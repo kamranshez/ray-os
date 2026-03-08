@@ -82,6 +82,11 @@ Show this as an example of a `./rules/serena.md` that you link from your CLAUDE.
 - Quick line-based edits
 ```
 
+## References
+
+- https://x.com/om_patel5/status/2030479131222192457
+- https://x.com/jarredsumner/status/2030520041377271812
+
 ## Key Points
 - LSP gives semantic understanding that text search can't match
 - Add these instructions to your AGENTS.md so sub-agents inherit them

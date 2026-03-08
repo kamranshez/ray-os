@@ -24,7 +24,8 @@
       "WebFetch(domain:wmedia.es)",
       "mcp__excalidraw__read_me",
       "mcp__mcp-registry__search_mcp_registry",
-      "mcp__exa__web_search_exa"
+      "mcp__exa__web_search_exa",
+      "mcp__claude_ai_Gmail__gmail_search_messages"
     ]
   }
 }
