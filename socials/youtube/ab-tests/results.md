@@ -638,6 +638,21 @@ All variants use the locked title: "Anthropic Just Dropped the Feature That Kill
 - Original thumbnail actually performing better now (38.6%) than during title testing (~36%) — locked title is lifting the whole package
 - Faceless thumbnails confirmed as anti-pattern for this channel
 
+### Thumbnail A/B Test Round 2 (2026-03-08)
+
+| Thumbnail Style | Thumbnail Text | Watch-time Share | Result |
+|----------------|----------------|------------------|--------|
+| Face + tweet mock-up | It's 96% Cheaper! | 38.5% | Leader |
+| Face + tweet mock-up | Anthropic's OpenClaw | 31.3% | |
+| Face + tweet mock-up | How I Work Now | 30.2% | |
+
+**Key takeaways:**
+- "It's 96% Cheaper!" (38.5%) surges — concrete cost angle adds a value prop the competitive framing alone lacked
+- Original "Anthropic's OpenClaw" collapsed from 38.6% (R1) → 31.3% (R2) — high volatility between rounds, same pattern as V11/V12
+- "How I Work Now" (30.2%) confirmed: personal formula doesn't work for news/competitive videos (also failed on V12 at 26.8%)
+- **New insight:** Cost/savings framing on thumbnails adds a second hook — title says "what" (kills OpenClaw), thumbnail says "why you should care" (96% cheaper)
+- Need Round 3 to confirm whether "96% Cheaper" stabilizes or if this is volatility
+
 ---
 
 ## Tests Still Worth Running

@@ -21,7 +21,10 @@
       "WebFetch(domain:arxiv.org)",
       "Skill(excalidraw-gen)",
       "WebSearch",
-      "WebFetch(domain:wmedia.es)"
+      "WebFetch(domain:wmedia.es)",
+      "mcp__excalidraw__read_me",
+      "mcp__mcp-registry__search_mcp_registry",
+      "mcp__exa__web_search_exa"
     ]
   }
 }
