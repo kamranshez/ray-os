@@ -653,6 +653,26 @@ All variants use the locked title: "Anthropic Just Dropped the Feature That Kill
 - **New insight:** Cost/savings framing on thumbnails adds a second hook — title says "what" (kills OpenClaw), thumbnail says "why you should care" (96% cheaper)
 - Need Round 3 to confirm whether "96% Cheaper" stabilizes or if this is volatility
 
+### Thumbnail A/B Test Round 3 (2026-03-08)
+
+| Thumbnail Style | Thumbnail Text | Watch-time Share | Result |
+|----------------|----------------|------------------|--------|
+| Face + tweet mock-up | It's 96% Cheaper! | 38.3% | **Winner** |
+| Face + tweet mock-up | $200 vs $5,000 | 33.3% | |
+| Face + tweet mock-up | Loops Ended OpenClaw | 28.3% | |
+
+**Key takeaways:**
+- "It's 96% Cheaper!" stable across 2 rounds: 38.5% → 38.3% — locking in
+- Percentage (38.3%) > dollar comparison (33.3%) — simpler to parse at thumbnail size
+- "Loops Ended OpenClaw" flopped at 28.3% — "Loops" is too technical for casual viewers, and text got cut off on the thumbnail
+- **New insight:** Simple percentage claims > specific dollar comparisons on thumbnails — less cognitive load at a glance
+
+**Status:** Final. Locking in **"It's 96% Cheaper!"** as thumbnail text.
+
+**Final package:**
+- **Title:** Anthropic Just Dropped the Feature That Kills OpenClaw
+- **Thumbnail:** Face + tweet mock-up + "It's 96% Cheaper!"
+
 ---
 
 ## Tests Still Worth Running
