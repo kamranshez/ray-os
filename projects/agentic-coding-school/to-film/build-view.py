@@ -1,12 +1,16 @@
-#!/bin/bash
-# Generates an HTML dashboard from all to-film markdown files.
-# Usage: cd to-film && ./build-view.sh && open view.html
+#!/usr/bin/env python3
+"""Generates an HTML dashboard from all to-film markdown files.
+Usage: cd to-film && python build-view.py && open view.html
+"""
 
-OUTPUT="view.html"
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+import json
+import re
+from pathlib import Path
 
-cat > "$SCRIPT_DIR/$OUTPUT" << 'HEADER'
-<!DOCTYPE html>
+SCRIPT_DIR = Path(__file__).parent
+OUTPUT = SCRIPT_DIR / "view.html"
+
+HTML_HEAD = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -62,85 +66,10 @@ cat > "$SCRIPT_DIR/$OUTPUT" << 'HEADER'
 <div id="content"></div>
 <script>
 const data =
-HEADER
+"""
 
-# Build JSON data from all markdown files
-echo -n "[" >> "$SCRIPT_DIR/$OUTPUT"
-FIRST=true
-
-for class_dir in "$SCRIPT_DIR"/*/; do
-  [ ! -d "$class_dir" ] && continue
-  class_name=$(basename "$class_dir")
-  [ "$class_name" = "." ] && continue
-
-  for f in "$class_dir"*.md; do
-    [ ! -f "$f" ] && continue
-
-    # Parse frontmatter
-    duration=""
-    batch=""
-    order=""
-    batch_name=""
-    chapter=""
-    title=""
-    body=""
-
-    in_frontmatter=false
-    frontmatter_done=false
-    body_lines=""
-
-    while IFS= read -r line; do
-      if [ "$frontmatter_done" = false ]; then
-        if [ "$line" = "---" ]; then
-          if [ "$in_frontmatter" = true ]; then
-            frontmatter_done=true
-          else
-            in_frontmatter=true
-          fi
-          continue
-        fi
-        if [ "$in_frontmatter" = true ]; then
-          key=$(echo "$line" | sed 's/:.*//' | xargs)
-          val=$(echo "$line" | sed 's/^[^:]*: *//' | sed 's/^"//;s/"$//')
-          case "$key" in
-            duration) duration="$val" ;;
-            batch) batch="$val" ;;
-            order) order="$val" ;;
-            batch_name) batch_name="$val" ;;
-            chapter) chapter="$val" ;;
-          esac
-        fi
-      else
-        # First non-empty line after frontmatter = title
-        if [ -z "$title" ]; then
-          cleaned=$(echo "$line" | sed 's/^#* *//')
-          if [ -n "$cleaned" ]; then
-            title="$cleaned"
-          fi
-        else
-          body_lines="$body_lines$line "
-        fi
-      fi
-    done < "$f"
-
-    # Clean body for JSON (escape quotes, remove newlines)
-    body_clean=$(echo "$body_lines" | sed 's/"/\\"/g' | tr '\n' ' ' | sed 's/  */ /g' | head -c 300)
-
-    if [ "$FIRST" = true ]; then
-      FIRST=false
-    else
-      echo -n "," >> "$SCRIPT_DIR/$OUTPUT"
-    fi
-
-    cat >> "$SCRIPT_DIR/$OUTPUT" << ENTRY
-{"class":"$class_name","chapter":"$chapter","title":"$(echo "$title" | sed 's/"/\\"/g')","duration":"$duration","batch":"$batch","order":"$order","batchName":"$batch_name","body":"$body_clean","file":"$(basename "$f")"}
-ENTRY
-
-  done
-done
-
-cat >> "$SCRIPT_DIR/$OUTPUT" << 'FOOTER'
-];
+HTML_FOOTER = """
+;
 
 const classLabels = {
   'claude-code': 'Master Claude Code',
@@ -233,6 +162,71 @@ render();
 </script>
 </body>
 </html>
-FOOTER
+"""
 
-echo "Built $SCRIPT_DIR/$OUTPUT ($(wc -l < "$SCRIPT_DIR/$OUTPUT") lines)"
+
+def parse_markdown(path: Path) -> dict:
+    text = path.read_text(encoding="utf-8")
+    lines = text.splitlines()
+
+    frontmatter = {}
+    title = ""
+    body_lines = []
+    in_frontmatter = False
+    frontmatter_done = False
+
+    for line in lines:
+        if not frontmatter_done:
+            if line.strip() == "---":
+                if in_frontmatter:
+                    frontmatter_done = True
+                else:
+                    in_frontmatter = True
+                continue
+            if in_frontmatter:
+                m = re.match(r'^(\w+):\s*"?([^"]*)"?\s*$', line)
+                if m:
+                    frontmatter[m.group(1)] = m.group(2).strip()
+        else:
+            if not title:
+                cleaned = re.sub(r"^#+\s*", "", line).strip()
+                if cleaned:
+                    title = cleaned
+            else:
+                body_lines.append(line)
+
+    body = " ".join(body_lines)
+    body = re.sub(r"\s+", " ", body).strip()[:300]
+
+    return {
+        "class": path.parent.name,
+        "chapter": frontmatter.get("chapter", ""),
+        "title": title,
+        "duration": frontmatter.get("duration", ""),
+        "batch": frontmatter.get("batch", ""),
+        "order": frontmatter.get("order", ""),
+        "batchName": frontmatter.get("batch_name", ""),
+        "body": body,
+        "file": path.name,
+    }
+
+
+def build():
+    entries = []
+    for class_dir in sorted(SCRIPT_DIR.iterdir()):
+        if not class_dir.is_dir() or class_dir.name.startswith("."):
+            continue
+        for md_file in sorted(class_dir.glob("*.md")):
+            entries.append(parse_markdown(md_file))
+
+    with open(OUTPUT, "w", encoding="utf-8") as f:
+        f.write(HTML_HEAD)
+        f.write(json.dumps(entries, indent=2))
+        f.write(HTML_FOOTER)
+
+    line_count = OUTPUT.read_text().count("\n")
+    print(f"Built {OUTPUT} ({line_count} lines)")
+
+
+if __name__ == "__main__":
+    build()
