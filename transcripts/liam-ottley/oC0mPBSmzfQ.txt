@@ -1,0 +1,883 @@
+---
+title: "How to Automate Your Work with Claude Code (Beginner Breakdown)"
+date: 2026-01-14
+video_id: oC0mPBSmzfQ
+channel: liam-ottley
+---
+
+If you are not already using Claude code
+to automate parts of your life, then
+you're being left behind in 2026. So
+today, I wanted to bring on one of the
+leading experts in helping beginners to
+understand Claude Code for automating
+your work and life, PDang, who's going
+to be showing you the step-by-step
+process of installing Claude Code,
+getting it set up, identifying the first
+workflow that you want to automate, and
+then showing you the exact steps in
+order to build your set of prompts
+[music] that's going to do that task for
+you. So, this is an absolute must-h have
+skill for 2026. And I'm excited to be
+sharing this method with you all. Hey,
+Peter, thank you for coming on the
+channel, man. It's great to have you on
+here and thank you for your time. I'm
+super excited to get into Claude code
+and automating your life because I think
+a lot of people at this point don't
+realize just how much can be done by
+these agents because claude code feels a
+little bit out of their depth. So, we
+want to make it really simple in this
+video for you guys to get your feet wet
+with claw code and just start by
+automating one of the boring things and
+unnecessary things you're doing in your
+life today. So, Peter, uh, thank you for
+coming on, man. And, uh, what are we
+going to be going through today?
+>> So, one one thing about cloud code is
+like it seems like really intimidating,
+right? is like all about code, but in
+reality, it should really be just like
+claude general agent or claude agent is
+a real name. At the end of the day,
+you're just chatting with somebody. You
+think about you just just have a chat
+thread with an AI that can actually do
+things for you, right? So, the way I
+think about automate your life with
+cloud code is make an inventory of like
+your week and what takes up the most
+time. So, for this uh tutorial, let's
+use a example, right? So you and I know
+as a YouTuber like trying to come up
+with really good thumbnails and titles
+is just like a huge pain in in the ass.
+It takes up a lot of time, you know, to
+make it great and and and having really
+good copy for those is like really
+important to actually get people to
+watch the videos. So, um, what I built
+before is just kind of like a researcher
+that looks up a bunch of other channels
+and then, uh, what it does is it it
+finds the top performing videos like the
+titles and the thumbnails for those. Um,
+and then it uses that and my channels of
+videos to give me advice on what videos
+to make next or what videos are trending
+right now, right? And you can also
+generalize this to researching, you
+know, other competitors, you know, for
+your newsletter, for like your company,
+like basically cloud code and like
+claude has like online search
+capabilities, right? So like being able
+to get it to do research for you, it's
+just just saves me a lot of time. The
+great thing is is that it's very
+extensible and that if you've got this
+research component and you have some uh
+context documents within clude code
+about who you are and the kind of
+businesses you run or what like your
+messages or what you you typically talk
+about, it can very easily be extended
+from there to a script writer where
+given the context you know about my
+channel and this other information and
+this transcript that we can pull in from
+maybe you copy paste the transcript in
+from the uh from a YouTube transcript
+scraper or you set up a tool to do that
+then you can very quickly move from just
+research search and ideation into say
+content writing if you wanted to start a
+personal brand. So I think just well
+maybe you aren't necessarily trying to
+start a personal brand if you're
+watching this. This is just a framework
+for applying that to any this kind of
+thinking to any problem that you have in
+your life. So uh Peter let's uh let's
+jump into it.
+>> So what I have here is basically the
+clock website right. So how do you even
+install clock code? So uh they have a
+they have a link here that you can just
+cop copy and all you got to do is open
+up like your terminal. So terminal is
+just like uh like like a command shell
+that you can use to type stuff. You can
+just pasting this command to basically
+in install cloud code on your computer.
+I already have it installed. So to open
+cloud code after you install it, you
+just type cloud and then uh it will
+basically open clock. So clock says a
+little crab or what whatever and you can
+just talk to it. You can you know for
+example I I can just say hello, how are
+you doing? and and it can respond. So
+it's almost like using chat GBT or cloud
+on the web interface except uh cloud is
+cloud code is much more powerful. So you
+can talk to cloud through like these
+terminals but what I like to do is I
+like to use cursor and cursor let let me
+just open up cur cursor. So cursor is
+just like a very popular uh interface
+that people use to like you know get AI
+agents to write code and you know it
+looks pretty intimidating right it has a
+bunch of coding it but the only reason I
+like to use cursor is because like I can
+actually see the files that clock ho is
+making for me so I can actually browse
+the files and review the files myself to
+use cursor you just download it and then
+you open it um and then you just open a
+full folder so let's just open the
+YouTube demo for f folder that I made
+and it's just like an empty folder that
+I made and this is what you see when you
+open cursor. So how do you open clot
+code inside cursor right? So uh you can
+talk to the cursor has its own agent
+that you can talk to but like you go to
+terminal and uh type in you know claude
+and that is how you know you kind of
+open up cloud in cursor. So basically
+like a chat window uh that you can have
+with claude to get cloud to start doing
+stuff. So how do you actually build this
+YouTube researcher thing that we want to
+build right? So, let me uh open the
+same. And I I have a pre-made command
+here, but hopefully it's pretty
+self-explanatory. So, basically, like I
+want to build a tool where I just type
+in slash YouTube and some channel name,
+and then it outputs some sort of a
+research file that has all the
+information from that channel, like the
+top recent videos, uh, plus a key
+insight about what content is working
+for the CH channel, right? And I have no
+idea how to do this. So, I'm I'm just
+going to ask Cloud Code, how do you get
+started? Like, what what are three
+different ways to do this and what are
+the pros and cons?
+>> Okay, guys, very quickly, if you're an
+aspiring entrepreneur and want to start
+your own AI business and you haven't
+already joined my free school community,
+it's down there in one of the links in
+the description below. Has my full free
+course on how to start your own AI
+agency as a complete beginner and you're
+surrounded by over a quarter million
+people who are also striving towards the
+same thing. There's no better place on
+the planet right now to be surrounded by
+like-minded people and you get free
+weekly Q&A with me where you can ask
+questions directly to me about how to
+start and scale your business. I'll see
+you in there.
+>> So like ba basically like at a high
+level the way you want to do it is
+there's kind of a few steps. First you
+want to explore a few different
+solutions with Claude, right? Then
+working with Claude, you pick a
+solution. And then step two is you want
+to make a plan like a spec or a document
+that kind of lays out what you want to
+build. Step three is you get Claude to
+just build the thing that you want. And
+then step four is you got to review what
+it comes up with and it iterate and make
+it better.
+>> For people who are unfamiliar with the
+claude commands because that's what it's
+kind of all all based around here,
+right? If you scroll up in that initial
+prompt that you had, you're asking it uh
+we can explain the prompt here. slash
+YouTube and then you're adding in
+essentially the the parameter that comes
+after it to use a really technical word
+but uh Peter wants to be able to go
+slash YouTube then at say Liam Mley and
+that's going to be the input that is
+passed into what Claude's going to write
+out here. So this whole like slash
+command is your way of building sort of
+repeatable workflows uh into Claude
+which is uh is the really powerful thing
+that's been unlocked recently uh with
+this and Claude skills which are very
+similar. So just a bit of a clarifying
+on that.
+>> That's a really good point. So slash
+command is it looks kind of complicated
+but it's literally just like like a
+command I want to build so I can type
+into clock ho so that it can do
+something for for me right so this is a
+slash YouTube command but you can also
+do like slash research command or what
+whatever you want to come up with okay
+so let's let's going so so it came up
+with three different ways to get the
+data that we need right so number one is
+to use the official YouTube API pros are
+it's reliable is is there's a free feed
+tier cons that it requires some sort of
+a API key setup which sounds pretty comp
+complicated uh option Option two is it
+can just use web scraping. So you can
+like you know basically go to the
+youtube.com page and try to scrape the
+titles which sounds pretty complicated
+too. And then option three is to use
+some sort of third party services like
+social blade rapid API endpoints and so
+on and so forth. It's recommended a
+YouTube uh official YouTube API but I
+think uh it's actually pretty
+complicated to try to set up an API key.
+I don't want to kind of get there.
+>> Google makes it more difficult than most
+unfortunately.
+>> Yeah. It's it's like you have to go to
+this like weird site that Google has.
+>> So, you got to do some more research.
+So, you can be like, you know, I don't
+like any of these options. I actually
+did some research before this and
+there's this this thing called YouTube.
+DLP,
+>> uh, which is like this free thing that
+you can use, this free API you can use
+to get like the latest data for a
+channel. So, we just say like, what
+about YouTube? I heard that's pretty
+good, too. [laughter]
+And it's like not not it's like not
+super technical prompts but like but
+right now we're just kind of exploring
+the solution uh step with cloud right so
+let's see what it comes up with on this
+>> and I suppose a tip here for for for
+beginners this is where we're trying to
+use APIs across the internet to pull
+data in and get Claude to be able to
+pull that data in like the issue we just
+ran into here is that in often cases if
+you can ask Claude for a way like is
+there any free or like like easy setup
+versions of this that don't involve me
+going to a provider and setting up
+billing and putting my card down and and
+doing all of this back and forth. If you
+can push for in this case like YouTube
+DLP, I've built stuff with that before.
+If you do push for those kind of free
+alternatives or easy uh quicker setup
+alternatives, it will give them to you.
+So, this is when you start to build some
+of these skills around building and
+automating your life is okay, if I want
+to do this faster and easier, I can push
+for uh push cla to look and search the
+web for things that are more aligned
+with what I'm trying to build and and
+keeping it short and sweet. Just as a
+recap, like if you want to use this
+thing to automate your life, step one is
+think about what's taking up the most
+time in your life right now that you
+don't want to do like you know given on
+a given week, right? And then step two
+is just like just try to explore can I
+actually make this simpler just like ask
+cloud like can can I hey I'm spending a
+lot of time on titles and thumbnails is
+there a way to make this simpler or like
+do some research and make this simpler
+and kind of explore the space of quad
+which is what we're trying to do right
+right now. It's so exciting for any any
+knowledge worker particularly if you're
+working remote especially and that you
+could just be sitting at home like it's
+it's the golden era of remote workers
+before things really get scary maybe in
+the next couple of years but where you
+have these tools and the futures
+future's right here in front of us if
+you just get a little bit curious and
+build your skills slowly with uh
+automating the most basic workflows in
+your job with this uh obviously um
+trying to make sure you're not getting
+in trouble at the same time but this is
+a very exciting time to be uh to be
+alive if you're doing any kind of
+particularly remote uh knowledge work.
+Exactly. Okay. So, we talked about
+exploring solutions, right? So, let's
+say we landed on this YouTube-d DLP
+solution. So, so now it's asking me,
+hey, like, you know, I I can just build
+this for you, right? But I like to have
+a step in between like the step two,
+which is to get claw to write some sort
+of a spec or like requirements document
+so that I can review the plan. It's it's
+usually not a good idea to just like,
+hey, go build this thing because it was
+it's going to make a bunch of
+assumptions that you actually don't
+want, right? So here's like a very
+important thing. When you're coding with
+AI, when you're vi coding with AI, I
+estimate that like 70 or 80% of the
+time, you're actually just like writing
+documents with AI. You're making the
+plan because the the actual coding step,
+AI will actually do it for you, right?
+They will do it. So the how how good it
+is at doing that comes down to how good
+and specific your plan is, right? So
+don't get intimidated by this vibe
+coding thing. Like you're not actually
+writing code. You're literally trying to
+write in English what the requirements
+are for the thing that you want to
+build.
+>> Yeah, the planning step is is is
+massive. As I've I've got deep prints
+like aentic engineering, the plan is
+everything. And Claude code is so good
+at it because it can read every document
+you provided it to provided it with and
+then it's writing that really really
+comprehensive spec sheet breaking down
+each chunk of the build that it can go
+and look back on and execute. So asking
+for plans rather than I think that's the
+difference between like a a complete new
+beginner or like user of claude code and
+like the first step is is realizing that
+the the value is in the plan. So the
+spec or the brief is is a is everything.
+So let me uh give you a command about
+like some highle requirements right. So
+so okay. So first of all uh very
+important thing to remember for cloud
+code is you can press shift tab to
+switch from accept edits that you see
+here to plan mode. You see this is plan
+mode. So you just keep pressing shift
+shift tab until it gets to plan mode.
+And the reason you want to be in plan
+mode is because you don't want it to
+actually start writing code. Like the
+the model likes to write code. But like
+in in this case, we don't want it to
+write code. We want to write a plan. So
+in plan mode, it can't actually change
+your code. Well, we don't have any code
+here, but we don't want it to start
+actually producing code, right? So press
+shift tab to enter plan mode. And then
+I'm I'm just going to give like a very
+high level requirement. like make make
+me a spec which is like a document for
+this YouTube command. The command is
+just fetch uh let's say 20 recent videos
+and then show the top 10 by views with
+title view count and duration and then
+above the top 10 list uh include some
+sort of key insights uh with like you
+know specific performance patterns and
+let us say what is working well for the
+channel. Okay. And then I also asked it
+to include like the ideal output format
+in the spec. Okay. So it's going to go
+off and make like a word document now
+and and let's see what it comes up with.
+And and you know like I I've been a
+product leader for a long time and uh
+usually like I manually write these
+documents, right? Like you know it takes
+a very long time. Nowadays I always
+write the documents with AI like I
+always get AI to write the f first draft
+and then I review the document, make
+some changes and then we go from there.
+One tip with this this shift in workflow
+like you just said to being more of a a
+re reviewer is uh using something like
+Whisper Flow or any kind of uh
+transcription tool. I've got it on my
+Mac and it's it must save me like like
+hours or like maybe tens of hours each
+week of of of typing uh manually. It's
+just a simple thing that you can add to
+your your Mac or whatever computer
+you're using and allows you to just
+speak into it. And so I'd highly
+recommend if you guys are getting into
+this, not only getting familiar with
+flawed code and trying to automate your
+workflows like this, but trying to shift
+more so to transcription uh to just
+speed up how quickly you can input data
+into the computer because when you could
+just be reading over the response or the
+plan in this left panel and be talking
+and giving a feedback and then just
+dumping that in and it will
+automatically paste the whole transcript
+in there has been a a massive
+improvement in my my overall
+productivity as I've started using these
+tools more and more.
+>> I totally agree. Yeah, like I my my my
+seven-year-old doesn't even know how to
+type to the computer yet, but she can
+like voice dictate to cloud. [laughter]
+>> Yeah.
+>> So, yeah,
+>> I think it's it's one of those things
+this year that people are going to race
+ahead if you can learn to use these more
+heavily and combine that with the speed
+of of being able to speak into it. I
+feel like I'm I'm like 10x than what I
+was the summer last year.
+>> Okay. So, uh it's made a spec for us.
+So, this is a spec. And now, it's very
+important to actually review the spec.
+And AI tends to want to do too much. So,
+usually what ends up happening is I like
+to cut out some requirements. Okay, so
+here's uh the command line. You type
+this thing and then it works and then um
+it's going to fetch the videos. Yeah,
+this makes sense. Get this date data for
+us. Output format. Okay, here's uh some
+keys sites content opportunity. And then
+here's like the information.
+Okay, this sounds pretty good, right? Um
+so why don't we just tell it to go ahead
+and implement the spec. Let's go go go
+go go go ahead and implement the slash
+YouTube
+command now per the spec. So hopefully
+it will make the slash command and then
+we can test it on chat channel. While we
+wait,
+let me make a new file called
+channels.md.
+And this is a file. Why don't we run on
+your channel, dude? Like should we run a
+channel? Let's put your channel here.
+And why don't we put my channel too?
+Yeah. Okay. So I'm I'm I'm just making a
+list of channels. All right. So it's it
+claims that it's done implementing the
+the thing. So let's go ahead and try try
+it out. So let's do YouTube
+and let's do Liam
+Artley. If we pull up the YouTube
+command, uh the prompt on the left, the
+actual spec, uh we can kind of walk
+through and explain what this is doing.
+So in these specs, guys, this is
+breaking down like step by step as if
+you were handing this over to a human to
+go and fetch all these things.
+Claude code has the ability to do a lot
+of the stuff in the background. So it
+has a web searching tool. It has the
+ability to read and write files as it's
+been doing here. And so kind of has this
+basic cluster of tools or or abilities
+that a kind of junior like an intern or
+something or or a knowledge worker would
+have which is is how when you feed it
+just a set of instructions like this,
+you're kind of outlining how it should
+be using each of those tools and it's
+able to link them all together and think
+in between which is really been the big
+leap forward with this. So when you
+write them out like this, you give it a
+format and tell it what to do. It's able
+to go and search the web, pull the
+information back and then execute on uh
+the steps you provided in there. So this
+is really just scratching the surface
+and we already have our first YouTube
+research report which would have saved
+uh I mean if you was to go on a channel
+and and do that might take 15 minutes,
+10 minutes to go through and analyze it,
+pull all the data and get it formatted
+and put it into a nice report.
+>> The great thing about these requirements
+is like they're like like anyone can
+understand them, right? This doesn't
+have a bunch of like pseudo core or
+anything like like that. like anyone can
+understand what this stuff is trying to
+do. So anyway, now now let's kind of
+pull the research. Let's take a look at
+the file that I generated.
+>> You're going to leak my whole YouTube
+strategy here, man. [laughter]
+>> Yeah. So did the research and uh yeah, I
+mean, you know, I think you're doing
+incredibly well. Obviously, top
+performer is how I build beautiful 5,000
+plus dollar websites in minutes with AI.
+So that's top performer. I I don't know
+how to feel about this to be honest with
+you, but it does seem like putting the
+the money the money in the title like
+drives clicks.
+>> Yeah. Well, my my audience is very very
+business and and make money focused.
+That's what it's always been. So, I I
+wouldn't be surprised there.
+>> That makes sense. Okay. So, then you
+know how AI how I do this and money and
+more tutorial stuff. Uh and here's like
+the top 10 tutorials. Uh I'm sure the
+one that we're going to publish soon is
+going to be our number one hope. Right.
+There we go.
+>> Yeah. Yeah. So, uh so yeah. So, so now
+let's let's kind of make a quick
+improvement. So now let's say uh let me
+actually add a few more channels. Let me
+just add like maybe Greg and Greg, Tina,
+and Jeff. So it's it's kind of like a
+pain ass to have to like do this one by
+one, right? So now we just made a new
+file with channels MD and you can call
+it whatever you want. MD is is markdown
+guys and that's just a a specific way of
+writing files. Um so all kinds of AI
+LLMs and agents really like reading in
+in uh MD or Markdown. Um it allows you
+to put headings in and and so on. So, if
+you need any questions on that, just ask
+JGBD like what is markdown and how does
+it work. But you'll see a lot of like
+pound symbols or hashtags to denote
+headings and that's just a very easy way
+of communicating um between different
+types of text to AI. So, just uh if
+you're wondering what the MD means.
+>> Yeah, exactly. Exactly. And now since
+you mentioned whisper flow, let me
+actually use whislow to try to voice
+tictate this like hey Claude. Um so now
+I I made a channels.md file and I've
+listed like a bunch of YouTube channels,
+right? And now what I want you to do is
+when I type slashyoutube, I just want
+you to update the research report with
+the same information for all five ch
+channels. Okay.
+Okay. Okay. I don't know what the hell
+this is. Okay. [laughter]
+>> I don't know. Whisper flow's got ads
+now. I don't know that ads.
+>> Yeah, it's got ads. I don't know. Okay.
+So, yeah. So, like it feels the same.
+>> And I mean this is a pretty shitty this
+is pretty like casual instructions,
+right? This is like what you tell your
+friend. So, uh, let's see if we can
+understand my spitballing here.
+All right. So, it looks like it's going
+to do it.
+And yeah, this might take a while. But,
+you know, while we wait, um, look, the
+the the key unlock here is um, just like
+if you have a problem, just ask Claude
+like, hey, how how can we like this is
+wasting my time, this workflow,
+>> like how do we automate this or how can
+we solve this problem in the simplest
+way, right? and then give me a bunch of
+other options.
+>> And the cool thing is as as you guys can
+see here, we're starting to layer
+functionality on it. We created a
+research capability to scrape and
+research a channel. And now we're
+putting another layer on top of that,
+which is like taking that function and
+being able to run it multiple times. And
+this can really just scale and scale and
+scale until you have like layers and
+layers of commands that are all kind of
+chained together and passing data
+through. um to the point where I've
+gotten uh a a sort of agentic
+engineering set of prompts and and claw
+go commands that I've been able to let
+run for like 13 hours straight and code
+overnight for me and build out an entire
+MVP. So there's like levels and levels
+to this and it's so exciting once you
+start feeling that traction of like the
+level of autonomy you can get uh of of
+handing off work to these agents. So if
+you're I mean it's it's so accessible
+now if you can get over this hump of
+this looks kind of scary. I feel like
+I'm I'm in a code editor and I'm a
+developer now and you you're able to not
+get too scared by the by the bash cards
+then uh then you're in a really really
+good spot this year.
+>> Yeah, man. Don't don't be scared, dude.
+It's just like you're just chatting with
+the AI and who can like do work for you
+for you.
+>> I feel like there is a I guess that's
+where Claude's going with Claude desktop
+and bringing Claude code in there. I'm
+sure they're going to do it. But taking
+this exact experience, but just skinning
+it in something that seems way less
+intimidating, I feel would uh would
+really hit with my I suppose just like a
+chat GPT experience, but it's able to do
+all this stuff in the background. Um
+that's probably where it's going, right?
+>> I think people using cloud code is like
+at the cutting edge. They just simplify
+it for everyone else. But, you know,
+before they do that, if you can get
+familiar with this interface, you're
+going to be ahead of the curve.
+>> What do you think? Is this going to
+create an an explosion of essentially
+claude code being the the method for
+people discovering different like uh
+product uh product opportunities or is
+this going to be kind of a generalizing
+tech where it all pulls into one? I
+think that's pretty uh interesting to
+get your your thoughts on.
+>> I feel like this is like the first like
+people keep saying like agent and a
+agents and blah blah blah and I feel
+like this is like the first general
+agent that actually can do do like
+whatever you want it to do. Do you think
+we're going to be pulling this say into
+a a a existing application or new
+application would pull this
+functionality in and this kind of
+becomes the core user experience to you
+know what I mean it's like so regardless
+of what kind of app you're building this
+kind of becomes the core and everything
+else that you build from within the
+software this getting a bit technical
+but everything else you build within the
+software people can expect this kind of
+experience as the the new interface for
+everything they do on their favorite
+softwares. My feeling is like we're
+moving from uh like more application
+interfaces to just like it's almost like
+you're like hiring a team, right? Like
+you're hiring a team and you're training
+each person on your team like how to
+work. Uh like you know like I use like
+workday or Twitter or whatever that that
+that's like an application, right? And
+you can only personalize that to you can
+only personalize so much. You can like
+follow different pe people. You can
+change the set headings. But for these
+agents for like you know for this stuff
+that we're building ourselves like I can
+make it like hyperpersonalized to
+whatever I wanted to do and and like
+it's it's very difficult for I think
+like some offtheshelf application to
+compete with this because this is like
+personalized to like my particular use
+case. Yeah, I I suppose the the
+functionality of a lot of these
+applications can become accessible like
+via how MCP was available or whatever
+the next iteration that is that
+anthropics eyeing up but allowing these
+applications that actually do something
+highly valuable for you by just making
+this the kind of central uh central
+operating system for for accessing that
+functionality.
+>> Exactly. Yeah. Okay. So it it built the
+command. So so I think the command is
+somewhere uh and now let's let's try it
+out by doing YouTube. Right. So then you
+can do the research on all five
+channels.
+>> If you're a business owner who's
+interested in what generative AI can do
+for your business, you can get in touch
+with me and my team at Morning.AI in one
+of the links in the description below
+and we can start your entire AI
+transformation process going all the way
+from the education and training of your
+staff to the identification of the best
+AI use cases for your company all the
+way through to development and beyond.
+We've worked with some of the world's
+biggest sports teams and also publicly
+traded companies. So rest assured, you
+are in good hands.
+>> All right, so uh we saw there's there's
+some bugs and we had to save in a new
+file. Let's be honest, but the
+information is here now. So, we have
+your channel, right? We already looked
+at it. Uh, and then for some reason for
+my channel, maybe I give the wrong name,
+but it does not have the information.
+Um, for Greg's channel, it does. So,
+Greg is another uh he does a lot of AI
+tutorials and yeah, he's very good at
+breaking the news. So, he probably has a
+lot of time on his hands. So like when
+when this companies launch something
+new, he does like a exclusive demo. And
+let's see who else we have. Tina. Tina
+does more I think beginner tutorials and
+like a pattern that I kind of copy from
+her is like you know
+>> here's like everything you need to know
+in like x minutes and that seems to work
+well.
+>> Yeah.
+>> Y
+>> um and then Jeff is uh also does a bunch
+of this stuff and yeah now that we have
+this research right like we can continue
+building in this project. we can build
+uh a new slash command or something else
+where um you know maybe it looks like my
+channel's v videos and all this research
+and what's hot right now and then it can
+actually suggest the video to make next
+and like like I said it can even maybe
+write the transcript. It can do a bunch
+of searches and write a transcript.
+>> Yeah. adding in just a a a new file in
+here that would be like uh pdang like
+core context is how I how I usually call
+it like the who you are what you do uh
+what sort of stuff you like to talk
+about what your businesses are what your
+objectives are with creating content uh
+then you'd be able to go to Claude and
+say hey I have this new file which
+explains the context of me and the kind
+of content that I create and my my goals
+here can we uh integrate that into the
+YouTube command prompt that we had there
+or create a new new slash command which
+would be slrite and you'll be able to
+pass in a a video idea who had taken
+that information from who you are and
+taken the the example of what that
+person gave and be able to start to
+write some draft scripts for you. So
+that's just one example of of being able
+to automate small parts of your life.
+And I think the the challenge for people
+is to one download CL code, get access
+to it, like install it via terminal, and
+then get in there and start just
+throwing questions at and say, "Hey,
+these are the things I do. Is there
+anything? What's the lowest hanging
+fruit for me here? What's the easiest
+thing that I could build out here?" It's
+just a starting point for building a a
+workflow within claw code to automate
+the part of my my life. So uh Peter, I
+appreciate you coming on. Um, I'm sure
+there's a lot of other, uh, great pieces
+of content on your channel that people
+can be checking out around these kinds
+of things as well. So, I will link your
+your channel in the description below.
+But, uh, really appreciate you coming
+on. Is there any any last minute tips
+you want to give to people heading into
+2026?
+>> Yeah, I mean, I think my best tip is,
+you know, I think Liam and I are good
+teachers, but I think, uh, we have to
+admit that Claude is probably a better
+teacher than us. So, just if you have a
+question, just ask the AI how you can do
+this stuff, and they'll probably tell
+you.
+>> I think it's it's it's such a good
+mental kind of habit to build up this
+year. I think is really going to
+separate the winners from losers this
+year is one not only just asking
+questions but two thinking like I have a
+problem can I build something for this
+because building is now accessible to
+whether it's building a a automated
+workflow like we have there or it's
+actually building a small app for you to
+use personally all of this stuff is
+available to you guys now so u the world
+is your oyster hopefully we'll be able
+to to bring some new source on cloud
+code um in the in the near future Peter
+will have you back on the channel but
+it's been great to great to chat with
+you man and um I'll leave your links
+down in the description
+>> thanks so much yeah cheers So, that is
+all for this episode of the podcast,
+guys. If you want to see something
+similar that I really think you'd like,
+you can click up here to watch another
+one. And remember, if you think you have
+a story worth telling and some valuable
+insight you can share with the
+community, you can fill out my podcast
+application form in the description
+below. I'd love to have a chat with you
+and get some exposure for your business.
+Aside from that, guys, that's all for
+the video. Thank you so much for
+watching and I'll see you in the next

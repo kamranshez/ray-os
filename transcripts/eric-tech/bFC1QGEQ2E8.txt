@@ -1,0 +1,766 @@
+---
+title: "Claude Skills Explained: 4 Skills to 10x Your Coding Workflow"
+date: 2025-12-30
+video_id: bFC1QGEQ2E8
+channel: eric-tech
+---
+
+In this video, I'm going to give you a
+complete beginner guide on claw skills.
+And specifically, I'm going to talk
+about why we should use claw skills.
+What are the three reasons why we should
+use it right now? And also, I'm going to
+talk about how claw skills work behind
+the scene. How does it work with sub
+agents, MCB servers, and also the
+overall agent workflow? And lastly, I'm
+going to show you my top four cloud
+skills that actually 10x my productivity
+when I use Claude every single day. So,
+by the end of this video, you will
+become a Claw skill master. not only
+know why to use it and when to use it,
+but also know how you can use it to 10x
+your productivity with Claude. So, with
+that being said, if you're interested,
+let's get into it. All right, so before
+we jump in, a quick intro for those who
+are new here. My name is Eric and I have
+spent years as a senior software
+engineer at companies like Amazon, AWS,
+and Microsoft. And I have started this
+YouTube channel to share everything I
+have learned along the way from AI and
+coding to automations, web 3, career
+developments, and more. all broken down
+into practical tutorials that you can
+actually follow. So if you're ready to
+level up, make sure to check out my
+YouTube channel and hit that subscribe
+button. Now let's get back to the video.
+All right, so now what I want to tell us
+is what's the reason why we should use
+claw skill. And the first reason why we
+should use it is because it's really
+good at doing specific and repeatable
+task. Let's say we have claw skill here.
+Help us to design a nice front end.
+Right? The first time the process is
+going to be very painful because you
+have to tell Claude exactly what kind of
+style, what kind of color, what kind of
+typography it's going to use to create a
+nice perfect front end that you imagine,
+right? And after that process is done,
+you can be able to have claw here to
+create a cloud skill so that you can be
+able to reuse it. So the next time when
+you give it a prompt saying that help me
+to design a nice front end, then claw
+will know exactly what kind of style,
+what kind of typographies, what kind of
+UI design is count as nice front end. So
+the process here is much more smooth and
+the AI here won't hallucinate so much
+because claw skills will tell AI exactly
+how to create those things. And the
+second reason why we should use claw
+skill is that it also help you to save
+context because before when we don't
+have claw skills we will have to use
+claw rules which is kind of like a
+system prompts that we pass to claude
+every time we talk to cla right but the
+problem with claw rules is that every
+time when you talk to claude you had to
+pass all the claw rules or all the
+system prompts to claw agent here to
+basically give you the response. But the
+thing is that not all the rules are
+relevant to what you're asking for. And
+that's why claw skill is really
+different is because now cloud will
+automatically pick the right skill to
+the request that you're asking for.
+Right? So let's say you're trying to
+design a nice front end. Then basically
+cloud will find the right skills or
+maybe like a front-end skill or maybe
+like a UX UI skill that will basically
+help you to complete the task that's
+relevant to what you're asking for.
+Okay. So that will help you to save so
+much context during the process of using
+claude. And the last reason why we
+should use claw skill is that it's also
+really easy to share, right? You can
+think of claw skill as like a SOP where
+basically creates a SOP to guide the AI
+on how to exactly do things, right? And
+what you can do is that you can
+basically have this cloud skill to
+export in a zip file so that you can
+share with other people, right? Share
+this with other employers or co-workers.
+And what you can do is that you can also
+create multiple sub aents and each sub
+aents here can have a shared same clause
+skills that's being created earlier that
+you have in your projects. So it's much
+more easier for you to share, right? And
+also much more easier to save context
+and also help you automate a specific
+and reusable task. So those are the
+three main reasons why we should use
+claw skills to basically improve our
+productivity for every time we're using
+claw. All right, so now you know why we
+should use claw skills. So now let's
+take a look at how it works behind the
+scene. So right here you can see that we
+have our agent configurations right this
+is going to be our clawed agents and
+basically inside of our configurations
+we have three main parts one is our core
+system prompts right like what I
+mentioned before like our claw rules uh
+static system prompts that will be sent
+to every conversation that we're going
+to have with claude and then we also
+have our equipped skills so these are
+skills that we can add later on for
+example we can add a skill particularly
+that can handle PDF that can handle
+excel sheets that can handle like PBTX
+or like powerpoints right so this is our
+equipped skills for our clot and we also
+have our equipped MCP servers. So MCP
+servers if you don't know what it is you
+can check out this video right here
+which I'm exactly how MCP server work
+but basically you can think of MCP like
+a tools a list of tools that AI agent
+here can call for example it can be able
+to you know search data on the web it
+can be able to call like API to fetch
+data from like your database or like
+GitHub create a pull request on your
+behalf so those are MTB servers right so
+these are the three main key components
+of our agent configurations and what
+happens here is that for every agent
+here it has a agent virtual machine and
+this virtual machine here has access to
+like bash commands, have access to
+Python, Node.js, any type of language,
+right? And then we also have our file
+system and what this file system does
+here is that basically contains the list
+of contents for the skill directory. So
+all the skills that you create that you
+add will be live in here inside of this
+file system and each skill here we have
+the skill.md file which basically the
+description of what the skill look like,
+right? And then we also could have like
+data sources. We also could have like
+Python scripts. So after the skill is
+being triggered by claude, it will
+basically execute a script to basically
+get informations that we need to guide
+the AI on the right track. So in this
+case to put it in practice here, you can
+see that we have a situation where a
+user ask you to fill this PDF form based
+on what you know about me and here is
+the location on where the file is. So
+claw will basically think about it and
+try to see okay what kind of skill we're
+going to use right so you can see that
+it's going to be a PDF. So it's going to
+use the PDF skill claw automatically
+identify what skill related to our query
+be able to call the right skills and
+call the right tools to basically
+complete the user request. All right. So
+now you know how it works and why we
+should use it. Let me show you four claw
+skills that will boost your productivity
+whenever you're using claude. But before
+I show you the first claw code skill
+that I personally use, one thing to note
+here is that you can see I opened a
+projects called bookkeeping
+applications. In this project, I
+basically built this using Nets.js. And
+you can check out the full tutorial on
+how did I build this applications using
+this five MCB servers that I show you in
+this video right here. But moreover,
+basically what this application does is
+that it's a bookkeeping application that
+keep track of your receipts, your bank
+statements and later you can be able to
+use that to prepare your tax and file
+it. Right? So right here you can see
+this is a landing page. We have all the
+features here and here we can also be
+able to log in to our application. This
+is our dashboard. We can also match our
+transactions and also this is where we
+upload our bank statements and also this
+is where we upload our receipts and keep
+track of them inside of our tables. So
+what I want to do now is basically try
+to introduce you the first clause skill
+that I use which is the front end design
+skill from claw code. And what it can do
+is that it will basically create a
+production grade front end interface
+with high quality design. So based on
+what your application does, it will
+first try to understand the applications
+and then it try to create a design
+that's best fit for your application.
+And just to keep in mind that this is
+what it looks like right now for our
+applications. And if I were to navigate
+to our landing page, this is what it
+looks like right now. So what I'm going
+to do here is I'm going to follow this
+guide right here to basically install
+the marketplace from our Claw Code. And
+then I'm going to install this plugin
+right here, which is the front end
+design. And I'm just going to tell Clo
+here to redesign our entire front end.
+So in this case, let's take a look at
+how it works. So right here, I'm just
+going to copy this command right here.
+Navigate back to my CLCO session. And
+I'm just going to run this. basically
+try to install the claw code plugins
+inside of our marketplace. Because I
+already have this installed, I'm just
+going to use the slash plugin right now.
+So, if I were to do the slash plugin,
+right? And here you can see I have my
+marketplace right here, which you can
+see that we have claw code plugins
+installed. So, now we're going to do now
+is try to install the front-end design
+skill. So, right here, I'm just going to
+copy this command. But because I already
+have this installed on my local machine,
+if I were navigate to installed, you can
+see that I have this one installed. But
+for yourself, you're probably just going
+to run this again inside of your clock
+session. So what we're going to do now
+is basically try to instruct clco here
+to, you know, use the front end design
+skill to redesign our application. And
+because I already have done so here you
+can see that after I have using the
+clock session here instructed, clo uses
+the front-end design skill basically
+redesign the entire application for this
+u front end. And you can see this what
+it looks like. So right here you can see
+it gives me a complete redesign of our
+landing page and it used to be using the
+blue now it's using the green. Okay. So
+right here you can see we have the you
+know on boarding sessions the entire
+typography is changed the testimonials
+right you can see the call to actions as
+well as the footer are completely
+changed. So now if I were to log in to
+the applications and if I were to sign
+in here you can see this what the
+dashboard look like. So right here you
+can see it still looks like what it used
+to be but it's just that the entire
+theme typographies the styles are all
+changed right and you can see that the
+matchings here are still exist. So
+pretty much you can see that the style
+here are consistent throughout the
+entire application which is really cool.
+So in this case that's pretty much how
+we can use the front-end design skills
+in clock code to basically give yourself
+or give your application a complete
+redesign that's make it much more like a
+production ready. And I'll make sure to
+leave the link for this post in the
+description below so that you can check
+it out. So the next skill that I want to
+show you here is the domain name
+brainstormer which will basically help
+you to find a domain name for your
+project. So let's say if you have
+building like bunch of projects and
+you're struggle to find the right domain
+name that's available that's the best
+fit for your projects then this claw
+skill here will help you to do so. And
+here you can see that what this claw
+skill does is that basically you provide
+a instruction saying that help me to
+find a domain name for this program
+projects. And what it does here is that
+it's going to look through all the
+domain names online and try to find what
+are the domain names that are available
+and what are the domain names that's
+best fit for our target audience and
+also what are the key features that this
+domain name has right and all in all it
+will basically gather try to find the
+right domain name and it'll help you to
+rank it to figure out what's the best
+pick for the domain name for this
+current projects. For example, this
+project is good for developer short and
+memorable and also has the.dev dev
+extensions which adds credibility and
+most importantly this domain name is
+available right now right so what we can
+do here is that I'm just going to
+download this folder right here which
+you can see is called the domain name
+brainstormer which only has the skilld
+file and once I download this I
+basically add it onto our projects so
+here you can seeclaw folder there I
+create a folder called skills and inside
+this folder I create a folder called
+domain name brainstormer which basically
+I just drag that folder entirely into
+this skill folder and I basically
+restart my claw session and now what I
+can do is that based on this project
+that I have right now, can you use the
+domain name brainstormer skill to
+basically help me to brainstorm the
+right domain name for this project? So
+that's going to be my prompt and I'm
+just going to send this request and
+right away you can see that claw here
+triggers a domain name brainstormer here
+to basically trigger the skill and
+basically chatter generates the relevant
+domain suggestions. So in this case
+while we wait let's give a quick shout
+out to the sponsor of this video. Think
+if you're in AI or tech your work is
+[music] probably scattered everywhere.
+GitHub, papers, LinkedIn X, maybe
+YouTube. That's exactly why I started
+using Dink. What Dink is, Dink.Me is an
+AI native digital identity platform
+[music] built for developers,
+researchers, and AI talent. It
+automatically pulls your real
+achievements from GitHub, Google
+Scholar, LinkedIn X, Archive, and more,
+[music] and turns them into a living,
+autoupdating AI identity card. This is
+my Dink profile.
+Instead of a static resume, everything
+here updates automatically. [music]
+New repo, paper, project, or roll, it
+shows up without me touching anything.
+What's powerful is that Dink [music]
+doesn't just list links. It understands
+your work. You can see verified
+contributions, real collaboration
+networks through the achievement [music]
+graph, and how people are actually
+connected through projects, not cloud.
+You can browse other members Think
+[music] pages, analyze their profiles,
+and discover like-minded people.
+Want to collaborate, hire, or build a
+team? You can DM directly and start real
+conversations based on actual work. Dink
+feels like what LinkedIn should have
+become for the AI era. A deeper, more
+credible identity that actually
+understands what you do. Dink is
+currently [music] invite only. So, if
+you want to try it, use my invite code
+below and create your AI native identity
+here. Links also in the description.
+All right. So, back to the video now.
+Here you can see that as a result this
+is what the AI generates after cloud
+skills has generated using the domain
+searcher. Here you can see that we have
+our premium AI domains right here which
+are all available right and they're all
+in with.AI AI extension. There's also
+the strong.com options, the io or the
+tech forward options and here is the top
+tech recommendations and they're all
+available in this link right here which
+shows in real time results and you can
+see that it also concludes the finding
+of the budget forai and this is the
+minimum two year of registrations.
+Pretty much what we can do here from now
+is just pick the domains that we want
+and just go with it. Right? So pretty
+much that's how we can use the domain
+finder skill to find the right domain
+for our projects. Okay. So the next
+skill that we're going to show you here
+is the Stripe scale. This is really
+important because if you're going to
+have accepting payment for your
+applications and it's really important
+to keep it consistent for how you're
+going to integrate your Stripe payments
+into your application. So right here you
+can see I have navigated to a very
+special skill called Stripe skill or
+Stripe integration skill. Basically it's
+going to master the Stripe payment
+processing. We can actually be able to
+create a skill and have our AI here have
+clogg here to implement the stripe
+payment consistently. Okay. So, for
+example, creating a checkout session,
+right? Creating a one-time payment or
+creating a custom payment flow. You can
+see that this documentation or this
+cloud skill here has already create this
+thing automatically, right? So, all we
+had to do here just tell it to implement
+this inside of our applications and
+should be able to implement in the right
+way. So, in our case, basically, we're
+just going to navigate to the Stripe
+integration here. You can see that we
+only have one file in this folder, which
+is the skill MD file. And I'm just going
+to download this folder right here.
+Navigate back to claw code. In this
+case, I'm just going to drag the skill
+into this skill folder. And right here,
+I'm just going to restart my claw
+section. And here I'm just going to say
+based on the application right now,
+please use the Stripe integration skill
+to integrate our Stripe payment inside
+of our application. Okay. So then here
+is our prompt. So I'm just going to
+switch to plan mode and basically have
+Clocko here to use the Stripe
+integration skill to build our Stripe
+integration. And then here I'm just
+going to run this. All right. So right
+now we can see it's first going to
+analyze the application here and try to
+explore the clear understanding of the
+application. Here is the summary. So
+here you can see that we did not
+implement the payment processing. We did
+not implement the subscription
+management. And here you can see that
+there's the recommended uh payment
+structure. So right here based on the
+existing pricing page, here is what it
+recommends. So we have our starter plan
+which is no payment required. There's
+the growth plan which is most popular
+and it has the 14-day free trial.
+There's also the pro plan which is the
+$39 per month and it also includes the
+14 days free trial. So here you can see
+what it does here is that it's going to
+analyze the application, create a plan,
+and before it do so, it's going to ask
+me some serious questions to clarify the
+intent. So it says that you want to
+offer a 14 days free trial for the
+growth and the pro plan. Here I'm just
+going to say yes for the 7 days free
+trial instead. And here's asking us if
+you have the Stripe API keys. I'm just
+going to say yes, I do. And then here,
+what are the plan changes? Should be
+able to upgrade or downgrade? And yes,
+I'm just going to say allow that. And
+basically, you can see these are the
+answers that I have. I'm just going to
+submit the answer here. And of course,
+if you ever wonder where you can be able
+to get the API keys, you can navigate to
+your Stripe dashboard. And here there is
+a developer. So if you click on
+developer, there's API keys. And here
+you can see that we have our publishable
+keys and also secret keys. So we're
+going to need those tools inside of our
+MV.local file to call the right Stripe
+account to get a payment, right? So in
+this case, once you get your publish key
+and your secret key, you can literally
+add this in your file and then be able
+to use it eventually. Okay. So what
+we're going to do now is that I'm just
+going to come back to claw code. And
+here you can see this the entire plan
+for our bookkeeper pro application.
+Right? So here is the current stack the
+payment structure the plan for the
+management as well as the gating tier.
+So for example like the starter plan you
+get the unlimited receipt scanning.
+Great. The categorizations also the CSV
+export which is perfect. But what you
+don't get is you don't get the bank
+reconciliations the automated invoicing
+and also tax optimizations. Right? So
+you don't get those things for the
+starter plan but growth plan you do. Uh
+there's also the database setup. So for
+example, you can. So here you can see
+it's also going to set up the database
+table for the subscriptions and also
+subscription plan as well as the strike
+configurations, the backend API routes,
+endpoints as well as the front
+integrations, the web hooks. And if you
+were to scroll all the way down, you can
+see here that it's going to use the
+stripe integration scale to implement
+the checkout, the customer portal, the
+web hook handlers, the database schema
+for the subscription tracking, and also
+the future gating middleware. So this is
+not something that cloud code knows by
+itself. This is going to be something
+that it calls our skill that we created
+and we will implement this entirely.
+Okay. So in this case I'm just going to
+say yes and bypass all permission and
+it's going to design everything
+completely by itself. Okay. So in this
+case let's wait for a bit while it's
+doing that. Okay. So as result you can
+see the stripe integration here has
+fully complete. And now you can see that
+we have three tiers starter growth and
+also the protier. So now if I were to
+navigate to thev.example example file.
+Here you can see that we have five
+environment variables that's created for
+this application. So we have our publish
+key as well as the secret key, the web
+hook secret as well as the pricing ID
+for the growth and also the pro plan.
+Right? So you can see that we can simply
+just going to get these things um inside
+of our dashboard in our stripe. Then we
+can be able to add this in inside of
+ourv.local file and we can be able to
+use it. So in this case I'm just going
+to fill this in inside myv.loc local
+file and navigate it to our applications
+and try to log in and try to see if the
+payment gateway is fully set up. And now
+if I were to navigate to our application
+here, if I were to choose a plan, for
+example, I'm just going to choose the
+growth plan. If I were to click on start
+on this plan and here you can see that
+it navigate us to the checking page. And
+right here you can see that currently I
+create a sandbox environment so they can
+be able to process it using a test
+account. So right here you can see that
+we have our bookkeepers growth plan 7
+days free trial and after that it's
+going to be $19 per month starting
+January 3rd. And all I have to do here
+just simply just enter the card
+informations with the test card. And now
+if I were to click on start a free
+trial, it's going to process this. And
+now you can see that the test payment
+here has been successful. And if I were
+to click on the settings here and
+currently you can see that we're using
+the growth tier which is costing $19 per
+month. So pretty much that's how we can
+use the stripe integration clause skill
+to guide the AI here to basically build
+our payment system for our application.
+All right. So the last skill we're going
+to take a look at for this entire video
+here is going to be the skill creator.
+And this skill here help us to create
+claw skills for our entire projects. And
+to use this skill, basically we just
+provide instructions on what kind of
+skill we want to create. And it's going
+to trigger this skill creator to
+basically help us create a skill. And to
+do so, I basically have claw here do a
+research on exactly what's the best way
+to review code. Because for a day-to-day
+workflow, I have to review tons of code
+from different projects, right? And I
+have to give a lot of feedback to
+people. So that's why I want to create
+this skill that I can be able to
+delegate this work to AI that can have
+AI here to create a consistent feedback
+based on different projects that we
+encounter. So right here you can see
+that there are different things that
+we're going to have AI here to do deep
+research on what's the best way for
+technical review here. What's the best
+practice for especially for NestJ
+architecture patterns as well as React
+and TypeScript projects as well as
+what's the multi-perspect review, right?
+Especially for higher level like senior
+developers or staff engineers. You're
+not just reviewing just the technical
+side of things. You also have to review
+the system based on different roles. For
+example, like an architect, product
+manager, QA or user experience overall.
+try to evaluate the codebase to see if
+it actually solved that business
+problem, right? And also what is the
+code review methodologies, right? Make
+sure that if we want to use top- down
+approach, time allocation strategies,
+we're also doing the documentation
+review and also making sure that we
+stand on the product and the user
+experience perspective. Try to make sure
+that the product here is focusing on the
+customer first thinking, right? Making
+sure that customer is actually able to
+use this product and is able to solve
+the problem that they're facing and also
+what is the mobile experience look like?
+What is the usability, right? So
+basically it's going to do a deep
+research on this simply just going to
+use the deep research right here in the
+cloud and it'll basically automatically
+help you to look through like tons of
+resource. You can see that it's going to
+look through like 432 sources online and
+try to conduct this entire research and
+conclude it into a one single MD file.
+Right? And what I'm going to do now is
+I'm just going to open a cloud session.
+I'm just going to reference the research
+file which is the one that we just done
+for the research from Claude. And then
+I'm just going to say that please use
+the skill creator skill to basically
+create a skill based on this research
+that we have done. And then here's
+basically my prompt. So I'm just going
+to send this to Claude and let Claude
+here to basically handle this trigger
+the skill creator skill. And here you
+can see that's going to use the skill
+creator skill to basically build a
+comprehensive co-review skill based on
+the research document that we have
+provided. So right here you can see that
+it's triggering the skill creator
+reading the research.md file and
+eventually you can see that it creates
+the skill creator skill inside of our
+skills folder right here. So you can see
+that we have our skill MD file. We also
+have a couple references on the NJS
+patterns the perspective the report
+templates and all those kind of things.
+Okay. So what we can do now is that if
+we want to review this we can actually
+open this doc and here you can see that
+this is the NESJS code review skill and
+basically this is when to use the skill
+right. This is basically telling AI what
+are times when we're going to trigger
+the scale for example reviewing the NJS
+pull request or if there's code changes
+and also for the existing codebase for
+quality security and performance and
+then in terms of our review there's
+different phases we have architecture
+review so that's going to be the first
+step uh things like checking out the
+overall design identify if there's any
+blocking issues and then also there's
+the file structure review try to evalate
+the organizations the naming conventions
+and also the expected structure Um after
+that's done we also have our detailed
+component review. This is going to be
+more like reviewing line by line and try
+to stand on all six expert perspectives
+like senior developers, system
+architects. There's also PMs and also
+the user Q engineer and also the
+business analyst. Okay, so pretty much
+this is the phase three. And after all
+is done, we're going to create a
+documentation review and then at the end
+it's going to generate a review report
+that's very similar to like this where
+it's going to mention what are the
+findings, what are the issues that I
+found and whether or not this codebase
+or this pull request is approved. So
+pretty much you can see that this is the
+entire um skill that we have created and
+what I'm going to do here is I'm going
+to open a clause session and I'm just
+going to say using the NestJS code
+review skill and please help me to
+review the entire codebase for this
+application and basically this is my
+prompt and I'm just going to submit this
+to Claude and hopefully Claude will
+basically trigger the Nest.js code
+review scale which you can see is asking
+if you want to proceed with the NestJS
+code review scale. I'm just going to say
+yes and then it's going to bree through
+the entire NestJS code review skills and
+try to understand how it's going to
+review this uh four-phase methodologies.
+Right? So right here you can see it's
+going to be doing the phase one for
+architecture review. So in this case
+pretty much that's how we can be able to
+use the claw skill creator here to
+create a new skill instead of claude. So
+pretty much that's what we have covered
+in this video. We cover why we should
+use claw skills, what are three reasons,
+and how does it work behind the scenes,
+as well as my top four claw skills that
+you can use to boost your productivities
+using clot. So, pretty much that's it
+for this video. And if you do find out
+in this video, please make sure to like
+this video, consider subscribing for
+more content like this. But with that
+being said, I'll see you in the next
+video.
