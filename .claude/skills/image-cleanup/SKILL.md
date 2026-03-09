@@ -72,14 +72,20 @@ python3 /Users/ray/Desktop/Obsidian/.claude/skills/image-cleanup/scripts/cleanup
 ## Workflow
 
 1. **Ask the user which mode they want:**
-   - **Cleanup** — delete unreferenced images, flatten/rename subfolder images, update markdown refs
-   - **Sort by note** — move images from ad-hoc locations into `images/{note-slug}/` subfolders
-   - **Both** — run sort-by-note first, then cleanup
-2. User provides a target folder (or you infer it from context, e.g., the file they're working on). If none provided, ask.
+   - **Sort by note** *(default/recommended)* — rename generic image filenames by context, then move images into `images/{note-slug}/` subfolders
+   - **Delete unreferenced only** — remove images not referenced by any markdown file, strip broken refs (no restructuring)
+   - **Both** — sort by note first, then delete unreferenced
+2. User provides a target folder (or you infer it from context). If none provided, ask.
 3. Run the **dry run** for the chosen mode(s) first — always
 4. Show the user the report
 5. Ask for confirmation before running with `--execute`
 6. Report results
+
+**Sort by note** is the standard post-excalidraw-gen workflow:
+1. `rename-by-context.py` — rename `excalidraw_N.png` → descriptive names using subfolder/surrounding text
+2. `sort-by-note.py` — move into `images/{note-slug}/descriptive-name.png`
+
+**Do NOT use `cleanup.py` with flattening** — this destroys per-note organisation. Only use it with `--no-flatten` to delete unreferenced images.
 
 ---
 
