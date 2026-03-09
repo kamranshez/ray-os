@@ -1,7 +1,7 @@
 ---
 duration: "1-4 min"
 batch: 1
-order: 24
+order: 3
 batch_name: "Quick Wins"
 class: "claude-code"
 chapter: "Commands"
