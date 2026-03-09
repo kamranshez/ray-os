@@ -8,7 +8,7 @@ This creates a kind of gravitational pull. The older model's limitations don't j
 
 Understanding this dynamic is critical for deciding when to refactor, when to rewrite, and how to prevent your codebase from being permanently constrained by the worst model that ever touched it.
 
-![[images/gravitional-pull-from-older-models.png]]
+![[images/gravitional-pull-from-older-models/gravitional-pull-from-older-models.png]]
 
 ## What's actually happening
 
@@ -47,7 +47,7 @@ This debt looks like:
 
 The scary part: it can _feel_ coherent locally, but globally it's harder to scale.
 
-![[images/gravitional-pull-from-older-models-4.png]]
+![[images/gravitional-pull-from-older-models/gravitional-pull-from-older-models-4.png]]
 
 ---
 
@@ -88,7 +88,7 @@ If the **core shape** is wrong, refactoring becomes death by a thousand cuts. Re
 - Migrate with a strangler approach
 - Preserve business logic via tests/specs
 
-![[images/gravitional-pull-from-older-models-2.png]]
+![[images/gravitional-pull-from-older-models/gravitional-pull-from-older-models-2.png]]
 
 ---
 
@@ -145,7 +145,7 @@ You don't need to remake everything. Pick:
 
 Make that module the _new gold standard_ so future AI copies _it_.
 
-![[images/gravitional-pull-from-older-models-6.png]]
+![[images/gravitional-pull-from-older-models/gravitional-pull-from-older-models-6.png]]
 
 ---
 
@@ -168,7 +168,7 @@ But rebuild loses when:
 
 A good compromise: **strangler rebuild** — new core built cleanly, legacy gradually routed out.
 
-![[images/gravitional-pull-from-older-models-5.png]]
+![[images/gravitional-pull-from-older-models/gravitional-pull-from-older-models-5.png]]
 
 ---
 
@@ -180,4 +180,4 @@ A good compromise: **strangler rebuild** — new core built cleanly, legacy grad
 
 That avoids perfectionism, but still ensures the repo gets better over time rather than worse.
 
-![[images/gravitional-pull-from-older-models-3.png]]
+![[images/gravitional-pull-from-older-models/gravitional-pull-from-older-models-3.png]]

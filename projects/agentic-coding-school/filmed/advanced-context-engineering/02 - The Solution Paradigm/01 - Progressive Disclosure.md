@@ -14,7 +14,7 @@ So what's the answer?
 
 **Progressive disclosure.** Load only what you need, when you need it.
 
-![[images/01-progressive-disclosure.png]]
+![[images/01-progressive-disclosure/01-progressive-disclosure.png]]
 
 ---
 ## Where This Comes From
@@ -39,7 +39,7 @@ Think of it like having a focused conversation in a crowded room where everyone 
 
 The answer isn't more context. It's the right context, at the right time.
 
-![[images/01-progressive-disclosure-2.png]]
+![[images/01-progressive-disclosure/01-progressive-disclosure-2.png]]
 
 ---
 
@@ -70,7 +70,7 @@ Progressive disclosure translates into a layered architecture:
 
 The philosophy: provide the map, let the agent choose the path. Context becomes a resource to spend wisely, not a dump truck to empty into every conversation.
 
-![[images/01-progressive-disclosure-3.png]]
+![[images/01-progressive-disclosure/01-progressive-disclosure-3.png]]
 
 ---
 
@@ -89,7 +89,7 @@ Progressive disclosure works because it addresses every constraint from the foun
 2. **Instruction limits** — You're not dumping 500 rules. You're loading 5-10 when they matter.
 3. **Search noise** — The agent still explores, but with guidance. Less fumbling, more finding.
 
-![[images/01-progressive-disclosure-4.png]]
+![[images/01-progressive-disclosure/01-progressive-disclosure-4.png]]
 ---
 ## The Conclusion
 

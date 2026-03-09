@@ -10,7 +10,7 @@ AI agents are **non-deterministic**. Every time they run, they load context diff
 
 The fix is dead simple: **repeat it five times.**
 
-![[images/just-run-it-again-5.png]]
+![[images/just-run-it-again/just-run-it-again-5.png]]
 
 ---
 
@@ -28,7 +28,7 @@ Say you need a plan for a new feature.
 
 **Run 5:** One more time, as a sanity check. If this run comes back with nothing meaningful to add, you've converged. The plan is stable. You can trust it.
 
-![[images/just-run-it-again-2.png]]
+![[images/just-run-it-again/just-run-it-again-2.png]]
 
 ---
 
@@ -42,7 +42,7 @@ Think of it like asking five different developers to review the same PR. They do
 
 Except here, you're not coordinating five people. You're just clicking "run" again.
 
-![[images/just-run-it-again-4.png]]
+![[images/just-run-it-again/just-run-it-again-4.png]]
 
 ---
 
@@ -56,7 +56,7 @@ Except here, you're not coordinating five people. You're just clicking "run" aga
 
 **Design:** Before you build anything, run your design review five times. This is where it pays off the most, because design mistakes are the most expensive to fix downstream.
 
-![[images/just-run-it-again-3.png]]
+![[images/just-run-it-again/just-run-it-again-3.png]]
 
 ---
 
@@ -66,4 +66,4 @@ You don't have to do this sequentially. After a plan is done, fire off five revi
 
 Same with code. Write it once, then launch five parallel reviewers. One catches a race condition. Another flags a naming inconsistency. A third spots a missing error handler. None of them would have caught everything alone. Together, they cover the space.
 
-![[images/just-run-it-again.png]]
+![[images/just-run-it-again/just-run-it-again.png]]

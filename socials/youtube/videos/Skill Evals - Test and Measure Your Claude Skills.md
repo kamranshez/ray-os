@@ -16,7 +16,7 @@ There was no way to regression-test a skill. No way to measure if it actually tr
 
 That's what this update fixes.
 
-![[images/skill-evals-test-and-measure-your-claude-skills-6.png]]
+![[images/skill-evals-test-and-measure-your-claude-skills/skill-evals-test-and-measure-your-claude-skills-6.png]]
 ## The two types of skills (and why this matters for testing)
 
 Anthropic makes a useful distinction here:
@@ -30,7 +30,7 @@ The testing angle is different for each.
 1. Capability skills might become unnecessary as models get smarter — evals tell you when the base model has caught up and you can retire the skill. 
 2. Preference skills are more durable, but evals make sure the workflow still matches what you actually want.
 
-![[images/skill-evals-test-and-measure-your-claude-skills-8.png]]
+![[images/skill-evals-test-and-measure-your-claude-skills/skill-evals-test-and-measure-your-claude-skills-8.png]]
 
 This ties back to [[self-improving skills|the self-improving skills concept]] — if you update the SKILL.md after each run, you now have a way to verify the "improvement" actually improved something instead of just trusting it.
 
@@ -49,7 +49,7 @@ has caught up (retire skill)     still matches your process
 ```
 
 
-![[images/skill-evals-test-and-measure-your-claude-skills-7.png]]
+![[images/skill-evals-test-and-measure-your-claude-skills/skill-evals-test-and-measure-your-claude-skills-7.png]]
 
 ## Testing output quality (evals + benchmarks + blind A/B)
 
@@ -72,7 +72,7 @@ graph LR
 ```
 
 
-![[images/skill-evals-test-and-measure-your-claude-skills.png]]
+![[images/skill-evals-test-and-measure-your-claude-skills/skill-evals-test-and-measure-your-claude-skills.png]]
 
 Everything gets aggregated into benchmark stats: mean, standard deviation, min, max for pass rate, time, and tokens. With deltas so you see exactly what the skill costs vs. what it buys you:
 
@@ -91,7 +91,7 @@ ocr-scanned-to-searchable    ✓    8.4s  5,088     ✗    9.1s  4,602
 Pass rate                   5/5 (100%)           2/5 (40%)
 ```
 
-![[images/skill-evals-test-and-measure-your-claude-skills-2.png]]
+![[images/skill-evals-test-and-measure-your-claude-skills/skill-evals-test-and-measure-your-claude-skills-2.png]]
 
 ~13% more tokens, but pass rate goes from 40% to 100%. Three of those five tests *only* pass with the skill loaded. That's how you know the skill is actually doing something.
 
@@ -120,7 +120,7 @@ CAPABILITY EVALS                    PROCEDURAL EVALS
                                     • Used company severity scale, not generic
 ```
 
-![[images/skill-evals-test-and-measure-your-claude-skills-4.png]]
+![[images/skill-evals-test-and-measure-your-claude-skills/skill-evals-test-and-measure-your-claude-skills-4.png]]
 
 One genuine gap here: there's no structured way to test *sequencing* yet — "did it check documentation completeness *before* routing?" You'd need the execution trace, not just the final output. For now you eyeball that in the eval viewer. But even without sequencing, process assertions catch most of what matters.
 
@@ -138,7 +138,7 @@ Then it loops. New description, re-run all queries, check again. Up to five iter
 
 It's genuinely using ML principles — train/test split, holdout validation, iterative optimization — applied to prompt engineering instead of model weights.
 
-![[images/skill-evals-test-and-measure-your-claude-skills-9.png]]
+![[images/skill-evals-test-and-measure-your-claude-skills/skill-evals-test-and-measure-your-claude-skills-9.png]]
 
 Anthropic ran this on their own document skills and saw improvements on 5 out of 6:
 
@@ -154,7 +154,7 @@ xlsx                     6/8      8/8    ← perfect
 product-self-knowledge   6/12     10/12  ← massive jump
 ```
 
-![[images/skill-evals-test-and-measure-your-claude-skills-5.png]]
+![[images/skill-evals-test-and-measure-your-claude-skills/skill-evals-test-and-measure-your-claude-skills-5.png]]
 
 xlsx went from 75% to 100%. product-self-knowledge from 50% to 83%. Just from better descriptions.
 
@@ -243,4 +243,4 @@ This also connects back to the [[context engineering]] idea — your CLAUDE.md f
 
 For now: if you're building skills, add evals. Takes five minutes. Turns "seems to work" into "I know it works." And when the next model drops, you'll know immediately if anything broke.
 
-![[images/skill-evals-test-and-measure-your-claude-skills-3.png]]
+![[images/skill-evals-test-and-measure-your-claude-skills/skill-evals-test-and-measure-your-claude-skills-3.png]]

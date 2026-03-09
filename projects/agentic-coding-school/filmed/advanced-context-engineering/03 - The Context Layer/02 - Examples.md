@@ -235,7 +235,7 @@ Notice what changed in both examples:
 
 **The core question:** What does Claude need to avoid making a mistake? Include that. Nothing more.
 
-![[images/02-examples.png]]
+![[images/02-examples/02-examples.png]]
 
 ---
 
