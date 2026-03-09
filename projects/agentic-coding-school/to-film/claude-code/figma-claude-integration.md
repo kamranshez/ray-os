@@ -1,0 +1,14 @@
+---
+duration: "1-4 min"
+batch: 2
+order: 8
+batch_name: "Bonus Techniques"
+class: "claude-code"
+chapter: "MCP Servers"
+---
+
+# Figma + Claude Code Integration
+
+Figma announced direct integration with Claude Code, meaning you can now have a say in the design process and front-end UI/UX without leaving your agentic coding workflow.
+
+Cover how to use Claude Code with Figma to bridge the gap between design and implementation — inspecting designs, generating components from Figma frames, and keeping your UI code in sync with your design system.

@@ -1,0 +1,18 @@
+---
+duration: "1-4 min"
+batch: 2
+order: 3
+batch_name: "Bonus Techniques"
+class: "techniques"
+chapter: "Fundamental Techniques"
+---
+
+# Always force a constraint restatement before code
+
+**Implication:** Many failures come from the model silently dropping constraints.
+
+Add a tiny step:
+
+> "Before coding, list the requirements you will satisfy (max 6 bullets). Then implement."
+
+This surfaces missing constraints early and reduces "oops I forgot."

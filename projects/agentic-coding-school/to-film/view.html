@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Coding School — To Film</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0d1117; color: #c9d1d9; padding: 24px; }
+  h1 { color: #f0f6fc; margin-bottom: 8px; font-size: 24px; }
+  .subtitle { color: #8b949e; margin-bottom: 24px; font-size: 14px; }
+  .stats { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 16px; }
+  .stat-num { font-size: 28px; font-weight: 700; color: #f0f6fc; }
+  .stat-label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+  .class-section { margin-bottom: 32px; }
+  .class-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; }
+  .class-header h2 { font-size: 18px; color: #f0f6fc; }
+  .class-badge { font-size: 12px; background: #30363d; color: #8b949e; padding: 2px 8px; border-radius: 12px; }
+  .chapter-group { margin-bottom: 16px; margin-left: 8px; }
+  .chapter-name { font-size: 13px; font-weight: 600; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding-left: 8px; border-left: 3px solid #30363d; }
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 8px; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 16px; transition: border-color 0.15s; }
+  .card:hover { border-color: #58a6ff; }
+  .card-title { font-size: 14px; font-weight: 600; color: #f0f6fc; margin-bottom: 6px; }
+  .card-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 12px; }
+  .tag-duration { background: #1f2937; color: #93c5fd; }
+  .tag-batch { background: #1c2333; color: #a78bfa; }
+  .tag-order { background: #1a2332; color: #6ee7b7; }
+  .card-body { font-size: 12px; color: #8b949e; margin-top: 8px; line-height: 1.5; max-height: 60px; overflow: hidden; }
+  .card.expanded .card-body { max-height: none; }
+  .card-toggle { font-size: 11px; color: #58a6ff; cursor: pointer; margin-top: 4px; border: none; background: none; padding: 0; }
+  .class-claude-code .chapter-name { border-left-color: #58a6ff; }
+  .class-techniques .chapter-name { border-left-color: #f97316; }
+  .class-context-engineering .chapter-name { border-left-color: #a78bfa; }
+  .class-business .chapter-name { border-left-color: #34d399; }
+  .class-workflows .chapter-name { border-left-color: #fbbf24; }
+  .color-claude-code { color: #58a6ff; }
+  .color-techniques { color: #f97316; }
+  .color-context-engineering { color: #a78bfa; }
+  .color-business { color: #34d399; }
+  .color-workflows { color: #fbbf24; }
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-btn { font-size: 12px; padding: 6px 14px; border-radius: 20px; border: 1px solid #30363d; background: #161b22; color: #c9d1d9; cursor: pointer; transition: all 0.15s; }
+  .filter-btn:hover, .filter-btn.active { background: #30363d; border-color: #58a6ff; color: #f0f6fc; }
+</style>
+</head>
+<body>
+<h1>Agentic Coding School — To Film</h1>
+<p class="subtitle">Auto-generated from to-film/*.md files</p>
+<div class="stats" id="stats"></div>
+<div class="filter-bar" id="filters"></div>
+<div id="content"></div>
+<script>
+const data =
+[{"class":"business","chapter":"Research & Intelligence","title":"Deep Research with Exa","duration":"8-12 min","batch":"1","order":"1","batchName":"Research & Intelligence","body":" Demo setting up the Exa MCP server and running real business research tasks: - Market research: \"Find all SaaS companies in the accounting automation space launched in the last 12 months\" - Competitive analysis: \"What are the top 5 competitors to [X] and what are their pricing models?\" - Trend ","file":"deep-research-with-exa.md"}
+,{"class":"business","chapter":"Marketing Automation","title":"Lead Research & Outreach","duration":"8-12 min","batch":"2","order":"2","batchName":"Marketing Automation","body":" Use Claude Code + Exa to find and research potential clients: 1. **Find prospects** — Search for companies/people matching your ideal customer profile 2. **Research each one** — Pull their website, recent content, company info 3. **Personalized outreach** — Generate custom email drafts based ","file":"lead-research-and-outreach.md"}
+,{"class":"business","chapter":"Operations & Admin","title":"Receipt & Invoice Processing","duration":"8-12 min","batch":"2","order":"1","batchName":"Operations & Admin","body":" Directly relevant to John Kim's accounting clients. Demo the headless mode receipt processing workflow: 1. Drop receipts/invoices (photos, PDFs) into a folder 2. Run a batch script that processes each one 3. Claude extracts: vendor, date, amount, category, tax info 4. Outputs structured CSV or JSON","file":"receipt-processing-for-accountants.md"}
+,{"class":"business","chapter":"Research & Intelligence","title":"Research Loops","duration":"8-12 min","batch":"1","order":"2","batchName":"Research & Intelligence","body":" John Kim's exact request: \"a loop that researches and feeds the system with updated information so it learns as it goes.\" Demo building a research loop using: 1. A skill that defines what to research and how to format findings 2. Headless mode (`claude -p`) to run the research on a schedule 3. A ","file":"research-loops.md"}
+,{"class":"business","chapter":"Content Production","title":"Social Media Content Engine","duration":"10-15 min","batch":"1","order":"3","batchName":"Content Production","body":" Build a content production system using Claude Code: 1. **Brand voice skill** — Create a skill file that captures your tone, style, vocabulary, and content pillars 2. **Content calendar** — Generate a month of content ideas based on your pillars + current trends (via Exa) 3. **Batch generation*","file":"social-media-content-engine.md"}
+,{"class":"claude-code","chapter":"Commands","title":"Ask User Question Tool: Markdown Previews","duration":"1-4 min","batch":"1","order":"17","batchName":"Quick Wins","body":" The ask user question tool now renders markdown in a right-hand preview panel, so Claude can show you visual mockups of layout options side by side. You can switch between options and add notes before selecting — great for design decisions like column layouts or FAQ ordering. ","file":"ask-user-question-markdown.md"}
+,{"class":"claude-code","chapter":"Hooks","title":"Background Hooks","duration":"1-4 min","batch":"1","order":"5","batchName":"Quick Wins","body":" [Boris Cherny (@bcherny) on X](https://x.com/bcherny/status/2015524460481388760?s=12) [Maximilian Mitchell (@maxmeuk) on X](https://x.com/maxmeuk/status/2015524640752337013?s=12) ","file":"background-hooks.md"}
+,{"class":"claude-code","chapter":"Hooks","title":"Blocking Risky Commands with Hooks","duration":"1-4 min","batch":"3","order":"2","batchName":"Hooks","body":" [Param (@Param_eth) on X](https://x.com/param_eth/status/2014774504132903260?s=46) Tell CC to explore the codebase and identify all such commands. ","file":"blocking-risky-commands-with-hooks.md"}
+,{"class":"claude-code","chapter":"Setup","title":"Claude Code in Xcode","duration":"5-9 min","batch":"6","order":"4","batchName":"Setup & Platforms","body":" [Xcode 26.3 unlocks the power of agentic coding](https://www.apple.com/newsroom/2026/02/xcode-26-point-3-unlocks-the-power-of-agentic-coding/) [Antoine v.d. SwiftLee (@twannl) on X](https://x.com/twannl/status/2018770166549758222?s=12) ","file":"claude-code-in-xcode.md"}
+,{"class":"claude-code","chapter":"Skills","title":"/debug Built-in Skill","duration":"1-4 min","batch":"1","order":"16","batchName":"Quick Wins","body":" Claude Code now ships with a built-in `/debug` skill. Describe an issue you observed (e.g. a hook that didn't trigger) and it'll diagnose it using the logs stored in your `.claude` folder. After fixing the issue, use `/rewind` to restore the conversation to before you asked the debug question. ","file":"debug-skill.md"}
+,{"class":"claude-code","chapter":"Desktop App","title":"Desktop App: Plugins","duration":"1-4 min","batch":"1","order":"14","batchName":"Quick Wins","body":" The Claude Code desktop app now supports plugins. You can browse available plugins, inspect what they contain before installing, and install them per-project or globally. Examples include frontend design and code simplifier plugins. ","file":"desktop-app-plugins.md"}
+,{"class":"claude-code","chapter":"Desktop App","title":"Desktop App: Previews","duration":"1-4 min","batch":"1","order":"11","batchName":"Quick Wins","body":" Claude Code desktop can now run your app locally and click through it like a user — taking screenshots and verifying buttons work. You can also select a specific element in the preview and ask Claude to change it directly (e.g. \"make this button green\"). Supports mobile view and persistent sess","file":"desktop-app-previews.md"}
+,{"class":"claude-code","chapter":"Desktop App","title":"Desktop App: Share Sessions","duration":"1-4 min","batch":"1","order":"15","batchName":"Quick Wins","body":" You can now share Claude Code sessions with colleagues via a public link from the desktop app or the web version. Useful for showing teammates what Claude did or getting a second opinion on a session. ","file":"desktop-app-share-sessions.md"}
+,{"class":"claude-code","chapter":"Desktop App","title":"Desktop App: SSH Connections","duration":"1-4 min","batch":"1","order":"13","batchName":"Quick Wins","body":" The Claude Code desktop app now supports SSH connections to remote servers. Add a server, connect, choose a remote folder, and Claude Code runs directly on that machine. Useful for quick changes to small side projects hosted on a VPS without needing Git or a full deploy pipeline. ","file":"desktop-app-ssh.md"}
+,{"class":"claude-code","chapter":"Desktop App","title":"Desktop App: /desktop Command","duration":"1-4 min","batch":"1","order":"12","batchName":"Quick Wins","body":" If you started a session in the CLI and want to move it to the desktop app to use features like the element picker or diff viewer, just run `/desktop`. It loads that exact session into the desktop app so you can continue without starting over. ","file":"desktop-cli-to-app.md"}
+,{"class":"claude-code","chapter":"MCP Servers","title":"Figma + Claude Code Integration","duration":"1-4 min","batch":"2","order":"8","batchName":"Bonus Techniques","body":" Figma announced direct integration with Claude Code, meaning you can now have a say in the design process and front-end UI/UX without leaving your agentic coding workflow. Cover how to use Claude Code with Figma to bridge the gap between design and implementation — inspecting designs, generating ","file":"figma-claude-integration.md"}
+,{"class":"claude-code","chapter":"Skills","title":"Finding Skills for Things You Want","duration":"1-4 min","batch":"4","order":"1","batchName":"Skills","body":" Ask the AI to go out and find skills for you — you won't always discover them on X. Explore skill directories or ask Claude Code to search for and install skills relevant to what you're building. Example: PlanetScale launched database skills for agents (Postgres, MySQL, Vitess) that give agents t","file":"finding-skills-for-things-you-want.md"}
+,{"class":"claude-code","chapter":"Commands","title":"--from-pr Command","duration":"1-4 min","batch":"1","order":"19","batchName":"Quick Wins","body":" Run `claude --from-pr <PR-ID>` to load the previous Claude Code conversation that was linked to that pull request. Makes it easy to pick up where you left off on any PR without hunting through session history. ","file":"from-pr-command.md"}
+,{"class":"claude-code","chapter":"Advanced","title":"Generate Diagrams On Demand","duration":"1-4 min","batch":"1","order":"21","batchName":"Quick Wins","body":" Pairs with: [[delete-your-readme]] ## The problem Architecture diagrams are READMEs with pictures. They go stale the moment you commit them, and when an agent reads a stale diagram (or the Mermaid source checked into the repo), it treats that outdated structure as ground truth. Worse, nobody update","file":"generate-diagrams-on-demand.md"}
+,{"class":"claude-code","chapter":"Setup","title":"Ghostty","duration":"1-4 min","batch":"6","order":"1","batchName":"Setup & Platforms","body":" Combined video covering Ghostty essentials: - Setting up tabs - Renaming tabs - Moving the pane around - Making a new pane - /terminal-setup [Boris Cherny (@bcherny) on X](https://x.com/bcherny/status/2017742753971769626) [https://x.com/bcherny/status/2007179832300581177](https://x.com/bcherny/stat","file":"ghostty-and-slash-terminal-setup.md"}
+,{"class":"claude-code","chapter":"Hooks","title":"Git Hooks in Claude","duration":"1-4 min","batch":"3","order":"3","batchName":"Hooks","body":" [Anthony Morris ツ (@amorriscode) on X](https://x.com/amorriscode/status/2019833252794757299?s=12) ","file":"git-hooks-in-claude.md"}
+,{"class":"claude-code","chapter":"Hooks","title":"Hooks for MCP","duration":"1-4 min","batch":"3","order":"4","batchName":"Hooks","body":" Prevent Claude Code running dangerous Postgres commands. Or remind it to spawn up a command in a subagent if it isn't in a subagent…? Is that possible. ","file":"hooks-for-mcp.md"}
+,{"class":"claude-code","chapter":"Hooks","title":"Hooks with Slash Commands, Skills, Subagents","duration":"1-4 min","batch":"3","order":"5","batchName":"Hooks","body":" - Added hooks support to agent frontmatter, allowing agents to define PreToolUse, PostToolUse, and Stop hooks scoped to the agent's lifecycle - Added hooks support for skill and slash command frontmatter - Go through the example of edit file for the macos appcast subagent to prevent it editing file","file":"hooks-with-slash-commands-skills-subagents.md"}
+,{"class":"claude-code","chapter":"Configuration","title":"--init, --init-only, --maintenance","duration":"1-4 min","batch":"1","order":"5","batchName":"Quick Wins","body":" ","file":"init-init-only-maintenance.md"}
+,{"class":"claude-code","chapter":"Configuration","title":"managed-settings.json for enterprises","duration":"1-4 min","batch":"6","order":"5","batchName":"Setup & Platforms","body":" [Claude Code settings - Claude Code Docs](https://code.claude.com/docs/en/settings) ","file":"managed-settings-json-for-enterprises.md"}
+,{"class":"claude-code","chapter":"Subagents","title":"Model Differences","duration":"5-9 min","batch":"5","order":"2","batchName":"Subagents & Models","body":" ### Aparajita Key Practical Differences 1. Error Recovery & Debugging - Opus: When something breaks during implementation, better at diagnosing root causes across multiple files and backtracking to fix the approach - Sonnet: Good at fixing individual issues, but may need you to help identify when t","file":"model-differences.md"}
+,{"class":"claude-code","chapter":"Commands","title":"Plan Mode from Slack","duration":"1-4 min","batch":"1","order":"18","batchName":"Quick Wins","body":" You can now trigger Claude Code plan mode directly from the Claude Slack app. @Claude a request and your team can collaborate on the plan together in Slack before any code gets written. ","file":"plan-mode-from-slack.md"}
+,{"class":"claude-code","chapter":"MCP Servers","title":"Playwright & Agent Browser","duration":"5-9 min","batch":"2","order":"9","batchName":"Bonus Techniques","body":" https://www.youtube.com/watch?v=I9kO6-yPkfM ","file":"playwright-agent-browser.md"}
+,{"class":"claude-code","chapter":"Skills","title":"React Best Practices Skill","duration":"5-9 min","batch":"4","order":"3","batchName":"Skills","body":" [agent-skills/skills/react-best-practices at react-best-practices · vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills/tree/react-best-practices/skills/react-best-practices) ","file":"react-best-practices-skill.md"}
+,{"class":"claude-code","chapter":"Subagents","title":"Second Opinion From Other Agents","duration":"5-9 min","batch":"5","order":"3","batchName":"Subagents & Models","body":" [Aaron Francis (@aarondfrancis) on X](https://x.com/aarondfrancis/status/2021953568945975434?s=12) ","file":"second-opinion-from-other-agents.md"}
+,{"class":"claude-code","chapter":"Skills","title":"Self Improving Skills","duration":"5-9 min","batch":"4","order":"2","batchName":"Skills","body":" With either another skill or a stop hook: [The SECRET to Claude Code Skills Nobody's Talking About](https://www.youtube.com/watch?v=3EHnp-SH4O8) [Self-Improving Skills in Claude Code](https://www.youtube.com/watch?v=-4nUCaMNBR8&pp=ygUgc2VsZi1pbXByb3Zpbmcgc2tpbGwgY2xhdWRlIGNvZGU%3D) ","file":"self-improving-skills.md"}
+,{"class":"claude-code","chapter":"Skills","title":"Skill Creator with Evals","duration":"5-9 min","batch":"1","order":"22","batchName":"Quick Wins","body":" Use the `/skill-creator` skill to build new skills from scratch — and run evals to test whether they actually trigger reliably. The skill interviews you about what you want, generates the skill file, then benchmarks it with variance analysis so you know if it's consistent before you ship it. ","file":"skill-creator-with-evals.md"}
+,{"class":"claude-code","chapter":"Skills","title":"Skills vs Subagents","duration":"5-9 min","batch":"4","order":"4","batchName":"Skills","body":" How they differ now parallelisation ## Skills don't scale — subagents do Beyond a certain number of skills (30-40+), it gets really messy. Claude struggles to reliably trigger the right one. The system prompt gets bloated with skill descriptions and trigger conditions, and Claude starts picking t","file":"skills-vs-subagents.md"}
+,{"class":"claude-code","chapter":"Commands","title":"/loop — Auto-Renewal Before Expiry","duration":"1-4 min","batch":"1","order":"24","batchName":"Quick Wins","body":" Recurring cron jobs auto-expire after 3 days. To keep a loop running indefinitely, schedule a one-shot task to delete and recreate it before it dies. Use `/loop` to set up the renewal job itself — so the whole system is self-sustaining without any manual intervention. ","file":"slash-loop-renewal.md"}
+,{"class":"claude-code","chapter":"Commands","title":"/loop — Setting Up a Recurring Task","duration":"1-4 min","batch":"1","order":"23","batchName":"Quick Wins","body":" `/loop` schedules any prompt or slash command to run on a recurring interval. Use it to poll for status, check messages, babysit a deploy, or run any repeated task hands-free. Syntax: `/loop [interval] <prompt>` — e.g. `/loop 5m /telegram-message` or `check the deploy every 20m`. ","file":"slash-loop-setup.md"}
+,{"class":"claude-code","chapter":"Commands","title":"References","duration":"1-4 min","batch":"1","order":"25","batchName":"Quick Wins","body":" - https://x.com/oikon48/status/2030066371548401702 ","file":"stash.md"}
+,{"class":"claude-code","chapter":"Subagents","title":"Subagent Memory","duration":"1-4 min","batch":"1","order":"10","batchName":"Quick Wins","body":" Subagents can now have persistent memory across runs using the `memory` frontmatter key (user, project, or local level). Claude injects a `memory.md` file into the subagent each time it runs, so it can remember what it did last time. Combine with `background: true` for self-improving background age","file":"subagent-memory.md"}
+,{"class":"claude-code","chapter":"Subagents","title":"Subagent Teams","duration":"5-9 min","batch":"1","order":"1","batchName":"Quick Wins","body":" ## Prep - Read through this article on multi-agent teams: https://x.com/oikon48/status/2024515104969281785 - Watch: https://www.youtube.com/watch?v=dlb_XgFVrHQ ","file":"subagent-teams.md"}
+,{"class":"claude-code","chapter":"Subagents","title":"Use subagents to reason with different models like the Kraken","duration":"5-9 min","batch":"5","order":"1","batchName":"Subagents & Models","body":" [Amp Code: Next Generation AI Coding – Beyang Liu](https://www.youtube.com/watch?v=gvIAkmZUEZY&list=WL&index=107) 1. Use different models. 2. Use bigger context for reasoning compared to the 32k. Place it before the Parathinker video. ","file":"use-subagents-to-reason-with-different-models-like-the-kraken.md"}
+,{"class":"claude-code","chapter":"Setup","title":"Using CC in WSL","duration":"5-9 min","batch":"6","order":"3","batchName":"Setup & Platforms","body":" ","file":"using-cc-in-wsl.md"}
+,{"class":"claude-code","chapter":"Advanced","title":"Worktrees","duration":"5-9 min","batch":"1","order":"9","batchName":"Quick Wins","body":" ## Prep - Read through this thread on worktrees: https://x.com/bcherny/status/2025117826412106216 ","file":"worktrees.md"}
+,{"class":"context-engineering","chapter":"Advanced Techniques","title":"Code Field","duration":"1-4 min","batch":"7","order":"2","batchName":"Context Engineering","body":" [context-field/code_field_article.md at main · NeoVertex1/context-field](https://github.com/NeoVertex1/context-field/blob/main/code_field_article.md) ","file":"code-field.md"}
+,{"class":"context-engineering","chapter":"Advanced Techniques","title":"Company as a file system","duration":"5-9 min","batch":"7","order":"3","batchName":"Context Engineering","body":" [Eli Mernit (@mernit) on X](https://x.com/mernit/status/2021324284875153544?s=12) ","file":"company-as-a-file-system.md"}
+,{"class":"context-engineering","chapter":"The Context Layer","title":"Context Layer Summarised","duration":"5-9 min","batch":"7","order":"1","batchName":"Context Engineering","body":" ","file":"context-layer-summarised.md"}
+,{"class":"context-engineering","chapter":"Advanced Techniques","title":"Language Server Protocol","duration":"5-9 min","batch":"7","order":"4","batchName":"Context Engineering","body":" Use LSP-powered tools (like Serena/JetBrains MCP) instead of text-based search for code navigation. Semantic understanding beats grep. ## Example: Serena in AGENTS.md for Sub-Agents Show how you can add LSP instructions to your `AGENTS.md` so sub-agents use semantic tools first: **The anti-pattern:","file":"language-server-protocol.md"}
+,{"class":"techniques","chapter":"Fundamental Techniques","title":"Always force a constraint restatement before code","duration":"1-4 min","batch":"2","order":"3","batchName":"Bonus Techniques","body":" **Implication:** Many failures come from the model silently dropping constraints. Add a tiny step: > \"Before coding, list the requirements you will satisfy (max 6 bullets). Then implement.\" This surfaces missing constraints early and reduces \"oops I forgot.\" ","file":"always-force-a-constraint-restatement-before-code.md"}
+,{"class":"techniques","chapter":"Advanced Techniques","title":"Getting Shit Done","duration":"5-9 min","batch":"2","order":"6","batchName":"Bonus Techniques","body":" [GitHub - glittercowboy/get-shit-done: A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code and OpenCode.](https://github.com/glittercowboy/get-shit-done) ","file":"getting-shit-done.md"}
+,{"class":"techniques","chapter":"Fundamental Techniques","title":"LLMs have an easier time writing things","duration":"5-9 min","batch":"2","order":"7","batchName":"Bonus Techniques","body":" LLMs have an easier time writing things. Can write it into a new codebase or file or as a separate application. Mini tool or app. Use —add-dir. (can be a class video too) ","file":"llms-have-an-easier-time-writing-things.md"}
+,{"class":"techniques","chapter":"Advanced Techniques","title":"Pass agents","duration":"1-4 min","batch":"2","order":"2","batchName":"Bonus Techniques","body":" ## Use two-pass agents for reliability **Implication:** Single-pass generation drops constraints; a second pass catches misses. - Pass 1: generate solution - Pass 2: a \"compliance checker\" prompt: \"Check against requirements; list violations; patch.\" This is basically unit tests for instruction","file":"pass-agents.md"}
+,{"class":"techniques","chapter":"Advanced Techniques","title":"Refactoring to Save on Context","duration":"1-4 min","batch":"2","order":"4","batchName":"Bonus Techniques","body":" [Whiteboarding made easy](https://app.excalidraw.com/s/85b98HOP6NF/AlunVcjhjrB) Read replies here: [Ian Nuttall (@iannuttall) on X](https://x.com/iannuttall/status/2017260282272166396?s=12) ","file":"refactoring-to-save-on-context.md"}
+,{"class":"workflows","chapter":"Applications","title":"Remotion","duration":"5-9 min","batch":"8","order":"1","batchName":"Applications","body":" As a separate application class. ","file":"remotion.md"}
+];
+
+const classLabels = {
+  'claude-code': 'Master Claude Code',
+  'techniques': 'Bonus Techniques',
+  'context-engineering': 'Context Engineering',
+  'business': 'Claude Code for Business',
+  'workflows': 'Workflows & Applications'
+};
+
+const classOrder = ['claude-code', 'techniques', 'context-engineering', 'business', 'workflows'];
+
+// Stats
+const totalVideos = data.length;
+const classes = [...new Set(data.map(d => d.class))];
+const chapters = [...new Set(data.map(d => d.chapter))];
+document.getElementById('stats').innerHTML = `
+  <div class="stat"><div class="stat-num">${totalVideos}</div><div class="stat-label">Videos to Film</div></div>
+  <div class="stat"><div class="stat-num">${classes.length}</div><div class="stat-label">Classes</div></div>
+  <div class="stat"><div class="stat-num">${chapters.length}</div><div class="stat-label">Chapters</div></div>
+`;
+
+// Filters
+let activeFilter = 'all';
+const filtersEl = document.getElementById('filters');
+filtersEl.innerHTML = `<button class="filter-btn active" data-filter="all">All</button>` +
+  classOrder.filter(c => data.some(d => d.class === c)).map(c =>
+    `<button class="filter-btn" data-filter="${c}">${classLabels[c] || c}</button>`
+  ).join('');
+
+filtersEl.addEventListener('click', e => {
+  if (!e.target.matches('.filter-btn')) return;
+  activeFilter = e.target.dataset.filter;
+  filtersEl.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  render();
+});
+
+function render() {
+  const filtered = activeFilter === 'all' ? data : data.filter(d => d.class === activeFilter);
+  const grouped = {};
+  filtered.forEach(d => {
+    if (!grouped[d.class]) grouped[d.class] = {};
+    if (!grouped[d.class][d.chapter]) grouped[d.class][d.chapter] = [];
+    grouped[d.class][d.chapter].push(d);
+  });
+
+  // Sort videos within chapters by batch then order
+  Object.values(grouped).forEach(chapters => {
+    Object.values(chapters).forEach(videos => {
+      videos.sort((a, b) => (Number(a.batch) - Number(b.batch)) || (Number(a.order) - Number(b.order)));
+    });
+  });
+
+  let html = '';
+  classOrder.forEach(cls => {
+    if (!grouped[cls]) return;
+    const chapterMap = grouped[cls];
+    const count = Object.values(chapterMap).reduce((s, v) => s + v.length, 0);
+
+    html += `<div class="class-section class-${cls}">`;
+    html += `<div class="class-header"><h2 class="color-${cls}">${classLabels[cls] || cls}</h2><span class="class-badge">${count} videos</span></div>`;
+
+    Object.keys(chapterMap).sort().forEach(chapter => {
+      const videos = chapterMap[chapter];
+      html += `<div class="chapter-group">`;
+      html += `<div class="chapter-name">${chapter || 'Uncategorized'}</div>`;
+      html += `<div class="video-grid">`;
+      videos.forEach(v => {
+        html += `<div class="card" onclick="this.classList.toggle('expanded')">`;
+        html += `<div class="card-title">${v.title}</div>`;
+        html += `<div class="card-meta">`;
+        if (v.duration) html += `<span class="tag tag-duration">${v.duration}</span>`;
+        if (v.batch) html += `<span class="tag tag-batch">Batch ${v.batch}</span>`;
+        if (v.order) html += `<span class="tag tag-order">#${v.order}</span>`;
+        html += `</div>`;
+        if (v.body && v.body.trim()) {
+          html += `<div class="card-body">${v.body}</div>`;
+          html += `<button class="card-toggle">more</button>`;
+        }
+        html += `</div>`;
+      });
+      html += `</div></div>`;
+    });
+    html += `</div>`;
+  });
+
+  document.getElementById('content').innerHTML = html;
+}
+render();
+</script>
+</body>
+</html>
