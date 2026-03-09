@@ -1,0 +1,1031 @@
+---
+title: "Claude Code Tutorial for Beginners"
+date: 2026-02-19
+video_id: 3HVH2Iuplqo
+channel: sabrina-ramonov
+---
+
+If you're not using Cloud Code right
+now, you are falling behind millions of
+other people that are using it to get
+real work done, automate tedious things,
+learn things 10 times faster, start new
+businesses, and so much more. It is the
+AI tool of the year. Imagine Chat GPT,
+but with the ability to actually get
+real work done. That is Claude Code, and
+I'm so excited today to walk you through
+exactly how to install it for beginners
+who are absolutely non-technical. We're
+going to walk through setting up your
+first MCP server and we're going to walk
+through building your very first AI
+social media assistance. This is going
+to be a comprehensive tutorial for
+absolute beginners. You do not need any
+technical background. And I wanted to
+really walk you through a realworld
+practical use case, which is why we're
+going to plug in an MCP server as well
+and build out your very first AI social
+media assistant. Okay, step one is to
+create a claude.ai account. So, go
+ahead, go over to claw.ai. If you don't
+have an account already, go ahead and
+sign up for an account. Then on the
+bottom left corner, this is where you
+can access your settings. So go ahead
+and click settings, right? Click billing
+on the lefth hand side. And many people
+ask me which plan should they pay for.
+If you're absolutely new to Claude,
+you're not sure yet if you're going to
+use it a lot. Just start with the pro
+plan, $20 per month. Keep in mind though
+that you will probably hit the usage
+limits pretty quickly, especially if you
+have AI calling all different types of
+tools that you use such as notion, air
+table, Google sheets, etc. I am
+personally on the max plan at $200 per
+month. I have never hit the usage limit
+and I'm super happy with that plan, but
+you will naturally progress. So, just
+start on the lowest least commitment
+plan. And if you end up using Cloud Code
+significantly, which I suspect you will,
+you'll realize you can cancel many other
+tools and just invest in Cloud Code.
+Once you've set up your cloud.ai
+account, go ahead, go to
+code.claude.com.
+Now, you've probably seen many tutorials
+that reference this section, and it's
+basically a kind of a scary looking
+documentation that shows you all the
+different ways you can install Cloud
+Code. I'm going to show you the
+beginnerfriendly option, but if you are
+technical, you know your way around a
+terminal, this is the easiest place to
+get started. You just copy one of these
+commands depending on your operating
+system. If you're on Mac, Linux, or
+Windows Subsystem for Linux, on Windows,
+click this one. But you're doing Windows
+PowerShell, click this one. However, for
+most people watching this video, this is
+already intimidating. So, I'm going to
+suggest a slightly different approach
+that I think will be much more
+productive. If you are absolutely
+non-technical new to this stuff, just go
+to Google or your search bar and type in
+visualstudio code. The first result
+should be this code.visisualstudio.com.
+Go ahead and click that and download it
+for your operating system. Boom. Click
+download. Okay. So now the download is
+starting. Go ahead and click it to start
+the real download. I accept. Go ahead.
+Next. Next. Just choose all the default
+options here. And of course, it'll look
+a little bit different if you're on Mac,
+but it's essentially the same
+installation process. At the end of the
+wizard, it should say launch Visual
+Studio Code. So, go ahead and click
+finish. And if it didn't launch
+automatically, just open up your app
+navigation and type in Visual Studio
+Code. This is the icon. So, it should
+look like this. So, go ahead and open
+that up. Okay. So, just to recap, we've
+set up our cloud.ai account. We've
+installed Visual Studio Code. And now
+we're going to install the official
+Claude Code extension for Visual Studio
+Code. You can think of it an extension.
+It's kind of just like a plugin into
+Visual Studio Code to give it
+superpowers. And if you're wondering
+what this Visual Studio Code thing is, I
+kind of call it a Google Doc, but for
+developers, or at least traditionally,
+you would be a developer to use this
+kind of tool. But the reason I recommend
+it, even if you're non-technical and
+you're just a beginner starting out, is
+because it makes it so much easier to
+review the work that Cloud Code is
+doing. I'm going to show you in a bit in
+this tutorial, but when you ask Cloud
+Code to do something and it produces
+different outputs or even temporary
+plans, it's way easier to use an editor
+to view the output or the thinking
+process of cloud code than to use a
+terminal. Okay, so it should look like
+this now. And on the left sidebar,
+actually, hang on one sec. I I have to
+bring up my left sidebar. On your left
+sidebar, there should be a couple
+different icons. Look for the one that
+says extensions. It should look like
+three cubes. I hid it from my normal
+view. Um, but if you don't see it, you
+can always go to view at the top and
+then click extensions here. Okay. Then
+we're going to search for Cloud Code.
+Should be the first result here. And go
+ahead and install this. Make sure it has
+over 4 million downloads here. So,
+you're downloading the correct
+extension. If it downloaded correctly,
+it should look like this. uninstall,
+right? Because that means it's
+installed. Okay? And then you should see
+this orange icon in the top right
+corner. So go ahead and click that. So
+when you click that orange icon in the
+top right corner, Cloud Code will open
+and it will open in the folder that you
+have open here in Visual Studio Code. If
+you want to add multiple folders for
+Cloud Code to be able to like easily
+operate on and you want to see what's
+happening in those folders, on the left
+hand side, this is where the files and
+folders are going to appear. Um, you can
+do something like for example file open
+folder or you can add folder to
+workspace if you want to add multiple
+folders to this workspace or you can
+open a different folder containing a
+different project. In this case, my
+folder is completely empty because we're
+just going to start from scratch. But if
+it's your first time, I recommend just
+creating an empty folder and then
+opening that. That way, you know,
+everything we create will just be stored
+there and it won't impact anything else
+on your computer. Once you've gone ahead
+and created that folder, then you'll
+want to open it here. So go to file,
+open folder, and then find the folder
+that you just created. And it will look
+like this. Again, it's empty because we
+don't have any files yet. So go ahead.
+Once you've done that, let's go ahead
+and use cloud code. So let's just ask it
+what can you do. This is one of my
+favorite tips working with any AI tool.
+I like to just literally ask the tool
+what it can do. It can walk me through
+exactly how it's useful. So it can be
+used for code development. It can be
+used for researching the web. It can be
+used for planning. And it even told us
+to type slashhelp if we want more
+information on available commands. So
+let's start typing that slash and then
+the menu pops up. Okay, so this is
+really neat. So these are additional
+commands that you can invoke within
+cloud code. We're not going to go
+through all of them today, but it's just
+handy to know that that's where this is.
+For example, if you want to switch the
+model to a different model, you just
+type /model and choose the one that you
+want to work with. In my case, I almost
+always use opus 4.6 six. Unless I'm
+doing really, really easy stuff or if I
+don't want to eat up my usage limits,
+then I might switch to a lesser model.
+You can also tell Claude exactly how
+often it should ask you for permission.
+So, the default is it will ask you any
+time before it edits files. But if you
+want to change that, you can click it,
+right? So, instead, it could be in
+planning mode. If you just want to spend
+most of your time planning, you can,
+this is the default mode. It'll ask you
+before any edits or you can have it edit
+files automatically. Okay, so let's get
+started just diving in and using claw
+code. So let's ask it to do something
+related to social media marketing. Um
+let's say research the latest Kimmy claw
+open claw tool and write a viral
+LinkedIn post output the draft. Okay.
+And now what's happening is claude code
+is thinking. So the first thing it did
+is asked us for permission to search the
+web automatically. So it's asking allow
+searching for this query. So this means
+claude code is going to research the
+internet about this Kimmy claw AI tool
+in 2026. You can either click these
+options or you can just press the
+number. So I want to say yes. So I'm
+going to press one. If you want to give
+it additional context, you can tell
+Claude what to do instead by typing here
+and then pressing enter. In this case,
+let's just click one for yes. It's going
+to keep asking to allow the search. And
+what's really cool is you can see its
+thinking process. So it searched this.
+You can see it's green here. So it was
+successful. You can click on this to
+actually see what it searched. Like this
+is the output of running that query. And
+if this is hard to read, don't worry. So
+go to I think it's view. Go to view and
+then click word wrap. So this will now
+wrap everything in your browser. So it's
+a little bit easier to read. Um but it's
+really cool because you can see claw
+thought process at each step and verify
+that it's doing the work that you want
+at each step. So here again, it's asking
+us to fetch from this URL. I'm going to
+say yes, allow these domains while we're
+doing research. And you may have noticed
+on the left side, a file was actually
+created in the process. So if you go
+ahead and click that settings.local
+JSON, notice how it's under this
+directory.Cloud.
+Let me zoom in here. Okay. So what this
+means is cloud code remembered the
+permissions that we granted. Remember
+when I said I'm going to allow it to
+fetch the web at this domain for this
+project. So now that we have a
+permissions file, Cloud Code will know
+if I ever want to go to this website or
+this website, I'm allowed to do so. And
+this permissions file will only apply to
+this project. So you can have a
+different set of permissions for one
+project and a different set of
+permissions for another project as it
+makes sense. Okay, now Claude is writing
+a bullet point draft. And he's asking,
+would you like me to adjust the LinkedIn
+post draft? Looks good as is. more
+personal story, shorter and punchier,
+more technical depth. Let's make it
+shorter and punchier since this is
+LinkedIn. And here's the draft. So, it
+actually did output the draft over here.
+So, LinkedIn post draft. And there's a
+separate um directory on your computer
+where it's going to store its plans. But
+you can always click on this or we can
+ask Claude to actually create the draft
+within this project. So, I'll do that in
+a second. But keep in mind, you can
+click a lot of these links, right? So,
+it'll open the corresponding file, which
+is really handy. Okay. So here's our
+LinkedIn post draft. This is the plan.
+I'm just going to say no keep planning
+for now so we can take a look at it.
+Okay. So here's the plan on the lefth
+hand side. But let's say we want to
+write this LinkedIn post here in our
+project file so that we can go back to
+it at any time. So let's go ahead and
+ask claude. Let's first of all switch
+from plan mode to ask before edits mode
+and say write uh let's say create a file
+in this project containing the LinkedIn
+draft. also create another file with a
+draft for Twitter. So, two slightly
+different writing styles since Twitter
+has a strict character limit unless you
+have a premium account. So, this will
+create two files in this project. One
+with our LinkedIn draft. Okay, so here
+is the draft. I'm going to zoom out so
+it's a little bit easier to see. And
+this mode that just came up, what this
+means is Claude is asking us permission
+to write this file. So, allow write to
+this file. And it's showing us the
+before and after. So this left panel
+looks empty because the file didn't
+exist. And the right side of this is
+showing the post that Claude will be
+writing. So here I'm going to say yes,
+allow all edits this session, which
+means if I want Claude to tweak this
+draft, it'll go ahead and do that
+without asking me for permission every
+single time. And notice how it's
+switched now from ask before every edit
+to edit automatically because of what I
+answered when it asked for permission.
+Okay, so now we have two files, right?
+So just click on these, right? LinkedIn
+Twitter draft. I'm going to close the
+previous planet made as well as the
+settings. We don't really need to look
+at that anymore. But yeah, this is why
+I'm kind of um equating the Visual
+Studio code to Google Doc for editors.
+Um so traditionally these files would
+contain code, right? And editors would
+and coders would edit this code to build
+their apps. But you can also use this
+interface to quickly scan and review the
+outputs from cloud code. So here, Cloud
+Code wrote our LinkedIn draft regarding
+OpenClaw and Kimmy and then it also
+wrote a Twitter draft and in fact it
+wrote a Twitter thread. Tweet one, tweet
+two, tweet three, tweet 4. So if you
+want to make any edits before this goes
+out, you can easily do that in here or
+you can ask Claude to do it for you. But
+the nice thing is all of the files are
+stored here in this project directory.
+I'm going to show you just a couple more
+prompts so you can get comfortable using
+Claude code. So, for example, let's say
+make sure to fact check all this
+information since Kimmy Claw is brand
+new point. It's going to ask permission
+again for a bunch of websites and I
+granted it access. Okay. And after it's
+doing its research and after I asked it
+to fact check this, it said a couple
+things need correcting. So, some things
+like partially true, misleading, right?
+So, it's going ahead and edit our drafts
+based on my request to fact check this
+post. And here's the conclusion. All
+other claims checked out across multiple
+sources, which is great. Now, there can
+always be a situation when multiple
+sources are wrong, but at least you have
+kind of done. But if multiple credible
+sources are reporting the same thing,
+it's much less likely that you're
+reporting something incorrect. Now,
+let's say you want to take this to the
+next level, like how do you incorporate
+your brand voice, your own marketing
+assets? The beautiful thing about Cloud
+Code and many other generative AI tools
+is you can just ask them the best way to
+interact with them so that they can help
+you accomplish your goal. So let's just
+ask Claude Code what would be the best
+way to incorporate my brand voice in
+these drafts as well as all drafts
+moving forward so that you don't have to
+repeat this process again and again. And
+Claude's answering we should create a
+brand voice file in our project so that
+it can reference it every time it writes
+content. And now it's going to build
+that guide by asking me a couple of
+questions about my brand voice. Um, I
+would say maybe thoughtful and
+analytical. There's multiple questions
+here. So, tone, CTA, and examples, so
+make sure to click through all of them.
+How do you typically end posts? I like
+to end it with a question. And then
+examples. Do you have existing LinkedIn
+posts? I do somewhere, but uh, let's
+just say for now, no. Build from
+scratch. Obviously, if you have your own
+content, that's great. Just click yes.
+It's asking some more follow-up
+questions. I'll just say mix of the
+above. What should your posts never
+sound like? No. Sometimes I do like to
+say crushing it. So I'll just say and
+the key point I really want you to learn
+is that you can just ask Claude code how
+do I do this? You don't have to search
+for the perfect YouTube tutorial to
+follow along. Claude Code can actually
+teach you step by step or you can
+brainstorm with it interactively. Come
+up with a plan. Give it feedback like h
+I don't think this sounds like me. This
+sounds more like me over here. like just
+keep going with that interactive
+feedback and realize that instead of
+your instead of your default being oh
+let me find a tutorial that walks me
+through this. Your default mode of
+thinking should be let me ask claude
+code and see what we can do. Okay. And
+if you scroll up here you can actually
+see the brand voice guide it wrote. You
+may have noticed the file it added over
+here on the left side. Let's go ahead
+and open that up. And obviously this is
+a very light brand voice file but you
+can add a lot more to it. So, I'm just
+giving you kind of the basic skeleton to
+get started, and you can add a ton more
+on top of this. So, one neat thing here
+is Claude's saying, "For future content,
+I'll reference the brand voice guide
+automatically." You can also tweak at
+any time to refine the voice. But how
+does that actually work? So, let's go
+ahead and ask Claude, how does this
+actually work? If I close this
+conversation, how will you know to
+reference the brand voice guide
+automatically? Okay, and this is really
+interesting. and Claude actually backed
+up on its answer which I figured it
+would do but this is a really useful
+experience and experiment to go through
+um because there also always keep in
+mind that AI so question it be like how
+would this work can you walk me through
+how it would work and now Claude is
+saying if you close this conversation I
+start fresh with no memory of this
+session but I do have a persistent
+memory file that gets loaded it's
+currently empty if I save a note there
+pointing to your brand voice then I'll
+see it every time so now it's going to
+set it up. So, it went ahead and updated
+its memory file here and it summarized
+exactly what I did here. So, that was a
+really nice example which honestly I
+didn't even plan, but it worked out
+perfectly. Right? The key thing to
+always understand is you're still
+talking to AI at the end of the day,
+which means it can be wrong. It can have
+outdated knowledge. It may hallucinate.
+It may put emphasis on the wrong context
+instead of the right context for your
+situation. And so, just as a habit,
+always ask why. How does that work? Walk
+me through it. Why? If something doesn't
+add up or seem right or doesn't make
+sense to you, just dig in deeper. I
+really want you to embrace cloud code as
+a partner, but it can also be wrong. So
+like it is important that you understand
+what is going on. And the more you
+understand how to work with cloud code,
+the more productivity and leverage
+you'll be able to gain working with it.
+Okay, now the next step in our agenda,
+we have completed all of these, which is
+great. And now we're going to set up our
+very first MCP server and launch our AI
+social media assistance. Now, I was
+debating whether I should include MCP in
+a beginner tutorial like this. But the
+reason why I think it's so important is
+because understanding MCP and how to
+connect MCP will allow you to use Cloud
+Code to perform realworld tasks. What I
+mean by this is, okay, now we have two
+draft social media posts. Let's say
+we're happy with these drafts. Okay, but
+what do you do next? How do you actually
+post them to social media? I mean, you
+would have to copy and paste this,
+right? Open up Twitter or open up some
+kind of scheduler tool for social media.
+Copy paste each of these things. This is
+a Twitter thread, by the way. So, you're
+going to copy paste tweet one, tweet
+two, tweet three, tweet four, and this
+alternative version, you're going to
+have to copy paste each one of those
+into your social media scheduling app or
+into Twitter directly and then post it.
+And then you're going to open this
+LinkedIn draft, copy paste this, and
+then post it to LinkedIn. You may also
+want to create a visual for this
+content, right? Most LinkedIn posts, by
+the way, have a visual attached, whether
+it's an image or video. So, how do you
+do that? You would normally open up
+another tool like Canva or Adobe or
+whatever you use to make nice
+infographics and images. You'd open that
+up separately and then grab everything
+and upload it to LinkedIn. Then grab
+everything and upload it to Twitter. So,
+the amazing thing about MCP is all of
+that tedious work you'd have to do
+separately, you can now do all in one
+place. And all you have to do is tell
+Claude in plain English. Hey, I want to
+make an infographic accompanying this
+post. Hey, this post is ready to go.
+Let's post it on Twitter or let's
+schedule it a week out from now. You can
+do all of those things within Cloud
+Code. And that is why I'm so excited to
+teach folks how to use Cloud Code
+because you can actually get real work
+done. It's not just coming up with a
+post, but you have to do everything else
+yourself, right? Because that's not
+super efficient either. What I'm going
+to show you, you're going to use cloud
+code. It's going to write the post. You
+should review it, obviously, add your
+human voice, your perspective, things
+that are unique to you. And then within
+Cloud Code as well, you can make visuals
+and post or schedule them out to all of
+your social media platforms without ever
+having to leave Cloud Code. But to do
+this, we need to learn to integrate at
+least one MCP. So, real quick, what is
+MCP? The simple way I like to describe
+it is it allows cloud code to interact
+with the apps you actually use. So if
+you use email, if you use air table, if
+you use notion or here, Google doc, MCP
+allows AI to efficiently interact with
+the apps that you actually use on a
+day-to-day basis. Now, full disclosure,
+this is an app I built as a content
+creator. I've grown from zero to 1.5
+million followers without a team and
+without budget. And the only way I've
+been able to do that is to figure out AI
+and automation to scale myself. And I
+built an MCP server so that I could do
+all of this within cloud code. So go to
+the website blot.com, click login or
+start your free week. On the bottom
+left, click settings. Okay. And this is
+where you're going to be able to grab
+your API key. Now the API key is a paid
+feature here. I know that's not amazing,
+but it significantly helps me to reduce
+spam. I do have a no questions asked
+money back guarantee. So like seriously,
+if you're not happy with this for any
+reason, you can just get a refund. But I
+do have a payw wall up to reduce spam
+posts. If you're logging in for the
+first time, you won't have an API key
+generated yet. So there will be a big
+button here that says generate API key.
+So go ahead and click that. Then the
+second step is to copy the setup
+command. So go ahead and click that.
+Then go over to cloud code and paste
+that in there. So this is the command.
+If you have cloud code installed via
+terminal already before watching this
+video, then you can just take this
+command and run it in your terminal and
+that will work. However, in this video,
+since I focused on installing cloud code
+via Visual Studio Code, this command
+actually won't work. So, we need to add
+just a little bit extra to help cloud
+code out. So, we're going to take this
+add the following MCP server as if you
+were running cloud MCP ad and add it to
+user scope, meaning it's going to be
+used and available for multiple projects
+that you may have in cloud code. And
+we're telling Cloud to create the file
+if it doesn't exist yet. So, go ahead
+and copy this or screenshot this and add
+it to the beginning of your prompt.
+Okay, so now your prompt should look
+like this. And then go ahead and click
+enter. It's going to ask for a bunch of
+permissions. So, it's trying to see if
+that file already exists. Okay, the file
+exists. Great. So, now it's going to add
+it to the file, which is great. Okay.
+And now Claude is verifying that it was
+added correctly, but it also opened the
+file here. So, it should beclaude JSON.
+And the nice thing about doing it this
+way, if so, if you don't add this
+initial part, cloud code will try to set
+up your MCP server in a different file.
+And it can lead to confusion because
+you're going to have different MCP
+servers in your global user scope and
+then other MCP servers in your personal
+project. If you're brand new to this,
+like you're a beginner to this, that can
+just lead to extra confusion. For any
+future MCP servers you want to install,
+you can also add this thing at the
+beginning and it will install all of
+them at the same scope in the same
+configuration file. So you can just see
+all of them and manage all of them
+there. Okay, let's go back to cloud
+code. And it says done. The Blueot MCP
+server has been added. Let's go look for
+it. So, this is the cloud J file. Should
+scroll down. There should be a section
+called MCP servers potato. Here's the
+URL. And then that should be your API
+key. If for some reason you're you
+didn't uh paste your API key or it
+didn't copy over, you can copy your API
+key from your potato settings. Okay. And
+then paste it in here if for some reason
+it did not copy over. And we will need
+to restart Cloud Code for the new MCP
+server to be picked up. Okay. So, it's
+telling us this right here. To do that,
+just click the plus button in the top
+right corner. This will start a new
+session. Um, I'm on Windows, but if
+you're on Mac, uh, you should also be
+able to click this button, this orange
+icon, and it will open a new cloud code
+session. Let's go ahead and click that.
+Okay. And yeah, let's try using our AI
+social media assistant. So, let's say
+make a whiteboard infographic from the
+LinkedIn draft. Now, remember when I
+said the purpose of installing an MCP
+server, even though this is an absolute
+beginner tutorial, is because we want
+Cloud Code to be able to do useful
+things. It's like, it's great that it
+can write the copy. I mean, chat GPT can
+also do that. What about creating the
+visual? What about actually scheduling
+it and publishing it to social media?
+So, that's the part we're going to walk
+through right now. Okay. And it's going
+to ask you for all of these permissions.
+I just say yes, allow these permissions.
+And again, don't be concerned if like
+stuff is red here. That's just Claude
+figuring it out. Like that one didn't
+work. Okay, this one worked. Now the
+visual is being generated. Let me check
+on the progress. Now, when you create a
+visual, especially a whiteboard
+infographic, it's going to use an AI
+model to make that visual. So, it can
+take 30 seconds or upwards to a minute
+to finish. But you can check on the
+progress by going to your potato
+account, click videos, and you should
+see the draft here. Right? So, this was
+the one that errored out when Cloud Code
+initially tried it, but it didn't quite
+work. And then this was the one that was
+successful. And the cool thing is Cloud
+Code just figured it out. It was able to
+read my extensive API documentation and
+just figure it out. So go ahead and
+click into this draft that you can see
+it's still generating the script or the
+prompt for this whiteboard infographic.
+And when it's done, Blotto will actually
+automatically refresh the page. So you
+can see the infographic draft. So this
+is the draft and then it's going to
+render the final version. So that will
+take probably another 20 seconds. But if
+you go back to cloud code, it actually
+gave us the preview here. So this is
+actually the preview. Okay. So here one
+thing is if you click this link, the
+link will actually not be valid because
+there's too much stuff here. So after
+the JPEG, all of this like timestamp and
+stuff shouldn't be clickable. So that's
+why it's not popping up. If you kind of
+remove all of that junk, so you just see
+like the JPEG extension at the end and
+then click enter, then you will see the
+infographic template. But we can also
+ask Claude code to clarify and just say
+that link didn't work. Could you check
+it again and output just the link? And
+let me just go back to our LinkedIn post
+as well. So yeah, so this post was about
+Kimmy and Open Clock Combining. The
+company behind Kimmy is called Moonshot
+AI. So that's why it's referencing that.
+And here's the link. So let's go ahead
+and click that. Okay, that is the clean
+link. So it works. Okay, so basically in
+a matter of 1 minute, Cloud Code took
+our LinkedIn post draft that we put in
+our brand voice and then generated a
+whiteboard infographic to go along with
+it. And if you're wondering if these
+types of posts do well, uh this is a
+post I made about 18 hours ago using
+this Cloud Code system, using one of the
+infographic templates, and it's almost
+10,000 views now. And I posted this like
+late last night. Okay, so now we have an
+AI social media assistant that is
+creating copy in our brand voice.
+Obviously, we can beef up this brand
+voice guide. This was just the starting
+point. Uh, it can also make visuals. So,
+I just showed one infographic template,
+but there's actually all kinds of
+visuals you can make. So, if you click
+create new video up here, you'll see
+like all of these different templates.
+You can make AI videos with AI voices,
+11 Labs voiceovers. You can make image
+slideshows like this for Tik Tok. You
+can make carousels for Instagram, quote
+cards, all kinds of different
+infographic styles like this. This anime
+one is one of my favorite. I think I'm
+going to start doing those for LinkedIn.
+Product scene photos. So, if you have a
+product reference image and you want it
+like in a certain scene, you can use
+this templates. If you have existing
+footage, uh you can use this template
+which will generate captions and B-roll.
+And if you have existing images or video
+clips, you can also feed them in here
+and it will create a social media ready
+video with a title with subcaptions with
+optional music as well. And what was
+really cool is Claude actually decided
+which template to use based on our
+request. We said, "Hey, make an
+infographic to accompany this and it
+chose the infographic template that it
+thought would be a great fit for this
+topic." Okay. Now, the last step is like
+how do you actually publish this to
+social media? So, what we're going to do
+first is connect our social media
+accounts to Blotato. So, again, go back
+to go to settings, go to accounts, and
+then click login with your social
+account. So, I'm going to log in to
+Twitter here. Okay. And you should see
+the connected accounts down at the
+bottom here. And I'm also going to log
+in to link. Okay. So, now we have both
+accounts here. By the way, you can also
+post the LinkedIn company pages. So,
+just so you know. And now, let's go back
+to Claude Code. Okay. So, let's just say
+we make some edits here. Like, oh, I
+don't like all these hashtags at the
+bottom. Okay. Make sure to save the
+file. So if there's like a little dot,
+maybe that was too quick. But let's say
+you make some edits. There'll be a
+little dot here. That means it's unsaved
+changes. So make just go ahead click
+save just like you normally would. And
+then here's the Twitter draft. And now
+we want to tell Cloud Code to post this
+on social media. And we can be somewhat
+free form with it. So let's say okay,
+I'm ready to post now. Let's say for
+LinkedIn, schedule it for tomorrow
+morning with an infographic. And let's
+say for Twitter, no infographic, but
+schedule the thread, right? So in the
+draft, it gave us a single tweet version
+or a fourpart Twitter thread. Let's go
+with a thread. Schedule the thread. I
+don't know what today is. What is today?
+Tuesday. Okay. Uh schedule a thread
+Thursday morning. Okay. So now what
+should happen is cloud code is first
+checking what social accounts we have
+connected. So go ahead and click yes. So
+it's going to fetch like, oh, you have
+this Twitter account or you have this
+LinkedIn account. By the way, you can
+have multiple accounts of the same
+platform. You can have multiple Twitter
+accounts connected, multiple Facebook
+accounts connected, multiple Instagram
+accounts connected. So, that's really
+handy. Once it fetches the accounts,
+then it's going to like create the
+request that's going to publish it to
+social media or in this case schedule it
+in advance. Okay. Okay. So, now it's
+scheduling now LinkedIn for tomorrow
+with the infographic, Thursday for
+Twitter, and no image. Okay. It says
+both scheduled, but let's go check. So
+in potato we can check our calendar
+right on the lefth hand side click
+calendar click upcoming posts and boom
+and this is by the way a spare account
+that's why everything's empty nothing's
+connected but yeah this was just pub
+scheduled right this looks like a very
+legit um LinkedIn post now you may be
+wondering about the m dashes and stuff
+like that but obviously you can put
+humanize prompts within your brand voice
+guidelines to get rid of some of that
+and I actually go through that in my
+more advanced version of this tutorial
+and then here's the Twitter thread. So,
+it's it's um segmented like this because
+it's going to be one tweet at a time,
+but all of them in the same Twitter
+thread. And let's just talk about other
+types of prompts you can run. So, like
+what else can you do with this MCP
+server? So, you can create the posts,
+right? It can help you draft the copy.
+It can also analyze YouTube, Tik Tok
+videos, podcast URLs. So, let's go to
+YouTube real quick. Let's grab like the
+latest Hormosi video or something. Okay,
+this one. It took 36 years to realize
+what I'll tell you in 26 minutes. So,
+let me just copy the URL of this. Okay.
+And then let's go back to Cloud Code.
+Okay. And say I analyze this YouTube
+video. Boom. And what this is going to
+do is use the built-in Blot tool to
+extract transcripts from YouTube videos,
+Tik Tok videos, etc. You can see the MCP
+tool call here. Okay. So, this is the
+tool call and this is really neat
+because you can take a video that is
+super awesome, right? Summarize it into
+bullet points for Instagram tailored to
+your audience like why this particular
+topic is interesting or different or
+relevant to your particular audience.
+Add your tweaks to the content, your
+human level tweaks, and then publish
+everything out. Okay. And here's the
+breakdown of the YouTube transcript.
+Literally in less than 30 seconds pulled
+the entire transcript and the key
+arguments. Now, let's make an Instagram
+carousel. Let's say write an Instagram
+carousel based on this YouTube video.
+then create it with potato and schedule
+it for I don't know what day it is
+tomorrow evening. Okay, so this is
+getting a little more complicated but
+it's so cool because you can just talk
+freely in plain language like you are
+talking to a person like hey we're I I
+just shared this YouTube video with you.
+Yeah, it's super cool. Let's make an
+Instagram carousel out of it and like
+put in some of our language, some of our
+philosophy in there. Create a Instagram
+carousel visual to accompany it and then
+schedule it for publishing. like this is
+how you would get work done. This is how
+you would interact with someone to
+communicate this instruction. And the
+beautiful thing is you can do all of
+this within cloud code. And that is why
+I really wanted to showcase the power of
+MCP even in this beginner tutorial
+because if you didn't see this, you
+might think, oh, cloud code, okay, it
+writes cool stuff. I mean, so does chat
+GPT, so does Gemini. Like what actually
+makes it different or powerful? But now
+with this MCP integration, you can do
+all kinds of crazy things, things that
+you are probably doing manually right
+now. Like after this post is published,
+are you updating an table or Google
+Sheets with the posts links? Like cloud
+code can do that. You can hook up an MCP
+to air table to notion to your Google
+Workspace to your CRM and just have
+cloud code operate on the same data that
+you operate on. Like it can read the
+data, it can obviously be careful, but
+it can write to the data. can change the
+data in your systems. Okay. And now it's
+done with the carousel images and it
+generated the slides one by one. That's
+why you see multiple links here. So if
+we open one of these links, right? So
+this is the first carousel slide. This
+is probably the second carousel slide.
+Okay, great. And then oh, so it didn't
+schedule it to Instagram because I don't
+have my Instagram connected. That makes
+sense. I'm not logged into Instagram on
+this computer. But it would work
+similarly like before, right? Like we
+would just go here, check it out in our
+calendar, and it would appear here. So
+this paradigm is truly the closest I
+have ever seen, experienced or built for
+myself that that comes close to a true
+AI assistant for social media. You can
+tell it to do things. It can research
+topics. It can write drafts in your
+brand voice. It can do quality checks,
+which I cover in advanced tutorials. It
+can create the visuals accompanying your
+post. And it can schedule and publish
+everything on social media. It can even
+update your systems with the published
+post URL once your post goes live. Feed
+it back into Air Table. feeded back into
+Google Sheets. So, just to summarize
+everything we talked about. So, first we
+set up our Claude accounts and again
+many people ask me about pricing. I'm
+very happy on the Max plan. It seems
+expensive but when you realize how many
+other AI tools you can stop paying for,
+I think it's well worth it. Then we
+installed Visual Studio Code. This is in
+my opinion the easiest way to get up and
+running with Cloud Code. So, you don't
+have to open a scary looking terminal.
+The other benefit of Visual Studio C
+code is it makes it super easy to review
+what cloud code is doing, what it's
+thinking, the drafts, you know, so you
+can e you can edit everything here. Just
+think of it as your own Google doc,
+okay? Or you can have cloud code edit it
+and you just watch it make the changes.
+So that is one really big advantage of
+using an editor like Visual Studio Code.
+Even though it sounds scary, it's really
+not that bad. Just think about it as a
+Google doc where you're going to be
+collaborating with Cloud Code and
+reviewing its work. Okay? And then we
+installed the claude code official
+extension. Right? So that's this little
+orange button here. If you're on Mac,
+you can just click this button. It'll
+open new sessions. For my Windows, I
+click this plus button on the top right
+corner. Um we talked a little bit about
+some slash options. So switching model
+um edits like the permissions and stuff
+like that. And then we asked Cloud Code
+what it can do, right? So we started
+with having Cloud Code write some copy,
+which was fine. We added some minimal
+brand voice guidelines. You can you can
+beef that up significantly. And then we
+set up your very first MCP server in
+this Blot for social media visual
+generation as well as publishing and
+managing your entire content calendar.
+And the beautiful thing is once Cloud
+Code has that MCP server integration, it
+can do all of these things as a true as
+a true AI social media assistant should
+be able to do. It should be able to
+research any topic you throw at it. It
+should be able to write posts in your
+brand voice where you are just reviewing
+and tweaking and fine-tuning as a final
+step. It should be able to create
+visuals such as faceless videos,
+infographics, carousels for Instagram,
+slideshows for Tik Tok. And an AI social
+media assistant should be able to
+actually schedule and publish all of
+your content to social media. If you
+have any questions, please drop them
+below. Hit like, drop a comment. I'd
+love to hear from you. And there is a
+more advanced version of this tutorial.
+So check out the entire series.

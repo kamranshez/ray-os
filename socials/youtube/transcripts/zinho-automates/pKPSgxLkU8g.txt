@@ -1,0 +1,570 @@
+---
+title: "How To Use Claude Code Better than 99% of People"
+date: 2026-01-05
+video_id: pKPSgxLkU8g
+channel: zinho-automates
+---
+
+Most people use clawed code completely
+wrong. They treat it like catchy BT with
+a save button. They type in vague
+prompts and they spend hours just fixing
+the mess. But the top 1% know specific
+techniques that make clawed code 10
+times more powerful. I used to be one of
+those people. So I'd type out prompts,
+I'd get code back, and I'd spend hours
+just debugging it. And then [music] I
+just sit and wonder why everyone was
+hyping up clawed code so much. Then what
+I did is I realized something specific.
+99% of people are using clawed code at
+maybe 5% of its actual power. Last month
+I discovered these four techniques that
+completely changed my workflow. Features
+that used to take me a week. I'm now
+building them in about 2 hours. And the
+crazy part about all of this is that
+most Clawude Code users [music] don't
+even know these techniques exist. And
+guys, in this video, I'm going to be
+showing you exactly what I found and how
+to use them. You're going to learn
+exactly what these four techniques are.
+So, number one is the Claude MD file
+that 99% of people don't even know
+exists. Number two is planning mode that
+encourages detail and brainstorming.
+Number three is clawed skills that make
+you 10 times faster at repetitive tasks.
+And number four is running multiple
+clawed code instances in parallel for
+serious productivity. And by the end of
+this video guys, you'll transform the
+way that you use clawed code. But real
+quick before we dive in, if you want to
+master AI vibe coding faster and connect
+with other builders shipping real
+projects, then we've created a
+completely free school community, guys.
+Inside we share the prompt templates,
+advanced guides, and new techniques
+every single week. The link is in the
+description below, guys. And it's
+completely free to join. So go and check
+it out. I can guarantee you you are not
+going to be disappointed. Right now,
+let's head over to the PC. So now guys,
+we are over on the PC and guys, first
+things first, you are going to need to
+install Claude code properly. So the
+best way to do this is directly inside
+Visual Studio Code. Okay, so there is
+also Claude's desktop app, but the
+important thing is that it is actually
+missing plan mode. Okay, and that is a
+massive feature which I would want you
+to use. So I would suggest kind of
+staying away from that unless you don't
+think you need it. Okay, so plan mode,
+the reason why it's important is because
+it lets Claude brainstorm and also it
+lets it plan with you before writing out
+any code. Okay, so that basically means
+that you get exactly what you want the
+first time and you don't need to keep
+refining it over and over. Plus, on top
+of that, with the VS Code, you get
+realtime code changes highlighted in
+line, drag and drop files directly into
+code. So basically, everything is in one
+seamless workflow. So guys, that's why I
+recommend using Claude Code inside
+Visual Studio Code. VS Code is
+completely free and it gives you full
+power of Claude Code. Okay guys, so now
+that you got that, let's jump in. Okay,
+so you're going to head over to
+code.visisualstudio.com
+and then you're going to download VS
+Code for your operating system. So once
+you've installed it, then you're going
+to open VS Code. And now you're going to
+go to your extensions marketplace on the
+left sidebar and it looks like a square
+with four boxes. Okay. So guys, once you
+see that, you are then going to search
+for Claude code and you'll see the
+official extension for Anthropic. So
+then you're going just going to click
+install and guys, and once it is
+installed, you'll see a new Claude icon
+in the left sidebar. Then you're going
+to click it to open Claude Code directly
+inside VS Code. So this integration is
+seamless. And you'll see guys, as
+everything goes on, it just gets easier
+and easier. So you can basically work on
+your code on the left and you can talk
+to Claude on the right. And it's all in
+one window. So guys, just make sure that
+you verify that everything is working by
+typing in a simple text message kind of
+like, "Hey Claude and basically you
+should get a response." Okay, super
+simple. And there guys, now you are
+ready to use Claude code properly. So
+now we're going to get into our
+techniques. Okay guys, let's get started
+with claw.md files. And this is probably
+the single most important thing in this
+entire video. So you want to make sure
+that you are paying attention right now.
+So get your notebook out, get your pen
+out and pay attention right now. So I'd
+estimate that 99% of Claude Code users
+don't even know that that this exists.
+So the problem is that every time you
+start a new Claude Code session, it
+forgets your coding preferences. So it
+kind of forgets your project
+architecture. It forgets your company
+style guide. And then basically when it
+forgets all of that, what do you think
+happens? You repeat yourself over and
+over. Use Typescript, follow this
+structure, don't use console log, um,
+use the logger utility, always write
+tests, use feature branches, never push
+to main. And guys, to be honest with
+you, it's pretty exhausting. It It just
+wastes tokens. And each time you explain
+something, that's more tokens that
+Claude needs to process it. So, it's
+kind of like just taking money out your
+pocket and time out of your day. So the
+solution is claude MD. So the claude MD
+file is basically Claude's permanent
+memory for your project. So you create a
+file called claude.md
+and then you put it in a claude folder
+in your project to root and inside it
+you write down basically everything that
+you want claude to the member. So guys
+basically just think about it like on
+boarding a new developer to your team.
+So what would they need to know? And
+that is what goes in claw.md. So here's
+what you're going to do. So you're going
+to open claw code and you're going to
+type the init command and then you're
+going to press enter and this command
+initializes a claude.md file for your
+project and then claude will actually
+ask you a few questions about your
+project just so that it can understand
+everything. So that will be kind of like
+your text stack, um your folder
+structure, your coding preferences, and
+then what you're going to do is just
+going to answer these questions and
+Claude will automatically generate a
+customized claude.md file based on all
+of your responses. So once Claude then
+generates the initial file, you're going
+to start adding detailed content. So
+here's what a really good claude.md file
+needs to have. So a tech stack where you
+list every major technology that you are
+using and you can just copy myclaw.md
+guide from our free school community
+guys that we spoke about earlier.
+Remember guys link is in the description
+below. But first let's get to the end of
+the video before you check it out. Okay.
+So now the reason that this matters is
+because Claude doesn't have to how can I
+put it? Claw doesn't actually have to
+guess anything. So you are basically
+giving it it knows exactly what tools
+you're using and can give you framework
+specific solutions instead of generic
+ones. So now guys we have that
+completed. Now next up is your project
+structure. So document where things
+live. So when Claude creates new files
+it puts them in the right place for you
+so you don't end up with a chaotic
+project where components are scattered
+everywhere. Then your coding standards
+because it's important that Claude
+adapts to your style. the code looks
+like it was written by one person, not a
+jumble of different encoding styles,
+which can be pretty confusing. So, most
+critically, your git workflow because
+this prevents disasters going forward,
+guys. You want to make sure that you pay
+attention to these. So, if Claude
+doesn't know your workflow, then it
+might just push directly to main,
+breaking your production app. And this
+rule, it prevents that. So lastly guys,
+you have your testing requirements and
+your project specific rules. So guys,
+you can copy my complete claw.md guide.
+It is in our free school community down
+below and I have templates for different
+types of projects um front end only,
+full stack, mobile apps, etc., etc. Okay
+guys, so copy the one that matches your
+project. Then you just customize it and
+you are done. Okay, so also guys just
+here's a quick pro tip. So as you work
+on your project and you notice that
+Claude is doing something that you don't
+like, then what you do is you simply
+just add a rule to the claude.md file
+and over time this file becomes
+incredibly powerful. And guys, once the
+file exists, every single Claude code
+session automatically loads it. Claude
+then works your way every single time
+and you never ever have to repeat
+yourself ever again. Now guys, we are
+finished with that technique. So we are
+getting on to technique number two.
+Okay, so this is going to save you so
+many hours and also it's going to
+prevent you from wasting tokens in wrong
+directions guys and this is the planning
+mode. The problem that most people face
+is you ask Claude to build a user
+dashboard and Claude immediately starts
+coding. It makes a lot of assumptions
+about what you would want and then 20
+minutes later, Claude has built an
+entire dashboard and you only realize
+halfway through that it's kind of not
+what you wanted in the first place or
+let's just say it's not what you wanted
+at all. The layout is completely wrong.
+The data structure doesn't match your
+backend and now you have a long
+conversation with Claude explaining what
+you actually wanted. This is a disaster
+because well, number one, you waste the
+tokens. Number two, you wasted your
+time. And number three, Claude is now
+poisoned with the wrong context. You get
+where I'm going with this, guys? So, the
+solution is planning mode. So, planning
+mode lets you work with Claude to plan
+out exactly what you want before Claude
+starts writing the code. So, here's how
+all of this works. Okay, so in Claude
+code, you're going to type in plan or
+you're going to select plan from the
+bottom left menu box. And then this puts
+Claude in planning mode. So now instead
+of Claude immediately jumping into code,
+it asks clarifying questions and it
+breaks down the project into simple
+steps. So you can tell Claude um
+something like I want to build a user
+dashboard and then Claude responds with
+clarifying questions about the data
+display, the layout, the integration
+points, the analytic charts and
+basically whatever else it needs. So
+once you answer all of these, Claude
+will then create a detailed
+implementation plan before writing any
+code and you get to approve the plan
+before Claude starts. So you can say
+actually I don't want an activity plan
+or can you add a search feature to all
+of this before Claude writes a single
+line of code. You can actually control
+the outcome and this saves so much time
+because you're aligned from the start.
+you guys are working perfectly together
+and that means that there's no wasted
+code, no wasted tokens and no long back
+and forth conversations which no one has
+time for. Before planning mode, what
+would happen is Claude would build for
+20 minutes. I would then realize it's
+long and there's a long conversation
+fixing all of it and then finally I
+would actually get what I want but it
+would be after so much time. Okay, so
+with planning mode I can ask for a
+dashboard and then Claude asks five
+clarifying questions. I answer those
+questions and then Claude just shows me
+a plan and then I either approve or I
+disapprove and Claude just builds
+exactly what I want in less time. If my
+calculations are right, that's about 30
+minutes of time saved just by
+implementing this one thing. This single
+technique is going to save you so many
+hours every single week. And now guys,
+that is the two techniques done. Now we
+are getting on to the third one and that
+is clawed skills. It's one that will
+separate you from everyone else. So
+let's say that you are building a lot of
+front-end components. So every time you
+create a new component, you have to
+explain. You have to say stuff like make
+it look modern, not like AI garbage, use
+good spacing, don't use blue and purple
+gradients, use good typography, make it
+professionally looking. Um, or maybe
+you're integrating Stripe into multiple
+projects. Every single time, set up the
+web hook correctly. Handle all the edge
+cases. test payment scenarios. Make sure
+production mode is separate from test
+mode. And the thing is guys, you're
+repeating these same instructions over
+and over and this just waste tokens and
+also it wastes time. And the aim of this
+video is to make sure that you guys
+never waste any of that. And guys, the
+solution is Claude skills. So the skills
+are basically instruction packages that
+teaches Claude to be a specialist at
+specific tasks. So there's structured
+prompts that capture the best practices
+for a particular domain. So to install
+claude code skills, first create a
+skills directory in your project route.
+Okay? Then you're going to add your
+skills folder and claude then finds it
+automatically when it's installed. So
+that's basically it. Now Claude knows
+about modern design principles and will
+automatically apply them when you ask
+for UI components. And guys, the reason
+why this so cool and why it works is
+because when you ask Claude to build a
+component, it doesn't just generate
+random code. What it actually does is it
+loads the front-end design skill. And
+that is what teaches it about
+typography, color theory, spacing,
+visual hierarchy, and how to avoid
+common AI design mistakes. So, here's
+what the front-end design skill actually
+teaches Claude. Okay, so typography, it
+doesn't just use generic fonts. It picks
+something interesting. Number two, the
+color and theme. So, it commits to a
+cohesive color palette. Instead of using
+10 colors, it uses two to three dominant
+colors with sharp accents. And then the
+third thing is motion. So, it uses
+animation strategically instead of just
+randomly pushing it out anywhere. And
+then number four is spatial composition,
+which breaks the grid and it uses a
+symmetry overlapping elements and it
+creates unexpected layouts. The number
+five is the background and the details.
+So it doesn't just use solid colors. It
+adds in textures, subtle gradients,
+decorative elements that matches your
+aesthetic that the one that you're going
+for. So basically guys, before this
+skill, so I'd basically just get decent
+components, but nothing special. It
+would be blue and purple everywhere, and
+it would basically just look generic. It
+would be the kind of stuff that you
+would see everywhere else, but we are
+obviously aiming higher. Now, after the
+skill, guys, just take a look at this.
+It's beautiful. It's modern. It's
+professional UIs. This entire landing
+page is is complete with animations and
+it's built in just one prompt, one
+sentence and it looks amazing.
+Like guys, that is what we are aiming
+for and that is exactly what you can
+create. So you can build custom skills
+for workflows unique to your team. Maybe
+your company always uses superbase a
+certain way. So you can create a
+superbase skill. Maybe you have a
+specific API structure that you always
+use and you can create a specific skill
+for that. You can simply just make these
+skills by going into Claude and asking
+to build a skill file. Anytime you find
+yourself giving Claude the same
+instructions more than three times, that
+is a candidate for a skill that can be
+learned. So the more skills you
+accumulate, the more powerful Claude
+becomes for your use cases. And it's
+kind of like hiring a specialist who is
+always ready to help you out. And guys,
+now we are getting on to technique
+number four and that is our final claw
+secret and that is parallel instances.
+So guys, this is a timesaver which works
+simultaneously.
+Most people just think that they need
+one claude code instance for the entire
+project, but it just doesn't work guys.
+So what happens is they start working on
+feature A and then Claude is thinking
+about it. It's processing and maybe
+taking a few minutes to write the code
+out. So what do you do? You wait. You
+watch the cursor blink. You're blocked.
+Or you finish feature A and you want to
+start the feature B, but now you have to
+close the first conversation and open up
+a new one. And this just breaks your
+context and also the workflow. The
+solution is multiple parallel instances.
+So you can run multiple clawed codes
+instances simultaneously on the same
+project. This is insane for
+productivity. So guys, here's how all of
+this works. In VS Code, you can open
+multiple Clawed Code panels. You can
+click the Claude icon in the sidebar
+twice, and now you have two Clawed Code
+instances running at the same time, and
+they're both working on the same
+project. So, they can see the same
+files. They can contribute to different
+features simultaneously. Okay, let's
+build an app with three main features.
+An authentication system, a dashboard
+UI, and a database schema. So panel one
+is authentication. You tell claude build
+the next orjs integration with
+superbase. Okay. Handle login and
+session management. And then claude
+starts working. It analyzes your code.
+It creates the files and it's thinking
+about the best approach. And now while
+this is happening, you open panel 2. And
+then you click on your second claw
+instance and you type in create the main
+dashboard component with a sidebar
+header and main content area and then
+use tailwind CSS and [music]
+make it all look beautiful. Claude in
+panel two starts working on completely
+different files. So lastly, then open up
+panel 3 and then what you're going to do
+is you're going to write out design the
+database schema for users, posts and
+comments and then create the migrations
+and seed files. So now you have three
+clouds working simultaneously. Claude
+one is building authentication, claw two
+is building the UI, claw three is
+building the database. You're not
+waiting on anyone. You are building kind
+of like a team. Everyone is putting in
+the same amount of work. So now you need
+to understand how to manage these
+multiple instances. So keep them
+isolated by the feature. Okay. So
+instance one that's going to be backend
+API work. Instance two that's going to
+be front-end UI work. Instance three
+that's going to be database and
+migrations. This prevents them from
+stepping on each other's toes and kind
+of just messing each other up. So let's
+say each feature would take about 2
+hours solo. So if I did that or if you
+did that altogether, it would take about
+6 hours total, which is 2 plus 2 plus
+two. And with parallel instances, it's
+going to take you approximately 2 hours
+total now because it's doing everything
+at the exact same time. So you just cut
+your development time by 60%. So here's
+just a quick little caveat. So you need
+to know when to use parallel instances
+and when not to. So you should be using
+it when you have large features, full
+stack development, when you want to
+experiment and when you are waiting.
+Okay? But don't use it when you have
+small features that are tightly coupled.
+So if you only have one to two hours of
+total work and if features depend
+heavily on each other, such as database
+schema first, then API, and then UI,
+you're not limited by cla speed. You're
+limited by the number of independent
+tasks that you can create. So break your
+project into pieces that don't depend on
+each other and then you're going to spin
+up parallel instances and just watch how
+all of your productivity is going to
+skyrocket. So now guys, here's a quick
+little bonus tip for you guys since you
+stayed all the way until the end. Claude
+Code can take images as input. So if you
+run into a UI bug, then what you do is
+you're going to take a screenshot and
+you feed it directly to Claude and it
+can see exactly what's wrong and then it
+can fix it for you. It's way faster than
+describing the problem in text. And you
+can also use this for design references.
+So you see a UI that you like on another
+website. What you can do is you can just
+screenshot and you can tell Claude to
+build something very similar to this.
+Have a Figma mockup that you really
+like. What you can do is you can export
+it as an image and you can give it to
+Claude and it will translate that design
+into code. And guys, if you just have a
+screenshot of a bug, what you can do is
+you can actually show Claude and it will
+understand everything immediately and it
+will help you out. Guys, most people
+think of Claude as a texton tool, but it
+can see and understand images. So why
+don't you just use that to your
+advantage? Take a look at all the four
+stuff that we mentioned in today's
+video, guys, and I guarantee you, you
+are going to create some insane things
+just by using these methods. And there
+we have it, guys. You are no longer just
+using Claude code. You are now mastering
+it. You know about Claude MD. You know
+about planning mode. You know about
+Claude skills and running multiple
+Claude instances at once. This is the
+difference between good and great. And
+guys, if you want to keep leveling up,
+then what you need to do is you need to
+go to the first link in the description
+below and you need to join our free
+school community. Guys, like I said, the
+link is in the description below, guys.
+We share advanced techniques like this
+every single week. We troubleshoot them
+together and we help each other create
+real projects. And guys, if you found
+all of this helpful, then give this
+video a like. Subscribe to the channel
+for more AI coding tutorials like this.
+And guys, you can be sure that I will
+catch you on the next
