@@ -10,7 +10,7 @@ The better move: **describe the goal and the constraints, then ask the model for
 
 This works because models have seen millions of codebases, thousands of architectural patterns, and every common (and uncommon) way to solve most problems. When you prescribe the procedure, you're capping the solution at what *you* know. When you describe the goal, you're tapping into what the *model* has seen — which, for implementation patterns, is almost certainly broader than any single engineer's experience.
 
-![[images/goal-in-strategy-out-intro.png]]
+![[images/goal-in-strategy-out-2.png]]
 
 ---
 
@@ -24,7 +24,7 @@ This made sense with older, weaker models. GPT-3 needed hand-holding. Early Copi
 
 But models have gotten dramatically better at reasoning about architecture, weighing tradeoffs, and proposing solutions — often across a wider range of patterns than any one person has encountered. The habit of prescribing procedure hasn't caught up with that reality. People are still driving manual when the car has an autopilot that knows every road.
 
-![[images/goal-in-strategy-out-why-backwards.png]]
+![[images/goal-in-strategy-out-5.png]]
 
 ---
 
@@ -48,7 +48,7 @@ Now the model is thinking, not just typing. It'll propose approaches you might n
 
 You've given it the *problem shape* — the goal plus the constraints that actually matter. The model fills in the implementation strategy. You evaluate the output on whether it solves the real problem, not whether it matches the procedure you had in mind.
 
-![[images/goal-in-strategy-out-practice.png]]
+![[images/goal-in-strategy-out-3.png]]
 
 ---
 
@@ -63,7 +63,7 @@ With stronger models, that procedural scaffolding becomes a ceiling. The model c
 This is the same dynamic described in [[Boxing the Model In]] — rigid orchestration constrains the model to your solution path, not the best solution path. Goal In, Strategy Out is the positive framing: instead of avoiding the anti-pattern, actively lean into the model's ability to recommend.
 
 
-![[images/goal-in-strategy-out-tailwind.png]]
+![[images/goal-in-strategy-out-4.png]]
 
 ---
 
@@ -84,7 +84,7 @@ Don't just say "build a cache." Say "build a cache for a read-heavy workload whe
 **5) Then iterate on the recommendation.**
 Once you have the model's preferred approach, *now* you can steer. "I like approach B but I'm worried about [specific concern]" is a much more productive conversation than "implement my predetermined solution."
 
-![[images/goal-in-strategy-out-how-to.png]]
+![[images/goal-in-strategy-out.png]]
 
 ---
 

@@ -16,7 +16,7 @@ And you've learned the solution: **progressive disclosure**. Load only what you 
 
 Now it's time to apply this. Your CLAUDE.md file is where theory meets practice.
 
-![[images/01-anatomy-of-a-node/from-theory-to-practice.png]]
+![[images/01-anatomy-of-a-node-4.png]]
 
 ---
 
@@ -28,7 +28,7 @@ Every instruction you add competes with every other instruction. Add too much, a
 
 The goal isn't to tell the model everything. It's to tell it **the right things** — the minimal set of high-signal context that applies to *every* task in your codebase.
 
-![[images/01-anatomy-of-a-node/claudemd-paradox.png]]
+![[images/01-anatomy-of-a-node-2.png]]
 
 ---
 
@@ -48,7 +48,7 @@ CLAUDE.md is a special file that Claude automatically pulls into context when st
 
 Source: https://www.humanlayer.dev/blog/writing-a-good-claude-md
 
-![[images/01-anatomy-of-a-node/why-have-claudemd.png]]
+![[images/01-anatomy-of-a-node-22.png]]
 
 ---
 ## When You Need One
@@ -64,7 +64,7 @@ The need grows as your project accumulates:
 
 If you're starting fresh with a modern stack, start with almost nothing. Add rules only when you notice repeated problems.
 
-![[images/01-anatomy-of-a-node/when-you-need-one.png]]
+![[images/01-anatomy-of-a-node-21.png]]
 
 ---
 
@@ -83,7 +83,7 @@ You don't need all six. But if your CLAUDE.md doesn't touch any of them, it's pr
 
 Source: https://www.humanlayer.dev/blog/writing-a-good-claude-md
 
-![[images/01-anatomy-of-a-node/six-core-areas.png]]
+![[images/01-anatomy-of-a-node-13.png]]
 
 ---
 
@@ -110,7 +110,7 @@ The question isn't "what could Claude benefit from knowing?" It's "what can Clau
 **The test:** For each line, ask: "If I removed this, would Claude do something wrong on most tasks?" If no, it probably doesn't belong in root.
 
 
-![[images/01-anatomy-of-a-node/what-to-include-exclude.png]]
+![[images/01-anatomy-of-a-node-20.png]]
 
 ---
 
@@ -139,7 +139,7 @@ yarn build:app
 Note: Always lint, test, and typecheck updated files.
 ```
 
-![[images/01-anatomy-of-a-node/put-commands-early.png]]
+![[images/01-anatomy-of-a-node-10.png]]
 
 ---
 
@@ -164,7 +164,7 @@ One real code snippet showing your style beats three paragraphs describing it. S
 - **Increases fidelity.** The agent mirrors your best examples in new code.
 - **Fights cognitive inertia.** Concrete examples anchor behavior better than abstract rules.
 
-![[images/01-anatomy-of-a-node/code-examples-over-explanations.png]]
+![[images/01-anatomy-of-a-node-3.png]]
 
 ---
 
@@ -181,7 +181,7 @@ Tell the agent what it should never touch. "Never commit secrets" was the most c
 - Don't touch `legacy/` unless explicitly asked
 ```
 
-![[images/01-anatomy-of-a-node/set-clear-boundaries.png]]
+![[images/01-anatomy-of-a-node-12.png]]
 
 ---
 
@@ -218,7 +218,7 @@ implementation and `src/auth/README.md` for flow details.
 
 The first version will rot. The second stays accurate.
 
-![[images/01-anatomy-of-a-node/point-to-sources.png]]
+![[images/01-anatomy-of-a-node-9.png]]
 
 ---
 
@@ -244,7 +244,7 @@ Imports can be recursive — referenced files can reference other files. Use thi
 
 **The pattern:** Essentials in CLAUDE.md, detailed topic-specific guidance in separate files via @imports.
 
-![[images/01-anatomy-of-a-node/at-imports-system.png]]
+![[images/01-anatomy-of-a-node.png]]
 
 ---
 
@@ -271,7 +271,7 @@ project/
 
 This is progressive disclosure in action — Claude only sees what it needs for the current task.
 
-![[images/01-anatomy-of-a-node/subfolder-claudemd.png]]
+![[images/01-anatomy-of-a-node-15.png]]
 
 ---
 
@@ -295,7 +295,7 @@ Skills are organized into categories:
 
 Source: https://www.callstack.com/blog/announcing-react-native-best-practices-for-ai-agents
 
-![[images/01-anatomy-of-a-node/stack-specific-skills.png]]
+![[images/01-anatomy-of-a-node-14.png]]
 
 ---
 
@@ -307,7 +307,7 @@ Source: https://www.callstack.com/blog/announcing-react-native-best-practices-fo
 
 If your root file is longer than 300 lines, it's almost certainly full of content that should live elsewhere.
 
-![[images/01-anatomy-of-a-node/target-file-length.png]]
+![[images/01-anatomy-of-a-node-18.png]]
 
 ---
 
@@ -321,7 +321,7 @@ When the next frontier model drops, consider starting your CLAUDE.md from scratc
 
 Source: https://code.claude.com/docs/en/best-practices
 
-![[images/01-anatomy-of-a-node/new-model-remove-stuff.png]]
+![[images/01-anatomy-of-a-node-7.png]]
 
 ---
 
@@ -346,7 +346,7 @@ Source: https://cursor.com/blog/agent-best-practices
 This is the opposite of how most people approach CLAUDE.md. They dump everything upfront, then wonder why the agent ignores half of it.
 
 
-![[images/01-anatomy-of-a-node/iterate-on-setup.png]]
+![[images/01-anatomy-of-a-node-6.png]]
 
 
 ---
@@ -370,7 +370,7 @@ Your CLAUDE.md isn't documentation. It's code that runs on every task. Treat it 
 - **Prune it regularly.** Every few weeks, ask: "Is this still necessary? Is this still accurate?"
 - **Test changes.** After editing, observe whether Claude's behavior actually shifts. If not, your edit didn't work.
 
-![[images/01-anatomy-of-a-node/treat-like-code.png]]
+![[images/01-anatomy-of-a-node-19.png]]
 
 ---
 
@@ -384,7 +384,7 @@ Two schools of thought:
 
 **My take:** Start with /init if you're new. But treat every generated line as suspect. Delete aggressively. The goal is signal, not coverage.
 
-![[images/01-anatomy-of-a-node/generation-init-vs-manual.png]]
+![[images/01-anatomy-of-a-node-5.png]]
 
 ---
 
@@ -415,7 +415,7 @@ Instead of stuffing everything into one file and hoping the model filters well, 
 
 Write a CLAUDE.md that doesn't need filtering. Then the wrapper becomes a no-op instead of a crutch.
 
-![[images/01-anatomy-of-a-node/system-reminder-wrapper.png]]
+![[images/01-anatomy-of-a-node-17.png]]
 
 ---
 
@@ -450,7 +450,7 @@ With a good context layer, explore mode and plan mode become dramatically more e
 
 If your CLAUDE.md is well-structured—minimal root, detailed subdirectories, relevant skills—the agent's exploration phase becomes a guided tour instead of a random walk.
 
-![[images/01-anatomy-of-a-node/plan-mode-context.png]]
+![[images/01-anatomy-of-a-node-8.png]]
 
 ---
 
@@ -469,7 +469,7 @@ Bad candidates:
 - Task-specific context that won't apply again
 - Explanations of what you just built (that's what code comments are for)
 
-![[images/01-anatomy-of-a-node/session-ending-updates.png]]
+![[images/01-anatomy-of-a-node-11.png]]
 
 ## Summary
 
@@ -486,6 +486,6 @@ Bad candidates:
 
 **The mindset:** Your CLAUDE.md is infrastructure, not documentation. Treat it like code. Review it, test it, prune it.
 
-![[images/01-anatomy-of-a-node/summary.png]]
+![[images/01-anatomy-of-a-node-16.png]]
 
 Next: [[02 - Examples]] — real-world before/after examples of transforming bloated nodes into lean, effective ones.

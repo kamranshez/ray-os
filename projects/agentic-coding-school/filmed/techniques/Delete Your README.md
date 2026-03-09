@@ -6,7 +6,7 @@ The core problem with a README.md isn't that it goes stale (though it does). It'
 
 You already have a CLAUDE.md that tells the agent how your project works — conventions, patterns, commands, boundaries. And you have the code itself. The README is a third voice saying potentially different things. When the agent lands in your repo, it reads all of them, and now it has to reconcile conflicting information. The CLAUDE.md says one thing, the README says another, the code says a third. The agent can't tell which one is current.
 
-![[images/multiple-sources-of-truth/excalidraw_1.png]]
+![[images/delete-your-readme-2.png]]
 
 ---
 ## The multiple sources of truth problem
@@ -19,7 +19,7 @@ The README has no feedback loop. Nobody notices when it's wrong because nobody d
 
 The more sources of truth you have, the more the agent hedges. It doesn't know which document to trust, so it tries to satisfy all of them, or picks one at random. This is the same problem as having two patterns for the same thing in your code — see [[One Pattern Per Thing]].
 
-![[images/readme-has-no-feedback-loop/excalidraw_1.png]]
+![[images/delete-your-readme-3.png]]
 
 ---
 ## The fix: delete it, generate on demand
@@ -30,4 +30,4 @@ The subagent reads the real imports, the real config files, the real directory s
 
 This is the principle of **just-in-time context**: don't pre-load stale information, generate fresh context at the moment you need it. One source of truth (the code), one set of constraints (the CLAUDE.md), nothing else competing for the agent's attention.
 
-![[images/just-in-time-context/excalidraw_7.png]]
+![[images/delete-your-readme.png]]

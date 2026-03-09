@@ -6,7 +6,7 @@ Agents don't have taste. If your codebase has two ways to do the same thing — 
 
 This is the "gravitational pull" effect. Early code (often written by weaker models or under time pressure) becomes the template for everything that follows, even when better patterns exist elsewhere in the same repo. The agent doesn't evaluate which pattern is better. It just copies the first one it sees.
 
-![[images/gravitational-pull.png]]
+![[images/one-pattern-per-thing-4.png]]
 
 ---
 
@@ -16,7 +16,7 @@ If your CLAUDE.md says "use Result types for error handling" but half the codeba
 
 This kills predictability. Run the agent 5 times on a consistent codebase and you get 5 similar results. Run it 5 times on an inconsistent one and you get 5 different approaches. You end up reviewing every line manually, which defeats the purpose.
 
-![[images/agent-fighting-itself.png]]
+![[images/one-pattern-per-thing.png]]
 
 ---
 
@@ -30,7 +30,7 @@ Spawn an Explore subagent with a "why" that frames the problem:
 
 The "why" filters results. "Find data fetching patterns" returns everything. Adding "because it'd be better to consolidate inconsistent patterns" focuses the subagent on surfacing the conflicts — where two patterns exist for the same job, which files use which, and what the differences actually are.
 
-![[images/find-where-it-hurts.png]]
+![[images/one-pattern-per-thing-3.png]]
 
 ## Pick the winner and build a task list
 
@@ -38,7 +38,7 @@ Once you know the competing patterns, pick which one wins. Then have the agent g
 
 You don't need to refactor everything in one session. The task list gives you a concrete, file-by-file list you can work through over time. Each file you migrate is one fewer place the agent can copy the wrong pattern from.
 
-![[images/pick-winner-build-task-list.png]]
+![[images/one-pattern-per-thing-5.png]]
 
 ## Let the code be the documentation
 
@@ -46,6 +46,6 @@ Here's the key: once the losing pattern is gone from the code, you don't need to
 
 You only need a CLAUDE.md line if you can't fully eliminate the losing pattern yet (e.g. a third-party dependency forces a different style in one module). In that case, a single constraint line bridges the gap until you can finish the migration.
 
-![[images/code-is-the-documentation.png]]
+![[images/one-pattern-per-thing-2.png]]
 
 Each file you clean up makes every future agent run more predictable. The codebase converges, and the agent converges with it. Consistency is a form of constraint, and constraints make agents predictable.

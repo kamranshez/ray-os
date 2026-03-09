@@ -21,7 +21,7 @@ So you keep tweaking. Convinced you're one clever phrase away from unlocking the
 
 This is the prompting trap.
 
-![[images/02-the-prompt-isn-t-the-problem/prompting-trap.png]]
+![[images/02-the-prompt-isn-t-the-problem-7.png]]
 
 ---
 
@@ -37,7 +37,7 @@ Once you've got clear instructions and sufficient detail, additional prompt twea
 
 **It's usually that the model doesn't have the right information.**
 
-![[images/02-the-prompt-isn-t-the-problem/diminishing-returns.png]]
+![[images/02-the-prompt-isn-t-the-problem-3.png]]
 
 ---
 
@@ -55,7 +55,7 @@ The same applies to AI. You can craft the most elegant prompt in the world, and 
 
 This is fundamentally a signal-to-noise problem. We'll explore this deeper in [[03 - Signal to Noise]], but the short version: **you only get the behavior you load.** If the model doesn't see your patterns, it falls back to generic training defaults.
 
-![[images/02-the-prompt-isn-t-the-problem/context-vs-prompt.png]]
+![[images/02-the-prompt-isn-t-the-problem-2.png]]
 
 ---
 
@@ -75,7 +75,7 @@ So when you're evaluating a prompt, don't ask: "Is this prompt perfect?"
 
 Ask: **"Will this prompt lead to a good plan?"**
 
-![[images/02-the-prompt-isn-t-the-problem/prompt-plan-code.png]]
+![[images/02-the-prompt-isn-t-the-problem-5.png]]
 
 ---
 
@@ -95,7 +95,7 @@ Beyond these? A "good enough" prompt with sufficient detail is satisfactory.
 
 Why not just add more instructions to cover every edge case? Because models have hard limits on how many instructions they can follow simultaneously. Research shows even frontier models start dropping rules around 150 instructions. We'll cover this in [[05 - Instruction Following Limits]] — but the implication is clear: you can't brute-force your way to reliability with more rules.
 
-![[images/02-the-prompt-isn-t-the-problem/keywords-that-matter.png]]
+![[images/02-the-prompt-isn-t-the-problem-4.png]]
 
 ---
 
@@ -113,7 +113,7 @@ The leverage isn't in phrasing. It's in information.
 
 
 
-![[images/02-the-prompt-isn-t-the-problem/right-question.png]]
+![[images/02-the-prompt-isn-t-the-problem-8.png]]
 
 ---
 
@@ -127,7 +127,7 @@ What files matter? What patterns should they follow? What constraints exist? Wha
 
 Answer those questions in your prompt, then trust the model to explore and plan.
 
-![[images/02-the-prompt-isn-t-the-problem/shift-in-mindset.png]]
+![[images/02-the-prompt-isn-t-the-problem-9.png]]
 
 ---
 
@@ -152,7 +152,7 @@ If it's a context problem, no amount of prompt rewriting will fix it. You need t
 
 That's what the rest of this course is about.
 
-![[images/02-the-prompt-isn-t-the-problem/prompt-vs-context-problems.png]]
+![[images/02-the-prompt-isn-t-the-problem-6.png]]
 
 ---
 
@@ -166,4 +166,4 @@ If the results are still bad, look at the context. What is the model seeing? Wha
 
 **The prompt points the model in a direction. The context determines what it finds when it gets there.**
 
-![[images/02-the-prompt-isn-t-the-problem/bottom-line.png]]
+![[images/02-the-prompt-isn-t-the-problem.png]]

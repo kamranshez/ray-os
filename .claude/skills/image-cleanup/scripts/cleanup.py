@@ -37,11 +37,19 @@ def find_image_files(folder):
 def extract_image_refs(md_files):
     """Extract all ![[...]] image references from markdown files.
     Returns dict: {ref_string: [(md_file, line_num)]}
+    Skips references inside fenced code blocks (``` or ~~~).
     """
     refs = {}
     for md_file in md_files:
         with open(md_file, 'r', encoding='utf-8') as f:
+            in_code_block = False
             for line_num, line in enumerate(f, 1):
+                stripped = line.strip()
+                if stripped.startswith('```') or stripped.startswith('~~~'):
+                    in_code_block = not in_code_block
+                    continue
+                if in_code_block:
+                    continue
                 for match in IMAGE_REF_PATTERN.finditer(line):
                     ref = match.group(1)
                     if ref not in refs:
