@@ -5,18 +5,39 @@ Usage:
     python download_transcript.py <video_id_or_url> [video_id_or_url ...] [--out-dir DIR]
 
 Transcripts are automatically saved into channel-name subfolders as <channel>/<video_id>.txt.
+Uses the Supadata API for transcript fetching and yt-dlp for metadata.
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import re
 import subprocess
 import sys
+import urllib.request
+import urllib.parse
+import json
 
-from youtube_transcript_api import YouTubeTranscriptApi
+
+def _load_env():
+    """Load .env file if SUPADATA_API_KEY not already set."""
+    if os.environ.get("SUPADATA_API_KEY"):
+        return
+    env_paths = [
+        os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", ".env"),
+        os.path.join(os.getcwd(), ".env"),
+    ]
+    for env_path in env_paths:
+        env_path = os.path.normpath(env_path)
+        if os.path.exists(env_path):
+            with open(env_path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        key, val = line.split("=", 1)
+                        os.environ.setdefault(key.strip(), val.strip())
+            break
 
 
 def extract_video_id(value: str) -> str:
@@ -65,6 +86,46 @@ def get_video_metadata(video_id: str) -> dict:
     return {}
 
 
+def fetch_transcript_supadata(video_id: str) -> str:
+    """Fetch transcript text from Supadata API."""
+    api_key = os.environ.get("SUPADATA_API_KEY", "")
+    if not api_key:
+        raise RuntimeError("SUPADATA_API_KEY not set. Add it to your .env file.")
+
+    url = f"https://api.supadata.ai/v1/transcript?url={urllib.parse.quote(f'https://www.youtube.com/watch?v={video_id}')}&text=true&mode=auto&lang=en"
+    req = urllib.request.Request(url, headers={
+        "x-api-key": api_key,
+        "User-Agent": "ray-os/1.0",
+    })
+
+    with urllib.request.urlopen(req, timeout=90) as resp:
+        status = resp.status
+        data = json.loads(resp.read().decode())
+
+    # Handle async job (HTTP 202)
+    if status == 202 and "jobId" in data:
+        job_id = data["jobId"]
+        print(f"  Transcript queued (job {job_id}), polling...")
+        import time
+        for _ in range(120):  # poll up to 2 minutes
+            time.sleep(1)
+            job_url = f"https://api.supadata.ai/v1/transcript/{job_id}"
+            job_req = urllib.request.Request(job_url, headers={"x-api-key": api_key})
+            with urllib.request.urlopen(job_req, timeout=30) as job_resp:
+                job_data = json.loads(job_resp.read().decode())
+            if job_data.get("status") == "completed":
+                return job_data["content"]
+            elif job_data.get("status") == "failed":
+                raise RuntimeError(f"Supadata job failed: {job_data.get('error', 'unknown error')}")
+        raise RuntimeError("Supadata job timed out after 2 minutes")
+
+    # Direct response
+    if "content" in data:
+        return data["content"]
+
+    raise RuntimeError(f"Unexpected Supadata response: {data}")
+
+
 def build_frontmatter(video_id: str, metadata: dict) -> str:
     """Build YAML frontmatter string from video metadata."""
     safe_title = metadata.get("title", "").replace('"', '\\"')
@@ -83,9 +144,7 @@ def build_frontmatter(video_id: str, metadata: dict) -> str:
 
 def download_transcript(video_id: str, out_dir: str) -> str:
     """Download transcript for a single video. Returns output path."""
-    api = YouTubeTranscriptApi()
-    transcript = api.fetch(video_id)
-    text = "\n".join(entry.text for entry in transcript)
+    text = fetch_transcript_supadata(video_id)
 
     target_dir = out_dir
     metadata = get_video_metadata(video_id)
@@ -111,6 +170,7 @@ def main():
     parser.add_argument("--out-dir", default=".", help="Output directory (default: current dir)")
     args = parser.parse_args()
 
+    _load_env()
     os.makedirs(args.out_dir, exist_ok=True)
 
     for value in args.videos:

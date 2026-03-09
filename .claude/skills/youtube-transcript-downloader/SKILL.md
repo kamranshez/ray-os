@@ -5,7 +5,7 @@ description: Download YouTube video transcripts as plain text files. Use when th
 
 # YouTube Transcripts
 
-Download YouTube transcripts using `scripts/download_transcript.py`. Transcripts are automatically organized into channel-name subfolders.
+Download YouTube transcripts using `scripts/download_transcript.py`. Uses the Supadata API for reliable transcript fetching. Transcripts are automatically organized into channel-name subfolders.
 
 ## Usage
 
@@ -16,6 +16,7 @@ python3 <skill-dir>/scripts/download_transcript.py <video_id_or_url> [more...] [
 - Accepts YouTube video IDs (`pb0lVGDiigI`) or full URLs (`https://youtube.com/watch?v=pb0lVGDiigI`)
 - Automatically organizes transcripts into channel-name subfolders via `yt-dlp`
 - Default output directory is the current working directory
+- Reads `SUPADATA_API_KEY` from environment or `.env` file in project root
 
 ## Examples
 
@@ -47,6 +48,6 @@ transcripts/
 
 ## Requirements
 
-- Python 3
-- `youtube-transcript-api` package (`pip install youtube-transcript-api`)
+- Python 3 (no pip packages needed — uses stdlib `urllib` for Supadata API)
 - `yt-dlp` (for channel name lookup)
+- `SUPADATA_API_KEY` environment variable (set in `.env`)
