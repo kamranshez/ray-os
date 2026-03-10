@@ -20,13 +20,4 @@ Claude Code can create scheduled background tasks that run on a cron — no exte
 - **Overnight codebase cleanup** — Review your codebase while you sleep for dead code, tech debt, and refactoring candidates — report waiting in the morning.
 - **Weekly release automation** — Every Friday: update changelog, bump version, regenerate API docs, run tests, tag the release, push. Replaces a 45-minute manual process.
 
-![[images/scheduled-tasks/excalidraw_2.png]]
 ![[images/scheduled-tasks/excalidraw_3.png]]
-![[images/scheduled-tasks/excalidraw_4.png]]
-![[images/scheduled-tasks/excalidraw_5.png]]
-![[images/scheduled-tasks/excalidraw_6.png]]
-![[images/scheduled-tasks/excalidraw_7.png]]
-![[images/scheduled-tasks/excalidraw_8.png]]
-![[images/scheduled-tasks/excalidraw_9.png]]
-![[images/scheduled-tasks/excalidraw_10.png]]
-![[images/scheduled-tasks/excalidraw_11.png]]
