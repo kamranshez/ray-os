@@ -1,5 +1,3 @@
-# /btw and --fork-session
-
 Claude just dropped a feature I didn't even realise I wanted.
 
 Here's the problem. You give the agent a big task. It's mid-flight — reading files, writing code, running tests. And then you want to ask it something. "Hey, why'd you decide to use the library?" or "Wait, what is the auth strategy here?"
@@ -7,6 +5,8 @@ Here's the problem. You give the agent a big task. It's mid-flight — reading f
 So you interrupt it. You type your question mid-session. Claude stops, answers you, and then tries to pick up where it left off.
 
 Except now there's noise in the conversation. Your question, its answer, maybe a clarification — none of that was relevant to the original task. And this matters more than you'd think.
+
+![[images/btw-and-fork/the-problem/excalidraw_2.png]]
 
 ---
 
@@ -19,6 +19,8 @@ When a person is deep in a task and you tap them on the shoulder with an unrelat
 LLMs work the same way, but the mechanism is different. A language model doesn't "forget" — instead, **the irrelevant messages sit in the context window permanently.** Every token the model generates from that point forward is influenced by everything that came before it, including your off-topic question and the answer it gave.
 
 This is what I call **context pollution.** The conversation now has noise mixed into the signal. The model has to attend to your random question about auth strategy right alongside the actual implementation it was doing. The result: slightly worse code, slightly confused reasoning, slightly off-target decisions — compounding over the rest of the session.
+
+![[images/btw-and-fork/context-pollution/excalidraw_1.png]]
 
 ---
 
@@ -57,6 +59,10 @@ The tradeoff: **no tool access and single-turn only.** `/btw` can only answer fr
 
 The docs describe it well: **`/btw` is the inverse of a subagent.** A subagent has full tools but starts with empty context. `/btw` sees your full conversation but has no tools. Use `/btw` to ask about what Claude already knows; use a subagent to go find out something new.
 
+![[images/btw-and-fork/btw-solution/excalidraw_5.png]]
+
+Now if it answers a question of yours and you realize that it made a bad decision, then you may want to just explore a different path by rewinding and then specifying that correction up front rather than just stopping the chat and correcting it 
+
 ---
 
 ## When to use /btw vs --fork-session
@@ -75,6 +81,8 @@ Both solve the same core problem — asking questions without polluting your mai
 
 The fork approach is especially powerful when combined with something like the mermaid-diagram-generator skill. You fork the session, ask it to generate a diagram of what it's building so far, and you get an interactive HTML file you can open in a browser — all without the original session knowing anything happened.
 
+![[images/btw-and-fork/btw-vs-fork/excalidraw_2.png]]
+
 ---
 
 ## What to keep in mind
@@ -86,3 +94,5 @@ The fork approach is especially powerful when combined with something like the m
 Being able to ask a question in mid-session, if you notice the answer is wrong, then you can stop it and then rewind more easily. 
 
 **Treat your context window like your desk.** Keep it clean. The conversation is Claude's working memory. Every message you add — questions, corrections, tangents — is a piece of paper on the desk. `/btw` is asking a question without putting anything on the desk. `--fork-session` is walking to a second desk. `/rewind` is clearing the mess and starting fresh from a clean point.
+
+![[images/btw-and-fork/keep-in-mind/excalidraw_7.png]]
