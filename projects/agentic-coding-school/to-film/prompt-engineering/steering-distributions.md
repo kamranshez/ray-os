@@ -19,6 +19,17 @@ When you say "find bugs related to cost counting," that distribution collapses. 
 
 The model has a finite computational budget per forward pass. Broad prompts spread that budget thin. Specific prompts concentrate it.
 
+![[images/attention-zero-sum/excalidraw_1.png]]
+![[images/attention-zero-sum/excalidraw_2.png]]
+![[images/attention-zero-sum/excalidraw_3.png]]
+![[images/attention-zero-sum/excalidraw_4.png]]
+![[images/attention-zero-sum/excalidraw_5.png]]
+![[images/attention-zero-sum/excalidraw_6.png]]
+![[images/attention-zero-sum/excalidraw_7.png]]
+![[images/attention-zero-sum/excalidraw_8.png]]
+![[images/attention-zero-sum/excalidraw_9.png]]
+![[images/attention-zero-sum/excalidraw_10.png]]
+
 ### How This Differs From Persona Vectors
 
 In the previous video we covered persona vectors — changing *how* the model reasons. Attention steering is the complementary concept: changing *where* the model focuses.
@@ -33,6 +44,17 @@ In the previous video we covered persona vectors — changing *how* the model re
 A persona vector will often implicitly steer attention as a side effect — the paranoid finops auditor naturally looks at cost-related code more carefully. But the reverse isn't true. "Look at cost counting bugs" doesn't give you the reasoning benefits of the persona. You get the right search area but default reasoning patterns.
 
 The strongest prompts combine both: persona (how to think) plus task specification (where to look). They're complementary vectors pointing in different directions through the same latent space.
+
+![[images/persona-vs-steering/excalidraw_1.png]]
+![[images/persona-vs-steering/excalidraw_2.png]]
+![[images/persona-vs-steering/excalidraw_3.png]]
+![[images/persona-vs-steering/excalidraw_4.png]]
+![[images/persona-vs-steering/excalidraw_5.png]]
+![[images/persona-vs-steering/excalidraw_6.png]]
+![[images/persona-vs-steering/excalidraw_7.png]]
+![[images/persona-vs-steering/excalidraw_8.png]]
+![[images/persona-vs-steering/excalidraw_9.png]]
+![[images/persona-vs-steering/excalidraw_10.png]]
 
 ### Why Default Distributions Are Dangerous
 
@@ -53,6 +75,17 @@ Think of prompting less like writing a job description and more like pointing a 
 
 The skill is knowing when you need breadth versus precision, and being specific about the dimensions that matter most for your task.
 
+![[images/flashlight-metaphor/excalidraw_1.png]]
+![[images/flashlight-metaphor/excalidraw_2.png]]
+![[images/flashlight-metaphor/excalidraw_3.png]]
+![[images/flashlight-metaphor/excalidraw_4.png]]
+![[images/flashlight-metaphor/excalidraw_5.png]]
+![[images/flashlight-metaphor/excalidraw_6.png]]
+![[images/flashlight-metaphor/excalidraw_7.png]]
+![[images/flashlight-metaphor/excalidraw_8.png]]
+![[images/flashlight-metaphor/excalidraw_9.png]]
+![[images/flashlight-metaphor/excalidraw_10.png]]
+
 ### Diminishing Returns of Long Prompts
 
 This is also why extremely long system prompts that try to cover every scenario often underperform. You're not giving the model more capability — you're creating competition between directives for the model's attention budget. A focused prompt that nails the three or four highest-leverage dimensions often beats an exhaustive one.
@@ -60,6 +93,17 @@ This is also why extremely long system prompts that try to cover every scenario 
 Ten things to check in one prompt → the model's prior weighting decides what gets attention, and common patterns dominate.
 
 Three focused, specific directives → full computational budget on each one.
+
+![[images/diminishing-returns/excalidraw_1.png]]
+![[images/diminishing-returns/excalidraw_2.png]]
+![[images/diminishing-returns/excalidraw_3.png]]
+![[images/diminishing-returns/excalidraw_4.png]]
+![[images/diminishing-returns/excalidraw_5.png]]
+![[images/diminishing-returns/excalidraw_6.png]]
+![[images/diminishing-returns/excalidraw_7.png]]
+![[images/diminishing-returns/excalidraw_8.png]]
+![[images/diminishing-returns/excalidraw_9.png]]
+![[images/diminishing-returns/excalidraw_10.png]]
 
 ### Demo
 
