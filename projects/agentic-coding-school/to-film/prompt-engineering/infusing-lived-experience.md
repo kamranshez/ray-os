@@ -96,9 +96,21 @@ From The AI Paradox:
 The takeaway: the more of *your* thought you put into the input, the more the output reflects you. Small generic inputs produce large generic outputs. Rich, experience-laden inputs produce outputs that actually extend your thinking.
 
 ![[images/fingerprint-metaphor/excalidraw_9.png]]
-### Key Insight
+### Key Insight: The GPS Analogy
+
+The pattern of technology-induced atrophy is well-documented across specific skills:
+
+- **London taxi drivers** — Neuroscientists in the 2000s found that the hippocampal region (spatial knowledge) of London cabbies was physically larger than average. But drivers who switched to GPS saw that gray matter actually *shrink*. The navigation skill wasn't just unused — it was lost.
+- **Doctors and AI diagnosis** — A recent Lancet paper found that doctors using AI assistance for just 4 months had a weakened ability to spot cancer on their own. By outsourcing *seeing* to the tool, they atrophied the fundamental visual skill needed to diagnose.
+- **Logic puzzles (Kristoff Van Neman)** — Two groups solved logic puzzles. Group A got helpful software highlighting valid moves. Group B struggled alone. Group A solved puzzles faster — but when the help was removed, they "aimlessly clicked around." Group B had no issue.
+
+Until recently, this atrophy was limited to specific skills. But LLMs are general — they can be applied to *thinking itself*. So the atrophy risk now applies to the most fundamental capability we have.
+
+**The GPS metaphor for prompt engineering:**
 
 > "Asking common questions to AI constantly will lead to atrophy. Like using GPS every day in your own neighborhood, you'll lose the map in your head. But asking rare questions you've never asked before to an AI — the ones specific to your experiences, the connections only you could make — that's different. Finding the question itself is the work."
+
+The distinction matters for this course: if you use AI to generate your ideas ("give me 10 content ideas"), you're GPS-ing your own neighborhood — outsourcing the thinking you should be building. But if you seed AI with your own observations, experiences, and half-formed connections, and ask it to *extend* those — you're asking rare questions only you could ask. That strengthens your thinking rather than replacing it.
 
 Source: [The AI Paradox — Jared Henderson](https://www.youtube.com/watch?v=fPFoTx-fXGw)
 
