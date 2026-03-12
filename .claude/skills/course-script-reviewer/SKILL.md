@@ -1,6 +1,7 @@
 ---
 name: course-script-reviewer
 description: Review video outlines and scripts before recording to catch pacing, accessibility, and structure issues. Use this skill whenever the user has a video outline or script they want reviewed before filming, when they ask to "review this script", "check this outline", "is this ready to film", or when they want feedback on a course video's structure. Also trigger when the user is about to film a video and wants a pre-flight check, or when they paste a video outline and ask for improvements. Works on both sparse bullet-point outlines and detailed scripts.
+disable-model-invocation: true
 ---
 
 # Course Script Reviewer
