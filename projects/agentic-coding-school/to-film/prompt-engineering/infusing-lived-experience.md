@@ -22,6 +22,7 @@ This comes from a concept explored in "The AI Paradox" by Jared Henderson:
 
 Research confirms AI is weaker than humans at divergent thinking (generating truly novel starting points) but highly effective at convergent thinking (refining and executing once you give it direction). So the prompt — the seed — is where *your* value lives.
 
+![[images/core-idea/excalidraw_9.png]]
 ### The Evidence: What Happens When You Skip the Seed
 
 **The MIT writing study (2025)** — ["Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task"](https://arxiv.org/abs/2506.08872) (Kosmyna et al., MIT Media Lab). Students wrote essays under three conditions: brain-only, Google-assisted, and ChatGPT-assisted. Researchers monitored brain activity with EEG while they worked. The findings:
@@ -32,11 +33,15 @@ Research confirms AI is weaker than humans at divergent thinking (generating tru
 
 But here's the most interesting result: they tested one final group — **human first, then AI access**. Students who outlined their own thinking first and then used ChatGPT showed *higher* brain connectivity than even the human-only group. The difference was the starting point. Human first, or AI first.
 
+![[images/mit-writing-study/excalidraw_7.png]]
+
 **The story similarity study (2024)** — ["Generative AI enhances individual creativity but reduces the collective diversity of novel content"](https://www.science.org/doi/10.1126/sciadv.adn5290) (Doshi & Hauser, *Science Advances*). ~300 people wrote stories, some with AI assistants to seed their ideas, some without. When they analyzed all the stories together, the AI-assisted stories were **significantly more similar to each other**. Our collective thought narrows when everyone uses the same tool.
 
 **The personas experiment** — ["Using Generative AI Personas Increases Collective Diversity in Human Ideation"](https://arxiv.org/abs/2504.13868) (Wan & Kalman, 2025). Researchers wondered if diversity could be restored. They gave writers 10 wildly different AI personas — a Latin American magic realist, a dystopian hard sci-fi writer, etc. It worked: the pool of stories became diverse again. But the catch was that the diversity only came from the human-designed personas in the first place. Within each persona, internal similarity was 0.92 — near-identical outputs. **The AI doesn't generate new diversity. It remixes what humans feed it.**
 
 **The echoes study** — ["Echoes in AI: Quantifying lack of plot diversity in LLM outputs"](https://www.pnas.org/doi/10.1073/pnas.2504966122) (Xu et al., Microsoft Research, *PNAS* 2025). Examined GPT-4 and LLaMA-3 on story generation and found LLM outputs consist of "echoed" plot elements — the same combinations repeating across generations. One output looks novel. Many reveal they're all banal echoes of the same thing.
+
+![[images/story-similarity-echoes/excalidraw_3.png]]
 
 ### Why This Happens: The Weighted Dice
 
@@ -45,6 +50,9 @@ Think of all possible thoughts as a massive tree, infinite in size. Each thought
 AI's dice are weighted, heavily biased towards what's been said before in its training data. That's why the paths make sense but always cluster and echo each other. You can't escape the weighted dice.
 
 Human thought is different. Your dice are weighted by your unique life experience and what matters to you. And this weighting is always changing. You wander into territory nobody else has been and the AI couldn't reach.
+
+![[images/weighted-dice/excalidraw_10.png]]
+
 ### What This Means for Prompt Engineering
 
 Most people prompt AI like a search engine: "give me ideas for X." That's asking the model to diverge — the thing it's worst at. The output will be generic, clustered, and echoey.
@@ -52,6 +60,8 @@ Most people prompt AI like a search engine: "give me ideas for X." That's asking
 The better approach: **seed it with your lived experience, then let it converge.**
 
 Your unique experiences, observations, and half-formed ideas are the starting point. The model's job is to extend, refine, and explore the territory *around* your seed — not to invent the seed for you. This is the difference between asking "what should I make a video about?" and saying "I noticed X happening in my business this week, and it connects to Y — explore that."
+
+![[images/prompt-engineering-implication/excalidraw_4.png]]
 
 ### The Practical Technique
 
@@ -67,6 +77,7 @@ The transcript or article acts as the seed — it puts the model into the right 
 
 **This is prompt engineering meeting context engineering.** The prompt is the seed (the direction), the context is the soil (the constraints and relevance). Both matter.
 
+![[images/practical-technique/excalidraw_3.png]]
 ### Demo
 
 1. Take a real transcript from a video I found interesting (show the copy-paste workflow)
@@ -84,8 +95,11 @@ From The AI Paradox:
 
 The takeaway: the more of *your* thought you put into the input, the more the output reflects you. Small generic inputs produce large generic outputs. Rich, experience-laden inputs produce outputs that actually extend your thinking.
 
+![[images/fingerprint-metaphor/excalidraw_9.png]]
 ### Key Insight
 
 > "Asking common questions to AI constantly will lead to atrophy. Like using GPS every day in your own neighborhood, you'll lose the map in your head. But asking rare questions you've never asked before to an AI — the ones specific to your experiences, the connections only you could make — that's different. Finding the question itself is the work."
 
 Source: [The AI Paradox — Jared Henderson](https://www.youtube.com/watch?v=fPFoTx-fXGw)
+
+![[images/key-insight/excalidraw_5.png]]
