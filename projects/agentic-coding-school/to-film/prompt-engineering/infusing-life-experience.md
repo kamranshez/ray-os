@@ -6,7 +6,6 @@ batch_name: "Seed Thinking"
 class: "prompt-engineering"
 chapter: "Seed Thinking"
 ---
-
 ## Infusing Life Experience Into Your Prompts
 
 AI is optimized to *continue* thought, not *generate* new thought. The creativity is in the seed — your seed. Your lived experience is the most valuable input you can give a model, and most people skip it entirely.
@@ -21,13 +20,34 @@ This comes from a concept explored in "The AI Paradox" by Jared Henderson:
 
 > "The input is the work. The input is the value."
 
-The MIT writing study he cites found something remarkable: students who outlined their own thinking *first* and then used ChatGPT showed *higher* brain connectivity than the human-only group. The order matters — human first, then AI.
+Research confirms AI is weaker than humans at divergent thinking (generating truly novel starting points) but highly effective at convergent thinking (refining and executing once you give it direction). So the prompt — the seed — is where *your* value lives.
 
-Research also confirms AI is weaker than humans at divergent thinking (generating truly novel starting points) but highly effective at convergent thinking (refining and executing once you give it direction). So the prompt — the seed — is where *your* value lives.
+### The Evidence: What Happens When You Skip the Seed
 
+**The MIT writing study (2025)** — ["Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task"](https://arxiv.org/abs/2506.08872) (Kosmyna et al., MIT Media Lab). Students wrote essays under three conditions: brain-only, Google-assisted, and ChatGPT-assisted. Researchers monitored brain activity with EEG while they worked. The findings:
+
+- Minutes after finishing, when asked to recall a single sentence from their own essay, **83% of the ChatGPT group couldn't recall any specific text**. The few who thought they could? 100% of them got it wrong.
+- The ChatGPT group showed significantly lower neural connectivity — their brains appeared to *dim* while working.
+- When evaluators read the essays, the AI-assisted ones were technically proficient, grammatically correct, structurally sound — but consistently described as **"hollow" or "soulless."** They were remarkably similar to each other.
+
+But here's the most interesting result: they tested one final group — **human first, then AI access**. Students who outlined their own thinking first and then used ChatGPT showed *higher* brain connectivity than even the human-only group. The difference was the starting point. Human first, or AI first.
+
+**The story similarity study (2024)** — ["Generative AI enhances individual creativity but reduces the collective diversity of novel content"](https://www.science.org/doi/10.1126/sciadv.adn5290) (Doshi & Hauser, *Science Advances*). ~300 people wrote stories, some with AI assistants to seed their ideas, some without. When they analyzed all the stories together, the AI-assisted stories were **significantly more similar to each other**. Our collective thought narrows when everyone uses the same tool.
+
+**The personas experiment** — ["Using Generative AI Personas Increases Collective Diversity in Human Ideation"](https://arxiv.org/abs/2504.13868) (Wan & Kalman, 2025). Researchers wondered if diversity could be restored. They gave writers 10 wildly different AI personas — a Latin American magic realist, a dystopian hard sci-fi writer, etc. It worked: the pool of stories became diverse again. But the catch was that the diversity only came from the human-designed personas in the first place. Within each persona, internal similarity was 0.92 — near-identical outputs. **The AI doesn't generate new diversity. It remixes what humans feed it.**
+
+**The echoes study** — ["Echoes in AI: Quantifying lack of plot diversity in LLM outputs"](https://www.pnas.org/doi/10.1073/pnas.2504966122) (Xu et al., Microsoft Research, *PNAS* 2025). Examined GPT-4 and LLaMA-3 on story generation and found LLM outputs consist of "echoed" plot elements — the same combinations repeating across generations. One output looks novel. Many reveal they're all banal echoes of the same thing.
+
+### Why This Happens: The Weighted Dice
+
+Think of all possible thoughts as a massive tree, infinite in size. Each thought is a pathway — each step is a word. Your mind only ever explores a tiny sliver of this tree. But that's *your* sliver. The pathways you choose are like a fingerprint.
+
+AI's dice are weighted, heavily biased towards what's been said before in its training data. That's why the paths make sense but always cluster and echo each other. You can't escape the weighted dice.
+
+Human thought is different. Your dice are weighted by your unique life experience and what matters to you. And this weighting is always changing. You wander into territory nobody else has been and the AI couldn't reach.
 ### What This Means for Prompt Engineering
 
-Most people prompt AI like a search engine: "give me ideas for X." That's asking the model to diverge — the thing it's worst at. The output will be generic, clustered, and echoey. Researchers found that even when you give AI 10 wildly different personas, the outputs still contain "echoes, combinations of the same ideas repeating."
+Most people prompt AI like a search engine: "give me ideas for X." That's asking the model to diverge — the thing it's worst at. The output will be generic, clustered, and echoey.
 
 The better approach: **seed it with your lived experience, then let it converge.**
 
