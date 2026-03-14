@@ -4,7 +4,7 @@ Anthropic just made 1 million tokens the default context window for Claude Code.
 
 ## What shipped
 
-Opus 4.6 and Sonnet 4.6: 1M context, generally available. No beta header, no long-context price increase — standard pricing across the full window. Up to 600 images or PDF pages per request. Default on all Claude Code plans.
+Opus 4.6: 1M context, generally available. No beta header, no long-context price increase — standard pricing across the full window. Up to 600 images or PDF pages per request. Default on all Claude Code plans.
 
 ---
 
@@ -26,17 +26,15 @@ This isn't a theory. Anthropic published testimonials from companies using 1M co
 
 ---
 
-## Coding: read wide, plan deep, implement narrow
+## Coding: scout, worker, synthesizer
 
-For coding, the pattern is concrete.
+For coding, the pattern breaks into three modes.
 
-**The intake phase:** Load the codebase architecture, the requirements, the existing patterns, the test results. Use the 1M window to understand the full picture. Where do modules connect? What conventions exist? Where will changes ripple? Come up with a detailed plan — not a vague outline, but specific: which files change, what each change does, what the dependencies are, what could break.
+**Scout — read wide, plan deep.** Load the codebase architecture, the requirements, the existing patterns, the test results. Use the 1M window to understand the full picture. Where do modules connect? What conventions exist? Where will changes ripple? Come up with a detailed plan — not a vague outline, but specific: which files change, what each change does, what the dependencies are, what could break. The plan is the artifact. It captures everything the scout phase understood, compressed into something actionable.
 
-**The distill step:** The plan itself is the artifact. It captures everything the intake phase understood, compressed into something actionable.
+**Worker — implement narrow.** Dispatch subagents from the same session, or start brand new sessions with the plan as input. Each worker gets the relevant slice — the files they're touching, the conventions they need to follow, the specific piece of the plan they're responsible for.
 
-**The execution phase:** Either dispatch subagents from the same session, or start brand new sessions with the plan as input. Each worker gets the relevant slice — the files they're touching, the conventions they need to follow, the specific piece of the plan they're responsible for.
-
-But first — why subagents at all? Why not just do everything in one session?
+But why subagents at all? Why not just do everything in one session?
 
 Because of what happens when a single session grows. Google's Gemini research put it clearly: as context grew significantly beyond 100K tokens, agents showed "a tendency toward favoring repeating actions from its vast history rather than synthesizing novel plans." The model stops thinking fresh. It starts copying what it already did instead of solving the next problem on its own terms. The context becomes a gravitational pull toward past patterns.
 
@@ -48,13 +46,19 @@ But subagents create a different problem: every time one reports back, it adds a
 
 **This is what 1M actually solves.** The coordinator can now absorb 10, 15, 20 subagent reports without compacting. It holds the full plan and every report. It catches contradictions. The 15th review is just as informed as the 1st.
 
+**Synthesizer — verify the whole picture.** This is the step most people skip, and it's where 1M context matters most. After all the workers report back, the coordinator holds the original plan, every worker's report, and the full architecture context simultaneously. It can now reason about whether the pieces actually fit together. Does worker 3's auth implementation work with worker 7's API changes? Did anyone introduce a pattern that contradicts the conventions established in the plan? Are there gaps — things the plan called for that no worker addressed?
+
+Before 1M, this synthesis step was exactly where compaction would hit. You'd have the plan, 15 worker reports, and the codebase context — and that's when the coordinator would lose the thread. The original plan would get summarized down to a few sentences. Cross-cutting concerns would vanish. The coordinator would approve work that contradicted earlier decisions because it couldn't see them anymore.
+
+With 1M, the synthesizer can actually do its job. It holds everything and checks the assembled whole against the original intent.
+
+And this is the deeper reason for delegating to workers in the first place. It's not just that workers think fresh — it's that **the synthesizer stays smart.** If you did everything in one session, the synthesis would happen at 800K tokens, deep in the degradation zone. By delegating the heavy implementation to subagents, the coordinator only holds the plan plus compact summaries. When synthesis happens, it might be at 200-300K — still in the sharp zone. You're keeping the coordinator's context lean specifically so that the most important step — verifying the whole thing actually works together — happens while the model is still at its best.
+
 So you have a choice about how to use a session:
 
 **Path 1 — Do the implementation directly.** One session, coding in context. This is fine up to about 200-300K tokens. Beyond that, the session starts degrading — repeating patterns, losing freshness, gravitating toward what it already did. If your task fits in that budget, this is simpler and works.
 
-**Path 2 — Coordinate subagents.** The session focuses on planning and reviewing. Implementation happens in fresh subagent windows. Each subagent thinks clean. The coordinator remembers everything. Before 1M, you could sustain maybe 5-6 cycles before the coordinator hit compaction. Now you can sustain 15-20+. Use this for anything that's too big for a single session's effective range.
-
-Reading and planning happen in the big window. Implementation happens in focused ones.
+**Path 2 — Scout, worker, synthesizer.** The session scouts the codebase and plans. Workers implement in fresh windows. The synthesizer verifies the assembled result against the original plan. Before 1M, you could sustain maybe 5-6 worker cycles before the coordinator hit compaction. Now you can sustain 15-20+. Use this for anything that's too big for a single session's effective range.
 
 ![[images/1m-context-window/coding-pattern/placeholder.png]]
 
