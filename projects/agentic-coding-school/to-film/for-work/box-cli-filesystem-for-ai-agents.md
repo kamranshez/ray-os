@@ -1,0 +1,14 @@
+---
+duration: "5-9 min"
+batch: 1
+order: 1
+batch_name: "AI at Work"
+class: "for-work"
+chapter: "Tool Setup"
+---
+
+## Box CLI Filesystem for AI Agents
+
+Using Box CLI as a secure filesystem for AI agents (like OpenClaw). Strict access controls, permission scoping, and gradually expanding access as you get comfortable with the security.
+
+https://x.com/MatthewBerman/status/1895277568888492412
