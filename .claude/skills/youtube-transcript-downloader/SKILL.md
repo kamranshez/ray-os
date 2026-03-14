@@ -15,31 +15,31 @@ python3 <skill-dir>/scripts/download_transcript.py <video_id_or_url> [more...] [
 
 - Accepts YouTube video IDs (`pb0lVGDiigI`) or full URLs (`https://youtube.com/watch?v=pb0lVGDiigI`)
 - Automatically organizes transcripts into channel-name subfolders via `yt-dlp`
-- Default output directory is the current working directory
+- Default output directory: **always use `--out-dir socials/youtube/transcripts`** so transcripts land in the canonical location alongside existing channel folders
 - Reads `SUPADATA_API_KEY` from environment or `.env` file in project root
 
 ## Examples
 
 Single video:
 ```bash
-python3 scripts/download_transcript.py pb0lVGDiigI --out-dir transcripts/
+python3 scripts/download_transcript.py pb0lVGDiigI --out-dir socials/youtube/transcripts
 ```
 
 Output:
 ```
-transcripts/
+socials/youtube/transcripts/
 └── ray-amjad/
     └── pb0lVGDiigI.txt   # includes YAML frontmatter (title, date, video_id, channel)
 ```
 
 Multiple videos:
 ```bash
-python3 scripts/download_transcript.py pb0lVGDiigI mZzhfPle9QU --out-dir transcripts/
+python3 scripts/download_transcript.py pb0lVGDiigI mZzhfPle9QU --out-dir socials/youtube/transcripts
 ```
 
 Output:
 ```
-transcripts/
+socials/youtube/transcripts/
 ├── ray-amjad/
 │   └── pb0lVGDiigI.txt
 └── john-kim/
