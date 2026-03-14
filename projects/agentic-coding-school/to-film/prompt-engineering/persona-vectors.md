@@ -6,7 +6,6 @@ batch_name: "Seed Thinking"
 class: "prompt-engineering"
 chapter: "Steering Models"
 ---
-
 ## Persona Vectors: Changing How the Model Thinks
 
 When you write "You are a senior backend engineer," you're not role-playing. You're activating a cluster of reasoning patterns inside the model — skepticism levels, what it treats as important, what it flags versus ignores, how it weighs trade-offs. A persona doesn't just change the model's tone. It changes what it *notices*.
@@ -21,16 +20,7 @@ Without a persona, the model reasons like a generalist. It applies default judgm
 
 This is fine for generic tasks. It's terrible when you need depth in a specific domain.
 
-![[images/no-persona-problem/excalidraw_1.png]]
 ![[images/no-persona-problem/excalidraw_2.png]]
-![[images/no-persona-problem/excalidraw_3.png]]
-![[images/no-persona-problem/excalidraw_4.png]]
-![[images/no-persona-problem/excalidraw_5.png]]
-![[images/no-persona-problem/excalidraw_6.png]]
-![[images/no-persona-problem/excalidraw_7.png]]
-![[images/no-persona-problem/excalidraw_8.png]]
-![[images/no-persona-problem/excalidraw_9.png]]
-![[images/no-persona-problem/excalidraw_10.png]]
 
 ### What a Persona Actually Does
 
@@ -45,16 +35,7 @@ Think of the model as having thousands of internal "dials" — formality, skepti
 
 Same code. Same task. Completely different analysis — because the model is reasoning through a different lens.
 
-![[images/persona-dials/excalidraw_1.png]]
-![[images/persona-dials/excalidraw_2.png]]
-![[images/persona-dials/excalidraw_3.png]]
-![[images/persona-dials/excalidraw_4.png]]
-![[images/persona-dials/excalidraw_5.png]]
-![[images/persona-dials/excalidraw_6.png]]
-![[images/persona-dials/excalidraw_7.png]]
-![[images/persona-dials/excalidraw_8.png]]
 ![[images/persona-dials/excalidraw_9.png]]
-![[images/persona-dials/excalidraw_10.png]]
 
 ### The Three Layers That Make a Persona Work
 
@@ -74,17 +55,7 @@ This gives the model hard boundaries that override its tendency to be agreeable.
 
 The jump from layer one to layers two and three is where most people's prompts fall short. "You are an expert" is almost useless. "You check X before Y, you never trust Z, you always verify W" — that's where the real steering happens.
 
-![[images/three-layers/excalidraw_1.png]]
-![[images/three-layers/excalidraw_2.png]]
-![[images/three-layers/excalidraw_3.png]]
-![[images/three-layers/excalidraw_4.png]]
 ![[images/three-layers/excalidraw_5.png]]
-![[images/three-layers/excalidraw_6.png]]
-![[images/three-layers/excalidraw_7.png]]
-![[images/three-layers/excalidraw_8.png]]
-![[images/three-layers/excalidraw_9.png]]
-![[images/three-layers/excalidraw_10.png]]
-
 ### Behavioral Specificity Beats Identity Labels
 
 Compare these two prompts for a code review:
@@ -96,18 +67,7 @@ Compare these two prompts for a code review:
 The second prompt doesn't even name a role. But it specifies *how to reason* — and that produces dramatically better output than a title ever could.
 
 The principle: describe the *behavior* you want, not the *label* you'd give it.
-
-![[images/behavioral-specificity/excalidraw_1.png]]
 ![[images/behavioral-specificity/excalidraw_2.png]]
-![[images/behavioral-specificity/excalidraw_3.png]]
-![[images/behavioral-specificity/excalidraw_4.png]]
-![[images/behavioral-specificity/excalidraw_5.png]]
-![[images/behavioral-specificity/excalidraw_6.png]]
-![[images/behavioral-specificity/excalidraw_7.png]]
-![[images/behavioral-specificity/excalidraw_8.png]]
-![[images/behavioral-specificity/excalidraw_9.png]]
-![[images/behavioral-specificity/excalidraw_10.png]]
-
 ### Correlated Dimensions: Free Extras and Unwanted Side Effects
 
 Here's something most people don't realize. When you activate one trait, correlated traits come along for free:
@@ -121,16 +81,6 @@ This is usually helpful — you get a coherent persona without specifying every 
 The skill is knowing when to ride the default correlations and when to explicitly break them.
 
 ![[images/correlated-dimensions/excalidraw_1.png]]
-![[images/correlated-dimensions/excalidraw_2.png]]
-![[images/correlated-dimensions/excalidraw_3.png]]
-![[images/correlated-dimensions/excalidraw_4.png]]
-![[images/correlated-dimensions/excalidraw_5.png]]
-![[images/correlated-dimensions/excalidraw_6.png]]
-![[images/correlated-dimensions/excalidraw_7.png]]
-![[images/correlated-dimensions/excalidraw_8.png]]
-![[images/correlated-dimensions/excalidraw_9.png]]
-![[images/correlated-dimensions/excalidraw_10.png]]
-
 ### When To Use Persona Vectors
 
 - **Code reviews** — a "paranoid security reviewer" catches different things than a "performance-obsessed systems engineer"
