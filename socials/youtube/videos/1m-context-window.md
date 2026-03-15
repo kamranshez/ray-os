@@ -22,10 +22,9 @@ This isn't a theory. Anthropic published testimonials from companies using 1M co
 
 (Show testimonial screenshots on screen here — flick through them quickly)
 
-![[images/1m-context-window/intake-pattern/placeholder.png]]
+![[images/1m-context-window/intake-pattern.png]]
 
 ---
-
 ## Coding: scout, worker, synthesizer
 
 For coding, the pattern breaks into three modes.
@@ -58,9 +57,15 @@ So you have a choice about how to use a session:
 
 **Path 1 — Do the implementation directly.** One session, coding in context. This is fine up to about 200-300K tokens. Beyond that, the session starts degrading — repeating patterns, losing freshness, gravitating toward what it already did. If your task fits in that budget, this is simpler and works.
 
-**Path 2 — Scout, worker, synthesizer.** The session scouts the codebase and plans. Workers implement in fresh windows. The synthesizer verifies the assembled result against the original plan. Before 1M, you could sustain maybe 5-6 worker cycles before the coordinator hit compaction. Now you can sustain 15-20+. Use this for anything that's too big for a single session's effective range.
+**Path 1.5 — Detailed plan, long execution.** Here's a nuance that changes the math. If you've already done the hard thinking — scouted the codebase, made all the architectural decisions, reviewed the plan with subagents — and the result is a detailed plan where every decision is already made, then the implementation session can run well past 200-300K. Because what degrades in long context isn't the model's ability to follow instructions. It's the model's ability to *reason and problem-solve*. A session that's just executing a detailed plan — file by file, change by change, no novel decisions required — can go long without meaningful quality loss. The thinking already happened in a different context window. This session is just typing.
 
-![[images/1m-context-window/coding-pattern/placeholder.png]]
+Before 1M, these long implementation sessions would hit compaction and lose the plan itself. That was the real problem — not that the model got dumber, but that it literally couldn't see the instructions anymore. Now the plan stays in context the entire time.
+
+**Path 2 — Scout, worker, synthesizer.** The session scouts the codebase and plans. Workers implement in fresh windows. The synthesizer verifies the assembled result against the original plan. Before 1M, you could sustain maybe 5-6 worker cycles before the coordinator hit compaction. Now you can sustain 15-20+. Use this for anything where the implementation itself requires significant reasoning — where the plan can't capture every decision in advance, or where subagents need to make judgment calls that could conflict with each other.
+
+![[images/1m-context-window/scout-worker-synthesizer.png]]
+![[images/1m-context-window/why-fresh-subagents.png]]
+![[images/1m-context-window/three-paths.png]]
 
 ---
 
@@ -83,7 +88,7 @@ Same structure works for:
 
 The 1M window lets you load everything at once. The different orderings make sure you actually find everything that's in there.
 
-![[images/1m-context-window/data-analysis/placeholder.png]]
+![[images/1m-context-window/data-analysis-ordering.png]]
 
 ---
 
@@ -99,7 +104,7 @@ For simple tasks, the intake and the execution are the same thing. There's nothi
 
 The distinction is **task intensity.** Simple and repetitive? Let the window fill up. Complex and creative? Read wide, then work narrow.
 
-![[images/1m-context-window/simple-tasks/placeholder.png]]
+![[images/1m-context-window/simple-tasks.png]]
 
 ---
 
@@ -117,4 +122,4 @@ When the project is done, start fresh. The context from the last project isn't h
 
 **The one-liner version:** 1M tokens doesn't mean one session all day. It means the sessions that need to be long can finally be long — and the rest should still be short.
 
-![[images/1m-context-window/when-to-start-fresh/placeholder.png]]
+![[images/1m-context-window/when-to-start-fresh.png]]

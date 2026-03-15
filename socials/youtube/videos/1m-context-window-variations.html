@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1M Context Window — Script Variations</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    padding: 24px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.4rem;
+    color: #888;
+    margin-bottom: 24px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+  .col {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+  .col h2 {
+    font-size: 1rem;
+    color: #f5a623;
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .col .subtitle {
+    font-size: 0.75rem;
+    color: #666;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+  .col h3 {
+    font-size: 0.85rem;
+    color: #7ec8e3;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .col p { margin-bottom: 10px; color: #bbb; }
+  .col strong { color: #e0e0e0; }
+  .col em { color: #999; font-style: italic; }
+  .col .highlight {
+    background: #1a2a1a;
+    border-left: 3px solid #4caf50;
+    padding: 8px 12px;
+    margin: 12px 0;
+    font-size: 0.78rem;
+    color: #a5d6a7;
+  }
+  .col .key-line {
+    background: #2a1a1a;
+    border-left: 3px solid #f5a623;
+    padding: 8px 12px;
+    margin: 12px 0;
+    font-size: 0.78rem;
+    color: #f5c56e;
+  }
+  .col ul {
+    padding-left: 16px;
+    margin-bottom: 10px;
+  }
+  .col li {
+    margin-bottom: 4px;
+    color: #bbb;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #2a2a2a;
+    margin: 14px 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>1M Context Window — 5 Script Variations</h1>
+
+<div class="grid">
+
+<!-- VARIATION 1 -->
+<div class="col">
+  <h2>1. The Two Failure Modes</h2>
+  <div class="subtitle">Structure around what goes wrong, not what goes right</div>
+
+  <h3>Hook</h3>
+  <p>There are two ways to fail with a 1M context window. Most people will hit both.</p>
+
+  <h3>Failure 1: Treating it as working memory</h3>
+  <p>You load everything in and start coding. At 200K it's great. At 400K it's fine. At 600K the model starts repeating itself. Google's Gemini research found it clearly — past a certain point, the model defaults to "repeating actions from its vast history rather than synthesizing novel plans."</p>
+  <p>It's not forgetting things. It's the opposite — it remembers too much. Every past decision becomes gravity pulling it toward the same patterns.</p>
+  <p>The fix: use the big window for <strong>reading</strong>, not doing. Load the whole codebase, understand the full picture, then distill a plan. Do the work in fresh, smaller sessions where each one starts clean.</p>
+
+  <h3>Failure 2: Never using it</h3>
+  <p>The opposite mistake. You keep sessions short because you heard long context degrades quality. So you never load the full picture. You work from fragments. You miss the connection between module A and module Z because you never saw them in the same window.</p>
+  <p>The fix: the reading phase <em>should</em> be long. That's where 1M earns its keep. You just shouldn't also do the execution there.</p>
+
+  <div class="key-line">The sweet spot is being aggressive about intake and disciplined about execution.</div>
+
+  <h3>The Coordination Problem</h3>
+  <p>Once you're dispatching work to subagents, a third failure mode appears: the coordinator losing track. Each subagent reports back — files changed, decisions made, tests run. After 5-6 reports, that's 20-30K tokens stacking up. Before 1M, this is where compaction would hit and the coordinator would start approving contradictory work.</p>
+  <p>This is 1M's real unlock for coding. Not longer execution — longer coordination. The coordinator can absorb 15-20 subagent reports without losing the thread. The 15th review is as informed as the 1st.</p>
+
+  <h3>The Decision Rule</h3>
+  <p>Before your next action, ask: <strong>am I reading or doing?</strong></p>
+  <p>Reading → let the window fill. Doing → keep it lean. Coordinating → this is what 1M was actually built for.</p>
+
+  <h3>When to Reset</h3>
+  <p>Does the context from your last task help the next one? If yes, keep going. If no, you're carrying dead weight. Feature A's context is noise when you're building feature B — unless they share state. Testing feature A? That context is pure signal. Keep going.</p>
+</div>
+
+<!-- VARIATION 2 -->
+<div class="col">
+  <h2>2. The Spectrum</h2>
+  <div class="subtitle">One framework: task intensity determines session strategy</div>
+
+  <h3>Hook</h3>
+  <p>There's one question that determines how you should use 1M context: <strong>how hard is what you're about to do?</strong></p>
+
+  <h3>Low Intensity: Just Keep Going</h3>
+  <p>Replying to 30 emails. Reviewing a batch of PRs. Renaming things across a codebase. Translating content. Filling out forms via browser automation.</p>
+  <p>These tasks don't require the model to hold complex decisions in its head. It needs to maintain a simple pattern across many repetitions. 1M context is a straight upgrade — you just don't run out of runway. Before, browser workflows would break at step 15. Now they handle 30-40 steps without losing continuity.</p>
+  <p>No orchestration needed. No subagents. One session, steady work.</p>
+
+  <h3>Medium Intensity: Read Then Do</h3>
+  <p>A feature that touches 5-10 files. A bug that requires understanding a subsystem. Anything that fits in roughly 200-300K tokens of actual implementation.</p>
+  <p>Load the relevant code, understand it, plan the approach, then implement — all in one session. The 1M window means you can load more context upfront without worrying about running out of room for the work itself. You get better plans because you see more of the codebase before you start.</p>
+
+  <h3>High Intensity: Scout, Dispatch, Verify</h3>
+  <p>A feature that touches 20+ files. A refactor across multiple subsystems. Anything where a single session would hit 400K+ tokens of implementation.</p>
+  <p>This is where the session splits into three roles:</p>
+  <p><strong>Scout:</strong> Load everything. Understand the full architecture. Produce a detailed plan — which files change, what each change does, what depends on what, what could break.</p>
+  <p><strong>Workers:</strong> Each subagent gets one piece of the plan. Fresh context, focused task. They implement better because they're not carrying 300K tokens of unrelated decisions.</p>
+  <p><strong>Verifier:</strong> The coordinator holds the original plan plus every worker's report. It checks: do the pieces fit? Did anyone contradict the plan? Are there gaps?</p>
+
+  <div class="highlight">1M's real contribution: the verifier can now hold 15-20 worker reports plus the full plan. Before, it would lose the early reports to compaction and approve contradictions it couldn't see.</div>
+
+  <h3>The Gradient, Not the Binary</h3>
+  <p>This isn't three discrete categories. It's a spectrum. As task complexity increases, gradually shift from "do it all here" toward "read here, do elsewhere." The transition point is roughly when you expect implementation to exceed 200-300K tokens.</p>
+
+  <div class="key-line">Simple → one session, let it run. Medium → read wide, implement here. Complex → read wide, dispatch narrow, verify wide.</div>
+</div>
+
+<!-- VARIATION 3 -->
+<div class="col">
+  <h2>3. Reading vs. Writing</h2>
+  <div class="subtitle">The core insight distilled to its simplest form, then expanded</div>
+
+  <h3>Hook</h3>
+  <p>1M context is a reading upgrade, not a writing upgrade. That one sentence changes how you use it for everything.</p>
+
+  <h3>The Core Principle</h3>
+  <p>Long context makes the model better at <strong>understanding</strong>. It does not make the model better at <strong>producing</strong>. In fact, production quality degrades as context grows — the model starts repeating past patterns instead of generating fresh solutions.</p>
+  <p>So you want maximum context when absorbing information. And minimum context when generating output.</p>
+
+  <div class="key-line">Read with the full window. Write with a clean one.</div>
+
+  <h3>Applied to Code</h3>
+  <p>Reading phase: load the entire repo, all the tests, the deployment config, the CI logs. See every connection. Understand the architecture completely. Produce one artifact: a detailed implementation plan.</p>
+  <p>Writing phase: start fresh sessions. Each one gets the relevant slice of the plan and the files it needs to touch. It writes better code because it's not drowning in 500K tokens of things it already read.</p>
+  <p>Verification phase: back to reading mode. Load the plan, every implementation report, the changed files. Read it all. Check coherence. This is reading, not writing — so the full window helps rather than hurts.</p>
+
+  <h3>Applied to Data</h3>
+  <p>Reading: load all 12 files. See cross-file patterns. But here's the nuance — <strong>reading is influenced by order</strong>. What the model read most recently gets more attention. So read the same files in different orders. Each pass surfaces different connections. Combine the readings.</p>
+
+  <h3>Applied to Repetitive Tasks</h3>
+  <p>Here the distinction collapses. Replying to emails, renaming variables, filling forms — this is "writing" that's so simple it's basically pattern application. There's no creative degradation because there's no creativity required. The full window just means you can apply the pattern longer.</p>
+
+  <h3>The Meta-Rule</h3>
+  <p>Before any session, ask: <strong>is this session primarily reading or writing?</strong></p>
+  <p>If reading → fill the window. That's its strength.</p>
+  <p>If writing → keep it lean. The accumulated context from your last reading session is available as an artifact (the plan), not as raw context.</p>
+  <p>If you're done with one type and switching to the other → start fresh. Unless the next task directly builds on the current context.</p>
+</div>
+
+<!-- VARIATION 4 -->
+<div class="col">
+  <h2>4. The Coordination Tax</h2>
+  <div class="subtitle">Reframed around the problem 1M actually solves</div>
+
+  <h3>Hook</h3>
+  <p>The hardest problem in AI-assisted coding isn't getting the model to write good code. It's getting 10 pieces of good code to work together. 1M context solves <em>that</em> problem.</p>
+
+  <h3>Why Single Sessions Break</h3>
+  <p>A single session coding for a long time hits two walls. First, retrieval — MRCR benchmarks show the model's ability to find information in its own context drops from 91.9% to 78.3% at 1M tokens. Second, and worse, creativity — Google's research shows the model starts repeating past actions instead of generating new approaches. It codes like someone who's been awake for 36 hours.</p>
+  <p>So you split the work. Subagents. Each one starts fresh, codes one piece well.</p>
+
+  <h3>The Problem That Creates</h3>
+  <p>Now you have a coordination problem. Someone has to hold the plan, receive every report, check for contradictions, catch gaps, verify the assembled result.</p>
+  <p>Each subagent report is 3-5K tokens. After 6 reports, that's 20-30K on top of the plan, the architecture context, and your messages. Before 1M, this is where the coordinator would hit compaction. The plan gets summarized. Early reports get compressed. The coordinator approves work that contradicts decisions it can no longer see.</p>
+
+  <div class="key-line">The coordination tax: every subagent that reports back costs context. Before 1M, you could afford maybe 5-6 reports. Now you can afford 15-20+.</div>
+
+  <h3>What This Actually Looks Like</h3>
+  <p><strong>Session loads the codebase.</strong> Understands architecture. Writes a detailed plan — files, changes, dependencies, risks.</p>
+  <p><strong>Dispatches workers.</strong> Each gets their slice. They implement in fresh windows. Quality stays high because each one is thinking, not repeating.</p>
+  <p><strong>Workers report back.</strong> The coordinator absorbs each report. Checks it against the plan. Checks it against every previous report. At report 15, it still has report 1 in full fidelity.</p>
+  <p><strong>Final synthesis.</strong> Does the assembled whole match the original intent? This is the step that was impossible before 1M. The coordinator would be at 500K tokens, deep in the degradation zone. Now it's at 200-300K — still sharp.</p>
+
+  <div class="highlight">The deeper insight: by delegating heavy implementation to subagents, the coordinator stays lean. When synthesis happens — the most important step — the model is still at its best.</div>
+
+  <h3>The Exception</h3>
+  <p>If there's no coordination — one task, repetitive, low complexity — there's no coordination tax. Just let the session run. 1M means you can reply to 30 emails or automate 40 browser steps without the session dying halfway through.</p>
+
+  <h3>Session Boundaries</h3>
+  <p>The coordination context is cumulative — every report builds on the last. Stay in the session while coordinating. But when the project's done, that coordination history is dead weight. Start fresh.</p>
+</div>
+
+<!-- VARIATION 5 -->
+<div class="col">
+  <h2>5. Three Numbers</h2>
+  <div class="subtitle">Built around concrete thresholds that make decisions easy</div>
+
+  <h3>Hook</h3>
+  <p>You don't need a framework for 1M context. You need three numbers: <strong>200K, 500K, and 1M</strong>.</p>
+
+  <h3>0-200K: The Sharp Zone</h3>
+  <p>The model is at its best. Full retrieval accuracy. Novel reasoning. Creative problem-solving. If your task — reading and implementation combined — fits in 200K, just do it in one session. No orchestration needed.</p>
+  <p>This covers most everyday coding. A feature that touches 5-10 files. A bug investigation. A refactor within one subsystem.</p>
+
+  <h3>200K-500K: The Transition Zone</h3>
+  <p>Retrieval is still solid. But creative output starts degrading. The model begins recycling patterns from earlier in the session. It's subtle — the code still works, but it starts looking like copies of what it already wrote.</p>
+  <p>If you're in this zone and doing complex creative work, consider splitting: read phase here, implementation dispatched to subagents. If you're doing simple repetitive work, keep going — there's no creativity to degrade.</p>
+
+  <h3>500K+: The Intake Zone</h3>
+  <p>This is where you should be reading, not writing. Loading codebases. Absorbing logs. Understanding architecture. The model can still <em>find</em> information — MRCR only drops to 78.3% at 1M — but its ability to generate novel solutions is significantly reduced.</p>
+  <p>Use this zone for:</p>
+  <ul>
+    <li>Building the complete picture before planning</li>
+    <li>Coordinating subagent reports (reading, not generating)</li>
+    <li>Synthesis — checking assembled work against the original plan</li>
+    <li>Repetitive tasks that don't require novelty</li>
+  </ul>
+
+  <div class="key-line">Below 200K: do everything here. 200-500K: transition to dispatch. Above 500K: read and coordinate only.</div>
+
+  <h3>How the Numbers Work Together</h3>
+  <p>The coordinator loads 300K of codebase context. Plans at 350K. Dispatches workers — each starts at 0, finishes around 50-100K. Workers report back. The coordinator absorbs reports, reaching 400-600K. But it's <em>reading</em> reports, not generating code. Synthesis happens at 500K — still effective for reading and checking coherence.</p>
+  <p>If the coordinator had done the implementation itself, it would be generating code at 500K+. That's the degradation zone. By offloading implementation, the hard creative work happened at 0-100K in each subagent. The coordinator only does reading and verification in the upper zones — exactly what those zones are good for.</p>
+
+  <h3>Data Analysis Trick</h3>
+  <p>Load files in different orders across separate sessions. Each session uses 200-400K. But each makes different connections because of recency and positional effects. Three passes with different orderings gives you coverage that one pass at any size can't match.</p>
+
+  <h3>When to Reset: The One Question</h3>
+  <p>Does the context you're carrying actively help the next task? If yes, continue. If not, you're wasting sharp-zone capacity on noise. Start fresh.</p>
+</div>
+
+</div>
+
+</body>
+</html>
