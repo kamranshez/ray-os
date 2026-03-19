@@ -20,4 +20,4 @@ Claude Code works better in WSL because WSL gives Windows a real Linux environme
 - **Git Bash vs WSL** — Anthropic says Claude Code on Windows uses Git Bash internally, while WSL gives you a full Linux environment directly on Windows.
 - **Bottom line** — If you're on Windows and using Claude Code, run it inside WSL for the most predictable experience.
 
-![[images/using-cc-in-wsl/excalidraw_4.png]]
+![[images/using-cc-in-wsl/claude-code-in-wsl.png]]
