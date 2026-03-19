@@ -1,0 +1,101 @@
+---
+title: "Anthropic Just Dropped the Feature Nobody Knew They Needed"
+date: 2026-03-11
+video_id: DqjBbAr3oTo
+channel: ray-amjad
+---
+
+Okay, now Claude Code added a feature that I 
+didn't even realize I needed. So I'll be going   over this and how you can use it effectively, 
+as well as a bunch of other things in Claude   Code to also help improve your workflows. Now, 
+essentially, when Claude Code is implementing a   pretty big feature, it's reading files, writing 
+code, downloading some packages, and then also   running tests. And you may have a question as it's 
+implementing something because you're watching   it. And you could be like, hey, why did you use 
+that particular library? And in those situations,   what most people do is they interrupt the model 
+by doing Escape or Ctrl+C and then saying,  "Why did you do X?" for example. And that can lead 
+to some problems because the time that is spent   answering your questions could have been used for 
+coding instead. So you basically end up taking   more time to implement that feature. And also it 
+does end up adding noise to conversation. So your   conversation history for that particular chat ends 
+up being filled with a bunch of Q&A. Now it's fine   to do it like once or twice in a conversation, 
+but if you end up doing that too often, then   that can be bad because you end up polluting the 
+conversation with a bunch of irrelevant noise. And   that can mean you have less signal overall because 
+you end up having a lot of random explanations in   the conversation that the model did not need, but 
+you needed instead. I find that a good analogy   here is when it comes to humans. So if you're 
+working on a task and you're in like deep focus,   then someone taps you on the shoulder and asks 
+you a quick question about what you're doing,   then it can be quite annoying because then it 
+can take you a while to resume the task again   and you've also lost track. And this is kind of 
+like adding a random question answer into the   LLM context window. So you're basically polluting 
+it with things that the LLM did not need and only   you needed. And if you do this enough, then it 
+can fill up the context window and also degrade   future outputs as well. And as I talked about 
+2 months ago in my 2026 workflow video, the way   that I got around this and to not interrupt 
+the main session was by splitting the window   and starting a brand new session. By doing claude 
+continue --fork-session. So it'd be kind of like   this. Let's imagine that this is still working 
+away. Then I would do Ctrl+D to split the window,   do claude -c --fork-session. And then that would 
+make a copy of the last session that I was running   and it made a change on, such as the session 
+over here on the right-hand side. And then I can   ask some questions. And then once it answered the 
+question for me, I would do Ctrl+W to close out of   that tab and then just resume in the main session. 
+But now Claude Code made this even easier. So as   it's working away, you can do /btw and then ask 
+a question here. So I can say, why did you import   and use AVFoundation? And then press Enter. 
+And you will see that it answers the question   inline. So you can see that it answered it right 
+over here. And then I can press Escape, Enter,   or Space to dismiss this like little window. And 
+then I can ask another question of like summarize   the change so far. And you can see as I'm doing 
+this, the main session behind it is still working   away. Now essentially this is a side channel built 
+into Claude Code where you can ask any question   you want without polluting the main conversation 
+and keep all the context of what was done so far   from that conversation so it can help answer the 
+question. Now the benefit here is like with Fork's   context window, we have full context of visibility 
+where it can see everything that had been decided   and written so far to help it answer the question. 
+We also have no context pollution because no   question or answer enters a conversation history. 
+It doesn't interrupt Claude Code. So as it's   answering the question, it can still work away, 
+which means that even if it took like 30 seconds,  60 seconds to answer a long question, during 
+that time, the model is still working behind   the scenes on the feature implementation. And 
+also since answering the question uses the prompt   cache of the main session, it means the cost to 
+answering any question is really low. Now there   are some trade-offs here. The first of which 
+is you can't ask a follow-up question. It is   single turn only. So if I did /btw and said, what 
+was the last question that I asked? Then you can   see it forgot the last question that I asked. And 
+secondly, it has no tool access. It is read-only,   which means you can't get it to make a diagram 
+for you, for example, in an image or a file,   in which case you may want to go back to using 
+--fork-session instead. So for example, if I   wanted to make a Mermaid diagram of what exactly 
+is happening behind the scenes, then I would press   Command+D instead, do claude -c --fork-session, 
+and then it would load an identical version of   that chat, which means that if I entered anything 
+on the right-hand side, it would not be copied   over to the left-hand side. So I could do like 
+a mermaid diagram generator, and this is my own   custom mermaid diagram generator skill. And you 
+can learn more about the skill and download it   using a free video in my Master Claude Code class. 
+So for example, I could have it make the mermaid   diagram here on the right-hand side, and then have 
+it make changes here on the left-hand side. And   now we have the Mermaid diagram ready over here. 
+And then I could just be inspecting it to better   understand how the project works. So this is one 
+of the key differences between the approaches. I   would personally use /btw, /by the way, as a quick 
+question and then use fork-session for any deep   dives. So that would be for anything that requires 
+reading files because /btw can't read files. It   only uses the context in the conversation so far. 
+Producing artifacts like the Mermaid diagram that   I just showed you, and then maybe exploring 
+a different turn or approach. Another way of   doing the forking is by doing /fork inside of the 
+session itself, and then it will move you over to   forked branch. And then you can continue on with 
+the original one by copying over this command and   then putting it into a new window pane. But you 
+also have to add --fork-session to this as well.   And then you have both of those chats separately. 
+And then you can explore different possibilities   whereby you can see the one on the left is on a 
+work tree and the one on the right is in the main   session and move over to a different work tree as 
+well so they don't conflict with one another. Now,   the key idea that ties everything together here 
+is context pollution. So as your agent is working   away, you don't want to be interrupting it and 
+asking random questions, getting it to go on   tangents, having it explain things to you, because 
+that is not necessary for the agent to complete   its goal. Only the plan that you specified at the 
+beginning was necessary for that. So you should be   using /btw for anything that is a tangent or off 
+topic or something. And if it requires making a   file, then use the fork session. And finally, 
+if you do /btw and you ask a question and you   realize that the agent had a fundamentally wrong 
+understanding of what you were trying to achieve,   rather than doing Escape or Ctrl+C to like 
+stop it, and then correcting it from there.   As I explained in my video last week, you should 
+rewind the conversation instead. So rather than   arguing with some stale context where it made a 
+bad decision early on and then having that stale,   wrong context polluting like 20-30% of the context 
+window, you should instead /rewind earlier on and   then reprompt it with the correct prompt that 
+has the additional detail. And that would be   as simple as doing /rewind and then going back 
+earlier on For example, like over here, doing   restore code and conversation and then reprompting 
+it with the correct like information. I would also   recommend watching this video of mine after this 
+one for more details. So these two ideas now tie   together because if you use /btw and you notice 
+that the agent like made a misconception or just   had the wrong idea, then you can rewind, reprompt 
+it from that point and add additional details in   that prompt and then continue from there. Now, if 
+you are interested in more details, then I cover   a lot to do with this kind of stuff in my Claude 
+Code Masterclass. It is the most comprehensive   Claude Code class that you will find on the 
+internet from someone who's used it for over 1,  700 hours. Some people have emailed me asking me 
+to extend the birthday sale by a few days because   about 1 year ago Claude Code was released. So 
+it's the 1-year birthday sale. So if you are   interested, there will be a link down below. And 
+if you sign up to my free Claude Code newsletter,   Then you will also get access to some free videos 
+from the class. Signing up to it will also give   you access to the Mermaid Diagram Generator 
+skill that I talked about earlier in the video.
