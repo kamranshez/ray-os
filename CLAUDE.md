@@ -25,6 +25,7 @@ date: YYYY-MM-DD
 
 ## Conventions
 
+- **kebab-case everything** — All file and folder names use `kebab-case`. No Title Case with spaces, no camelCase. Obsidian displays titles via frontmatter `title:` or `aliases:`.
 - Date-prefix files as `YYYY-MM-` for chronological sorting
 - `analysis/` folders contain research about *other* creators/posts
 - `self-audit/` or `posts/` folders contain Ray's own content and performance data

@@ -17,7 +17,7 @@ socials/
 │   └── transcripts/    — Downloaded transcripts organized by channel
 └── linkedin/
     ├── analysis/       — Feed analysis and viral post research
-    └── posts/          — Post drafts, history, and performance tracking
+    └── (posts/ planned — not yet created)
 ```
 
 ## Conventions
