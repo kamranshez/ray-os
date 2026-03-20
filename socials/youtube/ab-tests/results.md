@@ -792,6 +792,29 @@ All variants use the locked title: "Anthropic Just Dropped the Feature That Kill
 
 ---
 
+## Video 16: Claude Code Channels (Telegram/Discord — OpenClaw Killer)
+
+**Published:** 2026-03-20
+**Thumbnail Text:** It's 96% Cheaper!
+
+### Title A/B Test Round 1 (2026-03-20)
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Claude Code Channels Just Dropped, And It Kills OpenClaw | It's 96% Cheaper! | 35% | Leader |
+| Anthropic Just Dropped the OpenClaw Killer | It's 96% Cheaper! | 33.9% | |
+| Anthropic Just Dropped the Feature That Kills OpenClaw | It's 96% Cheaper! | 31.1% | |
+
+**Key takeaways:**
+- Extremely tight race — all 3 within 4%, no clear breakaway winner
+- Leader (35%) lacks "Anthropic" authority — breaks the proven formula, risky long-term
+- V13's winning title "...Feature That Kills OpenClaw" underperforming here (31.1% vs 36.3% on V13) — possible audience fatigue from recycled competitive framing
+- "OpenClaw Killer" shorter/punchier at 33.9% but no breakaway
+- Thumbnail "It's 96% Cheaper!" reused from V13 — may feel like a retread for overlapping audience
+- **Round 2 should test maximally different frames:** cost contrast in title, social proof curiosity, and keep best performer as control
+
+---
+
 ## Tests Still Worth Running
 
 1. **Bold/emotional claims** — "This Changes Everything" type titles
