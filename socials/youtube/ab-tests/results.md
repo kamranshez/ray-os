@@ -848,9 +848,29 @@ Switched back to title testing. Same thumbnail across all 3 (face + X'd OpenClaw
 - **Diagnosis: The entire "OpenClaw" competitive angle may have hit its ceiling.** V13 already covered this positioning — audience fatigue likely
 - Round 3 should drop OpenClaw from titles entirely and test cost contrast, social proof curiosity, and capability framing
 
+### Title A/B Test Round 3 (2026-03-21) — Drop OpenClaw, test diverse frames
+
+Dropped OpenClaw from all titles. Same thumbnail across all 3 (face + X'd OpenClaw mascot + "It's 96% Cheaper!").
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Anthropic Just Dropped a $5,000 Feature for $200 | It's 96% Cheaper! | 33.4% | Tied |
+| Anthropic Just Dropped 24/7 Claude Code for $200/month | It's 96% Cheaper! | 33.4% | Tied |
+| Anthropic Just Dropped the Feature Nobody Knew They Needed | It's 96% Cheaper! | 33.2% | |
+
+**Key takeaways:**
+- Completely flat — all within 0.2% despite three maximally different title frames (cost contrast, capability, social proof curiosity)
+- "Nobody Knew They Needed" — a 46.8% winner on V14 — flopped at 33.2% here
+- Three different frames producing identical results = **the thumbnail is the ceiling, not the title**
+- The X'd OpenClaw mascot + "It's 96% Cheaper!" likely confuses viewers who don't know/care about OpenClaw, limiting the audience
+- **Diagnosis: Switch to thumbnail testing.** The competitive/OpenClaw-heavy thumbnail is capping performance regardless of title
+- Next round should test thumbnails that don't require OpenClaw knowledge: personal workflow ("How I Code Now"), cost contrast visual, or phone/Telegram visual proof
+
 ---
 
 ## Tests Still Worth Running
+
+### Title Frames
 
 1. **Bold/emotional claims** — "This Changes Everything" type titles
 2. ~~**"You Can Now" framing**~~ **TESTED (Video 10)** — Flopped at 27.9%. Second-person capability framing doesn't work.
@@ -858,3 +878,17 @@ Switched back to title testing. Same thumbnail across all 3 (face + X'd OpenClaw
 4. **Problem framing** — "Your CLAUDE.md File Is Probably Hurting Your Code"
 5. **"Why" framing** — "Why Most CLAUDE.md Files Make Claude Code Worse"
 6. **Transformative framing** — "Turned X Into Y" tested at 31.7% (Video 10) — decent, worth retesting in a stronger position
+7. **Cost contrast in title** — "Anthropic Just Dropped a $5,000 Feature for $200" tested at 33.4% (V16) but thumbnail was likely the bottleneck. Retest with a non-competitive thumbnail
+8. **"Just Dropped [Feature] for Free"** — free framing untested, could be powerful for features included in subscription
+9. **"Anthropic Doesn't Want You to Know This"** — conspiracy/secret framing, risky but untested. Distinct from "Internal" (proven 49.4%) and "Nobody Knew" (46.8%)
+10. **Number + time savings** — "Anthropic Just Saved Me 10 Hours a Week" — personal authority + quantified benefit combo
+
+### Thumbnail Experiments
+
+1. **Phone screenshot showing Telegram/Discord chat with Claude** — visual proof of feature, no text needed
+2. **Split-screen: before/after workflow** — showing the transformation the feature enables
+3. **Price tag visual** — "$200" on one side, "$5,000" crossed out on other — cost contrast as imagery not text
+4. **Face + single emoji reaction** — minimal text, emotional reaction does the selling
+5. **Dark/moody thumbnail vs bright** — tone testing, every V1-16 thumbnail uses similar lighting
+6. **No text thumbnail** — test whether the face + visual context alone can carry (faceless confirmed anti-pattern on V13, but text-free with face is untested)
+7. **Thumbnail-title mismatch testing** — V16 showed competitive thumbnail capping non-competitive titles. Deliberately test aligned vs misaligned combos to quantify the penalty
