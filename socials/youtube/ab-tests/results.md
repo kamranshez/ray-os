@@ -813,6 +813,41 @@ All variants use the locked title: "Anthropic Just Dropped the Feature That Kill
 - Thumbnail "It's 96% Cheaper!" reused from V13 — may feel like a retread for overlapping audience
 - **Round 2 should test maximally different frames:** cost contrast in title, social proof curiosity, and keep best performer as control
 
+### Thumbnail A/B Test Round 1 (2026-03-21)
+
+Same title across all 3: "Claude Code Channels Just Dropped, And It Kills OpenClaw". Testing thumbnail variations with X'd out OpenClaw mascot.
+
+| Thumbnail Style | Thumbnail Text | Watch-time Share | Result |
+|----------------|----------------|------------------|--------|
+| Face + X'd OpenClaw mascot | No More OpenClaw | 33.6% | Leader |
+| Face + code background (original) | It's 96% Cheaper! | 33.2% | |
+| Face + X'd OpenClaw mascot | It's 96% Cheaper! | 33.2% | |
+
+**Key takeaways:**
+- Dead flat — all within 0.4%, thumbnail changes made zero difference
+- X'd mascot visual element didn't move the needle
+- "No More OpenClaw" vs "It's 96% Cheaper!" — competitive vs cost framing tied
+- **Diagnosis: The title is the bottleneck, not the thumbnail.** "Claude Code Channels Just Dropped" lacks Anthropic authority and is long/clunky
+- Round 2 should switch back to title testing with "Anthropic" authority frames, keeping "No More OpenClaw" thumbnail as the constant
+
+### Title A/B Test Round 2 (2026-03-21) — Anthropic authority + competitive variants
+
+Switched back to title testing. Same thumbnail across all 3 (face + X'd OpenClaw mascot + "It's 96% Cheaper!").
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Anthropic Just Dropped the Feature Everyone Was Wishing For | It's 96% Cheaper! | 36.2% | Leader |
+| Anthropic Just Completed the OpenClaw Killer | It's 96% Cheaper! | 34.4% | |
+| Anthropic Just Gave Claude Code the One Thing OpenClaw Has | It's 96% Cheaper! | 29.3% | |
+
+**Key takeaways:**
+- Still no breakaway — best at 36.2%, OpenClaw competitive frame appears capped at ~35-36% across all rounds
+- "Everyone Was Wishing For" (36.2%) weaker than "Everyone Asked For" (42.3% V10) and "Nobody Knew They Needed" (46.8% V14) — "Wishing" is passive vs "Asked" (demand) and "Nobody Knew" (discovery)
+- "Completed" (34.4%) is a weak verb — lacks the impact of "Dropped"
+- "Gave...the One Thing OpenClaw Has" (29.3%) too long, too specific, gives away the answer
+- **Diagnosis: The entire "OpenClaw" competitive angle may have hit its ceiling.** V13 already covered this positioning — audience fatigue likely
+- Round 3 should drop OpenClaw from titles entirely and test cost contrast, social proof curiosity, and capability framing
+
 ---
 
 ## Tests Still Worth Running
