@@ -1,6 +1,6 @@
 # ray-os
 
-Ray's centralised personal operating system — content, courses, research, projects, and social media in one place.
+Ray's centralised personal operating system — content, research, projects, and social media in one place.
 
 ```
 
