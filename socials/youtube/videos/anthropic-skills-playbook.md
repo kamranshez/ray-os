@@ -30,9 +30,6 @@ And this is exactly why "don't state the obvious" matters. If your skill just re
 
 If anything, you're just amplifying it. You've added tokens that reinforce the default. A skill only does real work when it pushes the model toward outputs it wouldn't have generated without the skill.
 
-![[images/anthropic-skills-playbook/default-output-problem.png]]
-![[images/anthropic-skills-playbook/skill-shifts-distribution.png]]
-![[images/anthropic-skills-playbook/restating-obvious-counterproductive.png]]
 
 ---
 ## The gotchas section is the highest-signal part
@@ -47,7 +44,6 @@ Example: say you have a customer support reply skill. Claude's default is to be 
 
 You add the gotcha: "Never promise a specific timeline for fixes. Say 'our team is actively working on this' instead."
 
-![[images/anthropic-skills-playbook/iterative-gotcha-feedback-loop.png]]
 
 ---
 ## Don't railroad Claude
@@ -84,9 +80,7 @@ The first version produces identical output for a senior architect and a junior 
 
 Describe what good output looks like and let Claude figure out the path. Give it the information it needs and the flexibility to adapt.
 
-![[images/anthropic-skills-playbook/railroading-collapses-distribution.png]]
 
-![[images/anthropic-skills-playbook/prescriptive-vs-flexible-prompt.png]]
 
 ---
 
@@ -102,7 +96,6 @@ Instead, the SKILL.md says "repurpose this content for the requested platform. P
 
 That's **progressive disclosure.** Tell Claude what files exist in the skill folder and let it read them when they're relevant. The SKILL.md is the entry point, not the entire skill.
 
-![[images/anthropic-skills-playbook/progressive-disclosure-on-demand.png]]
 
 ---
 
@@ -120,7 +113,6 @@ The right one literally lists the phrases a user would type. You're seeding the 
 
 I showed exactly how to optimize this in my skill evals video — the description optimization system uses train/test splits to iterate on descriptions until trigger accuracy converges. Anthropic ran it on their own skills and saw massive improvements.
 
-![[images/anthropic-skills-playbook/description-routing-not-marketing.png]]
 
 ---
 
@@ -134,7 +126,6 @@ The model's turns are spent on composition and reasoning instead of reconstructi
 
 This is where skills-as-folders really pays off. Your SKILL.md says "use the functions in `lib/` to query data." Claude reads the lib, understands the API, and writes new scripts that compose those functions for whatever the user asked.
 
-![[images/anthropic-skills-playbook/composition-over-boilerplate.png]]
 
 ---
 ## On-demand hooks
@@ -171,9 +162,7 @@ And these hooks are temporary. They activate when the skill starts and deactivat
 
 Essentially each skill gets its own mini sandbox. The Stripe skill can only touch Stripe and reports. A deploy skill can only touch deploy tooling. A content skill can only write to the content folder. Every task runs inside its own set of constraints, and when the task ends, the constraints disappear.
 
-![[images/anthropic-skills-playbook/on-demand-hooks-keycard.png]]
 
-![[images/anthropic-skills-playbook/stripe-sandbox-guard-hooks.png]]
 
 ---
 ## Store data inside skills
@@ -186,7 +175,6 @@ Same principle for newsletters, competitor checks, pipeline updates — anything
 
 One caveat: data in the skill directory can get deleted on upgrade. Anthropic provides `${CLAUDE_PLUGIN_DATA}` as a stable folder per plugin for persistent storage.
 
-![[images/anthropic-skills-playbook/append-only-log-continuity.png]]
 
 ---
 ## Skills are folders, not files
@@ -199,7 +187,6 @@ The best skills at Anthropic aren't instructions. They're operational packages. 
 
 Everything that follows builds on this idea.
 
-![[images/anthropic-skills-playbook/skills-are-folders-not-files.png]]
 
 ---
 ## Setup via config files
@@ -210,7 +197,6 @@ The pattern: store this in a `config.json` inside the skill directory. If the co
 
 You can even have Claude present structured multiple-choice questions using the AskUserQuestion tool — so the setup feels like a wizard, not an interview.
 
-![[images/anthropic-skills-playbook/config-wizard-one-time-setup.png]]
 
 ---
 ## The 9 types (audit your gaps)

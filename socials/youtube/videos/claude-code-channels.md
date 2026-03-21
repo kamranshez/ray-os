@@ -107,7 +107,6 @@ Second, **richer replies**. Right now you get text back. If Claude generates a d
 
 But the foundation is solid. The channel protocol is open — you can build your own if you want. Anthropic published a channels reference for custom implementations.
 
-![[images/claude-code-channels/future-wishlist.png]]
 
 ---
 

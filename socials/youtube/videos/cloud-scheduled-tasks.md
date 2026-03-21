@@ -2,7 +2,6 @@
 date: 2026-03-21
 status: planning
 ---
-
 ## Title Hypotheses (A/B Test)
 
 Based on proven formulas ("Dropped" verb dominance, insider framing at 49.4%, single-hook rule):
@@ -31,104 +30,129 @@ Every section ties back to this: the developer's role is evolving from producer 
 
 ---
 
-## Section 1: What Just Shipped (1-2 min)
+## Section 1: What Just Shipped
 
-- Cloud-scheduled recurring tasks for Claude Code
-- Set a repo (or repos), a schedule, and a prompt
-- Runs on Anthropic's infra — your laptop can be off, closed, doesn't matter
-- Available at claude.ai/code/scheduled or via desktop app
-- Pro and Max plans (limits on # of schedules vary by plan, expect these to grow)
-- Access to any MCPs you've connected via claude.ai
+Anthropic just dropped cloud-scheduled tasks for Claude Code. Here's the idea: you give it a repo, a prompt, and a schedule — and Claude runs that task on Anthropic's cloud infrastructure on a recurring basis. Your laptop can be off. Your machine can be unplugged. It doesn't matter. It runs on their servers.
 
-## Section 2: The Setup (2-3 min)
+You set it up at claude.ai/code/scheduled, or through the desktop app. It's available on Pro and Max plans — there are limits on how many schedules you can create right now, but those are expected to grow.
 
-Screen recording walkthrough:
+And here's the key detail: it has access to any MCP servers you've connected through claude.ai. So it's not just running against your code — it can reach out to external services, APIs, whatever you've wired up.
 
-- Run `/web-setup` from terminal (Pro and Max)
-- Connect your repos via GitHub connector
-- Configure environment variables for secrets/keys (write-only in UI)
-- Set the schedule (cron-style) and the prompt
-- Show the UI at claude.ai/code/scheduled
-- Note: if you already have local scheduled tasks, cloud sync is "coming soon" (per Noah Zweben)
+![[images/cloud-scheduled-tasks/cloud-scheduling-overview/excalidraw_2.png]]
 
-## Section 3: Real Use Cases (3-4 min)
+---
+## Section 2: The Setup
 
-Progressive complexity, tiered:
+So let's set one up. First, run `/web-setup` from your terminal. This connects your GitHub repos to Anthropic's cloud so scheduled tasks can access them.
 
-**Maintenance (the boring stuff nobody wants to own):**
-- Sweep open PRs nightly — code review + comments before your team wakes up
-- Analyze CI failures overnight — file tickets when anomaly patterns spike
-- Dependency audits — run npm audit, triage, open a PR
-- Doc drift detection — code changed but docs didn't? Auto-PR the fix
+Then head to claude.ai/code/scheduled. You'll see a dashboard where you configure three things: which repo (or repos) the task runs against, what schedule it follows — daily, hourly, weekly, whatever you need — and the prompt, which is just the instruction you'd normally give Claude in your terminal.
 
-**Building (the ambitious stuff):**
-- Build features from approved GitHub issues — Claude picks up triaged issues and opens draft PRs
-- Refactoring passes on deprecated API calls — pushed to review branches
-- Test coverage gap analysis on new PRs
+You can also set environment variables here for any secrets or API keys the task needs. These are write-only in the UI, so once you save them, nobody can read them back — they just get injected when the task runs.
 
-**With MCPs (the power-user stuff):**
-- Since it has access to your claude.ai MCPs, you can chain external services
-- Example: Slack/Discord notifications when scheduled runs complete
-- Example: Linear ticket creation from code analysis results
+One thing to note: if you already have local scheduled tasks set up via cron, there's no sync between local and cloud yet. That's confirmed as coming soon.
 
-## Section 4: The Software Factory Thesis (3-4 min)
+*(This section is a screen recording walkthrough — no excalidraw needed)*
 
-The big idea — philosophical anchor payoff:
+---
 
-**Explain the concept simply:**
-There's this idea that's been gaining a lot of traction recently called the "software factory." The metaphor comes from real manufacturing — think of a car factory. You don't hand-build every car from scratch. You design the blueprint, set up the assembly line, define quality standards, and then the factory runs. Cars come out the other end. You inspect, you adjust, you ship.
+## Section 3: Real Use Cases
 
-The software factory is the same idea applied to code. Instead of developers hand-crafting every line, you feed in specs — what you want built, how it should behave, what the constraints are — and autonomous agents handle the production. They write the code, they test it, they iterate on failures, and they deliver working software. Your job shifts from building to supervising the assembly line.
+So what do you actually point this at? I think about it in three tiers.
 
-That's the end state. But we're not there yet. What we ARE getting, right now, are the **primitives** — the individual building blocks that make this possible. And cloud scheduling is one of the most important ones.
+### Tier 1: Maintenance
 
-**The primitives are stacking up** (cite Aakash Gupta's thread — four features in 24 days):
-- Remote Control (Feb 25) — freed you from your desk
-- Scheduled Tasks (Feb 25) — freed you from remembering to kick things off
-- Dispatch (Mar 17) — freed you from being near the machine
-- Cloud Scheduling (Mar 21) — **removed the machine entirely**
-- Each release eliminated one dependency. What's left? Just human judgment and intent.
+This is the boring stuff that nobody wants to own but everyone complains about when it slips.
 
-**What this actually looks like when you combine the primitives:**
+You can set up a nightly task that sweeps through all your open PRs — reads the code, leaves review comments, flags issues. Your team wakes up to reviews already done. Or a task that watches your CI pipeline and when failures spike, it reads the logs, figures out what broke, and files a ticket. Dependency audits — every week it runs npm audit, triages the results, and opens a PR with the fixes. Or doc drift detection: the code changed three weeks ago but the docs still describe the old behaviour? Scheduled task catches it and opens a PR to sync them up.
 
-Imagine this: Sentry detects a bug in production at 2am. A scheduled Claude task is watching your error tracking. It picks up the issue, reads the stack trace, finds the root cause, writes a fix, runs the tests, and opens a draft PR — all before you wake up. You review the PR over coffee, approve it, ship it.
+![[images/cloud-scheduled-tasks/maintenance-automation-cycle/excalidraw_7.png]]
 
-Or: you have a backlog of feature requests in Linear. A scheduled task runs every night, picks up the highest-priority approved issue, reads the spec, implements it, opens a PR. Every morning you wake up to a new draft feature. You review, refine, merge. You're shipping updates daily without writing a line of code yourself.
+### Tier 2: Building
 
-Or: the agent hits something ambiguous — a design decision it's not sure about, an edge case the spec didn't cover. It messages you on Telegram via Channels: "Hey, should the retry logic use exponential backoff or fixed intervals?" You reply from your phone. It continues building. You're supervising from the couch.
+This is where it gets more ambitious. You have a backlog of approved issues in GitHub. A scheduled task runs every night, picks up the highest-priority one, reads the spec, implements it, runs the tests, and opens a draft PR. You wake up to a new feature ready for review.
 
-This is the software factory in its early form. Agents running in the background, on the cloud, around the clock. Not one agent doing one thing — multiple scheduled tasks across your repos, each handling a different part of the pipeline. Monitoring, building, testing, fixing, reporting back.
+Or refactoring passes — you've got deprecated API calls scattered across the codebase. A weekly task finds them, updates them to the new pattern, and pushes to a review branch. Or test coverage analysis on every new PR — the task checks what's not covered and either adds tests or flags the gaps.
 
-**The workflow shift:**
-- Old: you write code, you review code, you ship code
-- New: you set the intent, the schedule, the quality bar. Agents produce. You review the output, test, and ship.
-- You're not writing code anymore. You're **managing code production** — and the highest-leverage work is now writing clear specs and making taste decisions
-- Some people are already operating this way — small teams shipping like large engineering orgs
+![[images/cloud-scheduled-tasks/nightly-feature-building-pipeline/excalidraw_2.png]]
 
-**The economics:**
-- $200/month Max subscription vs. the cost of additional headcount
-- This isn't replacing engineers — it's giving every engineer a night shift that handles the backlog
-- A 3-person team operates like a 5-person team without the burn rate
+### Tier 3: With MCPs
 
-**Where this is heading:**
-- Right now we're at the hybrid stage — agents produce, humans review and approve. And that's mostly because the models still need that oversight. They're good, but not "trust it blindly" good.
-- But think about it — we're on Opus 4.5. It's not quite reliable enough yet to fully trust unsupervised. But by the time we get to Opus 5, Opus 6, the reliability just keeps going up. The error rate drops. The judgment gets better. At some point, the review step becomes a formality. You glance at the PR, it's correct, you merge. Eventually you stop glancing.
-- That's when the factory truly runs lights-out. Not because someone flipped a switch, but because the models got reliable enough that human review stopped adding value. The infrastructure is already here — cloud scheduling, channels, MCPs, env vars. The only bottleneck left is model capability. And that's the one thing that's improving the fastest.
-- Future primitives we'll probably see: chained task outputs (one task's result feeds into the next), agent swarms (multiple agents coordinating on one problem), scenario-based validation (agents testing against simulated environments instead of waiting for human review)
-- We're watching the assembly line get built in real time. Cloud scheduling is the conveyor belt — and today you can turn it on
+Since cloud tasks can access your MCP servers, you can chain external services into the workflow. A task finishes its nightly PR sweep and posts a summary to Slack. Or it analyses your codebase, finds patterns worth tracking, and creates tickets in Linear automatically. The MCPs turn these from isolated repo tasks into full workflow automation that reaches across your entire stack.
 
-## Section 5: What's Missing / Wishlist (1 min)
+![[images/cloud-scheduled-tasks/mcp-connected-workflow/excalidraw_1.png]]
 
-Keep it honest:
-- Schedule limits per plan — still early
-- No sync between local scheduled tasks and cloud (confirmed coming soon)
-- No chaining of scheduled task outputs yet
-- Secret manager integration still being worked out
-- Retry behavior on errors unclear
+---
 
-## Section 6: CTA (30 sec)
+## Section 4: The Software Factory
 
-Masterclass-first CTA (regular video, not pillar). Single CTA at end.
+Now here's the bigger picture. There's this idea that's been gaining a lot of traction recently called the "software factory." And I think this feature is one of the most important building blocks toward making it real.
+
+The metaphor comes from real manufacturing. Think of a car factory. You don't hand-build every car from scratch. You design the blueprint, you set up the assembly line, you define quality standards — and then the factory runs. Cars come out the other end. You inspect them, you adjust the line, you ship.
+
+The software factory is that same idea applied to code. Instead of developers hand-crafting every line, you feed in specs — what you want built, how it should behave, what the constraints are — and autonomous agents handle the production. They write the code, they test it, they iterate on failures, and they deliver working software. Your job shifts from being on the assembly line to supervising it.
+
+![[images/cloud-scheduled-tasks/car-factory-to-software-factory/excalidraw_1.png]]
+
+That's the end state. We're not fully there yet. But what we ARE getting, right now, are the **primitives** — the individual building blocks that make this possible. And they've been stacking up fast.
+### What this looks like when you combine the primitives
+
+Let me paint three pictures of what's possible right now.
+
+Picture one: it's 2am. Sentry detects a bug in production. A scheduled Claude task is watching your error tracking through an MCP. It picks up the issue, reads the stack trace, traces it to the root cause in your code, writes a fix, runs the test suite, and opens a draft PR. All of this happens while you're asleep. You wake up, review the PR over coffee, approve it, ship it. The bug was detected and fixed before your users even noticed.
+
+![[images/cloud-scheduled-tasks/sentry-bug-fix-while-sleeping/excalidraw_7.png]]
+
+Picture two: you have a backlog of feature requests in Linear. A scheduled task runs every night, picks up the highest-priority approved issue, reads the spec, implements it, opens a PR. Every single morning you wake up to a new draft feature. You review it, refine it, merge it. You're shipping updates daily without writing a single line of code yourself.
+
+![[images/cloud-scheduled-tasks/nightly-backlog-to-morning-prs/excalidraw_5.png]]
+
+Picture three: the agent is working on something overnight and hits an ambiguous design decision — an edge case the spec didn't cover. It doesn't just guess or stop. It messages you on Telegram through Channels: "Should the retry logic use exponential backoff or fixed intervals?" You see it on your phone, reply with two words, and it keeps building. You're supervising from the couch. Or from bed. Or from a different country.
+
+![[images/cloud-scheduled-tasks/telegram-clarification-loop/excalidraw_5.png]]
+
+This is the software factory in its early form. Not one agent doing one thing — multiple scheduled tasks running across your repos, around the clock, on the cloud. Each one handling a different part of the pipeline. One monitoring. One building. One testing. One fixing. One reporting back.
+
+![[images/cloud-scheduled-tasks/multi-agent-factory-floor/excalidraw_6.png]]
+
+### The workflow shift
+
+The old way: you write code, you review code, you ship code. You're on the assembly line.
+
+The new way: you set the intent, the schedule, and the quality bar. Agents do the production. You review the output, test it, and ship. You're managing the factory floor.
+
+The highest-leverage work isn't coding anymore — it's writing clear specs, making architecture decisions, and applying taste. Some teams are already operating this way. Small teams of three or four people shipping like engineering orgs ten times their size.
+
+![[images/cloud-scheduled-tasks/old-vs-new-developer-role/excalidraw_7.png]]
+
+And think about the economics. A Max subscription costs $200 a month. That's your night shift. That's your weekend coverage. That's your backlog processor. Compare that to the cost of additional headcount. This isn't replacing engineers — it's giving every engineer a tireless junior that works the shifts they don't want to.
+
+### Where this is heading
+
+Right now we're at the hybrid stage. Agents produce, humans review and approve. And that's mostly because the models still need that oversight. They're good — but not "trust it completely unsupervised" good.
+
+But think about it. We're on Opus 4.5. It's not quite reliable enough yet to let it run fully unsupervised. But by the time we get to Opus 5, Opus 6 — the reliability just keeps going up. The error rate drops. The judgment gets better. At some point the review step becomes a formality. You glance at the PR, it's correct, you merge. Eventually you stop glancing.
+
+That's when the factory truly runs lights-out. Not because someone flipped a switch, but because the models got reliable enough that human review stopped adding value. And here's the thing — the infrastructure is already here. Cloud scheduling, channels, MCPs, environment variables. All the plumbing is in place. The only bottleneck left is model capability. And that's the one thing improving the fastest.
+
+![[images/cloud-scheduled-tasks/reliability-trajectory-to-lights-out/excalidraw_3.png]]
+
+The primitives we'll probably see next: chained task outputs, where one scheduled task's result feeds into the next one automatically. Agent swarms, where multiple agents coordinate on a single problem. And scenario-based validation, where agents test their own work against simulated environments instead of waiting for a human to review it.
+
+We're watching the assembly line get built in real time. Cloud scheduling is the conveyor belt. And today, you can turn it on.
+
+---
+
+## Section 5: What's Missing
+
+A few things still to come. There are limits on how many schedules you can create per plan — this is still early. There's no sync between your local scheduled tasks and cloud ones yet, though that's been confirmed as coming. You can't chain task outputs yet — each task runs independently. And the retry behaviour when a scheduled task errors out mid-run isn't well documented yet.
+
+But the foundation is solid. And given that Anthropic shipped four related features in 24 days, I wouldn't expect these gaps to last long.
+
+---
+
+## Section 6: CTA
+
+And if you want to go deeper on Claude Code — skills, scheduling, remote control, channels, all of it — my full masterclass is linked below.
 
 ---
 
@@ -139,5 +163,3 @@ Masterclass-first CTA (regular video, not pillar). Single CTA at end.
 - **Visual hook in first 10 seconds**: Show split screen — you sleeping / Claude opening PRs at 3am with timestamps
 - **Terminal always moving**: During setup section, terminal should be actively running `/web-setup`, configuring repos, showing the schedule being created
 - **Single topic, deep**: Not a feature roundup. One feature explored fully (focused videos get 25% more views)
-
-## Estimated Length: 10-14 minutes
