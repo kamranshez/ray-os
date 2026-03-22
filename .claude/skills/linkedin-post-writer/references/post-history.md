@@ -102,3 +102,35 @@ Track all generated posts and their performance to learn what works.
 > Combine this with remote control (which shipped last week) and you can dictate code changes from your phone while walking your dog.
 >
 > The keyboard becoming optional faster than anyone expected.
+
+### 2026-03-22 — "Anthropic just turned Claude Code into a 24/7 software factory."
+- **Archetype:** The News + Insight
+- **Media:** text only
+- **Status:** posted
+- **Engagement:** reactions: — | comments: — | reposts: —
+- **Notes:** Based on video pOsGxVKYd3s. Covers cloud-based scheduled tasks, software factory model, Sentry fixer demo. Proper sentence-case capitalization per updated skill rules.
+
+**Full text:**
+> Anthropic just turned Claude Code into a 24/7 software factory.
+>
+> They shipped cloud-based scheduled tasks. You define a prompt, set a schedule (hourly, daily, whatever), and it runs on their servers. No laptop needed.
+>
+> I set one up live on camera: a Sentry fixer that runs every hour, finds bugs affecting 3+ users, writes the fix, opens a PR, and sends me a Telegram message with the root cause.
+>
+> It found and fixed a bug while I was still recording the video.
+>
+> Here's what this actually means:
+>
+> → Overnight, agents pick up your highest priority tickets and have PRs waiting when you wake up
+>
+> → Errors get caught and fixed around the clock without you touching a keyboard
+>
+> → Feature requests from Gmail, Linear, or Slack get prototyped automatically
+>
+> The developer role is shifting. Less "worker on the assembly line," more "factory floor manager." You're reviewing output, approving PRs, and optimizing the pipeline instead of writing every line yourself.
+>
+> The honest take: with current models, you still want to review everything. But Anthropic isn't building this for Opus 4.6. They're building it for Opus 5 and beyond.
+>
+> Same pattern as every infrastructure play — boring when it ships, transformative 6 months later.
+>
+> Full breakdown in the video: https://www.youtube.com/watch?v=pOsGxVKYd3s

@@ -11,12 +11,11 @@ On every skill trigger, before doing anything else:
 
 1. Read `references/post-history.md`
 2. Check for posts with status `posted` but no engagement data
-3. If any exist, ask the user: "Last time you posted [title/hook]. How did it do? (reactions, comments, reposts)"
-4. Update the post entry with the reported metrics
-5. Check for posts with status `draft` — ask "Did you end up posting [hook]?"
+3. If any exist, **use Chrome browser automation to check the post URLs on LinkedIn** and pull the current engagement numbers (reactions, comments, reposts). Update `post-history.md` with the data found. If no URL is saved or the post can't be found, ask the user for the numbers.
+4. Check for posts with status `draft` — ask "Did you end up posting [hook]?"
    - If yes → update status to `posted`, ask for metrics next session
    - If no → update status to `skipped`
-6. After collecting data, briefly note any pattern emerging (e.g., "Your personal story posts average 2x the reactions of your how-to posts")
+5. After collecting data, briefly note any pattern emerging (e.g., "Your personal story posts average 2x the reactions of your how-to posts")
 
 Then proceed with whatever the user asked for.
 
@@ -53,6 +52,14 @@ When composing posts, apply patterns from two sources:
 2. **Personal performance data:** `references/post-history.md` — what actually works for this user's audience
 
 Prioritize patterns that have proven engagement in the user's own history over general best practices. If the user has 5+ posts with data, note which archetypes and hooks performed best for them specifically.
+
+### Capitalization
+
+**Always use proper sentence-case capitalization.** Do NOT write in all-lowercase. The casual tone comes from word choice and sentence structure, not from dropping capitals. Every sentence starts with a capital letter.
+
+### Output Format
+
+**Always output the post as plain text** — no markdown blockquote `>` prefixes, no code fences. The user will copy-paste it directly into LinkedIn, so it must be clean, ready-to-paste text.
 
 ## References
 

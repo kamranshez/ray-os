@@ -2,6 +2,10 @@
 
 Ray's centralised personal operating system — content, research, projects, and social media in one place.
 
+## YouTube
+
+- **Channel**: https://www.youtube.com/@RAmjad/videos
+
 ```
 
 ## Obsidian Vault
