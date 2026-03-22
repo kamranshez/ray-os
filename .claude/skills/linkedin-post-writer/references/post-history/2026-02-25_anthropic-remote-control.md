@@ -5,10 +5,10 @@ archetype: The News + Insight
 media: text only
 status: posted
 engagement:
-  reactions: 7
+  reactions: 8
   comments: 2
-  reposts: 1
-  impressions: 812
+  reposts: 2
+  impressions: 1441
 url: https://www.linkedin.com/feed/update/urn:li:activity:7432426590422343680/
 notes: Based on remote control video (y3xzYwxQuHc). Covers claude rc, phone control, security/sandbox angle, Hetzner server tip. Decent engagement but slightly below COBOL post — longer/more technical posts may lose some readers.
 ---

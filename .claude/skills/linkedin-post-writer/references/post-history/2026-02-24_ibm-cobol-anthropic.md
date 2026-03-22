@@ -5,10 +5,10 @@ archetype: The News + Insight
 media: text only
 status: posted
 engagement:
-  reactions: 10
+  reactions: 11
   comments: 3
   reposts: 0
-  impressions: 869
+  impressions: 964
 url: https://www.linkedin.com/feed/update/urn:li:activity:7431926133006426112/
 notes: Best performer of recent batch. News + Insight with personal/casual hook outperforms tutorial-style.
 ---

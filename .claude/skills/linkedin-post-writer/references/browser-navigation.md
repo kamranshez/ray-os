@@ -7,6 +7,11 @@ How to navigate and interact with LinkedIn using Chrome browser automation (`mcp
 - Chrome browser automation tools must be available
 - Get tab context first with `tabs_context_mcp`, then create or reuse a tab
 
+## Ray's Profile
+
+- **Profile URL:** https://www.linkedin.com/in/rayamjad/
+- **Activity URL:** https://www.linkedin.com/in/rayamjad/recent-activity/all/
+
 ## Feed
 
 Navigate to `https://www.linkedin.com/feed/` to load the main feed.
