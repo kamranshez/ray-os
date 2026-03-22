@@ -868,11 +868,53 @@ Dropped OpenClaw from all titles. Same thumbnail across all 3 (face + X'd OpenCl
 
 ---
 
+## Video 17: Cloud Scheduled Tasks (Software Factory)
+
+**Video ID:** `pOsGxVKYd3s`
+**Published:** 2026-03-21
+**Thumbnail Text:** It's Finally Coming
+
+### Title A/B Test Round 1 (2026-03-21) — User's original titles
+
+All 3 used passive/future framing. Same thumbnail across all (face + software factory excalidraw + "It's Finally Coming").
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Claude Code is Now Becoming a Software Factory | It's Finally Coming | 33.9% | Leader |
+| Anthropic's Claude Code Software Factory is Coming | It's Finally Coming | 33.5% | |
+| Anthropic Started Building a Software Factory | It's Finally Coming | 32.7% | |
+
+**Key takeaways:**
+- Dead flat — all within 1.2%, no breakaway winner
+- All 3 share passive/future framing ("is Coming", "is Now Becoming", "Started Building") — no urgency, no news, no curiosity gap
+- "Software Factory" as a concept may be too abstract/jargony for casual viewers
+- Thumbnail "It's Finally Coming" reinforces the vague future tense — no concrete value promise
+- **Diagnosis:** Need to ground the concept in something concrete and clickable
+
+### Title A/B Test Round 2 (2026-03-21) — Diverse frames: narrative, authority, bold
+
+Tested maximally different frames. Same thumbnail across all (face + software factory excalidraw + "It's Finally Coming").
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Anthropic Just Showed Us the Future of Coding** | It's Finally Coming | **35.9%** | Leader |
+| Claude Code is Now Becoming a Software Factory | It's Finally Coming | 34% | |
+| Anthropic Wants Claude Code Running While You Sleep | It's Finally Coming | 30.2% | |
+
+**Key takeaways:**
+- "Future of Coding" leads at 35.9% — Anthropic authority pulling its weight again, and "Future of Coding" is a bigger, more compelling promise than "Software Factory"
+- R1 control "Now Becoming a Software Factory" held steady at 34% — not terrible but no breakaway
+- "Running While You Sleep" flopped at 30.2% — "Wants" is a weak verb (passive intent, not action), and second-person "You" underperforms (confirmed V14 R3: "Nobody" > "You")
+- Still no breakaway winner — "It's Finally Coming" thumbnail likely capping everything (vague, doesn't match any title frame)
+- **Diagnosis:** "Future of Coding" frame worth pursuing. Thumbnail may be the bottleneck (same flat-results-across-diverse-frames pattern as V16 R3)
+
+---
+
 ## Tests Still Worth Running
 
 ### Title Frames
 
-1. **Bold/emotional claims** — "This Changes Everything" type titles
+1. ~~**Bold/emotional claims**~~ **TESTED (Video 17)** — "Future of Coding" leading at 35.9%, "Coding Will Never Be the Same" still untested but "Future" frame shows promise
 2. ~~**"You Can Now" framing**~~ **TESTED (Video 10)** — Flopped at 27.9%. Second-person capability framing doesn't work.
 3. ~~**Question format titles**~~ **TESTED (Video 10 earlier test)** — Question format underperforms statement format by ~2-5%.
 4. **Problem framing** — "Your CLAUDE.md File Is Probably Hurting Your Code"
