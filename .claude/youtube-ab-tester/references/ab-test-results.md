@@ -908,6 +908,39 @@ Tested maximally different frames. Same thumbnail across all (face + software fa
 - Still no breakaway winner — "It's Finally Coming" thumbnail likely capping everything (vague, doesn't match any title frame)
 - **Diagnosis:** "Future of Coding" frame worth pursuing. Thumbnail may be the bottleneck (same flat-results-across-diverse-frames pattern as V16 R3)
 
+### Title A/B Test Round 3 (2026-03-22) — Refining "Future" frame
+
+Same thumbnail across all (face + software factory excalidraw + "It's Finally Coming").
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Anthropic Just Revealed Where Coding Is Heading | It's Finally Coming | 35.1% | |
+| Anthropic Just Showed Us the Future of Coding | It's Finally Coming | 34.6% | |
+| Anthropic Just Made Coding a 24/7 Operation | It's Finally Coming | 30.3% | |
+
+**Key takeaways:**
+- Still flat on titles — top two within 0.5%, three rounds of diverse title frames all producing ~33-36%
+- "Revealed Where Coding Is Heading" marginally leads but no breakaway
+- "24/7 Operation" flopped at 30.3% — technical/operational language doesn't create curiosity
+- R2 leader "Showed Us the Future of Coding" dropped from 35.9% → 34.6% — early volatility
+- **Diagnosis confirmed: Thumbnail is the bottleneck.** Three rounds of diverse title frames producing flat results = switch to thumbnail testing
+
+### Thumbnail A/B Test Round 1 (2026-03-22) — First thumbnail test
+
+Same title across all: "Anthropic Just Revealed Where Coding Is Heading". Testing thumbnail text variations.
+
+| Thumbnail Text | Watch-time Share | Result |
+|----------------|------------------|--------|
+| **The Factory Is Coming** | **38.6%** | Leader |
+| It's Finally Coming | 34.2% | Control |
+| It Never Stops | 27.2% | |
+
+**Key takeaways:**
+- "The Factory Is Coming" at **38.6%** — first breakaway result across all V17 rounds, confirms thumbnail was the bottleneck
+- Specific ("The Factory") crushes vague ("It's Finally") — same energy but concrete concept gives viewers something to latch onto
+- "It Never Stops" flopped at 27.2% — too ominous/negative without context, horror movie tagline energy
+- **New insight:** Thumbnail specificity matters — vague excitement ("It's Finally Coming") caps performance, naming the concept ("The Factory") breaks through
+
 ---
 
 ## Tests Still Worth Running
