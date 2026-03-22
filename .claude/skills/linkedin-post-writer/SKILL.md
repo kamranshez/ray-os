@@ -9,9 +9,9 @@ description: Navigate LinkedIn and create posts via Chrome browser automation. U
 
 On every skill trigger, before doing anything else:
 
-1. Read `references/post-history.md`
-2. Check for posts with status `posted` but no engagement data
-3. If any exist, **use Chrome browser automation to check the post URLs on LinkedIn** and pull the current engagement numbers (reactions, comments, reposts). Update `post-history.md` with the data found. If no URL is saved or the post can't be found, ask the user for the numbers.
+1. Read all files in `references/post-history/` (each post is its own file)
+2. Check for posts with status `posted` but no engagement data (null values)
+3. If any exist, **use Chrome browser automation to check the post URLs on LinkedIn** and pull the current engagement numbers (reactions, comments, reposts). Update the individual post file with the data found. If no URL is saved or the post can't be found, ask the user for the numbers.
 4. Check for posts with status `draft` — ask "Did you end up posting [hook]?"
    - If yes → update status to `posted`, ask for metrics next session
    - If no → update status to `skipped`
@@ -21,19 +21,35 @@ Then proceed with whatever the user asked for.
 
 ## Post History
 
-All generated posts are logged in `references/post-history.md`. Each entry includes:
+Each post is stored as its own file in `references/post-history/` with the naming convention:
 
-- Date generated
-- Hook (first line)
-- Full text
-- Archetype used (from the 8 viral archetypes)
-- Media type suggested
-- Status: `draft` | `posted` | `skipped`
-- Engagement: reactions, comments, reposts (filled in later)
-- Notes: what worked, what didn't (filled in later)
+```
+references/post-history/YYYY-MM-DD_slug.md
+```
+
+Each file has YAML frontmatter with metadata and the post body as plain text below:
+
+```yaml
+---
+date: YYYY-MM-DD
+hook: "First line of the post"
+archetype: The News + Insight
+media: text only
+status: posted  # draft | posted | skipped
+engagement:
+  reactions: null
+  comments: null
+  reposts: null
+  impressions: null
+url: https://linkedin.com/...
+notes: What worked, what didn't
+---
+
+The full post text goes here...
+```
 
 After generating a post, always:
-1. Append it to `references/post-history.md`
+1. Save it as a new file in `references/post-history/`
 2. Ask the user: "Want me to post this, or are you going to post it yourself?"
 3. If they want Claude to post → see `references/browser-navigation.md` for how
 4. Either way, log the post with appropriate status
@@ -41,7 +57,7 @@ After generating a post, always:
    ```yaml
    - task: "Check LinkedIn engagement for '[hook first line]' post"
      due: YYYY-MM-DD  # 3 days from posting date
-     context: "Posted on [date]. Check reactions/comments/reposts and update post-history.md."
+     context: "Posted on [date]. Check reactions/comments/reposts and update post-history file."
    ```
 
 ## Writing Viral Posts
@@ -49,7 +65,7 @@ After generating a post, always:
 When composing posts, apply patterns from two sources:
 
 1. **General patterns:** `references/viral-playbook.md` — hook formulas, formatting, 8 archetypes, media ranking
-2. **Personal performance data:** `references/post-history.md` — what actually works for this user's audience
+2. **Personal performance data:** `references/post-history/` — individual post files with engagement data showing what actually works for this user's audience
 
 Prioritize patterns that have proven engagement in the user's own history over general best practices. If the user has 5+ posts with data, note which archetypes and hooks performed best for them specifically.
 
@@ -64,5 +80,5 @@ Prioritize patterns that have proven engagement in the user's own history over g
 ## References
 
 - `references/viral-playbook.md` — Hook formulas, formatting rules, 8 viral archetypes, media ranking, CTAs
-- `references/post-history.md` — Log of all generated posts + engagement tracking
+- `references/post-history/` — Individual post files (one per post) with engagement tracking
 - `references/browser-navigation.md` — How to navigate LinkedIn via Chrome automation (feed, profiles, posting)
