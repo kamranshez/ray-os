@@ -1,118 +1,136 @@
-# LinkedIn Viral Post Playbook (2026)
+# Emotional Psychology Playbook for LinkedIn
 
-Derived from analysis of 50+ posts. Apply these patterns when composing LinkedIn posts.
+The only thing that determines whether a post spreads or dies is how it makes people feel. Not the information, not the posting time, not the hashtags — the emotional architecture.
 
-## Table of Contents
+Ray's posts have historically delivered information well (News + Insight archetype, ~1000 impressions, ~10 reactions). The goal now is to keep the same quality of insight but wrap it in emotional triggers that make people unable to scroll past.
 
-- [Hook Formulas](#hook-formulas)
-- [Formatting Rules](#formatting-rules)
-- [Media Selection](#media-selection)
-- [CTA Patterns](#cta-patterns)
-- [8 Viral Archetypes](#8-viral-archetypes)
-- [Image Design Patterns](#image-design-patterns)
-- [What to Avoid](#what-to-avoid)
+For the full deep-dive behind these principles, read `references/articles/2035437083175592061.md`.
 
-## Hook Formulas
+## The Core Shift: Information vs. Provocation
 
-First 1-2 lines determine if anyone reads further. LinkedIn truncates after ~210 characters.
+Information makes people think "that's useful." Provocation makes people think "holy shit, that's me."
 
-### 1. The Shocking Number
-Lead with a jaw-dropping stat.
-- "Anthropic just hit $380B valuation" (723 reactions)
-- "I spent $500K renovating our new HQ" (568 reactions)
-- "6.8 billion people have never used AI" (344 reactions)
+Both can contain identical substance. The difference is emotional packaging.
 
-### 2. The Bold Claim
-Make a statement people can't scroll past.
-- "Figma AI is practically dead" (2,680 reactions)
-- "Claude just killed prompt engineering" (92 reactions)
+**Information delivery (what we're moving away from):**
+"Anthropic shipped scheduled tasks. You define a prompt, set a schedule, and it runs on their servers."
 
-### 3. The Vulnerability Hook
-Start with raw honesty.
-- "Im 19 years old, and im running out of time" (152 reactions)
-- "Cambridge! I can't believe it" (254 reactions, 111 comments)
+**Emotional provocation (what we're moving toward):**
+"You're still manually fixing bugs that an agent could patch while you sleep. The developers who figured this out aren't working harder than you — they just stopped doing the part a machine should be doing."
 
-### 4. The Curiosity Gap
-Tease something people need to know.
-- "The Most Important Metric is MISSING from Your Meta Ads Manager" (497 reactions)
-- "When it came to the final details, my co-founder had one hard rule" (568 reactions)
+Same news. Same facts. Completely different feeling.
 
-### 5. The Person A vs Person B
-Two paths, one lesson.
-- "Two people both want financial freedom..." (310 reactions)
-- Pure storytelling, no formatting tricks needed
+## The 6 Emotional Triggers
 
-## Formatting Rules
+Every viral post uses 2-3 of these. Pick a primary trigger (your hook) and a secondary trigger (your body). Trying to use all 6 creates confused content.
 
-- **One idea per line** (not per paragraph)
-- **→ Arrows** for key points (used by 35% of top posts)
-- **▪️ or ✅ or ⚡ Emoji bullets** for lists
-- **❌/✅ Contrast pairs** for mindset shifts
-- **Bold Unicode text** for headers (𝗕𝗼𝗹𝗱 𝗧𝗲𝘅𝘁)
-- **Numbered steps** for frameworks
-- **Short sentences.** Three to ten words max. Stack them.
+### 1. Identity Validation
 
-## Media Selection
+Make people feel *seen*. Articulate something they've thought but never said out loud. When someone reads it and thinks "I've literally thought this exact thing," they can't help but engage.
 
-Ranked by average engagement:
+The power comes from going past the surface observation into the psychological reality underneath.
 
-1. **Carousel/Document (9-13 pages)** — Avg 340 reactions. #1 organic format.
-   - Dark background + white text for cover slides
-   - Each page = one concept
-   - "Guide" or "Playbook" framing
+- Weak: "Cold email is hard."
+- Strong: "You don't hate sales. You hate feeling like a used car salesman because someone told you that's what selling requires."
 
-2. **Event/Multiple Photos** — Avg 896 reactions.
-   - Real photos from events/conferences
+For Ray's niche: articulate what developers/founders feel about AI but haven't put into words yet. The anxiety, the excitement, the confusion about their role changing.
 
-3. **Meme/Humor Images** — Avg 270 reactions.
-   - Must be relevant to audience's pain points
-   - Image does the work, text is minimal
+### 2. Status Signaling Opportunity
 
-4. **Custom Data Visualizations** — Avg 344 reactions.
-   - Original graphics showing data in novel ways
+People share content because sharing it makes *them* look good. The question isn't "is this valuable?" — it's "what does sharing this say about the person who shares it?"
 
-5. **Video** — Avg 200 reactions (organic).
-   - Celebrity/expert clips or product demos
+Content that gets shared makes the sharer look:
+- Informed (insider knowledge others don't have)
+- Ahead of the curve (contrarian takes before they're mainstream)
+- Competent and generous (tactical breakdowns)
 
-6. **Text Only** — Avg 175 reactions.
-   - Best for personal stories and parables
+Nobody can post "I'm really smart about AI" without looking like an ass. But they can share your post and add "this is exactly right" to achieve the same result.
 
-## CTA Patterns
+You're not just writing posts. You're creating vehicles for other people's self-presentation.
 
-- **Question:** "wdyt?" / "What would you do?" / "Which is your fav?"
-- **Engagement bait:** "Comment X to get the guide" (drives 300+ comments)
-- **Rhetorical:** "Are you optimising for today's balance sheet, or tomorrow's unfair advantage?"
-- **Follow:** "Hit the 🔔 on my profile"
-- **P.S. format:** "P.S. Which of these stories is your fav?" (Fatima Khan: 307 comments)
+### 3. Tribal Belonging
 
-## 8 Viral Archetypes
+Create clear in-group/out-group dynamics. "This is for founders who..." or "If you're the kind of developer who..." creates identity categories people want to belong to.
 
-1. **The Data Bomb** — Shocking stat → comparison → analysis → CTA
-2. **The Carousel Guide** — How-to packaged in swipeable document
-3. **The Personal Story** — Vulnerability + achievement + gratitude
-4. **The Bold Claim** — Controversial statement → evidence → vision
-5. **The Meme Drop** — Ultra-short text + viral-worthy image
-6. **The Contrarian Take** — "Everyone thinks X, actually Y" + data
-7. **The Person A/B Parable** — Two paths, one lesson, narrative format
-8. **The News + Insight** — Breaking news + "here's what it means for you"
+- "There are two types of developers: ones who are learning to work with AI, and ones who are polishing a resume that'll be obsolete in 18 months."
+- "Every 'AI skeptic' I know is using ChatGPT daily. They just don't post about it because their identity is built on being the contrarian."
 
-## Image Design Patterns
+The reader self-selects into the sophisticated group and engages to demonstrate they belong there.
 
-1. **Dark backgrounds** with white/bright text (carousel covers)
-2. **Large bold typography** for meme-style images
-3. **Custom data viz** > stock charts
-4. **Real photos** from events/offices > stock photos
-5. **Monospace/retro fonts** for tech-related carousels
-6. **Flag emojis** (🇬🇧🇫🇷🇩🇪) for international content = visual scanning
-7. **Screenshots** of real products/tools as proof
+### 4. Productive Discomfort
+
+Make people feel uncomfortable in a way that motivates action. Not negativity — discomfort with a path forward.
+
+The psychology: cognitive dissonance. When you make someone aware their current behavior conflicts with their self-image, they either argue (comments) or commit to change (engage, save, follow). Both are great for engagement.
+
+- "You've been posting on LinkedIn for 6 months and have fewer than 500 followers. This isn't an algorithm problem. This is a 'nobody cares about what you're posting' problem."
+- "You're still reviewing AI-generated code line by line. You're not being diligent. You're being slow because you don't trust your own judgment about what to check."
+
+### 5. Curiosity Gap
+
+The psychological tension created when someone knows information exists but doesn't have it. Intensity matters more than novelty.
+
+- Weak: "Here's how to use Claude Code better."
+- Strong: "The Claude Code setup that replaced my junior developer — and the one mistake that almost cost me a production database."
+
+Elements of a strong curiosity gap:
+- Specific numbers or outcomes
+- Implied insider knowledge
+- Tension between expectation and reality
+
+Best when combined with other triggers: "The uncomfortable truth about why your AI workflow is slower than coding by hand" (curiosity + productive discomfort).
+
+### 6. Aspiration and Possibility
+
+Make people believe something they want is actually possible for them. Not inspiration (passive) — aspiration (active). The reader should mentally project themselves into the future state.
+
+The key: aspiration without believability is fantasy. "$10M in year one" triggers skepticism. "From 0 to deploying 3 AI agents in a weekend" triggers aspiration because it feels achievable.
+
+- Outcomes that feel achievable (impressive but not impossible)
+- Timeframes that feel realistic
+- Methods that feel accessible
+- Proof that feels authentic (specific numbers, not vague claims)
+
+## Belief Disruption (Top-of-Funnel)
+
+The most powerful content takes something your audience currently believes and demonstrates why it's wrong. This isn't being controversial for attention — it's creating awareness of a gap they didn't know existed.
+
+Structure:
+1. **State the common belief clearly** — "Most developers think the way to use AI is to paste code into ChatGPT and ask it to fix bugs."
+2. **Create doubt** — "But I know developers who do that all day and ship slower than before AI existed. And I know developers who use AI for 20 minutes a day and ship 5x more."
+3. **Introduce the alternative frame** — "The difference isn't the tool. It's what they're delegating. One group automates typing. The other automates thinking."
+4. **Show the implication** — "Which means most developers are working harder with AI for worse results because they're automating the wrong layer entirely."
+5. **Path forward (optional)** — A question, a reframe they can apply, or a resource.
+
+## The Authenticity Filter
+
+Before posting, every post must pass these four tests. Emotional content that fails these reads as guru-bait and destroys trust.
+
+1. **Is this true?** Not "could this be true" — is this actually true based on direct experience?
+2. **Would you say this in person?** Imagine saying it at a dinner with smart people in the industry. If it would feel try-hard, it will feel that way on LinkedIn.
+3. **Is the emotion earned?** Emotion should be proportional to the point. "This will DESTROY your workflow" about a minor feature is ridiculous. Strong language about a genuine paradigm shift is earned.
+4. **Does this serve the reader?** If you're triggering emotions for engagement rather than to help someone understand something important, it will come through.
+
+**The specificity test:** Generic = guru energy. "Most people are doing this wrong" is generic. "Developers who've been using Cursor for 6 months but still write every function by hand" is specific. Specificity signals you actually understand the problem.
+
+## Formatting (Tactical)
+
+These are secondary to emotional triggers — format amplifies emotion, it doesn't replace it.
+
+- One idea per line (not per paragraph)
+- Short sentences. Three to ten words. Stack them.
+- Arrows (→) for key points
+- Sentence-case capitalization always
+- Bold Unicode (𝗕𝗼𝗹𝗱) for section headers sparingly
+- 1-3 hashtags max, at end only
+- Questions to invite comments: "What's your take?" / "Am I wrong?"
 
 ## What to Avoid
 
-- Corporate language / press release tone
-- Posts without clear hooks
-- Walls of text without line breaks
-- Hashtag spam (1-3 max, at end only)
-- Pure self-promotion without story/value framing
-- "I'm excited to announce" (boring hook)
-- Being too polished — casual tone outperforms corporate, but always use proper capitalization (sentence case)
-- Posting text-only when you could add a carousel
+- **Information delivery without emotion** — "Here are 5 tips for X" with no psychological trigger
+- **Corporate language / press release tone** — kills all emotion instantly
+- **Fake urgency or scarcity** — nobody believes it, destroys trust
+- **Generic applicability** — if it applies to everyone it resonates with no one
+- **Unearned intensity** — hyperbolic language about minor things
+- **"I'm excited to announce"** — the most emotionally dead hook on the platform
+- **Being controversial without substance** — disruption needs a real alternative frame, not just a hot take

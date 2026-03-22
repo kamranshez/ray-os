@@ -7,7 +7,7 @@ description: All LinkedIn tasks — writing posts, checking post performance, br
 
 When this skill triggers, ask the user what they'd like to do (unless their message already makes it clear):
 
-1. **Write a post** → Read `references/write-post.md`
+1. **Write posts** → Read `references/write-post.md` (always generates 10 variations using emotional psychology)
 2. **Check post performance** → Read `references/check-performance.md`
 3. **Browse / research** → Read `references/browser-navigation.md`
 
