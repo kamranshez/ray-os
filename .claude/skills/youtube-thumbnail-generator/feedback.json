@@ -1,0 +1,87 @@
+{
+  "preferred_style": {
+    "name": "GitHub repo card",
+    "description": "GitHub repository/PR/issue card on light background with face on right side. Inspired by Nick Saraev (4Cb_l2LJAW8). Uses fake repo names, descriptions, and stats to create curiosity. Face expression is contemplative or surprised \u2014 NOT exaggerated/crazy reactions.",
+    "reference": "4Cb_l2LJAW8",
+    "example": "pOsGxVKYd3s/github-card-last-framework.png"
+  },
+  "global_feedback": {
+    "facial_expressions": "Keep expressions modest and natural \u2014 no exaggerated shock/surprise faces. Contemplative, serious, or subtly concerned work best.",
+    "hairstyle": "Don't make hair too curly \u2014 keep it natural to the reference photos."
+  },
+  "pOsGxVKYd3s/github-card-last-framework.png": {
+    "favorite": true,
+    "rating": 5,
+    "comment": "Best one \u2014 the-last-framework concept with contemplative chin-hold"
+  },
+  "pOsGxVKYd3s/github-pr-dario-merged.png": {
+    "favorite": true,
+    "rating": 5,
+    "comment": "GitHub PR merged by dario-amodei \u2014 very compelling with the line diff"
+  },
+  "pOsGxVKYd3s/github-card-future-of-coding.png": {
+    "favorite": false,
+    "rating": 4,
+    "comment": "I don't like this facial reaction but the background is great."
+  },
+  "pOsGxVKYd3s/face-prop-ai-writes-all-code.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": "The hairstyle on this is too curly but it looks interesting"
+  },
+  "pOsGxVKYd3s/github-issue-deprecate-code.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": "I don't like these crazy facial reactions. They should be more modest"
+  },
+  "pOsGxVKYd3s/face-laptop-2027-ai-code.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  },
+  "pOsGxVKYd3s/face-laptop-anthropic-site.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  },
+  "pOsGxVKYd3s/folders-self-coding.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  },
+  "pOsGxVKYd3s/github-card-last-framework-v2.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  },
+  "pOsGxVKYd3s/github-issue-human-code-dead.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  },
+  "pOsGxVKYd3s/icon-border-anthropics-plan.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  },
+  "pOsGxVKYd3s/icon-grid-the-shift.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  },
+  "pOsGxVKYd3s/pixel-art-100pct-ai-code.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  },
+  "pOsGxVKYd3s/pixel-art-coders-replaced.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  },
+  "pOsGxVKYd3s/product-ui-claude-screenshot.png": {
+    "favorite": false,
+    "rating": 3,
+    "comment": ""
+  }
+}

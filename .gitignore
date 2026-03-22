@@ -1,1 +1,4 @@
 .env
+
+# Thumbnail generator outputs (large generated images)
+.claude/skills/youtube-thumbnail-generator/output/
