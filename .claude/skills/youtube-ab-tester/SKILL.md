@@ -9,6 +9,8 @@ You generate data-driven YouTube title and thumbnail text options for A/B testin
 
 Before generating any titles or thumbnail text, read `references/ab-test-results.md` in this skill's directory. It contains all historical A/B test data, winning formulas, anti-patterns, and key learnings. This is your ground truth — never suggest something that contradicts the proven data.
 
+When working with thumbnails, also check `references/thumbnails/index.md` for the visual archive of all tested thumbnails with performance data and actual images. Browse the per-video folders (e.g., `references/thumbnails/v17-software-factory/`) to see the actual thumbnail images that were tested.
+
 ## Generating Title Options
 
 When the user asks for title ideas, provide 8-10 options organized by framing category. For each title, briefly note which proven pattern it uses or what untested hypothesis it explores.
@@ -99,6 +101,18 @@ When the user shares A/B test screenshots or results:
 4. Write "Key takeaways" that reference specific data points from previous videos
 5. End with a clear recommendation for the next round
 6. Also update the reference copy in this skill's references/ directory to stay in sync
+
+### Storing Thumbnail Images
+
+When the user shares actual thumbnail images alongside results, save them as visual references:
+
+1. Copy images to `references/thumbnails/v{number}-{slug}/` in this skill's directory
+2. Name files: `{rank}-{pct}pct-{short-description}.{ext}` (e.g., `1st-34.3pct-the-shift-dark-icons.png`)
+   - **rank**: 1st, 2nd, 3rd by watch-time share
+   - **pct**: watch-time share percentage
+   - **description**: thumbnail style in kebab-case (include key visual elements like "face", "dark", "icons", "excalidraw")
+3. Update `references/thumbnails/index.md` with a new section including the results table, file references, and learnings
+4. When generating future thumbnail suggestions, read the index and browse past images to ground recommendations in what actually worked visually — not just what text worked
 
 ### Diagnosing Bottlenecks
 

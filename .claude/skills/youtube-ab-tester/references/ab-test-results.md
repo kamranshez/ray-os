@@ -941,6 +941,24 @@ Same title across all: "Anthropic Just Revealed Where Coding Is Heading". Testin
 - "It Never Stops" flopped at 27.2% — too ominous/negative without context, horror movie tagline energy
 - **New insight:** Thumbnail specificity matters — vague excitement ("It's Finally Coming") caps performance, naming the concept ("The Factory") breaks through
 
+### Thumbnail A/B Test Round 2 (2026-03-22) — Style diversity test
+
+Same title across all: "Anthropic Just Revealed Where Coding Is Heading". Testing radically different thumbnail styles.
+
+| Thumbnail Style | Thumbnail Text | Watch-time Share | Result |
+|----------------|----------------|------------------|--------|
+| Dark + glowing icons (code, AI, robot, rocket) | THE SHIFT | 34.3% | Leader |
+| Pixel art brain + "ANTHROPIC" branding | 100% AI CODE | 33.3% | |
+| Face + excalidraw whiteboard (R1 winner) | The Factory Is Coming | 32.4% | |
+
+**Key takeaways:**
+- Dead flat — all within 1.9%, no breakaway winner despite radically different visual styles
+- R1 winner "The Factory Is Coming" collapsed from 38.6% → 32.4% — early-round volatility confirmed again (same pattern as V11, V12, V13)
+- Faceless thumbnails ("THE SHIFT", "100% AI CODE") marginally outperforming face thumbnail — unusual, contradicts V13 finding where face crushed faceless by 7.4%
+- "THE SHIFT" (34.3%) has broader framing than "The Factory Is Coming" — less jargony, but the margin is too thin to be meaningful
+- **Diagnosis:** Three rounds of title testing (flat) + two rounds of thumbnail testing (flat) = **likely a topic ceiling.** "Software Factory / cloud scheduled tasks" is niche infrastructure content with limited mass appeal. No amount of packaging optimization will overcome a fundamentally narrow topic
+- **Recommendation:** Lock in best-performing combo and move on. Further testing unlikely to find a breakaway winner
+
 ---
 
 ## Tests Still Worth Running
