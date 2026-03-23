@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "193f0dbfa1c5169b",
+        "id": "2a5293d728cfb590",
         "type": "tabs",
         "children": [
           {
-            "id": "c8a063b6d0d1436d",
+            "id": "920fe249604a3908",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "projects/agentic-coding-school/filmed/prompt-engineering/persona-vectors.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "persona-vectors"
             }
           }
         ]
@@ -74,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 282.50271224975586,
-    "collapsed": true
+    "width": 282.50271224975586
   },
   "right": {
     "id": "99b289f72ba3f8e1",
@@ -178,30 +181,39 @@
       "bases:Create new base": false
     }
   },
-  "active": "c8a063b6d0d1436d",
+  "active": "920fe249604a3908",
   "lastOpenFiles": [
+    "projects/agentic-coding-school/to-film/claude-code/scope-and-settings.md",
+    "projects/agentic-coding-school/filmed/claude-code/scope-and-settings.md",
+    "projects/agentic-coding-school/filmed/claude-code",
+    "projects/agentic-coding-school/filmed/untitled folder",
+    "projects/agentic-coding-school/filmed/scope-and-settings.md",
+    "socials/youtube/ab-tests/results.md",
+    "socials/youtube/ab-tests",
+    "projects/agentic-coding-school/filmed/prompt-engineering/persona-vectors.md",
+    "projects/agentic-coding-school/filmed/prompt-engineering",
+    "socials/youtube/videos/cloud-scheduled-tasks.md",
+    "images/cloud-scheduled-tasks/reliability-trajectory-to-lights-out/excalidraw_7.png",
+    "images/cloud-scheduled-tasks/reliability-trajectory-to-lights-out/excalidraw_6.png",
+    "images/cloud-scheduled-tasks/reliability-trajectory-to-lights-out/excalidraw_5.png",
+    "images/cloud-scheduled-tasks/reliability-trajectory-to-lights-out/excalidraw_4.png",
+    "images/cloud-scheduled-tasks/reliability-trajectory-to-lights-out/excalidraw_3.png",
+    "images/cloud-scheduled-tasks/reliability-trajectory-to-lights-out/excalidraw_2.png",
+    "images/cloud-scheduled-tasks/reliability-trajectory-to-lights-out/excalidraw_1.png",
+    "images/cloud-scheduled-tasks/old-vs-new-developer-role/excalidraw_7.png",
+    "images/cloud-scheduled-tasks/old-vs-new-developer-role/excalidraw_6.png",
+    "images/cloud-scheduled-tasks/old-vs-new-developer-role/excalidraw_5.png",
+    "images/cloud-scheduled-tasks/reliability-trajectory-to-lights-out",
+    "images/cloud-scheduled-tasks/old-vs-new-developer-role",
+    "images/cloud-scheduled-tasks/multi-agent-factory-floor",
+    "images/cloud-scheduled-tasks/telegram-clarification-loop",
+    "images/cloud-scheduled-tasks/nightly-backlog-to-morning-prs",
+    "images/cloud-scheduled-tasks/sentry-bug-fix-while-sleeping",
+    "socials/youtube/videos/claude-code-channels.md",
+    "socials/youtube/videos/skill-evals-test-and-measure-your-claude-skills.md",
+    "socials/youtube/videos/anthropic-skills-playbook.md",
     "socials/youtube/scripts/Skill Evals - Test and Measure Your Claude Skills.md",
     "socials/youtube/scripts/50 Tips for Claude Code.md",
-    "excalidraw_2.png 10-49-59-685.png",
-    "socials/youtube/scripts/images/skill-evals/bigger-picture/excalidraw_3.png",
-    "socials/youtube/scripts/images/skill-evals/bigger-picture/excalidraw_2.png",
-    "socials/youtube/scripts/images/skill-evals/bigger-picture/excalidraw_1.png",
-    "socials/youtube/scripts/images/skill-evals/trigger-loop/excalidraw_3.png",
-    "socials/youtube/scripts/images/skill-evals/trigger-loop/excalidraw_2.png",
-    "socials/youtube/scripts/images/skill-evals/trigger-loop/excalidraw_1.png",
-    "socials/youtube/scripts/images/skill-evals/testing-angle/excalidraw_3.png",
-    "socials/youtube/scripts/images/skill-evals/testing-angle/excalidraw_2.png",
-    "socials/youtube/scripts/images/skill-evals/testing-angle/excalidraw_1.png",
-    "socials/youtube/scripts/images/skill-evals/bigger-picture",
-    "socials/youtube/scripts/images/skill-evals/trigger-loop",
-    "socials/youtube/scripts/images/skill-evals/testing-angle",
-    "socials/youtube/scripts/images/skill-evals/the-problem",
-    "claude-md-cheat-sheet.html",
-    "socials/youtube/scripts/images/skill-evals/skill-types",
-    "socials/youtube/scripts/images/skill-evals/description-optimization",
-    "socials/youtube/scripts/images/skill-evals/capability-vs-procedural-evals",
-    "socials/youtube/scripts/images/skill-evals/benchmark-table",
-    "socials/youtube/scripts/images/skill-evals/ab-testing-flow",
     "courses/techniques/Best of 5.md",
     "courses/techniques/Boxing the Model In.md",
     "courses/techniques/Closing the Loop.md",
@@ -217,14 +229,6 @@
     "projects/agentic-coding-school/to-film/from-pr-command.md",
     "projects/agentic-coding-school/to-film/plan-mode-from-slack.md",
     "projects/agentic-coding-school/to-film/ask-user-question-markdown.md",
-    "projects/agentic-coding-school/to-film/debug-skill.md",
-    "projects/agentic-coding-school/to-film/desktop-app-share-sessions.md",
-    "projects/agentic-coding-school/to-film/desktop-app-plugins.md",
-    "projects/agentic-coding-school/to-film/desktop-app-ssh.md",
-    "projects/agentic-coding-school/to-film/desktop-cli-to-app.md",
-    "projects/agentic-coding-school/to-film/desktop-app-previews.md",
-    "projects/agentic-coding-school/to-film/subagent-memory.md",
-    "socials/youtube/revenue/2026-02-video-revenue.md",
     "Untitled.canvas"
   ]
 }
