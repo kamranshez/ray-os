@@ -959,6 +959,24 @@ Same title across all: "Anthropic Just Revealed Where Coding Is Heading". Testin
 - **Diagnosis:** Three rounds of title testing (flat) + two rounds of thumbnail testing (flat) = **likely a topic ceiling.** "Software Factory / cloud scheduled tasks" is niche infrastructure content with limited mass appeal. No amount of packaging optimization will overcome a fundamentally narrow topic
 - **Recommendation:** Lock in best-performing combo and move on. Further testing unlikely to find a breakaway winner
 
+### Thumbnail A/B Test Round 3 (2026-03-23) — Fake GitHub repo style
+
+Same title across all: "Anthropic Just Revealed Where Coding Is Heading". Testing fake GitHub repo mockup thumbnails vs R1 control.
+
+| Thumbnail Style | Thumbnail Text | Watch-time Share | Result |
+|----------------|----------------|------------------|--------|
+| Face + fake GitHub repo "anthropic/future-of-coding" with orange border, stats (1.2k stars, 45 forks) | anthropic/future-of-coding | 33.9% | Leader |
+| Face + fake GitHub repo "anthropic/the-last-framework" with "Trending 24k stars" | anthropic/the-last-framework | 33.7% | |
+| Face + excalidraw whiteboard (R1 control) | The Factory Is Coming | 32.4% | |
+
+**Key takeaways:**
+- Still flat — all within 1.5%, 6 total rounds on this video (3 title + 3 thumbnail) all producing ~32-36%
+- Fake GitHub repo mockup is a creative concept but didn't break through — viewers may not recognize the GitHub UI at thumbnail size, or the concept is too "developer-insider"
+- "future-of-coding" (33.9%) marginally beat "the-last-framework" (33.7%) — "future" framing slightly more clickable than "last framework" finality framing
+- Face + GitHub mockup didn't outperform faceless dark styles from R2 (34.3%) — the GitHub visual isn't inherently more clickable
+- **Topic ceiling confirmed across 6 rounds.** Locking in and moving on
+- **New insight for thumbnail library:** Fake GitHub repo mockups are a novel format worth testing on higher-ceiling topics — this test was confounded by the topic ceiling
+
 ---
 
 ## Tests Still Worth Running

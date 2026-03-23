@@ -30,3 +30,17 @@ v{number}-{slug}/
 - Faceless dark/graphic thumbnails marginally outperformed face thumbnail — unusual for this channel (V13 showed face winning by 7.4%)
 - All three visually distinct styles produced flat results — confirms topic ceiling diagnosis
 - "THE SHIFT" broad framing slightly edged out concept-specific "The Factory Is Coming"
+
+#### Round 3 — Fake GitHub Repo Style (2026-03-23)
+
+| File | Style | Text | Watch-time |
+|------|-------|------|-----------|
+| `1st-33.9pct-github-future-of-coding-face.png` | Face (excited) + fake GitHub repo card, orange border, "anthropic/future-of-coding", stats (1.2k stars, 45 forks, 12 discussions) | anthropic/future-of-coding | 33.9% |
+| `2nd-33.7pct-github-last-framework-face.png` | Face (thoughtful) + fake GitHub repo card, blue background, "anthropic/the-last-framework", Trending badge, 24k stars | anthropic/the-last-framework | 33.7% |
+| *(reused from R2)* `3rd-32.4pct-factory-coming-face-excalidraw.jpg` | Face + excalidraw whiteboard (control) | The Factory Is Coming | 32.4% |
+
+**Learnings:**
+- Fake GitHub repo mockup is a creative novel format but didn't break through on this video (topic ceiling)
+- Two different facial expressions tested: excited (future-of-coding) vs thoughtful/serious (last-framework) — excited marginally won but within noise
+- GitHub-style thumbnails worth retesting on a higher-ceiling topic where the "dev-insider" visual language may resonate more
+- 6 total rounds on V17 (3 title + 3 thumbnail) all flat at ~32-36% — confirmed topic ceiling, locked in and moved on
