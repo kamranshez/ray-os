@@ -1063,3 +1063,20 @@ Same thumbnail across all (face + /dream folder icon). Testing locked winner aga
 - "Made Claude Code Dream" flopped at 30.6% — metaphorical framing confuses more than intrigues
 - **New insight:** Metaphorical framing underperforms concrete framing
 - **New insight:** "Made" confirmed as weak verb
+
+### Thumbnail A/B Test Round 1 (2026-03-25) — Face vs faceless dark styles
+
+Same title across all: "Anthropic Just Dropped the Feature Nobody Knew They Needed". Testing original face thumbnail vs two faceless dark-background designs.
+
+| Thumbnail Style | Thumbnail Text | Watch-time Share | Result |
+|----------------|----------------|------------------|--------|
+| Face + /dream folder icon (original) | /dream | 34.9% | Leader |
+| Dark + Claude icon + moon/brain icon | It dreams. | 31.1% | |
+| Dark + Memory 1.0 → Auto Dream progression | They added this. | 34% | |
+
+**Key takeaways:**
+- Original face thumbnail leads at 34.9% — face continues to outperform faceless (consistent with V13: 38.6% vs 31.2%)
+- "They added this." progression visual surprisingly close at 34% — the before/after visual narrative nearly matches the face thumbnail
+- "It dreams." flopped at 31.1% — anthropomorphic/metaphorical framing fails on thumbnails too (mirrors title R3 where "Made Claude Code Dream" flopped at 30.6%)
+- Gap is only 3.8% between best and worst — tighter than V13's 7.4% face vs faceless gap
+- **New insight:** Dark faceless thumbnails with progression visuals ("Memory 1.0 → Auto Dream") can nearly match face thumbnails — the visual story compensates for missing face recognition
