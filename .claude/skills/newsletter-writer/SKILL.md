@@ -102,7 +102,7 @@ Present all of this in one go so Ray can pick and combine (e.g., Subject Line 3 
 5. Generate 5 subject lines and 5 preview snippets
 6. Read through for conversational flow — if any sentence sounds like a blog post, rewrite it
 7. Run the humanizer skill on the drafts to catch AI-sounding patterns
-8. If the newsletter references a video, run `scripts/add-play-button.py` on the thumbnail
+8. If the newsletter references a video, ask the user for a thumbnail image path, then run `scripts/add-play-button.py` on it to generate the play-button version
 9. Present everything together for Ray to mix and match
 
 ## Examples
