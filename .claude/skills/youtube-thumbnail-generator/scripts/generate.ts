@@ -85,18 +85,23 @@ function loadFaceReferences(): { data: string; mimeType: string }[] {
     return [];
   }
 
-  // Randomly select up to 5 face references to stay within Nano Banana 2's
-  // 14-image limit while leaving room for competitor/style references
+  // Always prioritize go-to-face.jpg, then randomly fill remaining slots
   const MAX_FACE_REFS = 5;
+  const GO_TO_FACE = "go-to-face.jpg";
   let selected = imageFiles;
   if (imageFiles.length > MAX_FACE_REFS) {
-    // Fisher-Yates shuffle, then take first 5
-    const shuffled = [...imageFiles];
-    for (let i = shuffled.length - 1; i > 0; i--) {
+    const hasGoTo = imageFiles.includes(GO_TO_FACE);
+    const others = imageFiles.filter((f) => f !== GO_TO_FACE);
+    // Fisher-Yates shuffle the non-go-to photos
+    for (let i = others.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      [others[i], others[j]] = [others[j], others[i]];
     }
-    selected = shuffled.slice(0, MAX_FACE_REFS);
+    if (hasGoTo) {
+      selected = [GO_TO_FACE, ...others.slice(0, MAX_FACE_REFS - 1)];
+    } else {
+      selected = others.slice(0, MAX_FACE_REFS);
+    }
   }
 
   console.log(`Randomly selected ${selected.length}/${imageFiles.length} face reference(s)...`);

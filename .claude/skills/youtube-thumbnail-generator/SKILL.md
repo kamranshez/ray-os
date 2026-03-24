@@ -279,7 +279,12 @@ The script automatically loads face reference images from `assets/face/`.
 
 ## Face References
 
-Located in `assets/face/`. The script randomly selects 5 from the available photos per generation for variety.
+Located in `assets/face/`.
+
+**Primary reference: `go-to-face.jpg`** — This is the go-to face photo that performs best for thumbnail generation. When running generations:
+- If only one face reference is needed (most cases), use `go-to-face.jpg` exclusively by temporarily isolating it or ensuring the script only loads it
+- The script randomly selects up to 5 from `assets/face/`, so when you want consistency, move other photos to `assets/face-backup/` before generating, then restore after
+- Other photos in the folder are supplementary — useful for variety but `go-to-face.jpg` should always be included
 
 ---
 
