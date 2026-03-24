@@ -1,7 +1,7 @@
 .env
 
-# Thumbnail generator outputs (large generated images)
-.claude/skills/youtube-thumbnail-generator/output/
+# Thumbnail generator temp batch dirs (cleaned up after generation)
+# Final outputs in output/<video-id>/ are tracked via Git LFS
 
 # Video transcriber outputs (generated transcript files)
 .claude/skills/video-transcriber/outputs/
