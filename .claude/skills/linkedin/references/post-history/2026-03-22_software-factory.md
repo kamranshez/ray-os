@@ -5,10 +5,10 @@ archetype: The News + Insight
 media: text only
 status: posted
 engagement:
-  reactions: 0
+  reactions: 5
   comments: 1
   reposts: 0
-  impressions: 17
+  impressions: 254
 video: pOsGxVKYd3s
 notes: Based on video pOsGxVKYd3s. Covers cloud-based scheduled tasks, software factory model, Sentry fixer demo. Proper sentence-case capitalization per updated skill rules.
 ---
