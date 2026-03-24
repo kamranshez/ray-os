@@ -55,14 +55,55 @@ Write newsletters that feel like a friend talking to you over coffee, not a blog
 - Not every issue needs to be "useful" - sometimes the value is just in the honest sharing
 - End with warmth, not a hard sell
 
+## Video Thumbnail with Play Button
+
+When the newsletter references a video (marked with `[VIDEO THUMBNAIL + LINK]`), generate a clickable-looking thumbnail image with a play button overlay. This makes the email feel more engaging — readers see what looks like an embedded video.
+
+Run the bundled script:
+```bash
+python3 scripts/add-play-button.py <input_thumbnail> [output_path]
+```
+
+- Takes any thumbnail image (PNG, JPG, WEBP)
+- Overlays a YouTube-style semi-transparent play button (dark circle + white triangle)
+- Adds a subtle dark gradient at the bottom
+- If no output path given, saves as `<name>-play.<ext>` next to the original
+
+If the user provides a thumbnail image, run this automatically. If not, ask if they have one. The output image should replace the `[VIDEO THUMBNAIL + LINK]` placeholder in the final newsletter.
+
+## Output Format
+
+When presenting a newsletter draft, always provide options so Ray can mix and match. The typical input is a video transcript that needs to be turned into a short, video-redirect newsletter (not a full essay retelling the video).
+
+### Always generate:
+
+**5 Subject Lines** — varied angles on the same topic. Mix these approaches:
+- Mystery/curiosity gap ("I found something hidden in...")
+- Direct statement ("Claude Code dreams now")
+- Problem/pain point ("Your AI agent is sleep-deprived")
+- Quotable moment from the content (something surprising the reader said/found)
+- Casual/conversational ("...and I had no idea why")
+
+**5 Preview Snippets** — the text that shows below the subject line in email clients. Keep to one sentence. Should complement the subject line, not repeat it. Mix between teasing the content, stating a surprising fact, and creating intrigue.
+
+**3 Newsletter Variations** — each with a different opening hook/angle. Keep them short (video-redirect format). Label each with its hook strategy so Ray can quickly scan:
+- e.g., "Mystery/Discovery Hook", "Problem-First Hook", "Human Analogy Hook"
+- Each variation should be a complete, sendable draft — not just the opening paragraph
+- All variations share the same closing (warm close + question + sign-off)
+
+Present all of this in one go so Ray can pick and combine (e.g., Subject Line 3 + Snippet 1 + Variation B).
+
 ## Workflow
 
-1. Ask for the topic or seed idea (or receive it from the user)
-2. Identify a personal angle or story to anchor the topic
-3. Draft following the structure pattern above
-4. Read through for conversational flow - if any sentence sounds like it belongs in a blog post, rewrite it
-5. Run the humanizer skill on the draft to catch AI-sounding patterns
-6. Present the draft for user review
+1. Receive the topic — usually a video transcript, sometimes a seed idea
+2. Read `references/examples.md` to calibrate tone and structure
+3. Identify 3 distinct angles/hooks from the content
+4. Draft 3 complete newsletter variations (video-redirect format by default)
+5. Generate 5 subject lines and 5 preview snippets
+6. Read through for conversational flow — if any sentence sounds like a blog post, rewrite it
+7. Run the humanizer skill on the drafts to catch AI-sounding patterns
+8. If the newsletter references a video, run `scripts/add-play-button.py` on the thumbnail
+9. Present everything together for Ray to mix and match
 
 ## Examples
 
