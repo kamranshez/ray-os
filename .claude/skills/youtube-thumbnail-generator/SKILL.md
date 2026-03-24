@@ -108,9 +108,34 @@ For parallel generation, run up to 5 Bash commands simultaneously, each generati
 
 ## Mode 1: Research Thumbnails
 
-### Auto-Scrape from YouTube Studio (preferred)
+The user will specify where to pull competitor references from. There are four sources:
 
-The best competitor data comes from YouTube Studio's "What your audience watches" section. Use browser automation to scrape it automatically.
+### From a Specific Channel (when user provides a channel URL)
+
+When the user provides a YouTube channel URL (e.g., `https://www.youtube.com/@nateherk/videos`), scrape that channel's recent thumbnails directly.
+
+**Steps:**
+
+1. Use `yt-dlp` to get recent video IDs and titles:
+   ```bash
+   yt-dlp --flat-playlist --print "%(id)s %(title)s" "<channel-url>" --playlist-end 15
+   ```
+2. Create the output directory:
+   ```bash
+   mkdir -p research/competitor-thumbnails/
+   ```
+3. Download maxresdefault thumbnails for each video:
+   ```bash
+   curl -sL "https://i.ytimg.com/vi/<VIDEO_ID>/maxresdefault.jpg" -o "research/competitor-thumbnails/<VIDEO_ID>.jpg"
+   ```
+4. Visually inspect each thumbnail using the Read tool
+5. Write a style analysis summarizing the channel's patterns (face placement, text style, colors, props, layout)
+
+This is the fastest method and produces the most cohesive style reference set since all thumbnails come from one creator's visual identity.
+
+### Auto-Scrape from YouTube Studio
+
+The best competitor data from Ray's own audience comes from YouTube Studio's "What your audience watches" section. Use browser automation to scrape it automatically.
 
 **YouTube Studio Analytics URL:**
 ```
