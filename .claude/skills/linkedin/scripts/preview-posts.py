@@ -21,6 +21,7 @@ Or simply pass a flat array of post objects.
 """
 
 import argparse
+import base64
 import html
 import json
 import os
@@ -28,6 +29,16 @@ import subprocess
 import sys
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "post-preview.html")
+PROFILE_PHOTO_PATH = os.path.join(os.path.dirname(__file__), "..", "references", "ray-profile-photo.jpg")
+
+
+def get_avatar_data_url() -> str:
+    """Load Ray's profile photo as a base64 data URL for embedding in HTML."""
+    if os.path.exists(PROFILE_PHOTO_PATH):
+        with open(PROFILE_PHOTO_PATH, "rb") as f:
+            b64 = base64.b64encode(f.read()).decode()
+        return f"data:image/jpeg;base64,{b64}"
+    return ""
 
 
 def build_post_card(post: dict, index: int) -> str:
@@ -64,7 +75,7 @@ def build_post_card(post: dict, index: int) -> str:
 
         <div class="linkedin-post">
             <div class="post-author">
-                <div class="avatar">RA</div>
+                <img class="avatar" src="{get_avatar_data_url()}" alt="Ray Amjad">
                 <div class="author-info">
                     <div class="author-name">Ray Amjad</div>
                     <div class="author-headline">Building with AI &middot; YouTube @RAmjad</div>
@@ -119,7 +130,7 @@ def generate_html(posts: list[dict]) -> str:
     }}
 
     .page-header {{
-        max-width: 560px;
+        max-width: 1160px;
         margin: 0 auto 24px;
         text-align: center;
     }}
@@ -136,9 +147,15 @@ def generate_html(posts: list[dict]) -> str:
         color: #00000099;
     }}
 
+    .posts-grid {{
+        max-width: 1160px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }}
+
     .post-card {{
-        max-width: 560px;
-        margin: 0 auto 20px;
     }}
 
     .post-header {{
@@ -214,13 +231,7 @@ def generate_html(posts: list[dict]) -> str:
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #0a66c2, #004182);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 16px;
+        object-fit: cover;
         flex-shrink: 0;
     }}
 
@@ -285,12 +296,13 @@ def generate_html(posts: list[dict]) -> str:
         user-select: none;
     }}
 
-    @media (max-width: 600px) {{
+    @media (max-width: 900px) {{
+        .posts-grid {{
+            grid-template-columns: 1fr;
+            max-width: 560px;
+        }}
         body {{
             padding: 12px;
-        }}
-        .post-card {{
-            margin-bottom: 16px;
         }}
     }}
 </style>
@@ -302,7 +314,9 @@ def generate_html(posts: list[dict]) -> str:
     <p>{len(posts)} variations &middot; each uses different emotional triggers</p>
 </div>
 
+<div class="posts-grid">
 {cards}
+</div>
 
 <script>
 function copyPost(btn, text) {{
