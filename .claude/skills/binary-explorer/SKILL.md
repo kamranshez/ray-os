@@ -25,12 +25,12 @@ This outputs the path to the cached strings file (e.g., `~/.claude/cache/binary-
 
 Given the user's query about a feature, search the extracted strings. The approach depends on what the user is asking about:
 
-**If they name a specific feature flag or codename** (e.g., `tengu_onyx_plover`):
+**If they name a specific feature flag or codename** 
 ```bash
 grep -i "<flag_name>" <strings_file>
 ```
 
-**If they describe a feature by behavior** (e.g., "auto-dream", "memory consolidation"):
+**If they describe a feature by behavior** 
 - Start with keyword searches using likely terms
 - Look for function names, config keys, prompts, and log messages
 - Follow the trail: if you find a function name like `gt7`, search for that to find related code

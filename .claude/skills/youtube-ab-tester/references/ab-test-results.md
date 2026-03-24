@@ -1003,3 +1003,63 @@ Same title across all: "Anthropic Just Revealed Where Coding Is Heading". Testin
 5. **Dark/moody thumbnail vs bright** — tone testing, every V1-16 thumbnail uses similar lighting
 6. **No text thumbnail** — test whether the face + visual context alone can carry (faceless confirmed anti-pattern on V13, but text-free with face is untested)
 7. **Thumbnail-title mismatch testing** — V16 showed competitive thumbnail capping non-competitive titles. Deliberately test aligned vs misaligned combos to quantify the penalty
+
+---
+
+## Video 18: Auto Dream — Claude Code Memory Consolidation
+
+**Published:** 2026-03-24
+**Thumbnail Text:** /dream (on all variants)
+
+### Title A/B Test Round 1 (2026-03-24)
+
+Same thumbnail across all (face + /dream folder icon).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Anthropic Just Dropped the Feature Nobody Knew Existed** | /dream | **39.6%** | Leader |
+| Anthropic Just Solved Claude Code's Memory Problem | /dream | 31.6% | |
+| Anthropic Just Dropped a Secret Feature Into Claude Code | /dream | 28.8% | |
+
+**Key takeaways:**
+- "Nobody Knew Existed" leads at 39.6% — social proof curiosity dominates again, tracking toward V14's 46.8% ceiling
+- "Secret Feature" flopped at 28.8% — **stating** secrecy kills the curiosity that **implying** secrecy preserves. "Nobody Knew" lets viewers fill in the blank; "Secret" gives it away
+- "Solved...Memory Problem" decent at 31.6% — problem-solution works but no curiosity gap
+- **New insight:** Implicit mystery ("Nobody Knew Existed") >>> explicit mystery ("Secret Feature") — telling someone it's a secret is less compelling than making them feel nobody else knows about it
+- 10.8% gap between social proof and explicit secret framing is significant at 5k views
+
+### Title A/B Test Round 2 (2026-03-24)
+
+Same thumbnail across all (face + /dream folder icon). Testing "Nobody Knew Existed" (R1 winner) vs proven "Nobody Knew They Needed" (V14's 46.8% all-time #2) vs "Secretly Added" (different secret framing).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Anthropic Just Dropped the Feature Nobody Knew They Needed** | /dream | **37.2%** | ✅ WINNER (auto-declared, visible to all) |
+| Anthropic Just Dropped the Feature Nobody Knew Existed | /dream | 35.9% | |
+| Anthropic Secretly Added a New Feature to Claude Code | /dream | 26.9% | |
+
+**Key takeaways:**
+- YouTube auto-declared "Nobody Knew They Needed" winner at 37.2%, flipping R1 where "Existed" led at 39.6%
+- **"They Needed" > "Existed"** — utility framing beats pure discovery
+- "Secretly Added" at 26.9% confirms: **explicit secret framing is an anti-pattern** (28.8% R1 → 26.9% R2)
+- "Nobody Knew They Needed" at 37.2% here vs 46.8% on V14 — gap likely content-dependent (niche power-user topic)
+- **New anti-pattern:** "Secretly [verb]" explicit secret framing (26.9-28.8% across 2 rounds)
+
+**Status:** Title auto-locked as **"Anthropic Just Dropped the Feature Nobody Knew They Needed"**. Continuing to test challengers.
+
+### Title A/B Test Round 3 (2026-03-24) — Catchy concept + version label challengers
+
+Same thumbnail across all (face + /dream folder icon). Testing locked winner against "Dream" concept and "Memory 2.0" version label.
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Anthropic Just Dropped the Feature Nobody Knew They Needed** | /dream | **35.1%** | Leader (control) |
+| Anthropic Just Dropped Memory 2.0 for Claude Code | /dream | 34.3% | |
+| Anthropic Just Made Claude Code Dream | /dream | 30.6% | |
+
+**Key takeaways:**
+- Locked winner holds at 35.1% (37.2% R2 → 35.1% R3) — settling into mid-30s
+- "Memory 2.0" surprisingly competitive at 34.3% — only 0.8% behind
+- "Made Claude Code Dream" flopped at 30.6% — metaphorical framing confuses more than intrigues
+- **New insight:** Metaphorical framing underperforms concrete framing
+- **New insight:** "Made" confirmed as weak verb
