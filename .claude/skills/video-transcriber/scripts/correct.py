@@ -52,7 +52,7 @@ Raw transcript:
 
 {transcript}"""
 
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = "gemini-3-flash"
 
 
 def upload_video(client, video_path: str):
@@ -138,9 +138,13 @@ def main():
         except Exception:
             pass
 
-    # Save corrected transcript
+    # Save corrected transcript to skill outputs folder
+    skill_dir = Path(__file__).resolve().parent.parent
+    outputs_dir = skill_dir / "outputs"
+    outputs_dir.mkdir(exist_ok=True)
+
     video_stem = Path(video_path).stem
-    output_path = f"{video_stem}.txt"
+    output_path = outputs_dir / f"{video_stem}.txt"
     with open(output_path, "w") as f:
         f.write(corrected)
 

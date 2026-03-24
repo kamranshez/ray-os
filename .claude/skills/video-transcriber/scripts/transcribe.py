@@ -133,9 +133,13 @@ def main():
     finally:
         os.unlink(tmp_audio.name)
 
-    # Save raw transcript next to the video
+    # Save raw transcript to skill outputs folder
+    skill_dir = Path(__file__).resolve().parent.parent
+    outputs_dir = skill_dir / "outputs"
+    outputs_dir.mkdir(exist_ok=True)
+
     video_stem = Path(video_path).stem
-    output_path = f"{video_stem}-raw.txt"
+    output_path = outputs_dir / f"{video_stem}-raw.txt"
     with open(output_path, "w") as f:
         f.write(transcript_text)
 

@@ -2,3 +2,6 @@
 
 # Thumbnail generator outputs (large generated images)
 .claude/skills/youtube-thumbnail-generator/output/
+
+# Video transcriber outputs (generated transcript files)
+.claude/skills/video-transcriber/outputs/
