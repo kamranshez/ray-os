@@ -69,7 +69,7 @@ with st.sidebar:
     total = len(videos)
     generated = sum(1 for v in videos.values() if v["status"] != "not_generated")
     shortlisted = sum(1 for v in videos.values() if v["status"] in ("shortlisted", "uploaded", "results_in"))
-    uploaded = sum(1 for v in videos.values() if v["status"] in ("uploaded", "results_in"))
+    uploaded = sum(1 for v in videos.values() if v["status"] in ("uploaded", "results_in") and v.get("uploaded_thumbs"))
     results_done = sum(1 for v in videos.values() if v["status"] == "results_in")
 
     st.caption("Progress")
@@ -100,13 +100,26 @@ if page == "Dashboard":
         with col:
             emoji = status_emoji(info["status"])
             shortlist_count = len(info.get("shortlisted", []))
+            upload_count = len(info.get("uploaded_thumbs", []))
+
+            # Due date line for uploaded videos
+            due_line = ""
+            if info["status"] == "uploaded" and info.get("results_due"):
+                try:
+                    days_left = (datetime.strptime(info["results_due"], "%Y-%m-%d") - datetime.now()).days
+                    due_color = "#ef4444" if days_left <= 0 else "#eab308" if days_left <= 2 else "#888"
+                    due_text = "DUE NOW" if days_left <= 0 else f"{days_left}d left"
+                    due_line = f'<div style="font-size:0.7rem;color:{due_color};margin-top:2px;">⏰ Check results: {due_text}</div>'
+                except ValueError:
+                    pass
 
             st.markdown(f"""
             <div style="background:#1a1a2e;border-radius:12px;padding:16px;margin-bottom:12px;border-left:4px solid {'#e8590c' if info['status'] == 'not_generated' else '#22c55e' if info['status'] in ('shortlisted','uploaded','results_in') else '#eab308'};">
                 <div style="font-size:0.75rem;color:#888;">{info['video_number']} · {info['views']:,} views</div>
                 <div style="font-size:0.95rem;font-weight:600;margin:4px 0;">{info['title'][:50]}{'...' if len(info['title']) > 50 else ''}</div>
-                <div style="font-size:0.8rem;color:#aaa;">{emoji} {status_label(info['status'])} · {shortlist_count}/{config['max_shortlist']} picked</div>
+                <div style="font-size:0.8rem;color:#aaa;">{emoji} {status_label(info['status'])} · {shortlist_count}/{config['max_shortlist']} picked{f' · {upload_count} uploaded' if upload_count else ''}</div>
                 <div style="font-size:0.7rem;color:#666;margin-top:4px;">{info['topic']}</div>
+                {due_line}
             </div>
             """, unsafe_allow_html=True)
 
@@ -229,18 +242,62 @@ elif page == "Review":
         st.success(f"Saved {len(current_shortlist)} shortlisted thumbnails for {selected_info['video_number']}")
         st.rerun()
 
-    # Mark as uploaded
-    if selected_info["status"] == "shortlisted":
+    # Mark individual thumbnails as uploaded
+    if selected_info["status"] in ("shortlisted", "uploaded") and current_shortlist:
         st.divider()
-        if st.button("Mark as uploaded to YouTube Studio", use_container_width=True):
+        st.subheader("Mark uploaded to YouTube Studio")
+
+        # Show upload date and check-back reminder if already uploaded
+        if selected_info.get("uploaded_date"):
+            upload_date = selected_info["uploaded_date"]
+            due_date = selected_info.get("results_due", "?")
+            try:
+                days_left = (datetime.strptime(due_date, "%Y-%m-%d") - datetime.now()).days
+                if days_left > 0:
+                    st.info(f"Uploaded on **{upload_date}** — check results in **{days_left} days** ({due_date})")
+                else:
+                    st.warning(f"Uploaded on **{upload_date}** — results are **due now!** ({due_date})")
+            except ValueError:
+                st.info(f"Uploaded on **{upload_date}**")
+
+        st.caption("Select which shortlisted thumbnails you've uploaded:")
+
+        already_uploaded = set(selected_info.get("uploaded_thumbs", []))
+        new_uploaded = set()
+
+        upload_cols = st.columns(min(len(current_shortlist), 5))
+        for j, fname in enumerate(sorted(current_shortlist)):
+            with upload_cols[j % len(upload_cols)]:
+                img_path = OUTPUT_DIR / selected_vid / fname
+                if img_path.exists():
+                    st.image(str(img_path), use_container_width=True)
+                is_up = st.checkbox(
+                    "Uploaded",
+                    key=f"up_{fname}",
+                    value=fname in already_uploaded,
+                )
+                if is_up:
+                    new_uploaded.add(fname)
+                st.caption(fname)
+
+        if st.button("Save upload status", type="primary", use_container_width=True):
             today = datetime.now().strftime("%Y-%m-%d")
             due = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
-            videos[selected_vid]["status"] = "uploaded"
-            videos[selected_vid]["uploaded_date"] = today
-            videos[selected_vid]["results_due"] = due
+            videos[selected_vid]["uploaded_thumbs"] = list(new_uploaded)
+            if new_uploaded:
+                videos[selected_vid]["status"] = "uploaded"
+                if not videos[selected_vid].get("uploaded_date"):
+                    videos[selected_vid]["uploaded_date"] = today
+                    videos[selected_vid]["results_due"] = due
+            elif selected_info["status"] == "uploaded":
+                # All unchecked — revert to shortlisted
+                videos[selected_vid]["status"] = "shortlisted"
+                videos[selected_vid]["uploaded_date"] = None
+                videos[selected_vid]["results_due"] = None
             data["videos"] = videos
             save_data(data)
-            st.success(f"Marked as uploaded. Results due: {due}")
+            count = len(new_uploaded)
+            st.success(f"Saved — {count}/{len(current_shortlist)} thumbnails marked as uploaded.")
             st.rerun()
 
 
@@ -266,22 +323,28 @@ elif page == "Results":
                     pass
 
             with st.expander(f"🔵 {info['video_number']} — {info['title'][:50]} · Due: {due} ({days_left})"):
-                st.caption(f"Uploaded: {info.get('uploaded_date', '?')} · Shortlisted: {', '.join(info['shortlisted'])}")
+                uploaded_thumbs = info.get("uploaded_thumbs", info["shortlisted"])
+                not_uploaded = [f for f in info["shortlisted"] if f not in uploaded_thumbs]
+                st.caption(f"Uploaded: {info.get('uploaded_date', '?')} · {len(uploaded_thumbs)}/{len(info['shortlisted'])} thumbnails uploaded")
 
-                # Show shortlisted thumbnails
-                if info["shortlisted"]:
-                    cols = st.columns(len(info["shortlisted"]))
-                    for j, fname in enumerate(info["shortlisted"]):
+                # Show uploaded thumbnails
+                if uploaded_thumbs:
+                    cols = st.columns(len(uploaded_thumbs))
+                    for j, fname in enumerate(uploaded_thumbs):
                         with cols[j]:
                             img_path = OUTPUT_DIR / vid / fname
                             if img_path.exists():
                                 st.image(str(img_path), use_container_width=True)
                             st.caption(fname)
 
-                # Record results
+                # Show non-uploaded shortlisted (dimmed)
+                if not_uploaded:
+                    st.caption(f"Not uploaded: {', '.join(not_uploaded)}")
+
+                # Record results — only for uploaded thumbnails
                 st.markdown("**Record results:**")
                 result_data = {}
-                for fname in info["shortlisted"]:
+                for fname in uploaded_thumbs:
                     col1, col2, col3 = st.columns([3, 2, 1])
                     with col1:
                         st.text(fname)
