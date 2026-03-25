@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thumbnail Picker — My Claude Code Workflow for 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0f0f0f; color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 24px; }
+  h1 { text-align: center; font-size: 1.6rem; margin-bottom: 8px; color: #fff; }
+  .subtitle { text-align: center; color: #888; margin-bottom: 24px; font-size: 0.9rem; }
+  .controls { text-align: center; margin-bottom: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .controls button { padding: 8px 16px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #e0e0e0; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+  .controls button:hover { background: #2a2a2a; border-color: #555; }
+  .controls button.active { background: #e8590c; border-color: #e8590c; color: #fff; }
+  .counter { text-align: center; margin-bottom: 20px; color: #888; font-size: 0.85rem; }
+  .counter span { color: #e8590c; font-weight: 700; }
+
+  .variant-section { margin-bottom: 40px; }
+  .variant-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid #e8590c; color: #ccc; }
+  .variant-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  .thumb-card { position: relative; border-radius: 12px; overflow: hidden; border: 3px solid transparent; transition: all 0.2s; cursor: pointer; background: #1a1a1a; }
+  .thumb-card:hover { border-color: #555; transform: scale(1.02); }
+  .thumb-card.selected { border-color: #e8590c; box-shadow: 0 0 20px rgba(232, 89, 12, 0.3); }
+  .thumb-card img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+  .thumb-card .label { padding: 8px 12px; font-size: 0.75rem; color: #888; display: flex; justify-content: space-between; align-items: center; }
+  .thumb-card .label .name { font-family: monospace; }
+  .thumb-card .check { display: none; position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; background: #e8590c; color: #fff; font-size: 16px; line-height: 28px; text-align: center; font-weight: 700; }
+  .thumb-card.selected .check { display: block; }
+
+  .export-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a1a; border-top: 1px solid #333; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+  .export-bar button { padding: 10px 24px; border-radius: 8px; border: none; background: #e8590c; color: #fff; cursor: pointer; font-size: 0.9rem; font-weight: 600; }
+  .export-bar button:hover { background: #c4470a; }
+  .export-bar .info { color: #888; font-size: 0.85rem; }
+
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200; justify-content: center; align-items: center; cursor: zoom-out; }
+  .modal.open { display: flex; }
+  .modal img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
+
+  body { padding-bottom: 80px; }
+
+  @media (max-width: 768px) {
+    .variant-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Thumbnail Picker</h1>
+<p class="subtitle">My Claude Code Workflow for 2026 — 15 variants, 2 each (25K views)</p>
+
+<div class="controls">
+  <button onclick="showAll()" class="active" id="btn-all">All (30)</button>
+  <button onclick="showSelected()" id="btn-selected">Selected Only</button>
+  <button onclick="clearAll()">Clear Selection</button>
+</div>
+
+<div class="counter">Selected: <span id="count">0</span> / 30</div>
+
+<div id="gallery"></div>
+
+<div class="export-bar">
+  <div class="info" id="export-info">Click thumbnails to select favorites</div>
+  <button onclick="exportSelection()">Copy Selected Filenames</button>
+</div>
+
+<div class="modal" id="modal" onclick="closeModal()">
+  <img id="modal-img" src="" alt="">
+</div>
+
+<script>
+const variants = [
+  { name: "Folder: /workflow Command", ref: "Nate Herk NH2 — folder/command style", files: ["folder-workflow-command-a.png", "folder-workflow-command-b.png"] },
+  { name: "Icons: 2026 Stack", ref: "Nate Herk NH3 — icons on black, no face", files: ["icons-2026-stack-a.png", "icons-2026-stack-b.png"] },
+  { name: "Old vs New: 2025 to 2026", ref: "Nate Herk NH5 — old vs new comparison", files: ["old-vs-new-workflow-a.png", "old-vs-new-workflow-b.png"] },
+  { name: "Feature Grid: Full Stack Tools", ref: "Nate Herk NH8 — feature grid on screen", files: ["feature-grid-workflow-a.png", "feature-grid-workflow-b.png"] },
+  { name: "Flow: Daily Routine Diagram", ref: "Nate Herk NH10 — flow arrows/diagram", files: ["flow-daily-routine-a.png", "flow-daily-routine-b.png"] },
+  { name: "CLI: $10K/mo Workflow", ref: "Nate Herk NH12 — CLI + bold text", files: ["cli-workflow-bold-a.png", "cli-workflow-bold-b.png"] },
+  { name: "Dashboard: Productivity Stats", ref: "Nate Herk NH14 — dark dashboard stats", files: ["dashboard-productivity-a.png", "dashboard-productivity-b.png"] },
+  { name: "Cinematic: THE 2026 STACK", ref: "Fireship C1 — dark cinematic", files: ["cinematic-workflow-dark-a.png", "cinematic-workflow-dark-b.png"] },
+  { name: "VS Code: Blue Gradient Pro", ref: "VS Code C2 — blue gradient", files: ["clean-workflow-professional-a.png", "clean-workflow-professional-b.png"] },
+  { name: "Whiteboard: Workflow Steps", ref: "Nick Saraev C3 — whiteboard", files: ["whiteboard-workflow-steps-a.png", "whiteboard-workflow-steps-b.png"] },
+  { name: "Terminal: Split Screen", ref: "Net Ninja C4 — terminal split", files: ["terminal-workflow-output-a.png", "terminal-workflow-output-b.png"] },
+  { name: "Minimal: 2026 WORKFLOW", ref: "Kevin Stratvert C5 — minimal", files: ["minimal-2026-bold-a.png", "minimal-2026-bold-b.png"] },
+  { name: "Text Only: Claude Code Workflow", ref: "Tech With Tim C6 — text only, no face", files: ["text-only-workflow-a.png", "text-only-workflow-b.png"] },
+  { name: "Bright: Before/After Comparison", ref: "Nathan Sebhastian C7 — bright colorful", files: ["bright-workflow-comparison-a.png", "bright-workflow-comparison-b.png"] },
+  { name: "Tier List: 2026 Tool Rankings", ref: "DevOps Toolbox C8 — tier-list", files: ["tier-list-coding-2026-a.png", "tier-list-coding-2026-b.png"] },
+];
+
+const selected = new Set();
+
+function render(filterSelected = false) {
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = '';
+  variants.forEach((v, vi) => {
+    const filesToShow = filterSelected ? v.files.filter(f => selected.has(f)) : v.files;
+    if (filesToShow.length === 0) return;
+
+    const section = document.createElement('div');
+    section.className = 'variant-section';
+    section.innerHTML = `<div class="variant-title">${vi + 1}. ${v.name} <span style="color:#666;font-weight:400;font-size:0.8rem;">&mdash; ${v.ref}</span></div>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'variant-grid';
+
+    filesToShow.forEach(file => {
+      const card = document.createElement('div');
+      card.className = 'thumb-card' + (selected.has(file) ? ' selected' : '');
+      card.innerHTML = `
+        <div class="check">&check;</div>
+        <img src="${file}" alt="${file}" loading="lazy" ondblclick="openModal('${file}')" />
+        <div class="label"><span class="name">${file}</span><span>${selected.has(file) ? '★' : ''}</span></div>
+      `;
+      card.onclick = (e) => {
+        if (e.detail === 2) return;
+        toggleSelect(file);
+      };
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    gallery.appendChild(section);
+  });
+  updateCount();
+}
+
+function toggleSelect(file) {
+  if (selected.has(file)) selected.delete(file);
+  else selected.add(file);
+  const isFiltered = document.getElementById('btn-selected').classList.contains('active');
+  render(isFiltered);
+}
+
+function updateCount() {
+  document.getElementById('count').textContent = selected.size;
+  document.getElementById('export-info').textContent = selected.size > 0
+    ? `${selected.size} thumbnail${selected.size > 1 ? 's' : ''} selected`
+    : 'Click thumbnails to select favorites';
+}
+
+function showAll() {
+  document.getElementById('btn-all').classList.add('active');
+  document.getElementById('btn-selected').classList.remove('active');
+  render(false);
+}
+
+function showSelected() {
+  document.getElementById('btn-selected').classList.add('active');
+  document.getElementById('btn-all').classList.remove('active');
+  render(true);
+}
+
+function clearAll() {
+  selected.clear();
+  const isFiltered = document.getElementById('btn-selected').classList.contains('active');
+  render(isFiltered);
+}
+
+function exportSelection() {
+  if (selected.size === 0) { alert('No thumbnails selected!'); return; }
+  const text = [...selected].join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById('export-info').textContent = `Copied ${selected.size} filename(s) to clipboard!`;
+    setTimeout(updateCount, 2000);
+  });
+}
+
+function openModal(file) {
+  document.getElementById('modal-img').src = file;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+render();
+</script>
+</body>
+</html>
