@@ -1,0 +1,177 @@
+{
+  "config": {
+    "variants_per_video": 15,
+    "images_per_variant": 2,
+    "parallel_generations": 10,
+    "face_reference": "go-to-face.jpg",
+    "style_references": "nateherk",
+    "max_shortlist": 3
+  },
+  "videos": {
+    "pb0lVGDiigI": {
+      "video_number": "V1",
+      "title": "Anthropic Reveals How to Prompt Claude Code 10x Better",
+      "views": 28840,
+      "topic": "Prompting tips, Opus 4.5",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "IiA4Ku5viyg": {
+      "video_number": "V2",
+      "title": "Anthropic Just Added These Features to Claude Code",
+      "views": 19074,
+      "topic": "Weekly features update",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "rXTvax9pyhs": {
+      "video_number": "V3",
+      "title": "Anthropic Just Connected Claude Code to Your Browser",
+      "views": 20377,
+      "topic": "Browser control, Chrome automation",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "sy65ARFI9Bg": {
+      "video_number": "V4",
+      "title": "My Claude Code Workflow for 2026",
+      "views": 25680,
+      "topic": "Personal workflow, coding stack",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "NmKdYlODC24": {
+      "video_number": "V5",
+      "title": "Claude Code's Biggest Update in Months",
+      "views": 24913,
+      "topic": "Subagents update",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "aF4QAHbNDrA": {
+      "video_number": "V6",
+      "title": "Anthropic Just Added These Features to Claude Code",
+      "views": 19909,
+      "topic": "Planning features",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "6omInQipcag": {
+      "video_number": "V7",
+      "title": "Claude Code's New Task System Explained",
+      "views": 27728,
+      "topic": "Task management system",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "DWiYdXrxSwg": {
+      "video_number": "V8",
+      "title": "Learn Claude Code Agent Teams in 12 Minutes",
+      "views": 21277,
+      "topic": "Agent swarms, multi-agent teams",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "F_frSYyhzOE": {
+      "video_number": "V9",
+      "title": "Anthropic Just Dropped 17 New Claude Code Features",
+      "views": 18269,
+      "topic": "Worktrees, desktop app updates",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "y3xzYwxQuHc": {
+      "video_number": "V10",
+      "title": "Anthropic Just Dropped the Feature Everyone Asked For",
+      "views": 35649,
+      "topic": "Remote control, phone coding",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "AzmnaoVP8sk": {
+      "video_number": "V11",
+      "title": "The Top 0.01% User's Guide to Claude Code",
+      "views": 18415,
+      "topic": "60 tips, power user guide",
+      "status": "generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "qXWz-V_XMOc": {
+      "video_number": "V12",
+      "title": "Anthropic Just Dropped Claude Code Skills 2.0",
+      "views": 44863,
+      "topic": "Skills 2.0, skill evals",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "DqjBbAr3oTo": {
+      "video_number": "V14",
+      "title": "Anthropic Just Dropped the Feature Nobody Knew They Needed",
+      "views": 38795,
+      "topic": "/btw, --fork-session, context pollution",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "7PnF8qctDi8": {
+      "video_number": "V15",
+      "title": "Anthropic Just Dropped Their Internal Skills Strategy",
+      "views": 10479,
+      "topic": "Skills guide, internal strategy",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    },
+    "pOsGxVKYd3s": {
+      "video_number": "V17",
+      "title": "Anthropic Just Revealed Where Coding Is Heading",
+      "views": 17027,
+      "topic": "Software factory, cloud tasks",
+      "status": "not_generated",
+      "shortlisted": [],
+      "uploaded_date": null,
+      "results_due": null,
+      "results": {}
+    }
+  }
+}

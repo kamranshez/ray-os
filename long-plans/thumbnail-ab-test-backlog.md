@@ -99,9 +99,9 @@ For each video:
 | 15 | V17 — Software Factory | 17K | ~56 min |
 | 16 | V15 — Internal Skills Strategy | 10K | ~60 min |
 
-#### Step 17: Master Index (2 min)
-- [ ] Create `output/picker-index.html` — master page linking all 16 video pickers
-- [ ] Show video title, view count, and thumbnail count per video
+#### Step 17: Update Backfill Lab data.json (1 min)
+- [ ] Mark each video as `generated` in `data.json` after thumbnails are created
+- [ ] Backfill Lab auto-discovers thumbnails from `output/<video-id>/`
 
 #### Step 18: Restore & Cleanup (1 min)
 - [ ] Restore face photos from backup
@@ -117,22 +117,32 @@ For each video:
     action: |
       1. Open YouTube Studio analytics for each video
       2. Screenshot A/B test results
-      3. Record winners to ab-test-results.md
+      3. Record winners in Backfill Lab (Results page)
       4. Update feedback.json with winning styles
   ```
 
 #### Step 20: Commit & Push
-- [ ] Commit all generated thumbnails + pickers + agent task
+- [ ] Commit all generated thumbnails + backfill app + agent task
 - [ ] Push to remote
 
 ---
 
-### After User Picks Favorites
+### Backfill Lab (Streamlit App)
 
-Once Ray shortlists from the HTML pickers:
-1. Ray uploads chosen thumbnails as A/B tests in YouTube Studio (3 per video)
-2. Wait 7 days
-3. Agent task triggers — collect results, record winners, update style preferences
+**Location:** `.claude/skills/youtube-thumbnail-generator/backfill/`
+**Launch:** `cd .claude/skills/youtube-thumbnail-generator/backfill && streamlit run app.py --server.port 8503`
+**Data:** `backfill/data.json` — single source of truth for all state
+
+**Pages:**
+1. **Dashboard** — all videos as cards sorted by views, status badges, progress bar, export tools
+2. **Review** — pick a video, see 30 thumbnails in variant pairs, click to shortlist up to 3, mark as uploaded
+3. **Results** — record A/B test watch-time % and winners after 7 days, summary table
+
+**Workflow:**
+1. Generate thumbnails → status moves to `generated`
+2. Ray shortlists 3 per video in Review page → status moves to `shortlisted`
+3. Ray uploads to YouTube Studio, clicks "Mark as uploaded" → status moves to `uploaded`, sets 7-day due date
+4. After 7 days, record results in Results page → status moves to `results_in`
 
 ---
 
