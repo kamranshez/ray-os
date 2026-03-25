@@ -200,43 +200,46 @@ Read `references/thumbnail-analysis.md` for the outlier framework. Key patterns 
 
 ## Mode 2: Generate Thumbnail Variations
 
-### The V11 Standard (ALWAYS follow this)
+### The V15 Standard (ALWAYS follow this)
 
-V11 ("The Top 0.01% User's Guide to Claude Code") produced the best thumbnails. Every generation must follow this exact approach:
+**CRITICAL: Do NOT use subagents for ANY part of thumbnail generation.** Subagents lose context about prompt quality, reference matching, and transcript details. All prompt writing and generation must happen in the main session.
+
+#### Core Rules
 
 1. **Fetch the transcript FIRST** — use supadata to get the full video transcript before writing any prompts
 2. **Read `feedback.json`** for global feedback rules and preferred style
-3. **Read `references/thumbnail-analysis.md`** for outlier patterns
-4. **Use Nate Herk references only** — from `research/competitor-thumbnails/nateherk/`. These 15 styles are proven. Do NOT use random competitor thumbnails as references — they produce inconsistent/poor results.
-5. **Write each prompt yourself** with specific detail from the transcript — do NOT delegate prompt writing to subagents. Generic prompts produce generic thumbnails.
-6. **Generate with `-n 1`** (one image per run, NOT `-n 2`) — this produces higher quality output
-7. **Run 10 parallel generations** per batch (user preference, Gemini API handles this)
-8. **Isolate face reference** — move all photos except `go-to-face.jpg` out of `assets/face/` before generating, restore after
+3. **Visually inspect each Nate Herk reference** before writing its prompt — use the Read tool to see the actual image, then describe its exact visual composition (person placement, prop placement, background, icon style, text style)
+4. **Use Nate Herk references only** — from `research/competitor-thumbnails/nateherk/`. These 15 styles are proven. Do NOT use random competitor thumbnails.
+5. **Write each prompt yourself** — describe the EXACT visual layout of the reference, only changing the text/topic to match the video content. Do NOT get creative with composition — match the reference precisely.
+6. **3 variants per reference** — generate 3 slightly different prompts per Nate reference (vary the text overlay and minor details, keep composition identical)
+7. **Generate with `-n 1`** (one image per run, NOT `-n 2`)
+8. **Run 10 parallel generations** per batch (Gemini API handles this)
+9. **Isolate face reference** — move all photos except `go-to-face.jpg` out of `assets/face/` before generating, restore after
 
-### Steps
+#### Steps
 
 1. Get the video URL and fetch transcript via supadata
 2. Read `feedback.json` for global feedback rules
-3. Read the transcript thoroughly — identify key concepts, features mentioned, emotional hooks
-4. For each Nate Herk reference, craft a unique detailed prompt that:
-   - Matches the visual style of that specific reference thumbnail
-   - References actual content/features from the transcript (not just the title)
-   - Includes specific text overlays relevant to the video's content
-   - Follows all global feedback rules
-5. Isolate `go-to-face.jpg` (move others to `assets/face-backup/`)
-6. Generate using separate output directories per reference:
+3. Read the transcript thoroughly — identify key concepts, features, emotional hooks
+4. **Visually inspect** each Nate Herk reference image you plan to use (Read tool)
+5. For each reference, craft 3 prompts that:
+   - **Match the exact visual composition** of the reference (person LEFT or RIGHT, prop position, background type)
+   - Only change the text/topic to match the video's content
+   - Use the proven person description (see Prompt Template below)
+   - Follow all global feedback rules
+6. Isolate `go-to-face.jpg` (move others to `assets/face-backup/`)
+7. Generate using separate output directories per run:
 
 ```bash
 cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts "<prompt>" \
-  -n 1 -o "output/<video-id>-tmp-<ref>" \
+  -n 1 -o "output/<video-id>-tmp-<name>" \
   -r "research/competitor-thumbnails/nateherk/<ref-id>.jpg"
 ```
 
-7. After generation, rename files with descriptive kebab-case names and move to `output/<video-id>/`
-8. Clean up temp batch directories
-9. Restore face photos from backup
-10. Generate HTML picker for the video
-11. Launch Streamlit app or Backfill Lab for user review
+8. After generation, rename files with descriptive kebab-case names and move to `output/<video-id>/`
+9. Clean up temp batch directories
+10. Restore face photos from backup
+11. Generate HTML comparison page for user review
 
 ### 15 Nate Herk Reference Styles
 
@@ -264,31 +267,60 @@ When generating a subset (e.g., 7 of 15), randomly select different ones per vid
 
 ### Prompt Construction
 
-**CRITICAL**: Read the transcript first. Prompts must reference actual video content, not just the title.
+**CRITICAL**: You MUST visually inspect (Read tool) each Nate Herk reference image before writing its prompt. Describe the exact layout you see — don't guess from the style name.
 
-Always apply global feedback rules from `feedback.json`. Current rules:
-- **Expressions**: Modest and natural — contemplative, serious, subtly concerned. NO exaggerated shock/open-mouth surprise.
-- **Hair**: Keep natural to reference photos, don't make too curly.
+**The key insight**: Describe the EXACT visual composition of the reference image, then only swap the text/topic for the video's content. Do NOT add extra conceptual elements or get creative with layout — the reference's layout IS the prompt structure.
 
-**Prompt template:**
+#### Proven Person Description (use this exact phrasing for face thumbnails)
+
 ```
-A YouTube thumbnail in the style of the reference image.
-[SCENE DESCRIPTION — specific to actual video content from transcript].
-A young South Asian man with glasses (matching the reference photos exactly) with a [MODEST EXPRESSION] expression.
-[TEXT AND LAYOUT DESCRIPTION — use actual terms/features from the video].
-[COLOR/BACKGROUND matching the reference style].
-Clean composition optimized for small mobile YouTube thumbnail viewing.
+a young South Asian man with glasses and naturally straight dark hair — not curly, not wavy
+(matching the reference photos exactly) — with a [EXPRESSION]
 ```
 
-For no-face thumbnails (refs #3 and #4), add `--no-face` flag and omit face description.
+Expressions that work:
+- **Folder styles**: "warm enthusiastic smile showing teeth, pointing at the folder"
+- **Shh/comparison styles**: "finger on lips in a subtle shh gesture with a knowing expression"
+- **CLI/prop styles**: "big warm smile showing teeth"
+- **Dashboard/flow styles**: "contemplative serious expression"
+
+#### Proven Prompt Template (with-face styles)
+
+```
+A YouTube thumbnail in the style of the reference image. [BACKGROUND from reference — e.g. "Clean gray studio background" or "Dark background with faint code editor elements"].
+On the [LEFT/RIGHT — match reference], [PROP DESCRIPTION — e.g. "a large manila folder with an orange-red rounded-square app icon featuring a white 8-pointed starburst and bold black text '/command-here'"].
+On the [OTHER SIDE], a young South Asian man with glasses and naturally straight dark hair — not curly, not wavy (matching the reference photos exactly) — with a [EXPRESSION from list above].
+[Any additional reference-specific elements — badges, icons with X/checkmarks, etc.]
+Clean minimal composition optimized for YouTube thumbnail viewing.
+```
+
+#### Proven Prompt Template (no-face styles — refs #3 and #4)
+
+```
+A YouTube thumbnail in the style of the reference image. Pure black background.
+Large white bold text at the top reading '[VIDEO-SPECIFIC TEXT].' with a subtle chalk-style underline scribble.
+Below, two large rounded-square app icons side by side with a white '+' between them:
+on the left an orange-red rounded square with a white 8-pointed starburst icon,
+on the right a dark rounded square with a [TOPIC-RELEVANT ICON] and subtle warm glow.
+No person in the image. Clean minimal composition optimized for YouTube thumbnail viewing.
+```
+
+Add `--no-face` flag for refs #3 and #4.
+
+#### What NOT to do
+- Do NOT add code backgrounds, busy conceptual diagrams, or extra elements not in the reference
+- Do NOT describe "a flowchart showing X → Y → Z" unless the reference literally shows a flowchart
+- Do NOT use generic descriptions — be specific about LEFT/RIGHT positioning, icon styles, text placement
+- Do NOT delegate prompt writing to subagents — they lose context about visual composition
 
 ### Naming Convention
 
-Name files descriptively based on their concept:
-- `folder-top-secrets-a.png` — Folder /command style
-- `icons-black-they-dont-know-b.png` — Icons on black style
-- `cli-boring-but-works-a.png` — CLI terminal style
-- `retro-game-leaderboard-b.png` — Retro arcade style
+Name files descriptively based on their concept. Use `-a`, `-b`, `-c` suffixes for the 3 variants per reference:
+- `folder-skills-strategy-a.png` — Folder /command style, variant a
+- `folder-skills-strategy-b.png` — Folder /command style, variant b (different text)
+- `folder-skills-strategy-c.png` — Folder /command style, variant c (different text)
+- `icons-override-defaults-a.png` — Icons on black style
+- `cli-boring-works-a.png` — CLI terminal style
 
 ---
 
