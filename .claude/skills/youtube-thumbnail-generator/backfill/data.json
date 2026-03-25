@@ -5,7 +5,7 @@
     "parallel_generations": 10,
     "face_reference": "go-to-face.jpg",
     "style_references": "nateherk",
-    "max_shortlist": 3
+    "max_shortlist": 5
   },
   "videos": {
     "pb0lVGDiigI": {
@@ -123,8 +123,12 @@
       "title": "The Top 0.01% User's Guide to Claude Code",
       "views": 18415,
       "topic": "60 tips, power user guide",
-      "status": "generated",
-      "shortlisted": [],
+      "status": "shortlisted",
+      "shortlisted": [
+        "agent-network-folder-b.png",
+        "cli-boring-but-works-a.png",
+        "folder-god-mode-b.png"
+      ],
       "uploaded_date": null,
       "results_due": null,
       "results": {}
