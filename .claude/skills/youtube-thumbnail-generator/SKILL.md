@@ -73,21 +73,25 @@ Before every generation run:
 
 ---
 
-## Streamlit App
+## YouTube Lab (Streamlit App)
+
+The centralized app for all thumbnail management — generation tracking, review/shortlisting, uploads, and A/B test results.
 
 Launch with:
 ```bash
-cd .claude/skills/youtube-thumbnail-generator && streamlit run app.py --server.port 8502
+cd .claude/skills/youtube-thumbnail-generator/lab && streamlit run app.py --server.port 8503
 ```
 
 The app has 3 pages:
-- **Generated** — Browse all thumbnails by video ID, rate/favorite/comment each one, pick style references
-- **Competitors** — View all competitor thumbnails ranked by views
-- **Regenerate** — Shows thumbnails with comments and generates CLI commands
+- **Dashboard** — All videos as cards sorted by publish date, status badges, progress bar, export tools
+- **Review** — Pick a video, see thumbnails with reference images, click to shortlist (max 5), mark as uploaded
+- **Results** — Record A/B test watch-time % and winners after 7 days, summary table
+
+**Data:** `lab/data.json` — single source of truth for all video state. Supports `output_folder` field for videos with custom output directory names.
 
 Open in browser after launching:
 ```bash
-open http://localhost:8502
+open http://localhost:8503
 ```
 
 ---
@@ -196,25 +200,71 @@ Read `references/thumbnail-analysis.md` for the outlier framework. Key patterns 
 
 ## Mode 2: Generate Thumbnail Variations
 
+### The V11 Standard (ALWAYS follow this)
+
+V11 ("The Top 0.01% User's Guide to Claude Code") produced the best thumbnails. Every generation must follow this exact approach:
+
+1. **Fetch the transcript FIRST** — use supadata to get the full video transcript before writing any prompts
+2. **Read `feedback.json`** for global feedback rules and preferred style
+3. **Read `references/thumbnail-analysis.md`** for outlier patterns
+4. **Use Nate Herk references only** — from `research/competitor-thumbnails/nateherk/`. These 15 styles are proven. Do NOT use random competitor thumbnails as references — they produce inconsistent/poor results.
+5. **Write each prompt yourself** with specific detail from the transcript — do NOT delegate prompt writing to subagents. Generic prompts produce generic thumbnails.
+6. **Generate with `-n 1`** (one image per run, NOT `-n 2`) — this produces higher quality output
+7. **Run 10 parallel generations** per batch (user preference, Gemini API handles this)
+8. **Isolate face reference** — move all photos except `go-to-face.jpg` out of `assets/face/` before generating, restore after
+
 ### Steps
 
-1. Get the video URL and fetch metadata via supadata
-2. Read `feedback.json` for global feedback rules and preferred style
-3. Read `references/thumbnail-analysis.md` for outlier patterns
-4. For each competitor reference, craft a unique prompt adapted to the user's video topic
-5. Generate using separate output directories per batch:
+1. Get the video URL and fetch transcript via supadata
+2. Read `feedback.json` for global feedback rules
+3. Read the transcript thoroughly — identify key concepts, features mentioned, emotional hooks
+4. For each Nate Herk reference, craft a unique detailed prompt that:
+   - Matches the visual style of that specific reference thumbnail
+   - References actual content/features from the transcript (not just the title)
+   - Includes specific text overlays relevant to the video's content
+   - Follows all global feedback rules
+5. Isolate `go-to-face.jpg` (move others to `assets/face-backup/`)
+6. Generate using separate output directories per reference:
 
 ```bash
 cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts "<prompt>" \
-  -n 1 -o "output/<video-id>-tmp-<batch>" \
-  -r "research/competitor-thumbnails/<competitor-id>.jpg"
+  -n 1 -o "output/<video-id>-tmp-<ref>" \
+  -r "research/competitor-thumbnails/nateherk/<ref-id>.jpg"
 ```
 
-6. After generation, rename files with descriptive kebab-case names and move to `output/<video-id>/`
-7. Clean up temp batch directories
-8. Launch Streamlit app for user review
+7. After generation, rename files with descriptive kebab-case names and move to `output/<video-id>/`
+8. Clean up temp batch directories
+9. Restore face photos from backup
+10. Generate HTML picker for the video
+11. Launch Streamlit app or Backfill Lab for user review
+
+### 15 Nate Herk Reference Styles
+
+Always use these references from `research/competitor-thumbnails/nateherk/`:
+
+| # | File | Style | Face? |
+|---|------|-------|-------|
+| 1 | `OUyfxhFtGCo.jpg` | Folder + `/command` + pointing | Yes |
+| 2 | `X6EGzi9qm3E.jpg` | Folder + `/command` + smiling | Yes |
+| 3 | `LrgfmZkl3nc.jpg` | Icons on black + bold statement | **No** (`--no-face`) |
+| 4 | `Wu67lLD8bB0.jpg` | Icons on black + short phrase | **No** (`--no-face`) |
+| 5 | `pkSxISewcw8.jpg` | Old vs New comparison + face center | Yes |
+| 6 | `ZeJXI2MAhj0.jpg` | BASIC vs PRO + shh face | Yes |
+| 7 | `T6_Ges4j1qY.jpg` | Holding prop/device + bold text | Yes |
+| 8 | `4Zaoo0YbYaw.jpg` | Feature grid on screen + face | Yes |
+| 9 | `mpALXah_PBg.jpg` | Whiteboard numbered list + face | Yes |
+| 10 | `hem5D1uvy-w.jpg` | Screen with flow arrows + face | Yes |
+| 11 | `l1jnOXc52NY.jpg` | Retro game leaderboard/score | Yes |
+| 12 | `vFepZE_wrfg.jpg` | CLI chat input + bold text overlay | Yes |
+| 13 | `BlNJFa3Btm8.jpg` | CLI chat input + "Game Over" style | Yes |
+| 14 | `NDnv16PY2XQ.jpg` | Dark dashboard with stats | Yes |
+| 15 | `vDVSGVpB2vc.jpg` | Folder + agent network diagram | Yes |
+
+When generating a subset (e.g., 7 of 15), randomly select different ones per video for variety.
 
 ### Prompt Construction
+
+**CRITICAL**: Read the transcript first. Prompts must reference actual video content, not just the title.
 
 Always apply global feedback rules from `feedback.json`. Current rules:
 - **Expressions**: Modest and natural — contemplative, serious, subtly concerned. NO exaggerated shock/open-mouth surprise.
@@ -223,23 +273,22 @@ Always apply global feedback rules from `feedback.json`. Current rules:
 **Prompt template:**
 ```
 A YouTube thumbnail in the style of the reference image.
-[SCENE DESCRIPTION adapted to the video's topic].
+[SCENE DESCRIPTION — specific to actual video content from transcript].
 A young South Asian man with glasses (matching the reference photos exactly) with a [MODEST EXPRESSION] expression.
-[TEXT AND LAYOUT DESCRIPTION].
+[TEXT AND LAYOUT DESCRIPTION — use actual terms/features from the video].
 [COLOR/BACKGROUND matching the reference style].
 Clean composition optimized for small mobile YouTube thumbnail viewing.
 ```
 
-For no-face thumbnails, add `--no-face` flag and omit face description.
+For no-face thumbnails (refs #3 and #4), add `--no-face` flag and omit face description.
 
 ### Naming Convention
 
 Name files descriptively based on their concept:
-- `github-card-last-framework.png` — GitHub repo card style
-- `github-pr-dario-merged.png` — GitHub PR style
-- `face-laptop-2027-ai-code.png` — Face + laptop concept
-- `icon-grid-the-shift.png` — No-face icon grid
-- `pixel-art-coders-replaced.png` — Pixel art style
+- `folder-top-secrets-a.png` — Folder /command style
+- `icons-black-they-dont-know-b.png` — Icons on black style
+- `cli-boring-but-works-a.png` — CLI terminal style
+- `retro-game-leaderboard-b.png` — Retro arcade style
 
 ---
 
