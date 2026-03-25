@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "dream",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,12 +74,12 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 282.50271224975586,
-    "collapsed": true
+    "width": 282.50271224975586
   },
   "right": {
     "id": "99b289f72ba3f8e1",
@@ -184,6 +184,12 @@
   },
   "active": "920fe249604a3908",
   "lastOpenFiles": [
+    "projects/agentic-coding-school/filmed/claude-code/scope-and-settings.md",
+    "projects/agentic-coding-school/to-film/claude-code/stash.md",
+    "projects/agentic-coding-school/to-film/claude-code/slash-loop-renewal.md",
+    "projects/agentic-coding-school/to-film/claude-code/skills-vs-subagents.md",
+    "projects/agentic-coding-school/to-film/claude-code/skill-creator-with-evals.md",
+    "socials/youtube/videos/auto-dream-memory-consolidation.md",
     "Final Video.txt",
     "Final Video-raw.txt",
     "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_10.png",
@@ -202,16 +208,13 @@
     "socials/youtube/videos/images/auto-dream-human-analogy",
     "socials/youtube/videos/images/auto-dream-problem",
     "socials/youtube/videos/skills-2.0.md",
-    "socials/youtube/videos/auto-dream-memory-consolidation.md",
     "projects/agentic-coding-school/filmed/prompt-engineering/persona-vectors.md",
     "projects/agentic-coding-school/to-film/claude-code/scope-and-settings.md",
-    "projects/agentic-coding-school/filmed/claude-code/scope-and-settings.md",
     "projects/agentic-coding-school/filmed/claude-code",
     "projects/agentic-coding-school/filmed/untitled folder",
     "projects/agentic-coding-school/filmed/scope-and-settings.md",
     "socials/youtube/ab-tests/results.md",
     "socials/youtube/ab-tests",
-    "projects/agentic-coding-school/filmed/prompt-engineering",
     "socials/youtube/videos/cloud-scheduled-tasks.md",
     "socials/youtube/videos/claude-code-channels.md",
     "socials/youtube/videos/anthropic-skills-playbook.md",
@@ -227,9 +230,6 @@
     "courses/techniques/One Pattern Per Thing.md",
     "projects/agentic-coding-school/to-film/generate-diagrams-on-demand.md",
     "research/Building Effective Agent Teams.md",
-    "courses/Classes Dashboard.md",
-    "socials/youtube/revenue/2026-02-pitch-analysis.md",
-    "projects/agentic-coding-school/to-film/from-pr-command.md",
     "Untitled.canvas"
   ]
 }
