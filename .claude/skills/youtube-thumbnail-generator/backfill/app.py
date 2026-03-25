@@ -85,8 +85,8 @@ if page == "Dashboard":
     st.header("Thumbnail Backfill Dashboard")
     st.caption(f"{total} videos · {config['variants_per_video']} variants x {config['images_per_variant']} each = {config['variants_per_video'] * config['images_per_variant']} thumbnails per video")
 
-    # Sort by views descending
-    sorted_videos = sorted(videos.items(), key=lambda x: x[1]["views"], reverse=True)
+    # Sort by publish date (oldest first)
+    sorted_videos = sorted(videos.items(), key=lambda x: x[1].get("publish_date", "9999-99-99"))
 
     # Status filter
     filter_status = st.selectbox("Filter by status", ["All", "Not Generated", "Generated", "Shortlisted", "Uploaded", "Results In"])
@@ -115,7 +115,7 @@ if page == "Dashboard":
 
             st.markdown(f"""
             <div style="background:#1a1a2e;border-radius:12px;padding:16px;margin-bottom:12px;border-left:4px solid {'#e8590c' if info['status'] == 'not_generated' else '#22c55e' if info['status'] in ('shortlisted','uploaded','results_in') else '#eab308'};">
-                <div style="font-size:0.75rem;color:#888;">{info['video_number']} · {info['views']:,} views</div>
+                <div style="font-size:0.75rem;color:#888;">{info['video_number']} · {info.get('publish_date', '?')} · {info['views']:,} views</div>
                 <div style="font-size:0.95rem;font-weight:600;margin:4px 0;">{info['title'][:50]}{'...' if len(info['title']) > 50 else ''}</div>
                 <div style="font-size:0.8rem;color:#aaa;">{emoji} {status_label(info['status'])} · {shortlist_count}/{config['max_shortlist']} picked{f' · {upload_count} uploaded' if upload_count else ''}</div>
                 <div style="font-size:0.7rem;color:#666;margin-top:4px;">{info['topic']}</div>
@@ -167,9 +167,9 @@ elif page == "Review":
         st.warning("No thumbnails generated yet. Run the generation pipeline first.")
         st.stop()
 
-    # Sort by views
-    sorted_available = sorted(available.items(), key=lambda x: x[1]["views"], reverse=True)
-    options = [f"{info['video_number']} — {info['title'][:50]} ({info['views']:,} views)" for _, info in sorted_available]
+    # Sort by publish date (oldest first)
+    sorted_available = sorted(available.items(), key=lambda x: x[1].get("publish_date", "9999-99-99"))
+    options = [f"{info['video_number']} — {info['title'][:50]} ({info.get('publish_date', '?')})" for _, info in sorted_available]
     video_ids = [vid for vid, _ in sorted_available]
 
     selected_idx = st.selectbox("Select video", range(len(options)), format_func=lambda i: options[i])
