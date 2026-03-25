@@ -10,9 +10,9 @@ import json
 from pathlib import Path
 from datetime import datetime, timedelta
 
-APP_DIR = Path(__file__).parent
+APP_DIR = Path(__file__).resolve().parent
 DATA_FILE = APP_DIR / "data.json"
-OUTPUT_DIR = APP_DIR.parent / "output"
+OUTPUT_DIR = (APP_DIR.parent / "output").resolve()
 
 st.set_page_config(
     page_title="Thumbnail Backfill Lab",
