@@ -1080,3 +1080,26 @@ Same title across all: "Anthropic Just Dropped the Feature Nobody Knew They Need
 - "It dreams." flopped at 31.1% — anthropomorphic/metaphorical framing fails on thumbnails too (mirrors title R3 where "Made Claude Code Dream" flopped at 30.6%)
 - Gap is only 3.8% between best and worst — tighter than V13's 7.4% face vs faceless gap
 - **New insight:** Dark faceless thumbnails with progression visuals ("Memory 1.0 → Auto Dream") can nearly match face thumbnails — the visual story compensates for missing face recognition
+
+### Title + Thumbnail A/B Test Round 2 (2026-03-25 to 2026-03-26) — "Memory 2.0" title retest with thumbnail variants
+
+Testing whether "Memory 2.0" title can beat the locked winner, and whether the progression thumbnail creates better alignment with the "Memory 2.0" title.
+
+| Title | Thumbnail Style | Thumbnail Text | Watch-time Share | Result |
+|-------|----------------|----------------|------------------|--------|
+| **Anthropic Just Dropped the Feature Nobody Knew They Needed** | Face + /dream folder (original) | /dream | **35.7%** | ✅ WINNER (auto-declared, visible to all) |
+| Anthropic Just Dropped Memory 2.0 for Claude Code | Face + /dream folder (original) | /dream | 32.9% | |
+| Anthropic Just Dropped Memory 2.0 for Claude Code | Dark + Memory 1.0 → Auto Dream progression | They added this. | 31.4% | |
+
+**Key takeaways:**
+- "Nobody Knew They Needed" confirmed as final winner at 35.7% — held across 4 title rounds (37.2% → 35.1% → 35.7%) and 2 thumbnail rounds
+- "Memory 2.0" with same thumbnail scored 32.9% — 2.8% gap confirms "Nobody Knew They Needed" is the stronger title on a level playing field
+- "Memory 2.0" + aligned progression thumbnail (31.4%) performed *worse* than "Memory 2.0" + face thumbnail (32.9%) — title-thumbnail alignment didn't help here because the face thumbnail's trust/recognition advantage outweighs concept alignment
+- **Revised insight from Thumb R1:** The progression thumbnail's 34% in R1 was likely carried by the strong title, not the visual itself. When paired with a weaker title, it dropped to 31.4%
+
+**Final package:**
+- **Title:** Anthropic Just Dropped the Feature Nobody Knew They Needed
+- **Thumbnail:** Face + /dream folder icon
+- **Thumbnail images:** See `references/thumbnails/v18-auto-dream/`
+
+---
