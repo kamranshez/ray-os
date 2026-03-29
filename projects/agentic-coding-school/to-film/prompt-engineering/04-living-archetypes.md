@@ -20,6 +20,7 @@ A living archetype feeds on its own run history. Every time you:
 
 These signals accumulate. After 50 runs, Product-You isn't the same Product-You you started with. It's been shaped by 50 rounds of your feedback — just like a real employee after their first quarter.
 
+![[images/static-vs-living/excalidraw_1.png]]
 ### The Correction Problem
 
 Not all corrections are equal. There's a critical distinction:
@@ -30,6 +31,8 @@ Not all corrections are equal. There's a critical distinction:
 If you don't distinguish these, your archetypes overcorrect. Engineer-You gets overruled once on a performance concern, and suddenly it stops flagging performance issues entirely. This is the same failure mode real teams have — someone gets burned and becomes gun-shy.
 
 The fix: when you correct an archetype, tag whether it's a **pattern correction** (update the archetype) or a **context exception** (don't update, just override this once). Over time, the archetype learns your actual judgment boundaries rather than flinching from every correction.
+
+![[images/correction-branching/excalidraw_9.png]]
 
 ### Archetypes That Model Each Other
 
@@ -47,8 +50,7 @@ Real teams do this unconsciously over months. Your archetype team does it in 20-
 - Round 10: Engineer-You says "the data model will block the feature we're planning for next month." Product-You agrees to fix it.
 - Round 20: Engineer-You preemptively flags data model issues in terms of downstream product impact. Product-You rarely disagrees. The tension has become productive by default.
 
-![[images/archetype-modeling-each-other.png]]
-
+![[images/archetype-modeling-each-other/excalidraw_1.png]]
 ### When to Reset vs. Accumulate
 
 Living archetypes have a shelf life. Your taste six months ago isn't your taste today — you've shipped things, seen results, changed your mind. An archetype that accumulated 200 runs of outdated judgment is worse than a fresh one built from your current thinking.
@@ -83,14 +85,13 @@ This is powerful because it means your *governance* role becomes clear. You're n
 
 **The role shift:**
 
-| Stage | Your Role | Time Spent |
-|---|---|---|
-| No archetypes | Maker — you do everything | 100% |
-| Static archetypes | Editor — you review and correct | 40% |
-| Living archetypes | Governor — you set culture and handle exceptions | 10-15% |
+| Stage             | Your Role                                        | Time Spent |
+| ----------------- | ------------------------------------------------ | ---------- |
+| No archetypes     | Maker — you do everything                        | 100%       |
+| Static archetypes | Editor — you review and correct                  | 40%        |
+| Living archetypes | Governor — you set culture and handle exceptions | 10-15%     |
 
-![[images/maker-editor-governor.png]]
-
+![[images/maker-editor-governor/excalidraw_14.png]]
 ### The Danger: Calcified Thinking
 
 The same dynamics that make living archetypes powerful also create risk. A team that's been running for months develops blind spots:
@@ -105,6 +106,7 @@ Mitigations:
 - **Adversarial archetype** — keep one subagent whose job is to argue against the team consensus. Feed it contrarian perspectives, failed companies that did what you're doing, reasons your approach is wrong.
 - **Fresh-eyes reset** — every quarter, rebuild one archetype from scratch. Lose the accumulated dynamics. See if the fresh version spots something the seasoned one stopped noticing.
 
+![[images/calcified-thinking/excalidraw_6.png]]
 ### Demo
 
 1. Show an archetype team with 20+ runs of accumulated history
