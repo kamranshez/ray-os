@@ -90,7 +90,7 @@ Markdown updates:
 - **Always dry run first.** Never delete images without showing the user what will happen.
 - **Always show rename plan.** Present the proposed names before executing.
 - **Vault root is sacred.** `images/` at `/Users/ray/Desktop/ray-os/images/` is the single source of truth for all images.
-- **Markdown references use vault-root paths.** All refs should look like `![[images/{slug}/name.png]]` — Obsidian resolves these from the vault root.
+- **Markdown references use vault-root paths.** All refs should look like `` — Obsidian resolves these from the vault root.
 - **No dependencies.** The cleanup.py script is pure Python 3 stdlib. Renaming and moving is done by Claude directly.
 
 ---

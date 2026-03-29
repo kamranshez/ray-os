@@ -25,7 +25,6 @@ The key insight: these agents aren't just reviewing code quality in the abstract
 
 ![[images/three-fresh-subagents/excalidraw_2.png]]
 
-![[images/reconnecting-codebase/excalidraw_8.png]]
 ## When to Use It
 
 - After finishing a feature, before committing

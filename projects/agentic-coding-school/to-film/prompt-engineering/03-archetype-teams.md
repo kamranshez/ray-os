@@ -16,6 +16,7 @@ A single Claude instance trying to be all of these at once hits the same problem
 
 The fix: split them into subagents, each activated with a different archetype of you.
 
+![[images/blended-vs-split/excalidraw_5.png]]
 ### Building Your Archetype Team
 
 Each subagent gets its own compressed identity derived from your real data:
@@ -44,8 +45,6 @@ The orchestrator (your main Claude instance) routes tasks to the right archetype
 
 This mirrors how a real team works. The PM and the engineer disagree. Someone resolves it. But instead of scheduling a meeting with two humans, you get both perspectives in seconds, both already calibrated to your standards.
 
-![[images/archetype-team-flow.png]]
-
 ### The Tension Is the Feature
 
 When your archetypes disagree, that's not a failure — it's the most valuable output.
@@ -59,6 +58,7 @@ The best teams have productive tension:
 
 By building archetypes that genuinely represent different facets of your thinking, you create that tension artificially — and the resolution is where the real insight lives.
 
+![[images/productive-tension/excalidraw_3.png]]
 ### Compressing a Real Team
 
 This extends beyond a single person. If you work with a team of 3-5 people, you can compress the *team's* collective identity:
@@ -85,8 +85,7 @@ A subagent team activated with an org's compressed identity produces outputs tha
 
 This is how a solo founder scales to feel like a team, and how a team scales to feel like an organization — without adding headcount.
 
-![[images/individual-team-org-compression.png]]
-
+![[images/individual-team-org-compression/excalidraw_7.png]]
 ### Demo
 
 1. Build two archetype subagents from real data: Product-You and Engineer-You

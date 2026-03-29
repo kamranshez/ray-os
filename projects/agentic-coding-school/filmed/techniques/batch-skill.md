@@ -28,7 +28,6 @@ The key architectural decision: **git worktree isolation**. Each worker gets its
 
 ![[images/coordinator-worker-fanout/excalidraw_3.png]]
 
-![[images/batch-pipeline/excalidraw_10.png]]
 
 ## When to Use It
 

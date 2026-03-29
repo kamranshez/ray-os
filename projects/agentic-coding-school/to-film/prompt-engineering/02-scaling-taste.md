@@ -14,8 +14,6 @@ Ask "what's the best business to start in 2026" and you get the same 50 ideas ev
 
 But here's what most people miss: there is a version of *you* inside that model. Not literally — but a cluster of archetypes that, when activated correctly, produces outputs that are 95% aligned with your taste, judgment, and decision-making style. The question is how to invoke it.
 
-![[images/consensus-you-vs-real-you.png]]
-
 ### From the Call: The Ray Simulator
 
 I recently answered over 500 specification questions while planning software. After reviewing my answers, I realized Claude had enough signal to model my decision-making. So I set up two subagents:
@@ -26,6 +24,7 @@ I recently answered over 500 specification questions while planning software. Af
 The result was 97% aligned with what I would have said. Not because Claude read my mind, but because within those 100 million compressed humans, there's a cluster that maps closely to how I think in that domain. My answers were the coordinates that located it.
 
 This is the same principle as steering distributions, but applied to *identity* rather than *task focus*. Your data is the seed that collapses the model's identity distribution from "average of everyone" to "someone who thinks like you."
+
 ### What Counts as "Your Data"
 
 Anything that captures how you think, decide, and express:
@@ -37,7 +36,6 @@ Anything that captures how you think, decide, and express:
 - **Domain expertise expressed naturally** — dictated thoughts, voice memos, meeting transcripts
 
 The key insight: this data is valuable to AI companies for training. It's *equally valuable to you* for steering. You are sitting on a personal dataset that, when compressed into a Claude skill or subagent prompt, can activate the version of the model that thinks like you.
-
 ### Compressing Yourself into a Skill
 
 Once you have enough data, you compress it. This is what Claude skills and CLAUDE.md memories are for — they're not just instructions, they're identity activation seeds.
@@ -49,6 +47,7 @@ A well-built skill derived from your data does three things:
 3. **Scales to new domains** — the taste that guided your software decisions can guide your writing, content, code review, hiring — any domain where judgment matters
 
 The 500 spec answers I gave weren't about software specifically. They revealed *how I make tradeoffs* — simplicity vs. completeness, speed vs. correctness, risk tolerance. That reasoning pattern transfers.
+
 
 ### The 95/5 Split
 
@@ -63,8 +62,6 @@ You get:
 - A quick glance to fill the remaining 5% — the truly human part that no model captures
 
 This is what "scaling taste" means. You're not delegating thinking. You're compressing your taste into a seed, letting it activate at scale across dozens of tasks, and then applying the irreducible human judgment only where it matters.
-
-![[images/95-5-split.png]]
 
 ### Why You Should Save Everything
 
@@ -92,8 +89,7 @@ The loop:
 
 This is why the "just show up and talk" workflow works. You dictate for 10 minutes. Claude repurposes into email, LinkedIn, podcast script. You glance at each, make small corrections. Those corrections are data. Tomorrow's outputs are marginally better. Over 90 days, the gap between Claude's output and your actual voice narrows continuously.
 
-![[images/taste-feedback-loop.png]]
-
+![[images/taste-feedback-loop/excalidraw_2.png]]
 ### Demo
 
 1. Show a Claude skill built from real writing samples and past decisions
@@ -119,3 +115,5 @@ Each of these is a separate archetype that can be compressed into its own subage
 Your main Claude instance becomes the orchestrator. It doesn't try to be all of you at once — it delegates to the right archetype depending on the task. When reviewing a feature spec, it consults Product-You. When drafting a newsletter, it hands off to Writer-You. Each subagent activates a different region of the model's identity space, and together they cover the full surface area of your judgment.
 
 This is how you go from one person making one decision at a time to your taste applied across ten domains simultaneously — with a quick glance to fill the last 5% on each.
+
+![[images/orchestrator-delegation/excalidraw_7.png]]

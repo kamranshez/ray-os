@@ -18,7 +18,6 @@ Channels are MCP servers that push messages into a running Claude Code session. 
 5. Claude reads the event, does the work, and replies back through the same channel
 
 So let's set one up. I'll do Telegram because that's what most people are using.
-![[images/claude-code-channels/channel-architecture-flow/excalidraw_4.png]]
 
 ---
 

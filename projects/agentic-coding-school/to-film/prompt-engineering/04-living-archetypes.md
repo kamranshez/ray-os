@@ -32,7 +32,6 @@ If you don't distinguish these, your archetypes overcorrect. Engineer-You gets o
 
 The fix: when you correct an archetype, tag whether it's a **pattern correction** (update the archetype) or a **context exception** (don't update, just override this once). Over time, the archetype learns your actual judgment boundaries rather than flinching from every correction.
 
-![[images/correction-branching/excalidraw_9.png]]
 
 ### Archetypes That Model Each Other
 
@@ -91,7 +90,6 @@ This is powerful because it means your *governance* role becomes clear. You're n
 | Static archetypes | Editor — you review and correct                  | 40%        |
 | Living archetypes | Governor — you set culture and handle exceptions | 10-15%     |
 
-![[images/maker-editor-governor/excalidraw_14.png]]
 ### The Danger: Calcified Thinking
 
 The same dynamics that make living archetypes powerful also create risk. A team that's been running for months develops blind spots:
