@@ -223,17 +223,28 @@ async function main() {
 
   const genai = new GoogleGenAI({ apiKey });
 
-  // Generate images in parallel
-  const promises = Array.from({ length: count }, (_, i) =>
-    Promise.race([
-      generateSingleImage(genai, fullPrompt, referenceImages, i),
-      new Promise<{ index: number; error: string }>((resolve) =>
-        setTimeout(() => resolve({ index: i, error: `Timeout after ${timeout}s` }), timeout * 1000)
-      ),
-    ])
-  );
+  // Generate images with staggered concurrency (max 2 at a time, 3s delay between launches)
+  const CONCURRENCY = 2;
+  const STAGGER_MS = 3000;
+  const results: Awaited<ReturnType<typeof generateSingleImage>>[] = [];
 
-  const results = await Promise.all(promises);
+  for (let batch = 0; batch < count; batch += CONCURRENCY) {
+    const batchPromises = [];
+    for (let j = 0; j < CONCURRENCY && batch + j < count; j++) {
+      const i = batch + j;
+      if (j > 0) await new Promise(r => setTimeout(r, STAGGER_MS));
+      batchPromises.push(
+        Promise.race([
+          generateSingleImage(genai, fullPrompt, referenceImages, i),
+          new Promise<{ index: number; error: string }>((resolve) =>
+            setTimeout(() => resolve({ index: i, error: `Timeout after ${timeout}s` }), timeout * 1000)
+          ),
+        ])
+      );
+    }
+    results.push(...await Promise.all(batchPromises));
+    if (batch + CONCURRENCY < count) await new Promise(r => setTimeout(r, STAGGER_MS));
+  }
   results.sort((a, b) => a.index - b.index);
 
   // Save results with non-conflicting filenames
