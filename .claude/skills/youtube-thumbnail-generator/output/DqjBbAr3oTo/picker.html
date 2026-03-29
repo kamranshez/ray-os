@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html><head><title>Anthropic Just Dropped the Feature Nobody Knew They Needed — Thumbnail Picker</title>
+<style>
+body { font-family: -apple-system, sans-serif; background: #111; color: #fff; padding: 20px; }
+h1 { font-size: 1.5em; margin-bottom: 5px; }
+h2 { font-size: 1em; color: #888; margin-bottom: 20px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 20px; }
+.pair { background: #1a1a1a; border-radius: 12px; padding: 15px; }
+.pair h3 { font-size: 0.9em; color: #aaa; margin: 0 0 10px; }
+.pair-images { display: flex; gap: 10px; }
+.pair-images img { width: 50%; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+.pair-images img:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
+.pair-images img.selected { border: 3px solid #6366f1; box-shadow: 0 0 20px rgba(99, 102, 241, 0.8); }
+.count { position: fixed; top: 20px; right: 20px; background: #6366f1; padding: 10px 20px; border-radius: 8px; font-weight: bold; z-index: 10; }
+.single { }
+.single img { width: 100%; }
+</style>
+</head><body>
+<h1>Anthropic Just Dropped the Feature Nobody Knew They Needed</h1>
+<h2>16 thumbnails — 8 Nate Herk styles x 2 variants — Click to select favorites</h2>
+<div class="count">Selected: <span id="sel-count">0</span></div>
+<div class="grid">
+
+<div class="pair">
+<h3>1. Folder + /command (OUyfxhFtGCo)</h3>
+<div class="pair-images">
+<img src="folder-btw-command-a.png" onclick="toggle(this)" title="folder-btw-command-a">
+<img src="folder-rewind-command-b.png" onclick="toggle(this)" title="folder-rewind-command-b">
+</div>
+</div>
+
+<div class="pair">
+<h3>2. Icons on black — no face (LrgfmZkl3nc)</h3>
+<div class="pair-images">
+<img src="icons-secret-feature-a.png" onclick="toggle(this)" title="icons-secret-feature-a">
+<img src="icons-nobody-knew-b.png" onclick="toggle(this)" title="icons-nobody-knew-b">
+</div>
+</div>
+
+<div class="pair">
+<h3>3. Old vs New comparison (ZeJXI2MAhj0)</h3>
+<div class="pair-images">
+<img src="old-vs-new-interrupt-a.png" onclick="toggle(this)" title="old-vs-new-interrupt-a">
+<img src="messy-vs-clean-context-b.png" onclick="toggle(this)" title="messy-vs-clean-context-b">
+</div>
+</div>
+
+<div class="pair">
+<h3>4. Holding prop + bold text (T6_Ges4j1qY)</h3>
+<div class="pair-images">
+<img src="prop-btw-phone-a.png" onclick="toggle(this)" title="prop-btw-phone-a">
+<img src="prop-stop-interrupting-b.png" onclick="toggle(this)" title="prop-stop-interrupting-b">
+</div>
+</div>
+
+<div class="pair">
+<h3>5. Feature grid on screen (4Zaoo0YbYaw)</h3>
+<div class="pair-images">
+<img src="feature-grid-btw-a.png" onclick="toggle(this)" title="feature-grid-btw-a">
+<img src="feature-grid-productivity-b.png" onclick="toggle(this)" title="feature-grid-productivity-b">
+</div>
+</div>
+
+<div class="pair">
+<h3>6. CLI chat + bold text (vFepZE_wrfg)</h3>
+<div class="pair-images">
+<img src="cli-hidden-powerful-a.png" onclick="toggle(this)" title="cli-hidden-powerful-a">
+<img src="cli-nobody-knew-b.png" onclick="toggle(this)" title="cli-nobody-knew-b">
+</div>
+</div>
+
+<div class="pair">
+<h3>7. CLI chat + Game Over style (BlNJFa3Btm8)</h3>
+<div class="pair-images">
+<img src="cli-game-changer-a.png" onclick="toggle(this)" title="cli-game-changer-a">
+<img src="cli-zero-cost-b.png" onclick="toggle(this)" title="cli-zero-cost-b">
+</div>
+</div>
+
+<div class="pair">
+<h3>8. Screen with flow arrows (hem5D1uvy-w)</h3>
+<div class="pair-images">
+<img src="flow-btw-channel-a.png" onclick="toggle(this)" title="flow-btw-channel-a">
+<img src="flow-clean-context-b.png" onclick="toggle(this)" title="flow-clean-context-b">
+</div>
+</div>
+
+</div>
+
+<script>
+function toggle(img) {
+  img.classList.toggle('selected');
+  document.getElementById('sel-count').textContent = document.querySelectorAll('.selected').length;
+}
+</script>
+</body></html>
