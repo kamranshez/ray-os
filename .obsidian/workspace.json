@@ -4,21 +4,37 @@
     "type": "split",
     "children": [
       {
-        "id": "2a5293d728cfb590",
+        "id": "80cbace78db45388",
         "type": "tabs",
         "children": [
           {
-            "id": "920fe249604a3908",
+            "id": "7508a4eb561bc3ca",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "kanban",
               "state": {
-                "file": "socials/youtube/videos/auto-dream-memory-consolidation.md",
-                "mode": "source",
-                "source": false
+                "file": "Agentic Coding School.md",
+                "kanbanViewState": {
+                  "kanban-plugin": "board",
+                  "list-collapse": [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                  ]
+                }
               },
-              "icon": "lucide-file",
-              "title": "auto-dream-memory-consolidation"
+              "icon": "lucide-trello",
+              "title": "Agentic Coding School"
             }
           }
         ]
@@ -53,7 +69,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "dream",
+                "query": "tag:#claude-code",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,12 +90,11 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 282.50271224975586
+    "width": 284.5004348754883
   },
   "right": {
     "id": "99b289f72ba3f8e1",
@@ -179,57 +194,58 @@
       "graph:Open graph view": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "obsidian-kanban:Create new board": false
     }
   },
-  "active": "920fe249604a3908",
+  "active": "7508a4eb561bc3ca",
   "lastOpenFiles": [
-    "projects/agentic-coding-school/filmed/claude-code/scope-and-settings.md",
-    "projects/agentic-coding-school/to-film/claude-code/stash.md",
-    "projects/agentic-coding-school/to-film/claude-code/slash-loop-renewal.md",
-    "projects/agentic-coding-school/to-film/claude-code/skills-vs-subagents.md",
-    "projects/agentic-coding-school/to-film/claude-code/skill-creator-with-evals.md",
-    "socials/youtube/videos/auto-dream-memory-consolidation.md",
-    "Final Video.txt",
-    "Final Video-raw.txt",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_10.png",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_9.png",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_8.png",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_7.png",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_6.png",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_5.png",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_4.png",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_3.png",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_2.png",
-    "socials/youtube/videos/images/auto-dream-three-phases/excalidraw_1.png",
-    "socials/youtube/videos/images/auto-dream-mastra-tiers",
-    "socials/youtube/videos/images/auto-dream-trigger-conditions",
-    "socials/youtube/videos/images/auto-dream-three-phases",
-    "socials/youtube/videos/images/auto-dream-human-analogy",
-    "socials/youtube/videos/images/auto-dream-problem",
-    "socials/youtube/videos/skills-2.0.md",
-    "projects/agentic-coding-school/filmed/prompt-engineering/persona-vectors.md",
-    "projects/agentic-coding-school/to-film/claude-code/scope-and-settings.md",
-    "projects/agentic-coding-school/filmed/claude-code",
-    "projects/agentic-coding-school/filmed/untitled folder",
-    "projects/agentic-coding-school/filmed/scope-and-settings.md",
-    "socials/youtube/ab-tests/results.md",
-    "socials/youtube/ab-tests",
-    "socials/youtube/videos/cloud-scheduled-tasks.md",
-    "socials/youtube/videos/claude-code-channels.md",
-    "socials/youtube/videos/anthropic-skills-playbook.md",
-    "socials/youtube/scripts/Skill Evals - Test and Measure Your Claude Skills.md",
-    "socials/youtube/scripts/50 Tips for Claude Code.md",
-    "courses/techniques/Best of 5.md",
-    "courses/techniques/Boxing the Model In.md",
-    "courses/techniques/Closing the Loop.md",
-    "courses/techniques/Delete Your README.md",
-    "courses/techniques/Goal In, Strategy Out.md",
-    "courses/techniques/Gravitional Pull from Older Models.md",
-    "courses/techniques/High Level Strategy, Low Level Details.md",
-    "courses/techniques/One Pattern Per Thing.md",
-    "projects/agentic-coding-school/to-film/generate-diagrams-on-demand.md",
-    "research/Building Effective Agent Teams.md",
+    "projects/agentic-coding-school/to-film/claude-code/worktrees.md",
+    "Agentic Coding School.md",
+    "projects/agentic-coding-school/filmed/techniques/boxing-the-model-in.md",
+    "CLAUDE.md",
+    "Example 1.md",
+    "projects/agentic-coding-school/to-film/context-engineering/code-field.md",
+    "projects/agentic-coding-school/to-film/building-effective-agent-teams.md",
+    "projects/agentic-coding-school/to-film/business/remotion.md",
+    "projects/agentic-coding-school/to-film/techniques/refactoring-to-save-on-context.md",
+    "projects/agentic-coding-school/to-film/techniques/llms-have-an-easier-time-writing-things.md",
+    "projects/agentic-coding-school/to-film/techniques/getting-shit-done.md",
+    "projects/agentic-coding-school/to-film/techniques/always-force-a-constraint-restatement-before-code.md",
+    "projects/agentic-coding-school/to-film/context-engineering/company-as-a-file-system.md",
+    "projects/agentic-coding-school/to-film/context-engineering/context-layer-summarised.md",
+    "projects/agentic-coding-school/to-film/context-engineering/language-server-protocol.md",
+    "projects/agentic-coding-school/to-film/cloud-agents/task-shaped-wrappers.md",
+    "projects/agentic-coding-school/to-film/claude-code/background-hooks.md",
+    "projects/agentic-coding-school/to-film/claude-code/ask-user-question-markdown.md",
+    "projects/agentic-coding-school/to-film/claude-code/blocking-risky-commands-with-hooks.md",
+    "projects/agentic-coding-school/to-film/claude-code/claude-code-aliases.md",
+    "projects/agentic-coding-school/to-film/claude-code/claude-code-in-xcode.md",
+    "projects/agentic-coding-school/to-film/claude-code/claude-code-lab.md",
+    "projects/agentic-coding-school/to-film/claude-code/compound-engineering.md",
+    "projects/agentic-coding-school/to-film/claude-code/desktop-app-ssh.md",
+    "projects/agentic-coding-school/to-film/claude-code/debug-skill.md",
+    "projects/agentic-coding-school/to-film/claude-code/desktop-app-plugins.md",
+    "images/worktrees/worktreecreate-hooks-automated-setup.png",
+    "images/worktrees/worktree-flag-and-subagent-isolation.png",
+    "images/worktrees/worktree-friction-and-future-direction.png",
+    "images/worktrees/two-sessions-one-codebase-problem.png",
+    "images/worktrees/subagent-worktrees-parallel-execution.png",
+    "images/worktrees/isolated-worktrees-parallel-agents.png",
+    "images/worktrees/agent-teams-vs-independent-workstreams.png",
+    "images/worktrees",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/calcified-thinking/excalidraw_10.png",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/calcified-thinking/excalidraw_9.png",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/calcified-thinking/excalidraw_8.png",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/calcified-thinking",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/correction-branching",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/static-vs-living",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/blended-vs-split",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/productive-tension",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/orchestrator-delegation",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/data-to-skill-compression",
+    "projects/agentic-coding-school/vsl/diff-v5-v6.html",
+    "projects/agentic-coding-school/to-film/prompt-engineering/images/three-axes-of-prompting",
     "Untitled.canvas"
   ]
 }
