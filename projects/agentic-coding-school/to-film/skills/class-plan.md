@@ -2,7 +2,7 @@
 class: skills
 title: "From Prompt to Product"
 tagline: "Build a complete AI operating system — one skill at a time."
-total_videos: 26
+total_videos: 29
 status: planning
 created: 2026-03-31
 ---
@@ -39,11 +39,13 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
 ## Chapter 1: The Blank Slate (3 videos)
 
 ### 1.1 — Why Skills Change Everything
-- **Duration**: 5-7 min
+- **Duration**: 7-10 min
 - **Status**: NEW — class intro
 - **Core concept**: "Claude Code without skills is like a smartphone without apps." Skills make Claude do a specific thing in a specific way, every time. Not just chat — actual labor.
 - **What to show**: Side-by-side of Claude with vs without the front-end design skill. Side-by-side of a generic contract review vs one with an encoded legal skill (Zack Shapiro example from encoding-your-expertise brief).
 - **Key line**: "Skills aren't prompts you save. They're employees you train once."
+- **Business pain framing (Miessler)**: Open with the $50T stat — worldwide knowledge worker compensation, most of it producing inconsistent output. SOPs decay, get stuck in people's heads, conflict with each other. Skills are SOPs that execute themselves — they can't forget, can't skip steps, can't produce inconsistent output. The bar AI is competing with is not excellence — it's chaos.
+- **Human 3.0 framing (Miessler)**: Address the elephant in the room early — "am I replacing myself?" The capability stack: Knowledge → Understanding → Intelligence → Creativity → Subjective Experience → Desire. AI has the first three. Humans uniquely have the bottom two plus creativity. Your role is deciding WHAT to build, WHY, and for WHOM. Skills handle the HOW. You're not the row in the Excel sheet — you're the person who decides what the spreadsheet should calculate.
 - **The control hierarchy** (frame early): There are three layers of control over Claude's behavior:
   1. **Global instructions** (Settings → Profile) — affects everything, always loaded
   2. **Project-level CLAUDE.md / Agent.md** — affects this project/folder
@@ -180,6 +182,18 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
 - **Live build**: Contract reviewer skill with red flags, yellow flags, missing terms, negotiation suggestions — all encoded from a real professional's judgment
 - **Key line**: "Experienced practitioners have the biggest advantage. If you've spent 10 or 20 years developing judgment in your practice area, you are sitting on exactly the asset that AI makes more valuable, not less."
 
+### 3.4 — The Articulation Gap
+- **Duration**: 10-12 min
+- **Status**: NEW — from Miessler "AI WILL Replace Knowledge Workers"
+- **Core concept**: The gap between human expertise and AI expertise isn't the model — it's that nobody has written their expertise down. 3.3 encodes YOUR expertise. 3.4 extracts expertise from OTHER PEOPLE — the "Cliff" who never documented anything.
+- **What to show**:
+  - Build a knowledge capture interview skill that asks structured questions: "Walk me through how you do X. What do you check first? What are the red flags? What does everyone get wrong?"
+  - The skill captures answers into a draft skill skeleton: process steps, decision points, edge cases, common mistakes, quality criteria
+  - Demo: interview yourself about something you know well but haven't documented — show how much gets captured
+  - "The Cliff exercise": Think of the person at your company everyone calls when things break. Imagine they're retiring in 30 days. This skill is how you capture what's in their head.
+- **Key line (Miessler)**: "The expertise gap between humans and AI is actually the failure so far of us to articulate all the different chaos things — all those random pieces of knowledge inside of people's brains."
+- **Connects to Ch 7.2**: This knowledge capture is part of the $15K service — walk into a company, interview domain experts, build skills from their knowledge.
+
 ---
 
 ## Chapter 4: Build Your AI Employees (5 videos)
@@ -303,9 +317,21 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
   - Show before/after: generic slide deck skill → Swiss-design-branded version with your colors
 - **Why this matters for sharing**: You can share one plugin with your team and each person customizes it to their context
 
+### 5.6 — Business Metrics for Skills
+- **Duration**: 7-10 min
+- **Status**: NEW — from Miessler "AI WILL Replace Knowledge Workers"
+- **Core concept**: 5.1 measures skills technically (assertion pass rates, tokens). This video measures them in dollars, hours, and consistency — the metrics business people care about.
+- **What to show**:
+  - Cost per execution vs human equivalent (e.g., content director: $0.12 tokens vs $150 for 2hrs human work)
+  - Consistency test: same input to a skill 5 times — near-identical outputs. Same task to 5 different humans — wildly different (the "Sarah vs Jim" problem from Miessler)
+  - Quality blind test: skill output vs human output, reviewed blind
+  - Build a metrics dashboard meta-skill that tracks cost, time, quality across all skills with weekly rollups
+- **The vendor test (Miessler)**: "Now a vendor doesn't come with a steak dinner. We show them our metrics. What are YOUR ratings? What are YOUR cost numbers?"
+- **Connects to**: 6.4 (each graph node gets these metrics), 7.2 (business metrics are the proof when pitching)
+
 ---
 
-## Chapter 6: Wire It All Together (3 videos)
+## Chapter 6: Wire It All Together (4 videos)
 
 ### 6.1 — Chaining and Stacking Skills
 - **Duration**: 10-12 min
@@ -340,6 +366,21 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
   - Interactive dashboard: click on each skill to see what it does, when it runs, what it connects to
   - "This is not a tool. This is a content director / operations manager / marketing department."
 - **Key number**: "My entire operation runs on Claude Max — $100/month. That's $1,200/year versus $54,000/year for human equivalents."
+
+### 6.4 — Companies Are Graphs of Algorithms
+- **Duration**: 10-12 min
+- **Status**: NEW — from Miessler "AI WILL Replace Knowledge Workers"
+- **Core concept**: 6.3 maps your personal system. 6.4 goes enterprise — every company process is a node in a graph, each with metrics (cost, quality, time), each either human, automated, or hybrid. Skills are the implementation layer for each node.
+- **The Lattice Architecture (Miessler)**: A hierarchy where company → department → team → individual each have SOPs, metrics, goals, budget, work, quality. Each tier broadcasts APIs — queryable up, down, and across.
+- **What to show**:
+  - Map a real business process as a graph (e.g., lead → qualification → proposal → contract → onboarding)
+  - Identify which nodes are skill candidates vs human-only vs hybrid
+  - Build an interactive HTML graph — color-coded green (automated), yellow (hybrid), red (human-only)
+  - Click any node to see its metrics from 5.6
+  - The vendor test: "What are your ratings? What are your cost numbers?"
+- **Key line (Miessler)**: "You can't optimize what you don't understand. You can't optimize what you don't see."
+- **The visibility pitch**: CEOs/CFOs spend months and hundreds of thousands of dollars (McKinsey, KPMG) just to get visibility into what their company is doing. This graph provides it instantly.
+- **Connects to**: 7.2 — this graph IS the deliverable for the enterprise engagement
 
 ---
 
@@ -413,9 +454,15 @@ These existing videos from other classes should be referenced (not re-recorded) 
 |---|---|---|---|
 | 1. The Blank Slate | 3 | 3 | 0 |
 | 2. Your First Skill | 5 | 4 | 1 (re-record Blog Post to Skill for business audience) |
-| 3. Make It Yours | 3 | 2 | 1 (adapt encoding-your-expertise brief) |
+| 3. Make It Yours | 4 | 3 | 1 (adapt encoding-your-expertise brief) |
 | 4. Build Your AI Employees | 5 | 4 | 1 (adapt skills-vs-subagents brief) |
-| 5. Quality Control | 5 | 5 | 0 |
-| 6. Wire It All Together | 3 | 2 | 1 (cross-link or co-film with Scheduled Tasks) |
+| 5. Quality Control | 6 | 6 | 0 |
+| 6. Wire It All Together | 4 | 3 | 1 (cross-link or co-film with Scheduled Tasks) |
 | 7. Ship It | 2 | 1 | 1 (adapt skills-as-team-knowledge brief) |
-| **Total** | **26** | **21 new** | **5 adapted/cross-linked** |
+| **Total** | **29** | **24 new** | **5 adapted/cross-linked** |
+
+### Miessler-sourced additions (2026-03-31)
+- 1.1: Added $50T business pain framing + Human 3.0 "where humans fit" intro
+- 3.4: The Articulation Gap — extracting OTHER people's expertise into skills
+- 5.6: Business Metrics for Skills — dollars/hours/consistency vs technical evals
+- 6.4: Companies Are Graphs of Algorithms — enterprise process mapping with the Lattice architecture

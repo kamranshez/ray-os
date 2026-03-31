@@ -105,6 +105,7 @@ kanban-plugin: board
 - [ ] [[3-1-adding-your-brand-context]] #skills
 - [ ] [[3-2-refactoring-a-marketplace-skill]] #skills
 - [ ] [[3-3-encoding-your-expertise]] #skills
+- [ ] [[3-4-the-articulation-gap]] #skills
 - [ ] [[4-1-the-morning-briefing-employee]] #skills
 - [ ] [[4-2-the-content-director]] #skills
 - [ ] [[4-3-the-operations-manager]] #skills
@@ -115,9 +116,11 @@ kanban-plugin: board
 - [ ] [[5-3-self-improving-skills]] #skills
 - [ ] [[5-4-the-auto-improvement-skill]] #skills
 - [ ] [[5-5-the-customizer-pattern]] #skills
+- [ ] [[5-6-business-metrics-for-skills]] #skills
 - [ ] [[6-1-chaining-and-stacking-skills]] #skills
 - [ ] [[6-2-scheduling-skills-as-autonomous-agents]] #skills
 - [ ] [[6-3-mapping-your-system]] #skills
+- [ ] [[6-4-companies-are-graphs-of-algorithms]] #skills
 - [ ] [[7-1-sharing-skills-with-your-team]] #skills
 - [ ] [[7-2-selling-ai-operating-systems]] #skills
 - [ ] Record intro for Skills class #skills

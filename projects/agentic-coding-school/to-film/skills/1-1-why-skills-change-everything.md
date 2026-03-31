@@ -10,9 +10,20 @@ status: "new"
 
 "Claude Code without skills is like a smartphone without apps." — the class opener.
 
-## The Problem
+## The Problem (Two Levels)
 
+### The Individual Problem
 Most people use Claude as a chatbot. They ask questions, copy-paste answers, and that's the extent of it. But Claude can do actual labor — if you tell it how. Without skills, you're using about 10% of what it can do.
+
+### The Business Problem (Miessler framing)
+$50 trillion is spent worldwide on knowledge worker compensation every year. Most of that money produces inconsistent output. Different people doing the same job, using the same documents, produce wildly different results. SOPs either don't exist, are outdated, conflict with each other, or are stuck in one person's head. When that person goes on vacation, retires, or switches jobs every 2-3 years — the knowledge dies with them.
+
+Skills are the fix. They're SOPs that can't decay — because they execute themselves. A skill doesn't forget the process. It doesn't misread the document. It doesn't skip steps because it's Monday morning. It runs the same way every time. This is not about AI being smarter than humans. It's about the bar being on the floor — and skills clearing it effortlessly.
+
+**Key stat**: Only 21% of workers globally are engaged (Gallup 2025). Companies are paying $50T for work that is mostly inconsistent, undocumented, and trapped in people's heads.
+
+### Where Humans Fit (Human 3.0)
+This class is NOT about replacing yourself. Think of it this way — there's a capability stack: Knowledge → Understanding → Intelligence → Creativity → Subjective Experience → Desire. AI has the first three. Humans uniquely have the bottom two, plus creativity. Your role is deciding WHAT to build, WHY, and for WHOM. Skills handle the HOW. You're not the row in the Excel sheet. You're the person who decides what the spreadsheet should calculate. Skills free you from execution so you can focus on vision, direction, and the things only you can do.
 
 ## What to Cover
 

@@ -7,13 +7,19 @@ duration: "5-7 min"
 
 ## Why Skills Change Everything
 
-So this class is about skills. And the simplest way I can explain what a skill does is this — Claude without skills is like a smartphone without apps. It works. You can make calls. But you're using maybe 10% of what it can actually do. Skills are the other 90%.
+So this class is about skills. And before I show you what they do, I want to tell you why they matter at a level most people aren't talking about.
 
-And I'm going to prove that to you right now with two examples before we talk about anything else.
+$50 trillion. That's what the world spends every year on knowledge worker compensation. And most of that money produces wildly inconsistent output. You know how it works inside companies. There's a process for how things should be done — except the process is outdated, or there are three versions of it, or it's stuck in Sarah's head and Sarah just left for a new job. Someone new comes in, gets onboarded, picks up maybe 60% of how things are supposed to work, and the output is different every time.
 
-### The Before and After (0:00–2:00)
+Skills fix this. A skill is an SOP — a standard operating procedure — that executes itself. It doesn't forget the process. It doesn't skip steps because it's Monday morning. It runs the same way every time.
+
+Now — this class is not about replacing yourself. There's a capability stack I want you to keep in mind. AI is great at knowledge, understanding, and intelligence — following instructions, adapting to new requirements, connecting patterns. But it has zero desire. Zero ambition. It doesn't see a problem in the world and go "that's not right, we should fix that." That's you. Your job is deciding what to build, why, and for whom. Skills handle the how. You're not the row in the Excel sheet. You're the person who decides what the spreadsheet should calculate.
+
+OK — let me prove what skills actually do with two examples.
 
 > [SCREEN: Claude Code terminal]
+
+### The Before and After
 
 I'm going to type a simple prompt. "Build me a landing page for a SaaS product."
 
