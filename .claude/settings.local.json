@@ -28,7 +28,8 @@
       "mcp__claude_ai_Gmail__gmail_search_messages",
       "mcp__agentic-coding-school__list_classes",
       "mcp__agentic-coding-school__list_videos",
-      "WebFetch(domain:www.swyx.io)"
+      "WebFetch(domain:www.swyx.io)",
+      "mcp__plugin_telegram_telegram__reply"
     ]
   }
 }

@@ -39,6 +39,13 @@ The whole thing is fire-and-forget. It runs in the background after the model fi
 
 **Source:** `utils/hooks/skillImprovement.ts:30-268`
 
+![[images/skill-improvement/excalidraw_1.png]]
+![[images/skill-improvement/excalidraw_2.png]]
+![[images/skill-improvement/excalidraw_3.png]]
+![[images/skill-improvement/excalidraw_4.png]]
+![[images/skill-improvement/excalidraw_5.png]]
+![[images/skill-improvement/excalidraw_6.png]]
+
 ---
 
 ## AWAY SUMMARY — "While You Were Away"
@@ -52,6 +59,12 @@ It only fires when no turn is currently in progress and there's no existing summ
 **Why this matters:** When you're running long background tasks or agent teams that work while you're in another window, coming back to a wall of tool output is overwhelming. The away summary gives you a human-readable catch-up.
 
 **Source:** `hooks/useAwaySummary.ts:12-126`
+
+![[images/away-summary/excalidraw_1.png]]
+![[images/away-summary/excalidraw_2.png]]
+![[images/away-summary/excalidraw_3.png]]
+![[images/away-summary/excalidraw_4.png]]
+![[images/away-summary/excalidraw_5.png]]
 
 ---
 
@@ -78,6 +91,12 @@ Workers communicate via XML `<task-notification>` messages that include status, 
 
 **Source:** `coordinator/coordinatorMode.ts:111-369`
 
+![[images/coordinator-mode/excalidraw_1.png]]
+![[images/coordinator-mode/excalidraw_2.png]]
+![[images/coordinator-mode/excalidraw_3.png]]
+![[images/coordinator-mode/excalidraw_4.png]]
+![[images/coordinator-mode/excalidraw_5.png]]
+
 ---
 
 ## VERIFICATION AGENT — The Adversarial Code Checker
@@ -98,6 +117,12 @@ Different strategies for different change types: frontend changes get a dev serv
 
 **Source:** `tools/AgentTool/built-in/verificationAgent.ts:10-152`
 
+![[images/verification-agent/excalidraw_1.png]]
+![[images/verification-agent/excalidraw_2.png]]
+![[images/verification-agent/excalidraw_3.png]]
+![[images/verification-agent/excalidraw_4.png]]
+![[images/verification-agent/excalidraw_5.png]]
+
 ---
 
 ## TOKEN BUDGET — "Spend 2M Tokens On This"
@@ -116,6 +141,12 @@ Budget parsing supports shorthand (`+500k`, `+2.5m`) and verbose ("use 2M tokens
 **Why this matters:** Right now there's no way to tell Claude "really go deep on this." It tends to wrap up when it thinks it's done. Token budgets let you say "no, I want you to spend $5 worth of compute on this problem" and it'll keep exploring, testing, and refining until it hits the target.
 
 **Source:** `query/tokenBudget.ts:3-93`, `utils/tokenBudget.ts`, `constants/prompts.ts:538-550`
+
+![[images/token-budget/excalidraw_1.png]]
+![[images/token-budget/excalidraw_2.png]]
+![[images/token-budget/excalidraw_3.png]]
+![[images/token-budget/excalidraw_4.png]]
+![[images/token-budget/excalidraw_5.png]]
 
 ---
 
@@ -141,6 +172,12 @@ Rejected plans are tracked — the system counts rejections and passes that cont
 
 **Source:** `commands/ultraplan.tsx:32-382`, `utils/ultraplan/ccrSession.ts:80-349`, `utils/teleport.tsx:730-1185`
 
+![[images/ultraplan/excalidraw_1.png]]
+![[images/ultraplan/excalidraw_2.png]]
+![[images/ultraplan/excalidraw_3.png]]
+![[images/ultraplan/excalidraw_4.png]]
+![[images/ultraplan/excalidraw_5.png]]
+
 ---
 
 ## TEMPLATES — Repeatable Structured Jobs
@@ -159,6 +196,12 @@ Think of it like GitHub Issues but for your Claude conversations. Each conversat
 
 **Source:** `entrypoints/cli.tsx:212`, `query/stopHooks.ts:45-132`
 
+![[images/templates/excalidraw_1.png]]
+![[images/templates/excalidraw_2.png]]
+![[images/templates/excalidraw_3.png]]
+![[images/templates/excalidraw_4.png]]
+![[images/templates/excalidraw_5.png]]
+
 ---
 
 ## BRIEF / SendUserMessage — Filtered Output
@@ -176,6 +219,12 @@ Three views:
 
 **Source:** `tools/BriefTool/BriefTool.ts:88-134`, `tools/BriefTool/UI.tsx:18-62`
 
+![[images/brief/excalidraw_1.png]]
+![[images/brief/excalidraw_2.png]]
+![[images/brief/excalidraw_3.png]]
+![[images/brief/excalidraw_4.png]]
+![[images/brief/excalidraw_5.png]]
+
 ---
 
 ## PUSH NOTIFICATIONS — Claude Pings Your Phone
@@ -186,6 +235,12 @@ A `PushNotification` tool that sends alerts to your devices. When something impo
 
 **Source:** `tools.ts` (gated by `KAIROS || KAIROS_PUSH_NOTIFICATION`)
 
+![[images/push-notifications/excalidraw_1.png]]
+![[images/push-notifications/excalidraw_2.png]]
+![[images/push-notifications/excalidraw_3.png]]
+![[images/push-notifications/excalidraw_4.png]]
+![[images/push-notifications/excalidraw_5.png]]
+
 ---
 
 ## GITHUB WEBHOOK SUBSCRIPTIONS — Real-Time PR Watching
@@ -195,6 +250,12 @@ The `SubscribePR` tool lets Claude subscribe to GitHub PR activity via webhooks.
 **Why this matters:** Imagine Claude watching your PR, and when a reviewer leaves a comment asking for a change, Claude automatically implements the fix and pushes it. That's what this enables.
 
 **Source:** `commands.ts:101-103` (gated by `KAIROS_GITHUB_WEBHOOKS`)
+
+![[images/github-webhooks/excalidraw_1.png]]
+![[images/github-webhooks/excalidraw_2.png]]
+![[images/github-webhooks/excalidraw_3.png]]
+![[images/github-webhooks/excalidraw_4.png]]
+![[images/github-webhooks/excalidraw_5.png]]
 
 ---
 
@@ -207,6 +268,12 @@ Fork copies the entire conversation history, all tool results, everything. The c
 **Why this matters:** If you're deep into debugging and want to explore two hypotheses simultaneously, fork lets you branch your conversation like git branches code. Each fork has full context.
 
 **Source:** `tools/AgentTool/forkSubagent.ts:1-211`
+
+![[images/fork/excalidraw_1.png]]
+![[images/fork/excalidraw_2.png]]
+![[images/fork/excalidraw_3.png]]
+![[images/fork/excalidraw_4.png]]
+![[images/fork/excalidraw_5.png]]
 
 ---
 
@@ -224,51 +291,92 @@ The memory has an index file (`MEMORY.md`) capped at ~25KB with one-line pointer
 
 **Source:** `memdir/teamMemPaths.ts:22-293`, `memdir/memdir.ts:448-472`
 
+![[images/team-memory/excalidraw_1.png]]
+![[images/team-memory/excalidraw_2.png]]
+![[images/team-memory/excalidraw_3.png]]
+![[images/team-memory/excalidraw_4.png]]
+![[images/team-memory/excalidraw_5.png]]
+
 ---
 
 ## BYOC — Bring Your Own Compute
 
 Run Claude Code agents on your own infrastructure. Anthropic provides a Docker image; you run it on AWS, GCP, Kubernetes, wherever. Your code never leaves your network.
 
-The runner registers with the CCR backend, polls for work, receives a `WorkSecret` blob with git repo URL, env vars, MCP configs, and auth tokens. Spawns a child Claude Code process with everything injected.
+Here's exactly what happens when a BYOC runner starts:
 
-**Why this matters:** Enterprises can run Claude Code in their own VPC. Plus you could spin up 50 parallel agents on your own K8s cluster.
+**1. Registration**
 
-**Source:** `bridge/workSecret.ts:6-127`, `bridge/types.ts:33-51`
+The runner calls `POST /worker/register` against Anthropic's CCR (Cloud Code Runtime) backend, sending its environment ID, machine name, git repo URL, and a `worker_type` tag (`claude_code` or `claude_code_assistant`). It gets back an `environment_id` and `environment_secret` — its identity for all future API calls.
+
+**2. Polling for work**
+
+The runner enters a long-poll loop against `GET /environments/{id}/work`. When a session is dispatched to it, the response is a `WorkResponse` containing a **WorkSecret** — a base64url-encoded JSON blob. The WorkSecret contains everything the child Claude process needs to run:
+
+- `session_ingress_token` — a short-lived JWT for authenticating to the session
+- `api_base_url` — which Anthropic API endpoint to use
+- `sources` — where to get the code (git repo URL, ref, and an auth token for cloning)
+- `auth` — additional auth tokens
+- `claude_code_args` — any CLI flags to inject
+- `mcp_config` — MCP server configuration to pass to the child
+- `environment_variables` — env vars to inject (your secrets, API keys, etc.)
+- `use_code_sessions` — whether to use CCR v2 transport (SSE) vs v1 (WebSocket)
+
+**3. Spawning the child**
+
+The runner spawns a child `claude` process in the working directory with the SDK URL and session ID, stripping its own OAuth token and replacing it with the session JWT from the WorkSecret. The child runs in `CLAUDE_CODE_ENVIRONMENT_KIND=bridge` mode, streaming NDJSON over stdout.
+
+**Three spawn modes** control how sessions share the filesystem:
+- `single-session` — one session, tears down when done
+- `worktree` — persistent server, each session gets an isolated git worktree (no collisions)
+- `same-dir` — persistent server, all sessions share the working directory
+
+**4. Permission forwarding**
+
+When Claude wants to use a dangerous tool, it emits a `control_request` JSON line on stdout. The bridge intercepts it and forwards it to claude.ai — the user sees an approval prompt in their browser and can approve or deny in real time, even though Claude is running on their own infrastructure.
+
+**5. Session lifetime**
+
+Sessions run for up to 24 hours. The bridge heartbeats every active session to extend its lease. Session JWTs expire every ~5 hours — the bridge proactively refreshes them 5 minutes before expiry. Up to **32 sessions can run concurrently** per environment (gated by `tengu_ccr_bridge_multi_session`).
+
+**Why this matters:** Your code never touches Anthropic's infrastructure. The git clone happens inside your network, the Claude process runs on your machine, and only the conversation (messages + tool outputs) flows back to Anthropic. For enterprises with strict data residency requirements, this is the only way to use Claude Code.
+
+**Source:** `bridge/workSecret.ts:6-127`, `bridge/types.ts:33-51`, `bridge/sessionRunner.ts:248-548`, `bridge/bridgeMain.ts:141-400`
+
+![[images/byoc/excalidraw_6.png]]
+![[images/byoc/excalidraw_7.png]]
+![[images/byoc/excalidraw_8.png]]
+![[images/byoc/excalidraw_9.png]]
+![[images/byoc/excalidraw_10.png]]
 
 ---
 
 ## CONTEXT COLLAPSE — Reversible Conversation Archiving
 
-Instead of just summarizing old messages (auto-compact), Context Collapse **archives entire spans** and replaces them with compact summaries. Each archived span has a risk score and can be reconstructed later.
+Auto-compact has one fatal flaw: it's permanent. When your context gets full, it throws away your entire conversation history and replaces it with a single summary. You can't get it back.
 
-The internal codename is **"marble-origami"** — deliberately obfuscated in the source so it doesn't leak into external builds. Every persist entry is typed `marble-origami-commit` or `marble-origami-snapshot`, not `context-collapse-*`.
+Context Collapse does the same job — keeping conversations from hitting the token limit — but it's **reversible**. Here's the simple version of how it works:
 
-Here's how the pipeline works:
+While you're talking to Claude, a background agent watches the conversation and identifies **"safe to compress"** chunks — stretches of messages that are finished and low-risk. Think: a long debugging session you just resolved, or a series of file reads that already produced their result. It scores each chunk with a risk number and queues the low-risk ones up.
 
-**1. Staging — the ctx-agent scores spans**
+Those queued chunks aren't compressed yet — they're just **staged**. The original messages still exist.
 
-A background agent called `marble_origami` runs periodically and analyzes your conversation history. It identifies spans (ranges of messages) that are candidates for collapsing and assigns each a **risk score**. Low-risk spans (tool calls, exploratory debugging, answered questions) are safe to collapse. High-risk spans (decisions in progress, uncommitted work) are left alone. The results go into a **staged queue** — an array of `{startUuid, endUuid, summary, risk, stagedAt}` objects, serialized to the transcript as a snapshot entry.
+When the context starts getting full, the staged chunks get **committed**: each one gets replaced with a short summary in what Claude actually sends to the API. But your local history is untouched. The full messages are still there. If you need them back, you can.
 
-**2. Committing — the projection layer**
+The clever part: **Claude sees a different history than you do.** Your terminal shows the full conversation. The API gets a compressed version where old resolved chunks are replaced with summaries. It's the same trick a good editor uses — cut the parts that are done, keep the parts that are live.
 
-When a staged collapse is applied, it's written as a **commit** to the transcript: a `marble-origami-commit` entry containing the span boundaries (first/last message UUIDs), a 16-digit collapseId, a summary string, and a `<collapsed id="...">text</collapsed>` XML placeholder. Crucially, **the original messages are never deleted** — they stay in the REPL's full history. What changes is how `projectView()` reads them.
+If you hit the context limit anyway, it commits all the staged chunks immediately as an emergency measure. If that's still not enough, it falls back to a full compact as a last resort.
 
-**3. projectView — the API sees a different history than you do**
+**The internal codename is "marble-origami"** — deliberately obfuscated in the source so the feature name doesn't leak into external builds before it ships.
 
-Before every API call, `query.ts` runs `projectView()` over the message array. This function replays the commit log and substitutes collapsed spans with their summary placeholders — so the model receives a compressed history without the raw archived messages. Your local REPL still holds everything. This is the "reversibility": uncommit a span, and the full messages are still there.
-
-**4. Overflow recovery**
-
-When the API returns a 413 (prompt-too-long), Context Collapse gets first crack at recovery: it drains all staged spans immediately (`recoverFromOverflow()`), commits them, and retries the request. If that's still not enough, it falls back to reactive compact. This layered approach means you lose the least amount of context possible — granular collapses before the nuclear option of a full summary.
-
-**5. What you see**
-
-The token warning bar shows "N / M summarized" live. The `/context` command runs `projectView()` before calculating token counts, so it shows what the model *actually* sees — not the inflated REPL view. Without this, you'd see "180k tokens" when the API is only seeing 120k (because 3 collapsed spans aren't visible to the model but were being counted).
-
-**Why this matters:** Auto-compact destroys your history. One big summary replaces everything. Context Collapse is surgical — it picks the lowest-risk spans, keeps your live context intact, and can undo any collapse that turns out to have been a mistake. When Context Collapse is enabled, auto-compact is disabled entirely; the system now "owns" context management and handles it more precisely.
+**Why this matters:** Instead of one catastrophic summary that wipes your history, you get dozens of small surgical compressions. Each one is reversible. You can have much longer conversations without losing the ability to reference what happened two hours ago.
 
 **Source:** `types/logs.ts:238-295`, `commands/context/context.tsx:20`, `query.ts:428-447`, `query.ts:1086-1116`, `utils/sessionStorage.ts:1541-1580`
+
+![[images/context-collapse/excalidraw_1.png]]
+![[images/context-collapse/excalidraw_3.png]]
+![[images/context-collapse/excalidraw_4.png]]
+![[images/context-collapse/excalidraw_5.png]]
 
 ---
 
@@ -280,6 +388,17 @@ Read-only mode where your local work is visible on claude.ai but nobody can cont
 
 **Source:** `bridge/bridgeEnabled.ts:197-202`, `bridge/replBridgeTransport.ts:340-345`
 
+![[images/smaller-features/excalidraw_1.png]]
+![[images/smaller-features/excalidraw_2.png]]
+![[images/smaller-features/excalidraw_3.png]]
+![[images/smaller-features/excalidraw_4.png]]
+![[images/smaller-features/excalidraw_5.png]]
+![[images/ccr-mirror/excalidraw_1.png]]
+![[images/ccr-mirror/excalidraw_2.png]]
+![[images/ccr-mirror/excalidraw_3.png]]
+![[images/ccr-mirror/excalidraw_4.png]]
+![[images/ccr-mirror/excalidraw_5.png]]
+
 ---
 
 ## TERMINAL PANEL — Persistent Shell with Meta+J
@@ -289,6 +408,12 @@ A tmux-based shell that lives alongside Claude Code. Press **Meta+J** to flip be
 **Why this matters:** No more exiting Claude Code to run a quick command.
 
 **Source:** `utils/terminalPanel.ts:25-192`
+
+![[images/terminal-panel/excalidraw_1.png]]
+![[images/terminal-panel/excalidraw_2.png]]
+![[images/terminal-panel/excalidraw_3.png]]
+![[images/terminal-panel/excalidraw_4.png]]
+![[images/terminal-panel/excalidraw_5.png]]
 
 ---
 
@@ -300,6 +425,13 @@ Launch background sessions with `--bg`. Manage with `claude ps`, `logs`, `attach
 
 **Source:** `entrypoints/cli.tsx:185`, `utils/concurrentSessions.ts:1-205`
 
+![[images/background-sessions/excalidraw_1.png]]
+![[images/background-sessions/excalidraw_2.png]]
+![[images/background-sessions/excalidraw_3.png]]
+![[images/background-sessions/excalidraw_4.png]]
+![[images/background-sessions/excalidraw_5.png]]
+![[images/background-sessions/excalidraw_6.png]]
+
 ---
 
 ## SETTINGS SYNC — Cloud-Synced Preferences
@@ -308,6 +440,12 @@ Bidirectional sync of settings and memory between local CLI and cloud. Your keyb
 
 **Source:** `services/settingsSync/index.ts:1-582`
 
+![[images/settings-sync/excalidraw_1.png]]
+![[images/settings-sync/excalidraw_2.png]]
+![[images/settings-sync/excalidraw_3.png]]
+![[images/settings-sync/excalidraw_4.png]]
+![[images/settings-sync/excalidraw_5.png]]
+
 ---
 
 ## CONNECTOR TEXT — Anti-Distillation Defense
@@ -315,6 +453,11 @@ Bidirectional sync of settings and memory between local CLI and cloud. Your keyb
 Server-side encoding that prevents unauthorized model training on Claude's output. Content blocks cryptographically bound to your API key. The DRM of AI output.
 
 **Source:** `constants/betas.ts:23-25`, `utils/betas.ts:279-298`
+
+![[images/connector-text/excalidraw_1.png]]
+![[images/connector-text/excalidraw_2.png]]
+![[images/connector-text/excalidraw_4.png]]
+![[images/connector-text/excalidraw_5.png]]
 
 ---
 
@@ -335,3 +478,9 @@ Release: April Fools teaser April 1-7, 2026. Live for real May 2026.
 **Why this matters:** It's delightful. And it shows Anthropic is thinking about emotional connection with their tools, not just utility.
 
 **Source:** `buddy/types.ts:54-73`, `buddy/sprites.ts:26-515`, `buddy/companion.ts:62-134`
+
+![[images/buddy/excalidraw_1.png]]
+![[images/buddy/excalidraw_2.png]]
+![[images/buddy/excalidraw_3.png]]
+![[images/buddy/excalidraw_4.png]]
+![[images/buddy/excalidraw_5.png]]
