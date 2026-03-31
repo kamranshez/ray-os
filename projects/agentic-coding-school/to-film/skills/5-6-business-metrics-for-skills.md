@@ -68,4 +68,4 @@ Technical evals (Ch 5.1) tell you if the skill works. Business metrics tell you 
 
 - [[5-1-evaluating-your-skills]] — the technical eval layer (assertions, benchmarks)
 - [[6-4-companies-are-graphs-of-algorithms]] — each node in the company graph gets these metrics
-- [[7-2-selling-ai-operating-systems]] — business metrics are the proof when pitching to enterprises
+- [[7-1-sharing-skills-with-your-team]] — business metrics help teams understand which skills to prioritize

@@ -54,10 +54,10 @@ This is the difference between a solopreneur encoding their own workflow and a c
 
 ### Key Insight
 
-The articulation gap is the real bottleneck — not model capability. Every undocumented process is a skill waiting to be written. The person who can walk into a company and extract this knowledge into skills is providing $15K+ of value per engagement (connects to Ch 7.2).
+The articulation gap is the real bottleneck — not model capability. Every undocumented process is a skill waiting to be written. The person who can walk into a company and extract this knowledge into skills is providing massive value — and the resulting skills can be shared across the whole team (connects to Ch 7.1).
 
 ### Cross-Links
 
 - [[3-3-encoding-your-expertise]] — YOUR expertise (complementary, not overlapping)
-- [[7-2-selling-ai-operating-systems]] — this is part of the $15K service: knowledge capture + skill building
+- [[7-1-sharing-skills-with-your-team]] — captured expertise is the highest-value content to share
 - [[2-1-the-interrogate-skill]] — the interrogate pattern applied to knowledge extraction

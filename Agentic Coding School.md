@@ -102,6 +102,8 @@ kanban-plugin: board
 - [ ] [[2-3-anatomy-of-a-well-built-skill]] #skills
 - [ ] [[2-4-writing-descriptions-that-trigger]] #skills
 - [ ] [[2-5-the-skill-you-already-have]] #skills
+- [ ] [[2-6-the-escalation-pattern]] #skills
+- [ ] [[2-7-code-before-prompts]] #skills
 - [ ] [[3-1-adding-your-brand-context]] #skills
 - [ ] [[3-2-refactoring-a-marketplace-skill]] #skills
 - [ ] [[3-3-encoding-your-expertise]] #skills
@@ -122,7 +124,6 @@ kanban-plugin: board
 - [ ] [[6-3-mapping-your-system]] #skills
 - [ ] [[6-4-companies-are-graphs-of-algorithms]] #skills
 - [ ] [[7-1-sharing-skills-with-your-team]] #skills
-- [ ] [[7-2-selling-ai-operating-systems]] #skills
 - [ ] Record intro for Skills class #skills
 - [ ] Knowing which skills to combine #skills
 - [ ] Running Claude in a dev box #devboxes

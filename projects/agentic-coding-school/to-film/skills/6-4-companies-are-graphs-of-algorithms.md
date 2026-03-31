@@ -76,6 +76,6 @@ The system you build in this class (6.3 = personal) can scale to a full company 
 ### Cross-Links
 
 - [[6-3-mapping-your-system]] — personal version of this concept
-- [[7-2-selling-ai-operating-systems]] — this graph IS the deliverable for the $15K engagement
+- [[7-1-sharing-skills-with-your-team]] — this graph helps teams understand the full system when sharing
 - [[3-4-the-articulation-gap]] — you need to capture knowledge (3.4) before you can map it as a graph (6.4)
 - Daniel Miessler's blog: "Companies Are Just a Graph of Algorithms"

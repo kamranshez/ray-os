@@ -2,7 +2,7 @@
 class: skills
 title: "From Prompt to Product"
 tagline: "Build a complete AI operating system — one skill at a time."
-total_videos: 29
+total_videos: 30
 status: planning
 created: 2026-03-31
 ---
@@ -82,7 +82,7 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
 
 ---
 
-## Chapter 2: Your First Skill (5 videos)
+## Chapter 2: Your First Skill (7 videos)
 
 ### 2.1 — The Interrogate Skill (Your First Build)
 - **Duration**: 8-10 min
@@ -140,9 +140,33 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
 - **Decision**: Either cross-link the existing video (it's developer-focused with React useEffect) or re-record with a business example (take a sales playbook PDF → skill). Recommend RE-RECORD for this class's audience.
 - **What to show**: Take a real business document (proposal template, review checklist, client brief format) and use Skill Creator to turn it into a skill. Show output with vs without.
 
+### 2.6 — The Escalation Pattern
+- **Duration**: 8-10 min
+- **Status**: NEW — from Miessler "Stop Getting Blocked: My Escalating Web Scraper Skill"
+- **Core concept**: Build skills that recover from failure without human intervention. Multiple tiers of execution — cheapest/simplest first, escalating to expensive/complex only on failure. Each tier catches its own failure and hands off to the next.
+- **What to show**:
+  - Build a data-fetching skill with 3 tiers (simple fetch → retry with adaptation → heavy artillery)
+  - Show the skill hitting a wall at tier 1, automatically escalating to tier 2, succeeding
+  - Show a case where tier 2 also fails → tier 3 kicks in
+  - Compare: without escalation, the skill just errors out and stops
+- **Key principles**: Cost-aware tool selection (cheap first), fail-forward not fail-stop, observability (log which tiers fired), schedule-safe (can run at 3am unattended)
+- **Why this matters**: The difference between a skill that works in demos and one that works in production. Nobody else teaches this. Makes skills trustworthy enough to run on schedules (Ch 6.2).
+
+### 2.7 — Code Before Prompts
+- **Duration**: 7-10 min
+- **Status**: NEW — from Miessler PAI Deep Dive + Unified AI Assistant
+- **Core concept**: The 80/20 rule — anything deterministic should be code in scripts/, not AI prompts. Math, date formatting, CSV parsing, API calls with exact parameters — code gets these right 100% of the time, AI gets them right 90%. Reserve AI for the fuzzy parts: writing, summarizing, deciding, interpreting.
+- **What to show**:
+  - Take the receipt scanner from Ch 4.3. Show it miscalculating with pure AI.
+  - Add a scripts/calculate.py that handles all math deterministically
+  - Update skill.md to call the script for math, use AI only for image reading and report writing
+  - Run both versions on 5 receipts — show the consistency improvement
+- **CLI tools as gold standard (Miessler)**: Wrap deterministic code in proper CLI tools with flags and help text. AI models perform dramatically better calling `scripts/calculate --input items.json --tax-rate 0.08` than interpreting freeform instructions.
+- **Key line**: "Anything that can be done deterministically in code should be. Reserve AI for the fuzzy tasks that resist programmatic solutions."
+
 ---
 
-## Chapter 3: Make It Yours (3 videos)
+## Chapter 3: Make It Yours (4 videos)
 
 ### 3.1 — Adding Your Brand Context
 - **Duration**: 10-12 min
@@ -192,7 +216,7 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
   - Demo: interview yourself about something you know well but haven't documented — show how much gets captured
   - "The Cliff exercise": Think of the person at your company everyone calls when things break. Imagine they're retiring in 30 days. This skill is how you capture what's in their head.
 - **Key line (Miessler)**: "The expertise gap between humans and AI is actually the failure so far of us to articulate all the different chaos things — all those random pieces of knowledge inside of people's brains."
-- **Connects to Ch 7.2**: This knowledge capture is part of the $15K service — walk into a company, interview domain experts, build skills from their knowledge.
+- **Connects to Ch 7.1**: When sharing skills with a team, captured expertise is the highest-value content to distribute.
 
 ---
 
@@ -327,7 +351,7 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
   - Quality blind test: skill output vs human output, reviewed blind
   - Build a metrics dashboard meta-skill that tracks cost, time, quality across all skills with weekly rollups
 - **The vendor test (Miessler)**: "Now a vendor doesn't come with a steak dinner. We show them our metrics. What are YOUR ratings? What are YOUR cost numbers?"
-- **Connects to**: 6.4 (each graph node gets these metrics), 7.2 (business metrics are the proof when pitching)
+- **Connects to**: 6.4 (each graph node gets these metrics)
 
 ---
 
@@ -380,11 +404,11 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
   - The vendor test: "What are your ratings? What are your cost numbers?"
 - **Key line (Miessler)**: "You can't optimize what you don't understand. You can't optimize what you don't see."
 - **The visibility pitch**: CEOs/CFOs spend months and hundreds of thousands of dollars (McKinsey, KPMG) just to get visibility into what their company is doing. This graph provides it instantly.
-- **Connects to**: 7.2 — this graph IS the deliverable for the enterprise engagement
+- **Connects to**: 7.1 — this graph helps teams understand the full system when sharing
 
 ---
 
-## Chapter 7: Ship It (2 videos)
+## Chapter 7: Ship It (1 video)
 
 ### 7.1 — Sharing Skills with Your Team
 - **Duration**: 7-10 min
@@ -396,18 +420,6 @@ Secondary: developers who've seen the Skills chapter in the Claude Code class bu
   - The Zack Shapiro insight: "Knowledge that takes years of mentorship to transmit is now an instruction file that works from the first draft."
   - Show: two Claude instances, same skill, same input → consistent output. vs blank Claude → wildly different output.
 - **Cross-link**: Kanban items [[skills-as-team-knowledge-base]], [[managed-settings-json-for-enterprises]]
-
-### 7.2 — Selling AI Operating Systems
-- **Duration**: 8-10 min
-- **Status**: NEW — the business case closer
-- **Core concept**: The system you just built is what businesses pay $15K+ for. How to productize and sell it.
-- **What to show**:
-  - The pitch: "I'll build an AI operating system that replaces 3-4 employees for your business for a one-time fee"
-  - Real numbers: solopreneur video guy working with 3 clients at $15K average deal size
-  - The delivery: skill plugin + onboarding + customization session
-  - The recurring angle: monthly retainer for skill maintenance, updates, new skills as business evolves
-- **Key insight**: "Anyone can go and install 280,000 generic skills. But building one that's tailored to a specific business with years of knowledge and context — that's where the real value is."
-- **This is the closer**: The class started with "build skills for yourself." It ends with "sell skills to others."
 
 ---
 
@@ -436,33 +448,36 @@ These existing videos from other classes should be referenced (not re-recorded) 
 
 **Phase 1 — Foundation (record first, highest standalone value)**
 - Ch 1: 1.1, 1.2, 1.3
-- Ch 2: 2.1, 2.2, 2.3, 2.4
+- Ch 2: 2.1, 2.2, 2.3, 2.4, 2.6, 2.7
 
 **Phase 2 — The Build (record second, needs Phase 1 as prereq)**
 - Ch 2: 2.5
-- Ch 3: 3.1, 3.2, 3.3
+- Ch 3: 3.1, 3.2, 3.3, 3.4
 - Ch 4: 4.1, 4.2, 4.3, 4.4, 4.5
 
 **Phase 3 — Advanced + Ship (record last)**
-- Ch 5: 5.1, 5.2, 5.3, 5.4, 5.5
-- Ch 6: 6.1, 6.2, 6.3
-- Ch 7: 7.1, 7.2
+- Ch 5: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6
+- Ch 6: 6.1, 6.2, 6.3, 6.4
+- Ch 7: 7.1
 
 ## Video Count Summary
 
 | Chapter | Videos | New | Cross-link/Adapt |
 |---|---|---|---|
 | 1. The Blank Slate | 3 | 3 | 0 |
-| 2. Your First Skill | 5 | 4 | 1 (re-record Blog Post to Skill for business audience) |
+| 2. Your First Skill | 7 | 6 | 1 (re-record Blog Post to Skill for business audience) |
 | 3. Make It Yours | 4 | 3 | 1 (adapt encoding-your-expertise brief) |
 | 4. Build Your AI Employees | 5 | 4 | 1 (adapt skills-vs-subagents brief) |
 | 5. Quality Control | 6 | 6 | 0 |
 | 6. Wire It All Together | 4 | 3 | 1 (cross-link or co-film with Scheduled Tasks) |
-| 7. Ship It | 2 | 1 | 1 (adapt skills-as-team-knowledge brief) |
-| **Total** | **29** | **24 new** | **5 adapted/cross-linked** |
+| 7. Ship It | 1 | 0 | 1 (adapt skills-as-team-knowledge brief) |
+| **Total** | **30** | **25 new** | **5 adapted/cross-linked** |
 
 ### Miessler-sourced additions (2026-03-31)
 - 1.1: Added $50T business pain framing + Human 3.0 "where humans fit" intro
+- 2.6: The Escalation Pattern — fail-forward, cost-aware tiered execution
+- 2.7: Code Before Prompts — 80/20 rule, deterministic code in scripts/ for consistency
 - 3.4: The Articulation Gap — extracting OTHER people's expertise into skills
 - 5.6: Business Metrics for Skills — dollars/hours/consistency vs technical evals
 - 6.4: Companies Are Graphs of Algorithms — enterprise process mapping with the Lattice architecture
+- Removed: 7.2 Selling AI Operating Systems
