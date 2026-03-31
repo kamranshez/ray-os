@@ -4,18 +4,6 @@ kanban-plugin: board
 
 ---
 
-## Next Up
-
-- [ ] [[worktrees]] #claude-code
-- [ ] Telegram channel #channels
-- [ ] iMessage channel #channels
-- [ ] Using Screenshots #correction
-- [ ] Skills #correction
-- [ ] Disable Model Invoked Skills #correction
-- [ ] Auto Compact & Handoff #correction
-- [ ] Output Styles #correction
-- [ ] Clarifying Questions #correction
-
 ## To Do
 
 - [ ] [[compound-engineering]] #claude-code
@@ -40,7 +28,17 @@ kanban-plugin: board
 - [ ] [[ghostty-and-slash-terminal-setup]] #claude-code
 - [ ] [[claude-code-in-xcode]] #claude-code
 - [ ] [[managed-settings-json-for-enterprises]] #claude-code
+- [ ] [[claude-code-lab]] #claude-code
 - [ ] [[building-effective-agent-teams]] #claude-code
+- [ ] [[agent-teams-with-debate]] #claude-code
+- [ ] [[auto-research-karpathy-loop]] #claude-code
+- [ ] [[multi-agent-chrome]] #claude-code
+- [ ] [[self-modifying-claude-md]] #claude-code
+- [ ] [[workspace-organization]] #claude-code
+- [ ] [[agent-harness-concept]] #claude-code
+- [ ] [[deploying-skills-to-cloud]] #claude-code
+- [ ] [[computer-use]] #claude-code
+- [ ] [[global-claude-md-personal-profile]] #claude-code
 - [ ] MCPs / Connectors that I use #claude-code
 - [ ] Dynamic Context Injection for skills #claude-code
 - [ ] Auto Mode #claude-code
@@ -68,10 +66,17 @@ kanban-plugin: board
 - [ ] [[skills-as-team-knowledge-base]] #business
 - [ ] [[self-auditing-ai-checks-its-own-work]] #business
 - [ ] [[remotion]] #business
+- [ ] [[doe-framework]] #business
+- [ ] [[self-annealing-workflows]] #business
 - [ ] [[01-steering-distributions]] #prompt-engineering
 - [ ] [[02-scaling-taste]] #prompt-engineering
 - [ ] [[03-archetype-teams]] #prompt-engineering
 - [ ] [[04-living-archetypes]] #prompt-engineering
+- [ ] [[stochastic-consensus-and-fan-out-fan-in]] #techniques
+- [ ] [[video-to-action-pipeline]] #techniques
+- [ ] [[prompt-contracts]] #techniques
+- [ ] [[core-agent-loop]] #techniques
+- [ ] [[subagent-verification-loops]] #techniques
 - [ ] [[always-force-a-constraint-restatement-before-code]] #techniques
 - [ ] [[getting-shit-done]] #techniques
 - [ ] [[llms-have-an-easier-time-writing-things]] #techniques
@@ -89,6 +94,32 @@ kanban-plugin: board
 - [ ] Look at another video for Claude.ai #claude-ai
 - [ ] Record intro for Claude.ai class #claude-ai
 - [ ] Explaining RAG #claude-ai
+- [ ] [[1-1-why-skills-change-everything]] #skills
+- [ ] [[1-2-how-skills-work-under-the-hood]] #skills
+- [ ] [[1-3-set-up-your-workspace]] #skills
+- [ ] [[2-1-the-interrogate-skill]] #skills
+- [ ] [[2-2-building-a-research-skill]] #skills
+- [ ] [[2-3-anatomy-of-a-well-built-skill]] #skills
+- [ ] [[2-4-writing-descriptions-that-trigger]] #skills
+- [ ] [[2-5-the-skill-you-already-have]] #skills
+- [ ] [[3-1-adding-your-brand-context]] #skills
+- [ ] [[3-2-refactoring-a-marketplace-skill]] #skills
+- [ ] [[3-3-encoding-your-expertise]] #skills
+- [ ] [[4-1-the-morning-briefing-employee]] #skills
+- [ ] [[4-2-the-content-director]] #skills
+- [ ] [[4-3-the-operations-manager]] #skills
+- [ ] [[4-4-the-marketing-director]] #skills
+- [ ] [[4-5-skills-vs-subagents]] #skills
+- [ ] [[5-1-evaluating-your-skills]] #skills
+- [ ] [[5-2-ab-testing-reference-files]] #skills
+- [ ] [[5-3-self-improving-skills]] #skills
+- [ ] [[5-4-the-auto-improvement-skill]] #skills
+- [ ] [[5-5-the-customizer-pattern]] #skills
+- [ ] [[6-1-chaining-and-stacking-skills]] #skills
+- [ ] [[6-2-scheduling-skills-as-autonomous-agents]] #skills
+- [ ] [[6-3-mapping-your-system]] #skills
+- [ ] [[7-1-sharing-skills-with-your-team]] #skills
+- [ ] [[7-2-selling-ai-operating-systems]] #skills
 - [ ] Record intro for Skills class #skills
 - [ ] Knowing which skills to combine #skills
 - [ ] Running Claude in a dev box #devboxes
@@ -98,6 +129,21 @@ kanban-plugin: board
 - [ ] Set up Reddit Claude cron (auto dream example) #coverage
 - [ ] Ensure coverage: UPtmKh1vMN8 + yLXLHnD4fco #coverage
 - [ ] Check completeness: 2BpCk4d2Cc0 #coverage
+
+
+## Next Up
+
+- [ ] [[refero-design-mcp]] #claude-code
+- [ ] [[worktrees]] #claude-code
+- [ ] Telegram channel #channels
+- [ ] iMessage channel #channels
+- [ ] Using Screenshots #correction
+- [ ] Skills #correction
+- [ ] Disable Model Invoked Skills #correction
+- [ ] Auto Compact & Handoff #correction
+- [ ] Output Styles #correction
+- [ ] Clarifying Questions #correction
+
 
 ## Doing
 
@@ -133,8 +179,10 @@ kanban-plugin: board
 - [x] CE: Working with Model Limits #context-engineering
 
 
+
+
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,false,false,false,false,false,false,false]}
 ```
 %%
