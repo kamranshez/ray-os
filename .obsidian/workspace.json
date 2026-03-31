@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "projects/agentic-coding-school/to-film/coverage-gaps-from-transcripts.md",
+                "file": "socials/youtube/videos/claude-code-leak.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "coverage-gaps-from-transcripts"
+              "title": "claude-code-leak"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 284.5004348754883
+    "width": 284.5004348754883,
+    "collapsed": true
   },
   "right": {
     "id": "99b289f72ba3f8e1",
@@ -184,6 +185,32 @@
   },
   "active": "7508a4eb561bc3ca",
   "lastOpenFiles": [
+    "socials/youtube/videos/images/context-collapse/excalidraw_5.png",
+    "socials/youtube/videos/images/context-collapse/excalidraw_4.png",
+    "socials/youtube/videos/images/context-collapse/excalidraw_3.png",
+    "socials/youtube/videos/images/context-collapse/excalidraw_1.png",
+    "socials/youtube/videos/images/buddy/excalidraw_5.png",
+    "socials/youtube/videos/images/buddy/excalidraw_4.png",
+    "socials/youtube/videos/images/buddy/excalidraw_3.png",
+    "socials/youtube/videos/images/buddy/excalidraw_2.png",
+    "socials/youtube/videos/images/buddy/excalidraw_1.png",
+    "socials/youtube/videos/images/connector-text/excalidraw_5.png",
+    "socials/youtube/videos/images/connector-text/excalidraw_4.png",
+    "socials/youtube/videos/images/connector-text",
+    "socials/youtube/videos/images/settings-sync",
+    "socials/youtube/videos/images/background-sessions",
+    "socials/youtube/videos/images/terminal-panel",
+    "socials/youtube/videos/images/ccr-mirror",
+    "socials/youtube/videos/images/github-webhooks",
+    "socials/youtube/videos/images/push-notifications",
+    "socials/youtube/videos/images/brief-mode",
+    "socials/youtube/videos/images/coordinator-mode",
+    "socials/youtube/videos/images/claude-code-leak/buddy",
+    "socials/youtube/videos/skills-2.0.md",
+    "socials/youtube/videos/cloud-scheduled-tasks.md",
+    "projects/agentic-coding-school/to-film/coverage-gaps-from-transcripts.md",
+    "projects/agentic-coding-school/to-film/Claude-Code Source Code Leak.md",
+    "Agentic Coding School.md",
     "projects/agentic-coding-school/to-film/skills/7-2-selling-ai-operating-systems-script.md",
     "projects/agentic-coding-school/to-film/skills/7-1-sharing-skills-with-your-team-script.md",
     "projects/agentic-coding-school/to-film/skills/6-3-mapping-your-system-script.md",
@@ -204,32 +231,6 @@
     "projects/agentic-coding-school/to-film/claude-code/multi-agent-chrome.md",
     "projects/agentic-coding-school/to-film/claude-code/agent-teams-with-debate.md",
     "projects/agentic-coding-school/to-film/techniques/stochastic-consensus-and-fan-out-fan-in.md",
-    "projects/agentic-coding-school/to-film/claude-code/auto-research-karpathy-loop.md",
-    "projects/agentic-coding-school/to-film/skills/5-5-the-customizer-pattern-script.md",
-    "projects/agentic-coding-school/to-film/skills/5-4-the-auto-improvement-skill-script.md",
-    "projects/agentic-coding-school/to-film/skills/5-3-self-improving-skills-script.md",
-    "projects/agentic-coding-school/to-film/skills/5-2-ab-testing-reference-files-script.md",
-    "projects/agentic-coding-school/to-film/skills/5-1-evaluating-your-skills-script.md",
-    "images/worktrees/worktreecreate-hooks-automated-setup.png",
-    "images/worktrees/worktree-flag-and-subagent-isolation.png",
-    "images/worktrees/worktree-friction-and-future-direction.png",
-    "images/worktrees/two-sessions-one-codebase-problem.png",
-    "images/worktrees/subagent-worktrees-parallel-execution.png",
-    "images/worktrees/isolated-worktrees-parallel-agents.png",
-    "images/worktrees/agent-teams-vs-independent-workstreams.png",
-    "images/worktrees",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/calcified-thinking/excalidraw_10.png",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/calcified-thinking/excalidraw_9.png",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/calcified-thinking/excalidraw_8.png",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/calcified-thinking",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/correction-branching",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/static-vs-living",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/blended-vs-split",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/productive-tension",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/orchestrator-delegation",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/data-to-skill-compression",
-    "projects/agentic-coding-school/vsl/diff-v5-v6.html",
-    "projects/agentic-coding-school/to-film/prompt-engineering/images/three-axes-of-prompting",
     "Untitled.canvas"
   ]
 }
