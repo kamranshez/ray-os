@@ -138,8 +138,6 @@ kanban-plugin: board
 ## Next Up
 
 - [ ] [[refero-design-mcp]] #claude-code
-- [ ] [[worktrees]] #claude-code
-- [ ] Telegram channel #channels
 - [ ] iMessage channel #channels
 - [ ] Using Screenshots #correction
 - [ ] Skills #correction
@@ -151,6 +149,9 @@ kanban-plugin: board
 
 ## Doing
 
+- [ ] [[worktrees]] #claude-code
+- [ ] Telegram channel #channels
+- [ ] Codex + Claude Code
 
 
 ## Done
