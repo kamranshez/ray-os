@@ -15,9 +15,23 @@ When working with thumbnails, also check `references/thumbnails/index.md` for th
 
 When the user asks for title ideas, provide 8-10 options organized by framing category. For each title, briefly note which proven pattern it uses or what untested hypothesis it explores.
 
+### Recency Weighting
+
+Audience preferences drift over time. When patterns from older videos (V1-V10) conflict with newer videos (V15+), **trust the newer data**. Apply exponential decay when weighing evidence:
+
+- **V15+ (last ~4 videos):** Full weight — these reflect current audience behavior
+- **V10-V14:** High weight — still relevant but verify against recent results
+- **V1-V9:** Reduced weight — foundational patterns (e.g., "Anthropic" authority, no parentheticals) are likely durable, but specific formulas and scores may have drifted
+
+For example, if "Anthropic Just Dropped" scored 49.4% on V15 but a non-Anthropic title like "Claude Code Is About to Change Forever" scores 37.1% on V19 while "Anthropic Accidentally Leaked..." scores 29.9% in the same round — that's a signal the landscape is shifting. Don't dismiss newer counter-evidence just because older data was stronger.
+
+**Durable patterns** (unlikely to decay): anti-patterns like parentheticals, "Stop doing X", listing multiple features, pipe format. These fail for structural reasons, not trend reasons.
+
+**Trend-sensitive patterns** (may decay): specific verb rankings, whether "Anthropic" authority is required, optimal title length, which curiosity frames resonate. Re-evaluate these when newer data contradicts them.
+
 ### The Proven Formula Hierarchy
 
-These are ranked by reliability based on actual test data. Lean heavily toward the top of this list:
+These are ranked by reliability based on actual test data. Lean heavily toward the top of this list, but apply recency weighting — newer results may shift these rankings:
 
 1. **"Anthropic Just Dropped Their Internal [X] Strategy"** — insider framing, 49.4% all-time best (V15)
 2. **"Anthropic Just Dropped the Feature Nobody Knew They Needed"** — negative social proof curiosity, 46.8% (V14)
@@ -42,7 +56,7 @@ When using the "Anthropic Just [verb]" formula:
 
 Apply these rules to every title you generate:
 
-1. **Include "Anthropic" authority framing** — titles without it consistently underperform (V10: 25.4% without vs 40.9% with). The only exception is statistical authority framing ("Top 0.01% User")
+1. **Include "Anthropic" authority framing** — titles without it consistently underperform (V10: 25.4% without vs 40.9% with). Exceptions: statistical authority framing ("Top 0.01% User") and when the thumbnail already carries Anthropic branding visually (V19: "Claude Code Is About to Change Forever" at 37.1% beat "Anthropic Accidentally Leaked..." at 29.9% because the thumbnail's Anthropic logo + "/leaked" text handled authority)
 2. **Keep it short and clean** — one clear hook, not multiple
 3. **Never list multiple features in the title** — kills performance every time (V5: 26%)
 4. **Never use parentheticals** — proven negative signal (V1, V11 launch failure)
@@ -93,14 +107,17 @@ When suggesting thumbnail text, follow these proven patterns:
 
 ## Recording A/B Test Results
 
+**IMPORTANT: Record results immediately.** As soon as the user shares A/B test results (screenshots or numbers), record them to the reference files *before* suggesting the next round. Do not wait for the user to ask — recording is automatic and happens inline with your analysis. This ensures no data is lost between conversation turns.
+
 When the user shares A/B test screenshots or results:
 
-1. Record them in `/Users/ray/Desktop/ray-os/socials/youtube/ab-tests/results.md` under the correct video section
+1. Record them in `references/ab-test-results.md` in this skill's directory
 2. Use the established format with markdown tables
 3. Include timestamp in the round header: `### Title A/B Test Round N (YYYY-MM-DD)`
 4. Write "Key takeaways" that reference specific data points from previous videos
 5. End with a clear recommendation for the next round
-6. Also update the reference copy in this skill's references/ directory to stay in sync
+6. Save any thumbnail images shared alongside results (see Storing Thumbnail Images below)
+7. Update `references/thumbnails/index.md` if thumbnail results were included
 
 ### Storing Thumbnail Images
 
@@ -143,3 +160,6 @@ Never suggest these. If you catch yourself writing one, delete it:
 | "Stop [doing X]" | Worst performer category (20-29%) |
 | "Should Have" retrospective framing | Complaint without authority |
 | Vague thumbnail time references | No value promise |
+| "Accidentally [verb]" in title | Adds length without curiosity; if thumbnail already shows the event, title restating it = redundancy (V19: 29.9%) |
+| "Secretly [verb]" explicit secret framing | Stating secrecy kills the curiosity that implying it preserves (V18: 26.9-28.8%) |
+| Title + thumbnail saying the same thing | Complementary > redundant. If thumbnail says "/leaked", title should say what *changes*, not that something *leaked* (V19) |

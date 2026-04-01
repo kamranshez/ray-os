@@ -1103,3 +1103,69 @@ Testing whether "Memory 2.0" title can beat the locked winner, and whether the p
 - **Thumbnail images:** See `references/thumbnails/v18-auto-dream/`
 
 ---
+
+## Video 19: Claude Code Source Code Leak — Upcoming Features
+
+**Published:** 2026-04-01
+**Thumbnail Text:** /leaked (on winning variant)
+
+### Title A/B Test Round 1 (2026-04-01)
+
+Same thumbnail across all (face + /leaked folder icon, serious expression).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Anthropic Just Leaked the Features Nobody Was Supposed to See | /leaked | 34% | Leader |
+| Everything Hidden in Claude Code's Leaked Source Code | /leaked | 33.7% | |
+| Anthropic Just Leaked 18 Unreleased Claude Code Features | /leaked | 32.3% | |
+
+**Key takeaways:**
+- **Flat results (1.7% spread)** across three diverse frames (social proof curiosity, exhaustive, specificity+count) — classic thumbnail ceiling signal
+- Social proof curiosity ("Nobody Was Supposed to See") led marginally at 34%, consistent with V14/V18 pattern
+- Specificity with count ("18 Unreleased") came last at 32.3% — "18" may feel like a list video, killing curiosity
+- "Everything Hidden" exhaustive framing nearly tied at 33.7% — "Hidden" implies secrets but doesn't create enough curiosity gap
+- **Diagnosis:** Three genuinely different title frames all scoring ~33% = thumbnail is the bottleneck, not the title. Switched to thumbnail testing.
+
+### Thumbnail A/B Test Round 1 (2026-04-01) — "/leaked" vs "/source-code" text
+
+Same title across all: "Anthropic Just Leaked the Features Nobody Was Supposed to See". Testing folder text variations and facial expressions.
+
+| Thumbnail Style | Thumbnail Text | Watch-time Share | Result |
+|----------------|----------------|------------------|--------|
+| **Face (serious) + /leaked folder** | /leaked | **35.5%** | ✅ WINNER |
+| Face (smiling, pointing) + /source-code folder + code snippet tab | /source-code | 33% | |
+| Face (serious) + /source-code folder | /source-code | 31.5% | |
+
+**Key takeaways:**
+- **"/leaked" (35.5%) > "/source-code" (31.5-33%)** — shorter, punchier text wins. "/leaked" is 7 characters vs "/source-code" at 12. More scannable at small size.
+- Serious expression + /leaked (35.5%) beat smiling+pointing + /source-code (33%) — for leak/scandal content, serious expression matches the tone better than excited/pointing
+- Smiling+pointing (33%) > serious (31.5%) when both use /source-code — positive energy helps weaker text, but can't overcome "/leaked" with matched tone
+- **New insight:** Thumbnail text should match the emotional tone of the content. Leak = serious. Announcement = excited.
+- **New insight:** Shorter thumbnail text consistently wins ("/leaked" > "/source-code", same as "/dream" > "It dreams." in V18)
+- Locked in /leaked thumbnail. Returning to title testing with the stronger thumbnail.
+
+### Title A/B Test Round 2 (2026-04-01) — Transformation vs insider vs version label
+
+Same thumbnail across all (face + /leaked folder icon, serious expression). Testing completely different frames from Round 1.
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Claude Code Is About to Change Forever** | /leaked | **37.1%** | ✅ Leader |
+| Anthropic Accidentally Leaked Claude Code 3.0 | /leaked | 33% | |
+| Anthropic Accidentally Leaked Their Internal Claude Code Roadmap | /leaked | 29.9% | |
+
+**Key takeaways:**
+- **"Change Forever" transformation frame at 37.1%** — best score across both title rounds for this video
+- **"Accidentally Leaked" is dead weight** — adds 2 words, makes titles long. The thumbnail already says "/leaked" — double-dipping on the leak angle hurts
+- **"Internal...Roadmap" flopped at 29.9%** — "Roadmap" sounds corporate/boring. V15's "Internal Skills Strategy" won at 49.4% but "Strategy" > "Roadmap" in curiosity
+- **Dropping "Anthropic" worked** — rare exception to the authority rule. The thumbnail's Anthropic logo + "/leaked" carries authority visually, freeing the title for pure curiosity
+- **Short + transformation wins** — "Change Forever" is only 7 words. Clean, scannable, maximum curiosity gap
+- **"Claude Code 3.0" version label decent at 33%** — version labels work (V12: "Skills 2.0?" at 44.4%) but "3.0" may feel arbitrary since there's no established "2.0"
+- **New insight:** When thumbnail text already communicates the event (e.g., "/leaked"), the title should focus on the *implication*, not restate the event
+- **New insight:** "Accidentally Leaked" (29.9-33%) < "Just Leaked" (34% R1) — "Accidentally" adds length without adding curiosity
+
+**Status:** In progress — title Round 3 pending, refining around "Change Forever" transformation frame.
+
+**Thumbnail images:** See `references/thumbnails/v19-claude-code-leak/`
+
+---

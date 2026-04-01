@@ -74,3 +74,25 @@ v{number}-{slug}/
 - "They added this." progression thumbnail's R1 score (34%) was carried by the stronger title — dropped to 31.4% when paired with weaker "Memory 2.0" title
 - Title-thumbnail alignment (Memory 2.0 + progression) didn't outperform mismatched face thumbnail — face trust/recognition > concept alignment
 - Metaphorical "dreaming" framing consistently underperforms across both titles ("Made Claude Code Dream" 30.6%) and thumbnails ("It dreams." 31.1%)
+
+---
+
+### V19 — Claude Code Source Code Leak (2026-04-01)
+
+**Title:** "Anthropic Just Leaked the Features Nobody Was Supposed to See"
+**Result:** "/leaked" folder text won over "/source-code" variants
+
+#### Thumbnail Round 1 — "/leaked" vs "/source-code" text
+
+| File | Style | Text | Watch-time |
+|------|-------|------|-----------|
+| `1st-35.5pct-leaked-folder-face-serious.jpg` | Face (serious) + /leaked folder icon, muted blue-grey background | /leaked | 35.5% |
+| `3rd-33pct-source-code-folder-face-smiling.jpg` | Face (smiling, pointing) + /source-code folder + code snippet tab on folder, lighter background | /source-code | 33% |
+| `2nd-31.5pct-source-code-folder-face-serious.jpg` | Face (serious) + /source-code folder, same blue-grey background as winner | /source-code | 31.5% |
+
+**Learnings:**
+- **Shorter thumbnail text wins again:** "/leaked" (7 chars) > "/source-code" (12 chars) — consistent with V18 where "/dream" > "It dreams." and "They added this."
+- Serious expression (35.5%) beat smiling+pointing (33%) for leak/scandal content — tone matching matters
+- Smiling+pointing (33%) > serious (31.5%) when both use /source-code — positive energy partially compensates for weaker text
+- **New pattern:** Thumbnail text emotional tone should match content tone. Leak/scandal = serious. Announcement/feature = excited.
+- The folder icon visual language (established V18 with /dream) continues to perform — becoming a recognizable series element
