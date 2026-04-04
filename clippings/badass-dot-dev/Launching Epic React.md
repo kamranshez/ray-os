@@ -1,0 +1,201 @@
+---
+title: "Launching Epic React"
+source: "https://badass.dev/partners/epic-react"
+author:
+  - "[[Joel Hooks]]"
+published:
+created: 2026-04-04
+description: "Learn how epicreact.dev came to be."
+tags:
+  - "clippings"
+---
+### Table of contents
+
+1. [Designing the content](#designing-the-content)
+2. [Producing the content with a relentless focus on quality](#producing-the-content-with-a-relentless-focus-on-quality)
+3. [Making the learning experience delightful with stunning visuals](#making-the-learning-experience-delightful-with-stunning-visuals)
+4. [Developing custom courseware with egghead infrastructure](#developing-custom-courseware-with-egghead-infrastructure)
+5. [Getting people excited about Epic React](#getting-people-excited-about-epic-react)
+6. [Working together in a trusted relationship](#working-together-in-a-trusted-relationship)
+7. [Launching Epic React](#launching-epic-react)
+
+**Spending a few years teaching React through courses, live workshops, and blogposts, Kent realized there was a gap in resources to learn the framework.**
+
+![](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1687812843%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2F2-er-illustration_2x_sskm0t.png&w=3840&q=75)
+
+> “A lot of people were coming to me asking, 'where do I go to learn React from nuts and bolts to all the advanced stuff?'," says Kent. "I would say, 'Well, I have these courses on egghead. Then, I've got some stuff on Frontend Masters. I've got some blog posts. I have some workshops you could sign up for.' It was just kind of all over the place.”
+
+![Kent C. Dodds](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1687812843%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2F3-er-illustration_2x_kaif9z.png&w=1920&q=75)
+
+### Introducing
+
+#### Kent C. Dodds
+
+Software engineer, educator and creator
+
+In fact, there wasn't anywhere that he could find a consistent, high-quality, all-in-one resource that would help developers learn React from the fundamentals all the way through to building well-tested application architecture.
+
+We have long had a trusted partnership with Kent through egghead. He focuses on teaching and creating the content, and we provide him with a full skilled team of professionals to provide planning, designing, development and delivery support. On top of his egghead courses and lessons, Kent achieved a [massive success collaborating with the egghead team](https://howtoegghead.com/instructor/case-studies/kent-c-dodds/) on building and launching [Testing JavaScript](https://testingjavascript.com/) as an incredibly valuable, deep-dive, standalone workshop using egghead infrastructure as a platform.
+
+![](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1687812843%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2F4-er-testing-javascript_2x_yc9f6r.png&w=3840&q=75)
+
+It was only natural for us to collaborate to help Kent create the absolutely best place for developers to learn React so they can create robust, high-quality, well-tested React applications that scale. He'd create the content and entrust us to take care of managing and coordinating the production, working with him from concept through to launch and beyond.
+
+![](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1687814777%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2F5-artwork_2x_bhjxoz.png&w=3840&q=75)
+
+Except this time it was going to be so much bigger.
+
+And use a whole new workshop structure to get the concepts to stick in people's brains. 🧠
+
+\[1\]
+
+### How It Started
+
+Kent had already designed and delivered several workshops on the Epic React topics he planned to cover, so he had a great foundation to build on already.
+
+He and team member Taylor Bell collaborated in planning sessions in the early stages to flesh out Kent's initial ideas — dialing in the desired learner outcomes, defining what skills they'd come away with to reach those goals, and working out a plan to meet those goals through a series of modules.
+
+![Team Member Portrait](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1688422761%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2Fteam-members%2Fteam-avatar-1_2x_uswtwj.png&w=128&q=75)
+
+Taylor Bell
+
+Learning Design Support
+
+Taylor worked with Kent during the workshop design process to help define the learner outcomes and concepts that would be taught in each of the modules, as well as the plan to achieve those outcomes.
+
+### Using more 🌎 real-world examples and introducing a 👐🏼 hands-on learning format
+
+Kent wanted to bridge the gap between teaching the concepts in isolation and showing how to use them in a practical, real-world context.
+
+Isolated, manufactured examples are effective for learning a specific concept with less distraction, so Kent has typically relied on using these kinds of examples alone when time is a constraint (which it is usually). But with this much larger, self-paced workshop format of Epic React, he has the space to also map out how learners will apply the skills and knowledge gained by teaching them how to build a real-world app.
+
+Epic React is also designed to be a much more hands-on, exercise-driven workshop than Kent's previous recorded material. In each Epic React lesson, Kent:
+
+1. introduces the problem briefly in a video
+2. gives you a coding exercise to do on your own
+3. then walks through the solution in a video and answers questions that you might have come up with while doing the exercise
+![](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1689013657%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2F6-er-illustration2x_ouimjf.png&w=3840&q=75)
+
+Going through the workshops, you spend more time with your hands on the keyboard than watching the videos. It's an approach Kent learned in the book **Make it Stick: The Science of Successful Learning**.
+
+> “The point is for people to expose themselves to the problem and try to figure out the solution so that they get all the right questions in their minds," says Kent.
+
+### 🧪 Testing and improving the content based on learner feedback
+
+Before recording the material, Kent road-tested it a final time with developers through a series of eight remote live workshops to identify what worked for them and what didn't. He reviewed feedback on every single exercise from workshop attendees, and was able to pinpoint how to improve things to really make sure what he was teaching would stick with people and be helpful to them. One of the bigger changes he made was in the last workshop, in which Kent taught how to build a React application from scratch.
+
+> “It was a very difficult workshop to deliver in the amount of time and it just wasn't sinking in for people," says Kent. "I realized that what I really had wasn't one workshop — it was actually four. I expanded that workshop to four modules and I was able to add a bunch of exercises and give people a lot more time to work through things.”
+
+\[2\]
+
+### Producing the content with a relentless focus on quality
+
+With the content solidified and improvements made based on the learner feedback he received, Kent turned his attention to recording. Finding the energy and the quiet time to record about 350 videos with four kids is a challenge, resulting in a lot of late nights of recording. All together, he recorded about 60-70 hours of raw video.
+
+> “That's a lot of time," says Kent. "I'm talking and I'm trying to be engaged the whole time and excited. It's really tiring.”
+
+As Kent finished the raw videos, our content production team (Haze Provinsal, Lucas Minter, Cree Provinsal, Zac Jones and Lauro Silva) jumped in to handle the rest of the production and review process to ensure the final product was the absolutely best, most high-quality product possible.
+
+![Team Member Portrait](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1688422761%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2Fteam-members%2Fteam-avatar-2_2x_fgfmpf.png&w=640&q=75)
+
+Zac Jones, Haze Provinsal, Lucas Minter, Cree Provinsal & Lauro Silva
+
+Content Excellence Team
+
+We edited the raw footage for each of the ~350 videos so they were polished, free of distractions, and delivered the highest value-per-minute possible for the viewer.
+
+Each video was reviewed by four or five team members to catch and fix all the small, yet important details — everything from small editing blips through to any UX issues with the flow of the modules. We even had a few egghead community members test out one of the modules to get a fresh perspective on the workflow and make sure we didn't miss anything in the review process. We also took care of ordering and reviewing transcripts to make sure they're accurate.
+
+\[3\]
+
+### Making the learning experience delightful with stunning visuals
+
+You can't help but be drawn in by the stunning visual work that's gone into [EpicReact.dev](https://epicreact.dev/).
+
+![Team Member Portrait](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1688422761%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2Fteam-members%2Fteam-avatar-3_2x_mxnyxi.png&w=128&q=75)
+
+Vojta Holik
+
+UI Design & Development
+
+Designer/Developer Vojta Holik worked his magic to present the workshop beautifully, inside and out, to make it easy to access and use. He's responsible for pretty much all of the UI/UX design work on the site and in the workshop itself, including all the delightful animations.
+
+![](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1687812843%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2F7-creating-content_2x_eil4bj.png&w=3840&q=75)
+
+> "Vojta is constantly making really awesome things for me to package my stuff in," says Kent.
+> 
+>   
+> 
+> "I'm so not a designer. It's like I make this beautiful ice cream sundae and I give it to Vojta in a cardboard box and he swaps out that cardboard box for this beautiful glass bowl to deliver my delicious ice cream in. All of a sudden, that ice cream takes on a whole different meaning. The presentation makes such a difference in your perception of the content as well as your experience in consuming it."
+
+The space theme ties all the visual work together. Coming up with a compelling visual theme goes beyond providing a beautiful presentation. It communicates more effectively and gives people the emotional connection to purchase the workshop and to more easily engage and stick with the material.
+
+![Team Member Portrait](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1688422761%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2Fteam-members%2Fteam-avatar-4_2x_kazrqv.png&w=384&q=75)
+
+Maggie Appleton, Gustavo Henrique, David Gil
+
+Art Direction & Illustration
+
+Maggie Appleton provided the guidance and art direction on how to translate Epic React workshop concepts into visual space metaphors that would be easy to grasp. She brought in the talents of freelance illustrators David Gil and Gustavo Henrique to do the 3D artwork that would be used throughout the workshop material.
+
+![](https://badass.dev/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbadass-courses%2Fimage%2Fupload%2Fv1687812844%2Fcase-studies%2FLaunching%2520Epic%2520React%2520-%2520Kent%2520C.%2520Dodds%2F8-ti-illustrations-renders_2x_ewi9xx.png&w=3840&q=75)
+
+We handled all the development and infrastructure work for Epic React, with Joel Hooks serving as the technical architect and lead developer and Ian Jones supporting the back-end development.
+
+We built the Epic React site using Gatsby and MDX, with egghead's infrastructure serving as the platform. Having produced a couple standalone workshops using egghead infrastructure before (like Testing JavaScript), we had already solved some of the technical hurdles involved such as dealing with authentication/login, creating the eCommerce aspect, and allowing for purchase power parity.
+
+However, Epic React's new structure required us to do some clever workarounds with the tech for content delivery — pulling the right content needed and keep track of user progress in a way that made sense, without having to do a database overhaul or essentially inventing new technology. We essentially developed bespoke courseware to provide the instructor led hands-on learning experience with extreme depth.
+
+\[5\]
+
+### Getting people excited about Epic React
+
+As Epic React got closer to being ready to launch, we set out a marketing strategy and handled details for Kent such as setting up a mailing list sign up, writing and updating site copy, creating social share images, setting out the launch discounts and their timing, and collaborating with him to create and execute a launch plan to give people a chance to get excited about the release. We helped him plan out the articles and emails he'd write to share React tips and tricks and give people a taste of what's in the course.
+
+> "It's laid out all so perfectly nicely — I knew exactly what I need to write about and when to write about it," says Kent. "I didn't need to make decisions or do it in a haphazard way."
+
+Kent puts a lot of additional effort to get people excited about Epic React and to answer people's questions about it and about React more generally — from livestreams to office hours to being very active on Twitter. He's also done a lot of community building, creating the [KCD Discord](https://kentcdodds.com/discord) for developers to interact with each other in a friendly and positive environment as they learn (whether it's Kent material or something else) and facilitating group learning opportunities with [Learning Clubs](https://kentcdodds.com/clubs).
+
+\[6\]
+
+### Working together in a trusted relationship
+
+Collaborating on a launch like this requires a trusted relationship and making well-researched decisions that will help achieve the goal of creating a successful product that has a huge reach and impact.
+
+Kent puts an incredible amount of work to improve the lives of thousands developers by sharing his knowledge. He counts on us to be a trusted advisor to help him reach that goal with experienced production management, coordination and advice. We act in the best interest of Kent and who he serves, working with Kent to prioritize and resolve any needs or issues standing in the way of success.
+
+> "\[The team is\] constantly helping me overcome obstacles," he says. "If I have a question or need anything, I just ask. Joel will either convince me that I don't actually need it — which happens often and I don't mind, because he's normally right. Or he and the team will just get it for me."
+
+\[7\]
+
+### Launching Epic React
+
+Epic React's release was the result of a ton of planning, care and attention being put into the important details — large and small — across every part of the experience.
+
+After 18 months of planning and building and an absolutely massive amount of effort, Epic React launched on September 29, 2020.
+
+The response was overwhelming.
+
+## With anticipation building up for months, about 6,000 people bought within the first 4 days of sales, with 4000 people buying it within the very first 24 hours.
+
+Thanks to our ability to support purchasing power parity, more people from around the world are able to access it.
+
+It's impossible for things to go perfectly for such a huge launch. It requires a lot of customer and technical support — dealing with issues with login, payment failure, and other friction points. The team worked diligently to respond as quickly as possible navigate and fix critical issues reported as quickly as possible. Kent was able to let us handle those issues for him, freeing him up to focus on interacting with the community and answering questions about the content.
+
+Pretty much immediately after launch, people who bought Epic React were already sharing how it was helping them and how it lives up to what Kent promised. Developers who have been using React for 4-5 years are learning new things from the very first workshop on fundamentals. The interactive, hands-on format is proving powerful for learning and retention.
+
+Take a look at just a handful of the awesome things people who bought Epic React have to say:
+
+Kent says he couldn't be happier about how things went with the launch.
+
+> "I'm blown away," he says. "I mean, I knew it was going to be successful. It's hard to build something as great as Epic React and not have confidence that it will do well. We had great success selling tickets to each of the live workshops. But I honestly was overwhelmed by the enthusiasm and excitement by the general developer community."
+
+One of the delightful surprises of the launch was seeing how many people have been sharing their learnings with each other. Members of [Kent's community discord](https://kentcdodds.com/discord) have been super enthusiastic and eager to help others going through Epic React. The community members even built an [FAQ](https://epicreact.dev/faq/) to provide some additional support.
+
+> "It's been amazing to watch the community be there for each other answering questions about React generally, course material, or even helping with technical support," says Kent. "I've received a tremendous amount of open source pull requests to improve the course material as well, which has been such a wonderful thing to see."
+
+At each step of the process of building Epic React, the focus has been on creating an amazing and valuable experience for developers to help them increase their confidence, reduce overwhelm, and level up their skills in developing React applications with solid foundations.
+
+Kent points to the synergistic relationship with our team to be able to accomplish far more than going it alone. With our team being a fiduciary and providing support, it frees up Kent to focus on creating the most helpful content possible rather than being worried about the hundreds of other details involved in creating Epic React.
+
+> "I feel I'm a much better instructor because I don't have to deal with all that extra stuff that doesn't have anything to do with teaching people React," says Kent. "The end product is way better than what \[the team\] or I could have done individually. We end up having way more success and being way more successful at getting people to learn."
