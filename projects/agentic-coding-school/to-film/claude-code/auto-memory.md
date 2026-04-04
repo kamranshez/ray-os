@@ -14,8 +14,7 @@ Auto memory is on by default. To toggle it, open `/memory` in a session and use 
 
 You can also disable it via environment variable by setting `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`.
 
-![[images/enable-disable/excalidraw_1.png]]
-![[images/enable-disable/excalidraw_7.png]]
+![[images/enable-disable/excalidraw_2.png]]
 ## Storage location
 
 Each project gets its own memory directory at `~/.claude/projects/<project>/memory/`. The `<project>` path is derived from the git repository, so all worktrees and subdirectories within the same repo share one auto memory directory. Outside a git repo, the project root is used instead.
@@ -42,15 +41,11 @@ The directory contains a `MEMORY.md` entrypoint and optional topic files:
 
 `MEMORY.md` acts as an index of the memory directory. Claude reads and writes files in this directory throughout your session, using `MEMORY.md` to keep track of what's stored where. Auto memory is machine-local — all worktrees and subdirectories within the same git repository share one auto memory directory, but files are not shared across machines or cloud environments.
 
-![[images/storage-location/excalidraw_1.png]]
+[[images/storage-location/excalidraw_1.png]]
 ![[images/storage-location/excalidraw_2.png]]
 ![[images/storage-location/excalidraw_3.png]]
 ![[images/storage-location/excalidraw_4.png]]
 ![[images/storage-location/excalidraw_5.png]]
-![[images/storage-location/excalidraw_6.png]]
-![[images/storage-location/excalidraw_7.png]]
-![[images/storage-location/excalidraw_8.png]]
-![[images/storage-location/excalidraw_9.png]]
 
 ## How it works
 
@@ -67,11 +62,6 @@ Claude reads and writes memory files during your session. When you see "Writing 
 ![[images/how-it-works/excalidraw_3.png]]
 ![[images/how-it-works/excalidraw_4.png]]
 ![[images/how-it-works/excalidraw_5.png]]
-![[images/how-it-works/excalidraw_6.png]]
-![[images/how-it-works/excalidraw_7.png]]
-![[images/how-it-works/excalidraw_8.png]]
-![[images/how-it-works/excalidraw_9.png]]
-![[images/how-it-works/excalidraw_10.png]]
 
 ## Audit and edit your memory
 
@@ -82,11 +72,6 @@ All auto memory files are plain markdown you can edit or delete at any time. Run
 ![[images/audit-and-edit/excalidraw_3.png]]
 ![[images/audit-and-edit/excalidraw_4.png]]
 ![[images/audit-and-edit/excalidraw_5.png]]
-![[images/audit-and-edit/excalidraw_6.png]]
-![[images/audit-and-edit/excalidraw_7.png]]
-![[images/audit-and-edit/excalidraw_8.png]]
-![[images/audit-and-edit/excalidraw_9.png]]
-![[images/audit-and-edit/excalidraw_10.png]]
 
 ## View and edit with `/memory`
 
@@ -99,8 +84,3 @@ When you ask Claude to remember something — like "always use pnpm, not npm" or
 ![[images/view-and-edit/excalidraw_3.png]]
 ![[images/view-and-edit/excalidraw_4.png]]
 ![[images/view-and-edit/excalidraw_5.png]]
-![[images/view-and-edit/excalidraw_6.png]]
-![[images/view-and-edit/excalidraw_7.png]]
-![[images/view-and-edit/excalidraw_8.png]]
-![[images/view-and-edit/excalidraw_9.png]]
-![[images/view-and-edit/excalidraw_10.png]]

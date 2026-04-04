@@ -33,16 +33,16 @@ kanban-plugin: board
 - [ ] [[deploying-skills-to-cloud]] #claude-code
 - [ ] [[computer-use]] #claude-code
 - [ ] [[global-claude-md-personal-profile]] #claude-code
-- [ ] MCPs / Connectors that I use #claude-code
-- [ ] Dynamic Context Injection for skills #claude-code
-- [ ] Auto Mode #claude-code
-- [ ] Making Prompt Based hooks #claude-code
-- [ ] A Quick Build #claude-code
-- [ ] Using Git in VSCode Version #claude-code
-- [ ] Effort for Subagents #claude-code
-- [ ] Checkpoints & Rewind #claude-code
-- [ ] .mcp.json #claude-code
-- [ ] Cmux #claude-code
+- [ ] [[mcps-connectors-that-i-use]] #claude-code
+- [ ] [[dynamic-context-injection-for-skills]] #claude-code
+- [ ] [[auto-mode]] #claude-code
+- [ ] [[making-prompt-based-hooks]] #claude-code
+- [ ] [[a-quick-build]] #claude-code
+- [ ] [[using-git-in-vscode-version]] #claude-code
+- [ ] [[effort-for-subagents]] #claude-code
+- [ ] [[checkpoints-and-rewind]] #claude-code
+- [ ] [[mcp-json]] #claude-code
+- [ ] [[cmux]] #claude-code
 - [ ] [[box-cli-filesystem-for-ai-agents]] #business
 - [ ] [[deep-research-with-exa]] #business
 - [ ] [[social-media-content-engine]] #business
@@ -66,14 +66,14 @@ kanban-plugin: board
 - [ ] [[llms-have-an-easier-time-writing-things]] #techniques
 - [ ] [[refactoring-to-save-on-context]] #techniques
 - [ ] [[task-shaped-wrappers]] #techniques
-- [ ] Scrappy Copy First #techniques
-- [ ] Designing interfaces #techniques
+- [ ] [[scrappy-copy-first]] #techniques
+- [ ] [[designing-interfaces]] #techniques
 - [ ] [[context-layer-summarised]] #context-engineering
 - [ ] [[code-field]] #context-engineering
 - [ ] [[company-as-a-file-system]] #context-engineering
 - [ ] [[language-server-protocol]] #context-engineering
-- [ ] Signal to Noise Ratio #context-engineering
-- [ ] Consolers as a skill #workflows
+- [ ] [[signal-to-noise-ratio]] #context-engineering
+- [ ] [[consolers-as-a-skill]] #workflows
 - [ ] [[1-1-why-skills-change-everything]] #skills
 - [ ] [[1-2-how-skills-work-under-the-hood]] #skills
 - [ ] [[1-3-set-up-your-workspace]] #skills
@@ -104,37 +104,37 @@ kanban-plugin: board
 - [ ] [[6-3-mapping-your-system]] #skills
 - [ ] [[6-4-companies-are-graphs-of-algorithms]] #skills
 - [ ] [[7-1-sharing-skills-with-your-team]] #skills
-- [ ] Knowing which skills to combine #skills
-- [ ] Running Claude in a dev box #devboxes
-- [ ] Deterministic pathway replacing certain tools #devboxes
-- [ ] Auto research #channels
+- [ ] [[knowing-which-skills-to-combine]] #skills
+- [ ] [[running-claude-in-a-dev-box]] #devboxes
+- [ ] [[deterministic-pathway-replacing-certain-tools]] #devboxes
+- [ ] [[auto-research]] #channels
 
 
 ## Next Up
 
 - [ ] [[auto-memory]] #claude-code
-- [ ] Effort for Skill #claude-code
-- [ ] iMessage channel #channels
-- [ ] Using Screenshots #correction
-- [ ] Skills #correction
-- [ ] Disable Model Invoked Skills #correction
-- [ ] Auto Compact & Handoff #correction
-- [ ] Output Styles #correction
-- [ ] Clarifying Questions #correction
-- [ ] Frontend Design
+- [ ] [[effort-for-skill]] #claude-code
+- [ ] [[imessage-channel]] #channels
+- [ ] [[using-screenshots]] #correction
+- [ ] [[skills-overview]] #correction
+- [ ] [[disable-model-invoked-skills]] #correction
+- [ ] [[auto-compact-and-handoff]] #correction
+- [ ] [[output-styles]] #correction
+- [ ] [[clarifying-questions]] #correction
+- [ ] [[frontend-design]]
 
 
 ## Doing
 
-- [ ] Airtable Memory for Cloud Scheduled Tasks
-- [ ] [[refero-design-mcp]] #claude-code
 - [ ] [[worktrees]] #claude-code
-- [ ] Telegram channel #channels
-- [ ] Codex + Claude Code
+- [ ] [[telegram-channel]] #channels
+- [ ] [[git-inside-of-vscode]] #claude-code
 
 
 ## Done
 
+- [ ] Codex + Claude Code
+- [ ] Airtable Memory for Cloud Scheduled Tasks
 - [ ] Frontend Design
 - [ ] Remote Control #claude-code
 - [ ] [[02-scaling-taste]] #prompt-engineering
