@@ -4,7 +4,7 @@ kanban-plugin: board
 
 ---
 
-## To Do
+## Backlog
 
 - [ ] [[compound-engineering]] #claude-code
 - [ ] [[subagent-teams]] #claude-code
@@ -53,6 +53,8 @@ kanban-plugin: board
 - [ ] [[self-auditing-ai-checks-its-own-work]] #business
 - [ ] [[remotion]] #business
 - [ ] [[self-annealing-workflows]] #business
+- [ ] [[auto-research]] #business
+- [ ] [[imessage-channel]] #business
 - [ ] [[01-steering-distributions]] #prompt-engineering
 - [ ] [[03-archetype-teams]] #prompt-engineering
 - [ ] [[04-living-archetypes]] #prompt-engineering
@@ -65,7 +67,7 @@ kanban-plugin: board
 - [ ] [[getting-shit-done]] #techniques
 - [ ] [[llms-have-an-easier-time-writing-things]] #techniques
 - [ ] [[refactoring-to-save-on-context]] #techniques
-- [ ] [[task-shaped-wrappers]] #cloud-agents
+- [ ] [[task-shaped-wrappers]] #techniques
 - [ ] [[scrappy-copy-first]] #techniques
 - [ ] [[designing-interfaces]] #techniques
 - [ ] [[context-layer-summarised]] #context-engineering
@@ -107,27 +109,19 @@ kanban-plugin: board
 - [ ] [[knowing-which-skills-to-combine]] #skills
 - [ ] [[running-claude-in-a-dev-box]] #claude-code
 - [ ] [[deterministic-pathway-replacing-certain-tools]] #claude-code
-- [ ] [[auto-research]] #channels
 
 
-## Next Up
+## To Do
 
 - [ ] [[auto-memory]] #claude-code
 - [ ] [[effort-for-skill]] #claude-code
-- [ ] [[imessage-channel]] #channels
-- [ ] [[using-screenshots]] #correction
-- [ ] [[skills-overview]] #correction
-- [ ] [[disable-model-invoked-skills]] #correction
-- [ ] [[auto-compact-and-handoff]] #correction
-- [ ] [[output-styles]] #correction
-- [ ] [[clarifying-questions]] #correction
 - [ ] [[frontend-design]]
 
 
 ## Doing
 
 - [ ] [[worktrees]] #claude-code
-- [ ] [[telegram-channel]] #channels
+- [ ] [[telegram-channel]] #business
 - [ ] [[git-inside-of-vscode]] #claude-code
 
 
