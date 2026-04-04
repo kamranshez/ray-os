@@ -65,7 +65,7 @@ kanban-plugin: board
 - [ ] [[getting-shit-done]] #techniques
 - [ ] [[llms-have-an-easier-time-writing-things]] #techniques
 - [ ] [[refactoring-to-save-on-context]] #techniques
-- [ ] [[task-shaped-wrappers]] #techniques
+- [ ] [[task-shaped-wrappers]] #cloud-agents
 - [ ] [[scrappy-copy-first]] #techniques
 - [ ] [[designing-interfaces]] #techniques
 - [ ] [[context-layer-summarised]] #context-engineering
@@ -73,7 +73,7 @@ kanban-plugin: board
 - [ ] [[company-as-a-file-system]] #context-engineering
 - [ ] [[language-server-protocol]] #context-engineering
 - [ ] [[signal-to-noise-ratio]] #context-engineering
-- [ ] [[consolers-as-a-skill]] #workflows
+- [ ] [[consolers-as-a-skill]] #skills
 - [ ] [[1-1-why-skills-change-everything]] #skills
 - [ ] [[1-2-how-skills-work-under-the-hood]] #skills
 - [ ] [[1-3-set-up-your-workspace]] #skills
@@ -105,8 +105,8 @@ kanban-plugin: board
 - [ ] [[6-4-companies-are-graphs-of-algorithms]] #skills
 - [ ] [[7-1-sharing-skills-with-your-team]] #skills
 - [ ] [[knowing-which-skills-to-combine]] #skills
-- [ ] [[running-claude-in-a-dev-box]] #devboxes
-- [ ] [[deterministic-pathway-replacing-certain-tools]] #devboxes
+- [ ] [[running-claude-in-a-dev-box]] #claude-code
+- [ ] [[deterministic-pathway-replacing-certain-tools]] #claude-code
 - [ ] [[auto-research]] #channels
 
 
