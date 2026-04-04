@@ -8,7 +8,7 @@ import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
 import * as path from "path";
 
-const MODEL_NAME = "gemini-3.1-flash-image-preview";
+const MODEL_NAME = "gemini-3-pro-image-preview";
 
 const DEFAULT_SYSTEM_PROMPT = `Generate an Excalidraw-style explanation image matching the reference images. This is for visual explanations that teach concepts clearly.
 

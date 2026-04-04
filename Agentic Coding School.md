@@ -31,7 +31,6 @@ kanban-plugin: board
 - [ ] [[claude-code-lab]] #claude-code
 - [ ] [[building-effective-agent-teams]] #claude-code
 - [ ] [[agent-teams-with-debate]] #claude-code
-- [ ] [[auto-research-karpathy-loop]] #claude-code
 - [ ] [[multi-agent-chrome]] #claude-code
 - [ ] [[self-modifying-claude-md]] #claude-code
 - [ ] [[workspace-organization]] #claude-code
@@ -45,9 +44,6 @@ kanban-plugin: board
 - [ ] Making Prompt Based hooks #claude-code
 - [ ] A Quick Build #claude-code
 - [ ] Using Git in VSCode Version #claude-code
-- [ ] Remote Control #claude-code
-- [ ] Auto Memory #claude-code
-- [ ] Effort for Skill #claude-code
 - [ ] Effort for Subagents #claude-code
 - [ ] Checkpoints & Rewind #claude-code
 - [ ] .mcp.json #claude-code
@@ -69,7 +65,6 @@ kanban-plugin: board
 - [ ] [[doe-framework]] #business
 - [ ] [[self-annealing-workflows]] #business
 - [ ] [[01-steering-distributions]] #prompt-engineering
-- [ ] [[02-scaling-taste]] #prompt-engineering
 - [ ] [[03-archetype-teams]] #prompt-engineering
 - [ ] [[04-living-archetypes]] #prompt-engineering
 - [ ] [[stochastic-consensus-and-fan-out-fan-in]] #techniques
@@ -90,10 +85,6 @@ kanban-plugin: board
 - [ ] [[language-server-protocol]] #context-engineering
 - [ ] Signal to Noise Ratio #context-engineering
 - [ ] Consolers as a skill #workflows
-- [ ] Record intro for applications / use cases class #workflows
-- [ ] Look at another video for Claude.ai #claude-ai
-- [ ] Record intro for Claude.ai class #claude-ai
-- [ ] Explaining RAG #claude-ai
 - [ ] [[1-1-why-skills-change-everything]] #skills
 - [ ] [[1-2-how-skills-work-under-the-hood]] #skills
 - [ ] [[1-3-set-up-your-workspace]] #skills
@@ -124,20 +115,16 @@ kanban-plugin: board
 - [ ] [[6-3-mapping-your-system]] #skills
 - [ ] [[6-4-companies-are-graphs-of-algorithms]] #skills
 - [ ] [[7-1-sharing-skills-with-your-team]] #skills
-- [ ] Record intro for Skills class #skills
 - [ ] Knowing which skills to combine #skills
 - [ ] Running Claude in a dev box #devboxes
-- [ ] Why dev boxes #devboxes
 - [ ] Deterministic pathway replacing certain tools #devboxes
 - [ ] Auto research #channels
-- [ ] Set up Reddit Claude cron (auto dream example) #coverage
-- [ ] Ensure coverage: UPtmKh1vMN8 + yLXLHnD4fco #coverage
-- [ ] Check completeness: 2BpCk4d2Cc0 #coverage
 
 
 ## Next Up
 
-- [ ] [[refero-design-mcp]] #claude-code
+- [ ] [[auto-memory]] #claude-code
+- [ ] Effort for Skill #claude-code
 - [ ] iMessage channel #channels
 - [ ] Using Screenshots #correction
 - [ ] Skills #correction
@@ -145,10 +132,13 @@ kanban-plugin: board
 - [ ] Auto Compact & Handoff #correction
 - [ ] Output Styles #correction
 - [ ] Clarifying Questions #correction
+- [ ] Frontend Design
 
 
 ## Doing
 
+- [ ] Airtable Memory for Cloud Scheduled Tasks
+- [ ] [[refero-design-mcp]] #claude-code
 - [ ] [[worktrees]] #claude-code
 - [ ] Telegram channel #channels
 - [ ] Codex + Claude Code
@@ -156,6 +146,9 @@ kanban-plugin: board
 
 ## Done
 
+- [ ] Frontend Design
+- [ ] Remote Control #claude-code
+- [ ] [[02-scaling-taste]] #prompt-engineering
 - [x] [[persona-vectors]] #prompt-engineering
 - [x] [[boxing-the-model-in]] #techniques
 - [x] [[closing-the-loop]] #techniques
