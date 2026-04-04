@@ -134,7 +134,7 @@
       "views": 18415,
       "publish_date": "2026-03-02",
       "topic": "60 tips, power user guide",
-      "status": "uploaded",
+      "status": "results_in",
       "shortlisted": [
         "icons-black-top-001-b.png",
         "agent-network-folder-b.png",
@@ -144,7 +144,26 @@
       ],
       "uploaded_date": "2026-03-25",
       "results_due": "2026-04-01",
-      "results": {},
+      "results": {
+        "test_finished": "2026-03-31",
+        "verdict": "They all performed well",
+        "winner": "agent-network-folder-b.png",
+        "thumbnails": {
+          "agent-network-folder-b.png": {
+            "watch_time_share": 38,
+            "label": "Folder /secret-weapons + face pointing",
+            "visible_to_all": true
+          },
+          "cli-boring-but-works-a.png": {
+            "watch_time_share": 36,
+            "label": "BORING, BUT IT WORKS + face"
+          },
+          "icons-black-top-001-b.png": {
+            "watch_time_share": 25,
+            "label": "Top 0.01% + Claude + crown icons"
+          }
+        }
+      },
       "uploaded_thumbs": [
         "icons-black-top-001-b.png",
         "cli-boring-but-works-a.png",
