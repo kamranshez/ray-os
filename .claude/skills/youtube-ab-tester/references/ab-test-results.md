@@ -1164,8 +1164,45 @@ Same thumbnail across all (face + /leaked folder icon, serious expression). Test
 - **New insight:** When thumbnail text already communicates the event (e.g., "/leaked"), the title should focus on the *implication*, not restate the event
 - **New insight:** "Accidentally Leaked" (29.9-33%) < "Just Leaked" (34% R1) — "Accidentally" adds length without adding curiosity
 
-**Status:** In progress — title Round 3 pending, refining around "Change Forever" transformation frame.
+### Title A/B Test Round 3 (2026-04-01) — "Change Forever" control vs long-form challengers
 
-**Thumbnail images:** See `references/thumbnails/v19-claude-code-leak/`
+Same thumbnail across all (face + /leaked folder icon, serious expression).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Claude Code Is About to Change Forever** | /leaked | **37.5%** | ✅ WINNER |
+| Anthropic's Source Code Just Leaked What's Coming to Claude Code | /leaked | 31.9% | |
+| I Found Unreleased Features Hidden in Claude Code's Source Code | /leaked | 30.6% | |
+
+**Key takeaways:**
+- **"Change Forever" confirmed as winner at 37.5%** — stable across R2 (37.1%) and R3 (37.5%), rare consistency
+- **Long titles punished hard** — both challengers are 10+ words and scored 30-32%. "Change Forever" is 7 words. Brevity = scannability
+- **"I Found" first-person framing flopped at 30.6%** — personal discovery framing doesn't carry authority for leak content. Viewers want the *implication*, not who found it
+- **"Anthropic's Source Code Just Leaked What's Coming" (31.9%)** — tries to pack two ideas (leak event + what's coming) into one title. Double-dipping confirmed as anti-pattern from R2
+- **"Change Forever" works because it's pure implication** — thumbnail says "/leaked" (the event), title says "Change Forever" (the consequence). Perfect complementarity
+- **New insight:** Title-thumbnail complementarity confirmed as the winning formula for V19. Event in thumbnail + implication in title > restating the event in both
+- **Rare pattern:** No "Anthropic" in winning title — second confirmation that when the thumbnail carries visual authority (logo + "/leaked"), dropping "Anthropic" frees the title for maximum curiosity
+
+### Title A/B Test Round 4 (2026-04-01) — "3.0" version label variants
+
+Same thumbnail across all (face + /leaked folder icon, serious expression). Testing whether "Claude Code 3.0" version label can beat the "Change Forever" winner.
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Claude Code 3.0 Is Coming | /leaked | 35.5% | Leader |
+| Claude Code 3.0 Just Leaked | /leaked | 32.6% | |
+| Claude Code 3.0 Is Bigger Than Anyone Expected | /leaked | 31.9% | |
+
+**Key takeaways:**
+- **"3.0 Is Coming" best of the bunch at 35.5%** — but still 2% below "Change Forever" (37.5%). Short and clean, "Is Coming" works better here than on V17 (33.5%) because "3.0" gives it concrete meaning
+- **"3.0 Just Leaked" flopped at 32.6%** — restates the thumbnail ("/leaked"), confirmed anti-pattern from R2. Title + thumbnail redundancy wastes the title's curiosity budget
+- **"Bigger Than Anyone Expected" last at 31.9%** — too long (9 words), social proof framing ("Anyone Expected") weaker than "Nobody Knew" variants. "Bigger" is vague — bigger than what?
+- **"3.0" version label is decent but not dominant** — 35.5% here, 33% in R2. Consistently mid-30s but can't break past "Change Forever" (37.5%)
+- **Diagnosis:** "Change Forever" remains the stronger title. The version label adds specificity but sacrifices the transformation curiosity gap. "3.0 Is Coming" tells you *what*; "Change Forever" makes you wonder *how*
+
+**Final package:**
+- **Title:** Claude Code Is About to Change Forever
+- **Thumbnail:** Face (serious) + /leaked folder icon
+- **Thumbnail images:** See `references/thumbnails/v19-claude-code-leak/`
 
 ---
