@@ -67,15 +67,16 @@ def transcribe(upload_url: str, api_key: str) -> str:
             "audio_url": upload_url,
             "speech_models": ["universal-3-pro"],
             "language_detection": True,
-            "word_boost": [
+            "keyterms_prompt": [
                 "Claude Code",
                 "Anthropic",
                 "Claude",
             ],
-            "boost_param": "high",
         },
     )
-    response.raise_for_status()
+    if not response.ok:
+        print(f"Error {response.status_code}: {response.text}")
+        response.raise_for_status()
     transcript_id = response.json()["id"]
     print(f"Transcript ID: {transcript_id}")
 
