@@ -39,43 +39,85 @@ status: draft
 
 ---
 
-### SECTION 2: Setting Up Global Instructions (3:00–5:30)
+### SECTION 2: Setting Up Global Instructions — Your Personal Profile (3:00–7:00)
 
 **On screen**: Settings → CoWork → Global Instructions.
 
-**Step 1: Navigate to settings**
+> "Global instructions are the most underrated feature in CoWork. This is your personal profile — it gets injected into EVERY session, across EVERY project. When this is set up right, Claude stops giving you generic advice and starts giving you advice tailored to your actual situation."
+
+**Step 1: The before/after demo (show this FIRST)**
+
+Ask CoWork WITHOUT any global instructions:
+```
+What's the best way to handle my growing workload? I'm falling behind on tasks.
+```
+- Show the generic response — "prioritize with Eisenhower matrix, hire a VA, use time blocking"
+- > "Generic productivity advice you could find in any blog post. It doesn't know anything about me."
+
+Now add global instructions (next steps) and ask the EXACT same question.
+
+**Step 2: Navigate to settings**
 - Click your avatar (bottom left)
 - Click Settings
 - Click CoWork
 - Find "Global Instructions"
 
-**Step 2: Write your global instructions**
+**Step 3: Write your personal profile**
 
-> "These should be things that are true about you regardless of what project you're working on."
+> "This isn't just preferences — it's your identity. The more Claude knows about you, the more tailored every single response becomes."
 
-Show typing in example:
+Show typing in a comprehensive profile:
 
 ```
-About me:
-- My name is [Name]
-- I'm based in [City/Timezone]
+## About Me
+- Name: [Name]
+- Based in [City], [Timezone]
+- I run a YouTube channel about AI tools (~30K subscribers)
+- Revenue: ~$15K/month (courses + sponsorships + consulting)
+- Team: just me + a part-time video editor
+- Personality: direct, impatient with fluff, prefer speed over perfection
 
-How I want you to work:
-- Be concise. Don't over-explain.
+## Current Priorities
+- Growing YouTube to 50K subscribers by end of Q3
+- Launching a paid course on Claude
+- Building an email list (currently 3K subscribers)
+- Time is my bottleneck, not money — recommend the fastest option, not the cheapest
+
+## How I Make Decisions
+- I value speed and iteration over perfection
+- Give me a recommendation with reasoning, don't just list options
+- If something takes more than 2 hours, suggest breaking it into smaller pieces
+- Challenge my assumptions if you think I'm wrong
+
+## How I Want You to Work
+- Be concise. Don't over-explain — I can read.
 - Always ask before deleting any files
-- When creating files, use descriptive names (not "output.txt")
+- Use descriptive file names (not "output.txt")
 - If a task is ambiguous, ask me to clarify before starting
-- Show me your plan before executing anything destructive
+- Show your plan before executing anything destructive
 - Save all work to the project folder, never to random locations
-
-Formatting:
-- Use markdown for any documents
-- Use bullet points over paragraphs when possible
+- Use markdown for documents, bullet points over paragraphs
 ```
 
-> "Notice I'm not putting project-specific stuff here. No mention of YouTube or clients or specific work. That goes in project instructions. Global is for universal preferences."
+**Step 4: Show the difference — same question, with profile**
 
-**Reference from competitors**: Bart sets up global instructions but doesn't separate them from project instructions, which leads to confusion. Jack Roberts mentions "you can add default screeners for you" in global settings. Show the clear separation.
+Ask the exact same question:
+```
+What's the best way to handle my growing workload? I'm falling behind on tasks.
+```
+
+- Show the tailored response — it now considers: solo creator with a part-time editor, revenue level, time as the bottleneck, preference for speed
+- It might suggest: "hire a second editor to free up your production time" instead of "use a to-do list"
+- > "Completely different advice. It knows my revenue, my team, my bottleneck. It recommended hiring help because it knows money isn't my constraint — time is. Without the profile, it would have recommended free tools and time management techniques."
+
+> "This is why global instructions matter. Every task, every project, every conversation — Claude now knows who it's working for."
+
+**What goes in global (about YOU) vs project (about THE WORK)**:
+- Global: your name, role, revenue, team, decision-making style, communication preferences
+- Project: brand voice, audience details, workflow rules, file structure, current tasks
+- > "If it's true about you regardless of what project you're in — it goes in global. If it's specific to one area of work — it goes in the project."
+
+**Reference from competitors**: Bart sets up global instructions but doesn't separate them from project. Jack Roberts mentions "default screeners." Neither shows the before/after demo that proves the impact — this demo is the key differentiator.
 
 ---
 
@@ -150,20 +192,83 @@ Write me a YouTube video title about Claude CoWork
 
 ---
 
-### SECTION 4: Claude.md Files (9:00–11:30)
+### SECTION 4: Claude.md Files — Global and Local (9:00–13:00)
 
-**On screen**: Finder showing a CLAUDE.md file in a project folder.
+**On screen**: Finder showing file paths.
 
-> "There's one more way to give CoWork instructions that most people don't know about: Claude.md files."
+> "There's one more way to give CoWork instructions that most people don't know about: Claude.md files. And there are actually TWO types."
 
-**What is a Claude.md file?**
-> "If you put a file literally called CLAUDE.md in your project folder, CoWork will automatically read it at the start of every task. It works like project instructions, but it lives as a file on your computer instead of in the CoWork settings."
+**Two types of Claude.md files**:
 
-**When to use Claude.md vs project instructions**:
-- Project instructions: quick preferences, things you edit often
-- Claude.md: detailed reference material, structured documentation, version-controlled instructions
+1. **Global CLAUDE.md** — lives at `~/.claude/CLAUDE.md`
+   - Injected into EVERY session, EVERY project, EVERY conversation
+   - This is like a supercharged version of your global instructions
+   - Perfect for your full personal profile, reasoning strategies, and universal rules
 
-**Demo: Create a Claude.md file**
+2. **Local/Project CLAUDE.md** — lives in a project's folder
+   - Only read when working inside that specific project folder
+   - Perfect for project-specific workflows, file structure, and conventions
+
+> "The global one is about YOU. The local one is about THE PROJECT. Together with the settings-based instructions, you have a complete hierarchy."
+
+**Demo: The Global CLAUDE.md (~/.claude/CLAUDE.md)**
+
+**Step 1: Find the file**
+- On Mac: the `.claude` folder is hidden in your home directory
+- Show pressing Shift+Cmd+Period in Finder to reveal hidden files
+- Navigate to `~/.claude/`
+- Open (or create) `CLAUDE.md`
+
+> "This file is hidden by default. Most people don't even know it exists."
+
+**Step 2: Write a global CLAUDE.md**
+
+> "This is where you can go deeper than the settings-based global instructions. I put my full personal profile, my reasoning strategies, and my token conservation rules here."
+
+Show writing:
+
+```markdown
+# Personal Profile
+
+## Role & Context
+- Solo YouTube creator and course builder
+- Revenue: ~$15K/month (courses 60%, sponsorships 30%, consulting 10%)
+- Team: me + part-time video editor
+- Based in [City], [Timezone]
+- Time is my bottleneck, not money
+
+## Decision-Making Style
+- Default to the fastest option, not the cheapest
+- I prefer 80% done now over 100% done next week
+- When presenting options, give me your recommendation first, then alternatives
+- Challenge my thinking — don't just agree with me
+- If I'm overcomplicating something, say so directly
+
+## Communication Preferences
+- Be concise — bullet points over paragraphs
+- Don't summarize what you just did at the end of every response
+- Don't over-explain things I already understand
+- If something takes 1 sentence to say, don't use 3
+
+## Token Conservation
+- Use one write operation instead of many sequential edits
+- Fetch API docs before attempting unfamiliar tools
+- Don't add comments, docstrings, or type annotations to code you didn't change
+- Don't refactor surrounding code when fixing a specific issue
+```
+
+> "This is powerful. Every conversation now inherits this. If I ask for business advice, it knows my revenue and team size. If I ask for a recommendation, it gives me the fastest option. If I'm rambling, it'll push back."
+
+**Step 3: Using /insights to discover what to add**
+
+> "Here's a trick nobody talks about. If you've been using CoWork or Claude Code for a while, you can use /insights to see patterns in how you work. Things like: what tools you use most, what kind of tasks you do repeatedly, what conventions you follow. Use those insights to update your global CLAUDE.md."
+
+- Show running /insights (or mention it for Code users)
+- > "But here's the critical thing: manually review before adding. Don't let Claude auto-update your global file without you reading it. This is the compound probability problem — if Claude generates instructions, and then another session of Claude reads and interprets those instructions, errors compound. An AI reviewing AI reviewing AI means small mistakes snowball. YOU need to be the human in the loop for your global profile."
+
+**Demo: The Local/Project CLAUDE.md**
+
+> "Now let's do the project-level one. This lives in the project folder and only applies to that project."
 
 Show creating a CLAUDE.md file in the project folder:
 
@@ -190,11 +295,23 @@ Show creating a CLAUDE.md file in the project folder:
 - Always include a CTA in the first paragraph of the description
 ```
 
-> "Now every time I start a task in this project, CoWork has read this file and knows my entire workflow, my folder structure, and my SEO rules. I never have to explain it again."
+> "Now every time I start a task in this project, CoWork reads the global CLAUDE.md first — my personal profile — then this project CLAUDE.md — the YouTube-specific rules. I never have to explain who I am OR how this project works."
+
+**The complete hierarchy (recap)**:
+
+```
+1. Global CLAUDE.md (~/.claude/CLAUDE.md) — who YOU are
+2. Global Instructions (Settings → CoWork) — universal preferences  
+3. Project Instructions (project settings) — project context
+4. Project CLAUDE.md (project folder) — detailed project rules
+5. Task Prompt — what you want done RIGHT NOW
+```
+
+> "All five layers stack. CoWork reads them top to bottom before executing your task. The more context at the top, the less you need to repeat at the bottom."
 
 ---
 
-### SECTION 5: Common Mistakes (11:30–13:00)
+### SECTION 5: Common Mistakes (13:00–14:30)
 
 **On screen**: List of mistakes with corrections.
 
@@ -220,31 +337,35 @@ Show creating a CLAUDE.md file in the project folder:
 
 ---
 
-### SECTION 6: The Instructions Checklist (13:00–14:00)
+### SECTION 6: The Instructions Checklist (14:30–15:30)
 
 **On screen**: Checklist graphic.
 
 > "Before you move on, make sure you have these set up."
 
-- [ ] Global instructions with your name, timezone, and universal preferences
+- [ ] Global CLAUDE.md (`~/.claude/CLAUDE.md`) with your full personal profile
+- [ ] Global instructions (Settings) with universal work preferences
 - [ ] Project instructions for your main project with context, voice, and workflow rules
-- [ ] A CLAUDE.md file in your project folder with detailed reference material
+- [ ] A project CLAUDE.md file with detailed workflows and conventions
 - [ ] Test it — start a new conversation and ask CoWork something that proves it read your instructions
 
-> "If CoWork knows your name, your audience, and your preferred style without you telling it — your instructions are working."
+> "If CoWork knows your name, your revenue, your decision-making style, and your project workflows without you telling it — your instructions are working."
 
 ---
 
-### OUTRO (14:00–14:30)
+### OUTRO (15:30–16:00)
 
-> "Instructions are the foundation of everything in CoWork. Get them right and every task, every skill, every scheduled task inherits that context automatically. In the next video, we're connecting CoWork to your apps — Gmail, Calendar, Google Drive, Slack — so it can start doing real work beyond just your files."
+> "Instructions are the foundation of everything in CoWork. Get them right and every task, every skill, every scheduled task inherits that context automatically. The personal profile in your global CLAUDE.md is the single highest-leverage thing you can set up — it changes every conversation from generic to tailored. In the next video, we're connecting CoWork to your apps — Gmail, Calendar, Google Drive, Slack — so it can start doing real work beyond just your files."
 
 ---
 
 ### NOTES FOR FILMING
 
-- The before/after demo is the money shot — make the difference dramatic
-- Show the actual settings screen for global instructions, not just talking about it
-- When typing instructions, go slow enough that viewers can read along
-- The Claude.md file creation should show it in Finder AND show CoWork reading it
-- Target length: ~14 minutes
+- The before/after demo (generic advice vs tailored advice) is the money shot — do it FIRST in the global instructions section, same question asked twice
+- Show navigating to the hidden ~/.claude/ folder (Shift+Cmd+Period on Mac)
+- Show the actual settings screen for global instructions AND the CLAUDE.md file — viewers need to see both
+- When typing the personal profile, go slow enough for viewers to read and screenshot
+- The 5-layer hierarchy recap at the end of Section 4 should be a clear diagram on screen
+- Mention /insights briefly but don't belabor it — it's a power-user tip
+- The compound probability warning is important — emphasize human review for global files
+- Target length: ~16 minutes
