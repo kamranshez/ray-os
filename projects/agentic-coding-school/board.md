@@ -58,6 +58,13 @@ kanban-plugin: board
 - [ ] [[01-steering-distributions]] #prompt-engineering
 - [ ] [[03-archetype-teams]] #prompt-engineering
 - [ ] [[04-living-archetypes]] #prompt-engineering
+- [ ] [[05-few-shot-prompting]] #prompt-engineering
+- [ ] [[06-chain-of-thought]] #prompt-engineering
+- [ ] [[07-structured-output]] #prompt-engineering
+- [ ] [[08-constraints-and-negatives]] #prompt-engineering
+- [ ] [[09-interview-style-prompting]] #prompt-engineering
+- [ ] [[10-iterative-refinement]] #prompt-engineering
+- [ ] [[11-temperature-and-parameters]] #prompt-engineering
 - [ ] [[stochastic-consensus-and-fan-out-fan-in]] #techniques
 - [ ] [[video-to-action-pipeline]] #techniques
 - [ ] [[prompt-contracts]] #techniques
