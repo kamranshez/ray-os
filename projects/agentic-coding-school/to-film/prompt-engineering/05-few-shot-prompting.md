@@ -62,6 +62,16 @@ Few-shot isn't always the answer:
 - **Creative tasks** — too many examples anchor the model and kill novelty. Use 1 example max for creative work.
 - **Long outputs** — few-shot examples of 500-word outputs eat your context window fast. Describe the format instead and give one abbreviated example.
 
+### Building a Reference Library (Swipe File)
+
+Few-shot prompting only works if you have examples ready. The most effective prompters maintain what copywriters call a "swipe file" — a curated collection of inputs and outputs they admire, organized by task type.
+
+When you encounter an output that's exactly right — a perfectly formatted ticket title, a blog intro that nails your voice, a code review that caught the subtle bug — save it. Not just the output, but the input that produced it. That pair becomes a reusable example for future prompts.
+
+You can even use AI to reverse-engineer outputs you admire. Take something you like, paste it in, and ask the model to describe the patterns: "What makes this work? What are the implicit rules?" The model will surface patterns you didn't consciously notice — sentence length, word choice, structural decisions — which you can then encode as few-shot examples or explicit instructions.
+
+The reference library compounds over time. After a month, you have 3-5 gold examples for every task you do regularly. After six months, you have enough to fine-tune a model or build a skill. Your library is your prompting edge — it's why two people using the same model get dramatically different results.
+
 ### Demo
 
 1. Take a real task: converting customer feedback into support ticket titles

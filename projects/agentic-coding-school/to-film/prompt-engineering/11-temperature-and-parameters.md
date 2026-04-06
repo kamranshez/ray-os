@@ -84,6 +84,23 @@ Temperature and prompt specificity have an interaction effect:
 4. **For code**: Temperature 0.0. Code needs to be correct, not creative. Let the prompt handle the creativity (architecture decisions, naming) and let temperature handle the execution (deterministic token selection).
 5. **When you can't control temperature** (chat interfaces): Use your prompt to simulate it. For low temperature behavior, be extremely specific with constraints. For high temperature behavior, say "give me 5 very different approaches" — this forces the model to explore the distribution even at default temperature.
 
+### System Prompts vs. User Prompts
+
+Temperature and parameters are one layer of control. But there's another layer most people don't see: the system prompt.
+
+When you type a message in ChatGPT or Claude, your text is the *user prompt*. But before the model sees it, the platform prepends a *system prompt* — instructions that set the model's identity, rules, and behavior. You never see this, but it shapes every response you get.
+
+System prompts set "always on" behavior: tone, safety guardrails, tool access, output style. User prompts set "this turn" behavior: the specific task, context, and constraints. Understanding this split explains why the same model feels different across platforms — ChatGPT, Claude, Cursor, and Gemini all wrap the same base models with different system prompts.
+
+When you can control the system prompt (API, Claude Projects, GPT custom instructions, Cursor rules files), use it for:
+- **Identity and role** — "You are a senior backend engineer" belongs here, not in every user message
+- **Persistent constraints** — "Never use exclamation marks" or "Always respond in JSON"
+- **Context that applies across turns** — project background, coding standards, audience definition
+
+When you can't control the system prompt (most chat interfaces), simulate it by front-loading your first message with role, constraints, and context. The model treats early context as higher priority, so the beginning of the conversation functions like a lightweight system prompt.
+
+The practical insight: if a behavior should persist across every message in a conversation, it belongs in the system prompt (or its simulation). If it's specific to this one task, it belongs in the user prompt. Mixing these up is why people end up repeating instructions every turn.
+
 ### Other Parameters Worth Knowing
 
 - **Max tokens**: Hard limit on output length. Set this to prevent runaway outputs in automation. In conversation, rarely needed.

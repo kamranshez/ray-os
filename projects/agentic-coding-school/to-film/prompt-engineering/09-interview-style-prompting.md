@@ -70,6 +70,23 @@ Instead of trying to introspect and write down your preferences, let the model i
 
 Your answers become the raw data for a taste-activated skill. The interview surfaces preferences you didn't know you had — "Actually, now that you ask, I never use semicolons" — which are exactly the details that make a compressed identity accurate.
 
+### The Context.json Pattern: Persistent Interview Context
+
+Interview-style prompting is powerful for a single session. But what about projects that span weeks or months? Every new conversation starts from zero — the model doesn't remember what you told it last time.
+
+The fix is simple: after the interview, ask the model to compile everything you said into a structured file — call it `context.json` or `project-context.md`. Upload it to a Claude Project, GPT Project, or Gemini Gem. Now every future conversation in that project starts with the full context from your interview, without you repeating anything.
+
+The workflow:
+1. Start a new project in your AI tool
+2. Tell the model: "Interview me about this project — goals, constraints, audience, anything relevant"
+3. Answer 8-15 questions naturally
+4. When done: "Compile everything I told you into a structured context file I can reuse"
+5. Save the file and upload it to the project
+
+The key step most people skip: at the end of each subsequent conversation, ask the model to update the context file with any new decisions or information that came up. Replace the old file. Your context grows incrementally — each session adds signal without you writing documentation.
+
+This bridges interview-style prompting (a single-session technique) with context engineering (a persistent system). The interview extracts your knowledge; the context file preserves it across sessions.
+
 ### When NOT to Use Interview Style
 
 - **Simple tasks** — if you can describe what you want in one sentence, just describe it. The interview adds overhead.

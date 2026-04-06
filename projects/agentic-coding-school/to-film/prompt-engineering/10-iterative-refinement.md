@@ -8,6 +8,23 @@ chapter: "Core Techniques"
 ---
 Iterative refinement is treating prompting as a conversation, not a one-shot attempt. The first output is a draft. Your follow-up prompts sculpt it toward what you actually want. This is how experienced prompters work — they don't write the perfect prompt, they write a good-enough prompt and then steer from the output.
 
+### The Invisible Work: Thinking Before Typing
+
+Before refinement even starts, there's a step most people skip entirely — the cognitive work that happens before you open the chat.
+
+When you sit down to prompt, you have a vague idea in your head. Maybe you saw something cool and want to recreate it, or you need to solve a specific problem. But the image isn't sharp. You start typing, hoping the model will fill in the gaps. It can't — it only knows what you type, and a fuzzy input produces a fuzzy output every time.
+
+The gap between what you want and what you get isn't about the model being limited or needing better techniques. It's about you not knowing what you want with enough precision to communicate it.
+
+Before you type anything, force yourself through specificity questions:
+- What makes this output different from the generic version?
+- What would make me say "yes, exactly like this" vs. "close but not right"?
+- What emotion, structure, or insight am I actually after?
+
+Go find references. Look for something that successfully represents what you're envisioning — a piece of writing, a design, a code pattern. When you can point at something concrete and say "like this, but different in these ways," you've done the invisible work. Translating that into a prompt becomes mechanical.
+
+This is the difference between people who iterate 2-3 times and converge, and people who iterate 10 times and never get there. The second group isn't bad at prompting — they haven't figured out what they want yet, and no amount of iteration fixes that.
+
 ### Why Iteration Beats Perfection
 
 There's a paradox in prompt engineering: the more time you spend crafting the perfect first prompt, the less likely you are to get what you want. This is because:
@@ -76,6 +93,18 @@ The same pattern applies to code generation:
 4. **Refinement 3**: "Rename `processData` to `transformUserInput` and add a JSDoc comment"
 
 Each refinement is surgical. You're not re-describing the whole feature — you're pointing at specific things to change. This is the most efficient way to work with a coding agent.
+
+### Speak Your Prompts
+
+A practical technique that makes iteration dramatically faster: use voice instead of typing.
+
+The reason most people write vague prompts isn't lack of knowledge — it's laziness. Typing a detailed 200-word prompt with role, constraints, format, and examples takes effort. So people cut corners: they skip the constraints, leave out examples, and write the minimum.
+
+Voice dictation removes this bottleneck. Speaking at 150+ WPM versus typing at 40-60 WPM means you can include 3x more detail in the same time. The constraints you'd skip while typing ("don't use corporate jargon, keep it under 200 words, start with the action item") take 5 seconds to say.
+
+This is especially powerful for iterative refinement. Each refinement message is small — "shorter, cut the second paragraph, make the CTA more specific" — but typing those small corrections feels tedious. Speaking them feels natural, like directing a collaborator.
+
+Modern dictation tools (built-in on phone, third-party on desktop) handle punctuation, formatting, and filler word removal automatically. The prompt you get from speaking is often *better* than what you'd type, because you naturally include more context when talking than when typing.
 
 ### Connecting to Other Techniques
 
