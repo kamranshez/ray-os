@@ -7,10 +7,10 @@ triggers:
 media: text only
 status: posted
 engagement:
-  reactions: null
-  comments: null
-  reposts: null
-  impressions: null
+  reactions: 5
+  comments: 0
+  reposts: 0
+  impressions: 589
 url: https://www.linkedin.com/feed/update/urn:li:activity:7442158632277913600/
 video: OnQ4BGN8B-s
 notes: Based on Auto Dream video. Covers Claude Code's unannounced memory consolidation feature. User chose post 4 (Belief Disruption + Curiosity Gap). Edited to remove arrow bullets and tighten spacing.
