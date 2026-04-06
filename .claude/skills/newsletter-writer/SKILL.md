@@ -77,21 +77,34 @@ When presenting a newsletter draft, always provide options so Ray can mix and ma
 
 ### Always generate:
 
-**5 Subject Lines** — varied angles on the same topic. Mix these approaches:
+**10 Subject Lines** — varied angles on the same topic. Mix these approaches:
 - Mystery/curiosity gap ("I found something hidden in...")
 - Direct statement ("Claude Code dreams now")
 - Problem/pain point ("Your AI agent is sleep-deprived")
 - Quotable moment from the content (something surprising the reader said/found)
 - Casual/conversational ("...and I had no idea why")
+- Stealth launch / undocumented feature ("Anthropic silently shipped...")
 
-**5 Preview Snippets** — the text that shows below the subject line in email clients. Keep to one sentence. Should complement the subject line, not repeat it. Mix between teasing the content, stating a surprising fact, and creating intrigue.
+**10 Preview Snippets** — the text that shows below the subject line in email clients. Keep to one sentence. Should complement the subject line, not repeat it. Mix between teasing the content, stating a surprising fact, and creating intrigue.
 
 **3 Newsletter Variations** — each with a different opening hook/angle. Keep them short (video-redirect format). Label each with its hook strategy so Ray can quickly scan:
-- e.g., "Mystery/Discovery Hook", "Problem-First Hook", "Human Analogy Hook"
+- e.g., "Mystery/Discovery Hook", "Problem-First Hook", "Stealth Launch Hook"
 - Each variation should be a complete, sendable draft — not just the opening paragraph
-- All variations share the same closing (warm close + question + sign-off)
+- All variations share the same closing (warm close + CTA question + sign-off)
 
-Present all of this in one go so Ray can pick and combine (e.g., Subject Line 3 + Snippet 1 + Variation B).
+**3 CTA Questions** — topic-specific questions to close the email with. These should invite replies about the reader's own experience with the specific topic, not generic "what do you think?" prompts. e.g., for a planning feature: "How are you handling planning in Claude Code right now? Default plan mode, custom prompt, or do you skip it entirely?"
+
+Present all of this in one go so Ray can pick and combine (e.g., Subject Line 3 + Snippet 1 + Variation B + CTA 2).
+
+## Appendix / Reference Sections
+
+Some newsletters include bonus content below the sign-off — system prompts, code snippets, checklists, or reference material the reader can bookmark. When the content lends itself to this:
+
+- Add a `---` divider after the sign-off
+- Use a clear heading (e.g., "Ultraplan System Prompts Variants")
+- Keep the bridge sentence in the body casual: "I've included X below if you want to do the same"
+- Format reference material cleanly with code blocks, numbered sections, or bold labels
+- Don't repeat content from the body — the appendix is supplementary, not a summary
 
 ## Workflow
 
@@ -99,11 +112,11 @@ Present all of this in one go so Ray can pick and combine (e.g., Subject Line 3 
 2. Read `references/examples.md` to calibrate tone and structure
 3. Identify 3 distinct angles/hooks from the content
 4. Draft 3 complete newsletter variations (video-redirect format by default)
-5. Generate 5 subject lines and 5 preview snippets
+5. Generate 10 subject lines, 10 preview snippets, and 3 CTA questions
 6. Read through for conversational flow — if any sentence sounds like a blog post, rewrite it
-7. Run the humanizer skill on the drafts to catch AI-sounding patterns
-8. If the newsletter references a video, ask the user for a thumbnail image path, then run `scripts/add-play-button.py` on it to generate the play-button version
-9. Present everything together for Ray to mix and match
+7. If the newsletter references a video, ask the user for a thumbnail image path, then run `scripts/add-play-button.py` on it to generate the play-button version
+8. Present everything together for Ray to mix and match
+9. After the email is sent, ask Ray to paste the final version back so it can be stored in `references/examples/` for future reference and performance tracking
 
 ## Examples
 
