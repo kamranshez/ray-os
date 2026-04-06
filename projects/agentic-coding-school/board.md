@@ -128,6 +128,7 @@ kanban-plugin: board
 
 ## Doing
 
+- [ ] [[build-small-merge-big]] #techniques
 - [ ] [[worktrees]] #claude-code
 - [ ] [[telegram-channel]] #business
 - [ ] [[git-inside-of-vscode]] #claude-code
