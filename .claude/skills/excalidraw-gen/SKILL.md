@@ -91,6 +91,18 @@ cd .claude/skills/excalidraw-gen && npx ts-node scripts/generate.ts <prompt> [op
 - `-n, --count` — Number of images (default: 5, recommend 10)
 - `-o, --output` — Output directory (use subfolder per section)
 - `-t, --timeout` — Timeout per image in seconds (default: 180)
+- `-a, --aspect-ratio` — Aspect ratio (default: 16:9). Supported: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
+- `--image-size` — Image size hint (default: 2K)
+
+## X Article Thumbnails
+
+For X/Twitter article cover images, use **21:9** (the closest supported ratio to 5:2). X articles display cover images in a wide cinematic format.
+
+```bash
+cd .claude/skills/excalidraw-gen && npx ts-node scripts/generate.ts "<prompt>" -n 5 -a 21:9 -o "/path/to/images/<slug>"
+```
+
+Use a bold, high-contrast design with minimal text (3-5 words max). The image must be readable at small sizes in the X feed. Skip the white background instruction for thumbnails — use vibrant colors instead.
 
 ## Adding Image Embeds
 

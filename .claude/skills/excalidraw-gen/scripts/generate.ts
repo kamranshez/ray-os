@@ -110,8 +110,8 @@ async function generateSingleImage(
       config: {
         responseModalities: ["TEXT", "IMAGE"],
         imageConfig: {
-          aspectRatio: "16:9",
-          imageSize: "2K",
+          aspectRatio,
+          imageSize,
         },
       } as any,
     });
@@ -152,6 +152,10 @@ async function main() {
   let apiKey = process.env.GEMINI_API_KEY || "";
   let customRefs: string[] = [];
   let systemPrompt = DEFAULT_SYSTEM_PROMPT;
+  let aspectRatio = "16:9";
+  let imageSize = "2K";
+
+  const VALID_ASPECT_RATIOS = ["21:9", "16:9", "4:3", "3:2", "1:1", "9:16", "3:4", "2:3", "5:4", "4:5"];
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -167,6 +171,14 @@ async function main() {
       apiKey = args[++i];
     } else if (arg === "--system-prompt") {
       systemPrompt = args[++i];
+    } else if (arg === "--aspect-ratio" || arg === "-a") {
+      aspectRatio = args[++i];
+      if (!VALID_ASPECT_RATIOS.includes(aspectRatio)) {
+        console.error(`Error: Invalid aspect ratio "${aspectRatio}". Supported: ${VALID_ASPECT_RATIOS.join(", ")}`);
+        process.exit(1);
+      }
+    } else if (arg === "--image-size") {
+      imageSize = args[++i];
     } else if (!arg.startsWith("-")) {
       prompt = arg;
     }
