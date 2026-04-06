@@ -17,19 +17,50 @@ The thumbnail workflow is iterative: research → generate → feedback → rege
 
 ## Output Organization
 
-All generated thumbnails are stored by video ID with descriptive kebab-case names:
+All generated thumbnails are stored by video title (kebab-case) with descriptive names:
 
 ```
 output/
-  <video-id>/
-    github-card-last-framework.png
-    github-pr-dario-merged.png
-    face-laptop-2027-ai-code.png
-    icon-grid-the-shift.png
+  <video-title-kebab>/
+    folder-ultraplan-a.png
+    folder-ultraplan-b.png
+    icons-ultraplan-a.png
     ...
 ```
 
+**Before generating, always ask for the video title** so you can create a properly named folder. This keeps history organized by video, not by opaque video IDs.
+
 The `output/` folder is gitignored (large generated images).
+
+---
+
+## Golden References
+
+Golden references are previously successful outputs that already have Ray's likeness baked in. They produce much more consistent results than raw Nate Herk references because the model has less to reconcile between face ref + style ref.
+
+```
+research/golden-references/
+  folder-command.png        ← best folder + /command style
+  folder-pointing.png       ← best folder + pointing style
+  icons-black.png           ← best icons on black style
+  old-vs-new.png            ← best comparison style
+  cli-chat.png              ← best CLI terminal style
+  ...
+```
+
+### How Golden References Work
+
+1. **One-time setup per style**: Generate a thumbnail using a Nate Herk reference. When the result is good, copy it to `research/golden-references/` with a descriptive name.
+2. **All future generations use golden refs**: Instead of the raw Nate Herk image, pass the golden reference as `-r`. The output will match Ray's established look much more closely.
+3. **Update golden refs when you get a better one**: If a new generation is even better, replace the golden reference.
+
+### Generation Workflow (V16)
+
+1. **Ask for video title** → create `output/<video-title-kebab>/`
+2. **Check `research/golden-references/`** — if golden refs exist for the styles you need, use those
+3. **If no golden ref exists for a style** — fall back to the Nate Herk reference, then save the best result as a new golden reference
+4. **Generate variations** using golden refs (3 variants per style, 10 parallel)
+5. After generation, rename and consolidate into the video folder
 
 ---
 
@@ -206,40 +237,44 @@ Read `references/thumbnail-analysis.md` for the outlier framework. Key patterns 
 
 #### Core Rules
 
-1. **Fetch the transcript FIRST** — use supadata to get the full video transcript before writing any prompts
-2. **Read `feedback.json`** for global feedback rules and preferred style
-3. **Visually inspect each Nate Herk reference** before writing its prompt — use the Read tool to see the actual image, then describe its exact visual composition (person placement, prop placement, background, icon style, text style)
-4. **Use Nate Herk references only** — from `research/competitor-thumbnails/nateherk/`. These 15 styles are proven. Do NOT use random competitor thumbnails.
-5. **Write each prompt yourself** — describe the EXACT visual layout of the reference, only changing the text/topic to match the video content. Do NOT get creative with composition — match the reference precisely.
-6. **3 variants per reference** — generate 3 slightly different prompts per Nate reference (vary the text overlay and minor details, keep composition identical)
-7. **Generate with `-n 1`** (one image per run, NOT `-n 2`)
-8. **Run 10 parallel generations** per batch (Gemini API handles this)
-9. **Isolate face reference** — move all photos except `go-to-face.jpg` out of `assets/face/` before generating, restore after
+1. **Ask for the video title FIRST** — create `output/<video-title-kebab>/` folder
+2. **Fetch the transcript** — use supadata to get the full video transcript before writing any prompts
+3. **Read `feedback.json`** for global feedback rules and preferred style
+4. **Use golden references first** — check `research/golden-references/` for existing proven outputs. Only fall back to Nate Herk references from `research/competitor-thumbnails/nateherk/` if no golden ref exists for that style.
+5. **Visually inspect each reference** before writing its prompt — use the Read tool to see the actual image, then describe its exact visual composition
+6. **Write each prompt yourself** — describe the EXACT visual layout of the reference, only changing the text/topic to match the video content. Do NOT get creative with composition — match the reference precisely.
+7. **3 variants per reference** — generate 3 slightly different prompts per reference (vary the text overlay and minor details, keep composition identical)
+8. **Generate with `-n 1`** (one image per run, NOT `-n 2`)
+9. **Run 10 parallel generations** per batch (Gemini API handles this)
+10. **Isolate face reference** — move all photos except `go-to-face.jpg` out of `assets/face/` before generating, restore after
 
 #### Steps
 
-1. Get the video URL and fetch transcript via supadata
-2. Read `feedback.json` for global feedback rules
-3. Read the transcript thoroughly — identify key concepts, features, emotional hooks
-4. **Visually inspect** each Nate Herk reference image you plan to use (Read tool)
-5. For each reference, craft 3 prompts that:
+1. **Ask for video title** → create `output/<video-title-kebab>/`
+2. Get the video URL and fetch transcript via supadata
+3. Read `feedback.json` for global feedback rules
+4. Read the transcript thoroughly — identify key concepts, features, emotional hooks
+5. **Check golden references** — list `research/golden-references/` and visually inspect relevant ones
+6. For styles without a golden ref, visually inspect the Nate Herk reference instead
+7. For each reference (golden or Nate Herk), craft 3 prompts that:
    - **Match the exact visual composition** of the reference (person LEFT or RIGHT, prop position, background type)
    - Only change the text/topic to match the video's content
    - Use the proven person description (see Prompt Template below)
    - Follow all global feedback rules
-6. Isolate `go-to-face.jpg` (move others to `assets/face-backup/`)
-7. Generate using separate output directories per run:
+8. Isolate `go-to-face.jpg` (move others to `assets/face-backup/`)
+9. Generate using separate output directories per run:
 
 ```bash
 cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts "<prompt>" \
-  -n 1 -o "output/<video-id>-tmp-<name>" \
-  -r "research/competitor-thumbnails/nateherk/<ref-id>.jpg"
+  -n 1 -o "output/<video-title-kebab>-tmp-<name>" \
+  -r "research/golden-references/<style>.png"  # or nateherk/<ref-id>.jpg if no golden ref
 ```
 
-8. After generation, rename files with descriptive kebab-case names and move to `output/<video-id>/`
-9. Clean up temp batch directories
-10. Restore face photos from backup
-11. Generate HTML comparison page for user review
+10. After generation, rename files with descriptive kebab-case names and move to `output/<video-title-kebab>/`
+11. **Save best outputs as golden refs** — if a generation produced a great result for a style that has no golden ref yet, copy it to `research/golden-references/`
+12. Clean up temp batch directories
+13. Restore face photos from backup
+14. Generate HTML comparison page for user review
 
 ### 15 Nate Herk Reference Styles
 

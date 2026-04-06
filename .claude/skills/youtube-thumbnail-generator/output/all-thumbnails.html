@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>All Generated Thumbnails</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; color: #eee; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 24px; }
+  h1 { font-size: 28px; margin-bottom: 24px; color: #fff; }
+  h2 { font-size: 20px; margin: 32px 0 12px; color: #aaa; border-bottom: 1px solid #333; padding-bottom: 8px; }
+  .count { color: #666; font-weight: normal; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .card { background: #1a1a1a; border-radius: 8px; overflow: hidden; transition: transform 0.15s; }
+  .card:hover { transform: scale(1.02); }
+  .card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; cursor: pointer; }
+  .card .label { padding: 8px 12px; font-size: 12px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Lightbox */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 100; justify-content: center; align-items: center; cursor: zoom-out; }
+  .lightbox.active { display: flex; }
+  .lightbox img { max-width: 95vw; max-height: 95vh; object-fit: contain; }
+</style>
+</head>
+<body>
+<h1>All Generated Thumbnails</h1>
+
+<h2>software-factory <span class="count">(15 thumbnails)</span></h2>
+<div class="grid" id="software-factory"></div>
+
+<h2>DqjBbAr3oTo <span class="count">(46 thumbnails)</span></h2>
+<div class="grid" id="DqjBbAr3oTo"></div>
+
+<h2>claude-code-leak <span class="count">(34 thumbnails)</span></h2>
+<div class="grid" id="claude-code-leak"></div>
+
+<h2>auto-dream <span class="count">(30 thumbnails)</span></h2>
+<div class="grid" id="auto-dream"></div>
+
+<h2>AzmnaoVP8sk <span class="count">(30 thumbnails)</span></h2>
+<div class="grid" id="AzmnaoVP8sk"></div>
+
+<h2>7PnF8qctDi8 <span class="count">(12 thumbnails)</span></h2>
+<div class="grid" id="7PnF8qctDi8"></div>
+
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+  <img id="lightbox-img" src="">
+</div>
+
+<script>
+const data = {
+  "software-factory": [
+    "face-laptop-2027-ai-code.png","face-laptop-anthropic-site.png","face-prop-ai-writes-all-code.png",
+    "folders-self-coding.png","github-card-future-of-coding.png","github-card-last-framework-v2.png",
+    "github-card-last-framework.png","github-issue-deprecate-code.png","github-issue-human-code-dead.png",
+    "github-pr-dario-merged.png","icon-border-anthropics-plan.png","icon-grid-the-shift.png",
+    "pixel-art-100pct-ai-code.png","pixel-art-coders-replaced.png","product-ui-claude-screenshot.png"
+  ],
+  "DqjBbAr3oTo": [
+    "before-vs-after-context-c.png","cli-ask-anything-c.png","cli-game-changer-a.png",
+    "cli-hidden-powerful-a.png","cli-no-interruption-c.png","cli-nobody-knew-b.png",
+    "cli-zero-cost-b.png","dashboard-context-stats-a.png","dashboard-hidden-feature-c.png",
+    "dashboard-side-channel-b.png","feature-grid-btw-a.png","feature-grid-commands-c.png",
+    "feature-grid-productivity-b.png","flow-btw-channel-a.png","flow-clean-context-b.png",
+    "flow-side-channel-c.png","folder-btw-command-a.png","folder-btw-network-a.png",
+    "folder-btw-smiling-a.png","folder-by-the-way-d.png","folder-fork-command-c.png",
+    "folder-fork-network-b.png","folder-fork-smiling-b.png","folder-rewind-command-b.png",
+    "folder-rewind-network-c.png","folder-rewind-smiling-c.png","folder-side-channel-e.png",
+    "icons-context-killer-a.png","icons-nobody-knew-b.png","icons-secret-feature-a.png",
+    "icons-side-channel-b.png","icons-stop-polluting-c.png","icons-zero-noise-c.png",
+    "messy-vs-clean-context-b.png","old-new-escape-btw-a.png","old-new-interrupt-fork-b.png",
+    "old-new-pollute-rewind-c.png","old-vs-new-interrupt-a.png","prop-btw-phone-a.png",
+    "prop-secret-weapon-c.png","prop-stop-interrupting-b.png","retro-context-saved-b.png",
+    "retro-high-score-a.png","retro-zero-pollution-c.png","whiteboard-full-guide-a.png",
+    "whiteboard-hidden-commands-b.png","whiteboard-stop-doing-c.png"
+  ],
+  "claude-code-leak": [
+    "ad-command-leaked.png","ad-command-source-code.png","ad-pointing-leaked.png",
+    "ad-pointing-source-code.png","ref-10a.png","ref-10b.png","ref-11a.png","ref-11b.png",
+    "ref-12a.png","ref-12b.png","ref-13a.png","ref-13b.png","ref-14a.png","ref-14b.png",
+    "ref-15a.png","ref-15b.png","ref-1a.png","ref-1b.png","ref-2a.png","ref-2b.png",
+    "ref-3a.png","ref-3b.png","ref-4a.png","ref-4b.png","ref-5a.png","ref-5b.png",
+    "ref-6a.png","ref-6b.png","ref-7a.png","ref-7b.png","ref-8a.png","ref-8b.png",
+    "ref-9a.png","ref-9b.png"
+  ],
+  "auto-dream": [
+    "agent-hierarchy-dream-a.png","agent-hierarchy-dream-b.png","agent-network-dream-a.png",
+    "agent-network-dream-b.png","cli-dream-gameover-a.png","cli-dream-gameover-b.png",
+    "cli-hidden-works-a.png","cli-hidden-works-b.png","dashboard-dream-memory-a.png",
+    "dashboard-dream-memory-b.png","feature-grid-memory-a.png","feature-grid-memory-b.png",
+    "flow-memories-brain-a.png","flow-memories-brain-b.png","folder-dream-command-a.png",
+    "folder-dream-command-b.png","folder-dream-pointing-a.png","folder-dream-pointing-b.png",
+    "icons-it-dreams-a.png","icons-it-dreams-b.png","icons-memory-evolution-a.png",
+    "icons-memory-evolution-b.png","old-vs-new-dream-a.png","old-vs-new-dream-b.png",
+    "prop-secret-feature-a.png","prop-secret-feature-b.png","retro-dream-sessions-a.png",
+    "retro-dream-sessions-b.png","whiteboard-dream-guide-a.png","whiteboard-dream-guide-b.png"
+  ],
+  "AzmnaoVP8sk": [
+    "agent-network-folder-a.png","agent-network-folder-b.png","basic-vs-pro-comparison-a.png",
+    "basic-vs-pro-comparison-b.png","cli-boring-but-works-a.png","cli-boring-but-works-b.png",
+    "cli-game-over-a.png","cli-game-over-b.png","dashboard-001-club-a.png","dashboard-001-club-b.png",
+    "feature-grid-screen-a.png","feature-grid-screen-b.png","folder-god-mode-a.png",
+    "folder-god-mode-b.png","folder-top-secrets-a.png","folder-top-secrets-b.png",
+    "icons-black-they-dont-know-a.png","icons-black-they-dont-know-b.png","icons-black-top-001-a.png",
+    "icons-black-top-001-b.png","laptop-prop-built-1-week-a.png","laptop-prop-built-1-week-b.png",
+    "old-vs-new-comparison-a.png","old-vs-new-comparison-b.png","retro-game-leaderboard-a.png",
+    "retro-game-leaderboard-b.png","screen-flow-diagram-a.png","screen-flow-diagram-b.png",
+    "whiteboard-the-guide-a.png","whiteboard-the-guide-b.png"
+  ],
+  "7PnF8qctDi8": [
+    "basic-vs-pro-shh-r2.png","cli-boring-works-r2.png","dashboard-skill-packages-r3.png",
+    "flow-skills-transform-r3.png","folder-gotchas-r3.png","folder-skills-strategy-r2.png",
+    "folder-skills-strategy-r3.png","grid-skill-icons-r3.png","icons-override-defaults-r2.png",
+    "prop-secret-playbook-r3.png","retro-99-skills-r3.png","whiteboard-skills-guide-r3.png"
+  ]
+};
+
+// Populate full file lists from directory
+async function init() {
+  for (const [folder, files] of Object.entries(data)) {
+    const grid = document.getElementById(folder);
+    if (!grid) continue;
+    files.forEach(file => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<img src="${folder}/${file}" loading="lazy" onclick="openLightbox(this.src)"><div class="label">${file.replace('.png','')}</div>`;
+      grid.appendChild(card);
+    });
+  }
+}
+
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('active');
+  event.stopPropagation();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('active');
+});
+
+init();
+</script>
+</body>
+</html>
