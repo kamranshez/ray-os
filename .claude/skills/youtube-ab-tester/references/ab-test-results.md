@@ -1206,3 +1206,28 @@ Same thumbnail across all (face + /leaked folder icon, serious expression). Test
 - **Thumbnail images:** See `references/thumbnails/v19-claude-code-leak/`
 
 ---
+
+## Video 20: Claude Code Ultra Plan
+
+**Published:** 2026-04-06
+**Thumbnail Text:** /ultraplan (on all variants)
+
+### Title A/B Test Round 1 (2026-04-06)
+
+Same thumbnail across all (face + /ultraplan folder icon).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Claude Code's Biggest Planning Update Yet | /ultraplan | 34.2% | Leader |
+| Anthropic Just Dropped Ultra Plan for Claude Code | /ultraplan | 34% | |
+| Anthropic Just Dropped Ultra Plan (But There's a Catch) | /ultraplan | 31.8% | |
+
+**Key takeaways:**
+- Very flat — all within 2.4%, no breakaway winner
+- Parenthetical "(But There's a Catch)" confirmed anti-pattern again at 31.8% — lowest by 2%+
+- "Biggest Planning Update Yet" magnitude framing marginally leads at 34.2% without Anthropic authority — mirrors V5 pattern (37.1%)
+- "Ultra Plan" as a feature name alone doesn't create enough curiosity gap — it's a brand name viewers don't recognize yet
+- R1 leader lacks Anthropic authority — risky long-term based on V16 R1 where non-Anthropic leader eventually lost
+- **Diagnosis:** Need to test frames that explain *what Ultra Plan means* rather than just naming it. Version labels, insider framing, and benefit framing in R2
+
+---

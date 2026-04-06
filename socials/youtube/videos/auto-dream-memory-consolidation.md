@@ -23,7 +23,7 @@ And I actually talked about this a while back — auto-memory tends to write a l
 
 So the question becomes — if memory is essential for your agent to work across sessions, but the memory keeps getting worse the more sessions you have... how do you fix that?
 
-![[images/auto-dream-problem/excalidraw_2.png]]
+![[images/auto-dream-memory-consolidation/ai-memory-noise-accumulation.png]]
 ### The Human Analogy (2:00–3:00)
 
 And this is actually the same problem humans have. Throughout your day, your brain takes in a ton of new information. Conversations, decisions, things you read. All of it goes into short-term memory. But if it just stayed there, you'd be overwhelmed within a day.
@@ -32,7 +32,7 @@ So when you sleep — during REM sleep specifically — your brain replays the d
 
 That's exactly what's happening to your AI agent when it never consolidates. It's sleep-deprived.
 
-![[images/auto-dream-human-analogy/excalidraw_2.png]]
+![[images/auto-dream-memory-consolidation/human-sleep-ai-memory-analogy.png]]
 ### How Auto-Dream Works (3:00–6:30)
 
 *Terminal on screen.*
@@ -119,7 +119,7 @@ Sessions since last consolidation (9):
 - 813c7c05-7a39-414b-8e60-d7855658c337
 ```
 
-![[images/auto-dream-three-phases/excalidraw_7.png]]
+![[images/auto-dream-memory-consolidation/auto-dream-three-phases-flow.png]]
 
 Now it doesn't run constantly. It checks two conditions. First, at least 24 hours need to have passed since the last consolidation. And second, at least 5 sessions need to have happened since then. Both conditions have to be true before it fires. So it's not dreaming every time you close your laptop — just like you don't dream every time you close your eyes. You need to have accumulated enough new experiences first.
 
@@ -131,7 +131,7 @@ And when it does run, you'll see this in your status line — "Memory consolidat
 - Before: noisy, stale, contradictory
 - After: clean, consolidated, dated properly
 
-![[images/auto-dream-trigger-conditions/excalidraw_1.png]]
+![[images/auto-dream-memory-consolidation/dream-trigger-conditions-safety.png]]
 ### The Broader Trend (6:30–8:30)
 
 Now here's what's interesting. This isn't just Claude Code. The entire industry is converging on the same idea.
@@ -144,7 +144,7 @@ So you end up with three tiers: recent messages, observations, and reflections. 
 
 And here's what they say in their docs — "You don't remember every word of every conversation you've ever had. You observe what happened, then your brain reflects — reorganizing, combining, condensing into long-term memory." Same principle.
 
-![[images/auto-dream-mastra-tiers/excalidraw_2.png]]
+![[images/auto-dream-memory-consolidation/mastra-three-tier-memory-framework.png]]
 ### What This Means for You (8:30–10:00)
 
 So a few practical things. 

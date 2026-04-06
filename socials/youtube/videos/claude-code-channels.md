@@ -80,7 +80,7 @@ Use remote control when you want full visibility and control — debugging, revi
 
 The really powerful thing is combining them. Have channels running for quick messages from Telegram, and if something needs your full attention, switch to the Claude app with remote control for the same session.
 
-![[images/claude-code-channels/rc-vs-channels-comparison/excalidraw_1.png]]
+![[images/claude-code-channels/remote-control-vs-channels.png]]
 
 ---
 
@@ -92,7 +92,7 @@ With channels plus cron jobs — which I covered in the cron video — that gap 
 
 The people on Twitter calling this "every OpenClaw primitive shipped by Anthropic" aren't wrong. Remote control, cron scheduling, persistent memory, channels — each one closed a specific gap. Channels was the last major piece.
 
-![[images/claude-code-channels/openclaw-gap-closing-timeline/excalidraw_3.png]]
+![[images/claude-code-channels/openclaw-gap-closing-timeline.png]]
 
 ---
 
