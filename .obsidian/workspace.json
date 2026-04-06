@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "socials/youtube/videos/ultraplan.md",
+                "file": "Ultrathink.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ultraplan"
+              "title": "Ultrathink"
             }
           }
         ]
@@ -185,18 +185,20 @@
   },
   "active": "c1d367786dc6d985",
   "lastOpenFiles": [
+    "projects/agentic-coding-school/board.md",
+    "Ultrathink.md",
+    "Dashboard.md",
+    "socials/youtube/videos/ultraplan.md",
     "socials/youtube/videos/images/ultraplan/excalidraw_4.png",
     "socials/youtube/videos/images/ultraplan/excalidraw_5.png",
     "socials/youtube/videos/images/ultraplan/excalidraw_3.png",
     "socials/youtube/videos/images/ultraplan/excalidraw_2.png",
     "socials/youtube/videos/images/ultraplan/excalidraw_1.png",
-    "socials/youtube/videos/ultraplan.md",
     "socials/youtube/videos/images/ultraplan-hook/excalidraw_10.png",
     "socials/youtube/videos/images/ultraplan-hook/excalidraw_9.png",
     "socials/youtube/videos/images/ultraplan-hook/excalidraw_8.png",
     "socials/youtube/videos/images/ultraplan-hook/excalidraw_7.png",
     "socials/youtube/videos/images/ultraplan-hook/excalidraw_6.png",
-    "socials/youtube/videos/images/ultraplan-hook/excalidraw_5.png",
     "socials/youtube/videos/images/ultraplan-hook",
     "socials/youtube/videos/images/bigger-picture",
     "socials/youtube/videos/images/practical-tips",
@@ -211,8 +213,6 @@
     "projects/agentic-coding-school/to-film/coverage-gaps-from-transcripts.md",
     "artefacts/landing-page-playbook.md",
     "wordpress mcp.md",
-    "projects/agentic-coding-school/board.md",
-    "Dashboard.md",
     "clippings",
     "artefacts/revenue-strategy.md",
     "research/the-software-factory.md",

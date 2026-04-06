@@ -131,6 +131,7 @@ kanban-plugin: board
 - [ ] [[worktrees]] #claude-code
 - [ ] [[telegram-channel]] #business
 - [ ] [[git-inside-of-vscode]] #claude-code
+- [ ] [[Ultrathink]]
 
 
 ## Done
