@@ -28,7 +28,7 @@ Audience preferences drift over time. When patterns from older videos conflict w
 
 ## Generating Title Options
 
-When the user asks for title ideas, provide 8-10 options. For each title, briefly note which proven pattern it draws from or what untested hypothesis it explores.
+When the user asks for title ideas, provide 8-10 options as a **numbered list** (not a table). For each title, briefly note which proven pattern it draws from or what untested hypothesis it explores. Tables make it hard to select and copy individual titles — always use numbered lists for title and thumbnail text suggestions.
 
 ### Frame Diversity
 
