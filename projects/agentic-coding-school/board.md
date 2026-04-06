@@ -6,7 +6,7 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] [[wordpress mcp]]
+- [ ] [[wordpress-mcp]]
 - [ ] [[compound-engineering]] #claude-code
 - [ ] [[subagent-teams]] #claude-code
 - [ ] [[background-hooks]] #claude-code
