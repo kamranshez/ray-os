@@ -4,76 +4,102 @@ order: 1
 class: "skills"
 chapter: "The Blank Slate"
 status: "new"
+tags: [course, script, skills]
+lesson: "1.1 Why Skills Change Everything"
 ---
 
-# Why Skills Change Everything
+## Why Skills Change Everything
 
-"Claude Code without skills is like a smartphone without apps." — the class opener.
+So this class is about skills. And before I show you what they do, I want to tell you why they matter at a level most people aren't talking about.
 
-## The Problem (Two Levels)
+$50 trillion. That's what the world spends every year on knowledge worker compensation. And most of that money produces wildly inconsistent output. You know how it works inside companies. There's a process for how things should be done — except the process is outdated, or there are three versions of it, or it's stuck in Sarah's head and Sarah just left for a new job. Someone new comes in, gets onboarded, picks up maybe 60% of how things are supposed to work, and the output is different every time.
 
-### The Individual Problem
-Most people use Claude as a chatbot. They ask questions, copy-paste answers, and that's the extent of it. But Claude can do actual labor — if you tell it how. Without skills, you're using about 10% of what it can do.
+Skills fix this. A skill is an SOP — a standard operating procedure — that executes itself. It doesn't forget the process. It doesn't skip steps because it's Monday morning. It runs the same way every time.
 
-### The Business Problem (Miessler framing)
-$50 trillion is spent worldwide on knowledge worker compensation every year. Most of that money produces inconsistent output. Different people doing the same job, using the same documents, produce wildly different results. SOPs either don't exist, are outdated, conflict with each other, or are stuck in one person's head. When that person goes on vacation, retires, or switches jobs every 2-3 years — the knowledge dies with them.
+Now — this class is not about replacing yourself. There's a capability stack I want you to keep in mind. AI is great at knowledge, understanding, and intelligence — following instructions, adapting to new requirements, connecting patterns. But it has zero desire. Zero ambition. It doesn't see a problem in the world and go "that's not right, we should fix that." That's you. Your job is deciding what to build, why, and for whom. Skills handle the how. You're not the row in the Excel sheet. You're the person who decides what the spreadsheet should calculate.
 
-Skills are the fix. They're SOPs that can't decay — because they execute themselves. A skill doesn't forget the process. It doesn't misread the document. It doesn't skip steps because it's Monday morning. It runs the same way every time. This is not about AI being smarter than humans. It's about the bar being on the floor — and skills clearing it effortlessly.
+OK — let me prove what skills actually do with two examples.
 
-**Key stat**: Only 21% of workers globally are engaged (Gallup 2025). Companies are paying $50T for work that is mostly inconsistent, undocumented, and trapped in people's heads.
+> [SCREEN: Claude Code terminal]
 
-### Where Humans Fit (Human 3.0)
-This class is NOT about replacing yourself. Think of it this way — there's a capability stack: Knowledge → Understanding → Intelligence → Creativity → Subjective Experience → Desire. AI has the first three. Humans uniquely have the bottom two, plus creativity. Your role is deciding WHAT to build, WHY, and for WHOM. Skills handle the HOW. You're not the row in the Excel sheet. You're the person who decides what the spreadsheet should calculate. Skills free you from execution so you can focus on vision, direction, and the things only you can do.
+### The Before and After
 
-## What to Cover
+I'm going to type a simple prompt. "Build me a landing page for a SaaS product."
 
-### 1. The Before/After That Sells It
+> [TYPE: "Build me a landing page for a SaaS product"]
 
-Show two side-by-side comparisons to immediately demonstrate the gap:
+And here's what Claude gives me without any skills loaded.
 
-**Front-end design**: Left is a default AI-generated front end — generic, purple gradients, rounded cards on white, Interfont everywhere. Right is the same prompt WITH the front-end design skill — distinctive typography, intentional color, no "AI slop." The designer video nails this: "The skill explicitly tells Claude what not to do. It literally bans what it calls AI slop."
+> [SHOW: the generated landing page — generic, purple gradient, rounded cards on white, Inter font]
 
-**Contract review**: Left is "review this contract" — mediocre, surface-level. Right is a skill-encoded review — severity-rated summary with counter-language for each high-severity issue, red flags, yellow flags, missing terms, bottom-line verdict on whether to sign.
+It's... fine. It works. But it looks like every other AI-generated website you've ever seen. Purple gradients. Rounded cards on white. Inter font. If a thousand people typed the same prompt, they'd get roughly the same thing back. Because without anything steering it, Claude defaults to the most common pattern across all its training data. This is what people call AI slop.
 
-### 2. What a Skill Actually Is
+Now. Same exact prompt. But this time I've got the front-end design skill loaded.
 
-Keep it simple. Three definitions from three angles:
+> [SHOW: the generated landing page with skill — distinctive typography, intentional color, no generic patterns]
 
-- "A reusable instruction set — a specific markdown file that tells Claude exactly what to do for specific tasks." (Brock)
-- "A folder of knowledge. But it's how you build the files inside and the relationship between those files that determines how successful your skills are." (7 Levels)
-- "If you can prompt it inside of Claude Code, you can turn it into a skill. It is extremely flexible." (Chase)
+Different. The skill tells Claude how to think about design before it writes a single line of code. It considers purpose, tone, constraints. It has guidelines for typography — avoid generic fonts, choose distinctive pairings. It has rules for color, motion, composition. And it explicitly bans the slop — no purple gradients, no rounded cards on white, no Inter font everywhere.
 
-A skill is not a prompt you save. It's an SOP — a standard operating procedure — that Claude follows every time, without you re-explaining anything.
+> [SPLIT: left — without skill | right — with skill]
 
-### 3. The Control Hierarchy
+Same prompt. Same model. The only difference is a text file with instructions. That's a skill.
 
-Frame where skills sit. There are three layers of control over Claude's behavior:
+Now here's a completely different example. I type "review this contract."
 
-1. **Global instructions** (Settings → Profile) — affects everything, always loaded. Universal preferences.
-2. **Project-level CLAUDE.md / Agent.md** — affects this specific project/folder. Lenny's video: "Help me create a Claude MD file in this folder — this agent will be my assistant for all things related to home improvement."
-3. **Skills** — triggered on specific tasks, loaded on demand. The third and most powerful layer.
+> [SPLIT: left — generic contract review | right — skill-encoded review with severity ratings, red flags, yellow flags, counter-language]
 
-Skills are most powerful when the first two layers are set up. This hierarchy is what separates "I told Claude once" from "Claude always knows."
+Left side — generic. It reads the contract and gives me a summary. Right side — same contract, but now it's severity-rated. Red flags for things that could hurt me. Yellow flags worth reviewing. Missing terms. A bottom-line verdict — sign, negotiate, or walk. And specific counter-language for each high-severity issue.
 
-### 4. Skills Work Everywhere
+That's not a prompt trick. That's years of a lawyer's judgment encoded into a file that now fires every time.
 
-One build, full distribution: "You build them in one area and they automatically distribute across all of your Claude ecosystem. You don't have to do anything else." (Elliot) — Co-work desktop, Claude chat web, mobile app.
+### What a Skill Actually Is (2:00–3:00)
 
-### 5. What Skills Can Do (Quick Montage)
+So what is a skill really? It's a folder with instructions. A markdown file — plain text — that tells Claude how to do a specific thing in a specific way.
 
-Rapid-fire examples to blow the scope open:
-- Generate branded invoices with your logo, colors, fonts (Elliot, Brock)
-- Build entire slide decks from one sentence (Brock)
-- Research trending topics with scoring and content angles (Brand DNA, Chase)
-- Review contracts with severity ratings (Zack Shapiro pattern)
-- Create interactive explainer infographics from any concept (Brock)
-- Plan and script video batches with publishing calendars (Solopreneur)
-- Run morning briefings pulling from email, calendar, and Slack (Brock)
+Not how to do everything. How to do one thing, well, every time.
 
-## Key Insight
+Think of it as an SOP — a standard operating procedure. You write it once, Claude follows it every time. You don't re-explain your brand voice. You don't re-describe your review checklist. You don't paste the same prompt over and over. The skill handles it.
 
-> "Skills aren't prompts you save. They're employees you train once."
+And here's the key thing — anything you can prompt, you can turn into a skill. If you've ever typed a really good detailed prompt and thought "I wish Claude would just do this every time without me having to say all of this again" — that's a skill.
 
-## Cross-Links
+### Where Skills Sit — The Instruction Hierarchy (3:00–4:00)
 
-- [[Types of Skills]] (claude-code class) — workflow vs knowledge gap distinction
+Now, skills aren't the only way to control Claude's behavior. There are multiple layers of instructions, and understanding where skills fit matters.
+
+> [SCREEN: simple diagram showing the layers]
+
+**CLAUDE.md files — the instruction layer.** These are markdown files at different scopes. Your user-level CLAUDE.md at `~/.claude/CLAUDE.md` affects every project — universal preferences. A project-level CLAUDE.md inside a specific folder affects just that project. If you're on an enterprise plan, there's a managed policy CLAUDE.md that your org enforces. These stack — Claude reads all of them.
+
+**Skills — the on-demand layer.** Skills are different from CLAUDE.md files because they're not always loaded. They sit on the side, and Claude pulls them in only when they're relevant to what you're asking. That's what makes them efficient — they don't bloat your context with instructions you don't need right now.
+
+CLAUDE.md files tell Claude how to behave in general. Skills tell Claude how to do specific tasks. They're complementary — and skills are most powerful when the CLAUDE.md files are already set up with your baseline preferences.
+
+One thing to know: skills work in Claude Code — the CLI and the desktop app. They're local files on your machine. For this class, that's where we'll be working.
+
+### The Scope of What's Possible (4:00–5:30)
+
+Now I want to give you a quick sense of range. Because skills aren't just about making landing pages look better.
+
+> [SCREEN: rapid montage of skill outputs]
+
+You can build skills that generate branded invoices — with your logo, your colors, your font, payment terms pre-filled. One sentence and you've got a PDF ready to send.
+
+Skills that build entire slide decks from a brain dump. Skills that research trending topics, score them one to ten, and suggest content angles based on your existing audience.
+
+Skills that plan and script an entire batch of videos — ideation, scriptwriting, publishing calendar — from a single command. Skills that run every morning at 7am and send you a briefing with your calendar, urgent emails, and suggested replies.
+
+Skills that review contracts. Skills that draft proposals. Skills that track your expenses every Friday and generate a dashboard.
+
+And the thing is — each of these is just a folder with instructions. Some are 30 lines. Some are a few hundred. But the principle is the same. You teach Claude once, and it runs that workflow every time.
+
+### The One Line (5:30–6:00)
+
+So here's the frame for this entire class. Skills aren't prompts you save. They're employees you train once.
+
+Over the next 25 videos, we're going to build a complete system — from your first 30-line skill all the way to a full AI operating system with skills that chain together, improve themselves, and run on schedules without you. And at the end, you'll have something you can use for your own business or sell to someone else's.
+
+But none of it works if you don't understand how skills actually load and run under the hood. That's what matters for building them well and not just downloading random ones that half-work.
+
+### What's Next
+
+In the next video, we're going to look at how skills actually work under the hood — the three-tier loading system that makes them efficient, why 500 skills will kill your performance, and what the 15,000 character limit means for you.

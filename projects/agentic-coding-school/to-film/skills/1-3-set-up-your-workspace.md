@@ -4,52 +4,102 @@ order: 3
 class: "skills"
 chapter: "The Blank Slate"
 status: "new"
+tags: [course, script, skills]
+lesson: "1.3 Set Up Your Workspace"
 ---
 
 ## Set Up Your Workspace
 
-Setup checklist — do it once, never think about it again.
+Now we understand what skills are and how they load. Before we build anything, we need to get the workspace set up. This is a one-time thing — do it now and you won't think about it again.
 
-### Step 1: Install Skill Creator
+There are five things to do. Should take about five minutes.
 
-- Customize → Skills → scroll to Anthropic examples → toggle Skill Creator ON
-- "The skill creator skill is an official Anthropic skill. It's what we are going to use to create new skills, but it can do more — modify, improve, measure performance, run evals, benchmarks." (Chase)
+### Step 1 — Install Skill Creator (0:00–1:00)
 
-### Step 2: The Global Profile Setting Hack
+The first thing we need is the Skill Creator skill. This is an official Anthropic skill that creates other skills. We'll use it heavily starting in lesson five, but I want it installed now so it's ready.
 
-Settings → General → Profile. Add this one line:
+> [SCREEN: Claude Co-work — Customize sidebar]
 
-> "Always consider using the most appropriate skill when answering a query or responding."
+In Co-work, click Customize — the little briefcase icon. Then Skills. Scroll down past your personal skills to the Anthropic examples section.
 
-"You can build the perfect skill, structure everything the right way, add all your reference files, and Claude just doesn't use it. The reason is Claude needs to be told to look for your skills. Without that instruction, they just sit there." (Brand DNA video)
+> [SHOW: Skill Creator in the list]
 
-Two separate creators independently flag this as critical. Do this BEFORE building any skills.
+There it is — Skill Creator. Toggle it on.
 
-### Step 3: Understand Scope
+Now this thing does more than just create skills. It can modify existing skills, measure how well they perform, run benchmarks, even do A/B comparisons. We'll get into all of that in Chapter 5. For now, just make sure it's on.
 
-- `~/.claude/skills/` = **user scope** — every project, forever
-- `.claude/skills/` (in project) = **project scope** — only this project, shared with collaborators
-- "If we do install-for-you (user scope), this skill is on Claude's list all the time. If it's just in this repo, it's a skill for a specific project." (Chase)
+If you're in Claude Code CLI instead of Co-work, you can install it with `/install-plugin` or from the marketplace. Same skill, same result.
 
-**The compounding principle**: "Make sure what you build compounds. I want this skill to be useful for any outdoor project going forward so I don't have to rebuild it each time." (Lenny)
+### Step 2 — The One Setting That Actually Matters (1:00–2:00)
 
-### Step 4: Know the Install Methods
+This is the most important step and the one almost everyone skips.
 
-1. **Marketplace**: `/plugin` → search → install
-2. **GitHub CLI**: `npx skills add <repo> -d-skill <name>` (add `-d-local` for project scope)
-3. **Manual upload**: Customize → Skills → + → Upload. Simple .md for single-file skills. **Zip file for skills with scripts/ or assets/ folders** — "You need to compress that into a zip file to get it to upload effectively." (Lenny)
-4. **From another creator**: They send you the .md or .zip, you upload
+> [SCREEN: Co-work — user CLAUDE.md file at ~/.claude/CLAUDE.md]
 
-After any install: `/reload plugins` to activate.
+In Co-work, you can add global instructions through the settings. In Claude Code CLI, you'd edit your user-level CLAUDE.md file at `~/.claude/CLAUDE.md`. Either way, you're adding instructions that affect every session across all projects.
 
-### Step 5: Domain Allow List
+Add this one line:
 
-"One quick thing — in capabilities settings, switch your domain allow list to all domains." (Lenny) — Useful for skills that search the web or access external APIs.
+```
+Always consider using the most appropriate skill when answering a query or responding.
+```
 
-### Step 6: Pick Your Build Project
+> [TYPE: the line into the Profile field]
 
-For this class, pick a real business or project to build around. All skills in subsequent chapters serve this project.
+That's it. One sentence.
 
-### Cross-Links
+Here's why this matters. You can build the perfect skill — great structure, great description, reference files, the whole thing. And Claude just... doesn't use it. It sits there. The reason is that without this instruction, Claude doesn't actively check its skills list. It'll use a skill if you explicitly invoke it, but it won't proactively look for one on its own.
 
-- [[Creating Skills]] (claude-code class) — covers file creation mechanics in detail
+This one line changes that behavior. It tells Claude to actually scan its available skills on every request and consider whether any of them are relevant. Two completely independent creators discovered this problem and both landed on the same fix. Do this before building anything.
+
+### Step 3 — Understanding Scope (2:00–3:30)
+
+When you install a skill, you have to decide where it lives. And this matters more than people think.
+
+> [SCREEN: file browser showing two paths]
+
+There are two main locations:
+
+**User scope** — `~/.claude/skills/`. This is your personal skills folder. Any skill you put here is available in every project, every session, forever. It's on Claude's menu no matter what you're working on.
+
+**Project scope** — `.claude/skills/` inside a specific project folder. This skill only exists when you're working in that project. And if you commit it to a repo, anyone who clones the repo gets the skill too.
+
+So the question for every skill you build is: do I need this everywhere, or just here?
+
+An invoicing skill? Probably everywhere — user scope. A skill that knows how to deploy your specific app? Project scope — it's useless outside that project.
+
+And here's a principle to keep in mind for this whole class: make what you build compound. If you're building a research skill for a specific project, ask yourself — could I make this general enough to use everywhere? Because a skill that works across all your projects is ten times more valuable than one that only works in one.
+
+### Step 4 — The Four Install Methods (3:30–5:00)
+
+There are four ways to add skills. You'll use all of them at different points.
+
+**Method one — the marketplace.** Type `/plugin` in Claude and you get a searchable marketplace of skills. Find one you want, hit install, choose user or project scope. Done.
+
+> [SCREEN: /plugin marketplace]
+
+**Method two — from GitHub.** A lot of good skills live in GitHub repos. The install command looks like this:
+
+```bash
+npx skills add <repo-name> -d-skill <skill-name>
+```
+
+> [SCREEN: terminal running the command]
+
+Add `-d-local` at the end if you want it in the current project instead of your user folder.
+
+**Method three — manual upload.** In Co-work, go to Customize → Skills → hit the plus button → Upload. If it's a single markdown file, just upload the .md. If the skill has scripts or assets — multiple files in a folder — you need to zip it first. Co-work expects a zip file for multi-file skills.
+
+**Method four — from someone else.** Someone sends you a .md file or a .zip. You upload it the same way. We'll do this in Chapter 7 when we talk about sharing skills with your team.
+
+After any install, run `/reload plugins` so Claude picks up the new skill.
+
+### Step 5 — Pick Your Project (5:00–5:30)
+
+Last thing. For this class, I want you to pick a real business or project to build your system around. Every skill we build from here on out is going to serve this project. It could be your actual business. It could be a side project. It could be a client's business you want to build a system for.
+
+The point is: don't build skills in the abstract. Build them for something real. That's how you'll actually use them after this class.
+
+### What's Next
+
+Workspace is set up. Skill Creator's installed. The profile setting is in place. Now we build. In the next video, you're going to create your first skill from scratch — by hand, no Skill Creator, just a text file. It's about 30 lines long and it'll immediately make every other skill you build after it more effective.
