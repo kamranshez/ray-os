@@ -83,7 +83,9 @@ async function generateSingleImage(
   genai: GoogleGenAI,
   prompt: string,
   referenceImages: { data: string; mimeType: string }[],
-  index: number
+  index: number,
+  aspectRatio: string = "16:9",
+  imageSize: string = "2K"
 ): Promise<{ index: number; image?: Buffer; error?: string }> {
   try {
     const parts: Array<{ text: string } | { inlineData: { data: string; mimeType: string } }> = [
@@ -247,7 +249,7 @@ async function main() {
       if (j > 0) await new Promise(r => setTimeout(r, STAGGER_MS));
       batchPromises.push(
         Promise.race([
-          generateSingleImage(genai, fullPrompt, referenceImages, i),
+          generateSingleImage(genai, fullPrompt, referenceImages, i, aspectRatio, imageSize),
           new Promise<{ index: number; error: string }>((resolve) =>
             setTimeout(() => resolve({ index: i, error: `Timeout after ${timeout}s` }), timeout * 1000)
           ),
