@@ -31,5 +31,8 @@
       "WebFetch(domain:www.swyx.io)",
       "mcp__plugin_telegram_telegram__reply"
     ]
+  },
+  "remote": {
+    "defaultEnvironmentId": "env_01HK8ySVEB7u5tsKiNxMhCLD"
   }
 }

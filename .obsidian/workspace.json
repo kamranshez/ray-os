@@ -11,12 +11,14 @@
             "id": "c1d367786dc6d985",
             "type": "leaf",
             "state": {
-              "type": "pdf",
+              "type": "markdown",
               "state": {
-                "file": "projects/agentic-coding-school/ideas/claude-certified-architect-exam-guide.pdf"
+                "file": "artefacts/revenue-strategy.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-file-text",
-              "title": "claude-certified-architect-exam-guide"
+              "icon": "lucide-file",
+              "title": "revenue-strategy"
             }
           }
         ]
@@ -180,8 +182,11 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "c1d367786dc6d985",
+  "active": "446ab2d10da273db",
   "lastOpenFiles": [
+    "socials/youtube/videos/claude-code-workflow-scripts.md",
+    "projects/agentic-coding-school/ideas/claude-certified-architect-exam-guide.pdf",
+    "projects/agentic-coding-school/to-film/techniques/build-small-merge-big.md",
     "projects/agentic-coding-school/to-film/business/wordpress-mcp.md",
     "projects/agentic-coding-school/to-film/business/telegram-channel.md",
     "projects/agentic-coding-school/to-film/business/skills-as-team-knowledge-base.md",
@@ -206,8 +211,6 @@
     "projects/agentic-coding-school/to-film/claude-code/running-claude-in-a-dev-box.md",
     "projects/agentic-coding-school/to-film/claude-code/playwright-agent-browser.md",
     "projects/agentic-coding-school/to-film/claude-code/mcps-connectors-that-i-use.md",
-    "projects/agentic-coding-school/to-film/claude-code/mcp-json.md",
-    "projects/agentic-coding-school/to-film/claude-code/making-prompt-based-hooks.md",
     "socials/x/articles/images/ultraplan-thumbnail-v2/excalidraw_5.png",
     "socials/x/articles/images/ultraplan-thumbnail-v2/excalidraw_4.png",
     "socials/x/articles/images/ultraplan-thumbnail-v2",
@@ -227,7 +230,6 @@
     "socials/youtube/videos/images/ultraplan/excalidraw_4.png",
     "socials/youtube/videos/images/ultraplan/excalidraw_5.png",
     "socials/youtube/videos/images/ultraplan-hook",
-    "socials/youtube/videos/images/bigger-picture",
     "Untitled.canvas"
   ]
 }
