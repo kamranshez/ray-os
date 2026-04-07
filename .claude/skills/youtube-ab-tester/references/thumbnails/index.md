@@ -96,3 +96,24 @@ v{number}-{slug}/
 - Smiling+pointing (33%) > serious (31.5%) when both use /source-code — positive energy partially compensates for weaker text
 - **New pattern:** Thumbnail text emotional tone should match content tone. Leak/scandal = serious. Announcement/feature = excited.
 - The folder icon visual language (established V18 with /dream) continues to perform — becoming a recognizable series element
+
+---
+
+### V20 — Ultra Plan (2026-04-07)
+
+**Title:** "Anthropic Just Dropped Ultra Plan for Claude Code"
+**Result:** Faceless "Plan Mode 2.0" wins at 38.5% — first definitive faceless victory
+
+#### Thumbnail Round 1 — Face vs faceless styles
+
+| File | Style | Text | Watch-time |
+|------|-------|------|-----------|
+| `1st-38.5pct-plan-mode-2-icons.png` | Faceless, dark background, "Plan Mode 2.0." large text, Anthropic icon + cloud/planning icon below | Plan Mode 2.0. | 38.5% |
+| `2nd-35.3pct-face-ultraplan-folder.png` | Face + /ultraplan folder icon (original, same as title testing rounds) | /ultraplan | 35.3% |
+| `3rd-26.2pct-3-hidden-modes-icons.png` | Faceless, dark background, "3 Hidden Modes." large text, Anthropic icon + search icon below | 3 Hidden Modes. | 26.2% |
+
+**Learnings:**
+- **Faceless CAN beat face** when the visual design communicates a clear concept (version upgrade) rather than just being a dark background with text
+- "Plan Mode 2.0" version label creates upgrade curiosity — title says "Ultra Plan" (what), thumbnail says "Plan Mode 2.0" (what it means) — perfect complementarity
+- "3 Hidden Modes." too specific/technical at 26.2% — "Hidden" implies complexity, reducing casual appeal
+- This contradicts V13's finding (face +7.4% over faceless) — the difference is that V13's faceless was just text on a dark background, while V20's winner has a clear conceptual message via version label + recognizable icons
