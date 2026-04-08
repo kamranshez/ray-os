@@ -14,11 +14,6 @@ Any command that takes longer than 15 seconds is automatically pushed to a backg
 
 **Source:** `constants/prompts.ts:860-899`, `main.tsx:2197-2204`
 
-![[images/claude-code-leak/proactive-mode-repl-event-loop.png]]
-![[images/claude-code-leak/reactive-vs-proactive-heartbeat-tick.png]]
-![[images/claude-code-leak/proactive-mode-always-on-assistant.png]]
-![[images/claude-code-leak/reactive-vs-proactive-concept.png]]
-![[images/claude-code-leak/proactive-mode-before-after-kairos.png]]
 
 ---
 
@@ -36,12 +31,6 @@ The whole thing is fire-and-forget. It runs in the background after the model fi
 
 **Source:** `utils/hooks/skillImprovement.ts:30-268`
 
-![[images/claude-code-leak/skill-improvement-pipeline-overview.png]]
-![[images/claude-code-leak/feedback-pipeline-skill-update.png]]
-![[images/claude-code-leak/background-skill-learning-preferences.png]]
-![[images/claude-code-leak/silent-background-rule-change.png]]
-![[images/claude-code-leak/skill-file-auto-update-flow.png]]
-![[images/claude-code-leak/self-improving-skills-pipeline.png]]
 
 ---
 
@@ -57,11 +46,6 @@ It only fires when no turn is currently in progress and there's no existing summ
 
 **Source:** `hooks/useAwaySummary.ts:12-126`
 
-![[images/claude-code-leak/away-summary-overview-conditions.png]]
-![[images/claude-code-leak/away-summary-alt-tab-flow.png]]
-![[images/claude-code-leak/away-summary-before-after-clarity.png]]
-![[images/claude-code-leak/away-summary-wall-of-output.png]]
-![[images/claude-code-leak/away-summary-three-step-flow.png]]
 
 ---
 
@@ -88,11 +72,6 @@ Workers communicate via XML `<task-notification>` messages that include status, 
 
 **Source:** `coordinator/coordinatorMode.ts:111-369`
 
-![[images/claude-code-leak/coordinator-mode-four-phases-overview.png]]
-![[images/claude-code-leak/coordinator-mode-tech-lead-workflow.png]]
-![[images/claude-code-leak/coordinator-mode-parallelized-delegation.png]]
-![[images/claude-code-leak/coordinator-mode-sequential-four-phase-workflow.png]]
-![[images/claude-code-leak/coordinator-mode-spawning-parallel-workers.png]]
 
 ---
 
@@ -114,11 +93,6 @@ Different strategies for different change types: frontend changes get a dev serv
 
 **Source:** `tools/AgentTool/built-in/verificationAgent.ts:10-152`
 
-![[images/claude-code-leak/verification-agent-adversarial-checker.png]]
-![[images/claude-code-leak/verification-agent-run-process.png]]
-![[images/claude-code-leak/verification-agent-pessimistic-flow.png]]
-![[images/claude-code-leak/verification-agent-read-only-probe.png]]
-![[images/claude-code-leak/verification-agent-optimism-trap.png]]
 
 ---
 
@@ -139,11 +113,6 @@ Budget parsing supports shorthand (`+500k`, `+2.5m`) and verbose ("use 2M tokens
 
 **Source:** `query/tokenBudget.ts:3-93`, `utils/tokenBudget.ts`, `constants/prompts.ts:538-550`
 
-![[images/claude-code-leak/token-budget-spend-command.png]]
-![[images/claude-code-leak/token-budget-decision-engine.png]]
-![[images/claude-code-leak/token-budget-logic-flow.png]]
-![[images/claude-code-leak/token-budget-depth-comparison.png]]
-![[images/claude-code-leak/token-budget-forcing-deep-work.png]]
 
 ---
 
@@ -169,11 +138,6 @@ Rejected plans are tracked — the system counts rejections and passes that cont
 
 **Source:** `commands/ultraplan.tsx:32-382`, `utils/ultraplan/ccrSession.ts:80-349`, `utils/teleport.tsx:730-1185`
 
-![[images/claude-code-leak/ultraplan-deep-cloud-sessions.png]]
-![[images/claude-code-leak/ultraplan-local-vs-cloud.png]]
-![[images/claude-code-leak/ultraplan-30min-design-review.png]]
-![[images/claude-code-leak/ultraplan-session-step-by-step.png]]
-![[images/claude-code-leak/ultraplan-full-workflow-steps.png]]
 
 ---
 
@@ -193,11 +157,6 @@ Think of it like GitHub Issues but for your Claude conversations. Each conversat
 
 **Source:** `entrypoints/cli.tsx:212`, `query/stopHooks.ts:45-132`
 
-![[images/claude-code-leak/templates-job-system-overview.png]]
-![[images/claude-code-leak/ephemeral-vs-persistent-jobs.png]]
-![[images/claude-code-leak/templates-job-workflow-cli.png]]
-![[images/claude-code-leak/templates-job-flow-state.png]]
-![[images/claude-code-leak/templates-persistent-job-tracking.png]]
 
 ---
 
@@ -216,11 +175,6 @@ Three views:
 
 **Source:** `tools/BriefTool/BriefTool.ts:88-134`, `tools/BriefTool/UI.tsx:18-62`
 
-![[images/claude-code-leak/brief-mode-normal-vs-concise.png]]
-![[images/claude-code-leak/brief-senduservessage-signal-noise.png]]
-![[images/claude-code-leak/brief-mode-verbose-vs-clean.png]]
-![[images/claude-code-leak/brief-mode-chat-detail-transcript.png]]
-![[images/claude-code-leak/brief-output-detail-management.png]]
 
 ---
 
@@ -232,11 +186,6 @@ A `PushNotification` tool that sends alerts to your devices. When something impo
 
 **Source:** `tools.ts` (gated by `KAIROS || KAIROS_PUSH_NOTIFICATION`)
 
-![[images/claude-code-leak/push-notifications-claude-pings-phone.png]]
-![[images/claude-code-leak/push-notifications-terminal-bound-vs-omni.png]]
-![[images/claude-code-leak/push-notification-tool-flow.png]]
-![[images/claude-code-leak/push-notifications-3am-scenario.png]]
-![[images/claude-code-leak/push-notifications-router-benefits.png]]
 
 ---
 
@@ -248,11 +197,6 @@ The `SubscribePR` tool lets Claude subscribe to GitHub PR activity via webhooks.
 
 **Source:** `commands.ts:101-103` (gated by `KAIROS_GITHUB_WEBHOOKS`)
 
-![[images/claude-code-leak/webhook-reviewer-comment-auto-fix.png]]
-![[images/claude-code-leak/webhook-subscribe-realtime-pr-reaction.png]]
-![[images/claude-code-leak/webhook-pr-events-subscribe-pr-tool.png]]
-![[images/claude-code-leak/webhook-github-instant-automatic-reactions.png]]
-![[images/claude-code-leak/webhook-subscribe-pr-tool-solution.png]]
 
 ---
 
@@ -266,11 +210,6 @@ Fork copies the entire conversation history, all tool results, everything. The c
 
 **Source:** `tools/AgentTool/forkSubagent.ts:1-211`
 
-![[images/claude-code-leak/fork-context-preserving-parallel-exploration.png]]
-![[images/claude-code-leak/fork-before-after-agent-context.png]]
-![[images/claude-code-leak/fork-parent-child-cloud-cache.png]]
-![[images/claude-code-leak/fork-git-branching-max-cache.png]]
-![[images/claude-code-leak/fork-normal-agent-vs-fork-command.png]]
 
 ---
 
@@ -288,11 +227,6 @@ The memory has an index file (`MEMORY.md`) capped at ~25KB with one-line pointer
 
 **Source:** `memdir/teamMemPaths.ts:22-293`, `memdir/memdir.ts:448-472`
 
-![[images/claude-code-leak/team-memory-shared-knowledge-wiki.png]]
-![[images/claude-code-leak/team-memory-before-after-wiki.png]]
-![[images/claude-code-leak/team-memory-directory-shared-context.png]]
-![[images/claude-code-leak/team-memory-repo-knowledge-build.png]]
-![[images/claude-code-leak/team-memory-wiki-maintenance-flow.png]]
 
 ---
 
@@ -340,11 +274,6 @@ Sessions run for up to 24 hours. The bridge heartbeats every active session to e
 
 **Source:** `bridge/workSecret.ts:6-127`, `bridge/types.ts:33-51`, `bridge/sessionRunner.ts:248-548`, `bridge/bridgeMain.ts:141-400`
 
-![[images/claude-code-leak/byoc-aws-vpc-infrastructure.png]]
-![[images/claude-code-leak/byoc-private-vpc-agents.png]]
-![[images/claude-code-leak/byoc-docker-deploy-flow.png]]
-![[images/claude-code-leak/byoc-user-workflow-local-spawn.png]]
-![[images/claude-code-leak/byoc-runner-architecture-enterprise.png]]
 
 ---
 
@@ -370,10 +299,6 @@ If you hit the context limit anyway, it commits all the staged chunks immediatel
 
 **Source:** `types/logs.ts:238-295`, `commands/context/context.tsx:20`, `query.ts:428-447`, `query.ts:1086-1116`, `utils/sessionStorage.ts:1541-1580`
 
-![[images/claude-code-leak/context-collapse-reversible-archiving.png]]
-![[images/claude-code-leak/context-collapse-vs-autocompact.png]]
-![[images/claude-code-leak/context-collapse-reversible-better.png]]
-![[images/claude-code-leak/context-collapse-marble-origami-stages.png]]
 
 ---
 
@@ -385,16 +310,6 @@ Read-only mode where your local work is visible on claude.ai but nobody can cont
 
 **Source:** `bridge/bridgeEnabled.ts:197-202`, `bridge/replBridgeTransport.ts:340-345`
 
-![[images/claude-code-leak/niche-claude-features-beyond-basics.png]]
-![[images/claude-code-leak/smaller-claude-features-overview.png]]
-![[images/claude-code-leak/hidden-claude-features-operations.png]]
-![[images/claude-code-leak/ccr-mirror-terminal-panel-guide.png]]
-![[images/claude-code-leak/ccr-mirror-background-session-lock.png]]
-![[images/claude-code-leak/ccr-mirror-data-safety-valve.png]]
-![[images/claude-code-leak/ccr-mirror-outbound-only-flow.png]]
-![[images/claude-code-leak/ccr-mirror-access-control-panel.png]]
-![[images/claude-code-leak/ccr-mirror-read-only-mode.png]]
-![[images/claude-code-leak/ccr-mirror-readonly-data-flow.png]]
 
 ---
 
@@ -406,11 +321,6 @@ A tmux-based shell that lives alongside Claude Code. Press **Meta+J** to flip be
 
 **Source:** `utils/terminalPanel.ts:25-192`
 
-![[images/claude-code-leak/terminal-panel-before-after.png]]
-![[images/claude-code-leak/terminal-panel-metaj-toggle.png]]
-![[images/claude-code-leak/terminal-panel-dual-session.png]]
-![[images/claude-code-leak/terminal-panel-claude-to-shell.png]]
-![[images/claude-code-leak/terminal-panel-interrupted-vs-seamless.png]]
 
 ---
 
@@ -422,12 +332,6 @@ Launch background sessions with `--bg`. Manage with `claude ps`, `logs`, `attach
 
 **Source:** `entrypoints/cli.tsx:185`, `utils/concurrentSessions.ts:1-205`
 
-![[images/claude-code-leak/background-sessions-interactive-vs-detached.png]]
-![[images/claude-code-leak/background-sessions-launch-manage.png]]
-![[images/claude-code-leak/background-sessions-multi-session-commands.png]]
-![[images/claude-code-leak/background-sessions-multiple-agents.png]]
-![[images/claude-code-leak/background-sessions-foreground-vs-background.png]]
-![[images/claude-code-leak/background-sessions-reattach-workflow.png]]
 
 ---
 
@@ -437,11 +341,6 @@ Bidirectional sync of settings and memory between local CLI and cloud. Your keyb
 
 **Source:** `services/settingsSync/index.ts:1-582`
 
-![[images/claude-code-leak/settings-sync-cloud-bidirectional.png]]
-![[images/claude-code-leak/settings-sync-instance-to-everywhere.png]]
-![[images/claude-code-leak/settings-sync-local-to-cloud-machines.png]]
-![[images/claude-code-leak/settings-sync-local-isolation-vs-global.png]]
-![[images/claude-code-leak/settings-sync-bidirectional-keybindings.png]]
 
 ---
 
@@ -451,10 +350,6 @@ Server-side encoding that prevents unauthorized model training on Claude's outpu
 
 **Source:** `constants/betas.ts:23-25`, `utils/betas.ts:279-298`
 
-![[images/claude-code-leak/anti-distillation-content-blocks.png]]
-![[images/claude-code-leak/anti-distillation-encryption-flow.png]]
-![[images/claude-code-leak/anti-distillation-vulnerable-vs-protected.png]]
-![[images/claude-code-leak/anti-distillation-before-after-encoding.png]]
 
 ---
 
@@ -476,8 +371,3 @@ Release: April Fools teaser April 1-7, 2026. Live for real May 2026.
 
 **Source:** `buddy/types.ts:54-73`, `buddy/sprites.ts:26-515`, `buddy/companion.ts:62-134`
 
-![[images/claude-code-leak/buddy-tamagotchi-species-overview.png]]
-![[images/claude-code-leak/buddy-generation-rarity-stats.png]]
-![[images/claude-code-leak/buddy-mechanic-species-traits.png]]
-![[images/claude-code-leak/buddy-deterministic-companion-workflow.png]]
-![[images/claude-code-leak/buddy-hatch-storage-timeline.png]]

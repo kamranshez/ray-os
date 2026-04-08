@@ -22,7 +22,6 @@ Claude Code just shipped a feature called Ultraplan. And the idea is simple — 
 
 It's genuinely useful. But there's something about how it works that Anthropic doesn't tell you — and once you know it, it changes how you should use the feature.
 
-![[images/ultraplan/ultraplan-cloud-handoff-hook.png]]
 
 ---
 
@@ -52,7 +51,6 @@ That second path is interesting because it means you can use the cloud as a plan
 
 There's also a third way to get into ultraplan that most people miss. If you run a local plan first and it finishes, the approval dialog now has a new option: "No, refine with Ultraplan on Claude Code on the web." So you can start local, realise the plan needs more iteration than a terminal is good for, and hand it off to the cloud mid-flow.
 
-![[images/ultraplan/ultraplan-decouple-plan-execute.png]]
 ---
 
 ### Why Planning Remotely Is Different (3:00–5:30)
@@ -71,7 +69,6 @@ Think of it like replacing a light switch. The local approach is: swap the switc
 
 So ultraplan is most valuable for small, high-leverage changes — library upgrades, API contract changes, billing logic. For large mechanical renames across dozens of files, local planning is fine.
 
-![[images/ultraplan/local-vs-remote-plan-task-gap.png]]
 
 ---
 
@@ -215,7 +212,6 @@ This explains the inconsistency I was seeing. The plans that caught every edge c
 
 The deep variant caught things like: what happens if the user closes their browser tab mid-call and the webhook never fires? That's not something a simple planning pass surfaces. That's a dedicated "risk agent" doing its job.
 
-![[images/ultraplan/ultraplan-variants-ab-test.png]]
 
 ---
 
@@ -235,7 +231,6 @@ You can do this in Claude Code right now with the Agent tool, or even just by wr
 
 **Send big tasks to the cloud, keep small tasks local.** Ultraplan frees up your terminal, which matters when the planning takes time. But for a quick 2-file change where you already know the approach, local plan mode is faster. The sweet spot for ultraplan is medium-to-large tasks where you want the review surface and don't mind waiting.
 
-![[images/ultraplan/ultraplan-tips-multitasking-strategy.png]]
 
 ---
 
@@ -251,7 +246,6 @@ So what you're seeing right now — the inconsistency, the quality variation —
 
 This is the direction everything is heading. AI tools that quietly experiment with how they present work to you, measure what you accept, and iterate. Ultraplan is one of the first places you can see the machinery exposed — because the quality gap between variants is big enough to notice.
 
-![[images/ultraplan/ultraplan-ab-testing-framework.png]]
 
 ---
 

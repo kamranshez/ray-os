@@ -28,7 +28,6 @@ And these are all good. But they're all single-shot. A skill runs, it does its t
 
 That's a pipeline. That's an assembly line. And right now, if you want that, you're stitching it together by hand every time.
 
-![[images/claude-code-workflow-scripts/skills-vs-workflows-gap.png]]
 
 ### The Discovery (2:00–4:30)
 
@@ -61,7 +60,6 @@ And then the comment that gave everything away — in SyntheticOutputTool:
 
 30 to 80 structured agent calls per workflow. This isn't a skill. This is an orchestration engine.
 
-![[images/claude-code-workflow-scripts/source-code-seams-evidence.png]]
 
 ### How It Works (4:30–7:00)
 
@@ -91,7 +89,6 @@ And they cache the compiled schemas with a WeakMap — because when you're calli
 
 **Workflows can't spawn workflows.** The WorkflowTool is explicitly blocked inside subagents to prevent infinite recursion. Same principle as not letting a makefile call itself.
 
-![[images/claude-code-workflow-scripts/workflow-architecture-diagram.png]]
 
 ### The Rebuild (7:00–9:30)
 
@@ -137,7 +134,6 @@ The key insight from Anthropic's implementation: steps can reference each other.
   parallel: true
 ```
 
-![[images/claude-code-workflow-scripts/workflow-running-demo.png]]
 
 ### "Wait — Doesn't This Just Chain Skills?" (9:30–11:30)
 
@@ -167,7 +163,6 @@ So you've got three levels here:
 
 **Level 3: Both.** And nothing stops you from mixing them. A workflow step could invoke a skill if you wanted — just write "Use the /review skill" in the step's prompt and give the agent access to the Skill tool. Now you've got schema-enforced pipeline structure with skill-level expertise at each node.
 
-![[images/claude-code-workflow-scripts/three-levels-of-orchestration.png]]
 
 So when should you use what?
 
@@ -179,7 +174,6 @@ So when should you use what?
 
 Most people should start with a meta-skill. Reach for YAML when you're running the same pipeline across projects, need parallel execution, or need guaranteed data shapes between steps.
 
-![[images/claude-code-workflow-scripts/skills-vs-workflows-comparison.png]]
 
 ### The Honest Limits (11:30–13:00)
 
@@ -211,7 +205,6 @@ So this is an approximation. A useful one — I've been running it and the struc
 
 The good news is Anthropic is clearly building toward making this public. The integration points are already in the codebase. When it ships, you'll have the real thing. Until then, this gets you 80% of the way there.
 
-![[images/claude-code-workflow-scripts/rebuild-vs-internal-gap.png]]
 
 ### Where This Is Heading (13:00–13:45)
 
@@ -227,7 +220,6 @@ Think about what you could build:
 
 Each of those is a YAML file. Write it once. Run it forever.
 
-![[images/claude-code-workflow-scripts/skills-recipes-workflows-assembly-lines.png]]
 
 ### Closer (13:45–14:00)
 
