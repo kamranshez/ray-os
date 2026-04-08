@@ -197,6 +197,8 @@ async function main() {
   let systemPrompt = DEFAULT_SYSTEM_PROMPT;
   let noFace = false;
   let thumbnailText = "";
+  let cloneSrc = "";
+  let outputName = "";
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -216,6 +218,10 @@ async function main() {
       noFace = true;
     } else if (arg === "--text") {
       thumbnailText = args[++i];
+    } else if (arg === "--clone") {
+      cloneSrc = args[++i];
+    } else if (arg === "--name") {
+      outputName = args[++i];
     } else if (!arg.startsWith("-")) {
       prompt = arg;
     }
@@ -226,9 +232,28 @@ async function main() {
     process.exit(1);
   }
 
+  // Clone mode: use an existing thumbnail as reference, auto-construct prompt
+  if (cloneSrc) {
+    if (!fs.existsSync(cloneSrc)) {
+      console.error(`Error: Clone source not found: ${cloneSrc}`);
+      process.exit(1);
+    }
+    // Add the clone source as a reference
+    customRefs.unshift(cloneSrc);
+    // If no explicit prompt, auto-construct one for clone mode
+    if (!prompt) {
+      if (!thumbnailText) {
+        console.error("Error: --clone requires --text to specify the new text");
+        process.exit(1);
+      }
+      prompt = `Recreate this exact thumbnail with the same composition, layout, colors, person position, expression, and style — but change the text to read '${thumbnailText}'. Keep everything else identical to the reference image. The text '${thumbnailText}' must be spelled exactly as shown (one word, no spaces unless explicitly included).`;
+    }
+    console.log(`Clone mode: using ${path.basename(cloneSrc)} as source`);
+  }
+
   if (!prompt) {
     console.error(
-      "Usage: generate.ts <prompt> [-n count] [-o output] [-r reference] [--text TEXT] [--no-face]"
+      "Usage: generate.ts <prompt> [-n count] [-o output] [-r reference] [--text TEXT] [--no-face] [--clone SRC] [--name FILENAME]"
     );
     process.exit(1);
   }
@@ -268,7 +293,7 @@ async function main() {
     fullPrompt += `Additional reference images are provided as style/composition inspiration. Draw from their visual approach but create something original.\n\n`;
   }
   if (thumbnailText) {
-    fullPrompt += `IMPORTANT: The thumbnail MUST include the text "${thumbnailText}" rendered in large, bold, highly readable letters.\n\n`;
+    fullPrompt += `CRITICAL TEXT REQUIREMENT: The thumbnail MUST include the text "${thumbnailText}" rendered in large, bold, highly readable letters. Spell it EXACTLY as shown: "${thumbnailText}" — do not add spaces, split words, or alter the spelling in any way.\n\n`;
   }
   fullPrompt += `Thumbnail concept:\n${prompt}`;
 
@@ -303,8 +328,16 @@ async function main() {
   let successCount = 0;
   for (const result of results) {
     if ("image" in result && result.image) {
-      const fileIndex = startIndex + result.index;
-      const outputPath = path.join(outputDir, `thumbnail_${fileIndex}.png`);
+      let outputPath: string;
+      if (outputName) {
+        // Direct naming: use --name for the filename (add suffix for multiple)
+        const baseName = outputName.replace(/\.png$/, "");
+        const suffix = count > 1 ? `-${result.index + 1}` : "";
+        outputPath = path.join(outputDir, `${baseName}${suffix}.png`);
+      } else {
+        const fileIndex = startIndex + result.index;
+        outputPath = path.join(outputDir, `thumbnail_${fileIndex}.png`);
+      }
       fs.writeFileSync(outputPath, result.image);
       console.log(`  Saved: ${outputPath}`);
       successCount++;

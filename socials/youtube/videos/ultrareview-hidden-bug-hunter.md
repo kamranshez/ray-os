@@ -164,12 +164,7 @@ The second review ignored most of the codebase entirely. It picked one user flow
 
 One thinks like an auditor — scan everything, categorize, prioritize. The other thinks like an attacker — pick a path and break it. Neither one alone caught everything.
 
-![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_1.png]]
-![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_2.png]]
 ![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_3.png]]
-![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_4.png]]
-![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_5.png]]
-
 ### Closer (16:00–16:30)
 
 So that's ultrareview — Anthropic's cloud-based multi-agent bug hunter. And now you've got your own version as a skill. Three Claude agents, two Codex agents, cross-model verification. You can run it today on any repo, no feature flag required.

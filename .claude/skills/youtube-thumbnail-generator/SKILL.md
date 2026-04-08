@@ -40,13 +40,21 @@ Golden references are previously successful outputs that already have Ray's like
 
 ```
 research/golden-references/
-  folder-command.png        ← best folder + /command style
-  folder-pointing.png       ← best folder + pointing style
-  icons-black.png           ← best icons on black style
-  old-vs-new.png            ← best comparison style
-  cli-chat.png              ← best CLI terminal style
+  folder-command.png              ← best folder + /command style (contemplative)
+  folder-command-smiling.png      ← best folder + /command style (smiling/pointing)
+  folder-command-closeup.png      ← best folder + /command style (close-up crop)
+  icons-black.png                 ← best icons on black style
+  old-vs-new.png                  ← best comparison style
+  cli-chat.png                    ← best CLI terminal style
   ...
 ```
+
+**Golden refs should be saved per style AND per expression/crop.** For example, the folder style has multiple golden refs:
+- `folder-command.png` — contemplative, medium shot
+- `folder-command-smiling.png` — smiling/pointing, medium shot  
+- `folder-command-closeup.png` — close-up face crop (used for ultraplan/ultrareview)
+
+When the user asks for "same as X but different text", use the golden ref that matches the exact composition — not just the style category. Save the best output from each video as a new golden ref if it improves on the existing one.
 
 ### How Golden References Work
 
@@ -262,17 +270,25 @@ Read `references/thumbnail-analysis.md` for the outlier framework. Key patterns 
    - Use the proven person description (see Prompt Template below)
    - Follow all global feedback rules
 8. Isolate `go-to-face.jpg` (move others to `assets/face-backup/`)
-9. Generate using separate output directories per run:
+9. Generate directly into the final output folder using `--name`:
 
 ```bash
 cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts "<prompt>" \
-  -n 1 -o "output/<video-title-kebab>-tmp-<name>" \
+  -n 1 -o "output/<video-title-kebab>" \
+  --name "folder-<concept>-a" \
   -r "research/golden-references/<style>.png"  # or nateherk/<ref-id>.jpg if no golden ref
 ```
 
-10. After generation, rename files with descriptive kebab-case names and move to `output/<video-title-kebab>/`
-11. **Save best outputs as golden refs** — if a generation produced a great result for a style that has no golden ref yet, copy it to `research/golden-references/`
-12. Clean up temp batch directories
+For clone-mode (same thumbnail, different text):
+```bash
+cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts \
+  --clone "output/<source-video>/folder-<source>-golden-ref.jpeg" \
+  --text "/newcommand" \
+  --name "folder-<newcommand>-contemplative" \
+  -n 1 -o "output/<video-title-kebab>"
+```
+
+10. **Save best outputs as golden refs** — if a generation produced a great result for a style that has no golden ref yet, copy it to `research/golden-references/` with a descriptive name including the expression/crop type
 13. Restore face photos from backup
 14. Generate HTML comparison page for user review
 
@@ -382,14 +398,43 @@ cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts
 
 **Options:**
 - `-n, --count` — Number of images (default: 5)
-- `-o, --output` — Output directory
+- `-o, --output` — Output directory (created automatically if it doesn't exist)
 - `-t, --timeout` — Timeout per image in seconds (default: 180)
 - `-r, --reference` — Single competitor reference image (use ONE per generation)
 - `--no-face` — Skip loading face reference images
-- `--text` — Text to render on the thumbnail (passed separately for emphasis)
+- `--text` — Text to render on the thumbnail (passed separately for stronger emphasis on exact spelling)
+- `--name` — Output filename (without .png). Saves directly as `<output>/<name>.png` instead of `thumbnail_N.png`. For multiple images, appends `-1`, `-2`, etc.
+- `--clone` — Clone mode: pass an existing thumbnail to recreate with different text. Auto-constructs the prompt. Requires `--text`.
 - `--system-prompt` — Override the default system prompt
 
 The script automatically loads face reference images from `assets/face/`.
+
+### Clone Mode (V17 — "Same But Different Text")
+
+When the user wants the same thumbnail composition with just the text changed (e.g., `/ultraplan` → `/ultrareview`), use clone mode. This skips prompt writing entirely:
+
+```bash
+cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts \
+  --clone "output/ultraplan/folder-ultraplan-golden-ref.jpeg" \
+  --text "/ultrareview" \
+  --name "folder-ultrareview-contemplative" \
+  -n 1 -o "output/ultrareview"
+```
+
+**How it works:**
+1. The `--clone` source image is added as a reference
+2. The prompt is auto-generated: "Recreate this exact thumbnail but change the text to [X]"
+3. The `--name` flag saves directly to the final output folder — no temp dirs needed
+4. Face references are still loaded for likeness consistency
+
+**When to use clone mode:**
+- User says "same as X but with different text"
+- User wants a variant of an existing thumbnail for a new video
+- Generating a series with consistent style (e.g., all `/command` thumbnails)
+
+**When NOT to use clone mode:**
+- User wants a different composition, expression, or layout
+- The source thumbnail doesn't exist or wasn't a good result
 
 ---
 
