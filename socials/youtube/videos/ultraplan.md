@@ -1,6 +1,11 @@
 ---
-tags: [youtube, script, claude-code, planning, ultraplan]
-status: draft
+tags:
+  - youtube
+  - script
+  - claude-code
+  - planning
+  - ultraplan
+status: uploaded
 date: 2026-04-05
 ---
 

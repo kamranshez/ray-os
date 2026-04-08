@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "19d0efab3de02962",
+        "id": "637e29a20e16681f",
         "type": "tabs",
         "children": [
           {
-            "id": "c1d367786dc6d985",
+            "id": "dde957f29b72c8ee",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "angie",
+                "query": "autore",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 284.5004348754883
+    "width": 284.5004348754883,
+    "collapsed": true
   },
   "right": {
     "id": "99b289f72ba3f8e1",
@@ -182,27 +183,36 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "c1d367786dc6d985",
+  "active": "dde957f29b72c8ee",
   "lastOpenFiles": [
+    "socials/youtube/videos/ultrareview-hidden-bug-hunter.md",
+    "projects/agentic-coding-school/to-film/claude-code/auto-research-karpathy-loop.md",
+    "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_15.png",
+    "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_14.png",
+    "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_13.png",
+    "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_12.png",
+    "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_11.png",
+    "socials/youtube/videos/ultraplan.md",
+    "socials/youtube/videos/skills-2.0.md",
+    "socials/youtube/videos/cloud-scheduled-tasks.md",
+    "socials/youtube/videos/claude-code-workflow-scripts.md",
+    "socials/youtube/videos/claude-code-leak.md",
+    "socials/youtube/videos/claude-code-channels.md",
+    "socials/youtube/videos/btw-and-fork.md",
+    "socials/youtube/videos/auto-dream-memory-consolidation.md",
+    "socials/youtube/videos/anthropic-skills-playbook.md",
+    "socials/youtube/videos/50-tips-for-claude-code.md",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_5.png",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_4.png",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_3.png",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_2.png",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_1.png",
-    "projects/agentic-coding-school/to-film/claude-code/images/non-technical-use-cases/excalidraw_5.png",
-    "projects/agentic-coding-school/to-film/claude-code/images/non-technical-use-cases/excalidraw_4.png",
-    "projects/agentic-coding-school/to-film/claude-code/images/non-technical-use-cases/excalidraw_3.png",
-    "projects/agentic-coding-school/to-film/claude-code/images/non-technical-use-cases/excalidraw_2.png",
-    "projects/agentic-coding-school/to-film/claude-code/images/non-technical-use-cases/excalidraw_1.png",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it",
     "projects/agentic-coding-school/to-film/claude-code/images/non-technical-use-cases",
-    "projects/agentic-coding-school/to-film/claude-code/images/technical-use-cases/excalidraw_5.png",
     "projects/agentic-coding-school/to-film/claude-code/images/technical-use-cases",
     "projects/agentic-coding-school/to-film/claude-code/images/before-auto-research",
     "projects/agentic-coding-school/to-film/claude-code/images/what-is-auto-research",
-    "projects/agentic-coding-school/to-film/claude-code/auto-research-karpathy-loop.md",
     "artefacts/revenue-strategy.md",
-    "socials/youtube/videos/claude-code-workflow-scripts.md",
     "projects/agentic-coding-school/ideas/claude-certified-architect-exam-guide.pdf",
     "projects/agentic-coding-school/to-film/techniques/build-small-merge-big.md",
     "projects/agentic-coding-school/to-film/business/wordpress-mcp.md",
@@ -216,16 +226,6 @@
     "projects/agentic-coding-school/to-film/business/lead-research-and-outreach.md",
     "projects/agentic-coding-school/to-film/claude-code/imessage-channel.md",
     "projects/agentic-coding-school/to-film/business/deep-research-with-exa.md",
-    "projects/agentic-coding-school/to-film/business/box-cli-filesystem-for-ai-agents.md",
-    "projects/agentic-coding-school/to-film/claude-code/worktrees.md",
-    "projects/agentic-coding-school/to-film/business/auto-research.md",
-    "projects/agentic-coding-school/to-film/claude-code/workspace-organization.md",
-    "projects/agentic-coding-school/to-film/claude-code/using-git-in-vscode-version.md",
-    "projects/agentic-coding-school/to-film/claude-code/using-cc-in-wsl.md",
-    "projects/agentic-coding-school/to-film/claude-code/subagent-teams.md",
-    "projects/agentic-coding-school/to-film/skills/skills-vs-subagents.md",
-    "projects/agentic-coding-school/to-film/skills/skill-creator-with-evals.md",
-    "projects/agentic-coding-school/to-film/claude-code/self-modifying-claude-md.md",
     "socials/x/articles/images/ultraplan-thumbnail-v2",
     "socials/x/articles/images/ultraplan-thumbnail",
     "socials/x/articles/images",

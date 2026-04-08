@@ -24,6 +24,7 @@ But here's the problem. One agent, one pass means one perspective. It reads top 
 
 And that's actually the same limitation human code review has. One reviewer, one pass, linear reading. The important bugs live in the interactions between components, and no single-pass review reliably catches those.
 
+![[images/ultrareview-hidden-bug-hunter/problem-with-code-review/excalidraw_7.png]]
 ### What Ultrareview Actually Is (1:30–3:30)
 
 *Terminal on screen — run `/ultrareview`*
@@ -61,6 +62,7 @@ And this matters more than people realize. I actually covered this in a previous
 
 The result? "Review complete — no findings." Which in this case is actually good news — it means five agents couldn't find a real bug in my branch. But when they do find something, you know it's been independently verified, not just flagged by a pattern matcher.
 
+![[images/ultrareview-hidden-bug-hunter/what-ultrareview-actually-is/excalidraw_7.png]]
 ### Two Modes of Operation (3:30–5:00)
 
 *Back to terminal*
@@ -70,6 +72,8 @@ Now there are two ways to run it.
 **Mode 1 — Branch mode.** Just type `/ultrareview` with no arguments. It finds the merge-base between your current HEAD and the default branch, bundles the whole repo, and uploads it. This is what I used. It's the simplest — you just run it and walk away.
 
 **Mode 2 — PR mode.** `/ultrareview 42`. You pass a PR number. This one doesn't need to bundle anything — it checks out `refs/pull/42/head` directly from GitHub. So it works with any repo size, but you need to have pushed a PR first.
+
+![[images/ultrareview-hidden-bug-hunter/two-modes-of-operation/excalidraw_8.png]]
 
 ### The Billing Model (5:00–6:30)
 
@@ -91,35 +95,6 @@ Once you burn through your free allocation, it switches to Extra Usage billing. 
 And there's a minimum balance check — if your Extra Usage balance is below $10, it won't even let you launch.
 
 One more thing — if you're using Bedrock or a custom API setup, the quota system is bypassed entirely. You just run it.
-
-### The Server-Side Mystery (7:30–8:30)
-
-Now here's what I couldn't find. The actual bughunter prompt — the instructions that tell those five agents what to do, how to hunt for bugs, what to look for — none of that is in the binary.
-
-The client creates the remote session with `initialMessage: null`. No prompt. The fleet orchestration, the review criteria, the verification logic — all of that lives server-side, baked into that dedicated environment.
-
-What this means is that Anthropic can update the review logic — what bugs it looks for, how verification works, how the fleet coordinates — without shipping a new version of Claude Code. The client is just the launcher. The intelligence is in the cloud.
-
-### How It Compares to /review (8:30–9:30)
-
-So let's be clear about what each one does.
-
-*Side-by-side comparison on screen:*
-
-| | `/review` | `/ultrareview` |
-|---|---|---|
-| **Where** | Local, in your session | Cloud, dedicated container |
-| **Agents** | 1 | 5 (configurable to 20) |
-| **Time** | ~1 minute | 10–20 minutes |
-| **Approach** | Single-pass diff review | Find → Verify → Dedupe pipeline |
-| **Verification** | No | Yes — separate agent confirms each bug |
-| **Cost** | Included in your plan | Free allocation, then Extra Usage |
-| **Prompt** | In the binary (simple) | Server-side (sophisticated) |
-
-The `/review` prompt is literally 15 lines — "you are an expert code reviewer, follow these steps, run gh pr diff, analyze the changes." That's it. Basic.
-
-Ultrareview is an entirely different architecture. Multi-agent, multi-stage, independently verified. It's the difference between asking one person to skim your code and hiring a QA team.
-
 ### What This Means (9:30–10:30)
 
 Now here's what I think is actually interesting about all of this. We're moving from "AI reviews your code" to "AI teams review your code with adversarial verification." That's a meaningful shift.
@@ -130,6 +105,7 @@ That's how you reduce false positives. Not by making one agent smarter, but by m
 
 And the fleet architecture means it scales. Five agents today, twenty tomorrow. Each one catches things the others miss. It's parallel exploration of the bug space, not serial scanning.
 
+![[images/ultrareview-hidden-bug-hunter/what-this-means/excalidraw_5.png]]
 ### What You Can Do Right Now (10:30–12:30)
 
 Now — ultrareview is still behind a feature flag. Most people don't have it yet. But here's the thing. The architecture isn't magic. It's the same multi-agent pattern you can set up yourself today with any coding agent that supports subagents.
@@ -138,10 +114,11 @@ Now — ultrareview is still behind a feature flag. Most people don't have it ye
 
 **OpenAI Codex.** Codex now has full subagent support. You can define custom agents as TOML files in `~/.codex/agents/`, give each one different instructions and even different models, and Codex handles the orchestration — spawning them in parallel, routing follow-ups, collecting results. So you could build a "reviewer" agent, a "security auditor" agent, a "test coverage" agent, launch them all on the same diff, and get back three independent perspectives.
 
-**Pi.** If you use Pi (shittycodingagent.ai) — the open-source coding agent that works with Ollama and basically any model provider — it actually ships with a built-in `/review` command and a reviewer subagent out of the box. Plus it supports multi-model sessions, so you can have one agent running Claude, another running GPT, another running Gemini, all reviewing the same code. Different models catch different things — same principle as the fleet, but with model diversity on top.
+**Pi.** If you use Pi  — the open-source coding agent that works with Ollama and basically any model provider — it actually ships with a built-in `/review` command and a reviewer subagent out of the box. Plus it supports multi-model sessions, so you can have one agent running Claude, another running GPT, another running Gemini, all reviewing the same code. Different models catch different things — same principle as the fleet, but with model diversity on top.
 
 The point is: you don't need to wait for Anthropic to flip a flag. The pattern is fleet of agents, independent exploration, then verification. You can build that today.
 
+![[images/ultrareview-hidden-bug-hunter/what-you-can-do-right-now/excalidraw_9.png]]
 ### Building Your Own Ultrareview Skill (12:30–14:30)
 
 Actually — let's build it. Right now. I'm going to turn this into a Claude Code skill that replicates the ultrareview pipeline using multiple models and multiple agents.
@@ -176,7 +153,24 @@ The skill orchestrates all of this. You run `/fleet-review` and it:
 
 And the whole thing takes maybe 5–8 minutes. Faster than ultrareview because you're running locally — no repo bundling, no cloud teleportation. But you're getting the same architecture: fleet find, independent verify, dedupe.
 
-### Closer (14:30–15:00)
+![[images/ultrareview-hidden-bug-hunter/building-your-own-ultrareview-skill/excalidraw_6.png]]
+### What Two Reviews Actually Found (14:30–16:00)
+
+So I ran two independent reviews on the same PR. One came back with twenty-two findings. The other came back with eight. Three direct overlaps.
+
+The first review scanned everything — CI config, Dockerfiles, migrations, dependencies, route handlers, UI components. It read every file, caught credential exposure, supply-chain risks in CI, dead code, convention violations — and it prioritized all of it correctly. Blockers at the top, nits at the bottom. A thorough audit.
+
+The second review ignored most of the codebase entirely. It picked one user flow and traced it end to end — from button click through room creation, through the active call, to teardown. It found race conditions and lifecycle bugs that the first review walked right past. Not because the first review was sloppy — but because those bugs only surface when you hold three files in your head at once and follow the execution order.
+
+One thinks like an auditor — scan everything, categorize, prioritize. The other thinks like an attacker — pick a path and break it. Neither one alone caught everything.
+
+![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_1.png]]
+![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_2.png]]
+![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_3.png]]
+![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_4.png]]
+![[images/ultrareview-hidden-bug-hunter/what-two-reviews-found/excalidraw_5.png]]
+
+### Closer (16:00–16:30)
 
 So that's ultrareview — Anthropic's cloud-based multi-agent bug hunter. And now you've got your own version as a skill. Three Claude agents, two Codex agents, cross-model verification. You can run it today on any repo, no feature flag required.
 

@@ -1,6 +1,10 @@
 ---
-tags: [youtube, script, claude-code, memory]
-status: draft
+tags:
+  - youtube
+  - script
+  - claude-code
+  - memory
+status: uploaded
 date: 2026-03-24
 ---
 

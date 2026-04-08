@@ -1,7 +1,7 @@
 ---
 source: https://www.anthropic.com/blog/improving-skill-creator
 date: 2026-03-04
-status: draft
+status: uploaded
 ---
 
 So Anthropic just updated skill-creator — the thing you use to build skills for Claude Code and Claude.ai. The update is basically: you can now *test* your skills. Like, actually test them. Not "try it and see if it looks right" — proper evals with pass/fail, benchmarks, and even blind A/B comparisons.

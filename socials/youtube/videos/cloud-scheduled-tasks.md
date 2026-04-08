@@ -1,9 +1,7 @@
 ---
 date: 2026-03-21
-status: planning
+status: uploaded
 ---
-## Title Hypotheses (A/B Test)
-
 Based on proven formulas ("Dropped" verb dominance, insider framing at 49.4%, single-hook rule):
 
 | Variant | Title | Rationale |

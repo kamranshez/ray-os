@@ -1,7 +1,7 @@
 ---
 source: https://x.com/trq212/status/claude-code-channels
 date: 2026-03-20
-status: to-film
+status: uploaded
 ---
 
 Remember when Anthropic dropped remote control and everyone said "this is OpenClaw for grownups"? Well, they just took it further. You can now text Claude Code from Telegram or Discord — and it texts you back.

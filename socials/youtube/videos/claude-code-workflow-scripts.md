@@ -1,9 +1,12 @@
 ---
-tags: [youtube, script, claude-code, workflows]
-status: draft
+tags:
+  - youtube
+  - script
+  - claude-code
+  - workflows
+status: uploaded
 date: 2026-04-07
 ---
-
 ## Video Plan: "Claude Code Has a Build System Now — And It's Not What You Think"
 
 | # | Title | Formula |

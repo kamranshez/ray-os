@@ -1,6 +1,3 @@
-# Claude Code Source Code Leak — Every Hidden Feature Revealed
-
-
 ## PROACTIVE MODE — Claude That Works While You Don't
 
 This might be the most mind-blowing feature in the entire codebase. Right now, Claude Code is reactive — you type something, it responds. Proactive mode flips that completely. Claude **runs on its own**, receiving periodic heartbeat signals called `<tick>` prompts, and decides autonomously what to do next.

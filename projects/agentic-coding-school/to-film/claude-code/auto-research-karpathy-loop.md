@@ -9,20 +9,13 @@ chapter: "Advanced"
 
 # Auto Research (Karpathy Loop)
 
-## Video Arc (Beginner First)
-
 ### Act 1 — What Is Auto Research?
 
 Auto research is a pattern where an AI agent improves something *for you* while you sleep. You point it at anything measurable — your website speed, your email open rate, your code quality — and it runs hundreds of experiments overnight, keeping only what works.
 
 **The simple version**: imagine you hire someone who works 24/7, tries 1,000 different improvements to your thing, and only keeps the ones that actually made it better. That's auto research.
 
-![[images/what-is-auto-research/excalidraw_1.png]]
 ![[images/what-is-auto-research/excalidraw_2.png]]
-![[images/what-is-auto-research/excalidraw_3.png]]
-![[images/what-is-auto-research/excalidraw_4.png]]
-![[images/what-is-auto-research/excalidraw_5.png]]
-
 ### Act 2 — Before Auto Research (The Status Quo)
 
 Before this, automated optimization meant **parameter tuning** — you give the system a list of knobs to turn (learning rate, batch size, font size, whatever), and it tries different combinations. Tools like Optuna, Ray Tune, and Bayesian optimization worked this way. You define a fixed search space upfront, and the tool samples combinations within it. The architecture, the code, the fundamental approach — all stays unchanged.
@@ -32,11 +25,6 @@ Before this, automated optimization meant **parameter tuning** — you give the 
 And honestly — **you've probably already been doing a version of this**. If you watched the Closing the Loop video, we talked about the autopilot pattern: run something, check the result, adjust, repeat. Auto research is that same loop, just formalized and fully autonomous. Karpathy gave it a name, a repo, and a structure — but the core idea of "measure, change, keep what works" is something you've already been applying.
 
 ![[images/before-auto-research/excalidraw_1.png]]
-![[images/before-auto-research/excalidraw_2.png]]
-![[images/before-auto-research/excalidraw_3.png]]
-![[images/before-auto-research/excalidraw_4.png]]
-![[images/before-auto-research/excalidraw_5.png]]
-
 ### Act 3 — How It Actually Works
 
 Three things you need:
@@ -57,12 +45,7 @@ The human writes a `program.md` file — plain English instructions telling the 
 
 **The math**: if each experiment takes 5 minutes and 2% succeed, that's ~6 improvements per day. Each one compounds. 1.01^6 per day, 1.01^180 per month. Small wins, relentless compounding.
 
-![[images/how-it-works/excalidraw_1.png]]
-![[images/how-it-works/excalidraw_2.png]]
-![[images/how-it-works/excalidraw_3.png]]
-![[images/how-it-works/excalidraw_4.png]]
-![[images/how-it-works/excalidraw_5.png]]
-
+![[images/how-it-works/excalidraw_12.png]]
 ### Act 4 — Technical Use Cases
 
 **ML training (the original)**: Karpathy pointed it at a small LLM training setup called nanochat. In ~2 days, the agent found ~20 validated improvements and caught a bug he'd missed for months. Shopify CEO Tobi Lütke used a variant overnight: trained a 0.8B parameter model that beat his previous hand-tuned 1.6B model — a model half the size outperforming the bigger one.
@@ -72,11 +55,6 @@ The human writes a `program.md` file — plain English instructions telling the 
 **Code optimization**: Shopify used the pattern on their Liquid template engine — 53% faster parse+render time, 61% fewer object allocations.
 
 ![[images/technical-use-cases/excalidraw_1.png]]
-![[images/technical-use-cases/excalidraw_2.png]]
-![[images/technical-use-cases/excalidraw_3.png]]
-![[images/technical-use-cases/excalidraw_4.png]]
-![[images/technical-use-cases/excalidraw_5.png]]
-
 ### Act 5 — Non-Technical Use Cases (The Generalization)
 
 People quickly realized the pattern works for *anything measurable*. The community generalized it beyond code within weeks:
@@ -90,22 +68,13 @@ People quickly realized the pattern works for *anything measurable*. The communi
 **Other stuff people are running it on**: ad creative CTR, SEO copy, RAG retrieval accuracy, pricing experiments, YouTube thumbnails, newsletter subject lines.
 
 ![[images/non-technical-use-cases/excalidraw_1.png]]
-![[images/non-technical-use-cases/excalidraw_2.png]]
-![[images/non-technical-use-cases/excalidraw_3.png]]
-![[images/non-technical-use-cases/excalidraw_4.png]]
-![[images/non-technical-use-cases/excalidraw_5.png]]
-
 ### Act 6 — Why People Love It
 
 1. **Removes the boredom bottleneck** — traditional optimization is 90% tedious iteration. Auto research hands the entire loop to the AI. You wake up to a git history full of validated wins
 2. **Proof-of-concept for self-improvement** — the agent literally improves its own code based on past results. People call it the start of the "loopy era" of AI
 3. **Pure fun** — watching the git log fill up with AI-discovered improvements overnight is addictive
 
-![[images/why-people-love-it/excalidraw_1.png]]
-![[images/why-people-love-it/excalidraw_2.png]]
 ![[images/why-people-love-it/excalidraw_3.png]]
-![[images/why-people-love-it/excalidraw_4.png]]
-![[images/why-people-love-it/excalidraw_5.png]]
 
 ## Next Videos (Demos)
 
