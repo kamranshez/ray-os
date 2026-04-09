@@ -1315,3 +1315,26 @@ Same title across all: "Anthropic Just Dropped Ultra Plan for Claude Code".
 - **New insight:** Title-thumbnail complementarity with different terminology ("Ultra Plan" title + "Plan Mode 2.0" thumbnail) works because each adds information the other doesn't
 
 ---
+
+## Video 21: Claude Code Ultra Review (Multi-Agent Bug Hunter)
+
+**Video ID:** `EhiJX0WvRz4`
+**Published:** 2026-04-09
+**Thumbnail Text:** /ultrareview (on all variants)
+
+### Title A/B Test Round 1 (2026-04-09)
+
+Same thumbnail across all (face + /ultrareview folder icon).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Anthropic's New Ultrareview Is Coming: What You Need to Know | /ultrareview | 37.3% | Leader |
+| Anthropic Has a Review Feature Nobody Knows About Yet | /ultrareview | 32.3% | |
+| Claude Code Review 2.0 Is Coming | /ultrareview | 30.4% | |
+
+**Key takeaways:**
+- **6.9% spread — title frame matters here, not a thumbnail bottleneck**
+- "Anthropic's New Ultrareview Is Coming" leads at 37.3% despite using colon/subtitle format (usually an anti-pattern per V3's "Weekly:" at 29.7%). "What You Need to Know" may act as value prop rather than educational framing
+- "Nobody Knows About Yet" social proof curiosity at 32.3% — weaker than V14's "Nobody Knew They Needed" (46.8%). "Has" is a weak present-tense verb (no action), and "Knows About" is weaker than "Knew They Needed" (discovery > awareness)
+- "Review 2.0 Is Coming" at 30.4% without Anthropic authority — version labels alone can't carry, confirms V20 R1 pattern (no-Anthropic variants underperform)
+- Round 2 should test: "Anthropic Just Dropped" formula, transformation frame, insider/reverse-engineering angle, and keep leader as control
