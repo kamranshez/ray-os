@@ -1,3 +1,15 @@
+---
+youtube-id: AzmnaoVP8sk
+youtube-title: "The Top 0.01% User's Guide to Claude Code"
+published: 2026-03-02
+duration: "41:31"
+views: 20179
+likes: 638
+comments: 80
+status: uploaded
+fetched: 2026-04-09
+---
+
 ## Mindset
 
 To celebrate the first year of Claude Code, I'll be sharing over 50 tips from over 1,500 hours of usage.

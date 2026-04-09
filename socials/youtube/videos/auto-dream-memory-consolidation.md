@@ -6,6 +6,14 @@ tags:
   - memory
 status: uploaded
 date: 2026-03-24
+youtube-id: OnQ4BGN8B-s
+youtube-title: "Anthropic Just Dropped the Feature Nobody Knew They Needed"
+published: 2026-03-24
+duration: "7:30"
+views: 97093
+likes: 2386
+comments: 176
+fetched: 2026-04-09
 ---
 
 ## Video Plan: "Your AI Agent Dreams While You Sleep"

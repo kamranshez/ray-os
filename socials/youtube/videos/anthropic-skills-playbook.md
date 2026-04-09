@@ -2,6 +2,14 @@
 source: https://x.com/trq212/status/anthropic-skills-playbook
 date: 2026-03-18
 status: uploaded
+youtube-id: 7PnF8qctDi8
+youtube-title: "Anthropic Just Dropped Their Internal Skills Strategy"
+published: 2026-03-19
+duration: "18:43"
+views: 12374
+likes: 390
+comments: 12
+fetched: 2026-04-09
 ---
 So the Anthropic team just published the highest signal article you'll see this week about how to effectively to Claude Code Skills. By the very people who made them.
 

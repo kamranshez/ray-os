@@ -1,7 +1,15 @@
 ---
 tags: [youtube, script, claude-code, ultrareview, reverse-engineering]
-status: draft
+status: uploaded
 date: 2026-04-07
+youtube-id: q1Dg6vSXl-8
+youtube-title: "Claude Code Review 2.0 Is Coming"
+published: 2026-04-08
+duration: "8:11"
+views: 356
+likes: 11
+comments: 0
+fetched: 2026-04-09
 ---
 
 ## Video Plan: "Claude Code Has a Secret Bug Hunting Team"

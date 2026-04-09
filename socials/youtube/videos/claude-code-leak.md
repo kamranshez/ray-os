@@ -1,3 +1,15 @@
+---
+youtube-id: YSbB5gc_1K8
+youtube-title: "Claude Code 3.0 Is Coming"
+published: 2026-03-31
+duration: "16:37"
+views: 17270
+likes: 531
+comments: 0
+status: uploaded
+fetched: 2026-04-09
+---
+
 ## PROACTIVE MODE — Claude That Works While You Don't
 
 This might be the most mind-blowing feature in the entire codebase. Right now, Claude Code is reactive — you type something, it responds. Proactive mode flips that completely. Claude **runs on its own**, receiving periodic heartbeat signals called `<tick>` prompts, and decides autonomously what to do next.

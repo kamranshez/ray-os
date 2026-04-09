@@ -1,3 +1,15 @@
+---
+youtube-id: DqjBbAr3oTo
+youtube-title: "Anthropic Just Dropped the Feature Nobody Knew They Needed"
+published: 2026-03-11
+duration: "7:57"
+views: 39199
+likes: 1001
+comments: 88
+status: uploaded
+fetched: 2026-04-09
+---
+
 Claude just dropped a feature I didn't even realise I wanted.
 
 Here's the problem. You give the agent a big task. It's mid-flight — reading files, writing code, running tests. And then you want to ask it something. "Hey, why'd you decide to use the library?" or "Wait, what is the auth strategy here?"
