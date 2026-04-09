@@ -1338,3 +1338,23 @@ Same thumbnail across all (face + /ultrareview folder icon).
 - "Nobody Knows About Yet" social proof curiosity at 32.3% — weaker than V14's "Nobody Knew They Needed" (46.8%). "Has" is a weak present-tense verb (no action), and "Knows About" is weaker than "Knew They Needed" (discovery > awareness)
 - "Review 2.0 Is Coming" at 30.4% without Anthropic authority — version labels alone can't carry, confirms V20 R1 pattern (no-Anthropic variants underperform)
 - Round 2 should test: "Anthropic Just Dropped" formula, transformation frame, insider/reverse-engineering angle, and keep leader as control
+
+### Title A/B Test Round 2 (2026-04-10)
+
+Same thumbnail across all (face + /ultrareview folder icon).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Anthropic's New Ultrareview Is Coming: What You Need to Know | /ultrareview | 35.2% | Leader (control) |
+| Claude Code's Biggest Review Update Is Coming | /ultrareview | 34.3% | |
+| Anthropic Is Building Ultra Review for Claude Code | /ultrareview | 30.5% | |
+
+**Key takeaways:**
+- R1 leader dropped from 37.3% → 35.2% — early volatility, settling into mid-30s
+- Flat results (4.7% spread) despite three different frames (authority+subtitle, magnitude, feature naming)
+- "Is Building" flopped at 30.5% — passive/in-progress verb lacks urgency. "Is Coming" (R1: 30.4% on "Review 2.0", here: 34.3%) works better than "Is Building" for anticipation
+- "Biggest Review Update Is Coming" magnitude framing competitive at 34.3% without Anthropic authority — mirrors V5 (37.1%) and V20 R1 (34.2%) pattern
+- Two rounds of diverse title frames producing ~30-37% range — not fully flat but narrowing
+- **Diagnosis:** Title testing exhausted. Locking in **"Anthropic's New Ultrareview Is Coming: What You Need to Know"** as the title and moving on
+
+**Status:** Final. Locking in title. Video likely has a topic/packaging ceiling in the mid-30s range.
