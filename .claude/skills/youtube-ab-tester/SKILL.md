@@ -30,6 +30,27 @@ Audience preferences drift over time. When patterns from older videos conflict w
 
 When the user asks for title ideas, provide 8-10 options as a **numbered list** (not a table). For each title, briefly note which proven pattern it draws from or what untested hypothesis it explores. Tables make it hard to select and copy individual titles — always use numbered lists for title and thumbnail text suggestions.
 
+### Check for template reuse BEFORE proposing titles
+
+**Always glob `socials/youtube/videos/uploaded/` for recent scripts and scan their titles before suggesting new ones.** Repeated title templates lose novelty fast.
+
+Ray's March 2026 audit caught a clean example: "Anthropic Just Dropped the Feature Nobody Knew They Needed" was used twice in March (Mar 11 /btw at 39K views, Mar 24 Auto Dream at 97K views but only $6K revenue) and once in Feb. The second and third uses underperformed on the revenue axis even when views held up.
+
+**Rule:** flag any proposed title that reuses a template (same opening clause, same curiosity frame) from the last 60 days. If you must reuse, tell the user explicitly and explain why this time is different (new feature class, different audience segment, etc.).
+
+### Format matters for expected view count
+
+March 2026 data is unambiguous on format:
+
+| Format | Avg March views | Examples |
+|--------|----------------:|----------|
+| Single-feature deep dive | **45,215** | Skills 2.0, /btw, Auto Dream, Scheduled Tasks, Telegram |
+| Thesis / leak / pillar | **17,318** | Top 0.01%, Internal Skills Strategy, Where Coding Is Heading, Claude Code 3.0 |
+
+Single-feature titles averaged **2.6x the views** of thesis/leak/pillar titles. When the user asks for A/B titles on a thesis or leak video, flag this upfront: "This format historically pulls ~17K vs ~45K for single-feature — the test should be between thesis variants, not thesis vs single-feature, because the format ceiling is different."
+
+Pillar videos are the exception: they underperform on raw views but have **5x the per-view click-through to the masterclass site** (Top 0.01% hit 3.16% CTR vs 0.55–1.27% for single-feature). If the user is testing a pillar title, optimize for *curious-clicker* not *feed-scroller* language.
+
 ### Frame Diversity
 
 Include at least 3 genuinely different framing categories. If all options share the same frame, the A/B test can't find a winner. The test needs real variety — different frames, not just different words on the same frame.
