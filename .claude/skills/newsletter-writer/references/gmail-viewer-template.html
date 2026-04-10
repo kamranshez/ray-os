@@ -249,61 +249,6 @@
   }
   .email-view.active { display: block; }
 
-  /* Per-email subject / preview picker */
-  .picker-block {
-    background: #fcfcfe;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 24px;
-  }
-  .picker-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  .picker-options {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-  .picker-options:last-child { margin-bottom: 0; }
-  .picker-option {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 8px 12px;
-    border: 1px solid transparent;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1.45;
-    color: var(--text);
-    transition: all 0.1s ease;
-  }
-  .picker-option:hover {
-    background: var(--hover);
-  }
-  .picker-option.selected {
-    background: var(--accent-bg);
-    border-color: var(--accent);
-    font-weight: 500;
-  }
-  .picker-option .num {
-    color: var(--text-subtle);
-    font-size: 11px;
-    font-weight: 600;
-    flex-shrink: 0;
-    width: 16px;
-    margin-top: 1px;
-  }
-  .picker-option.preview-opt { color: var(--text-muted); }
-  .picker-option.preview-opt.selected { color: var(--text); }
-
   .email-subject {
     font-size: 22px;
     font-weight: 400;
@@ -467,6 +412,102 @@
     border-color: var(--accent);
   }
 
+  /* Headlines mode (dedicated subjects + previews page) */
+  .headlines-view {
+    display: none;
+    overflow-y: auto;
+    background: var(--bg);
+    padding: 32px 48px 64px;
+  }
+  .layout.headlines-mode { grid-template-columns: 220px 1fr; }
+  .layout.headlines-mode .inbox-col { display: none; }
+  .layout.headlines-mode .reading-col { display: none; }
+  .layout.headlines-mode .headlines-view { display: block; }
+
+  .headlines-header {
+    max-width: 1100px;
+    margin: 0 auto 24px;
+  }
+  .headlines-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 6px;
+  }
+  .headlines-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 4px;
+  }
+  .headlines-current {
+    font-size: 12px;
+    color: var(--text-subtle);
+  }
+  .headlines-current b { color: var(--text); font-weight: 600; }
+
+  .headlines-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .headlines-col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .headlines-col-header {
+    padding: 14px 18px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .headlines-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .headline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text);
+    transition: background 0.1s ease;
+  }
+  .headline-item:last-child { border-bottom: none; }
+  .headline-item:hover { background: var(--hover); }
+  .headline-item.selected {
+    background: var(--accent-bg);
+    font-weight: 500;
+  }
+  .headline-item.selected::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: -4px;
+  }
+  .headline-item .num {
+    color: var(--text-subtle);
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+    width: 18px;
+    margin-top: 2px;
+  }
+  .headline-item.preview-row { color: var(--text-muted); font-size: 13px; }
+  .headline-item.preview-row.selected { color: var(--text); }
+
   kbd {
     background: #f1f3f4;
     border: 1px solid var(--border-strong);
@@ -491,6 +532,7 @@
   <div class="topbar-actions">
     <div class="mode-toggle">
       <button class="active" id="mode-inbox" onclick="setMode('inbox')">Inbox</button>
+      <button id="mode-headlines" onclick="setMode('headlines')">Headlines</button>
       <button id="mode-compare" onclick="setMode('compare')">Compare all</button>
     </div>
     <div class="profile-dot">R</div>
@@ -521,23 +563,48 @@
 
   <!-- Compare mode view (replaces inbox + reading pane) -->
   <div class="compare-view" id="compare-view"></div>
+
+  <!-- Headlines mode view (10 subjects + 10 previews on a separate page) -->
+  <div class="headlines-view" id="headlines-view">
+    <div class="headlines-header">
+      <h2 class="headlines-title">Subject lines &amp; preview snippets</h2>
+      <p class="headlines-sub">Pick one of each. Your selection applies to every body variation in the inbox and compare views.</p>
+      <p class="headlines-current">Currently selected: <b id="hl-current-subj"></b> · <span id="hl-current-prev"></span></p>
+    </div>
+    <div class="headlines-grid">
+      <div class="headlines-col">
+        <div class="headlines-col-header">Subject lines · 10 options</div>
+        <div class="headlines-list" id="subjects-list"></div>
+      </div>
+      <div class="headlines-col">
+        <div class="headlines-col-header">Preview snippets · 10 options</div>
+        <div class="headlines-list" id="previews-list"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
   // ============================================================
   // Fill in the placeholders below when rendering this template.
   //
-  // Each variation should have this shape:
+  // VARIATIONS: 5 newsletter body variations, each with:
   //   {
   //     hook: "Polling Is Dead",
-  //     subjects: ["line 1", "line 2", "line 3", "line 4", "line 5"],
-  //     previews: ["snippet 1", "snippet 2", "snippet 3", "snippet 4", "snippet 5"],
-  //     body: ["Hey friends,", "Hope you're well.", "[THUMBNAIL]", "..."]
+  //     body: ["Hey friends,", "...", "[THUMBNAIL]", "..."]
   //   }
-  //
   // Use "[THUMBNAIL]" as a paragraph entry to mark where the video thumbnail goes.
+  //
+  // SUBJECTS: 10 subject line options (global pool, applies to any variation).
+  // PREVIEWS: 10 preview snippet options (global pool, applies to any variation).
+  //
+  // Subjects and previews live on the dedicated "Headlines" tab in the viewer,
+  // so they don't clutter the email page. Selection is global: pick one subject
+  // and one preview, and it applies to whichever body variation you're viewing.
   // ============================================================
   const VARIATIONS = __VARIATIONS_JSON__;
+  const SUBJECTS = __SUBJECTS_JSON__;
+  const PREVIEWS = __PREVIEWS_JSON__;
   const THUMBNAIL_PATH = "__THUMBNAIL_PATH__";
   const VIDEO_URL = "__VIDEO_URL__";
   const TOPIC = "__TOPIC__";
@@ -546,14 +613,16 @@
   const SENDER_NAME = "Ray Amjad";
   const RECIPIENT = "to me";
 
-  // Track currently selected subject + preview index per variation
-  const selSubj = VARIATIONS.map(() => 0);
-  const selPrev = VARIATIONS.map(() => 0);
+  // Global selection: one subject and one preview across all variations.
+  let selSubj = 0;
+  let selPrev = 0;
 
   const inboxList = document.getElementById('inbox-list');
   const readingCol = document.getElementById('reading-col');
   const compareView = document.getElementById('compare-view');
   const layout = document.getElementById('layout');
+  const subjectsList = document.getElementById('subjects-list');
+  const previewsList = document.getElementById('previews-list');
 
   function buildBodyHtml(body) {
     return body.map(p => {
@@ -564,8 +633,8 @@
     }).join('');
   }
 
+  // Render inbox rows, reading pane, and compare cards
   VARIATIONS.forEach((v, i) => {
-    // Inbox row
     const row = document.createElement('div');
     row.className = 'inbox-row' + (i === 0 ? ' active' : '');
     row.dataset.index = i;
@@ -574,40 +643,19 @@
         <div class="sender">${SENDER_NAME}</div>
         <div class="time">${timeLabel(i)}</div>
       </div>
-      <div class="subject"><span class="hook-badge">${escapeHtml(v.hook)}</span> <span class="subject-text" id="inbox-subj-${i}">${escapeHtml(v.subjects[0])}</span></div>
-      <div class="preview" id="inbox-prev-${i}">${escapeHtml(v.previews[0])}</div>
+      <div class="subject"><span class="hook-badge">${escapeHtml(v.hook)}</span> <span class="subject-text" id="inbox-subj-${i}"></span></div>
+      <div class="preview" id="inbox-prev-${i}"></div>
     `;
     row.addEventListener('click', () => selectVariation(i));
     inboxList.appendChild(row);
 
-    // Reading pane view with subject/preview picker
     const view = document.createElement('div');
     view.className = 'email-view' + (i === 0 ? ' active' : '');
     view.dataset.index = i;
-
-    const subjectOpts = v.subjects.map((s, j) =>
-      `<div class="picker-option subject-opt ${j === 0 ? 'selected' : ''}" data-var="${i}" data-kind="subj" data-idx="${j}">
-        <div class="num">${j + 1}.</div><div>${escapeHtml(s)}</div>
-      </div>`
-    ).join('');
-
-    const previewOpts = v.previews.map((p, j) =>
-      `<div class="picker-option preview-opt ${j === 0 ? 'selected' : ''}" data-var="${i}" data-kind="prev" data-idx="${j}">
-        <div class="num">${j + 1}.</div><div>${escapeHtml(p)}</div>
-      </div>`
-    ).join('');
-
     view.innerHTML = `
-      <div class="picker-block">
-        <div class="picker-label">Subject lines · click to preview</div>
-        <div class="picker-options">${subjectOpts}</div>
-        <div class="picker-label">Preview snippets · click to preview</div>
-        <div class="picker-options">${previewOpts}</div>
-      </div>
-
       <h1 class="email-subject">
         <span class="hook-badge">${escapeHtml(v.hook)}</span><br>
-        <span id="email-subj-${i}">${escapeHtml(v.subjects[0])}</span>
+        <span id="email-subj-${i}"></span>
       </h1>
       <div class="email-meta">
         <div class="sender-avatar">R</div>
@@ -622,19 +670,19 @@
         <button class="primary" onclick="copyBody(${i}, this)">Copy body</button>
         <button onclick="copyPair(${i}, this)">Copy subject + preview</button>
         <button onclick="copyAll(${i}, this)">Copy all</button>
+        <button onclick="setMode('headlines')">Change subject / preview</button>
       </div>
     `;
     readingCol.appendChild(view);
 
-    // Compare card
     const card = document.createElement('div');
     card.className = 'compare-card';
     card.dataset.index = i;
     card.innerHTML = `
       <div class="compare-card-header">
         <div class="hook-badge">${escapeHtml(v.hook)}</div>
-        <div class="subj" id="cmp-subj-${i}">${escapeHtml(v.subjects[0])}</div>
-        <div class="prev" id="cmp-prev-${i}">${escapeHtml(v.previews[0])}</div>
+        <div class="subj" id="cmp-subj-${i}"></div>
+        <div class="prev" id="cmp-prev-${i}"></div>
       </div>
       <div class="compare-card-body">${buildBodyHtml(v.body)}</div>
       <div class="compare-card-footer">
@@ -645,41 +693,51 @@
     compareView.appendChild(card);
   });
 
-  // Wire up picker clicks (event delegation)
-  readingCol.addEventListener('click', (e) => {
-    const opt = e.target.closest('.picker-option');
-    if (!opt) return;
-    const vi = parseInt(opt.dataset.var, 10);
-    const kind = opt.dataset.kind;
-    const idx = parseInt(opt.dataset.idx, 10);
-    if (kind === 'subj') {
-      selSubj[vi] = idx;
-      updateSubject(vi);
-    } else {
-      selPrev[vi] = idx;
-      updatePreview(vi);
-    }
+  // Render the Headlines tab: 10 subjects on the left, 10 previews on the right
+  SUBJECTS.forEach((s, j) => {
+    const el = document.createElement('div');
+    el.className = 'headline-item subject-row' + (j === 0 ? ' selected' : '');
+    el.dataset.idx = j;
+    el.innerHTML = `<div class="num">${j + 1}.</div><div>${escapeHtml(s)}</div>`;
+    el.addEventListener('click', () => { selSubj = j; applySelection(); });
+    subjectsList.appendChild(el);
+  });
+  PREVIEWS.forEach((p, j) => {
+    const el = document.createElement('div');
+    el.className = 'headline-item preview-row' + (j === 0 ? ' selected' : '');
+    el.dataset.idx = j;
+    el.innerHTML = `<div class="num">${j + 1}.</div><div>${escapeHtml(p)}</div>`;
+    el.addEventListener('click', () => { selPrev = j; applySelection(); });
+    previewsList.appendChild(el);
   });
 
-  function updateSubject(vi) {
-    const v = VARIATIONS[vi];
-    const s = v.subjects[selSubj[vi]];
-    document.getElementById(`email-subj-${vi}`).textContent = s;
-    document.getElementById(`inbox-subj-${vi}`).textContent = s;
-    document.getElementById(`cmp-subj-${vi}`).textContent = s;
-    // Update picker selected state
-    document.querySelectorAll(`.picker-option.subject-opt[data-var="${vi}"]`).forEach((el, i) => {
-      el.classList.toggle('selected', i === selSubj[vi]);
+  // Push the current selSubj/selPrev into every rendered surface
+  function applySelection() {
+    const s = SUBJECTS[selSubj];
+    const p = PREVIEWS[selPrev];
+
+    VARIATIONS.forEach((_, i) => {
+      const iSubj = document.getElementById(`inbox-subj-${i}`);
+      const iPrev = document.getElementById(`inbox-prev-${i}`);
+      const eSubj = document.getElementById(`email-subj-${i}`);
+      const cSubj = document.getElementById(`cmp-subj-${i}`);
+      const cPrev = document.getElementById(`cmp-prev-${i}`);
+      if (iSubj) iSubj.textContent = s;
+      if (iPrev) iPrev.textContent = p;
+      if (eSubj) eSubj.textContent = s;
+      if (cSubj) cSubj.textContent = s;
+      if (cPrev) cPrev.textContent = p;
     });
-  }
-  function updatePreview(vi) {
-    const v = VARIATIONS[vi];
-    const p = v.previews[selPrev[vi]];
-    document.getElementById(`inbox-prev-${vi}`).textContent = p;
-    document.getElementById(`cmp-prev-${vi}`).textContent = p;
-    document.querySelectorAll(`.picker-option.preview-opt[data-var="${vi}"]`).forEach((el, i) => {
-      el.classList.toggle('selected', i === selPrev[vi]);
+
+    document.querySelectorAll('#subjects-list .headline-item').forEach((el, i) => {
+      el.classList.toggle('selected', i === selSubj);
     });
+    document.querySelectorAll('#previews-list .headline-item').forEach((el, i) => {
+      el.classList.toggle('selected', i === selPrev);
+    });
+
+    document.getElementById('hl-current-subj').textContent = s;
+    document.getElementById('hl-current-prev').textContent = p;
   }
 
   function selectVariation(i) {
@@ -690,8 +748,10 @@
 
   function setMode(mode) {
     document.getElementById('mode-inbox').classList.toggle('active', mode === 'inbox');
+    document.getElementById('mode-headlines').classList.toggle('active', mode === 'headlines');
     document.getElementById('mode-compare').classList.toggle('active', mode === 'compare');
     layout.classList.toggle('compare-mode', mode === 'compare');
+    layout.classList.toggle('headlines-mode', mode === 'headlines');
   }
 
   function flash(btn, label) {
@@ -706,15 +766,13 @@
       .then(() => flash(btn, 'Copied ✓'));
   }
   function copyPair(i, btn) {
-    const v = VARIATIONS[i];
-    const text = `Subject: ${v.subjects[selSubj[i]]}\nPreview: ${v.previews[selPrev[i]]}`;
+    const text = `Subject: ${SUBJECTS[selSubj]}\nPreview: ${PREVIEWS[selPrev]}`;
     navigator.clipboard.writeText(text).then(() => flash(btn, 'Copied ✓'));
   }
   function copyAll(i, btn) {
-    const v = VARIATIONS[i];
     const view = document.querySelectorAll('.email-view')[i];
     const body = view.querySelector('.email-body').innerText;
-    const text = `Subject: ${v.subjects[selSubj[i]]}\nPreview: ${v.previews[selPrev[i]]}\n\n${body}`;
+    const text = `Subject: ${SUBJECTS[selSubj]}\nPreview: ${PREVIEWS[selPrev]}\n\n${body}`;
     navigator.clipboard.writeText(text).then(() => flash(btn, 'Copied ✓'));
   }
   function copyCompare(i, btn) {
@@ -726,6 +784,7 @@
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'c' || e.key === 'C') { setMode('compare'); return; }
+    if (e.key === 'h' || e.key === 'H') { setMode('headlines'); return; }
     if (e.key === 'i' || e.key === 'I' || e.key === 'Escape') { setMode('inbox'); return; }
     const n = parseInt(e.key, 10);
     if (n >= 1 && n <= VARIATIONS.length) {
@@ -746,6 +805,9 @@
     const labels = ['10:42 AM', '10:41 AM', '10:40 AM', '10:39 AM', '10:38 AM'];
     return labels[i] || '';
   }
+
+  // Initial paint
+  applySelection();
 </script>
 </body>
 </html>

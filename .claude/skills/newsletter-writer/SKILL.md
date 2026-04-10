@@ -99,11 +99,11 @@ Always make CTAs specific to the topic, never generic "what do you think?" promp
 
 ## Output Format
 
-The typical input is a video transcript that needs to be turned into a short, video-redirect newsletter (not a full essay retelling the video). The output is a set of 5 fully-built variations, each with its own body, its own 5 subject lines, and its own 5 preview snippets, so Ray can pick a variation and then pick a matching subject/preview pair.
+The typical input is a video transcript that needs to be turned into a short, video-redirect newsletter (not a full essay retelling the video). The output is 5 body variations plus a global pool of 10 subject lines and 10 preview snippets. Ray picks one body, one subject, and one preview, and copies the trio.
 
 ### What to generate
 
-**5 Newsletter Variations**, each with a different opening hook/angle. Label each with its hook strategy so Ray can scan quickly. Each variation is a complete, sendable draft (not just the opening paragraph), and each one must include the `[VIDEO THUMBNAIL + LINK]` placeholder in the body. Hook strategies to mix between:
+**5 Newsletter Variations** (the bodies), each with a different opening hook/angle. Label each with its hook strategy so Ray can scan quickly. Each variation is a complete, sendable draft (not just the opening paragraph), and each one must include the `[VIDEO THUMBNAIL + LINK]` placeholder in the body. Hook strategies to mix between:
 - Mystery/Discovery Hook
 - Problem-First Hook
 - Stealth Launch / Under-the-Radar Hook
@@ -111,19 +111,19 @@ The typical input is a video transcript that needs to be turned into a short, vi
 - Primitive / Building Block Hook
 - Personal Story Hook
 
-**5 Subject Lines per variation.** Not 5 globally, 5 *for each variation*. The subjects should reflect that variation's specific hook and angle. If the variation is "Polling Is Dead", the 5 subjects should all riff on the polling-is-dead framing from different angles, not a grab bag of unrelated lines. This way Ray can open a variation in the viewer and see 5 on-angle subjects rather than having to match subjects to variations manually.
+**10 Subject Lines** (global pool). One shared set of 10 subject line options that can plausibly pair with any of the 5 body variations. Aim for a spread of angles so there's at least one strong subject for each body's hook, rather than five that only fit one variation. Mix between mystery/curiosity, direct statement, problem/pain point, quotable moment, casual/conversational, and stealth-launch framings.
 
-**5 Preview Snippets per variation.** Same logic. The preview is the one-sentence tease that shows below the subject in email clients. Keep each to one sentence, and make sure they complement the subject line (tease, add a surprising fact, or create intrigue) without repeating it.
+**10 Preview Snippets** (global pool). One shared set of 10 one-sentence tease lines that complement the subjects without repeating them. Same logic as the subjects, these should be hook-agnostic enough that Ray can pair any preview with any body.
 
-**5 CTA Questions.** Close the email with a reply prompt. Apply the CTA framing rules above (forward-looking for feature announcements, experience-sharing for evergreen). These can be shared across variations or per-variation, your call depending on whether the hooks suggest different follow-up questions.
+**5 CTA Questions.** Close the email with a reply prompt. Apply the CTA framing rules above (forward-looking for feature announcements, experience-sharing for evergreen).
 
-### Why 5 per variation and not a global pool of 10
+### Why a global pool instead of per-variation subjects
 
-Earlier versions of this skill generated 10 global subjects and 10 global previews. The problem is that subjects are tightly coupled to the variation's hook: a "motion sensor" metaphor variation wants motion-sensor subjects, not polling-is-dead subjects. A global pool forced Ray to mentally match subjects to variations, which is friction. Per-variation pools mean every subject he sees is already compatible with the body he's reading. He picks the variation he likes, flips through 5 on-angle subjects and 5 on-angle previews, and copies the pair.
+Earlier versions of this skill paired 5 subjects and 5 previews *per variation*, which meant subjects were tightly coupled to the body's hook. That forced a rigid mental model (pick a body first, then pick from its 5 subjects) and cluttered the email reading view with picker UI. Ray preferred moving subjects and previews onto a dedicated "Headlines" page with one global pool of each, so the email view stays clean and he can mix any subject with any body. When generating the 10, write them broad enough that most of them pair sensibly with at least 2-3 of the 5 body variations.
 
 ### Present everything together
 
-When presenting in markdown, structure the output so each variation has a clear "Subject options" and "Preview options" subsection. When presenting in the HTML viewer, the variations data flows directly into the template (see the HTML Viewer section).
+When presenting in markdown, write the 5 bodies first, then a "Subject line options" list of 10, then a "Preview snippet options" list of 10, then the CTA questions. When presenting in the HTML viewer, the bodies, subjects, and previews all flow into the template (see the HTML Viewer section). The viewer puts subjects and previews on a dedicated "Headlines" tab so they don't clutter the email page.
 
 ## HTML Viewer Mode (Opt-In)
 
@@ -134,15 +134,17 @@ When Ray asks to see the variations "in an HTML thing", "in a viewer", "as HTML"
 2. Copy it to a user-accessible location (e.g., `<topic>-newsletter-options.html` in the working directory)
 3. Replace the `__VARIATIONS_JSON__` placeholder with an array of 5 variation objects, each containing:
    - `hook`: the hook strategy label (e.g., "Polling Is Dead")
-   - `subject`: the chosen subject line
-   - `preview`: the chosen preview snippet
    - `body`: an array of paragraph strings (use `"[THUMBNAIL]"` as a paragraph entry to mark where the video thumbnail goes)
-4. Replace `__THUMBNAIL_PATH__` with the relative path to the play-button thumbnail
-5. Replace `__VIDEO_URL__` with the YouTube URL
-6. Replace `__TOPIC__` with a short topic label for the page title
-7. `open` the resulting HTML file
+4. Replace the `__SUBJECTS_JSON__` placeholder with an array of exactly 10 subject line strings (the global pool)
+5. Replace the `__PREVIEWS_JSON__` placeholder with an array of exactly 10 preview snippet strings (the global pool)
+6. Replace `__THUMBNAIL_PATH__` with the relative path to the play-button thumbnail
+7. Replace `__VIDEO_URL__` with the YouTube URL
+8. Replace `__TOPIC__` with a short topic label for the page title
+9. `open` the resulting HTML file
 
-The template mimics the Gmail inbox + reading pane on a light theme. Tabs switch between the 5 variations, and each one displays like an actual Gmail-rendered email, which makes it much easier to tell whether a draft feels right in context.
+The viewer has three modes in the topbar: **Inbox** (default, shows the active body variation in a Gmail-style reading pane), **Headlines** (the dedicated page for the 10 subjects + 10 previews, two columns side by side), and **Compare all** (horizontal scroll of all 5 body variations side by side). Keyboard shortcuts: `1`-`5` jump to a variation, `i` / Escape returns to inbox, `h` opens Headlines, `c` opens Compare.
+
+Subject and preview selection is global (one active pair), so whatever Ray picks on the Headlines tab instantly applies to every body variation's header in the inbox and compare views. This keeps the email reading page clean while still letting him mix and match pairs in one click.
 
 ## Appendix / Reference Sections
 
