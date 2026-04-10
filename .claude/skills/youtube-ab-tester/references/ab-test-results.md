@@ -1422,3 +1422,37 @@ Same title across all 3: "Anthropic Just Dropped the Feature That Makes Sonnet F
 - This style is worth retesting on future slash-command videos (/dream, /leaked, /ultraplan, /ultrareview) to see if the family-context pattern generalizes
 
 **Status:** Final. Locking in title. Video likely has a topic/packaging ceiling in the mid-30s range.
+
+---
+
+## Video 23: Claude Code Monitor Tool
+
+**Published:** 2026-04-10
+**Thumbnail:** Face + /monitor two-column flowchart (Error/Warn/Failed → Notify/Diagnose/Fix, pointing gesture)
+
+### Title A/B Test Round 1 (2026-04-10) — Pocock-style hypothesis test vs proven Anthropic control
+
+Hypothesis: Does Matt Pocock's engineer-first frame style (personal adoption + opinionated claim) transfer to Ray's audience? User's audience overlap with @mattpocockuk makes this worth testing. Round mixed two Pocock-style frames against the proven "Nobody Knew They Needed" control.
+
+Same thumbnail across all (v3-06: face + /monitor flowchart with Error/Warn/Failed → Notify/Diagnose/Fix columns, pointing gesture).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Anthropic Just Dropped the Feature Nobody Knew They Needed** | /monitor flowchart | **39%** | ✅ Leader (control) |
+| I'm using Claude Code's monitor tool for everything now | /monitor flowchart | 33.3% | |
+| Event-driven Claude Code is a cheat code | /monitor flowchart | 27.6% | |
+
+**Key takeaways:**
+- **Pocock style does NOT transfer cleanly** — both Pocock-flavored frames lost to the proven Anthropic control. "I'm using... for everything now" landed mid (33.3%), "cheat code" opinion crashed (27.6%)
+- **11.4 point spread between top and bottom** — genuine frame-driven signal, not a thumbnail bottleneck
+- **"Nobody Knew They Needed" reproduces again at 39%** — below its V14 peak (46.8%) but still the winning frame. Confirms this is a robust repeatable formula, not a one-video fluke
+- **"I'm using X for everything now" at 33.3%** — decent but underperforms. Pocock's version of this title ("I'm using claude --worktree for everything now") worked for his audience but didn't break through on Ray's. Possible reason: Ray's audience expects news/authority framing; personal adoption reads as soft
+- **"Event-driven Claude Code is a cheat code" flopped at 27.6%** — second-lowest personal-framed score in the dataset. Two problems stacked: (a) no Anthropic authority, (b) "cheat code" is opinionated slang that doesn't land without the speaker already being trusted as an authority in the niche. Pocock can get away with "Red Green Refactor is OP" because his brand IS the opinion; Ray's brand is the insider news source
+- **New insight — brand-specific frame transfer failure:** Frames that work for other creators aren't portable if the frame conflicts with your brand's established value prop. Ray's audience clicks because they trust him to show them what Anthropic just shipped — personal opinion framings break that contract
+- **New insight — Pocock hypothesis partially validated:** Personal adoption ("I'm using... now") is viable as a secondary frame (33.3% is respectable) but can't beat the news control. Worth retesting only on workflow-style videos, not feature announcements
+- **Confirmed anti-pattern:** Dropping "Anthropic" for feature announcement videos = 5-6 point authority tax (V22, V21, V16, V15, V14, V13, V12, now V23)
+
+**Thumbnail note:** v3-06 is a tutorial-flavored concept visual (flowchart explaining the mechanism). Paired well with the news control because the thumbnail explains *what* while the title drives *why-you-should-click*. See `references/thumbnails/v23-monitor-tool/`
+
+**Status:** Strong signal. Lock in winner or run R2 with stronger Anthropic-authority frames to push past 39%?
+
