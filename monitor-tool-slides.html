@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How the Monitor Tool Works — Deep Dive</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --page-bg: #1c1c20; --page-text: #e2e2e6; --page-dim: #6a6a74; --page-muted: #44444e;
+            --badge-color: #c08060; --badge-border: rgba(192,128,96,0.45); --badge-bg: rgba(192,128,96,0.08);
+            --term-bg: #282830; --term-header-bg: #2e2e36; --term-border: #3a3a42;
+            --term-text: #d4d4dc; --term-dim: #6e6e78; --term-muted: #4a4a54; --prompt-bg: #333340;
+            --dot-red: #ff5f57; --dot-yellow: #febc2e; --dot-green: #28c840;
+            --tool-blue: #7eb8d4; --tool-green: #7ec87e; --tool-orange: #d4a06b; --tool-red: #d46b6b;
+            --tool-pink: #d46ba8; --tool-purple: #9b7ed4; --tool-cyan: #6bc8c8; --tool-yellow: #d4c86b;
+        }
+        html, body { height:100%; overflow:hidden; font-family:'Inter',-apple-system,sans-serif; background:var(--page-bg); color:var(--page-text); -webkit-font-smoothing:antialiased; }
+        .slide { position:absolute; top:0; left:0; width:100%; height:100%; display:none; padding:56px 80px 44px; flex-direction:column; opacity:0; transition:opacity 0.3s ease; }
+        .slide.active { display:flex; opacity:1; }
+        .slide-body { flex:1; display:flex; align-items:center; gap:48px; min-height:0; }
+        .slide-left { flex:0 0 32%; max-width:32%; display:flex; flex-direction:column; justify-content:center; }
+        .slide-right { flex:1; min-width:0; display:flex; flex-direction:column; max-height:100%; }
+        .slide-body.stacked { flex-direction:column; align-items:stretch; gap:28px; }
+        .slide-body.stacked .slide-left { flex:none; max-width:100%; }
+        .badge { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:0.68rem; font-weight:600; letter-spacing:0.14em; color:var(--badge-color); border:1.5px solid var(--badge-border); background:var(--badge-bg); padding:5px 16px; border-radius:3px; margin-bottom:20px; width:fit-content; }
+        .slide-title { font-size:2.6rem; font-weight:800; letter-spacing:-0.035em; line-height:1.12; color:var(--page-text); }
+        .slide-title.xl { font-size:3.2rem; }
+        .slide-desc { font-size:1rem; color:var(--page-dim); line-height:1.7; margin-top:16px; max-width:380px; }
+        .terminal { background:var(--term-bg); border:1px solid var(--term-border); border-radius:10px; overflow:hidden; box-shadow:0 12px 48px rgba(0,0,0,0.5); display:flex; flex-direction:column; flex:1; min-height:0; }
+        .term-header { display:flex; align-items:center; padding:14px 20px; background:var(--term-header-bg); border-bottom:1px solid var(--term-border); flex-shrink:0; }
+        .term-dots { display:flex; gap:8px; }
+        .term-dot { width:12px; height:12px; border-radius:50%; }
+        .dot-r { background:var(--dot-red); } .dot-y { background:var(--dot-yellow); } .dot-g { background:var(--dot-green); }
+        .term-path { margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--term-dim); }
+        .term-body { padding:24px 28px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; line-height:1.9; flex:1; overflow:hidden; display:flex; flex-direction:column; }
+        .term-content { flex:1; }
+        .term-footer { margin-top:auto; padding-top:16px; }
+        .p { display:block; background:var(--prompt-bg); padding:6px 12px; border-radius:4px; margin-bottom:16px; color:var(--term-text); }
+        .p::before { content:'\276F  '; color:var(--term-dim); }
+        .ln { display:block; }
+        .gap { display:block; height:12px; }
+        .sgap { display:block; height:22px; }
+        .b::before { content:'\23FA  '; font-size:0.65em; vertical-align:middle; }
+        .b { color:var(--term-text); }
+        .sub { padding-left:24px; display:block; }
+        .sub::before { content:'\2514\2500 '; color:var(--term-muted); }
+        .c-tool { color:var(--tool-blue); } .c-green { color:var(--tool-green); } .c-orange { color:var(--tool-orange); }
+        .c-red { color:var(--tool-red); } .c-pink { color:var(--tool-pink); } .c-purple { color:var(--tool-purple); }
+        .c-cyan { color:var(--tool-cyan); } .c-yellow { color:var(--tool-yellow); }
+        .c-dim { color:var(--term-dim); } .c-muted { color:var(--term-muted); } .c-text { color:var(--term-text); }
+        .resp { display:block; background:rgba(126,200,126,0.06); border-left:2px solid rgba(126,200,126,0.2); padding:10px 16px; border-radius:0 4px 4px 0; margin:12px 0; color:var(--term-text); font-size:0.76rem; line-height:1.8; }
+        .cursor { display:inline-block; width:8px; height:15px; background:var(--term-dim); vertical-align:text-bottom; animation:blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity:0; } }
+        .prompt-bottom { display:block; margin-top:12px; }
+        .prompt-bottom::before { content:'\276F  '; color:var(--term-dim); }
+        .shortcuts { display:block; color:var(--term-muted); font-size:0.7rem; margin-top:12px; }
+        .cards-row { display:flex; gap:14px; }
+        .mini-card { flex:1; background:rgba(255,255,255,0.025); border:1px solid var(--term-border); border-radius:8px; padding:24px 20px; text-align:center; }
+        .mini-card.hl { border-color:var(--badge-color); background:var(--badge-bg); }
+        .mini-card h4 { font-size:0.95rem; font-weight:600; margin-bottom:6px; }
+        .mini-card p { font-size:0.82rem; color:var(--page-dim); line-height:1.5; }
+        .mini-card .cl { font-family:'JetBrains Mono',monospace; font-size:0.65rem; font-weight:600; color:var(--badge-color); letter-spacing:0.1em; margin-top:10px; display:block; }
+        .stats { display:flex; gap:12px; margin-bottom:16px; }
+        .stat-box { flex:1; background:rgba(255,255,255,0.025); border:1px solid var(--term-border); border-radius:8px; padding:16px; text-align:center; }
+        .stat-v { font-family:'JetBrains Mono',monospace; font-size:1.5rem; font-weight:700; color:var(--badge-color); }
+        .stat-l { font-size:0.75rem; color:var(--page-dim); margin-top:2px; }
+        .slide-footer { display:flex; justify-content:space-between; align-items:center; padding-top:20px; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--page-muted); }
+        /* Two-col inside terminal */
+        .term-cols { display:flex; gap:32px; }
+        .term-col { flex:1; }
+        .term-col-label { font-size:0.7rem; font-weight:600; letter-spacing:0.1em; margin-bottom:12px; display:block; }
+        /* Callout */
+        .callout { margin-top:20px; padding:14px 18px; background:rgba(126,200,126,0.06); border:1px solid rgba(126,200,126,0.15); border-radius:6px; font-size:0.9rem; color:var(--page-dim); line-height:1.7; }
+        .callout strong { color:var(--tool-green); }
+        /* Use case label */
+        .uc-label { font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:600; letter-spacing:0.1em; padding:3px 10px; border-radius:3px; display:inline-block; margin-bottom:14px; width:fit-content; }
+        .uc-stream { color:var(--tool-cyan); border:1px solid rgba(107,200,200,0.3); background:rgba(107,200,200,0.08); }
+        .uc-poll { color:var(--tool-orange); border:1px solid rgba(212,160,107,0.3); background:rgba(212,160,107,0.08); }
+        /* Tabs for slide 2 */
+        .mode-tabs { display:flex; gap:8px; margin-bottom:16px; }
+        .mode-tab { font-family:'JetBrains Mono',monospace; font-size:0.72rem; font-weight:600; letter-spacing:0.06em; padding:8px 20px; border-radius:6px; border:1px solid var(--term-border); background:rgba(255,255,255,0.025); color:var(--page-dim); cursor:pointer; transition:all 0.2s; }
+        .mode-tab:hover { border-color:var(--page-dim); color:var(--page-text); }
+        .mode-tab.active { border-color:var(--badge-color); background:var(--badge-bg); color:var(--badge-color); }
+        .tab-panel { display:none; }
+        .tab-panel.active { display:block; }
+    </style>
+</head>
+<body>
+
+<!-- ===== 1: TITLE ===== -->
+<div class="slide active" data-n="1">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title xl">How the Monitor Tool Works</div>
+            <div class="slide-desc">Real-time event streaming in Claude Code &mdash; only uses tokens when events actually happen, not continuously.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/project</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="p">monitor the Vercel deploy and let me know when it's ready</span>
+                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"Vercel deploy status"</span><span class="c-dim">)</span></span>
+                        <span class="sub c-dim">Monitor started &middot; task brovgltib &middot; timeout 300s</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-text"><span class="b"></span>Monitoring &mdash; I'll let you know when it's ready.</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-dim" style="font-style:italic">&#10070; Saut&eacute;ed for 52s &middot; 1 monitor still running</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="b c-green">Monitor event:</span> <span class="c-green">"Vercel deploy status"</span></span>
+                        <span class="sub c-dim">14:32:15 status Ready</span>
+                        <span class="gap"></span>
+                        <span class="ln c-text"><span class="b"></span>Deploy is <span class="c-green">ready</span>. All good.</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>1 / 13</span></div>
+</div>
+
+<!-- ===== 2: THREE WAYS ===== -->
+<div class="slide" data-n="2">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title">Three Ways to Run Commands</div>
+            <div class="slide-desc">Click each tab to see what Claude actually does under the hood.</div>
+        </div>
+        <div class="slide-right">
+            <div class="mode-tabs">
+                <div class="mode-tab active" data-tab="fg">Foreground</div>
+                <div class="mode-tab" data-tab="bg">Background</div>
+                <div class="mode-tab" data-tab="mon">Monitor</div>
+            </div>
+            <div class="terminal" style="flex:1">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/project</span></div>
+                <div class="term-body">
+                    <!-- FOREGROUND -->
+                    <div class="tab-panel active" data-panel="fg">
+                        <div class="term-content">
+                            <span class="p">run the tests</span>
+                            <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("npm test")</span></span>
+                            <span class="sub c-dim">Running...</span>
+                            <span class="sgap"></span>
+                            <span class="ln c-muted" style="font-style:italic">&#9203; Claude is blocked &mdash; can't do anything else</span>
+                            <span class="ln c-muted" style="font-style:italic">&#9203; Waiting for all 47 tests to finish...</span>
+                            <span class="sgap"></span>
+                            <span class="ln"><span class="c-green">PASS</span> src/auth.test.ts <span class="c-dim">(4.2s)</span></span>
+                            <span class="ln"><span class="c-red">FAIL</span> src/api.test.ts <span class="c-dim">(3.1s)</span></span>
+                            <span class="ln"><span class="c-green">PASS</span> src/utils.test.ts <span class="c-dim">(1.8s)</span></span>
+                            <span class="ln c-dim">...44 more tests...</span>
+                            <span class="gap"></span>
+                            <span class="ln c-muted">&#9473; Blocked the whole time. Only saw the failure after all 47 ran.</span>
+                        </div>
+                    </div>
+                    <!-- BACKGROUND -->
+                    <div class="tab-panel" data-panel="bg">
+                        <div class="term-content">
+                            <span class="p">run the tests</span>
+                            <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("npm test", { run_in_background: true })</span></span>
+                            <span class="sub c-dim">Command running in background &middot; ID: task_k8m2p</span>
+                            <span class="sgap"></span>
+                            <span class="ln c-green">&#10003; Claude keeps working &mdash; returns immediately</span>
+                            <span class="sgap"></span>
+                            <span class="ln c-muted" style="font-style:italic">...2 minutes later, all 47 tests finish...</span>
+                            <span class="sgap"></span>
+                            <span class="ln"><span class="b c-orange">Notification:</span> <span class="c-dim">Background command "npm test" completed (exit code 1)</span></span>
+                            <span class="sub c-dim">Tests: 46 passed, 1 failed</span>
+                            <span class="gap"></span>
+                            <span class="ln c-muted">&#9473; ONE notification at the end. Didn't know about the failure until all 47 finished.</span>
+                        </div>
+                    </div>
+                    <!-- MONITOR -->
+                    <div class="tab-panel" data-panel="mon">
+                        <div class="term-content">
+                            <span class="p">run the tests</span>
+                            <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">("test suite")</span></span>
+                            <span class="sub c-dim">Monitor started &middot; task brovgltib &middot; timeout 300s</span>
+                            <span class="sgap"></span>
+                            <span class="ln c-green">&#10003; Claude keeps working &mdash; returns immediately</span>
+                            <span class="sgap"></span>
+                            <span class="ln"><span class="b c-green">Event:</span> <span class="c-green">PASS</span> <span class="c-dim">src/auth.test.ts (4.2s)</span></span>
+                            <span class="ln"><span class="b c-red">Event:</span> <span class="c-red">FAIL</span> <span class="c-dim">src/api.test.ts (3.1s)</span></span>
+                            <span class="gap"></span>
+                            <span class="ln c-text">&#9889; Failure detected on test 2 of 47 &mdash; already diagnosing while the rest run.</span>
+                            <span class="gap"></span>
+                            <span class="ln c-muted">&#9473; Each test result arrives live. Reacts to the first failure immediately.</span>
+                        </div>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>2 / 13</span></div>
+</div>
+
+<!-- ===== 3: THE API ===== -->
+<div class="slide" data-n="3">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title">The API</div>
+            <div class="slide-desc">Four parameters. Only stdout triggers events. Stderr goes to an output file silently.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/project</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="p">set up a monitor for the CI pipeline</span>
+                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">({</span></span>
+                        <span class="ln">&nbsp;&nbsp;<span class="c-cyan">description</span>: <span class="c-green">"CI pipeline status"</span>,</span>
+                        <span class="ln c-muted">&nbsp;&nbsp;// shown in every notification</span>
+                        <span class="gap"></span>
+                        <span class="ln">&nbsp;&nbsp;<span class="c-cyan">command</span>: <span class="c-green">"while true; do ..."</span>,</span>
+                        <span class="ln c-muted">&nbsp;&nbsp;// each stdout line = one event</span>
+                        <span class="gap"></span>
+                        <span class="ln">&nbsp;&nbsp;<span class="c-cyan">timeout_ms</span>: <span class="c-orange">300000</span>,</span>
+                        <span class="ln c-muted">&nbsp;&nbsp;// 5 min default, max 3600000 (1hr)</span>
+                        <span class="gap"></span>
+                        <span class="ln">&nbsp;&nbsp;<span class="c-cyan">persistent</span>: <span class="c-purple">false</span></span>
+                        <span class="ln c-muted">&nbsp;&nbsp;// true = no timeout, TaskStop to end</span>
+                        <span class="ln"><span class="c-dim">})</span></span>
+                        <span class="sub c-dim">Monitor started &middot; task cx8fj2a &middot; timeout 300s</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-muted">stdout &rarr; notifications &nbsp;&nbsp; stderr &rarr; output file (silent)</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>3 / 13</span></div>
+</div>
+
+<!-- ===== 4: HOW IT WORKS ===== -->
+<div class="slide" data-n="4">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title">How It Works</div>
+            <div class="slide-desc">You describe what to watch. Claude Code writes the filter script and decides what matters. Each print = a notification.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">internals &middot; how it works</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="ln c-muted">// The mental model:</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="c-green">1.</span> <span class="c-text">You describe what you want to watch</span></span>
+                        <span class="ln c-muted">&nbsp;&nbsp;&nbsp;Just tell Claude what you care about</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="c-cyan">2.</span> <span class="c-text">Claude Code writes the filter script</span></span>
+                        <span class="ln c-muted">&nbsp;&nbsp;&nbsp;It picks the right command, sets the filter</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="c-purple">3.</span> <span class="c-text">The script only prints when something matters</span></span>
+                        <span class="ln c-muted">&nbsp;&nbsp;&nbsp;<span class="c-green">stdout = signal</span> &nbsp; everything else = silence</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="c-orange">4.</span> <span class="c-text">Each print &rarr; notification &rarr; Claude reacts</span></span>
+                        <span class="ln c-muted">&nbsp;&nbsp;&nbsp;You don't need to do anything. It just arrives.</span>
+                        <span class="sgap"></span>
+                        <span class="resp">Think of it like a security camera that only alerts on motion. Not a live feed &mdash; a smart filter. You set what to watch, Claude builds the camera.</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>4 / 13</span></div>
+</div>
+
+<!-- ===== 5: TOKEN EFFICIENCY ===== -->
+<div class="slide" data-n="5">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title">Why It's Efficient</div>
+            <div class="slide-desc">Monitor costs zero tokens while waiting. Traditional polling burns tokens on every check &mdash; even when nothing changed.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">comparison</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <div class="term-cols">
+                            <div class="term-col">
+                                <span class="term-col-label c-red">WITHOUT MONITOR</span>
+                                <span class="ln c-muted">You ask Claude to check every 30s</span>
+                                <span class="sgap"></span>
+                                <span class="ln"><span class="c-dim">30s</span>&nbsp;&nbsp;<span class="c-text">"is it ready?"</span> &rarr; <span class="c-orange">tokens $$</span></span>
+                                <span class="ln"><span class="c-dim">60s</span>&nbsp;&nbsp;<span class="c-text">"is it ready?"</span> &rarr; <span class="c-orange">tokens $$</span></span>
+                                <span class="ln"><span class="c-dim">90s</span>&nbsp;&nbsp;<span class="c-text">"is it ready?"</span> &rarr; <span class="c-orange">tokens $$</span></span>
+                                <span class="ln"><span class="c-dim">120s</span> <span class="c-text">"is it ready?"</span> &rarr; <span class="c-orange">tokens $$</span></span>
+                                <span class="ln"><span class="c-dim">...</span></span>
+                                <span class="ln"><span class="c-dim">300s</span> <span class="c-text">"is it ready?"</span> &rarr; <span class="c-green">yes!</span></span>
+                                <span class="sgap"></span>
+                                <span class="ln c-red">10 API calls. 10&times; token cost.</span>
+                                <span class="ln c-red">Claude blocked the entire time.</span>
+                            </div>
+                            <div class="term-col" style="border-left:1px solid var(--term-border); padding-left:32px;">
+                                <span class="term-col-label c-green">WITH MONITOR</span>
+                                <span class="ln c-muted">Script watches silently in background</span>
+                                <span class="sgap"></span>
+                                <span class="ln"><span class="c-dim">30s</span>&nbsp;&nbsp;<span class="c-muted">... silence ...</span>&nbsp;&nbsp;<span class="c-dim">$0</span></span>
+                                <span class="ln"><span class="c-dim">60s</span>&nbsp;&nbsp;<span class="c-muted">... silence ...</span>&nbsp;&nbsp;<span class="c-dim">$0</span></span>
+                                <span class="ln"><span class="c-dim">90s</span>&nbsp;&nbsp;<span class="c-muted">... silence ...</span>&nbsp;&nbsp;<span class="c-dim">$0</span></span>
+                                <span class="ln"><span class="c-dim">120s</span> <span class="c-muted">... silence ...</span>&nbsp;&nbsp;<span class="c-dim">$0</span></span>
+                                <span class="ln"><span class="c-dim">...</span></span>
+                                <span class="ln"><span class="c-dim">300s</span> <span class="c-green">&check; event!</span> &rarr; <span class="c-orange">tokens $$</span></span>
+                                <span class="sgap"></span>
+                                <span class="ln c-green">1 API call. 1&times; token cost.</span>
+                                <span class="ln c-green">Claude works on other tasks.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="term-footer">
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>5 / 13</span></div>
+</div>
+
+<!-- ===== 6: MONITOR VS /LOOP ===== -->
+<div class="slide" data-n="6">
+    <div class="slide-body stacked">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title">Monitor vs /loop</div>
+        </div>
+        <div class="slide-right">
+            <div class="cards-row">
+                <div class="mini-card">
+                    <h4>Manual Polling</h4>
+                    <p>You keep asking &ldquo;is it ready?&rdquo; &mdash; Claude is blocked, every check costs tokens.</p>
+                    <span class="cl">BLOCKING &middot; N&times; TOKENS</span>
+                </div>
+                <div class="mini-card">
+                    <h4>/loop</h4>
+                    <p>Fires a prompt every N minutes. Non-blocking, but each iteration is a full API call.</p>
+                    <span class="cl">TIME-DRIVEN &middot; N&times; TOKENS</span>
+                </div>
+                <div class="mini-card hl">
+                    <h4>Monitor</h4>
+                    <p>Script watches silently. Only fires when stdout prints. Zero cost while waiting.</p>
+                    <span class="cl">EVENT-DRIVEN &middot; 1&times; TOKENS</span>
+                </div>
+            </div>
+            <div class="callout">
+                <strong>When to use /loop instead:</strong> When you need Claude's full reasoning each check &mdash; like reviewing a PR diff every hour, or summarising new Slack messages. /loop re-runs a full prompt; Monitor just passes through raw stdout events.
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>6 / 13</span></div>
+</div>
+
+<!-- ===== 7: STREAM VS POLL ===== -->
+<div class="slide" data-n="6">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title">Stream vs Poll</div>
+            <div class="slide-desc">Two patterns for writing monitor scripts. Pick based on whether a data stream already exists.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">patterns</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <div class="term-cols">
+                            <div class="term-col">
+                                <span class="term-col-label c-cyan">STREAM FILTER</span>
+                                <span class="ln c-muted">A data stream already exists.</span>
+                                <span class="ln c-muted">You just filter for what matters.</span>
+                                <span class="sgap"></span>
+                                <span class="ln c-dim">// Log tailing</span>
+                                <span class="ln"><span class="c-purple">tail</span> -f app.log \</span>
+                                <span class="ln">&nbsp;&nbsp;| <span class="c-purple">grep</span> <span class="c-cyan">--line-buffered</span> <span class="c-green">"ERROR"</span></span>
+                                <span class="sgap"></span>
+                                <span class="ln c-dim">// File system watching</span>
+                                <span class="ln"><span class="c-purple">fswatch</span> -r ./uploads</span>
+                                <span class="sgap"></span>
+                                <span class="ln c-dim">// Docker events</span>
+                                <span class="ln"><span class="c-purple">docker</span> events \</span>
+                                <span class="ln">&nbsp;&nbsp;--filter event=die</span>
+                                <span class="sgap"></span>
+                                <span class="ln c-cyan">Continuous. Uses persistent: true</span>
+                            </div>
+                            <div class="term-col" style="border-left:1px solid var(--term-border); padding-left:32px;">
+                                <span class="term-col-label c-orange">POLL &amp; DIFF</span>
+                                <span class="ln c-muted">No stream exists. You create one</span>
+                                <span class="ln c-muted">by checking periodically.</span>
+                                <span class="sgap"></span>
+                                <span class="ln c-dim">// Price check</span>
+                                <span class="ln"><span class="c-purple">while</span> <span class="c-purple">true</span>; <span class="c-purple">do</span></span>
+                                <span class="ln">&nbsp;&nbsp;<span class="c-purple">curl</span> -s api/price \</span>
+                                <span class="ln">&nbsp;&nbsp;&nbsp;&nbsp;| check_threshold</span>
+                                <span class="ln">&nbsp;&nbsp;<span class="c-purple">sleep</span> <span class="c-orange">30</span></span>
+                                <span class="ln"><span class="c-purple">done</span></span>
+                                <span class="sgap"></span>
+                                <span class="ln c-dim">// Only prints when threshold hit</span>
+                                <span class="sgap"></span>
+                                <span class="ln c-orange">Periodic. 30s+ for remote APIs</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="term-footer">
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>6 / 13</span></div>
+</div>
+
+<!-- ===== 7: DEV SERVER WATCHER ===== -->
+<div class="slide" data-n="7">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <span class="uc-label uc-stream">STREAM</span>
+            <div class="slide-title">Dev Server Watcher</div>
+            <div class="slide-desc">Start your dev server and have Claude watch for errors while you keep coding. It diagnoses issues as they appear.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/api-server</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="p">start the dev server and watch for errors while I work on the auth feature</span>
+                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"dev server errors"</span><span class="c-dim">)</span></span>
+                        <span class="sub c-dim">command: npm run dev 2>&1 | grep --line-buffered -iE "error|exception|crash"</span>
+                        <span class="sub c-dim">Monitor started &middot; persistent &middot; task dev4k7</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-text"><span class="b"></span>Dev server running. I'll catch errors as they happen.</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-dim" style="font-style:italic">&#10070; Working on auth feature &middot; 1 monitor running</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="b c-red">Monitor event:</span> <span class="c-red">"dev server errors"</span></span>
+                        <span class="sub c-text">Error: Cannot read properties of undefined (reading 'userId')</span>
+                        <span class="gap"></span>
+                        <span class="ln"><span class="b c-tool">Read</span><span class="c-dim">(src/middleware/auth.ts:42)</span></span>
+                        <span class="sub c-dim">const userId = req.session.userId</span>
+                        <span class="gap"></span>
+                        <span class="resp">Session object is undefined when no cookie is set. Adding a null check at line 42 now.</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>7 / 13</span></div>
+</div>
+
+<!-- ===== 8: TEST SUITE RUNNER ===== -->
+<div class="slide" data-n="8">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <span class="uc-label uc-stream">STREAM</span>
+            <div class="slide-title">Test Suite Runner</div>
+            <div class="slide-desc">Watch a long test suite and jump on the first failure instead of waiting for all 500 tests to finish.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/app</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="p">run the full test suite and tell me as soon as something fails</span>
+                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"test failures"</span><span class="c-dim">)</span></span>
+                        <span class="sub c-dim">command: npm test 2>&1 | grep --line-buffered -E "FAIL|Error|✗"</span>
+                        <span class="sub c-dim">Monitor started &middot; timeout 600s &middot; task tst4m1</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-text"><span class="b"></span>Tests running. I'll catch failures as they happen.</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="b c-red">Monitor event:</span> <span class="c-red">"test failures"</span></span>
+                        <span class="sub c-text">FAIL src/auth/__tests__/login.test.ts</span>
+                        <span class="sub c-text">✗ should reject expired tokens (42ms)</span>
+                        <span class="gap"></span>
+                        <span class="ln"><span class="b c-tool">Read</span><span class="c-dim">(src/auth/__tests__/login.test.ts)</span></span>
+                        <span class="gap"></span>
+                        <span class="resp">The test expects a 401 but the token validation was changed last commit to return 403. Updating the assertion now.</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>8 / 13</span></div>
+</div>
+
+<!-- ===== 9: FILE DROP WATCHER ===== -->
+<div class="slide" data-n="9">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <span class="uc-label uc-stream">STREAM</span>
+            <div class="slide-title">File Drop Watcher</div>
+            <div class="slide-desc">Watch a shared folder for new files and process them as they arrive. Works with Box, Dropbox, or any synced directory.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/Desktop</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="p">watch my Box sync folder for new client invoices and extract the totals</span>
+                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"new invoice watcher"</span><span class="c-dim">)</span></span>
+                        <span class="sub c-dim">command: fswatch -0 ~/Box/Client-Invoices 2>/dev/null | while IFS= read -r -d '' f; do echo "NEW: $(basename "$f")"; done</span>
+                        <span class="sub c-dim">Monitor started &middot; persistent &middot; task inv7k3</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-text"><span class="b"></span>Watching ~/Box/Client-Invoices. I'll process each file as it drops.</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="b c-green">Monitor event:</span> <span class="c-green">"new invoice watcher"</span></span>
+                        <span class="sub c-text">NEW: acme-corp-invoice-0042.pdf</span>
+                        <span class="gap"></span>
+                        <span class="ln"><span class="b c-tool">Read</span><span class="c-dim">(~/Box/Client-Invoices/acme-corp-invoice-0042.pdf)</span></span>
+                        <span class="sub c-dim">Invoice #0042 &middot; Acme Corp &middot; $12,450.00 &middot; Due: 2026-05-01</span>
+                        <span class="gap"></span>
+                        <span class="resp">New invoice from Acme Corp: $12,450, due May 1st. Added to the tracking spreadsheet.</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>9 / 13</span></div>
+</div>
+
+<!-- ===== 10: STOCK PRICE ALERT ===== -->
+<div class="slide" data-n="10">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <span class="uc-label uc-poll">POLL</span>
+            <div class="slide-title">Stock Price Alert</div>
+            <div class="slide-desc">Poll a price API and only notify when a target threshold is crossed. Nothing printed = nothing spent.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/trading</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="p">watch NVDA and let me know when it drops below $120</span>
+                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"NVDA price alert"</span><span class="c-dim">)</span></span>
+                        <span class="sub c-dim">command: while true; do price=$(curl -s api.stockdata.org/v1/data/quote?symbols=NVDA | jq -r '.data[0].price // empty') || true; if [ -n "$price" ] && [ $(echo "$price < 120" | bc) -eq 1 ] 2>/dev/null; then echo "NVDA: \$$price (below \$120)"; fi; sleep 60; done</span>
+                        <span class="sub c-dim">Monitor started &middot; timeout 3600s &middot; task stk2p8</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-text"><span class="b"></span>Watching NVDA. I'll let you know if it drops below $120.</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-dim" style="font-style:italic">&#10070; 45 minutes &middot; no events &middot; $0 tokens spent</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="b c-orange">Monitor event:</span> <span class="c-orange">"NVDA price alert"</span></span>
+                        <span class="sub c-text">NVDA: $118.42 (below $120)</span>
+                        <span class="gap"></span>
+                        <span class="resp">NVDA just hit $118.42 &mdash; below your $120 target. This is the first time it's crossed that threshold today.</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>10 / 13</span></div>
+</div>
+
+<!-- ===== 11: BUSINESS WORKFLOW ===== -->
+<div class="slide" data-n="11">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <span class="uc-label uc-poll">POLL</span>
+            <div class="slide-title">Business Workflow</div>
+            <div class="slide-desc">Poll your sales dashboard, inventory, or support queue. Claude summarises anomalies and suggests action items.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/business</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="p">check our Shopify sales every 5 minutes and flag anything unusual</span>
+                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"sales anomaly detector"</span><span class="c-dim">)</span></span>
+                        <span class="sub c-dim">command: while true; do orders=$(curl -s "$SHOPIFY_API/orders/count.json" | jq '.count'); if [ "$orders" -gt 50 ]; then echo "SPIKE: $orders orders in last hour"; elif [ "$orders" -eq 0 ]; then echo "ALERT: 0 orders in last hour"; fi; sleep 300; done</span>
+                        <span class="sub c-dim">Monitor started &middot; persistent &middot; task biz3r9</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-text"><span class="b"></span>Watching sales. I'll flag spikes or drops.</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-dim" style="font-style:italic">&#10070; 2 hours &middot; no anomalies &middot; $0 tokens spent</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="b c-orange">Monitor event:</span> <span class="c-orange">"sales anomaly detector"</span></span>
+                        <span class="sub c-text">SPIKE: 83 orders in last hour</span>
+                        <span class="gap"></span>
+                        <span class="resp">Unusual spike &mdash; 83 orders vs your daily average of ~120. Likely a promo or viral link. Check your referral sources and make sure inventory can handle the volume.</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>11 / 13</span></div>
+</div>
+
+<!-- ===== 12: TRY IT ===== -->
+<div class="slide" data-n="13">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title xl">Try It Yourself</div>
+            <div class="slide-desc">Monitor is available in Claude Code right now. Just tell Claude what you want to watch &mdash; it writes the script for you.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/your-project</span></div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="ln c-dim">// You don't write the scripts. Just say what to watch:</span>
+                        <span class="sgap"></span>
+                        <span class="p">watch the Vercel deploy for my PR and tell me when it's ready</span>
+                        <span class="p">run the full test suite and start fixing failures as they happen</span>
+                        <span class="p">monitor api.myapp.com/health and investigate if it goes down</span>
+                        <span class="p">watch ~/Box/invoices for new PDFs and extract the totals</span>
+                        <span class="p">check NVDA every minute and alert me when it crosses $120</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-dim">// Claude writes the filter script,</span>
+                        <span class="ln c-dim">// starts the monitor, and keeps working.</span>
+                        <span class="ln c-dim">// Events arrive. Claude reacts.</span>
+                        <span class="ln c-dim">// Zero tokens spent while waiting.</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>12 / 13</span></div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let current = 0;
+function go(n) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.slide-footer').forEach(f => {
+        f.querySelector('span:last-child').textContent = `${current + 1} / ${total}`;
+    });
+}
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(total - 1);
+});
+document.addEventListener('click', e => {
+    if (e.clientX > window.innerWidth * 0.55) go(current + 1);
+    else if (e.clientX < window.innerWidth * 0.45) go(current - 1);
+});
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+    const d = tx - e.changedTouches[0].clientX;
+    if (Math.abs(d) > 50) d > 0 ? go(current + 1) : go(current - 1);
+});
+// Auto-number all footers on load
+document.querySelectorAll('.slide-footer').forEach((f, i) => {
+    f.querySelector('span:last-child').textContent = `${i + 1} / ${total}`;
+});
+
+// Tab switching for slide 2
+document.querySelectorAll('.mode-tab').forEach(tab => {
+    tab.addEventListener('click', e => {
+        e.stopPropagation();
+        const t = tab.dataset.tab;
+        document.querySelectorAll('.mode-tab').forEach(x => x.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelector(`.tab-panel[data-panel="${t}"]`).classList.add('active');
+    });
+});
+</script>
+</body>
+</html>
