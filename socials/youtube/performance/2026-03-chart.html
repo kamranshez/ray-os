@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>March Video Revenue — 3-Day Post-Upload</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #e0e0e0; font-family: -apple-system, system-ui, sans-serif; padding: 40px; }
+  h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { color: #888; font-size: 14px; margin-bottom: 32px; }
+  .chart-container { position: relative; max-width: 1100px; height: 500px; margin-bottom: 48px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1100px; margin-bottom: 48px; }
+  .stat { background: #151515; border: 1px solid #252525; border-radius: 10px; padding: 20px; }
+  .stat-label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .stat-value { font-size: 28px; font-weight: 700; }
+  .stat-value.green { color: #4ade80; }
+  .stat-value.blue { color: #60a5fa; }
+  .stat-value.purple { color: #c084fc; }
+  .stat-value.orange { color: #fb923c; }
+  table { width: 100%; max-width: 1100px; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; color: #888; font-weight: 500; padding: 10px 12px; border-bottom: 1px solid #252525; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 12px; border-bottom: 1px solid #1a1a1a; }
+  tr:hover td { background: #151515; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .price-tag { display: inline-block; background: #1e1e2e; color: #c084fc; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<h1>March Video Revenue — 3-Day Post-Upload Window</h1>
+<p class="subtitle">Stripe charges (succeeded, AGENTICCODIN descriptor) in the 3 calendar days after each YouTube upload · Pulled 2026-04-10</p>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Total Net Revenue</div>
+    <div class="stat-value green">$61,959</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Total Sales</div>
+    <div class="stat-value blue">435</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Avg Revenue / Video</div>
+    <div class="stat-value purple">$6,884</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">UTM Attribution Coverage</div>
+    <div class="stat-value orange">~8%</div>
+  </div>
+</div>
+
+<div class="chart-container">
+  <canvas id="revenueChart"></canvas>
+</div>
+
+<div class="chart-container" style="height: 400px;">
+  <canvas id="viewsChart"></canvas>
+</div>
+
+<div class="chart-container" style="height: 400px;">
+  <canvas id="priceChart"></canvas>
+</div>
+
+<div class="chart-container" style="height: 400px;">
+  <canvas id="ctrChart"></canvas>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Video</th>
+      <th>Upload</th>
+      <th class="num">Views</th>
+      <th class="num">Sales</th>
+      <th class="num">Gross</th>
+      <th class="num">Net</th>
+      <th class="num">Avg Order</th>
+      <th class="num">Site Visitors</th>
+      <th class="num">CTR</th>
+      <th class="num">Tagged $</th>
+      <th>Pitch</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<script>
+const data = [
+  { title: "Top 0.01% User's Guide",         date: "Mar 2",  views: 20288, visitors: 642, sales: 65, gross: 10145, refunds: 320, net: 9825,  avg: 156, tagged: 1188, pitch: "Pillar / mid-video" },
+  { title: "Skills 2.0",                      date: "Mar 4",  views: 45354, visitors: 463, sales: 82, gross: 12142, refunds: 241, net: 11902, avg: 148, tagged: 327,  pitch: "Opening + birthday" },
+  { title: "Kills OpenClaw (Scheduled Tasks)",date: "Mar 7",  views: 30539, visitors: 389, sales: 90, gross: 13776, refunds: 706, net: 13070, avg: 153, tagged: 0,    pitch: "Closing + urgency" },
+  { title: "/btw",                             date: "Mar 11", views: 39239, visitors: 254, sales: 57, gross: 8788,  refunds: 210, net: 8578,  avg: 154, tagged: 744,  pitch: "Extension framing" },
+  { title: "Internal Skills Strategy",        date: "Mar 19", views: 12442, visitors: 135, sales: 21, gross: 2600,  refunds: 420, net: 2181,  avg: 124, tagged: 636,  pitch: "Mid-video soft plug" },
+  { title: "Replaces OpenClaw (Telegram)",    date: "Mar 20", views: 13711, visitors: 75,  sales: 24, gross: 2719,  refunds: 259, net: 2460,  avg: 113, tagged: 241,  pitch: "In-demo pitch" },
+  { title: "Where Coding Is Heading",          date: "Mar 21", views: 19274, visitors: 113, sales: 29, gross: 3174,  refunds: 259, net: 2916,  avg: 109, tagged: 0,    pitch: "Closing newsletter-first" },
+  { title: "Auto Dream",                       date: "Mar 24", views: 97233, visitors: 642, sales: 38, gross: 6029,  refunds: 569, net: 5460,  avg: 159, tagged: 1449, pitch: "Newsletter mid / class end" },
+  { title: "Claude Code 3.0 Is Coming",       date: "Mar 31", views: 17269, visitors: 152, sales: 29, gross: 5652,  refunds: 84,  net: 5567,  avg: 195, tagged: 534,  pitch: "Mid-video class plug" },
+];
+data.forEach(d => { d.ctr = (d.visitors / d.views * 100); });
+
+const labels = data.map(d => d.date);
+
+// Revenue bar chart with sales line
+new Chart(document.getElementById('revenueChart'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Net Revenue ($)',
+        data: data.map(d => d.net),
+        backgroundColor: data.map(d => d.net > 10000 ? '#4ade80' : d.net > 5000 ? '#60a5fa' : '#3b3b5c'),
+        borderRadius: 6,
+        borderSkipped: false,
+        yAxisID: 'y',
+      },
+      {
+        label: 'Sales Count',
+        data: data.map(d => d.sales),
+        type: 'line',
+        borderColor: '#fb923c',
+        backgroundColor: 'transparent',
+        pointBackgroundColor: '#fb923c',
+        pointRadius: 5,
+        tension: 0.3,
+        borderWidth: 2,
+        yAxisID: 'y1',
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { labels: { color: '#888', usePointStyle: true, padding: 20 } },
+      tooltip: {
+        callbacks: {
+          title: (items) => data[items[0].dataIndex].title,
+          label: (item) => {
+            if (item.datasetIndex === 0) return ' Net: $' + item.raw.toLocaleString();
+            return ' Sales: ' + item.raw;
+          },
+          afterBody: (items) => {
+            const i = items[0].dataIndex;
+            return '  Avg order: $' + data[i].avg + '\n  Views: ' + data[i].views.toLocaleString() + '\n  Pitch: ' + data[i].pitch;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#888' }, grid: { color: '#1a1a1a' } },
+      y: {
+        position: 'left',
+        ticks: { color: '#888', callback: v => '$' + (v/1000).toFixed(0) + 'k' },
+        grid: { color: '#1a1a1a' },
+        title: { display: true, text: 'Net Revenue', color: '#888' }
+      },
+      y1: {
+        position: 'right',
+        ticks: { color: '#fb923c' },
+        grid: { display: false },
+        title: { display: true, text: 'Sales Count', color: '#fb923c' }
+      }
+    }
+  }
+});
+
+// Views vs Revenue (shows Auto Dream disconnect)
+new Chart(document.getElementById('viewsChart'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Views',
+        data: data.map(d => d.views),
+        backgroundColor: '#60a5fa',
+        borderRadius: 6,
+        yAxisID: 'y',
+      },
+      {
+        label: 'Net Revenue ($)',
+        data: data.map(d => d.net),
+        type: 'line',
+        borderColor: '#4ade80',
+        backgroundColor: 'transparent',
+        pointBackgroundColor: '#4ade80',
+        pointRadius: 5,
+        tension: 0.3,
+        borderWidth: 2,
+        yAxisID: 'y1',
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { labels: { color: '#888', usePointStyle: true, padding: 20 } },
+      tooltip: {
+        callbacks: {
+          title: (items) => data[items[0].dataIndex].title,
+          label: (item) => {
+            if (item.datasetIndex === 0) return ' Views: ' + item.raw.toLocaleString();
+            return ' Net: $' + item.raw.toLocaleString();
+          },
+          afterBody: (items) => {
+            const i = items[0].dataIndex;
+            const rpv = (data[i].net / data[i].views * 1000).toFixed(0);
+            return '  Revenue per 1K views: $' + rpv;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#888' }, grid: { color: '#1a1a1a' } },
+      y: {
+        position: 'left',
+        ticks: { color: '#60a5fa', callback: v => (v/1000).toFixed(0) + 'k' },
+        grid: { color: '#1a1a1a' },
+        title: { display: true, text: 'Views', color: '#60a5fa' }
+      },
+      y1: {
+        position: 'right',
+        ticks: { color: '#4ade80', callback: v => '$' + (v/1000).toFixed(0) + 'k' },
+        grid: { display: false },
+        title: { display: true, text: 'Net Revenue', color: '#4ade80' }
+      }
+    }
+  }
+});
+
+// AOV trend
+new Chart(document.getElementById('priceChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Avg Order Value ($)',
+        data: data.map(d => d.avg),
+        borderColor: '#c084fc',
+        backgroundColor: 'rgba(192, 132, 252, 0.1)',
+        fill: true,
+        pointBackgroundColor: '#c084fc',
+        pointRadius: 6,
+        tension: 0.3,
+        borderWidth: 2,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { color: '#888', usePointStyle: true, padding: 20 } },
+      tooltip: {
+        callbacks: {
+          title: (items) => data[items[0].dataIndex].title,
+          label: (item) => ' Avg order: $' + item.raw,
+          afterBody: (items) => '  Pitch: ' + data[items[0].dataIndex].pitch
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#888' }, grid: { color: '#1a1a1a' } },
+      y: {
+        ticks: { color: '#888', callback: v => '$' + v },
+        grid: { color: '#1a1a1a' },
+        title: { display: true, text: 'Avg Order Value', color: '#888' }
+      }
+    }
+  }
+});
+
+// Click-through rate chart (PostHog reliable signal)
+new Chart(document.getElementById('ctrChart'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Click-Through % (visitors / views)',
+        data: data.map(d => d.ctr.toFixed(2)),
+        backgroundColor: data.map(d => d.ctr > 2 ? '#4ade80' : d.ctr > 1 ? '#60a5fa' : '#fb923c'),
+        borderRadius: 6,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { color: '#888', usePointStyle: true, padding: 20 } },
+      tooltip: {
+        callbacks: {
+          title: (items) => data[items[0].dataIndex].title,
+          label: (item) => ' CTR: ' + item.raw + '%',
+          afterBody: (items) => {
+            const i = items[0].dataIndex;
+            return '  Views: ' + data[i].views.toLocaleString() + '\n  Site visitors: ' + data[i].visitors + '\n  Tagged revenue: $' + data[i].tagged;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#888' }, grid: { color: '#1a1a1a' } },
+      y: {
+        ticks: { color: '#888', callback: v => v + '%' },
+        grid: { color: '#1a1a1a' },
+        title: { display: true, text: 'Site Click-Through % (PostHog, reliable)', color: '#888' }
+      }
+    }
+  }
+});
+
+// Table
+const tbody = document.getElementById('tableBody');
+data.forEach(d => {
+  tbody.innerHTML += '<tr>' +
+    '<td>' + d.title + '</td>' +
+    '<td>' + d.date + '</td>' +
+    '<td class="num">' + d.views.toLocaleString() + '</td>' +
+    '<td class="num">' + d.sales + '</td>' +
+    '<td class="num">$' + d.gross.toLocaleString() + '</td>' +
+    '<td class="num">$' + d.net.toLocaleString() + '</td>' +
+    '<td class="num">$' + d.avg + '</td>' +
+    '<td class="num">' + d.visitors + '</td>' +
+    '<td class="num">' + d.ctr.toFixed(2) + '%</td>' +
+    '<td class="num">$' + d.tagged + '</td>' +
+    '<td><span class="price-tag">' + d.pitch + '</span></td>' +
+  '</tr>';
+});
+</script>
+</body>
+</html>
