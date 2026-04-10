@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Claude Code's Monitor Tool Works</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --bg: #0a0a0f;
+            --card: #12121a;
+            --card-border: #1e1e2e;
+            --text: #e4e4ef;
+            --text-dim: #8888a0;
+            --accent: #7c6aef;
+            --accent-glow: rgba(124, 106, 239, 0.15);
+            --green: #4ade80;
+            --orange: #fb923c;
+            --red: #f87171;
+            --blue: #60a5fa;
+            --cyan: #22d3ee;
+            --pink: #f472b6;
+            --yellow: #facc15;
+
+            --l1: #4ade80;
+            --l1-glow: rgba(74, 222, 128, 0.12);
+            --l2: #60a5fa;
+            --l2-glow: rgba(96, 165, 250, 0.12);
+            --l3: #fb923c;
+            --l3-glow: rgba(251, 146, 60, 0.12);
+            --l4: #f472b6;
+            --l4-glow: rgba(244, 114, 182, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 40px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* ===== Level Navigation ===== */
+        .level-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 40px auto 60px;
+            max-width: 1200px;
+            padding: 0 40px;
+        }
+        .level-nav a {
+            display: block;
+            text-decoration: none;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .level-nav a:hover {
+            transform: translateY(-2px);
+        }
+        .level-nav a[data-level="1"] { border-top: 3px solid var(--l1); }
+        .level-nav a[data-level="1"]:hover { box-shadow: 0 4px 20px var(--l1-glow); }
+        .level-nav a[data-level="2"] { border-top: 3px solid var(--l2); }
+        .level-nav a[data-level="2"]:hover { box-shadow: 0 4px 20px var(--l2-glow); }
+        .level-nav a[data-level="3"] { border-top: 3px solid var(--l3); }
+        .level-nav a[data-level="3"]:hover { box-shadow: 0 4px 20px var(--l3-glow); }
+        .level-nav a[data-level="4"] { border-top: 3px solid var(--l4); }
+        .level-nav a[data-level="4"]:hover { box-shadow: 0 4px 20px var(--l4-glow); }
+        .level-nav .nav-level {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .level-nav a[data-level="1"] .nav-level { color: var(--l1); }
+        .level-nav a[data-level="2"] .nav-level { color: var(--l2); }
+        .level-nav a[data-level="3"] .nav-level { color: var(--l3); }
+        .level-nav a[data-level="4"] .nav-level { color: var(--l4); }
+        .level-nav .nav-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            display: block;
+            margin-bottom: 4px;
+        }
+        .level-nav .nav-desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            display: block;
+        }
+
+        /* ===== Level Dividers ===== */
+        .level-divider {
+            margin: 80px 0 50px;
+            padding: 32px 40px;
+            text-align: center;
+            position: relative;
+        }
+        .level-divider::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+        }
+        .level-divider[data-level="1"]::before { background: linear-gradient(90deg, transparent, var(--l1), transparent); }
+        .level-divider[data-level="2"]::before { background: linear-gradient(90deg, transparent, var(--l2), transparent); }
+        .level-divider[data-level="3"]::before { background: linear-gradient(90deg, transparent, var(--l3), transparent); }
+        .level-divider[data-level="4"]::before { background: linear-gradient(90deg, transparent, var(--l4), transparent); }
+        .level-divider .level-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .level-divider[data-level="1"] .level-badge { color: var(--l1); background: var(--l1-glow); border: 1px solid rgba(74, 222, 128, 0.3); }
+        .level-divider[data-level="2"] .level-badge { color: var(--l2); background: var(--l2-glow); border: 1px solid rgba(96, 165, 250, 0.3); }
+        .level-divider[data-level="3"] .level-badge { color: var(--l3); background: var(--l3-glow); border: 1px solid rgba(251, 146, 60, 0.3); }
+        .level-divider[data-level="4"] .level-badge { color: var(--l4); background: var(--l4-glow); border: 1px solid rgba(244, 114, 182, 0.3); }
+        .level-divider h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .level-divider p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-top: 8px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 60px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--accent-glow);
+            border: 1px solid rgba(124, 106, 239, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .section h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 16px;
+        }
+        .section-desc {
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            margin-bottom: 32px;
+            max-width: 800px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(124, 106, 239, 0.4), transparent);
+        }
+
+        /* Diagram container */
+        .diagram-wrap {
+            background: #0d0d14;
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid var(--card-border);
+            overflow-x: auto;
+        }
+        .diagram-wrap .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        .diagram-wrap .mermaid svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Analogy boxes */
+        .analogy {
+            background: linear-gradient(135deg, rgba(124, 106, 239, 0.08), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(124, 106, 239, 0.2);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin: 24px 0;
+            position: relative;
+        }
+        .analogy::before {
+            content: 'ANALOGY';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--cyan);
+            background: var(--card);
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(34, 211, 238, 0.3);
+        }
+        .analogy p {
+            color: var(--text);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+        .analogy strong {
+            color: var(--cyan);
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #0d0d14;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 20px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        .code-block .comment { color: #4a4a6a; }
+        .code-block .keyword { color: var(--accent); }
+        .code-block .string { color: var(--green); }
+        .code-block .number { color: var(--orange); }
+        .code-block .tag { color: var(--cyan); }
+        .code-block .func { color: var(--yellow); }
+
+        /* Comparison grid */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 24px 0;
+        }
+        .compare-card {
+            background: #0d0d14;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        .compare-card:hover {
+            border-color: var(--accent);
+        }
+        .compare-card.highlight {
+            border-color: var(--accent);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+        .compare-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .compare-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .compare-card p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .compare-card .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: var(--accent-glow);
+            padding: 3px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        /* Stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .stat {
+            background: #0d0d14;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+        }
+        .stat .label {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        /* Pipeline steps */
+        .pipeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 24px 0;
+        }
+        .pipeline-step {
+            display: flex;
+            align-items: stretch;
+            gap: 20px;
+        }
+        .pipeline-line {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40px;
+            flex-shrink: 0;
+        }
+        .pipeline-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid var(--bg);
+            box-shadow: 0 0 0 2px var(--accent);
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .pipeline-connector {
+            width: 2px;
+            flex-grow: 1;
+            background: linear-gradient(to bottom, var(--accent), rgba(124, 106, 239, 0.2));
+            margin: 4px 0;
+        }
+        .pipeline-content {
+            flex-grow: 1;
+            padding-bottom: 28px;
+        }
+        .pipeline-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .pipeline-content p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+        .pipeline-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: rgba(124, 106, 239, 0.1);
+            color: var(--accent);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Key insight callout */
+        .insight {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.08), rgba(251, 146, 60, 0.05));
+            border: 1px solid rgba(250, 204, 21, 0.25);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin: 24px 0;
+            position: relative;
+        }
+        .insight::before {
+            content: 'KEY INSIGHT';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--yellow);
+            background: var(--card);
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(250, 204, 21, 0.3);
+        }
+        .insight p {
+            color: var(--text);
+            font-size: 1.05rem;
+        }
+        .insight strong { color: var(--yellow); }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--card-border);
+            color: var(--text-dim);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(30, 30, 46, 0.5);
+        }
+        .data-table code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: rgba(124, 106, 239, 0.1);
+            color: var(--accent);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .data-table tr:hover td {
+            background: rgba(124, 106, 239, 0.03);
+        }
+
+        /* TLDR box */
+        .tldr {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.08), rgba(96, 165, 250, 0.05));
+            border: 1px solid rgba(74, 222, 128, 0.25);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin: 24px 0;
+            position: relative;
+        }
+        .tldr::before {
+            content: 'TL;DR';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--green);
+            background: var(--card);
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+        .tldr p {
+            color: var(--text);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .tldr strong { color: var(--green); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 60px 40px;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--card-border);
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .level-nav { grid-template-columns: 1fr 1fr; }
+            .compare-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .container { padding: 0 20px; }
+            .card { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+    <h1>How the Monitor Tool Works</h1>
+    <p class="subtitle">Claude Code's real-time event streaming &mdash; explained at four levels of depth</p>
+</div>
+
+<!-- Level Navigation -->
+<div class="level-nav">
+    <a href="#level-1" data-level="1">
+        <span class="nav-level">LEVEL 1</span>
+        <span class="nav-title">The Concept</span>
+        <span class="nav-desc">What it is and why it exists</span>
+    </a>
+    <a href="#level-2" data-level="2">
+        <span class="nav-level">LEVEL 2</span>
+        <span class="nav-title">Using It</span>
+        <span class="nav-desc">API, recipes, and gotchas</span>
+    </a>
+    <a href="#level-3" data-level="3">
+        <span class="nav-level">LEVEL 3</span>
+        <span class="nav-title">How It Works</span>
+        <span class="nav-desc">Architecture and data flow</span>
+    </a>
+    <a href="#level-4" data-level="4">
+        <span class="nav-level">LEVEL 4</span>
+        <span class="nav-title">The Internals</span>
+        <span class="nav-desc">Implementation and safety rails</span>
+    </a>
+</div>
+
+<div class="container">
+
+    <!-- ================================================================ -->
+    <!-- LEVEL 1: THE CONCEPT                                             -->
+    <!-- ================================================================ -->
+    <div class="level-divider" id="level-1" data-level="1">
+        <span class="level-badge">LEVEL 1</span>
+        <h2>The Concept</h2>
+        <p>What the Monitor tool is, in 60 seconds</p>
+    </div>
+
+    <div class="section">
+        <div class="tldr">
+            <p>Claude Code has a tool called <strong>Monitor</strong> that runs a shell script in the background and sends you a notification every time the script prints a line. It's like setting up a live alert system &mdash; you keep working, and events come to you.</p>
+        </div>
+
+        <div class="section-header">
+            <h2>Three Ways to Run Commands</h2>
+        </div>
+        <p class="section-desc">Claude Code can run shell commands in three modes. Monitor fills the gap between the other two.</p>
+
+        <div class="compare-grid">
+            <div class="compare-card">
+                <span class="icon">&#9724;</span>
+                <h4>Bash (Foreground)</h4>
+                <p>Blocks Claude completely. Can't do anything else until the command finishes.</p>
+                <span class="label">BLOCKING</span>
+            </div>
+            <div class="compare-card">
+                <span class="icon">&#9654;</span>
+                <h4>Bash (Background)</h4>
+                <p>Fire-and-forget. Gets ONE notification when the process exits. No updates during.</p>
+                <span class="label">FIRE &amp; FORGET</span>
+            </div>
+            <div class="compare-card highlight">
+                <span class="icon">&#9881;</span>
+                <h4>Monitor</h4>
+                <p>Live event stream. Each stdout line becomes a notification. Claude keeps working.</p>
+                <span class="label">STREAMING</span>
+            </div>
+        </div>
+
+        <div class="analogy">
+            <p>Think of it like <strong>ordering food</strong>. Foreground Bash is standing at the counter waiting. Background Bash is ordering delivery &mdash; you only hear a knock when it arrives. Monitor is like a <strong>live kitchen cam</strong> &mdash; you see each dish being prepared and can react the moment something goes wrong.</p>
+        </div>
+
+        <div class="card">
+            <h3>When to Use Each</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Tool</th>
+                        <th>Why</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Quick command (&lt;30s)</td>
+                        <td><code>Bash</code></td>
+                        <td>Just wait for it</td>
+                    </tr>
+                    <tr>
+                        <td>Long build you don't need updates on</td>
+                        <td><code>Bash</code> + <code>run_in_background</code></td>
+                        <td>Fire and forget, get notified when done</td>
+                    </tr>
+                    <tr>
+                        <td>Deploy status, CI pipeline, log tailing</td>
+                        <td><code>Monitor</code></td>
+                        <td>You want to see each status change as it happens</td>
+                    </tr>
+                    <tr>
+                        <td>Session-long PR comment watcher</td>
+                        <td><code>Monitor</code> + <code>persistent: true</code></td>
+                        <td>Runs until you stop it or the session ends</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ================================================================ -->
+    <!-- LEVEL 2: USING IT                                                -->
+    <!-- ================================================================ -->
+    <div class="level-divider" id="level-2" data-level="2">
+        <span class="level-badge">LEVEL 2</span>
+        <h2>Using It</h2>
+        <p>API parameters, copy-paste recipes, and mistakes to avoid</p>
+    </div>
+
+    <!-- API -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">API</span>
+            <h2>The Four Parameters</h2>
+        </div>
+        <p class="section-desc">Every Monitor call takes exactly four fields. All required.</p>
+
+        <div class="card">
+            <div class="code-block">
+<span class="func">Monitor</span>({
+  <span class="tag">description</span>: <span class="string">"Vercel deploy status"</span>,        <span class="comment">// Shown in every notification</span>
+  <span class="tag">command</span>: <span class="string">"while true; do ..."</span>,              <span class="comment">// Shell script. Each stdout line = one event</span>
+  <span class="tag">timeout_ms</span>: <span class="number">300000</span>,                          <span class="comment">// Kill after 5 min (max: 3600000)</span>
+  <span class="tag">persistent</span>: <span class="keyword">false</span>                            <span class="comment">// true = no timeout, runs until TaskStop</span>
+})
+            </div>
+
+            <table class="data-table" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>description</code></td>
+                        <td>string</td>
+                        <td>Appears in every notification's <code>&lt;summary&gt;</code>. Be specific.</td>
+                    </tr>
+                    <tr>
+                        <td><code>command</code></td>
+                        <td>string</td>
+                        <td>Shell command. Only <strong>stdout</strong> triggers events. Stderr goes to output file.</td>
+                    </tr>
+                    <tr>
+                        <td><code>timeout_ms</code></td>
+                        <td>number</td>
+                        <td>Default 300000 (5 min), max 3600000 (1 hr). Ignored when persistent.</td>
+                    </tr>
+                    <tr>
+                        <td><code>persistent</code></td>
+                        <td>boolean</td>
+                        <td>Session-length watches. Stop with <code>TaskStop({task_id: "..."})</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="insight">
+                <p><strong>Only stdout matters.</strong> Stderr is written to the output file silently &mdash; it does not trigger notifications. Redirect noise with <code>2>/dev/null</code> and keep stdout clean and selective.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recipes -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">RECIPES</span>
+            <h2>Copy-Paste Recipes</h2>
+        </div>
+        <p class="section-desc">Tested in production. Each was debugged through real use.</p>
+
+        <div class="card">
+            <h4 style="margin-bottom: 4px; color: var(--green);">Vercel Deployment</h4>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 16px;">Polls every 15s, reports Building/Ready/Error, exits on completion.</p>
+            <div class="code-block">
+<span class="keyword">sleep</span> <span class="number">15</span>  <span class="comment"># wait for deploy to register</span>
+URL=$(<span class="func">vercel ls</span> myproject --scope myteam <span class="number">2</span>>/dev/null | head -<span class="number">1</span>)
+<span class="keyword">echo</span> <span class="string">"Tracking: $URL"</span>
+<span class="keyword">while</span> <span class="keyword">true</span>; <span class="keyword">do</span>
+  RAW=$(<span class="func">vercel inspect</span> <span class="string">"$URL"</span> --scope myteam <span class="number">2</span>>&amp;<span class="number">1</span> | grep -a <span class="string">"status"</span>)
+  STATUS=$(<span class="keyword">echo</span> <span class="string">"$RAW"</span> | sed <span class="string">'s/.*status/status/'</span>)
+  <span class="keyword">echo</span> <span class="string">"$(date +%H:%M:%S) $STATUS"</span>
+  <span class="keyword">if</span> <span class="keyword">echo</span> <span class="string">"$RAW"</span> | grep -aq <span class="string">"Ready"</span>; <span class="keyword">then</span> <span class="keyword">echo</span> <span class="string">"DONE"</span>; <span class="keyword">break</span>; <span class="keyword">fi</span>
+  <span class="keyword">if</span> <span class="keyword">echo</span> <span class="string">"$RAW"</span> | grep -aq <span class="string">"Error"</span>; <span class="keyword">then</span> <span class="keyword">echo</span> <span class="string">"FAILED"</span>; <span class="keyword">break</span>; <span class="keyword">fi</span>
+  <span class="keyword">sleep</span> <span class="number">15</span>
+<span class="keyword">done</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h4 style="margin-bottom: 4px; color: var(--orange);">GitHub Actions Workflow</h4>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 16px;">Watches a workflow run until it completes or fails.</p>
+            <div class="code-block">
+<span class="keyword">while</span> <span class="keyword">true</span>; <span class="keyword">do</span>
+  STATUS=$(<span class="func">gh run list</span> --workflow=release.yml --limit=<span class="number">1</span> \
+    --json status,conclusion \
+    -q <span class="string">'.[0] | "\(.status) \(.conclusion)"'</span> <span class="number">2</span>>/dev/null || <span class="keyword">true</span>)
+  <span class="keyword">echo</span> <span class="string">"$(date +%H:%M:%S) $STATUS"</span>
+  <span class="keyword">if</span> [ <span class="string">"$STATUS"</span> != <span class="string">"in_progress "</span> ] &amp;&amp; [ <span class="string">"$STATUS"</span> != <span class="string">"queued "</span> ]; <span class="keyword">then</span>
+    <span class="keyword">echo</span> <span class="string">"DONE: $STATUS"</span>; <span class="keyword">break</span>
+  <span class="keyword">fi</span>
+  <span class="keyword">sleep</span> <span class="number">30</span>
+<span class="keyword">done</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h4 style="margin-bottom: 4px; color: var(--cyan);">Log Tail (Persistent)</h4>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 16px;">Runs for the whole session. Only errors come through. Use <code>persistent: true</code>.</p>
+            <div class="code-block">
+<span class="func">tail</span> -f /var/log/app.log | grep <span class="tag">--line-buffered</span> <span class="string">"ERROR\|FATAL\|PANIC"</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h4 style="margin-bottom: 4px; color: var(--pink);">File Watcher</h4>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 16px;">React to file changes in a build directory.</p>
+            <div class="code-block">
+<span class="func">fswatch</span> -r ./dist <span class="number">2</span>>/dev/null | <span class="keyword">while</span> read f; <span class="keyword">do</span>
+  <span class="keyword">echo</span> <span class="string">"Changed: $(basename $f)"</span>
+<span class="keyword">done</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pitfalls -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">PITFALLS</span>
+            <h2>Things That Will Bite You</h2>
+        </div>
+        <p class="section-desc">Every one of these caused a real monitor to silently produce no events or incorrect output.</p>
+
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Pitfall</th>
+                        <th>What Happens</th>
+                        <th>Fix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>No <code>--line-buffered</code></strong></td>
+                        <td>Pipe buffering delays events by minutes. Grep collects ~4KB before flushing.</td>
+                        <td>Always <code>grep --line-buffered</code> in pipes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unicode in CLI output</strong></td>
+                        <td>Tools like <code>vercel</code> use Unicode bullets. Grep matches but <code>sed</code>/<code>awk</code> choke.</td>
+                        <td>Use <code>grep -a</code> (binary-safe). Test with <code>cat -v</code> first.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Wrong command for status</strong></td>
+                        <td><code>vercel ls</code> shows URLs only, not status. Grep for "Ready" matches nothing.</td>
+                        <td>Use <code>vercel inspect &lt;url&gt;</code>. Always test raw output first.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>No error handling</strong></td>
+                        <td>One network blip kills the entire monitor.</td>
+                        <td>Add <code>|| true</code> after fallible commands</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Too much stdout</strong></td>
+                        <td>Raw logs trigger the 30-second flood kill.</td>
+                        <td>Filter aggressively with <code>grep</code>, <code>jq</code>, <code>awk</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Polling too fast</strong></td>
+                        <td>Rate limiting or flood kill from too-frequent output.</td>
+                        <td>30s+ for remote APIs. 0.5&ndash;1s for local checks.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>No <code>break</code> on success</strong></td>
+                        <td>Monitor runs forever after condition is met, wasting tokens.</td>
+                        <td>Always <code>break</code> or <code>exit</code> on terminal state</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="insight">
+                <p><strong>Test your script in a regular terminal first.</strong> Run it, watch the output, verify your grep/sed/awk matches the actual format. The #1 cause of silent monitors is a filter that doesn't match real output. Use <code>cat -v</code> to reveal hidden Unicode.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================================================================ -->
+    <!-- LEVEL 3: HOW IT WORKS                                            -->
+    <!-- ================================================================ -->
+    <div class="level-divider" id="level-3" data-level="3">
+        <span class="level-badge">LEVEL 3</span>
+        <h2>How It Works</h2>
+        <p>The architecture: from stdout line to conversation notification</p>
+    </div>
+
+    <!-- Big Picture -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">01</span>
+            <h2>The Data Flow</h2>
+        </div>
+        <p class="section-desc">A stdout line passes through a debouncer, rate limiter, XML formatter, shared queue, and finally arrives as a user message in the conversation.</p>
+
+        <div class="card">
+            <div class="diagram-wrap">
+                <div class="mermaid">
+sequenceDiagram
+    participant Script as Shell Script
+    participant Batch as Debouncer<br/>200ms window
+    participant Bucket as Token Bucket<br/>10 tokens, 1/2s refill
+    participant XML as XML Formatter
+    participant Queue as Input Queue<br/>(shared with user input)
+    participant Loop as Conversation Loop
+    participant API as Claude API
+
+    Note over Script,API: Happy Path — Event Gets Through
+
+    Script->>Batch: stdout line
+    Note right of Batch: Wait 200ms for<br/>more lines...
+    Script->>Batch: stdout line (within 200ms)
+    Batch->>Bucket: Batched lines
+    Bucket->>Bucket: Token available? YES
+    Bucket->>XML: Pass through
+    XML->>Queue: &lt;task-notification&gt; XML
+    Note right of Queue: priority: "next"
+    Queue->>Loop: Dequeue item
+    Loop->>API: Send as role: "user" message
+    API-->>Loop: Claude responds to event
+
+    Note over Script,API: Overloaded Path — Rate Limited
+
+    Script->>Batch: stdout line (flood)
+    Batch->>Bucket: Lines
+    Bucket->>Bucket: Token available? NO
+    Note right of Bucket: Suppress + count
+    Bucket-->>Bucket: 30s of sustained overflow?
+    Bucket->>XML: "[Monitor stopped — too much output]"
+    XML->>Queue: Kill notification
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shared Queue -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">02</span>
+            <h2>The Shared Queue</h2>
+        </div>
+        <p class="section-desc">Monitor events and your messages go through the exact same queue. The XML wrapper is the only way Claude tells them apart.</p>
+
+        <div class="card">
+            <div class="diagram-wrap">
+                <div class="mermaid">
+flowchart LR
+    subgraph Inputs["What Goes Into the Queue"]
+        direction TB
+        U["You Type a Message<br/><small>priority: next</small>"]
+        M["Monitor Event<br/><small>priority: next</small>"]
+        T["Task Completion<br/><small>priority: next</small>"]
+        I["Meta Instruction<br/><small>priority: later</small>"]
+    end
+
+    subgraph Q["The Input Queue"]
+        direction TB
+        Q1["Priority 0: NOW<br/><small>Aborts current API call</small>"]
+        Q2["Priority 1: NEXT<br/><small>Processed after current turn</small>"]
+        Q3["Priority 2: LATER<br/><small>After all NEXT items drain</small>"]
+    end
+
+    subgraph Output["What Claude Sees"]
+        direction TB
+        O1["role: user<br/><small>Your typed message</small>"]
+        O2["role: user<br/><small>&lt;task-notification&gt; XML</small>"]
+    end
+
+    U --> Q2
+    M --> Q2
+    T --> Q2
+    I --> Q3
+    Q1 --> O1
+    Q2 --> O1
+    Q2 --> O2
+    Q3 --> O2
+
+    style Q1 fill:#1a1025,stroke:#f87171,color:#f87171
+    style Q2 fill:#1a1025,stroke:#7c6aef,color:#7c6aef
+    style Q3 fill:#1a1025,stroke:#4a4a6a,color:#8888a0
+    style U fill:#12121a,stroke:#60a5fa,color:#60a5fa
+    style M fill:#12121a,stroke:#4ade80,color:#4ade80
+    style T fill:#12121a,stroke:#fb923c,color:#fb923c
+    style I fill:#12121a,stroke:#4a4a6a,color:#8888a0
+    style O1 fill:#12121a,stroke:#60a5fa,color:#60a5fa
+    style O2 fill:#12121a,stroke:#4ade80,color:#4ade80
+                </div>
+            </div>
+
+            <div class="insight">
+                <p><strong>Monitor notifications become user messages.</strong> From the API's perspective, a monitor event looks identical to you typing something. The <code>&lt;task-notification&gt;</code> XML tags are the only way Claude distinguishes them. That's why the system prompt says: "Events are not replies from the user."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rate Limiter -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">03</span>
+            <h2>The Rate Limiter</h2>
+        </div>
+        <p class="section-desc">Without this, a noisy script would flood the conversation, blow up the context window, and cost a fortune in tokens.</p>
+
+        <div class="card">
+            <div class="stats-row">
+                <div class="stat">
+                    <span class="value">10</span>
+                    <span class="label">Burst capacity</span>
+                </div>
+                <div class="stat">
+                    <span class="value">2s</span>
+                    <span class="label">Refill interval</span>
+                </div>
+                <div class="stat">
+                    <span class="value">30s</span>
+                    <span class="label">Kill threshold</span>
+                </div>
+                <div class="stat">
+                    <span class="value">200ms</span>
+                    <span class="label">Batch window</span>
+                </div>
+            </div>
+
+            <div class="diagram-wrap">
+                <div class="mermaid">
+stateDiagram-v2
+    [*] --> Healthy: Monitor starts
+
+    Healthy --> Healthy: stdout line + token available<br/>→ send notification
+    Healthy --> Draining: stdout line + NO token<br/>→ suppress, start counting
+
+    Draining --> Healthy: Token refills (2s elapsed)<br/>→ send "[N events suppressed]"<br/>→ reset counter
+    Draining --> Draining: More lines, still no tokens<br/>→ increment suppression counter
+    Draining --> Killed: 30s of sustained overflow<br/>→ send kill message<br/>→ auto-stop monitor
+
+    Healthy --> Ended: Script exits / timeout
+    Killed --> [*]
+    Ended --> [*]
+
+    note right of Healthy
+        1 token per 2 seconds
+        10 token max burst
+    end note
+
+    note right of Killed
+        "Write a new monitor with<br/>a more selective filter"
+    end note
+                </div>
+            </div>
+
+            <div class="analogy">
+                <p>The token bucket is like a <strong>bouncer at a nightclub</strong>. The club holds 10 people (burst). After that, one person can enter every 2 seconds (refill). If the line keeps growing for 30 seconds straight, the bouncer <strong>shuts down the venue</strong> and tells the promoter to be more selective next time.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================================================================ -->
+    <!-- LEVEL 4: THE INTERNALS                                           -->
+    <!-- ================================================================ -->
+    <div class="level-divider" id="level-4" data-level="4">
+        <span class="level-badge">LEVEL 4</span>
+        <h2>The Internals</h2>
+        <p>Implementation details &mdash; the XML format, wake-up mechanism, conversation loop, and safety rails</p>
+    </div>
+
+    <!-- XML Envelope -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">04</span>
+            <h2>The XML Envelope</h2>
+        </div>
+        <p class="section-desc">Every notification is wrapped in XML. Two formats &mdash; live events and task completion.</p>
+
+        <div class="card">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h4 style="margin-bottom: 12px; color: var(--green);">Live Monitor Event</h4>
+                    <div class="code-block">
+<span class="tag">&lt;task-notification&gt;</span>
+  <span class="tag">&lt;task-id&gt;</span><span class="string">brovgltib</span><span class="tag">&lt;/task-id&gt;</span>
+  <span class="tag">&lt;summary&gt;</span><span class="string">Monitor event: "Vercel deploy"</span><span class="tag">&lt;/summary&gt;</span>
+  <span class="tag">&lt;event&gt;</span><span class="string">Status: Ready hy-abc123</span><span class="tag">&lt;/event&gt;</span>
+<span class="tag">&lt;/task-notification&gt;</span>
+                    </div>
+                    <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 8px;">Sent for each stdout line that passes the rate limiter.</p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 12px; color: var(--orange);">Task Completion</h4>
+                    <div class="code-block">
+<span class="tag">&lt;task-notification&gt;</span>
+  <span class="tag">&lt;task-id&gt;</span><span class="string">brovgltib</span><span class="tag">&lt;/task-id&gt;</span>
+  <span class="tag">&lt;tool-use-id&gt;</span><span class="string">toolu_abc</span><span class="tag">&lt;/tool-use-id&gt;</span>
+  <span class="tag">&lt;output-file&gt;</span><span class="string">~/.claude/tasks/output.txt</span><span class="tag">&lt;/output-file&gt;</span>
+  <span class="tag">&lt;status&gt;</span><span class="string">completed</span><span class="tag">&lt;/status&gt;</span>
+  <span class="tag">&lt;summary&gt;</span><span class="string">Monitor "Vercel deploy" ended</span><span class="tag">&lt;/summary&gt;</span>
+<span class="tag">&lt;/task-notification&gt;</span>
+                    </div>
+                    <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 8px;">Sent when the script exits, times out, or is killed.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wake-Up Mechanism -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">05</span>
+            <h2>How Claude "Wakes Up"</h2>
+        </div>
+        <p class="section-desc">When Claude is idle and a monitor event arrives, the conversation loop needs to restart.</p>
+
+        <div class="card">
+            <div class="diagram-wrap">
+                <div class="mermaid">
+flowchart TD
+    A["Claude is idle<br/><small>Conversation loop has exited</small>"] --> B{"Notification<br/>arrives in queue"}
+
+    B -->|"priority: now"| C["INTERRUPT<br/><small>Aborts current API call mid-stream</small>"]
+    B -->|"priority: next"| D{"Is Claude<br/>mid-turn?"}
+    B -->|"priority: later"| E["Wait until all<br/>'next' items drain"]
+
+    D -->|"Yes, generating"| F["Queue it.<br/><small>Picked up on next loop iteration</small>"]
+    D -->|"No, idle"| G["Loop checks queue<br/><small>peekQueue() !== undefined?</small>"]
+
+    G --> H["Loop restarts<br/><small>Dequeues highest-priority item</small>"]
+    F --> H
+
+    H --> I["XML passed as prompt"]
+    I --> J["Creates role: user message"]
+    J --> K["Claude API call<br/><small>Claude sees &lt;task-notification&gt;</small>"]
+    K --> L["Claude responds"]
+
+    C --> H
+    E --> H
+
+    style A fill:#12121a,stroke:#4a4a6a,color:#8888a0
+    style C fill:#1a1025,stroke:#f87171,color:#f87171
+    style H fill:#1a1025,stroke:#7c6aef,color:#7c6aef
+    style K fill:#1a1025,stroke:#4ade80,color:#4ade80
+    style L fill:#1a1025,stroke:#22d3ee,color:#22d3ee
+                </div>
+            </div>
+
+            <div class="analogy">
+                <p>Claude's conversation loop is a <strong>sleeping security guard</strong>. The queue is a <strong>doorbell</strong>. A <code>"next"</code> priority rings normally. A <code>"now"</code> priority is the <strong>fire alarm</strong> &mdash; it interrupts whatever's happening immediately.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversation Loop -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">06</span>
+            <h2>The Conversation Loop</h2>
+        </div>
+        <p class="section-desc">The core engine that processes everything &mdash; your messages, monitor events, task completions.</p>
+
+        <div class="card">
+            <div class="code-block">
+<span class="keyword">do</span> {
+  <span class="keyword">await</span> <span class="func">processNextItem</span>();        <span class="comment">// dequeue + handle (API call, etc.)</span>
+  hasMore = <span class="keyword">false</span>;
+
+  <span class="keyword">let</span> runningTasks = <span class="func">getRunningTasks</span>();   <span class="comment">// monitors, agents, bg bash</span>
+  <span class="keyword">let</span> moreInQueue = <span class="func">peekQueue</span>() !== <span class="keyword">undefined</span>;
+
+  <span class="keyword">if</span> (runningTasks || moreInQueue) {
+    hasMore = <span class="keyword">true</span>;
+    <span class="keyword">if</span> (!moreInQueue) <span class="keyword">await</span> <span class="func">sleep</span>(<span class="number">100</span>);   <span class="comment">// poll every 100ms while tasks run</span>
+  }
+} <span class="keyword">while</span> (hasMore);
+
+<span class="comment">// Loop exits = Claude is idle</span>
+<span class="comment">// New queue items restart it</span>
+            </div>
+
+            <div class="insight">
+                <p><strong>The 100ms poll is critical.</strong> When monitors are running but the queue is empty, the loop sleeps 100ms and checks again. This keeps Claude "awake" to catch events without busy-waiting. The moment a stdout line hits the queue, the next poll picks it up.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Safety Rails -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">07</span>
+            <h2>Safety Rails</h2>
+        </div>
+        <p class="section-desc">Everything that prevents the system from going off the rails.</p>
+
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Protection</th>
+                        <th>Limit</th>
+                        <th>What Happens</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Token bucket</td>
+                        <td><code>10</code> burst, <code>1/2s</code> refill</td>
+                        <td>Events suppressed, warning sent</td>
+                    </tr>
+                    <tr>
+                        <td>Sustained flood kill</td>
+                        <td><code>30s</code> of overflow</td>
+                        <td>Monitor auto-killed with guidance</td>
+                    </tr>
+                    <tr>
+                        <td>Line truncation</td>
+                        <td><code>500</code> chars per line</td>
+                        <td>Truncated with "...(truncated)"</td>
+                    </tr>
+                    <tr>
+                        <td>Batch truncation</td>
+                        <td><code>3,000</code> chars per flush</td>
+                        <td>Excess content dropped</td>
+                    </tr>
+                    <tr>
+                        <td>Buffer limit</td>
+                        <td><code>1 MB</code> internal buffer</td>
+                        <td>Oldest data dropped</td>
+                    </tr>
+                    <tr>
+                        <td>Default timeout</td>
+                        <td><code>5 min</code> (max 1 hour)</td>
+                        <td>"Monitor timed out &mdash; re-arm if needed"</td>
+                    </tr>
+                    <tr>
+                        <td>SDK event buffer</td>
+                        <td><code>1,000</code> entries</td>
+                        <td>Oldest events dropped via shift()</td>
+                    </tr>
+                    <tr>
+                        <td>Task eviction</td>
+                        <td><code>30s</code> after completion</td>
+                        <td>Task entry removed from state</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Full Pipeline -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">08</span>
+            <h2>Full Pipeline: stdout to Response</h2>
+        </div>
+        <p class="section-desc">The complete journey of a single stdout line.</p>
+
+        <div class="card">
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <div class="pipeline-line">
+                        <div class="pipeline-dot" style="background: var(--green);"></div>
+                        <div class="pipeline-connector"></div>
+                    </div>
+                    <div class="pipeline-content">
+                        <h4>1. Script emits stdout line</h4>
+                        <p>Your shell script writes to stdout.</p>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-line">
+                        <div class="pipeline-dot" style="background: var(--cyan);"></div>
+                        <div class="pipeline-connector"></div>
+                    </div>
+                    <div class="pipeline-content">
+                        <h4>2. onStdout callback fires</h4>
+                        <p>Shell process stdout handler receives raw bytes.</p>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-line">
+                        <div class="pipeline-dot" style="background: var(--blue);"></div>
+                        <div class="pipeline-connector"></div>
+                    </div>
+                    <div class="pipeline-content">
+                        <h4>3. Debouncer batches (200ms window)</h4>
+                        <p>Lines within 200ms are grouped into one notification.</p>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-line">
+                        <div class="pipeline-dot" style="background: var(--accent);"></div>
+                        <div class="pipeline-connector"></div>
+                    </div>
+                    <div class="pipeline-content">
+                        <h4>4. Token bucket checks</h4>
+                        <p>Token available? Pass. Empty? Suppress. 30s sustained? Kill.</p>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-line">
+                        <div class="pipeline-dot" style="background: var(--orange);"></div>
+                        <div class="pipeline-connector"></div>
+                    </div>
+                    <div class="pipeline-content">
+                        <h4>5. Wrapped in XML</h4>
+                        <p>Builds <code>&lt;task-notification&gt;</code> with <code>&lt;summary&gt;</code> and <code>&lt;event&gt;</code> tags.</p>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-line">
+                        <div class="pipeline-dot" style="background: var(--yellow);"></div>
+                        <div class="pipeline-connector"></div>
+                    </div>
+                    <div class="pipeline-content">
+                        <h4>6. Pushed to shared queue</h4>
+                        <p>Same queue as your messages, <code>priority: "next"</code>.</p>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-line">
+                        <div class="pipeline-dot" style="background: var(--pink);"></div>
+                        <div class="pipeline-connector"></div>
+                    </div>
+                    <div class="pipeline-content">
+                        <h4>7. Conversation loop dequeues</h4>
+                        <p>100ms poll picks up the item.</p>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-line">
+                        <div class="pipeline-dot" style="background: var(--red);"></div>
+                        <div class="pipeline-connector"></div>
+                    </div>
+                    <div class="pipeline-content">
+                        <h4>8. Injected as user message</h4>
+                        <p>Claude literally sees it as a <code>role: "user"</code> message.</p>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-line">
+                        <div class="pipeline-dot" style="background: var(--green);"></div>
+                        <div class="pipeline-connector" style="background: transparent;"></div>
+                    </div>
+                    <div class="pipeline-content">
+                        <h4>9. Claude responds</h4>
+                        <p>Sees the XML, knows it's not from you, decides whether to react or keep working.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Gate -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-number">09</span>
+            <h2>Feature Gate</h2>
+        </div>
+        <p class="section-desc">Monitor is gated behind a remote feature flag.</p>
+
+        <div class="card">
+            <div class="code-block">
+<span class="comment">// The feature flag check</span>
+<span class="keyword">function</span> <span class="func">isMonitorEnabled</span>() {
+  <span class="keyword">return</span> <span class="func">getFeatureFlag</span>(<span class="string">"tengu_amber_sentinel"</span>, <span class="keyword">false</span>);
+}
+
+<span class="comment">// Used in the tool definition</span>
+<span class="func">isEnabled</span>() {
+  <span class="keyword">return</span> <span class="func">isMonitorEnabled</span>();  <span class="comment">// Only shows up if flag is true</span>
+}
+            </div>
+            <p style="color: var(--text-dim); margin-top: 16px;">The flag <code>tengu_amber_sentinel</code> is read from GrowthBook remote config. Defaults to <code>false</code>. The tool is also deferred &mdash; its schema isn't loaded until first invocation, keeping startup fast.</p>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>Reverse-engineered from Claude Code v2.1.98 binary &mdash; <a href="https://youtube.com/@RAmjad">@RAmjad</a></p>
+</div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+            primaryColor: '#7c6aef',
+            primaryTextColor: '#e4e4ef',
+            primaryBorderColor: '#5a4cc0',
+            lineColor: '#4a4a6a',
+            secondaryColor: '#1e1e2e',
+            tertiaryColor: '#12121a',
+            noteBkgColor: '#1a1025',
+            noteTextColor: '#e4e4ef',
+            noteBorderColor: '#5a4cc0',
+            actorBkg: '#1a1025',
+            actorBorder: '#7c6aef',
+            actorTextColor: '#e4e4ef',
+            signalColor: '#e4e4ef',
+            signalTextColor: '#e4e4ef',
+            labelBoxBkgColor: '#12121a',
+            labelBoxBorderColor: '#4a4a6a',
+            labelTextColor: '#e4e4ef',
+            activationBorderColor: '#7c6aef',
+            activationBkgColor: '#1a1025',
+            sequenceNumberColor: '#7c6aef'
+        },
+        sequence: {
+            diagramMarginX: 30,
+            diagramMarginY: 20,
+            actorMargin: 60,
+            width: 180,
+            height: 55,
+            boxMargin: 10,
+            messageMargin: 40,
+            mirrorActors: false,
+            useMaxWidth: true,
+            wrap: true
+        },
+        flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true,
+            curve: 'basis',
+            padding: 20
+        },
+        state: {
+            useMaxWidth: true
+        }
+    });
+</script>
+
+</body>
+</html>

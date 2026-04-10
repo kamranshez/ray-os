@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "42bd8f95d9e703eb",
+        "id": "9044e0636b7009e2",
         "type": "tabs",
         "children": [
           {
-            "id": "acd0d8aab55fa611",
+            "id": "1ccd5b295fe95f97",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -74,8 +74,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 284.5004348754883,
-    "collapsed": true
+    "width": 284.5004348754883
   },
   "right": {
     "id": "99b289f72ba3f8e1",
@@ -179,23 +178,31 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "acd0d8aab55fa611",
+  "active": "1ccd5b295fe95f97",
   "lastOpenFiles": [
+    "scrappy-first-excalidraw-picker.md",
+    "CLAUDE.md",
+    "Dashboard.md",
     "socials/youtube/videos/ultrareview-hidden-bug-hunter.md",
+    "socials/youtube/videos/5-skills-i-use-everyday.md",
+    "socials/youtube/videos/ultraplan.md",
+    "Ideas.md",
+    "artefacts/revenue-actions.md",
+    "socials/youtube/videos/javascript-tool.md",
+    "socials/youtube/videos/btw-and-fork.md",
+    "socials/youtube/videos/auto-dream-memory-consolidation.md",
+    "socials/youtube/videos/claude-code-channels.md",
+    "socials/youtube/videos/claude-code-leak.md",
+    "socials/youtube/videos/skills-2.0.md",
+    "socials/youtube/video-ideas",
     "projects/agentic-coding-school/to-film/claude-code/auto-research-karpathy-loop.md",
     "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_15.png",
     "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_14.png",
     "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_13.png",
     "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_12.png",
     "projects/agentic-coding-school/to-film/claude-code/images/how-it-works/excalidraw_11.png",
-    "socials/youtube/videos/ultraplan.md",
-    "socials/youtube/videos/skills-2.0.md",
     "socials/youtube/videos/cloud-scheduled-tasks.md",
     "socials/youtube/videos/claude-code-workflow-scripts.md",
-    "socials/youtube/videos/claude-code-leak.md",
-    "socials/youtube/videos/claude-code-channels.md",
-    "socials/youtube/videos/btw-and-fork.md",
-    "socials/youtube/videos/auto-dream-memory-consolidation.md",
     "socials/youtube/videos/anthropic-skills-playbook.md",
     "socials/youtube/videos/50-tips-for-claude-code.md",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_5.png",
@@ -216,16 +223,9 @@
     "projects/agentic-coding-school/to-film/business/skills-as-team-knowledge-base.md",
     "projects/agentic-coding-school/to-film/business/self-annealing-workflows.md",
     "projects/agentic-coding-school/to-film/business/self-auditing-ai-checks-its-own-work.md",
-    "projects/agentic-coding-school/to-film/business/remotion.md",
-    "projects/agentic-coding-school/to-film/business/overview.md",
-    "projects/agentic-coding-school/to-film/business/linkedin-via-claude-mcp.md",
-    "projects/agentic-coding-school/to-film/business/lead-research-and-outreach.md",
-    "projects/agentic-coding-school/to-film/claude-code/imessage-channel.md",
-    "projects/agentic-coding-school/to-film/business/deep-research-with-exa.md",
     "socials/x/articles/images/ultraplan-thumbnail-v2",
     "socials/x/articles/images/ultraplan-thumbnail",
     "socials/x/articles/images",
-    "images/x-articles/ultraplan-thumbnail-v2",
     "Untitled.canvas"
   ]
 }
