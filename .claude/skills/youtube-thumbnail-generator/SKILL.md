@@ -292,9 +292,9 @@ cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts
 13. Restore face photos from backup
 14. Generate HTML comparison page for user review
 
-### 15 Nate Herk Reference Styles
+### 11 Curated Nate Herk Reference Styles
 
-Always use these references from `research/competitor-thumbnails/nateherk/`:
+These are Ray's hand-picked references from `research/competitor-thumbnails/nateherk/`. Archived refs are in `nateherk/archived/` if needed later.
 
 | # | File | Style | Face? |
 |---|------|-------|-------|
@@ -302,19 +302,15 @@ Always use these references from `research/competitor-thumbnails/nateherk/`:
 | 2 | `X6EGzi9qm3E.jpg` | Folder + `/command` + smiling | Yes |
 | 3 | `LrgfmZkl3nc.jpg` | Icons on black + bold statement | **No** (`--no-face`) |
 | 4 | `Wu67lLD8bB0.jpg` | Icons on black + short phrase | **No** (`--no-face`) |
-| 5 | `pkSxISewcw8.jpg` | Old vs New comparison + face center | Yes |
-| 6 | `ZeJXI2MAhj0.jpg` | BASIC vs PRO + shh face | Yes |
-| 7 | `T6_Ges4j1qY.jpg` | Holding prop/device + bold text | Yes |
-| 8 | `4Zaoo0YbYaw.jpg` | Feature grid on screen + face | Yes |
-| 9 | `mpALXah_PBg.jpg` | Whiteboard numbered list + face | Yes |
-| 10 | `hem5D1uvy-w.jpg` | Screen with flow arrows + face | Yes |
-| 11 | `l1jnOXc52NY.jpg` | Retro game leaderboard/score | Yes |
-| 12 | `vFepZE_wrfg.jpg` | CLI chat input + bold text overlay | Yes |
-| 13 | `BlNJFa3Btm8.jpg` | CLI chat input + "Game Over" style | Yes |
-| 14 | `NDnv16PY2XQ.jpg` | Dark dashboard with stats | Yes |
-| 15 | `vDVSGVpB2vc.jpg` | Folder + agent network diagram | Yes |
+| 5 | `mpALXah_PBg.jpg` | Whiteboard numbered list + face | Yes |
+| 6 | `BlNJFa3Btm8.jpg` | CLI chat input + "Game Over" style | Yes |
+| 7 | `vDVSGVpB2vc.jpg` | Folder + agent network diagram | Yes |
+| 8 | `1EPsUXSManU.jpg` | Pixel art agent diagram + face | Yes |
+| 9 | `27Y44JYXZJ8.jpg` | Dark terminal agent network + face | Yes |
+| 10 | `sboNwYmH3AY.jpg` | Icons on black (Claude + second app) | **No** (`--no-face`) |
+| 11 | `B2Kh_ZoLVTM.jpg` | Icons on black (Claude + Codex) | **No** (`--no-face`) |
 
-When generating a subset (e.g., 7 of 15), randomly select different ones per video for variety.
+When generating a subset (e.g., 5 of 11), randomly select different ones per video for variety.
 
 ### Prompt Construction
 
@@ -331,9 +327,9 @@ a young South Asian man with glasses and naturally straight dark hair — not cu
 
 Expressions that work:
 - **Folder styles**: "warm enthusiastic smile showing teeth, pointing at the folder"
-- **Shh/comparison styles**: "finger on lips in a subtle shh gesture with a knowing expression"
-- **CLI/prop styles**: "big warm smile showing teeth"
-- **Dashboard/flow styles**: "contemplative serious expression"
+- **CLI styles**: "big warm smile showing teeth"
+- **Whiteboard/agent styles**: "warm enthusiastic smile showing teeth"
+- **Network/terminal styles**: "contemplative serious expression"
 
 #### Proven Prompt Template (with-face styles)
 
@@ -345,7 +341,7 @@ On the [OTHER SIDE], a young South Asian man with glasses and naturally straight
 Clean minimal composition optimized for YouTube thumbnail viewing.
 ```
 
-#### Proven Prompt Template (no-face styles — refs #3 and #4)
+#### Proven Prompt Template (no-face styles — refs #3, #4, #10, #11)
 
 ```
 A YouTube thumbnail in the style of the reference image. Pure black background.
@@ -356,7 +352,7 @@ on the right a dark rounded square with a [TOPIC-RELEVANT ICON] and subtle warm 
 No person in the image. Clean minimal composition optimized for YouTube thumbnail viewing.
 ```
 
-Add `--no-face` flag for refs #3 and #4.
+Add `--no-face` flag for refs #3, #4, #10, and #11.
 
 #### What NOT to do
 - Do NOT add code backgrounds, busy conceptual diagrams, or extra elements not in the reference
