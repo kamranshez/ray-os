@@ -289,8 +289,8 @@ cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts
 ```
 
 10. **Save best outputs as golden refs** — if a generation produced a great result for a style that has no golden ref yet, copy it to `research/golden-references/` with a descriptive name including the expression/crop type
-13. Restore face photos from backup
-14. Generate HTML comparison page for user review
+11. Restore face photos from backup
+12. **Auto-open the output folder** — always run `open output/<video-title-kebab>/` in Finder after generation so the user can review immediately
 
 ### 11 Curated Nate Herk Reference Styles
 
@@ -311,6 +311,29 @@ These are Ray's hand-picked references from `research/competitor-thumbnails/nate
 | 11 | `B2Kh_ZoLVTM.jpg` | Icons on black (Claude + Codex) | **No** (`--no-face`) |
 
 When generating a subset (e.g., 5 of 11), randomly select different ones per video for variety.
+
+### Matt Pocock Reference Styles
+
+A second reference set from `research/competitor-thumbnails/mattpocockuk/`. Matt's style is distinct from Nate Herk — warm room lighting, podcast mic visible, educational diagrams with red curved arrow annotations, and handwritten-style text. His top videos get 200K+ views.
+
+**Key styles (all have face + podcast mic on RIGHT):**
+
+| # | File | Style | Views |
+|---|------|-------|-------|
+| 1 | `EJyuu6zlQCg.jpg` | Slash command list + "(my favourite)" annotation | 238K |
+| 2 | `kZ-zzHVUrO4.jpg` | Terminal window + "MY FAVORITE CODING AGENT" | 240K |
+| 3 | `hX7yG1KVYhI.jpg` | Checklist + "Watch Me Work" | 80K |
+| 4 | `WNx-s-RxVxk.jpg` | Flowchart cycle diagram + bold text bottom | 52K |
+| 5 | `Ah9p7v7nJWg.jpg` | Two-column flow diagram (phases/steps) | 35K |
+| 6 | `9tmsq-Gvx6g.jpg` | Big command text + "Don't run this!" | 60K |
+| 7 | `hYZdIwFIy-c.jpg` | Numbered steps (1/2/3) + holding book | 38K |
+| 8 | `uC44zFz7JSM.jpg` | Colored grid diagram + "Is this your codebase?" | 65K |
+| 9 | `yv8VZpov8bk.jpg` | Tweet screenshot + contemplative face | 72K |
+| 10 | `9VNG0h4pLh0.jpg` | AI logos + red arrows + "LIARS" | 32K |
+
+**When to use Matt Pocock refs vs Nate Herk:** Use Matt's style when the thumbnail needs educational diagrams, flowcharts, numbered steps, or slash command lists. Use Nate Herk for folder/icon/studio styles.
+
+**IMPORTANT: Diagrams should look hand-drawn/excalidraw-style** — NOT clean vector/polished boxes. Matt's diagrams have a casual, sketched quality. When writing prompts for diagram thumbnails, specify "hand-drawn excalidraw-style" or "sketched whiteboard-style" for the diagram elements.
 
 ### Prompt Construction
 

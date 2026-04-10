@@ -7,7 +7,9 @@
   },
   "global_feedback": {
     "facial_expressions": "Keep expressions modest and natural \u2014 no exaggerated shock/surprise faces. Contemplative, serious, or subtly concerned work best.",
-    "hairstyle": "Don't make hair too curly \u2014 keep it natural to the reference photos."
+    "hairstyle": "Don't make hair too curly \u2014 keep it natural to the reference photos.",
+    "diagrams": "Diagrams in thumbnails should look hand-drawn/excalidraw-style \u2014 NOT clean vector/polished boxes. Casual sketched quality like Matt Pocock's thumbnails.",
+    "matt_pocock_style": "The Matt Pocock command-list style (slash commands listed vertically with colored text and red arrow annotations) is a favorite. Use this style frequently for /command feature videos."
   },
   "pOsGxVKYd3s/github-card-last-framework.png": {
     "favorite": true,
