@@ -16,6 +16,30 @@ Write scripts for Ray's YouTube channel (@RAmjad) — Claude Code tutorials and 
 2. Read `socials/youtube/improvements.md` in the project root — active production improvements. Apply any that are relevant.
 3. If the video topic relates to an existing script in `socials/youtube/videos/`, read it for context on what's already been covered.
 
+## Before drafting — ask the user 4 upfront questions
+
+These four decisions cascade through the whole script and are cheap to answer upfront but expensive to retrofit. **Ask all four in a single AskUserQuestion batch before writing any prose.** Do not guess — guessing wrong means rewriting the script. If the answers are already unambiguous from context (e.g., the user already said "let's do a pillar" or "newsletter push only"), skip that question, but default to asking.
+
+**Q1 — Format class.** Which template should this video pull from?
+- **Single-feature deep dive** (8-12 min, ~45K view ceiling) — the default for changelogs and feature announcements. Use the /btw, Skills 2.0, or Auto Dream scripts as references.
+- **Thesis / leak / industry take** (caps ~17K views) — flag this ceiling upfront so the user calibrates expectations. These videos optimize for thesis-vs-thesis comparison, not raw view count.
+- **Pillar** (30-45 min lifestyle storytelling, ~20K views but 3.16% masterclass CTR, 5x per-view revenue) — no single-feature anchor; compress multiple techniques into a "how I actually use Claude Code" narrative. Top 0.01% is the template. Aim for ~1 in 5 videos in this format — they're the highest-converting on the channel.
+
+**Q2 — Pitch goal.** Which monetization system is this video serving?
+- **Masterclass** — soft anchor at 1:30 + closing urgency pitch. Requires a real deadline and price change.
+- **Newsletter** — single clean close at the end. No masterclass mention anywhere in the script.
+- **None** — pure growth video, channel trailer, or collab.
+
+**Never stack newsletter + masterclass in one video.** March data is unambiguous: Auto Dream split both weakly and made $6K on 97K views; Kills OpenClaw committed to masterclass only and made $13.7K on 30K views. Stacking was −46% vs single-system pitching. If the user says "both," push back and ask which audience this specific video attracts.
+
+**Q3 — Coined term candidate.** What phrase is this video trying to put into the viewer's vocabulary?
+The top 3 videos by views all coined a term ("context pollution," "capability uplift vs encoded preference," "sleep-deprived agent"). The next 7 top performers did not. If the user can't name a candidate in 10 seconds, pause and brainstorm before drafting — this is the single biggest breakout lever and the hardest to retrofit.
+
+**Q4 — Live deadline + price escalation.** *Only ask if Q2 is masterclass.* What's the concrete deadline and price change to cite in the closing urgency pitch?
+The Kills OpenClaw template requires real numbers: "lifetime plan retires [date], price goes up to [amount] after." If there's no real deadline, fall back to a softer close — don't manufacture fake urgency, the audience can smell it.
+
+Only after all four answers are in hand should you start drafting the script.
+
 ## The Meta-Pattern (what all 3 hits share)
 
 These three scripts look different on the surface — one's about memory, one's about testing, one's about context management. But they share a deep structure that explains why they all broke out. This is the formula.
