@@ -1345,17 +1345,17 @@ Same thumbnail across all (face + /ultrareview folder icon).
 
 | Title | Thumbnail Text | Watch-time Share | Result |
 |-------|---------------|------------------|--------|
-| Anthropic's New Ultrareview Is Coming: What You Need to Know | /ultrareview | 35.2% | Leader (control) |
-| Claude Code's Biggest Review Update Is Coming | /ultrareview | 34.3% | |
-| Anthropic Is Building Ultra Review for Claude Code | /ultrareview | 30.5% | |
+| **Anthropic's New Ultrareview Is Coming: What You Need to Know** | /ultrareview | **36%** | ✅ WINNER (control) |
+| Claude Code's Biggest Review Update Is Coming | /ultrareview | 32.1% | |
+| Anthropic Is Building Ultra Review for Claude Code | /ultrareview | 31.9% | |
 
 **Key takeaways:**
-- R1 leader dropped from 37.3% → 35.2% — early volatility, settling into mid-30s
-- Flat results (4.7% spread) despite three different frames (authority+subtitle, magnitude, feature naming)
-- "Is Building" flopped at 30.5% — passive/in-progress verb lacks urgency. "Is Coming" (R1: 30.4% on "Review 2.0", here: 34.3%) works better than "Is Building" for anticipation
-- "Biggest Review Update Is Coming" magnitude framing competitive at 34.3% without Anthropic authority — mirrors V5 (37.1%) and V20 R1 (34.2%) pattern
-- Two rounds of diverse title frames producing ~30-37% range — not fully flat but narrowing
-- **Diagnosis:** Title testing exhausted. Locking in **"Anthropic's New Ultrareview Is Coming: What You Need to Know"** as the title and moving on
+- R1 leader dropped from 37.3% → 36% — settling into mid-30s after early volatility, but still the control winner across both rounds
+- **4.1 point spread** despite three different frames (authority+subtitle, magnitude, feature naming) — narrow margin suggests the thumbnail is likely capping this test, not the titles
+- "Is Building" at 31.9% — passive/in-progress verb lacks urgency. "Is Coming" (R1: 30.4% on "Review 2.0", R2: 32.1% on "Biggest") consistently beats "Is Building" by ~1-2 points for anticipation framing
+- "Biggest Review Update Is Coming" dropped from R1-adjacent expectations to 32.1% — magnitude framing without Anthropic authority plateaus around mid-pack, mirrors V5 and V20 R1 pattern but weaker than earlier readings predicted
+- Both challengers now converging at ~32% — less "diverse frames producing similar results" and more "challengers drifting toward the floor while control holds"
+- **Diagnosis:** Title testing exhausted across two rounds. Locking in **"Anthropic's New Ultrareview Is Coming: What You Need to Know"** as the title. **Thumbnail is the likely ceiling** — worth testing Matt Pocock style variations on the locked title. Generating 10 now for thumbnail R1 (see `references/thumbnails/v21-ultrareview/`)
 
 ---
 
