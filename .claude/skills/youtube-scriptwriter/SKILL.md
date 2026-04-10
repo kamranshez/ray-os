@@ -42,11 +42,12 @@ Ask yourself: "What does this feature do that humans also do?" Build the video a
 
 ### 3. 3-Beat Hook (first 20-30 seconds)
 
-**Use discovery framing, not announcement framing.** The top 3 all start from Ray's personal experience discovering or using the feature:
-- Auto-dream (94k): "I was just doing some vibe coding and I noticed Claude Code did something really weird"
-- btw/fork (39k): "Claude just dropped a feature I didn't even realize I wanted"
+**Use discovery framing, not announcement framing.** March 2026 confirmed this pattern hard. Every March video that opened with personal discovery beat its peers:
+- Auto Dream (97K views): "I was just doing some vibe coding and I noticed something weird"
+- /btw (39K views): "Claude Code added a feature I didn't even realize I needed"
+- Kills OpenClaw (30K, **$13,776 — best revenue of the month**): "I woke up a few minutes ago and checked the changelog"
 
-The mid-tier videos (25-35k) start with the announcement: "A few hours ago, Anthropic released..." / "I woke up and checked the updates." Discovery framing ("I stumbled onto this") makes viewers lean in. Announcement framing ("here's the news") makes them evaluate whether to stay.
+Mid-tier March videos that opened with "Anthropic Just Dropped X" verbally (even when the title used that phrase) averaged 30–60% fewer views than the discovery-framed ones. The title can say "Anthropic Just Dropped X" — the spoken opening cannot. Discovery framing ("I stumbled onto this") makes viewers lean in. Announcement framing ("here's the news") makes them evaluate whether to stay.
 
 Every script opens with three beats:
 - **Discovery or novelty signal** — frame it as something Ray found, not something Anthropic announced
@@ -93,9 +94,33 @@ This is the section that makes people subscribe. It shows Ray isn't just parroti
 
 Brief, actionable. Where to enable it, what to configure, what it means for their workflow. Keep it short — the value was already delivered.
 
-### 8. Single CTA at End (last 30s)
+### 8. The Pitch Layer (separate from content structure)
 
-One call to action, naturally connected to the topic. No mid-roll CTAs. The auto-dream script tied its CTA to "learn more about memory and context management in the masterclass."
+Content structure is optimized for *views*. The pitch layer is optimized for *revenue*. They are different systems and must be planned separately. March 2026 data settled this:
+
+| Pitch tactic | With | Without | Delta |
+|---|---:|---:|---:|
+| Masterclass CTA in first 90 seconds | $11,687 avg | $4,692 avg | **+149%** |
+| Urgency + price escalation language | $13,776 (Mar 7) | $5,880 avg | **+134%** |
+| "Best at their company" social proof | $12,142 (Skills 2.0) | $6,064 avg | **+100%** |
+| Newsletter-first closing | $4,601 avg | $8,489 avg | **−46%** |
+
+**The old "single CTA at end, no mid-roll CTAs" rule was costing revenue.** Auto Dream followed that rule on 97K views and made only $6,029. Kills OpenClaw broke it (mid-video soft anchor + closing urgency pitch) and made $13,776 on 30K views.
+
+**Apply the Mar 7 template to every regular video:**
+
+**Soft anchor at 1:30–2:00** (after the hook lands, before the deep dive):
+> "Before we continue — this video is sponsored by myself and my Claude Code Masterclass. Over 1,500 engineers from companies like [X] have taken it and many are now the best Claude Code user at their company. The lifetime plan retires [date] and the price is going up after that. Link below."
+
+**Closing urgency pitch** (tied to the video topic):
+> "So [feature summary]. If you want to go deeper on this, the Masterclass covers [specific deliverable]. The lifetime plan is gone after [date] and the price goes up. Link below."
+
+**Rules:**
+- Never newsletter-first on videos with a live masterclass deadline (March penalty: −46%)
+- Always include a concrete deadline + price escalation, not a vague "check it out"
+- Tie the closing pitch to a specific deliverable the video hinted at
+- One pitch system at a time. If newsletter is the goal, skip the masterclass pitch entirely rather than stacking both weakly (Auto Dream's mistake)
+- If a video crosses 30K views in 48 hours and the pitch was weak, **add a pinned comment with urgency + masterclass link**. Auto Dream would have captured ~$14K more with this single action.
 
 ## Adapting the Formula by Scope
 
@@ -110,6 +135,7 @@ The three hits show the formula scales to different video lengths:
 - **8-10 min (tight)**: Skip the full demo. Use the broader trend OR the original insight, not both. btw/fork is the template.
 - **10-12 min (standard)**: Include the broader trend section AND either a demo or a deeper original analysis. Auto-dream is the template.
 - **12+ min (deep)**: Full demo walkthrough + broader trend + original critique. Skills 2.0 is the template.
+- **30-45 min (pillar)**: Lifestyle storytelling opening, no single-feature anchor, compress multiple techniques into one "how I actually use Claude Code" narrative. **Mar 2 Top 0.01% (41:31) is the template — it had a 3.16% site click-through rate, 4–5x any single-feature video in March, and produced $10K revenue on only 20K views.** Open with memorable lifestyle stories (Claude Code reverse-engineered a dating app API, script to auto-reconnect to Starbucks WiFi). Use for ~1 in 5 videos — it's the highest-converting format the channel has.
 
 ## Pacing Guidelines (from improvements.md)
 
@@ -121,9 +147,12 @@ The three hits show the formula scales to different video lengths:
 
 ## What NOT to Do
 
-- **No feature roundups.** Focused single-feature videos average 25% more views. If the announcement has 5 features, pick the most interesting one.
-- **No abstract intros.** Don't open with "In today's video we're going to..." — open with the hook.
-- **No stacked CTAs.** One at the end. That's it.
+- **No feature roundups.** Focused single-feature videos averaged 45K views in March vs 17K for thesis/leak/pillar formats — **a 2.6x gap.** If the announcement has 5 features, pick the most interesting one.
+- **No "Anthropic Just Dropped X" spoken openings.** The title can use that framing; the first spoken line cannot. Every March video with an announcement-style verbal opening underperformed the discovery-framed peers on the same week by 30–60%.
+- **No abstract intros.** Don't open with "In today's video we're going to..." — open with the discovery beat.
+- **No repeated title templates within 60 days.** "Nobody Knew They Needed" was used twice in March (/btw Mar 11 at 39K → Auto Dream Mar 24) and once in Feb. Reuse compresses the novelty signal. Track recent titles before proposing a new one.
+- **No newsletter-first closings on videos with a live masterclass deadline.** March penalty: −46% revenue. Newsletter-first averaged $4,601 per video; masterclass-first averaged $8,489.
+- **No stacking 3 uploads in 3 days.** Mar 19/20/21 combined drove $8,500 across 5 unique days — less than the single Mar 11 /btw upload ($8,788 on its own). Overlapping 3-day windows cannibalize each other.
 - **No slides-first approach.** Write the script first, plan visuals second. The verbal explanation carries the video; visuals support it.
 
 ## Output Format
