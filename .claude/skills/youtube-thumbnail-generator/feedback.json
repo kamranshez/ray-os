@@ -1,15 +1,18 @@
 {
   "preferred_style": {
-    "name": "GitHub repo card",
-    "description": "GitHub repository/PR/issue card on light background with face on right side. Inspired by Nick Saraev (4Cb_l2LJAW8). Uses fake repo names, descriptions, and stats to create curiosity. Face expression is contemplative or surprised \u2014 NOT exaggerated/crazy reactions.",
-    "reference": "4Cb_l2LJAW8",
-    "example": "pOsGxVKYd3s/github-card-last-framework.png"
+    "name": "Matt Pocock structured explainer",
+    "description": "Left half pure black with structured explainer content (diagram, comparison, or fake UI mockup). Right half warm dark bedroom with Ray in black tee or white collared long-sleeve, Shure SM7B mic from bottom-right. Hand-drawn excalidraw font, colored rounded-square Kanban icons, red/green/orange semantic palette. 3 sub-families: structural, comparative, mockup.",
+    "reference_dir": "research/golden-references/matt-style/",
+    "secondary_style": "Nate Herk (folder + /command studio) \u2014 research/golden-references/nate-style/"
   },
   "global_feedback": {
-    "facial_expressions": "Keep expressions modest and natural \u2014 no exaggerated shock/surprise faces. Contemplative, serious, or subtly concerned work best.",
-    "hairstyle": "Don't make hair too curly \u2014 keep it natural to the reference photos.",
-    "diagrams": "Diagrams in thumbnails should look hand-drawn/excalidraw-style \u2014 NOT clean vector/polished boxes. Casual sketched quality like Matt Pocock's thumbnails.",
-    "matt_pocock_style": "The Matt Pocock command-list style (slash commands listed vertically with colored text and red arrow annotations) is a favorite. Use this style frequently for /command feature videos."
+    "facial_expressions": "Keep expressions modest and natural \u2014 warm genuine smile, knowing smirk, or contemplative. NEVER exaggerated shock, surprise, or crazy reactions.",
+    "hairstyle": "Don't make hair too curly or wavy \u2014 keep it naturally straight to match the reference photos exactly.",
+    "outfit": "Black t-shirt OR plain white collared long-sleeve shirt only. No plaid, no beige, no patterns, no yellow, no graphic tees.",
+    "diagrams": "Diagrams should look hand-drawn/excalidraw-style \u2014 NOT clean vector/polished boxes. Casual sketched quality.",
+    "matt_style_palette": "Use 3-color semantic palette: red=old/bad, green=new/good, orange=hero highlight. White/gray for neutral labels.",
+    "matt_style_accents": "Red curved hand-drawn arrow used exactly ONCE per thumbnail. Yellow handwritten (parenthetical) annotation used sparingly. Bold white-on-black pill callout optional.",
+    "anti_patterns": "Never use: metaphor illustrations (cameras, bells, zzz clouds, cartoons), giant single-word typography as only element, crossed-out/X-marked commands, retro pixel terminal, chaos grids, scatter plots, dense >6-item compositions."
   },
   "pOsGxVKYd3s/github-card-last-framework.png": {
     "favorite": true,
