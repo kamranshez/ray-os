@@ -1357,4 +1357,49 @@ Same thumbnail across all (face + /ultrareview folder icon).
 - Two rounds of diverse title frames producing ~30-37% range — not fully flat but narrowing
 - **Diagnosis:** Title testing exhausted. Locking in **"Anthropic's New Ultrareview Is Coming: What You Need to Know"** as the title and moving on
 
+---
+
+## Video 22: Claude Code /advisor Command
+
+**Published:** 2026-04-10
+**Thumbnail:** Face + /advisor folder icon (same visual language as V18 /dream, V19 /leaked, V20 /ultraplan)
+
+### Title A/B Test Round 1 (2026-04-10)
+
+Same thumbnail across all (face + /advisor folder icon).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| Anthropic Just Dropped the Feature That Makes Sonnet Feel Like Opus | /advisor | **35.9%** | Leader |
+| Anthropic Just Fixed Claude Code's Biggest Blind Spot | /advisor | 34.3% | |
+| This Claude Code Command Will Save You Hours on Hard Problems | /advisor | 29.8% | |
+
+**Key takeaways:**
+- 6.1% spread — title frame matters, not a thumbnail bottleneck
+- "Anthropic Just Dropped" + transformation frame leads at 35.9% — consistent with dominant formula
+- "Biggest Blind Spot" problem framing competitive at 34.3% — "Fixed + problem" working as usual
+- "This Claude Code Command" without Anthropic authority flopped at 29.8% — confirms Anthropic authority is non-negotiable (same pattern across V12, V13, V14, V15, V16, V21)
+- Both Anthropic-prefixed titles (35.9%, 34.3%) vs non-Anthropic (29.8%) — 5-6 point authority tax confirmed again
+- 35.9% is a solid but not breakaway leader — below the 40%+ ceiling hit by strongest performers. Need Round 2 with proven high-performing frames ("Nobody Knew", "Internal")
+- Round 2 should test: "Nobody Knew They Needed" (proven 46.8% on V14), "Internal" framing (proven 49.4% on V15), and keep leader as control
+
+### Title A/B Test Round 2 (2026-04-10)
+
+Same thumbnail across all (face + /advisor folder icon).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Anthropic Just Dropped the Feature That Makes Sonnet Feel Like Opus** | /advisor | **44%** | ✅ WINNER (auto-declared, visible to all viewers) |
+| Anthropic Just Added Something That Gets More Powerful When Mythos Releases | /advisor | 32.3% | |
+| Claude Code Now Asks a Stronger Model When It Gets Confused | /advisor | 23.8% | |
+
+**Key takeaways:**
+- R1 leader surged from 35.9% → 44% — early volatility confirmed again, transformation frame is the clear winner
+- YouTube auto-declared at 44% — strong result, approaching V14 (46.8%) and V15 (49.4%) peaks
+- Mythos/future-tension frame (32.3%) — decent hypothesis test but 11.7 points behind winner. Forward-looking frames don't convert as well as present-tense drops
+- Behavior frame "Now Asks a Stronger Model When It Gets Confused" flopped at 23.8% — two anti-patterns stacked: no Anthropic authority + descriptive behavior framing (reads like an explanation, not news)
+- **New insight (Mythos framing):** "Gets More Powerful When Mythos Releases" is too conditional/future — viewers can't act on it now, reducing urgency. Present-tense transformation beats future-conditional
+- **Confirmed insight:** Transformation frame ("Makes X Feel Like Y") is a strong novel formula — creates a clear before/after in the viewer's mind without being a comparison title
+- **Status:** Final. Locking in **"Anthropic Just Dropped the Feature That Makes Sonnet Feel Like Opus"** as the title.
+
 **Status:** Final. Locking in title. Video likely has a topic/packaging ceiling in the mid-30s range.
