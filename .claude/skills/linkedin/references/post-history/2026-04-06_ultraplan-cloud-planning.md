@@ -7,10 +7,11 @@ triggers:
 media: video
 status: posted
 engagement:
-  reactions: null
-  comments: null
-  reposts: null
-  impressions: 3
+  reactions: 10
+  comments: 1
+  reposts: 1
+  impressions: 545
+  last_checked: 2026-04-10
 url: https://www.linkedin.com/feed/update/urn:li:activity:7446751274181771264/
 video: UNhA17l6CWw
 notes: Post 1 chosen from Ultraplan batch. Introduces Ultraplan as a feature, teases hidden planners for video click. First comment links to video.
