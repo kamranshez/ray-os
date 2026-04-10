@@ -7,6 +7,8 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::selection { background: rgba(192,128,96,0.45); color: #fff; text-shadow: none; }
+        ::-moz-selection { background: rgba(192,128,96,0.45); color: #fff; text-shadow: none; }
         :root {
             --page-bg: #1c1c20; --page-text: #e2e2e6; --page-dim: #6a6a74; --page-muted: #44444e;
             --badge-color: #c08060; --badge-border: rgba(192,128,96,0.45); --badge-bg: rgba(192,128,96,0.08);
@@ -102,18 +104,18 @@
                 <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/project</span></div>
                 <div class="term-body">
                     <div class="term-content">
-                        <span class="p">monitor the Vercel deploy and let me know when it's ready</span>
-                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"Vercel deploy status"</span><span class="c-dim">)</span></span>
-                        <span class="sub c-dim">Monitor started &middot; task brovgltib &middot; timeout 300s</span>
+                        <span class="p">start the dev server and watch for errors while I work on the auth feature</span>
+                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"dev server errors"</span><span class="c-dim">)</span></span>
+                        <span class="sub c-dim">Monitor started &middot; persistent &middot; task dev4k7</span>
                         <span class="sgap"></span>
-                        <span class="ln c-text"><span class="b"></span>Monitoring &mdash; I'll let you know when it's ready.</span>
+                        <span class="ln c-text"><span class="b"></span>Dev server running. I'll catch errors as they happen.</span>
                         <span class="sgap"></span>
-                        <span class="ln c-dim" style="font-style:italic">&#10070; Saut&eacute;ed for 52s &middot; 1 monitor still running</span>
+                        <span class="ln c-dim" style="font-style:italic">&#10070; Working on auth feature &middot; 1 monitor running</span>
                         <span class="sgap"></span>
-                        <span class="ln"><span class="b c-green">Monitor event:</span> <span class="c-green">"Vercel deploy status"</span></span>
-                        <span class="sub c-dim">14:32:15 status Ready</span>
+                        <span class="ln"><span class="b c-red">Monitor event:</span> <span class="c-red">"dev server errors"</span></span>
+                        <span class="sub c-text">Error: Cannot read properties of undefined (reading 'userId')</span>
                         <span class="gap"></span>
-                        <span class="ln c-text"><span class="b"></span>Deploy is <span class="c-green">ready</span>. All good.</span>
+                        <span class="ln c-text"><span class="b"></span>Session is undefined when no cookie is set &mdash; patching <span class="c-green">auth.ts:42</span> now.</span>
                     </div>
                     <div class="term-footer">
                         <span class="prompt-bottom"><span class="cursor"></span></span>
@@ -434,36 +436,46 @@
     <div class="slide-footer"><span>&larr; &rarr; to navigate</span><span>6 / 13</span></div>
 </div>
 
-<!-- ===== 7: DEV SERVER WATCHER ===== -->
+<!-- ===== 7: VERCEL DEPLOY WATCHER ===== -->
 <div class="slide" data-n="7">
     <div class="slide-body">
         <div class="slide-left">
             <div class="badge">DEEP DIVE</div>
             <span class="uc-label uc-stream">STREAM</span>
-            <div class="slide-title">Dev Server Watcher</div>
-            <div class="slide-desc">Start your dev server and have Claude watch for errors while you keep coding. It diagnoses issues as they appear.</div>
+            <div class="slide-title">Vercel Deploy Watcher</div>
+            <div class="slide-desc">Stream every stage of a deploy &mdash; queued, building, notices, ready. Claude jumps in the moment something looks off, not just at the end.</div>
         </div>
         <div class="slide-right">
             <div class="terminal">
-                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/api-server</span></div>
+                <div class="term-header"><div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div><span class="term-path">claude &middot; ~/web-app</span></div>
                 <div class="term-body">
                     <div class="term-content">
-                        <span class="p">start the dev server and watch for errors while I work on the auth feature</span>
-                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"dev server errors"</span><span class="c-dim">)</span></span>
-                        <span class="sub c-dim">command: npm run dev 2>&1 | grep --line-buffered -iE "error|exception|crash"</span>
-                        <span class="sub c-dim">Monitor started &middot; persistent &middot; task dev4k7</span>
+                        <span class="p">watch the Vercel deploy for my PR and tell me every stage</span>
+                        <span class="ln"><span class="b c-tool">Monitor</span><span class="c-dim">(</span><span class="c-green">"Vercel deploy status"</span><span class="c-dim">)</span></span>
+                        <span class="sub c-dim">command: vercel inspect --wait $URL 2>&1 | grep --line-buffered -iE "status|warn|error|notice|ready"</span>
+                        <span class="sub c-dim">Monitor started &middot; timeout 600s &middot; task vrc7x2</span>
                         <span class="sgap"></span>
-                        <span class="ln c-text"><span class="b"></span>Dev server running. I'll catch errors as they happen.</span>
+                        <span class="ln c-text"><span class="b"></span>Watching the deploy. I'll stream each stage.</span>
                         <span class="sgap"></span>
-                        <span class="ln c-dim" style="font-style:italic">&#10070; Working on auth feature &middot; 1 monitor running</span>
+                        <span class="ln"><span class="b c-dim">Monitor event:</span> <span class="c-dim">queued</span></span>
+                        <span class="sub c-dim">14:31:02 status Queued &middot; waiting for build slot</span>
                         <span class="sgap"></span>
-                        <span class="ln"><span class="b c-red">Monitor event:</span> <span class="c-red">"dev server errors"</span></span>
-                        <span class="sub c-text">Error: Cannot read properties of undefined (reading 'userId')</span>
+                        <span class="ln"><span class="b c-orange">Monitor event:</span> <span class="c-orange">building</span></span>
+                        <span class="sub c-dim">14:31:18 status Building &middot; installing deps</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="b c-orange">Monitor event:</span> <span class="c-orange">notice</span></span>
+                        <span class="sub c-text">WARN 3 packages are looking for funding &middot; bundle size +12kb vs main</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="b c-red">Monitor event:</span> <span class="c-red">issue</span></span>
+                        <span class="sub c-text">Type error: Property 'userId' does not exist on type 'Session'</span>
+                        <span class="sub c-dim">src/middleware/auth.ts:42:24</span>
                         <span class="gap"></span>
-                        <span class="ln"><span class="b c-tool">Read</span><span class="c-dim">(src/middleware/auth.ts:42)</span></span>
-                        <span class="sub c-dim">const userId = req.session.userId</span>
+                        <span class="ln c-text"><span class="b"></span>Build is failing on a TS error in auth.ts. Patching it now so the deploy can retry.</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="b c-green">Monitor event:</span> <span class="c-green">ready</span></span>
+                        <span class="sub c-dim">14:33:47 status Ready &middot; https://web-app-git-pr-142.vercel.app</span>
                         <span class="gap"></span>
-                        <span class="resp">Session object is undefined when no cookie is set. Adding a null check at line 42 now.</span>
+                        <span class="resp">Deploy is <span class="c-green">ready</span> after the auth.ts fix. Preview URL above.</span>
                     </div>
                     <div class="term-footer">
                         <span class="prompt-bottom"><span class="cursor"></span></span>
@@ -688,10 +700,6 @@ document.addEventListener('keydown', e => {
     else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
     else if (e.key === 'Home') go(0);
     else if (e.key === 'End') go(total - 1);
-});
-document.addEventListener('click', e => {
-    if (e.clientX > window.innerWidth * 0.55) go(current + 1);
-    else if (e.clientX < window.innerWidth * 0.45) go(current - 1);
 });
 let tx = 0;
 document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
