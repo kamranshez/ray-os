@@ -114,7 +114,11 @@ notes: null
 The full post text here...
 ```
 
-3. Ask: "Want me to post this, or are you posting yourself?"
-   - If Claude posts → see `references/browser-navigation.md`
-   - Update status to `posted` once confirmed
-4. Add a todo to `todos.yaml` to check engagement in 3 days
+3. Ask: "Want me to post this, or are you posting yourself? Or save as a draft to come back to later?"
+   - If Claude posts → see `references/browser-navigation.md`, then update status to `posted` once confirmed
+   - If the user is posting themselves → update status to `posted` once they confirm it's live
+   - If saving as a draft → keep status as `draft` and add a todo to `todos.yaml` (see below) so it surfaces on the next skill invocation
+4. Update `todos.yaml` in the skill root (NOT any global todos file):
+   - For posted posts → add an entry to check engagement in 3 days (`due: <today + 3>`)
+   - For drafts → add an entry to finalize and post the draft, with `related_post` pointing to the post-history file
+   - When a todo is completed, flip `status: done` or remove it — don't let completed entries accumulate

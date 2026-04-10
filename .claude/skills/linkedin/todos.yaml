@@ -1,0 +1,21 @@
+# LinkedIn skill todos — drafts to finalize, posts to check engagement on, follow-ups.
+# Read this file at the start of every linkedin skill invocation and surface
+# anything overdue or pending before taking the user's request.
+#
+# Schema per entry:
+#   task: short title
+#   description: longer context, include file paths if relevant
+#   due: YYYY-MM-DD or TBD
+#   status: pending | in_progress | blocked | done
+#   related_post: (optional) path to draft in references/post-history/
+
+- task: Finalize and post /monitor LinkedIn draft
+  description: >
+    Post 9 from the /monitor batch — aspiration angle, "walking away from
+    production logs." Ray saved it as a draft and wants to review before posting.
+    When resuming: review the copy, attach the /monitor video clip, then post
+    via the linkedin skill and flip status from `draft` → `posted` in the
+    post-history file.
+  due: 2026-04-12
+  status: pending
+  related_post: references/post-history/2026-04-10_monitor-walk-away.md
