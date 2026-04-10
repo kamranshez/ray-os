@@ -1421,7 +1421,25 @@ Same title across all 3: "Anthropic Just Dropped the Feature That Makes Sonnet F
 - **New insight — context-of-family framing:** Showing /advisor *among* other slash commands makes it feel inevitable and native to Claude Code, rather than a one-off novelty. Viewers recognize /plan etc. and trust-by-association
 - This style is worth retesting on future slash-command videos (/dream, /leaked, /ultraplan, /ultrareview) to see if the family-context pattern generalizes
 
-**Status:** Final. Locking in title. Video likely has a topic/packaging ceiling in the mid-30s range.
+### Thumbnail A/B Test Round 2 (2026-04-10) — BEFORE/AFTER excalidraw vs command list control vs three-column structural
+
+Title locked: "Anthropic Just Dropped the Feature That Makes Sonnet Feel Like Opus"
+
+| Thumbnail | Text | Watch-time | Notes |
+|-----------|------|-----------|-------|
+| **Face + excalidraw BEFORE/AFTER /advisor split (stuck Claude → fixed result with green arrow)** | BEFORE / AFTER /advisor | **37.2%** | ✅ NEW WINNER |
+| *(R1 winner)* Face + excalidraw command list with "this one is new" | /advisor /plan /review /worktree | 34.5% | ↓ from 41.1% |
+| Face + structured three-column bento of colored concept blocks | (three-column structural) | 28.3% | |
+
+**Key takeaways:**
+- **New winning format: BEFORE/AFTER excalidraw split** — literal visualization of the transformation the title promises. "Makes Sonnet Feel Like Opus" (title) + stuck→fixed visual (thumbnail) = perfect complementarity
+- **Transformation visualization principle:** when the title promises a state change, the thumbnail should *show* the state change. Split-panel before/after is a clean instantiation of this
+- Command list (R1 winner) dropped from 41.1% → 34.5% when tested against a stronger format — the family-context insight still holds, it just met a better fit for this specific title
+- Two excalidraw/hand-drawn styles took top two spots (71.7% combined share) — hand-drawn whiteboard aesthetic dominates for feature explainers on this channel
+- Three-column structural flopped at 28.3% — too busy, no single focal point, structural formats need a clearer primary question beat
+- **Worth retesting** before/after excalidraw on future upgrade/unlock videos (version bumps, new capabilities) where transformation is the promise
+
+**Status:** Final. Locking in BEFORE/AFTER excalidraw thumbnail + "Makes Sonnet Feel Like Opus" title.
 
 ---
 
@@ -1455,4 +1473,29 @@ Same thumbnail across all (v3-06: face + /monitor flowchart with Error/Warn/Fail
 **Thumbnail note:** v3-06 is a tutorial-flavored concept visual (flowchart explaining the mechanism). Paired well with the news control because the thumbnail explains *what* while the title drives *why-you-should-click*. See `references/thumbnails/v23-monitor-tool/`
 
 **Status:** Strong signal. Lock in winner or run R2 with stronger Anthropic-authority frames to push past 39%?
+
+### Title A/B Test Round 2 (2026-04-10) — Pocock voice + explicit release verb framing
+
+Hypothesis: R1 showed Pocock-style personal adoption ("I'm using... for everything now") landed at 33.3% but couldn't beat news authority. What if we keep the Pocock terse voice but swap personal adoption for an explicit **release verb** ("shipped", "is here") — treating the feature as news, but in Pocock's short declarative style instead of Anthropic formal?
+
+Same thumbnail across all (v3-06 face + /monitor flowchart).
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Claude Code just shipped the monitor tool** | /monitor flowchart | **37.2%** | ✅ WINNER |
+| Anthropic Just Dropped the Feature Nobody Knew They Needed | /monitor flowchart | 31.4% | (control, R1 leader) |
+| Claude Code's monitor tool is here, and it's a game-changer | /monitor flowchart | 31.3% | |
+
+**Key takeaways:**
+- **Major result: Pocock-voice + release verb ("just shipped") beat the proven Anthropic control by 5.8 points** — first time "Nobody Knew They Needed" has underperformed a tested challenger
+- **Control dropped from 39% (R1) → 31.4% (R2)** — more evidence of early-round volatility on "Nobody Knew" frame. The R1 39% was likely optimistic; settling into low-30s when paired with stronger challengers
+- **"Claude Code just shipped the monitor tool" at 37.2%** — naming the feature directly + an active release verb works. "shipped" is concrete, past-tense, and implies the thing is usable right now. This is the Pocock-style terse news frame Ray's audience actually wants
+- **"is here, and it's a game-changer" flopped at 31.3%** — comma-clause construction + "game-changer" reads as hype/marketing copy, not news. Confirms anti-pattern: vague evaluative adjectives ("game-changer", "insane", "crazy") don't land without specificity
+- **New insight — the Pocock-voice news hybrid:** R1 proved Pocock's *personal adoption* frame ("I'm using X for everything now") fails for Ray's audience. R2 proves Pocock's *terse voice* (short, direct, named feature) works IF paired with a release verb instead of an opinion. The winning transfer isn't personal framing — it's the **declarative brevity**
+- **New insight — explicit release verbs beat implicit news framing:** "Anthropic Just Dropped" is a release verb already, but it's abstract ("the feature"). "Claude Code just shipped the monitor tool" is a release verb + named product + named feature — three concrete signals in 7 words. Concreteness wins when the feature name is interesting enough to stand on its own
+- **New formula candidate:** `[Product] just shipped [feature name]` — worth retesting on future slash-command/feature videos to see if it generalizes. First challenger to beat "Nobody Knew They Needed" in a head-to-head
+- **Anti-pattern confirmed:** Evaluative adjectives without specifics ("game-changer", "it's crazy", "insane") = low watch-time share. If the claim is vague, viewers can't predict what they'll learn
+- **Progression across the two rounds:** R1 tested Pocock personal frames → failed. R2 tested Pocock voice + release verb → succeeded. The takeaway is surgical: **voice transfers, frame doesn't**
+
+**Status:** Final. Lock in **"Claude Code just shipped the monitor tool"** as the title. Pocock-voice + release verb is a new formula worth banking.
 

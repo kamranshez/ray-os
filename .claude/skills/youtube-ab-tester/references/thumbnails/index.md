@@ -140,3 +140,18 @@ v{number}-{slug}/
 - "Your new advisor." faceless format flopped at 28.4% — descriptive label without curiosity or upgrade implication. Contradicts V20's "Plan Mode 2.0" faceless win (38.5%) because V20 had a version label creating upgrade curiosity, while "Your new advisor." is just a description
 - **New insight — context-of-family framing:** positioning a new feature among known siblings makes it feel inevitable and native. Worth retesting on future slash-command videos to see if the family-list pattern generalizes beyond /advisor
 - **New insight — "what's new" annotation:** hand-drawn arrow + "this one is new" copy is a compact curiosity trigger that points viewers directly at what they don't know
+
+#### Thumbnail Round 2 — Before/After excalidraw vs command list vs three-column structural
+
+| File | Style | Text | Watch-time |
+|------|-------|------|-----------|
+| `r2-1st-37.2pct-before-after-excalidraw.png` | Face + excalidraw BEFORE/ AFTER /advisor split — left shows stuck/confused Claude (jagged down arrow), right shows fixed result with green arrow. Hand-drawn, minimal color | BEFORE / AFTER /advisor | 37.2% |
+| *(reused from R1)* `1st-41.1pct-command-list-face-excalidraw.png` | Face + excalidraw command list (/advisor /plan /review /worktree) with "this one is new" arrow | /advisor /plan /review /worktree | 34.5% |
+| `r2-3rd-28.3pct-three-column-structural.png` | Face + structured three-column bento with colored concept blocks | (three-column structural) | 28.3% |
+
+**Learnings:**
+- **New winning format — BEFORE/AFTER excalidraw:** hand-drawn split panel showing the problem state vs the fixed state creates the clearest transformation promise yet. Pairs perfectly with the "Makes Sonnet Feel Like Opus" transformation title frame — thumbnail literally visualizes the transformation
+- Command-list format dropped from 41.1% (R1) → 34.5% (R2): losing share to a stronger format, not a weakening of the pattern itself. Still a solid #2 and the family-context insight holds
+- Three-column structural bento flopped at 28.3% — too busy, no single focal point, no curiosity hook. Structural-explainer formats need a clearer "what's the question" beat
+- **New insight — transformation visualization:** when the title promises a transformation ("Makes X Feel Like Y"), a literal before/after split in the thumbnail amplifies it. Title says what changes, thumbnail shows the change. Worth retesting on future upgrade/unlock videos
+- Two excalidraw styles took the top two spots (37.2% + 34.5% = 71.7% combined) — hand-drawn whiteboard aesthetic is dominating this channel's thumbnail meta for feature explainers
