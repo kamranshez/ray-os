@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>/monitor newsletter — 5 variations</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1d2129;
+    --border: #272c36;
+    --text: #e6e8ee;
+    --muted: #9aa3b2;
+    --accent: #ffb454;
+    --accent-2: #7cc6ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 48px 24px 96px; }
+  h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 28px; font-size: 14px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .tab {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+  }
+  .tab:hover { border-color: var(--accent); }
+  .tab.active {
+    background: var(--accent);
+    color: #0f1115;
+    border-color: var(--accent);
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 30px;
+    display: none;
+  }
+  .card.active { display: block; }
+  .meta { display: grid; grid-template-columns: 90px 1fr; gap: 6px 16px; font-size: 13px; margin-bottom: 22px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .meta dt { color: var(--muted); }
+  .meta dd { margin: 0; color: var(--text); }
+  .hook-tag { display: inline-block; background: var(--panel-2); border: 1px solid var(--border); color: var(--accent-2); font-size: 11px; padding: 3px 8px; border-radius: 999px; letter-spacing: 0.02em; text-transform: uppercase; font-weight: 600; }
+  .email { font-size: 15px; line-height: 1.65; color: #dfe3ec; }
+  .email p { margin: 0 0 16px; }
+  .email p:last-child { margin-bottom: 0; }
+  .thumb { margin: 18px 0; }
+  .thumb img { width: 100%; border-radius: 10px; border: 1px solid var(--border); display: block; }
+  .copy-btn {
+    position: sticky;
+    bottom: 20px;
+    float: right;
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+  .copy-btn:hover { border-color: var(--accent); }
+  .footer-note { color: var(--muted); font-size: 12px; margin-top: 24px; text-align: center; }
+  kbd { background: var(--panel-2); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px; font-size: 11px; font-family: ui-monospace, SFMono-Regular, monospace; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>/monitor newsletter — 5 variations</h1>
+    <p class="sub">All five leaning into the "polling is dead / event-driven" angle from Variation B. Click to switch. <kbd>1</kbd>–<kbd>5</kbd> also work.</p>
+
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-i="0">1 · Polling Is Dead</button>
+      <button class="tab" data-i="1">2 · Agents Finally Sleep</button>
+      <button class="tab" data-i="2">3 · The Motion Sensor</button>
+      <button class="tab" data-i="3">4 · Wake On Event</button>
+      <button class="tab" data-i="4">5 · The Four-Parameter Primitive</button>
+    </div>
+
+    <!-- CARD 1 -->
+    <div class="card active">
+      <dl class="meta">
+        <dt>Subject</dt><dd>/loop is dead. Long live /monitor.</dd>
+        <dt>Preview</dt><dd>Event-driven agents, finally.</dd>
+        <dt>Hook</dt><dd><span class="hook-tag">Polling Is Dead</span></dd>
+      </dl>
+      <div class="email">
+        <p>Hey friends,</p>
+        <p>Hope you're doing well.</p>
+        <p>Quick one this week about a new Claude Code tool that I think is going to quietly replace a lot of how I've been using agents lately.</p>
+        <p>It's called /monitor. And the easiest way to explain it is that it makes Claude Code event-driven instead of time-driven.</p>
+        <div class="thumb"><a href="https://www.youtube.com/watch?v=MpSf7EN5dhc"><img src="images/monitor-tool-frame-play.jpg" alt="Watch the video" /></a></div>
+        <p>Here's what I mean. Before, if I wanted Claude to keep an eye on something like a dev server, a test run, or a deploy, I had two bad options. Option one: run the command in the foreground and get locked out of the terminal until it finished. Option two: run it in the background and only find out at the very end that 3 of my 47 tests failed, ten minutes after the fact.</p>
+        <p>Or I'd reach for /loop, which fires a prompt every N minutes and each iteration costs a full API call. Which works, but it's burning tokens the whole time just to check whether anything happened.</p>
+        <p>/monitor is different. You give it a description, a command, a timeout, and whether it should persist. Claude writes the filter for you. The filter only prints when something matches. And each print is one event that wakes the main session.</p>
+        <p>So if you're running a 10-minute test suite and ask Claude to "monitor only for failing tests," the moment a test fails, it gets pulled into the main session and Claude starts diagnosing it — before the other tests have even finished. Zero tokens spent waiting.</p>
+        <p>The video goes through the full mechanics, the four parameters under the hood, and the two shapes of monitors (stream filters vs poll-and-if filters). Plus a handful of use cases like file drop watchers, API price alerts, sales launches, and production deploys that I think a lot of you will get value from.</p>
+        <p>What's the first thing you're going to point /monitor at? Dev server, test suite, Vercel deploy, or something weirder? Reply and let me know. I'm collecting patterns.</p>
+        <p>Talk soon,</p>
+        <p>Ray</p>
+      </div>
+      <button class="copy-btn" onclick="copyEmail(this)">Copy email</button>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="card">
+      <dl class="meta">
+        <dt>Subject</dt><dd>Your AI agent was sleep-deprived</dd>
+        <dt>Preview</dt><dd>Claude Code can finally rest when there's nothing to do.</dd>
+        <dt>Hook</dt><dd><span class="hook-tag">Agents Finally Sleep</span></dd>
+      </dl>
+      <div class="email">
+        <p>Hey friends,</p>
+        <p>Hope you've had a good week.</p>
+        <p>Here's a slightly weird framing I've been sitting with. Until this week, every Claude Code agent I ran was basically sleep-deprived.</p>
+        <p>What I mean is — if I wanted Claude to keep watch over something (a dev server, a deploy, a long test run), it had to stay awake the entire time, checking in every 30 or 60 seconds. "Anything new yet? Anything new yet?" Each check burning tokens. Each iteration a full API call. And most of them returning nothing.</p>
+        <div class="thumb"><a href="https://www.youtube.com/watch?v=MpSf7EN5dhc"><img src="images/monitor-tool-frame-play.jpg" alt="Watch the video" /></a></div>
+        <p>There's a new tool called /monitor that flips this. Instead of polling, Claude Code spins up a background process with a filter. That filter quietly runs for free. Zero tokens. And only when something you care about actually happens does it wake the main session up.</p>
+        <p>So Claude can actually go idle. Rest. And the moment a test fails, or your Vercel deploy goes red, or the error rate crosses a threshold, it's immediately there, holding the stack trace, ready to diagnose.</p>
+        <p>The mental shift that took me a minute to appreciate is that this isn't just "polling, but cheaper." It's a completely different shape. Your agent stops being a watchman pacing the corridor and becomes a motion sensor that only fires when something moves.</p>
+        <p>In the video I walk through the four parameters of a monitor, how it compares to /loop and backgrounded shell commands, and the use cases I'm personally most excited about (Vercel deploys and long test suites, mostly).</p>
+        <p>What long-running thing in your workflow have you been wanting to hand off but didn't trust /loop with? Hit reply and let me know — I try to respond to everyone.</p>
+        <p>Talk soon,</p>
+        <p>Ray</p>
+      </div>
+      <button class="copy-btn" onclick="copyEmail(this)">Copy email</button>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="card">
+      <dl class="meta">
+        <dt>Subject</dt><dd>Like a security camera, but for your terminal</dd>
+        <dt>Preview</dt><dd>Only alerts on motion. Zero tokens when nothing's moving.</dd>
+        <dt>Hook</dt><dd><span class="hook-tag">The Motion Sensor</span></dd>
+      </dl>
+      <div class="email">
+        <p>Hey friends,</p>
+        <p>Hope you're having a good one.</p>
+        <p>There's a new tool inside Claude Code called /monitor and the best mental model I've found for it is this: it's a security camera that only alerts on motion.</p>
+        <p>Let me explain what I mean by that, because it's a bigger shift than it sounds.</p>
+        <div class="thumb"><a href="https://www.youtube.com/watch?v=MpSf7EN5dhc"><img src="images/monitor-tool-frame-play.jpg" alt="Watch the video" /></a></div>
+        <p>Before, if you wanted Claude to keep an eye on something, it was essentially polling. Every 30 or 60 seconds, a full API call: "anything new? anything broken? anything ready?" Each check burning tokens. Most of them returning nothing. It worked, but it felt wasteful, and it was.</p>
+        <p>/monitor is event-driven. You describe what you want watched, and Claude Code writes a background process with a filter. The filter is the motion sensor — it's running silently the entire time for zero tokens. And the moment something you actually care about happens (an error, a failing test, a deploy going red, a price dropping below a threshold), it fires an event that wakes the main session with the context already there.</p>
+        <p>The difference between a security guard pacing the perimeter every minute and a motion sensor that only fires when something moves. Same outcome. Wildly different cost.</p>
+        <p>In the video I go through the four parameters, the two shapes of monitors you'll end up writing (stream filters for log tailing vs poll-and-if filters for remote APIs), and the use cases that got me most excited — Vercel deploys, long test suites, and watching error rates for a couple of hours after a critical production change.</p>
+        <p>What would you want Claude to silently watch for you in the background? The weirder the use case, the more interested I am. Hit reply.</p>
+        <p>Have a great week :)</p>
+        <p>Ray</p>
+      </div>
+      <button class="copy-btn" onclick="copyEmail(this)">Copy email</button>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="card">
+      <dl class="meta">
+        <dt>Subject</dt><dd>Claude Code just learned to "wake on event"</dd>
+        <dt>Preview</dt><dd>The quietest but biggest shipping this week.</dd>
+        <dt>Hook</dt><dd><span class="hook-tag">Wake On Event</span></dd>
+      </dl>
+      <div class="email">
+        <p>Hey friends,</p>
+        <p>Hope you're doing well.</p>
+        <p>If you remember the old "Wake on LAN" feature — the one where your computer could sleep until a signal came in over the network and then boot up instantly — that's pretty much what Claude Code just learned to do. But for your workflows instead of your machine.</p>
+        <p>The new feature is called /monitor. And it completely flips how background work gets handled.</p>
+        <div class="thumb"><a href="https://www.youtube.com/watch?v=MpSf7EN5dhc"><img src="images/monitor-tool-frame-play.jpg" alt="Watch the video" /></a></div>
+        <p>Before, you had two choices. Foreground — which locks you out of the terminal until the command finishes. Or background — which silently runs and only reports back once, right at the end, after everything has already happened. And if you wanted something in between, you'd reach for /loop, which fires a prompt every N minutes and costs a full API call each time. Polling, basically.</p>
+        <p>/monitor is a third option, and it's genuinely new. You describe what you want watched, Claude writes a filter, and the filter runs silently in the background for free. Zero tokens. And only when an event you care about actually fires — an error in the dev server, a failing test, a price crossing a threshold — does the main session wake up with the context already there.</p>
+        <p>Which means you can start a 10-minute test suite, ask Claude to watch only for failures, and the moment something breaks, it's already diagnosing it. Not waiting until minute ten. Not polling every thirty seconds. Just… woken up, on demand, by the actual event.</p>
+        <p>In the video I break down the four parameters of a monitor, the two main shapes (stream filter vs poll-and-if filter), and the use cases I'm most excited about — Vercel deploys, long test suites, and post-deploy production monitoring for client work.</p>
+        <p>What's the first thing you'd hand off to a /monitor if you could set one up in 30 seconds? Reply and let me know, I'm collecting patterns.</p>
+        <p>Have a great week :)</p>
+        <p>Ray</p>
+      </div>
+      <button class="copy-btn" onclick="copyEmail(this)">Copy email</button>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="card">
+      <dl class="meta">
+        <dt>Subject</dt><dd>Four parameters that change how you use Claude Code</dd>
+        <dt>Preview</dt><dd>Description, command, timeout, persistent. That's it.</dd>
+        <dt>Hook</dt><dd><span class="hook-tag">The Primitive</span></dd>
+      </dl>
+      <div class="email">
+        <p>Hey friends,</p>
+        <p>Hope you've had a good week.</p>
+        <p>Every so often, a new Claude Code feature ships that isn't really a feature — it's a primitive. A small, composable thing that changes what you can build with everything around it. This week's /monitor tool is one of those.</p>
+        <p>It takes four parameters. That's it.</p>
+        <p>A description of what to watch. A command to run. A timeout. And whether it should persist. Claude writes the filter for you, runs it in the background, and only wakes the main session when something matching fires.</p>
+        <div class="thumb"><a href="https://www.youtube.com/watch?v=MpSf7EN5dhc"><img src="images/monitor-tool-frame-play.jpg" alt="Watch the video" /></a></div>
+        <p>The reason I keep calling it a primitive rather than a feature is that once you internalise what those four parameters give you, your whole mental model for long-running agent work shifts. It's event-driven, not time-driven. It's wake-on-signal, not poll-and-check. And because the filter runs silently in the background, there's basically no cost until something you actually care about happens.</p>
+        <p>Which is wildly different from /loop (time-driven, full API call every N minutes) and different from a plain backgrounded shell command (silent until it exits, then one big dump at the end).</p>
+        <p>In the video I go through how the four parameters compose, the two main shapes of monitors (stream filters for log tailing, poll-and-if filters for remote APIs), and the use cases I'm personally most excited about — Vercel deploys, long test suites, file drop watchers, and post-deploy error rate monitoring for client work.</p>
+        <p>The short version: this is the first Claude Code feature that's actually changed what I'm comfortable walking away from.</p>
+        <p>How are you currently watching long-running things in Claude Code? /loop, backgrounded shell, something custom, or just refreshing the terminal manually? Reply and let me know — genuinely curious how people have been patching around this.</p>
+        <p>Talk soon,</p>
+        <p>Ray</p>
+      </div>
+      <button class="copy-btn" onclick="copyEmail(this)">Copy email</button>
+    </div>
+
+    <p class="footer-note">5 variations · all using the same thumbnail at images/monitor-tool-frame-play.jpg</p>
+  </div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const cards = document.querySelectorAll('.card');
+  function select(i) {
+    tabs.forEach((t, idx) => t.classList.toggle('active', idx === i));
+    cards.forEach((c, idx) => c.classList.toggle('active', idx === i));
+  }
+  tabs.forEach((t, i) => t.addEventListener('click', () => select(i)));
+  document.addEventListener('keydown', (e) => {
+    const n = parseInt(e.key, 10);
+    if (n >= 1 && n <= 5) select(n - 1);
+  });
+  function copyEmail(btn) {
+    const card = btn.closest('.card');
+    const text = card.querySelector('.email').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const old = btn.textContent;
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => btn.textContent = old, 1400);
+    });
+  }
+</script>
+</body>
+</html>

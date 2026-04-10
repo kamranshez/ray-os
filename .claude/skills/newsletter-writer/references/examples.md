@@ -1,7 +1,9 @@
 # Newsletter Examples
 
+> **⚠️ Punctuation disclaimer:** The Ali Abdaal examples below use em dashes (—) liberally. **Ignore that.** Ray has a hard rule against em and en dashes in his writing. Read these examples for voice, rhythm, structure, and rhetorical moves only, not for punctuation. See the "Hard Rule" section at the top of `SKILL.md`.
+
 ## Style References
-- `ali-abdaal/emails.md` - 5 full Ali Abdaal newsletters with tone/pattern annotations. Read to calibrate voice and structure.
+- `ali-abdaal/emails.md` - 5 full Ali Abdaal newsletters with tone/pattern annotations. Read to calibrate voice and structure. Again: ignore the dashes.
 
 ## Ray's Own Newsletters
 Full text with assets stored in `examples/` subdirectories by date. Each stored email includes metadata (subject, preview, date) for future performance tracking against open rates and conversions.
