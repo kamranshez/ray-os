@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "9044e0636b7009e2",
+        "id": "2d288b628b2a03af",
         "type": "tabs",
         "children": [
           {
-            "id": "1ccd5b295fe95f97",
+            "id": "6f5179305e5be74a",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -178,9 +178,15 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "1ccd5b295fe95f97",
+  "active": "6f5179305e5be74a",
   "lastOpenFiles": [
+    "projects/agentic-coding-school/to-film/techniques/scrappy-first.md",
     "scrappy-first-excalidraw-picker.md",
+    "monitor-newsletter-gmail.html",
+    "images/monitor-tool-frame-play-small.jpg",
+    "monitor-newsletter-options.html",
+    "images/monitor-tool-frame-play.jpg",
+    "images/monitor-tool-frame.jpg",
     "CLAUDE.md",
     "Dashboard.md",
     "socials/youtube/videos/ultrareview-hidden-bug-hunter.md",
@@ -207,9 +213,6 @@
     "socials/youtube/videos/50-tips-for-claude-code.md",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_5.png",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_4.png",
-    "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_3.png",
-    "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_2.png",
-    "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it/excalidraw_1.png",
     "projects/agentic-coding-school/to-film/claude-code/images/why-people-love-it",
     "projects/agentic-coding-school/to-film/claude-code/images/non-technical-use-cases",
     "projects/agentic-coding-school/to-film/claude-code/images/technical-use-cases",
@@ -222,10 +225,7 @@
     "projects/agentic-coding-school/to-film/business/telegram-channel.md",
     "projects/agentic-coding-school/to-film/business/skills-as-team-knowledge-base.md",
     "projects/agentic-coding-school/to-film/business/self-annealing-workflows.md",
-    "projects/agentic-coding-school/to-film/business/self-auditing-ai-checks-its-own-work.md",
     "socials/x/articles/images/ultraplan-thumbnail-v2",
-    "socials/x/articles/images/ultraplan-thumbnail",
-    "socials/x/articles/images",
     "Untitled.canvas"
   ]
 }

@@ -76,7 +76,7 @@ kanban-plugin: board
 - [ ] [[llms-have-an-easier-time-writing-things]] #techniques
 - [ ] [[refactoring-to-save-on-context]] #techniques
 - [ ] [[task-shaped-wrappers]] #techniques
-- [ ] [[scrappy-copy-first]] #techniques
+- [ ] [[scrappy-first]] #techniques
 - [ ] [[designing-interfaces]] #techniques
 - [ ] [[context-layer-summarised]] #context-engineering
 - [ ] [[code-field]] #context-engineering
