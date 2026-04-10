@@ -1400,6 +1400,25 @@ Same thumbnail across all (face + /advisor folder icon).
 - Behavior frame "Now Asks a Stronger Model When It Gets Confused" flopped at 23.8% — two anti-patterns stacked: no Anthropic authority + descriptive behavior framing (reads like an explanation, not news)
 - **New insight (Mythos framing):** "Gets More Powerful When Mythos Releases" is too conditional/future — viewers can't act on it now, reducing urgency. Present-tense transformation beats future-conditional
 - **Confirmed insight:** Transformation frame ("Makes X Feel Like Y") is a strong novel formula — creates a clear before/after in the viewer's mind without being a comparison title
-- **Status:** Final. Locking in **"Anthropic Just Dropped the Feature That Makes Sonnet Feel Like Opus"** as the title.
+- **Status:** Final. Locking in **"Anthropic Just Dropped the Feature That Makes Sonnet Feel Like Opus"** as the title. Moving to thumbnail testing.
+
+### Thumbnail A/B Test Round 1 (2026-04-10)
+
+Same title across all 3: "Anthropic Just Dropped the Feature That Makes Sonnet Feel Like Opus"
+
+| Thumbnail Style | Thumbnail Text | Watch-time Share | Result |
+|----------------|----------------|------------------|--------|
+| **Face + excalidraw-style command list (/advisor /plan /review /worktree, "this one is new" annotation)** | /advisor /plan /review /worktree | **41.1%** | ✅ WINNER |
+| Face + /advisor folder icon (original, same as title-testing rounds) | /advisor | 30.5% | |
+| Faceless dark, "Your new advisor." + Anthropic icon + brain icon | Your new advisor. | 28.4% | |
+
+**Key takeaways:**
+- **12.7% spread — huge thumbnail bottleneck unlocked.** Command-list style surges to 41.1% from the original /advisor folder's 30.5% — same title, +10.6 points from thumbnail alone
+- **New winning format: the "command list"** — positions /advisor alongside /plan /review /worktree, making it feel like part of a family of slash commands. The "this one is new" annotation creates a direct "what's new" pointer, reducing cognitive load
+- Original /advisor folder collapsed from 35.9-44% during title testing → 30.5% here — more evidence of early-round volatility, but the command list style is genuinely stronger not just noise
+- "Your new advisor." faceless dark style flopped at 28.4% — contradicts V20's faceless breakout ("Plan Mode 2.0" at 38.5%). Difference: V20 had a version label creating upgrade curiosity; "Your new advisor." is just a descriptive label with no curiosity gap
+- **New insight — "what's new" annotation trick:** Hand-drawn "this one is new" arrow pointing at /advisor within a list of known commands gives viewers a clear visual "here's the thing you don't know yet" — more compelling than isolating the feature
+- **New insight — context-of-family framing:** Showing /advisor *among* other slash commands makes it feel inevitable and native to Claude Code, rather than a one-off novelty. Viewers recognize /plan etc. and trust-by-association
+- This style is worth retesting on future slash-command videos (/dream, /leaked, /ultraplan, /ultrareview) to see if the family-context pattern generalizes
 
 **Status:** Final. Locking in title. Video likely has a topic/packaging ceiling in the mid-30s range.

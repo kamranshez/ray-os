@@ -117,3 +117,26 @@ v{number}-{slug}/
 - "Plan Mode 2.0" version label creates upgrade curiosity — title says "Ultra Plan" (what), thumbnail says "Plan Mode 2.0" (what it means) — perfect complementarity
 - "3 Hidden Modes." too specific/technical at 26.2% — "Hidden" implies complexity, reducing casual appeal
 - This contradicts V13's finding (face +7.4% over faceless) — the difference is that V13's faceless was just text on a dark background, while V20's winner has a clear conceptual message via version label + recognizable icons
+
+---
+
+### V22 — /advisor Command (2026-04-10)
+
+**Title:** "Anthropic Just Dropped the Feature That Makes Sonnet Feel Like Opus"
+**Result:** Command-list excalidraw style wins at 41.1% — +10.6 points over the /advisor folder control
+
+#### Thumbnail Round 1 — Command list vs folder vs faceless icons
+
+| File | Style | Text | Watch-time |
+|------|-------|------|-----------|
+| `1st-41.1pct-command-list-face-excalidraw.png` | Face + excalidraw-style list of slash commands (/advisor, /plan, /review, /worktree) with hand-drawn "this one is new" arrow pointing to /advisor | /advisor /plan /review /worktree | 41.1% |
+| `2nd-30.5pct-advisor-folder-face.jpg` | Face + /advisor folder icon (original, same visual language as V18-V20 series) | /advisor | 30.5% |
+| `3rd-28.4pct-your-new-advisor-icons-dark.png` | Faceless dark background, "Your new advisor." text with Anthropic icon + brain icon | Your new advisor. | 28.4% |
+
+**Learnings:**
+- **New winning format — the "command list":** showing the new command *within* a list of recognizable existing commands (/plan, /review, /worktree) + "this one is new" annotation. Creates instant context-of-family recognition and reduces cognitive load
+- **12.7% spread** — biggest thumbnail-only unlock yet on this channel, same title across all variants
+- Original /advisor folder style (30.5%) dropped significantly from its title-testing performance — may signal the folder pattern (V18-V20 series) is losing freshness for returning viewers
+- "Your new advisor." faceless format flopped at 28.4% — descriptive label without curiosity or upgrade implication. Contradicts V20's "Plan Mode 2.0" faceless win (38.5%) because V20 had a version label creating upgrade curiosity, while "Your new advisor." is just a description
+- **New insight — context-of-family framing:** positioning a new feature among known siblings makes it feel inevitable and native. Worth retesting on future slash-command videos to see if the family-list pattern generalizes beyond /advisor
+- **New insight — "what's new" annotation:** hand-drawn arrow + "this one is new" copy is a compact curiosity trigger that points viewers directly at what they don't know
