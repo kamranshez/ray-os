@@ -1,0 +1,12 @@
+{
+  "video_id": null,
+  "video_title": "Monitor Tool",
+  "uploaded_at": null,
+  "round": 1,
+  "backfilled": true,
+  "note": "Only one ranked file (r1-face-monitor-flowchart.png) exists so far — R1 may be in progress. 15 pool-* files are additional candidates from Ray's Downloads folder that were part of the shortlist but may or may not have been tested.",
+  "variants_pending_mapping": true,
+  "variants": [
+    "r1-face-monitor-flowchart.png"
+  ]
+}

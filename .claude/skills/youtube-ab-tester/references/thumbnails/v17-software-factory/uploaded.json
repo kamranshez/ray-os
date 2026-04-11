@@ -1,0 +1,17 @@
+{
+  "video_id": null,
+  "video_title": "Software Factory",
+  "uploaded_at": null,
+  "round": 2,
+  "backfilled": true,
+  "note": "Legacy manifest reconstructed from existing ranked files. Filenames already carry rank/pct prefixes — originals from before the manifest workflow existed.",
+  "variants": [
+    "1st-34.3pct-the-shift-dark-icons.png",
+    "2nd-33.3pct-100-ai-code-pixel-brain.png",
+    "3rd-32.4pct-factory-coming-face-excalidraw.jpg"
+  ],
+  "variants_round_1": [
+    "1st-33.9pct-github-future-of-coding-face.png",
+    "2nd-33.7pct-github-last-framework-face.png"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "video_id": "UNhA17l6CWw",
+  "video_title": "Plan Mode 2.0 / Ultraplan",
+  "uploaded_at": null,
+  "round": 1,
+  "backfilled": true,
+  "note": "Legacy manifest for the round that produced the 38.5/35.3/26.2 split. The full matt-* generated pool (10 variants) lives alongside and is available for future rounds.",
+  "variants": [
+    "1st-38.5pct-plan-mode-2-icons.png",
+    "2nd-35.3pct-face-ultraplan-folder.png",
+    "3rd-26.2pct-3-hidden-modes-icons.png"
+  ]
+}

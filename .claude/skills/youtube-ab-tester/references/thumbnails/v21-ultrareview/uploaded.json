@@ -1,0 +1,12 @@
+{
+  "video_id": "EhiJX0WvRz4",
+  "video_title": "Anthropic's New Ultrareview Is Coming: What You Need to Know",
+  "uploaded_at": null,
+  "round": 2,
+  "backfilled": true,
+  "note": "R2 results (36/32.1/31.9) logged in ab-test-results.md. Ranked copies not yet written — needs Ray to map the three tested files from the screenshot (pool-uploaded-t1.jpg is one of them). Full matt-* generated pool (9 variants) lives alongside.",
+  "variants_pending_mapping": true,
+  "variants": [
+    "pool-uploaded-t1.jpg"
+  ]
+}

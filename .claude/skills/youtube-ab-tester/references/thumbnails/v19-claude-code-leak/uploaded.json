@@ -1,0 +1,13 @@
+{
+  "video_id": null,
+  "video_title": "Claude Code Leak / Source Code",
+  "uploaded_at": null,
+  "round": 1,
+  "backfilled": true,
+  "note": "Legacy manifest reconstructed from existing ranked files. pool-alt-2.jpg and pool-alt-4.png are extra candidates from Ray's Downloads folder that were not part of the final three.",
+  "variants": [
+    "1st-35.5pct-leaked-folder-face-serious.jpg",
+    "2nd-31.5pct-source-code-folder-face-serious.jpg",
+    "3rd-33pct-source-code-folder-face-smiling.jpg"
+  ]
+}

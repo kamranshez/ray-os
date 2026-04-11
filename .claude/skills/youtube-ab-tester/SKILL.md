@@ -67,31 +67,61 @@ When suggesting thumbnail text, derive your patterns from the reference data. Ke
 - Match the title's energy — news title needs news thumbnail, workflow title needs personal thumbnail
 - Never use vague time references
 
+## Tracking uploaded variants (write the manifest BEFORE the test runs)
+
+Every video's thumbnail folder lives at `references/thumbnails/v{N}-{slug}/`. That folder holds the **full generated pool** at the top level (every variant Ray ever generated for the video). A single file, `uploaded.json`, pins which of those files are actually live on YouTube for the current A/B test. This eliminates the "which three did Ray upload?" guessing step.
+
+**When to write the manifest:** the moment Ray says "testing these three", "uploading X/Y/Z", "going live with A/B/C", or otherwise commits a set to a live YouTube test. Write it *before* the test runs, not after results come back.
+
+**Format** — `references/thumbnails/v{N}-{slug}/uploaded.json`:
+
+```json
+{
+  "video_id": "EhiJX0WvRz4",
+  "video_title": "Anthropic's New Ultrareview Is Coming: What You Need to Know",
+  "uploaded_at": "YYYY-MM-DD",
+  "round": 2,
+  "variants": [
+    "matt-structural-three-modes-b.png",
+    "matt-comparative-before-after-d.png",
+    "plan-mode-2-faceless-icons-v2.png"
+  ]
+}
+```
+
+**Rules:**
+- Every filename in `variants` MUST already exist at the top level of the same folder. If Ray names a file that isn't there, stop and ask — don't invent a match.
+- If a new round of the same test starts, bump `round` and overwrite `uploaded.json`. The ranked copies from the previous round already live in `tested/` so nothing is lost.
+- The manifest is the single source of truth for "what's live right now." Never guess from the generated pool.
+
 ## Recording A/B Test Results
 
 **IMPORTANT: Record results immediately.** As soon as the user shares A/B test results (screenshots or numbers), record them to the reference files *before* suggesting the next round. Do not wait for the user to ask — recording is automatic and happens inline with your analysis. This ensures no data is lost between conversation turns.
 
 When the user shares A/B test screenshots or results:
 
-1. Record them in `references/ab-test-results.md` in this skill's directory
-2. Use the established format with markdown tables
-3. Include timestamp in the round header: `### Title A/B Test Round N (YYYY-MM-DD)`
-4. Write "Key takeaways" that reference specific data points from previous videos
-5. End with a clear recommendation for the next round
-6. Save any thumbnail images shared alongside results (see below)
-7. Update `references/thumbnails/index.md` if thumbnail results were included
+1. **Read `references/thumbnails/v{N}-{slug}/uploaded.json` first.** It tells you exactly which files are live. Never guess from the full pool.
+   - If the manifest is missing (legacy video, or Ray forgot to mark it), stop and ask Ray to identify the three files before recording. Do not guess.
+2. Match each file in `variants` to its rank and pct from the screenshot.
+3. Copy (don't move — keep the originals in the pool) each tested file into `references/thumbnails/v{N}-{slug}/tested/` as `{rank}-{pct}pct-{original-stem}.{ext}`. Example: `matt-structural-three-modes-b.png` → `tested/1st-38.5pct-matt-structural-three-modes-b.png`.
+4. Record results in `references/ab-test-results.md` with the established markdown table format. Round header: `### Title A/B Test Round N (YYYY-MM-DD)`.
+5. Write "Key takeaways" that reference specific data points from previous videos.
+6. End with a clear recommendation for the next round.
+7. Update `references/thumbnails/index.md` with the new section including the results table, file references, and learnings.
 
-### Storing Thumbnail Images
+### Folder layout
 
-When the user shares actual thumbnail images alongside results, save them as visual references:
+```
+references/thumbnails/v{N}-{slug}/
+  uploaded.json                          # manifest — what's currently live
+  tested/                                # ranked copies of completed rounds
+    1st-38.5pct-<original-stem>.png
+    2nd-35.3pct-<original-stem>.png
+    3rd-26.2pct-<original-stem>.png
+  <all generated variants>.png           # the full pool (winners + losers + unused)
+```
 
-1. Copy images to `references/thumbnails/v{number}-{slug}/` in this skill's directory
-2. Name files: `{rank}-{pct}pct-{short-description}.{ext}` (e.g., `1st-34.3pct-the-shift-dark-icons.png`)
-   - **rank**: 1st, 2nd, 3rd by watch-time share
-   - **pct**: watch-time share percentage
-   - **description**: thumbnail style in kebab-case (include key visual elements like "face", "dark", "icons", "excalidraw")
-3. Update `references/thumbnails/index.md` with a new section including the results table, file references, and learnings
-4. When generating future thumbnail suggestions, read the index and browse past images to ground recommendations in what actually worked visually — not just what text worked
+The top-level pool is kept intact so future thumbnail suggestions can browse everything Ray has ever generated for a video, not just the winners.
 
 ### Diagnosing Bottlenecks
 
