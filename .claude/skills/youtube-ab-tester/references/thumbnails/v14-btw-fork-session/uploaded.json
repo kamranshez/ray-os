@@ -1,0 +1,10 @@
+{
+  "video_id": null,
+  "video_title": "Anthropic Just Dropped the Feature Nobody Knew They Needed",
+  "uploaded_at": null,
+  "round": null,
+  "backfilled": true,
+  "pool_only": true,
+  "note": "V14 is the /btw + --fork-session (context pollution) video. 3 title rounds produced the all-time-best 46.8% with 'Nobody Knew They Needed' — see ab-test-results.md Video 14. R3 notes said 'Moving to thumbnail testing' but no image-level test was recorded. This folder merges two exploratory pools (pending-btw + pending-feature-nobody-knew) that were both for this video.",
+  "variants": []
+}

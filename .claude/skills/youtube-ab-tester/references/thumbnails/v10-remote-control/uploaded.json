@@ -1,0 +1,10 @@
+{
+  "video_id": null,
+  "video_title": "Anthropic Just Dropped Remote Control for Claude Code",
+  "uploaded_at": null,
+  "round": null,
+  "backfilled": true,
+  "pool_only": true,
+  "note": "V10 finished with a title-only A/B test cycle (5 rounds) using the same thumbnail across all variants — see ab-test-results.md Video 10. No per-thumbnail A/B test was recorded. Files in this folder are the exploratory generation pool; no tested/ subfolder exists because no image-level test was run.",
+  "variants": []
+}

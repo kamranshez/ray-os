@@ -1,0 +1,10 @@
+{
+  "video_id": null,
+  "video_title": "The Top 0.01% User's Guide to Claude Code",
+  "uploaded_at": null,
+  "round": null,
+  "backfilled": true,
+  "pool_only": true,
+  "note": "V11 ran 5 title A/B rounds locking in 'The Top 0.01% User's Guide to Claude Code' — see ab-test-results.md Video 11. Thumbnail updated during R3 to 'Top 0.01% User' + '1,600 Hours' but no image-level A/B test was recorded in the reference data. Files here are exploratory pool generations.",
+  "variants": []
+}
