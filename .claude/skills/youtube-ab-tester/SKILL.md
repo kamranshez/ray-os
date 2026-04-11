@@ -103,11 +103,21 @@ When the user shares A/B test screenshots or results:
 1. **Read `references/thumbnails/v{N}-{slug}/uploaded.json` first.** It tells you exactly which files are live. Never guess from the full pool.
    - If the manifest is missing (legacy video, or Ray forgot to mark it), stop and ask Ray to identify the three files before recording. Do not guess.
 2. Match each file in `variants` to its rank and pct from the screenshot.
-3. Copy (don't move — keep the originals in the pool) each tested file into `references/thumbnails/v{N}-{slug}/tested/` as `{rank}-{pct}pct-{original-stem}.{ext}`. Example: `matt-structural-three-modes-b.png` → `tested/1st-38.5pct-matt-structural-three-modes-b.png`.
-4. Record results in `references/ab-test-results.md` with the established markdown table format. Round header: `### Title A/B Test Round N (YYYY-MM-DD)`.
-5. Write "Key takeaways" that reference specific data points from previous videos.
-6. End with a clear recommendation for the next round.
-7. Update `references/thumbnails/index.md` with the new section including the results table, file references, and learnings.
+3. **Resolve each filename** using the lookup order in "Finding variant files" below. If a file lives only in the generator's `output/` folder, copy it into the v{N} folder first so the ab-tester archive becomes self-contained.
+4. Copy (don't move — keep the originals in the pool) each tested file into `references/thumbnails/v{N}-{slug}/tested/` as `{rank}-{pct}pct-{original-stem}.{ext}`. Example: `matt-structural-three-modes-b.png` → `tested/1st-38.5pct-matt-structural-three-modes-b.png`.
+5. Record results in `references/ab-test-results.md` with the established markdown table format. Round header: `### Title A/B Test Round N (YYYY-MM-DD)`.
+6. Write "Key takeaways" that reference specific data points from previous videos.
+7. End with a clear recommendation for the next round.
+8. Update `references/thumbnails/index.md` with the new section including the results table, file references, and learnings.
+
+### Finding variant files
+
+When resolving a filename from `uploaded.json`, search in this order:
+
+1. `references/thumbnails/v{N}-{slug}/<filename>` — the canonical home. All new generations should land here directly (see `youtube-thumbnail-generator/SKILL.md`).
+2. `../../youtube-thumbnail-generator/output/<slug>/<filename>` — transitional fallback for files that were generated before the direct-to-ab-tester convention. If found here, **copy (not move) the file into the v{N} folder** before writing the `tested/` rank copy. This way the ab-tester archive becomes self-contained as old tests get recorded.
+
+If the file is missing from BOTH locations, stop and ask Ray. Never invent a match from similar filenames.
 
 ### Folder layout
 

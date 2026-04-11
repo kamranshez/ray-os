@@ -24,23 +24,41 @@ Read the style-specific reference file before generating:
 
 Whatever style the user picks, the workflow is the same:
 
-1. **Ask for the video title** → create `output/<video-title-kebab>/`
+1. **Ask for the video title** → determine the target folder in the ab-tester archive (see "Where generations land" below). If the folder doesn't exist yet, create it.
 2. **Ask which style** if not obvious — Matt or Nate
 3. **Get the video content** — either the transcript (fetch via supadata if URL) or a script/description the user provides
 4. **Read the style's reference file** (`references/matt-style.md` or `references/nate-style.md`)
 5. **Read `feedback.json`** for global feedback rules (e.g., facial expressions, hairstyle)
 6. **Isolate `go-to-face.jpg`** — move all other photos out of `assets/face/` to `assets/face-backup/`
 7. **Write 5 prompts** by hand, each using a different golden reference from the chosen style's library. Never use subagents for prompt writing — they lose visual context.
-8. **Fire all 5 generations in parallel** using `run_in_background: true`. Use `--name` to save directly to the final folder.
-9. **Wait via Monitor tool** that watches the output folder for the final count
+8. **Fire all 5 generations in parallel** using `run_in_background: true`. Use `--name` to save directly to the target folder.
+9. **Wait via Monitor tool** that watches the target folder for the final count
 10. **Restore face photos** from `face-backup/`
-11. **Open the output folder** — `open output/<video-title-kebab>/`
+11. **Open the target folder** — `open ../youtube-ab-tester/references/thumbnails/v{N}-{slug}/`
+
+### Where generations land
+
+All thumbnails — the generated pool AND the eventual tested winners — live in the **youtube-ab-tester** skill, not here. This skill is pure compute; the ab-tester holds state.
+
+```
+../youtube-ab-tester/references/thumbnails/
+  v{N}-{slug}/          ← canonical home for a video with a confirmed v-number
+    uploaded.json       ← manifest pinning the currently-live variants
+    tested/             ← ranked copies of completed rounds
+    <all generated variants>.png
+  pending-{slug}/       ← video doesn't have a v-number yet (unreleased / un-tested)
+```
+
+**Before generating:**
+- If you know the video's `v{N}` number (it's been tested before, or Ray tells you), use `v{N}-{slug}/`.
+- If it's a brand-new video with no test yet, use `pending-{slug}/`. When Ray runs his first A/B test on it, the folder gets renamed to `v{N}-{slug}/` and added to `ab-test-results.md`.
+- Never generate into `youtube-thumbnail-generator/output/` — that folder no longer exists.
 
 ### Parallel generation snippet
 
 ```bash
 cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts "<prompt>" \
-  -n 1 -o "output/<video-title-kebab>" \
+  -n 1 -o "../youtube-ab-tester/references/thumbnails/v{N}-{slug}" \
   --name "<style-prefix>-<concept>-<variant>" \
   -r "research/golden-references/<style>/<subfamily>/<golden-ref>.png" \
   -t 240
@@ -87,20 +105,21 @@ These apply to every thumbnail Ray generates, regardless of style:
 
 ## Output organization
 
+Files land in `../youtube-ab-tester/references/thumbnails/v{N}-{slug}/` (or `pending-{slug}/` for untested videos).
+
 ```
-output/
-  <video-title-kebab>/
-    matt-structural-radial-a.png
-    matt-comparative-table-b.png
-    matt-mockup-tweet-c.png
-    ...
+v{N}-{slug}/
+  uploaded.json                         # written by ab-tester when Ray picks variants
+  tested/                               # populated from A/B results
+  matt-structural-radial-a.png
+  matt-comparative-table-b.png
+  matt-mockup-tweet-c.png
+  ...
 ```
 
-Naming convention: `<style>-<subfamily>-<concept>-<variant>`
+Naming convention for the `--name` flag: `<style>-<subfamily>-<concept>-<variant>`
 - Matt style: `matt-structural-radial-a`, `matt-comparative-before-after-b`, `matt-mockup-tweet-c`
 - Nate style: `nate-folder-command-a`, `nate-icons-black-b`
-
-The `output/` folder is gitignored.
 
 ---
 
@@ -175,7 +194,7 @@ When the user says "regenerate from feedback":
 2. Find all thumbnails with non-empty comments
 3. For each, construct a new prompt that keeps what the user liked and fixes what they didn't
 4. Apply all `global_feedback` rules
-5. Generate into `output/<video-id>/` with a `-v2` suffix on the name
+5. Generate into the video's folder in `../youtube-ab-tester/references/thumbnails/v{N}-{slug}/` with a `-v2` suffix on the name
 
 ---
 
@@ -203,10 +222,10 @@ The script automatically loads face reference images from `assets/face/`.
 When Ray wants the same composition with just the text changed:
 ```bash
 cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts \
-  --clone "output/ultraplan/folder-ultraplan-golden-ref.jpeg" \
+  --clone "../youtube-ab-tester/references/thumbnails/v20-ultraplan/folder-ultraplan-golden-ref.jpeg" \
   --text "/ultrareview" \
   --name "folder-ultrareview-contemplative" \
-  -n 1 -o "output/ultrareview"
+  -n 1 -o "../youtube-ab-tester/references/thumbnails/v21-ultrareview"
 ```
 
 Use clone mode when:
@@ -287,4 +306,4 @@ open http://localhost:8503
 - **Resolution**: 2K output (2752x1536)
 - **Rate limits**: Up to 5 parallel generation processes
 - **Timeout**: 240s (4 minutes) per image — use `-t 240` on every call
-- **Wait strategy**: After firing 5 background generations, use the Monitor tool with a small polling script to watch the output folder for completion, rather than sleeping or polling manually
+- **Wait strategy**: After firing 5 background generations, use the Monitor tool with a small polling script to watch the target v{N}-{slug}/ folder for completion, rather than sleeping or polling manually
