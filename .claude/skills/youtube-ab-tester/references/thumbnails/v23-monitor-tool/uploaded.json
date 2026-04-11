@@ -3,12 +3,10 @@
   "video_title": "Claude Code just shipped the monitor tool",
   "internal_name": "Monitor Tool",
   "published_at": "2026-04-10",
-  "uploaded_at": null,
-  "round": 1,
+  "round": null,
   "backfilled": true,
-  "note": "Only one ranked file (r1-face-monitor-flowchart.png) exists so far — R1 may be in progress. 15 pool-* files are additional candidates from Ray's Downloads folder that were part of the shortlist but may or may not have been tested.",
-  "variants_pending_mapping": true,
-  "variants": [
-    "r1-face-monitor-flowchart.png"
-  ]
+  "pool_only": true,
+  "note": "V23 R1 and R2 were title-only tests with the same thumbnail across all variants. The thumbnail used was v3-06-two-column-flow (face + /monitor flowchart with Error/Warn/Failed → Notify/Diagnose/Fix columns, pointing gesture). R2 title 'Claude Code just shipped the monitor tool' won at 37.2% — first challenger ever to beat the 'Nobody Knew They Needed' control. No image-level A/B test has been run. The 91 pool-* files are exploratory candidates from the generation-phase library.",
+  "single_thumbnail_used_in_title_tests": "pool-v3-06-two-column-flow.png",
+  "variants": []
 }

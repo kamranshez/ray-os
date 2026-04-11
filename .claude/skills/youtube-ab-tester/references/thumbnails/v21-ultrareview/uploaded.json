@@ -1,12 +1,12 @@
 {
   "video_id": "EhiJX0WvRz4",
   "video_title": "Anthropic's New Ultrareview Is Coming: What You Need to Know",
-  "uploaded_at": null,
-  "round": 2,
+  "internal_name": "Claude Code Ultra Review (Multi-Agent Bug Hunter)",
+  "published_at": "2026-04-09",
+  "round": null,
   "backfilled": true,
-  "note": "R2 results (36/32.1/31.9) logged in ab-test-results.md. Ranked copies not yet written — needs Ray to map the three tested files from the screenshot (pool-uploaded-t1.jpg is one of them). Full matt-* generated pool (9 variants) lives alongside.",
-  "variants_pending_mapping": true,
-  "variants": [
-    "pool-uploaded-t1.jpg"
-  ]
+  "pool_only": true,
+  "note": "V21 R1 and R2 were title-only tests with the same thumbnail across all variants (face + /ultrareview folder icon). No image-level A/B test has been run. The 10 matt-* files in this folder are exploratory variants generated after R2 as candidates for a future thumbnail test (R2's diagnosis: 'thumbnail is the likely ceiling'). pool-uploaded-t1.jpg is believed to be the single thumbnail used across R1/R2 title tests — Ray to confirm by visual inspection.",
+  "single_thumbnail_used_in_title_tests": "pool-uploaded-t1.jpg",
+  "variants": []
 }
