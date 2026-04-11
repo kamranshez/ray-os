@@ -155,3 +155,27 @@ v{number}-{slug}/
 - Three-column structural bento flopped at 28.3% — too busy, no single focal point, no curiosity hook. Structural-explainer formats need a clearer "what's the question" beat
 - **New insight — transformation visualization:** when the title promises a transformation ("Makes X Feel Like Y"), a literal before/after split in the thumbnail amplifies it. Title says what changes, thumbnail shows the change. Worth retesting on future upgrade/unlock videos
 - Two excalidraw styles took the top two spots (37.2% + 34.5% = 71.7% combined) — hand-drawn whiteboard aesthetic is dominating this channel's thumbnail meta for feature explainers
+
+---
+
+### V23 — Monitor Tool (2026-04-11)
+
+**Title:** "Claude Code just shipped the monitor tool" (locked after 2 title rounds — Pocock-voice + release verb beat the Anthropic control at 37.2% in R2)
+**Result:** Command-list style wins at 36.2% — V22 pattern generalizes to a second video
+
+#### Thumbnail Round 1 — Command list vs BEFORE/AFTER sketches vs bar chart
+
+| File | Style | Text | Watch-time |
+|------|-------|------|-----------|
+| `1st-36.2pct-v3-01-slash-list-top.png` | Face + slash-command list (/monitor, /loop, /hooks, /schedule) with orange arrow + "new in Claude!" pointing at /monitor | /monitor /loop /hooks /schedule | 36.2% |
+| `2nd-34pct-v4-C4-before-after-state.png` | Face + hand-drawn BEFORE /monitor / AFTER /monitor split — left shows confused Claude, wasted tokens, polling every 30s; right shows meditating Claude, "0 tokens until event" | BEFORE / AFTER /monitor | 34% |
+| `3rd-29.8pct-v5-C5-bar-chart.png` | Face + bar chart comparison (/loop 10,000 tokens/hr vs /monitor 0.02 tokens/hr) with "$0 IDLE COST" pill at bottom | $0 IDLE COST | 29.8% |
+
+**Learnings:**
+- **V22 command-list pattern generalizes:** second consecutive video where face + slash-command list + "new" annotation wins. Now a confirmed Ray-channel formula, not a V22 one-off. Advisor R1 landed at 41.1%, Monitor R1 at 36.2% — both winners of their respective pools
+- **6.4% spread** — meaningful signal but narrower than V22's 12.7. All three V23 candidates were legitimately strong thumbnails (not a weak baseline like V22's "Your new advisor." faceless), so command-list is "best of three good options" rather than unlocking a soft spot
+- **BEFORE/AFTER at 34% is only 2.2 points behind the winner** — sketched comparison format with hand-drawn state transition is a viable secondary format. Trailed command-list but beat the bar chart handily. Confirms V22 R2 BEFORE/AFTER finding (37.2%) — this format transfers
+- **Bar chart + "$0 IDLE COST" flopped at 29.8%** — weakest format despite a strong punchline. Bar charts read as "data slide from a pitch deck," not "news about a new feature." Parsing axes burns attention; command-list and BEFORE/AFTER are instant visual reads
+- **New insight — data-chart thumbnails are high friction:** Even with a clean punchline, requiring viewers to parse axes and compare values burns attention. Charts belong IN the video, not on the thumbnail. Exception: if the chart IS the punchline (e.g., a dramatic sparkline)
+- **Confirmed insight — "new" annotation + family context:** V22 used "this one is new" arrow, V23 uses "new in Claude!" arrow. Both place the new item alongside known siblings (V22: /plan /review /worktree; V23: /loop /hooks /schedule). Family-context framing is now a durable pattern
+- **Open hypothesis:** V22 siblings were all native slash commands; V23 siblings were a looser mix (/loop /hooks /schedule span slash commands and other concepts). Is V22's 41.1% vs V23's 36.2% explained by "pure slash-command family" vs looser grouping? Worth one targeted R2 if upside justifies it
