@@ -7,10 +7,9 @@ description: Generate A/B test title and thumbnail text options for Ray's YouTub
 
 You generate data-driven YouTube title and thumbnail text options for A/B testing, and record/analyze test results.
 
-Before generating any titles or thumbnail text, **always read these reference files first** — they are your ground truth:
+Before generating any titles or thumbnail text, **always read this reference file first** — it is your ground truth:
 
-- `references/ab-test-results.md` — All historical A/B test data, winning formulas, anti-patterns, and key learnings. Derive your proven formulas, verb rankings, and pattern hierarchy fresh from this data each time.
-- `references/thumbnails/index.md` — Visual archive of all tested thumbnails with performance data. Browse per-video folders to see actual images that were tested.
+- `references/ab-test-results.md` — All historical A/B test data (titles AND thumbnails), winning formulas, anti-patterns, and key learnings. Derive your proven formulas, verb rankings, and pattern hierarchy fresh from this data each time. Per-video thumbnail images live under `references/thumbnails/v{N}-{slug}/tested/` — browse those folders when you want to see what winning thumbnails actually look like.
 
 The reference data is the source of truth for what works and what doesn't. Rather than relying on a static list of formulas baked into this skill file, re-derive your recommendations from the actual test results each time. This ensures your suggestions reflect the latest patterns, not stale rankings.
 
@@ -108,7 +107,6 @@ When the user shares A/B test screenshots or results:
 5. Record results in `references/ab-test-results.md` with the established markdown table format. Round header: `### Title A/B Test Round N (YYYY-MM-DD)`.
 6. Write "Key takeaways" that reference specific data points from previous videos.
 7. End with a clear recommendation for the next round.
-8. Update `references/thumbnails/index.md` with the new section including the results table, file references, and learnings.
 
 ### Finding variant files
 
