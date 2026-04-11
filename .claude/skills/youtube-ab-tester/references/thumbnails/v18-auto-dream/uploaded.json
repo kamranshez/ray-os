@@ -1,6 +1,9 @@
 {
-  "video_id": null,
-  "video_title": "Auto Dream",
+  "video_id": "OnQ4BGN8B-s",
+  "video_title": "Anthropic Just Dropped the Feature Nobody Knew They Needed",
+  "internal_name": "Auto Dream — Claude Code Memory Consolidation",
+  "published_at": "2026-03-24",
+  "title_reuse_note": "This title was reused from V14 (2026-03-11) — underperformed on revenue the second time. See feedback_ab_tester_framing memory.",
   "uploaded_at": null,
   "round": 1,
   "backfilled": true,
