@@ -1505,21 +1505,21 @@ Same title across all 3: "Claude Code just shipped the monitor tool"
 
 | Thumbnail Style | File | Watch-time Share | Result |
 |----------------|------|------------------|--------|
-| **Face + slash-command list (/monitor /loop /hooks /schedule, "new in Claude!" arrow pointing at /monitor)** | v3-01-slash-list-top.png | **36.2%** | ✅ WINNER |
-| Face + BEFORE /monitor / AFTER /monitor sketched comparison (wasted tokens, polling every 30s → 0 tokens until event) | v4-C4-before-after-state.png | 34% | |
-| Face + bar chart comparison (/loop 10,000 tokens/hr vs /monitor 0.02 tokens/hr, "$0 IDLE COST" pill) | v5-C5-bar-chart.png | 29.8% | |
+| **Face + slash-command list (/monitor /loop /hooks /schedule, "new in Claude!" arrow pointing at /monitor)** | v3-01-slash-list-top.png | **37.2%** | ✅ WINNER |
+| Face + BEFORE /monitor / AFTER /monitor sketched comparison (wasted tokens, polling every 30s → 0 tokens until event) | v4-C4-before-after-state.png | 33.5% | |
+| Face + bar chart comparison (/loop 10,000 tokens/hr vs /monitor 0.02 tokens/hr, "$0 IDLE COST" pill) | v5-C5-bar-chart.png | 29.3% | |
 
 **Key takeaways:**
 - **V22 command-list pattern generalizes to V23** — second consecutive video where face + slash-command list with a "new" annotation wins. This is now a confirmed Ray-channel formula, not a V22 one-off (/advisor landed at 41.1%)
-- **6.4 point spread** — meaningful thumbnail signal but narrower than V22's 12.7 points. All three V23 candidates are legitimately strong thumbnails (not a weak baseline like V22's "Your new advisor." faceless dark), so the command-list lead here is "best of three good options" rather than unlocking a soft spot
-- **BEFORE/AFTER at 34% is only 2.2 points behind the winner** — sketched comparison thumbnails with hand-drawn state transition are a viable secondary format worth banking. Trailed command-list but beat the bar chart handily
-- **Bar chart with "$0 IDLE COST" flopped at 29.8%** — the weakest format despite a strong punchline. Diagnosis: bar charts + dollar numbers read as "data slide from a pitch deck," not "news about a new feature." The chart's message (10,000 vs 0.02 tokens/hr) requires parsing axes and comparing values, while the command-list and BEFORE/AFTER are instant visual reads
+- **7.9 point spread** — meaningful thumbnail signal but narrower than V22's 12.7 points. All three V23 candidates are legitimately strong thumbnails (not a weak baseline like V22's "Your new advisor." faceless dark), so the command-list lead here is "best of three good options" rather than unlocking a soft spot
+- **BEFORE/AFTER at 33.5% is 3.7 points behind the winner** — sketched comparison thumbnails with hand-drawn state transition are a viable secondary format worth banking. Trailed command-list but beat the bar chart handily
+- **Bar chart with "$0 IDLE COST" flopped at 29.3%** — the weakest format despite a strong punchline. Diagnosis: bar charts + dollar numbers read as "data slide from a pitch deck," not "news about a new feature." The chart's message (10,000 vs 0.02 tokens/hr) requires parsing axes and comparing values, while the command-list and BEFORE/AFTER are instant visual reads
 - **New insight — chart/data thumbnails are high friction:** Even with a clean punchline, requiring viewers to parse axes burns attention. Charts belong IN the video, not on the thumbnail. Future thumbnail pools should deprioritize bar-chart visuals unless the chart IS the punchline (e.g., a dramatic sparkline)
 - **Confirmed insight — "new" annotation + family context:** V22 winner had "this one is new" arrow, V23 winner has "new in Claude!" arrow. Both place the new feature alongside known siblings (V22: /plan /review /worktree; V23: /loop /hooks /schedule). Family-context framing is now a proven pattern — viewers recognize the known items and trust-by-association that the new one is worth knowing
-- **Confirmed insight — command-list is generalizable:** Two wins in a row (V22 /advisor 41.1%, V23 /monitor 36.2%). Make it the default format to include in any future slash-command or named-feature video thumbnail pool
-- **Open hypothesis for R2 (if run):** V22 (41.1%) siblings were all slash commands; V23 (36.2%) siblings were `/loop /hooks /schedule` which mix slash commands with other concepts. Is the V22 advantage from "pure slash-command family" vs V23's looser grouping? Worth one targeted R2 test if the upside justifies another generation pass
+- **Confirmed insight — command-list is generalizable:** Two wins in a row (V22 /advisor 41.1%, V23 /monitor 37.2%). Make it the default format to include in any future slash-command or named-feature video thumbnail pool
+- **Open hypothesis for R2 (if run):** V22 (41.1%) siblings were all slash commands; V23 (37.2%) siblings were `/loop /hooks /schedule` which mix slash commands with other concepts. Is the V22 advantage from "pure slash-command family" vs V23's looser grouping? Worth one targeted R2 test if the upside justifies another generation pass
 
 **Thumbnail files:** `references/thumbnails/v23-monitor-tool/tested/` — all three ranked copies archived (`1st-36.2pct-v3-01-slash-list-top.png`, `2nd-34pct-v4-C4-before-after-state.png`, `3rd-29.8pct-v5-C5-bar-chart.png`)
 
-**Status:** Command-list winning at 36.2% but below V22's 41.1% ceiling. Recommend locking in and moving on unless R2 has a specific hypothesis to test (e.g., slash-only command family framing).
+**Status:** Command-list winning at 37.2% but below V22's 41.1% ceiling. Recommend locking in and moving on unless R2 has a specific hypothesis to test (e.g., slash-only command family framing).
 
