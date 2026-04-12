@@ -3,6 +3,8 @@ date: 2026-04-09
 status: scripting
 ---
 
+> **Example artifact:** `agentic-coding-school/tasks/cc-curriculum-reorder.html` — content-flow reorder of all 132 Claude Code course videos, side-by-side before/after view built from 10 parallel transcript-dependency subagents.
+
 ## Hook (0:00-0:30)
 
 Most people use Claude Code like a text editor. Type a prompt, get code back, paste it somewhere. But what if Claude could build you a live UI, serve it in your browser, and then read back what you did in that UI to change your actual project?
