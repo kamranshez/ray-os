@@ -13,13 +13,15 @@ I was showing a friend some of my Claude Code skills the other day and he just s
 
 > [SCREEN RECORDING — Claude Code terminal]
 
+https://x.com/trq212/status/2005315275026260309
+
 The first skill I use every day is auto-spec. Now, I'll explain this from the beginning because no one else is doing this.
 
 So there's this approach that a lot of people in the Claude Code space have been doing — the idea of interviewing yourself before you build anything. You write a rough plan, then you get Claude to question you on every aspect of it until you have a shared understanding of what you're actually building.
 
 This is an idea that I talked about 3 months ago on the channel so if you do wanna stay ahead of the curve, do subscribe.
 
-So I did this for about a month and I realised. Wow... This is great. Then day by day, I realised this is so boring, I'm just hear answering questions all day. 
+So I did this for about a month and I realised. Wow... At first, this is great. Then day by day, I realised this is so boring, I'm just here answering questions all day. 
 
 So I thought. Okay, I've answered enough questions by now that... What if Claude could interview a version of me instead?
 
@@ -37,15 +39,15 @@ I kick it off, I go make coffee, I come back and there's a completed interview w
 
 And then it generates this. An interactive decision tree. Every decision laid out as a card, colour-coded by category — architecture in blue, UI in green, scope in orange. Each card shows the question, the options that were considered, and the decision that was made with a rationale.
 
-Where the sim wasn't sure — where it flagged that it was guessing — those show up as orange cards instead of green. I review those, make a call, and the spec is done. Usually that's 3 or 4 cards out of 25. Five minutes of my time instead of forty.
-
 Then it automatically integrates all the decisions back into the plan file as a "Spec Decisions" section. So when the implementing agent picks up the plan, every ambiguity has already been resolved.
 
-The key idea is the decision profile. I have a compact file — about 2,500 tokens — that distils how I make decisions. My heuristics, my defaults, my red lines. Plus 200 real Q&A examples for the sim to pattern-match against.
+The key idea is the decision profile. I have a compact file — about 2,500 tokens — that distils how I make decisions. My heuristics, my defaults, my red lines. Plus 400 real Q&A examples for the sim to pattern-match against.
 
-And if you're thinking "I don't have 200 Q&A examples" — I built another skill called auto-spec-creator that analyses your Claude Code conversation history and generates the decision profile for you. You run it once and you have a digital twin.
+And if you're thinking "I don't have 400 Q&A examples" — I built another skill called auto-spec-creator that analyses your Claude Code conversation history and generates the decision profile for you. You run it once and you have a digital twin.
 
 If you want to go deeper on this, I cover the full spec developer workflow and how to verify implementations in my Claude Code masterclass.
+
+There's also a sale.
 
 ---
 
@@ -95,6 +97,10 @@ But here's why it's actually useful every day. It's a visual sanity check. If th
 
 I covered this concept in my Claude Code masterclass — the idea of validating the "shape of the diff" visually instead of reading every line. You check the diagram, confirm it matches your mental model, and move on with confidence.
 
+> [SHOW BROWSER — description-drift-detection.html from VidTempla repo]
+>
+> Here's a real example. I just shipped a description drift detection feature — detects when someone edits a YouTube description directly in YouTube Studio, bypassing the template system. Instead of reading the diff across 30 files, I generated this. Three diagrams: how drift is detected during sync, how write operations are gated, and the three resolution paths. Took 60 seconds to generate. Would've taken me 15 minutes to explain in a code review.
+
 You're probably noticing a trend here. Design variations, diagrams — I'm not writing code and reviewing code anymore. I'm getting Claude to generate an artefact and then I review the artefact. It's faster, it's more intuitive, and honestly it's a better use of my time. Reading a diagram or picking from 10 designs is a much higher-leverage activity than reading a diff line by line.
 
 ---
@@ -133,7 +139,7 @@ And the whole thing is connector-agnostic. Right now it reads Gmail. But the tri
 
 > [SCREEN RECORDING — Claude Code terminal with codex output]
 
-Last one. And this is probably the most controversial skill I have.
+Last one..
 
 I'm using OpenAI inside Claude Code.
 
