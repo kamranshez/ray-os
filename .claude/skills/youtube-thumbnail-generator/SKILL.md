@@ -29,7 +29,7 @@ Whatever style the user picks, the workflow is the same:
 3. **Get the video content** — either the transcript (fetch via supadata if URL) or a script/description the user provides
 4. **Read the style's reference file** (`references/matt-style.md` or `references/nate-style.md`)
 5. **Read `feedback.json`** for global feedback rules (e.g., facial expressions, hairstyle)
-6. **Isolate `go-to-face.jpg`** — move all other photos out of `assets/face/` to `assets/face-backup/`
+6. **Isolate `go-to-face.jpg`** — move all other photos out of `references/rays-face/` to `references/rays-face-backup/`
 7. **Write 5 prompts** by hand, each using a different golden reference from the chosen style's library. Never use subagents for prompt writing — they lose visual context.
 8. **Fire all 5 generations in parallel** using `run_in_background: true`. Use `--name` to save directly to the target folder.
 9. **Wait via Monitor tool** that watches the target folder for the final count
@@ -60,7 +60,7 @@ All thumbnails — the generated pool AND the eventual tested winners — live i
 cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts "<prompt>" \
   -n 1 -o "../youtube-ab-tester/references/thumbnails/v{N}-{slug}" \
   --name "<style-prefix>-<concept>-<variant>" \
-  -r "research/golden-references/<style>/<subfamily>/<golden-ref>.png" \
+  -r "research/golden-references/<style>/<golden-ref>.png" \
   -t 240
 ```
 
@@ -83,8 +83,8 @@ These apply to every thumbnail Ray generates, regardless of style:
 - Shure SM7B podcast microphone rising from the bottom-right foreground (used when the composition has room for it)
 
 **Face references:**
-- Always isolate `assets/face/go-to-face.jpg` as the ONLY face reference before generating
-- Move other photos to `assets/face-backup/`, restore after the batch completes
+- Always isolate `references/rays-face/go-to-face.jpg` as the ONLY face reference before generating
+- Move other photos to `references/rays-face-backup/`, restore after the batch completes
 - Without isolation, outputs drift off-likeness because the script randomly samples up to 5 photos
 
 **Generation mechanics:**
@@ -117,8 +117,8 @@ v{N}-{slug}/
   ...
 ```
 
-Naming convention for the `--name` flag: `<style>-<subfamily>-<concept>-<variant>`
-- Matt style: `matt-structural-radial-a`, `matt-comparative-before-after-b`, `matt-mockup-tweet-c`
+Naming convention for the `--name` flag: `<style>-<concept>-<variant>`
+- Matt style: `matt-command-list-radial-a`, `matt-before-after-b`, `matt-tweet-c`
 - Nate style: `nate-folder-command-a`, `nate-icons-black-b`
 
 ---
@@ -130,31 +130,30 @@ Golden refs are previous generations that Ray liked enough to treat as canonical
 ```
 research/golden-references/
 ├── matt-style/
-│   ├── matt-command-list.png          ← the original slash command list hero
-│   ├── structural/
-│   │   ├── v4-B3-radial-diagram.png   ← 4-spoke radial
-│   │   ├── v4-C5-three-column.png     ← WATCH/DETECT/REACT flow
-│   │   └── v5-S1-radial-six-spokes.png ← 6-spoke radial
-│   ├── comparative/
-│   │   ├── v3-06-two-column-flow.png  ← two-column Kanban flow
-│   │   ├── v4-C2-events-actions-dense.png
-│   │   ├── v4-C4-before-after-state.png ← BEFORE/AFTER split
-│   │   ├── v5-C1-feature-table.png    ← hand-drawn comparison table
-│   │   ├── v5-C2-mood-columns.png     ← sad/happy Kanban mood contrast
-│   │   └── v5-C5-bar-chart.png        ← horizontal bar chart comparison
-│   └── mockup/
-│       ├── v3-09-fake-tweet.png       ← Anthropic tweet card
-│       ├── v4-D3-mac-notification.png ← macOS notification popup
-│       ├── v4-D4-changelog-card.png   ← NEW badge changelog card
-│       ├── v5-M5-raycast-search.png   ← Raycast search result
-│       └── v5-M6-reddit-post.png      ← Reddit post card
+│   ├── ray-command-list-v1-37pct.png  ← original command list (open-mouth, black tee, 37.2% R1 peak)
+│   ├── ray-command-list-v2-40pct.png  ← ✅ BEST: subtly impressed, white oxford, 40.3% R2 peak — use this one
+│   └── liked-examples/               ← all other liked generations (flat, no subfolders)
+│       ├── v3-06-two-column-flow.png
+│       ├── v3-09-fake-tweet.png
+│       ├── v4-B3-radial-diagram.png
+│       ├── v4-C2-events-actions-dense.png
+│       ├── v4-C4-before-after-state.png
+│       ├── v4-C5-three-column.png
+│       ├── v4-D3-mac-notification.png
+│       ├── v4-D4-changelog-card.png
+│       ├── v5-C1-feature-table.png
+│       ├── v5-C2-mood-columns.png
+│       ├── v5-C5-bar-chart.png
+│       ├── v5-M5-raycast-search.png
+│       ├── v5-M6-reddit-post.png
+│       └── v5-S1-radial-six-spokes.png
 └── nate-style/
     └── folder-command/
         ├── folder-command.png         ← contemplative, medium shot
         └── folder-command-closeup.jpeg ← close-up face crop
 ```
 
-When Ray marks a new generation as a winner, **save it to the correct `matt-style/` subfamily or `nate-style/` folder** so future sessions benefit.
+When Ray marks a new generation as a winner, **save it to `matt-style/` (top level for command-list heroes, `liked-examples/` for other layouts) or `nate-style/`** so future sessions benefit.
 
 ---
 
@@ -215,7 +214,7 @@ cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts
 - `--clone` — Clone mode: pass an existing thumbnail to recreate with different text. Requires `--text`.
 - `--system-prompt` — Override the default system prompt
 
-The script automatically loads face reference images from `assets/face/`.
+The script automatically loads face reference images from `references/rays-face/`.
 
 ### Clone mode ("same but different text")
 
@@ -284,9 +283,9 @@ open http://localhost:8503
 
 ## Face references
 
-`assets/face/go-to-face.jpg` is the primary face reference. For consistency:
-- Move all other photos to `assets/face-backup/` before generating
-- The script randomly samples up to 5 photos from `assets/face/` — isolating prevents drift
+`references/rays-face/go-to-face.jpg` is the primary face reference. For consistency:
+- Move all other photos to `references/rays-face-backup/` before generating
+- The script randomly samples up to 5 photos from `references/rays-face/` — isolating prevents drift
 - Restore from backup after the batch completes
 
 ---
@@ -295,7 +294,7 @@ open http://localhost:8503
 
 - Node.js with dependencies installed (`npm install` in skill folder)
 - `GEMINI_API_KEY` in `.env` file
-- `assets/face/go-to-face.jpg` present
+- `references/rays-face/go-to-face.jpg` present
 - `yt-dlp` installed (for research mode)
 - Supadata skill installed (for research mode)
 - Streamlit installed (`pip install streamlit`) for the Lab

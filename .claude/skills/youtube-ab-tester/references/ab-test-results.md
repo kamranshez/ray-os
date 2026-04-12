@@ -1523,3 +1523,60 @@ Same title across all 3: "Claude Code just shipped the monitor tool"
 
 **Status:** Command-list winning at 37.2% but below V22's 41.1% ceiling. Recommend locking in and moving on unless R2 has a specific hypothesis to test (e.g., slash-only command family framing).
 
+### Thumbnail A/B Test Round 2 (2026-04-12)
+
+Same title across all 3: "Claude Code just shipped the monitor tool"
+
+**Hypothesis:** Keep the winning command-list layout but test whether a calmer facial expression + white oxford shirt outperforms the R1 open-mouth smile + black t-shirt. Also drops the slash on "monitor" (headlines it as the standalone feature name) while keeping `/loop /hooks /schedule` with their slashes. Two challengers tested against the R1 control.
+
+| Thumbnail Style | File | Watch-time Share | Result |
+|----------------|------|------------------|--------|
+| **Face + command-list, subtly impressed closed-mouth, white oxford, "monitor" no-slash** | matt-command-list-oxford-c-subtly-impressed.png | **40.3%** | ✅ WINNER |
+| Face + command-list, open-mouth smile, black t-shirt (R1 winner — control) | tested/1st-36.2pct-v3-01-slash-list-top.png | 31.2% | (control, R1 winner) |
+| Face + command-list, confident neutral closed-mouth, white oxford, "monitor" no-slash | matt-command-list-oxford-d-confident-neutral.png | 28.5% | |
+
+**What R2 isolated:**
+- **Expression:** open-mouth smile (R1 winner) vs. closed-mouth impressed vs. closed-mouth confident-neutral
+- **Outfit:** black t-shirt (R1 winner) vs. white collared oxford (both challengers)
+- **Feature name:** `/monitor` with slash (R1 winner) vs. `monitor` no slash, orange-highlighted as the standalone feature name (both challengers)
+
+**Layout held constant:** hand-drawn command-list, yellow "(new in Claude!)" arrow, `/loop /hooks /schedule` siblings with their slashes intact, Shure SM7B bottom-right.
+
+**Key takeaways:**
+- **Major result — subtly-impressed + oxford crushed at 40.3%, beating the R1 winner's 37.2% and the V22 command-list ceiling (41.1% /advisor) within striking distance.** This is the highest command-list result on record after V22, and it came from changing only the face + outfit + feature-name slash — the layout itself was held constant
+- **Confident-neutral flopped at 28.5% — the lowest result for any command-list thumbnail tested.** Stone-face read as cold/disconnected, not authoritative. There's a sweet spot between "open-mouth hype" and "zero expression" — subtly impressed (closed-mouth, slight eyebrow raise, warm eyes) hit that sweet spot. Confident-neutral overshot into flat
+- **R1 control regressed from 37.2% → 31.2%** — same volatility pattern seen in V23 title R1→R2 (control "Nobody Knew" dropped from 39% → 31.4%). Early-round results for strong thumbnails seem to settle ~6 points lower when re-tested against stronger challengers. The R1 37.2% was optimistic; 31.2% is the true steady-state for the open-mouth variant
+- **New insight — the "calm confidence" ceiling is above the "open-mouth smile" ceiling:** Across Ray's channel, closed-mouth + warm-eyes + subtle expression now outperforms the energetic open-mouth smile on command-list thumbnails. This contradicts the generic YouTube thumbnail advice ("big reactions win") but aligns with Ray's audience profile (dev/technical, skeptical of hype). Bank this for future thumbnails
+- **New insight — the oxford shirt signals "news anchor / trusted source":** Pairing the oxford with subtly impressed vs. confident neutral is the key — the oxford sets the formal frame, and the expression has to read as "engaged but measured" (impressed) rather than "detached" (neutral). White oxford + warm-but-modest expression = maximum authority without coldness
+- **New insight — "monitor" without the slash as a headline feature name may have contributed too:** Both challengers dropped the slash on the highlighted item, so R2 can't isolate this variable from expression/outfit. Worth a future A/B to test `/monitor` vs `monitor` with expression held constant if another slash-command video comes up
+- **Confirmed — command-list layout remains bulletproof:** Now three tests in a row (V22 41.1%, V23 R1 37.2%, V23 R2 40.3%) where the hand-drawn slash-command list wins. This is Ray's strongest format
+- **Anti-pattern confirmed — stone-face ≠ authoritative:** Confident-neutral at 28.5% is a clear signal that zero-expression reads as "bored/disinterested" rather than "serious/professional". Future thumbnail expression pool: skip stone-face, include subtle warmth
+- **R2 tested three variables at once (expression, outfit, slash)** — this is a bundled variable change, so credit for the +9.1 point swing between winner (40.3%) and loser (28.5%) cannot be cleanly attributed. The biggest individual suspect is expression (since R1 already proved this layout works with various outfits in prior videos), but outfit + no-slash likely contributed secondary lifts
+
+**Thumbnail files:** Winner is `matt-command-list-oxford-c-subtly-impressed.png`. Rank copies should be archived to `references/thumbnails/v23-monitor-tool/tested/` after this session.
+
+**Status:** Final. **Lock in `matt-command-list-oxford-c-subtly-impressed.png` as the V23 thumbnail.** New formula to bank: command-list layout + white oxford + closed-mouth subtly-impressed expression = new ceiling candidate. Test this expression/outfit pairing on the next slash-command video to see if it generalizes.
+
+### Thumbnail A/B Test Round 3 (2026-04-12)
+
+Same title across all 3: "Claude Code just shipped the monitor tool"
+
+**Hypothesis:** Confirm R2 winner (subtly impressed) by testing against two more closed-mouth expression variants within the "warm but measured" range. All three share the same white oxford outfit, "monitor" no-slash layout, and command-list format — only the facial expression differs.
+
+| Thumbnail Style | File | Watch-time Share | Result |
+|----------------|------|------------------|--------|
+| **Subtly impressed, closed-mouth (R2 winner — control)** | matt-command-list-oxford-c-subtly-impressed.png | **36.6%** | ✅ WINNER (again) |
+| Raised brows curious, closed-mouth | matt-command-list-oxford-g-raised-brows-curious.png | 31.8% | |
+| One brow raised + smirk, closed-mouth | matt-command-list-oxford-j-one-brow-smirk.png | 31.6% | |
+
+**Key takeaways:**
+- **Subtly impressed wins again at 36.6%** — dropped from R2's 40.3% (as controls always do in subsequent rounds — same regression pattern seen across R1→R2) but still leads by 4.8 points over both challengers. Two consecutive wins confirms this is the real ceiling expression for the command-list format
+- **Raised brows (31.8%) and one-brow smirk (31.6%) are statistically tied** — both read as "too much face character" without enough warmth. The raised-brows came out as "slightly concerned" (flagged during generation), and the one-brow smirk also had a corrupted icon tile (diagonal slash instead of Claude flower), which may have suppressed it further
+- **Confirmed: subtly impressed is the optimal expression for Ray's channel.** Three rounds of testing now: R1 proved command-list wins the layout, R2 proved subtly-impressed + oxford beats open-mouth + black tee, R3 confirmed subtly-impressed beats other closed-mouth variants (curious, smirk). The expression search is complete
+- **New insight — the "curious/skeptical" expression family underperforms "warm/impressed":** Both challengers projected uncertainty or challenge (raised brows = "huh?", one-brow smirk = "oh really?") while the winner projects quiet confidence + warmth ("oh, that's clever"). Viewers click into warmth, not into skepticism — even modest skepticism reads as "I'm not sure about this" rather than "I know something you don't"
+- **Anti-pattern confirmed — raised brows without a smile = concern:** The "both brows raised, curious" prompt rendered as mildly worried rather than intrigued. Future prompt guidance: never use raised brows without pairing them with a visible smile — brows alone read anxious
+
+**Status:** Final. V23 thumbnail locked to `matt-command-list-oxford-c-subtly-impressed.png`. Expression exploration complete — subtly-impressed is confirmed as the best expression across 3 rounds of testing (40.3% R2 peak, 36.6% R3 confirmation). No further rounds needed.
+
+
+

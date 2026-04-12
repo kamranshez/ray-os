@@ -30,7 +30,7 @@ Style notes:
 
 const SCRIPT_DIR = path.dirname(__filename);
 const SKILL_DIR = path.dirname(SCRIPT_DIR);
-const FACE_DIR = path.join(SKILL_DIR, "assets", "face");
+const FACE_DIR = path.join(SKILL_DIR, "references", "rays-face");
 const ENV_FILE = path.join(SKILL_DIR, ".env");
 
 // Also check project root .env

@@ -3,13 +3,14 @@
   "video_title": "Claude Code just shipped the monitor tool",
   "internal_name": "Monitor Tool",
   "published_at": "2026-04-10",
-  "round": 1,
+  "round": 3,
   "test_type": "thumbnail",
   "title_locked": "Claude Code just shipped the monitor tool",
-  "note": "V23 thumbnail A/B Test R1. Title was locked after two rounds of title testing (see ab-test-results.md). Title rounds 1-2 used v3-06-two-column-flow.png as the single thumbnail. This thumbnail R1 tests three distinct visual formats against the locked title.",
+  "final_winner": "matt-command-list-oxford-c-subtly-impressed.png",
+  "note": "V23 thumbnail R3 complete. Subtly-impressed won again at 36.6% (R2: 40.3%). Expression search complete across 3 rounds. Locked.",
   "variants": [
-    "v3-01-slash-list-top.png",
-    "v4-C4-before-after-state.png",
-    "v5-C5-bar-chart.png"
+    "matt-command-list-oxford-c-subtly-impressed.png",
+    "matt-command-list-oxford-g-raised-brows-curious.png",
+    "matt-command-list-oxford-j-one-brow-smirk.png"
   ]
 }
