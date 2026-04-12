@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "2d288b628b2a03af",
+        "id": "cc57c7e0fbd6f5ca",
         "type": "tabs",
         "children": [
           {
-            "id": "6f5179305e5be74a",
+            "id": "ce94c586e3e6b95d",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "socials/youtube/performance/2026-03.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "2026-03"
+              "title": "New tab"
             }
           }
         ]
@@ -78,7 +74,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 284.5004348754883
+    "width": 252.50043487548828,
+    "collapsed": true
   },
   "right": {
     "id": "99b289f72ba3f8e1",
@@ -182,14 +179,18 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "6f5179305e5be74a",
+  "active": "ce94c586e3e6b95d",
   "lastOpenFiles": [
-    "socials/youtube/performance/2026-02.md",
-    "socials/youtube/performance/2026-03.md",
-    "socials/youtube/improvements.md",
     "socials/youtube/videos/5-skills-i-use-everyday.md",
     "socials/youtube/videos/interactive-artifacts-bun.md",
+    "projects/agentic-coding-school/corrections.md",
+    "projects/2026-04-thumbnail-workflow-migration.html",
     "Dashboard.md",
+    "CLAUDE.md",
+    "projects/agentic-coding-school/board.md",
+    "socials/youtube/performance/2026-03.md",
+    "socials/youtube/performance/2026-02.md",
+    "socials/youtube/improvements.md",
     "socials/youtube/videos/uploaded/ultrareview-hidden-bug-hunter.md",
     "socials/youtube/videos/uploaded/ultraplan.md",
     "socials/youtube/videos/uploaded/skills-2.0.md",
@@ -201,7 +202,6 @@
     "socials/youtube/videos/uploaded/anthropic-skills-playbook.md",
     "socials/youtube/videos/uploaded/50-tips-for-claude-code.md",
     "socials/youtube/videos/uploaded",
-    "CLAUDE.md",
     "socials/CLAUDE.md",
     "socials/youtube/CLAUDE.md",
     "long-plans/thumbnail-ab-test-backlog.md",
@@ -209,10 +209,8 @@
     "research/ultraplan-variants-raw-analysis.md",
     "socials/linkedin/analysis/2026-02-viral-analysis.md",
     "socials/linkedin/CLAUDE.md",
-    "socials/x/articles/ultraplan-ab-test-secret-2026-04-06.md",
     "socials/x/articles/images/ultraplan-thumbnail-v2/excalidraw_4.png",
     "socials/x/articles/images/ultraplan-thumbnail-v2/excalidraw_5.png",
-    "socials/youtube/videos/auto-dream-memory-consolidation.md",
     "monitor-newsletter-gmail.html",
     "images/monitor-tool-frame-play-small.jpg",
     "monitor-newsletter-options.html",
@@ -229,7 +227,6 @@
     "projects/agentic-coding-school/to-film/claude-code/images/technical-use-cases",
     "projects/agentic-coding-school/to-film/claude-code/images/before-auto-research",
     "projects/agentic-coding-school/to-film/claude-code/images/what-is-auto-research",
-    "projects/agentic-coding-school/ideas/claude-certified-architect-exam-guide.pdf",
     "Untitled.canvas"
   ]
 }
