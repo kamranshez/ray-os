@@ -4,5 +4,4 @@ Corrections and updates to existing published videos.
 - [ ] [[skills-overview]]
 - [ ] [[disable-model-invoked-skills]]
 - [ ] [[auto-compact-and-handoff]]
-- [ ] [[output-styles]]
 - [ ] [[clarifying-questions]]
