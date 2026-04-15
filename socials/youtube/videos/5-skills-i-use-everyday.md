@@ -100,6 +100,10 @@ I covered this concept in my Claude Code masterclass — the idea of validating 
 > [SHOW BROWSER — description-drift-detection.html from VidTempla repo]
 >
 > Here's a real example. I just shipped a description drift detection feature — detects when someone edits a YouTube description directly in YouTube Studio, bypassing the template system. Instead of reading the diff across 30 files, I generated this. Three diagrams: how drift is detected during sync, how write operations are gated, and the three resolution paths. Took 60 seconds to generate. Would've taken me 15 minutes to explain in a code review.
+>
+> [SHOW BROWSER — parakeet-streaming-architecture.html from HyperWhisper repo]
+>
+> Another one. For HyperWhisper I needed to understand the on-device Parakeet streaming pipeline — how audio chunks flow from the mic through the encoder into the decoder and back out as partial transcripts. Instead of tracing the code across the Swift and Core ML layers, I generated an architecture diagram. One glance and I could see the whole pipeline: buffering, chunking, inference, stitching. Now it lives in the repo as a reference anyone on the team can open.
 
 You're probably noticing a trend here. Design variations, diagrams — I'm not writing code and reviewing code anymore. I'm getting Claude to generate an artefact and then I review the artefact. It's faster, it's more intuitive, and honestly it's a better use of my time. Reading a diagram or picking from 10 designs is a much higher-leverage activity than reading a diff line by line.
 
