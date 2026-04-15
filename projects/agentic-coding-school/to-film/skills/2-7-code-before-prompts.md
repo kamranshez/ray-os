@@ -84,11 +84,36 @@ scripts/calculate --input items.json --tax-rate 0.08 --currency USD --round 2
 
 The AI knows exactly what flags are available, what types they expect, and what the tool does. No ambiguity.
 
+### The Second Payoff: Context Economy
+
+Consistency is the obvious reason to prefer code. The less obvious one is tokens.
+
+Every byte that passes through the model costs you twice. Once on the way in as input, and once on the way out if the model echoes or transforms it. A 50MB CSV piped through Claude to "sum column C" is a catastrophe. You're paying to stream raw data through a language model that's worse at addition than a three-line Python script.
+
+The fix is the same fix. Move it to code, and let files do the remembering.
+
+**The pattern:**
+- Scripts read the big, messy input from disk.
+- Scripts write their output to a file (like `summary.json`, `items.csv`, `report.md`).
+- The skill.md instructs Claude to read *only* the distilled result.
+
+The raw 50MB CSV never enters the context window. The 20-line summary does. Same work, a fraction of the tokens, and your context stays free for the judgment calls that actually need it.
+
+**Where this matters most:**
+- **Scraping and API pulls.** Fetch 200 pages, save to `data/raw/`, let AI read only the filtered subset it needs.
+- **Log analysis.** Grep and aggregate in a script, hand the AI the 10 lines that matter, not the 10,000.
+- **Multi-step pipelines.** Stage 1 writes `stage1.json`, stage 2 reads it. The AI never has to hold intermediate state in its head.
+- **Long documents.** A script chunks and indexes. The AI reads only the relevant chunk.
+
+**The rule of thumb.** If a step produces more than a few hundred lines of output, it should write to a file, not stream through the model. Skill.md points Claude to the path. Claude reads it on demand.
+
+This is why `scripts/` is load-bearing. It's not just "code for math." It's the skill's working memory, the place where intermediate state lives so the context window doesn't have to hold it.
+
 ### Key Insight
 
 > "Anything that can be done deterministically in code should be. Reserve AI for the fuzzy tasks that resist programmatic solutions." — Miessler
 
-This is the maturity leap from "markdown instructions" to "production skill systems." Your skill.md becomes the orchestrator — it decides what to do and in what order. Scripts handle the execution where precision matters.
+This is the maturity leap from "markdown instructions" to "production skill systems." Your skill.md becomes the orchestrator. It decides what to do and in what order. Scripts handle the execution where precision matters, and files handle the memory so the context window stays lean.
 
 ### Cross-Links
 
