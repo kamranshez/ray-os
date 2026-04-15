@@ -1100,7 +1100,7 @@ Testing whether "Memory 2.0" title can beat the locked winner, and whether the p
 **Final package:**
 - **Title:** Anthropic Just Dropped the Feature Nobody Knew They Needed
 - **Thumbnail:** Face + /dream folder icon
-- **Thumbnail images:** See `references/thumbnails/v18-auto-dream/`
+- **Thumbnail images:** See `references/thumbnails/v16-auto-dream/`
 
 ---
 
@@ -1203,7 +1203,7 @@ Same thumbnail across all (face + /leaked folder icon, serious expression). Test
 **Final package:**
 - **Title:** Claude Code Is About to Change Forever
 - **Thumbnail:** Face (serious) + /leaked folder icon
-- **Thumbnail images:** See `references/thumbnails/v19-claude-code-leak/`
+- **Thumbnail images:** See `references/thumbnails/v17-claude-code-leak/`
 
 ---
 
@@ -1355,7 +1355,7 @@ Same thumbnail across all (face + /ultrareview folder icon).
 - "Is Building" at 31.9% — passive/in-progress verb lacks urgency. "Is Coming" (R1: 30.4% on "Review 2.0", R2: 32.1% on "Biggest") consistently beats "Is Building" by ~1-2 points for anticipation framing
 - "Biggest Review Update Is Coming" dropped from R1-adjacent expectations to 32.1% — magnitude framing without Anthropic authority plateaus around mid-pack, mirrors V5 and V20 R1 pattern but weaker than earlier readings predicted
 - Both challengers now converging at ~32% — less "diverse frames producing similar results" and more "challengers drifting toward the floor while control holds"
-- **Diagnosis:** Title testing exhausted across two rounds. Locking in **"Anthropic's New Ultrareview Is Coming: What You Need to Know"** as the title. **Thumbnail is the likely ceiling** — worth testing Matt Pocock style variations on the locked title. Generating 10 now for thumbnail R1 (see `references/thumbnails/v21-ultrareview/`)
+- **Diagnosis:** Title testing exhausted across two rounds. Locking in **"Anthropic's New Ultrareview Is Coming: What You Need to Know"** as the title. **Thumbnail is the likely ceiling** — worth testing Matt Pocock style variations on the locked title. Generating 10 now for thumbnail R1 (see `references/thumbnails/v19-ultrareview/`)
 
 ---
 
@@ -1470,7 +1470,7 @@ Same thumbnail across all (v3-06: face + /monitor flowchart with Error/Warn/Fail
 - **New insight — Pocock hypothesis partially validated:** Personal adoption ("I'm using... now") is viable as a secondary frame (33.3% is respectable) but can't beat the news control. Worth retesting only on workflow-style videos, not feature announcements
 - **Confirmed anti-pattern:** Dropping "Anthropic" for feature announcement videos = 5-6 point authority tax (V22, V21, V16, V15, V14, V13, V12, now V23)
 
-**Thumbnail note:** v3-06 is a tutorial-flavored concept visual (flowchart explaining the mechanism). Paired well with the news control because the thumbnail explains *what* while the title drives *why-you-should-click*. See `references/thumbnails/v23-monitor-tool/`
+**Thumbnail note:** v3-06 is a tutorial-flavored concept visual (flowchart explaining the mechanism). Paired well with the news control because the thumbnail explains *what* while the title drives *why-you-should-click*. See `references/thumbnails/v21-monitor-tool/`
 
 **Status:** Strong signal. Lock in winner or run R2 with stronger Anthropic-authority frames to push past 39%?
 
@@ -1519,7 +1519,7 @@ Same title across all 3: "Claude Code just shipped the monitor tool"
 - **Confirmed insight — command-list is generalizable:** Two wins in a row (V22 /advisor 41.1%, V23 /monitor 37.2%). Make it the default format to include in any future slash-command or named-feature video thumbnail pool
 - **Open hypothesis for R2 (if run):** V22 (41.1%) siblings were all slash commands; V23 (37.2%) siblings were `/loop /hooks /schedule` which mix slash commands with other concepts. Is the V22 advantage from "pure slash-command family" vs V23's looser grouping? Worth one targeted R2 test if the upside justifies another generation pass
 
-**Thumbnail files:** `references/thumbnails/v23-monitor-tool/tested/` — all three ranked copies archived (`1st-36.2pct-v3-01-slash-list-top.png`, `2nd-34pct-v4-C4-before-after-state.png`, `3rd-29.8pct-v5-C5-bar-chart.png`)
+**Thumbnail files:** `references/thumbnails/v21-monitor-tool/tested/` — all three ranked copies archived (`1st-36.2pct-v3-01-slash-list-top.png`, `2nd-34pct-v4-C4-before-after-state.png`, `3rd-29.8pct-v5-C5-bar-chart.png`)
 
 **Status:** Command-list winning at 37.2% but below V22's 41.1% ceiling. Recommend locking in and moving on unless R2 has a specific hypothesis to test (e.g., slash-only command family framing).
 
@@ -1553,7 +1553,7 @@ Same title across all 3: "Claude Code just shipped the monitor tool"
 - **Anti-pattern confirmed — stone-face ≠ authoritative:** Confident-neutral at 28.5% is a clear signal that zero-expression reads as "bored/disinterested" rather than "serious/professional". Future thumbnail expression pool: skip stone-face, include subtle warmth
 - **R2 tested three variables at once (expression, outfit, slash)** — this is a bundled variable change, so credit for the +9.1 point swing between winner (40.3%) and loser (28.5%) cannot be cleanly attributed. The biggest individual suspect is expression (since R1 already proved this layout works with various outfits in prior videos), but outfit + no-slash likely contributed secondary lifts
 
-**Thumbnail files:** Winner is `matt-command-list-oxford-c-subtly-impressed.png`. Rank copies should be archived to `references/thumbnails/v23-monitor-tool/tested/` after this session.
+**Thumbnail files:** Winner is `matt-command-list-oxford-c-subtly-impressed.png`. Rank copies should be archived to `references/thumbnails/v21-monitor-tool/tested/` after this session.
 
 **Status:** Final. **Lock in `matt-command-list-oxford-c-subtly-impressed.png` as the V23 thumbnail.** New formula to bank: command-list layout + white oxford + closed-mouth subtly-impressed expression = new ceiling candidate. Test this expression/outfit pairing on the next slash-command video to see if it generalizes.
 
