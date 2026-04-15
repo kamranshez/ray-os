@@ -130,9 +130,15 @@ Golden refs are previous generations that Ray liked enough to treat as canonical
 ```
 research/golden-references/
 ├── matt-style/
-│   ├── ray-command-list-v1-37pct.png  ← original command list (open-mouth, black tee, 37.2% R1 peak)
-│   ├── ray-command-list-v2-40pct.png  ← ✅ BEST: subtly impressed, white oxford, 40.3% R2 peak — use this one
-│   └── liked-examples/               ← all other liked generations (flat, no subfolders)
+│   ├── ray-command-list-v1-37pct.png                  ← original command list (open-mouth, black tee, 37.2% R1 peak)
+│   ├── ray-command-list-v2-40pct.png                  ← ✅ BEST: subtly impressed, white oxford, 40.3% R2 peak — use this one
+│   ├── winner-v22-advisor-command-list-41pct.png      ← v22 R1 1st: command-list excalidraw (41.1%)
+│   ├── winner-v20-plan-mode-icons-39pct.png           ← v20 R1 1st: plan-mode 2-icon structural (38.5%)
+│   ├── winner-v22-advisor-before-after-37pct.png      ← v22 R2 1st: before/after excalidraw (37.2%)
+│   ├── winner-v23-monitor-slash-list-36pct.png        ← v23 R1 1st: slash-list top structural (36.2%)
+│   ├── winner-v17-shift-dark-icons-34pct.png          ← v17 1st (tied): the-shift dark-icon (34.3%)
+│   ├── winner-v17-github-future-of-coding-34pct.png   ← v17 1st (tied): github-card mockup with face (33.9%)
+│   └── liked-examples/                                ← Ray's eye-picked compositions (no CTR data, flat)
 │       ├── v3-06-two-column-flow.png
 │       ├── v3-09-fake-tweet.png
 │       ├── v4-B3-radial-diagram.png
@@ -148,9 +154,11 @@ research/golden-references/
 │       ├── v5-M6-reddit-post.png
 │       └── v5-S1-radial-six-spokes.png
 └── nate-style/
+    ├── winner-v18-auto-dream-folder-35pct.png         ← v18 R1 1st: dream-folder face shot (34.9%)
+    ├── winner-v19-leak-folder-serious-36pct.jpg       ← v19 R1 1st: leak-folder serious face (35.5%)
     └── folder-command/
-        ├── folder-command.png         ← contemplative, medium shot
-        └── folder-command-closeup.jpeg ← close-up face crop
+        ├── folder-command.png                          ← contemplative, medium shot
+        └── folder-command-closeup.jpeg                 ← close-up face crop
 ```
 
 When Ray marks a new generation as a winner, **save it to `matt-style/` (top level for command-list heroes, `liked-examples/` for other layouts) or `nate-style/`** so future sessions benefit.

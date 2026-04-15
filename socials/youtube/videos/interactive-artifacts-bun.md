@@ -2,125 +2,106 @@
 date: 2026-04-09
 status: scripting
 ---
+![[images/three-layers/excalidraw_3.png]]
 
-> **Example artifact:** `agentic-coding-school/tasks/cc-curriculum-reorder.html` — content-flow reorder of all 132 Claude Code course videos, side-by-side before/after view built from 10 parallel transcript-dependency subagents.
+> **Example artifact:** `agentic-coding-school/tasks/cc-curriculum-reorder.html`. Content-flow reorder of all 132 Claude Code course videos, built from 10 parallel transcript-dependency subagents. Used as the "this scales" callback inside the rapid fire montage.
 
-## Hook (0:00-0:30)
+## Opening
 
-Most people use Claude Code like a text editor. Type a prompt, get code back, paste it somewhere. But what if Claude could build you a live UI, serve it in your browser, and then read back what you did in that UI to change your actual project?
+So recently I've been doing a bunch of Claude Code coaching calls to help organisations use it better. And I think one thing stood out to me, so I figured I'd make a separate video about it. 
 
-That's the interactive artifact loop. And once you see it, you can't go back to prompting.
+And this is the whole idea of interactive artifacts. So I'll be going through the three different layers here in this video. 
 
-## The Pattern (0:30-2:00)
+## Level 1: Static
 
-Here's the core idea in one sentence: Claude generates an HTML file, serves it with Bun's hot-reloading server, you interact with it in the browser, and your interactions write to a JSON file that Claude reads back.
+>"Extract this component and then give me ten design variations of it and then pick the one that I like and we can put it back in."
 
-**The loop:**
-1. Claude writes an HTML file + a Bun server (`bun --hot run server.ts`)
-2. Server goes live on localhost, you open it in Chrome
-3. You click, type, drag, whatever the UI needs
-4. Every interaction POSTs back to the Bun server, which writes to a JSON file
-5. You hit "Copy to Claude" (top-right button), paste it back. Claude reads the JSON and applies the changes.
+This is the floor. A static artifact is already better than a text response, because the information is spatial and glanceable. You see the shape of the journey at once. You would have gotten a bulleted list otherwise.
 
-The key ingredient is `bun --hot`. Not the browser HMR you know from Vite or Next. This is server-side hot reload. Bun 1.0 shipped it in September 2023. When you save server.ts, the module re-evaluates without killing the process. No reconnect, no port conflict. Claude edits the server while you're using it.
+>"Map the entire customer journey for my product. Every touchpoint from first visit to renewal. The happy path, abandoned carts, churned users, upsell paths, support escalations. Render it as a flow diagram."
 
-**Important pattern:** every artifact that generates output for Claude needs a "Copy to Claude" button in the top right. That's the bridge. The user interacts, the JSON accumulates, one click copies a prompt with the JSON path, paste it back into Claude Code. That's the full loop.
+Claude writes an HTML file. Opens in Chrome. Spawns subagents that read your PostHog events, your Stripe funnel, your Intercom conversations, your onboarding emails. Every branch of the real journey appears as a node in a flow diagram. Happy path in green, drop-off points in red, unknowns in grey. It looks like a real product.
 
-## Why Bun (2:00-2:45)
+And it does nothing. You cannot click anything. You cannot comment on anything. It is just a pretty visual of your funnel, already useful on its own because you can already see things at a glance that would take an hour to describe in a doc.
 
-Why not just use Node? Three reasons:
+## Layer 2: Interactive
 
-1. **`bun --hot`** gives you server-side hot reload with zero config. Node needs nodemon or tsx watch, plus you lose state on restart.
-2. **`Bun.serve()` + `Bun.file()` + `Bun.write()`** is your entire server in one import. No express, no fs promises, no middleware.
-3. **Speed.** Bun starts in under 50ms. When Claude is generating and restarting servers in a loop, that matters.
+> "Now serve it with Bun. Use `bun --hot run server.ts`. Let me click any node and leave a comment. Save everything to `journey-comments.json` on every interaction."
 
-The Adam Silverman demo from the Anthropic webinar showed exactly this pattern.
+Claude adds a tiny server. `Bun.serve()`, `Bun.file()`, `Bun.write()`. That is it. No Express, no middleware, no build step. The same page reloads, but now it is alive.
 
-## Demo 1: Design Variations (2:45-4:30)
+Click any node. A comment box opens. Type "why are we losing 40% of people here?" Click another node. Type "this email is doing nothing, draft three alternatives." Click a grey unknown. Type "do we even track this step?" Every comment saves to `journey-comments.json`. Open the file in another pane and watch it update.
 
-Starting with the simplest possible example. You want to see 4 different hero section designs side by side and pick one.
+This is the second floor. You now have a real input surface for commenting on the journey. The JSON is your output. But the JSON just sits there until someone reads it.
 
-> "Build me an interactive artifact that shows 4 variations of my hero section. Different layouts, different emphasis. Serve it with Bun. Let me click the one I like. Save my choice to choice.json."
+Cue the "Copy to Claude" button in the top right. Every interactive artifact gets this button. One click copies a prompt with the JSON path, you paste it into Claude Code, Claude reads the JSON, writes the insights memo, commits. This is already a massive upgrade over prompt-and-paste, and for a lot of artifacts this is all you need. Fast, explicit, no extra moving parts.
 
-Claude generates an HTML page with 4 rendered variations of your hero. Different headline sizes, different CTA placement, different visual hierarchy. You click the one that feels right. Hit "Copy to Claude" in the top right. Paste it back. Claude applies that design to your real component.
+But there is a richer version when you want Claude reacting to you live.
 
-No Figma. No mockup. No describing what you want in words. You just pointed at it.
+Can use this
 
-## Demo 2: Eisenhower Matrix (4:30-6:00)
+> **Curriculum reorder (132 videos).** Same pattern, scaled up. 10 parallel subagents read every transcript to build the dependency graph before the UI even loads. Drag lessons into a new order. Claude rewrites the curriculum.
 
-Now something everyone can use, not just developers.
+>**Stripe pricing simulator.** Sliders and a tier composer over your live Stripe data. Pick a scenario. Claude updates products, rewrites the pricing page, adjusts feature gates in code, queues grandfathering emails.
 
-> "Build me an interactive Eisenhower Matrix. Four quadrants: urgent+important, important+not urgent, urgent+not important, neither. Let me type tasks and drag them between quadrants. Save to tasks.json."
+## Layer 3: Channels loop
 
-Claude builds it. You type "record video on artifacts", drag it to Important + Not Urgent. "Reply to sponsor email" goes to Urgent + Important. Drag things around until your week makes sense.
+> "Wire up an MCP channel. Every time `journey-comments.json` changes, push the delta to Claude. Have Claude react live: pull the cohort analysis for any node I ask about, draft the emails I request, propose the tracking code, and render the results back into the diagram."
 
-Hit "Copy to Claude" in the top right. Now Claude has your prioritized task list as structured data. Ask it to generate a daily schedule, a markdown todo list, whatever you need.
+Reference: https://code.claude.com/docs/en/channels-reference
 
-The wow here: Claude just built you a full productivity app in 30 seconds. And it's not a screenshot. It's live, it's interactive, and it feeds back.
+Now the loop closes automatically. The Copy to Claude button is still there, still works, still useful when you want an explicit handoff. But you do not need it to trigger the feedback anymore. Every comment streams back to Claude through the MCP channel. Claude is listening.
 
-## Demo 3: Color Palette Remixer (6:00-7:30)
+And Claude's answers come back *into the diagram itself*. Your "why are we losing 40%" comment gets answered with a cohort analysis rendered under that node. "Draft three alternatives" gets three email drafts as cards under the node. "Do we track this" gets a PostHog query result or a proposed tracking plan with the exact code to add.
 
-This is the visual showstopper.
+You walk through the diagram leaving comments. Claude walks behind you doing the research and the drafting. By the time you finish the map you have a full audit, a set of drafts, and a tracking plan. No separate tabs, no lost context, no "let me go find that data".
 
-> "Extract my Tailwind color palette and build an interactive remixer. Sliders for hue, saturation, lightness. Show my actual components updating in real-time. Save the final palette to palette.json."
+This is the interaction Adam named in the Anthropic webinar: click on anything Claude sent you, leave a comment, Claude intercepts it and acts.
 
-Claude reads your Tailwind config, pulls every color, renders sliders. You drag the primary hue slider and watch your entire site shift from emerald to blue to purple. Adjust saturation. Dial down lightness for a moodier feel. See your actual buttons, cards, and text update in an iframe preview.
+This is the point of the pattern. You are interacting with a visual tool, and Claude is doing real work in your project the whole time, out of your way but inside the loop.
 
-Hit "Copy to Claude" in the top right. Claude rewrites your tailwind.config with the new palette.
+**Stripe churn investigator.** Last 30 cancellations as cards. Group and tag with hypotheses. Claude drafts win-back emails per cluster and writes an insights memo.
 
-This is the thumbnail moment. Sliders moving, colors shifting, everything updating live.
+> Having it do deep research and then seeing what's happening live in a nice UI front end, and then being able to direct it from there. 
 
-## Demo 4: Customer Journey Mapper (7:30-9:00)
+### Why Bun
 
-Now something for the business side.
+`bun --hot` gives server-side hot reload with zero config. When Claude edits `server.ts`, the module re-evaluates without killing the process. Your session stays intact. `Bun.serve()` plus `Bun.file()` plus `Bun.write()` is your entire server in one import. Bun starts in under 50ms, so the iteration loop feels instant.
 
-> "Build me a customer journey mapper. Timeline from first visit to purchase to renewal. Let me drag touchpoints onto the timeline: landing page, email sequences, checkout, follow-up emails, onboarding. Mark each as positive, neutral, or negative. Save to journey.json."
+### The dual-mode insight
 
-Claude builds a visual timeline. You drag "Welcome email" to day 1. "Checkout abandoned" email at day 2. "Recovery follow-up" at day 3. "Onboarding sequence" at day 7. "6-week check-in" at day 42. Mark each touchpoint as positive or negative based on what you know about your funnel.
+Every artifact is doing two jobs at once.
 
-Now you can see your entire customer experience laid out spatially. Where are the gaps? Where do you have 3 emails in 2 days and then silence for a month? 
+One, it is a UI that captures your decision. You clicked a node on the journey map and left a comment. That is data.
 
-Hit "Copy to Claude" in the top right. Paste it back. Ask Claude to identify the gaps, suggest new touchpoints, or draft the emails you're missing.
+Two, it is a conversational surface where you can edit the tool itself in the same breath. "Hey Claude, colour the churned-user nodes by cancellation reason, and by the way add a filter for paid users only." Claude edits `server.ts` to add the filter, updates the node renderer to pull the cancellation reasons from Stripe. Bun hot reload applies the server change. Your session keeps going. You did not stop working.
 
-## Quick Demos: Font Pairing + Animation Curves (9:00-10:30)
+This is what Adam from the Claude Code team called "flying" in the recent Anthropic webinar. You stop switching between "I am building the tool" and "I am using the tool". Claude handles both sides at once.
 
-Two more fast ones to show the range.
+![[images/dual-mode-insight/excalidraw_3.png]]
+![[images/dual-mode-insight/excalidraw_4.png]]
+## Rapid fire: the pattern is infinite
 
-**Font Pairing Explorer:** Claude loads 20 Google Fonts, renders your actual headings and body text with every combination. A grid of pairs. Click the one that looks right. "Copy to Claude" in the top right. Claude updates your font config. 10 seconds to find a font pairing that would take an hour of Googling.
+Every one of these follows the same three-layer shape. Static, interactive, channels.
 
-**Animation Curve Editor:** Claude extracts all your Framer Motion animations and renders them on a visual timeline. Drag keyframes. Adjust bezier easing curves. Preview the animation in real-time. "Copy to Claude" in the top right. Claude updates the motion components. You just edited animations without writing a single `transition` property.
+- **Inbox triage board.** Gmail as a Kanban. Drag emails into reply, archive, snooze. Claude drafts every reply in your voice and executes.
+- **Class outline whiteboard.** Sticky notes for every Agentic Coding School lesson, dependency arrows. Drag to reshape. Claude rewrites the course manifest and generates shot lists for flagged lessons.
 
-## The Pattern Is Infinite (10:30-11:30)
+The artifact does not have to be code-related. It just has to be a UI that writes JSON, streamed back through a channel. Claude reads it. Claude acts. That is it.
 
-Every one of these follows the same loop. HTML + Bun server + JSON bridge + "Copy to Claude" button in the top right.
+## Close
 
-Here are more you could build in 60 seconds:
+This is a different relationship with Claude.
 
-- **Database Schema Designer** — Interactive ERD. Drag tables, draw relations, add columns. Claude generates migrations.
-- **Form Builder** — Drag field types onto a canvas, set validation rules. Claude generates the component + Zod schema.
-- **Permission Matrix** — Roles x resources grid. Click cells to toggle access. Claude generates RBAC middleware.
-- **Cron Schedule Timeline** — All your scheduled tasks on a 24-hour clock. Drag to reschedule. Claude updates the config.
-- **HTML Slide Deck Builder** — Drag content blocks, pick a visual style, reorder slides. Claude generates a presentation. Meta: you could build the slides for this video with the pattern from this video.
+Instead of describing what you want in paragraphs, you show it. Instead of pasting JSON back, Claude reads the JSON itself. Instead of stopping to change the tool, you tell Claude to change the tool while you keep using it.
 
-The artifact doesn't have to be code-related. It's just a UI that writes JSON. Claude reads JSON. That's it.
+You interact with Claude visually and richly. Claude does the work behind the scenes.
 
-## Why This Matters (11:30-12:30)
-
-This is a fundamental shift. Instead of describing what you want in text, you're showing it. Instead of a prompt, it's a GUI. And the feedback loop is instant because Bun's hot reload means Claude can iterate on the artifact itself while you're using it.
-
-Think about what this means. Any time you find yourself writing a long, detailed prompt trying to describe exactly what you want, you could instead say: "Build me a UI where I can just show you."
-
-And you can build one of these in about 60 seconds.
+Any time you catch yourself writing a long prompt trying to describe what you want, stop. Say: "build me a UI where I can just show you, and wire it up with a channel so you can act on what I do."
 
 ---
 
-## Production Notes
+## Production notes
 
-- Record demos live, don't cut. Show Claude generating both files in the terminal.
-- Browser and terminal side by side for all demos.
-- For Color Palette Remixer: zoom in on the sliders. That's the money shot for the thumbnail.
-- Every artifact must show the "Copy to Claude" button in the top right. Emphasize this is the pattern. The bridge between GUI and AI.
-- End on the slide deck meta moment if possible: "these slides were built with the pattern I just showed you."
-- Demo sequence builds: simple pick (Design Variations) → drag-and-drop (Eisenhower) → live sliders (Color Palette) → business mapping (Journey) → rapid fire (Font + Animation)
-- Reference: Anthropic webinar (Casey, Tarek, Adam) where Adam demos this pattern
-- Link to class in description: masterclaudecode.com
+- Link the MCP channels docs: https://code.claude.com/docs/en/channels-reference
+- Link to class in description: masterclaudecode.com 
