@@ -12,7 +12,7 @@ Ray's thumbnails come in **two distinct visual systems**. Before generating anyt
 | **Matt Pocock** | A well-designed explainer slide from an educational deck | Features, comparisons, how-it-works videos, announcements, any video where you're teaching or contrasting something |
 | **Nate Herk** | A big folder or app-icon studio shot with a slash command | New command/tool launches, integration videos, "I built X" videos, anything that has a clear feature name to showcase |
 
-Each style has its own **golden reference library** under `research/golden-references/matt-style/` or `research/golden-references/nate-style/`, and its own set of rules. You should commit to ONE style per batch — never mix them.
+Each style has its own **golden reference library** under `golden-references/matt-style/` or `golden-references/nate-style/`, and its own set of rules. You should commit to ONE style per batch — never mix them.
 
 Read the style-specific reference file before generating:
 - **Matt style** → read `references/matt-style.md` for layouts, rules, and golden refs
@@ -29,12 +29,12 @@ Whatever style the user picks, the workflow is the same:
 3. **Get the video content** — either the transcript (fetch via supadata if URL) or a script/description the user provides
 4. **Read the style's reference file** (`references/matt-style.md` or `references/nate-style.md`)
 5. **Read `feedback.json`** for global feedback rules (e.g., facial expressions, hairstyle)
-6. **Isolate `go-to-face.jpg`** — move all other photos out of `references/rays-face/` to `references/rays-face-backup/`
-7. **Write 5 prompts** by hand, each using a different golden reference from the chosen style's library. Never use subagents for prompt writing — they lose visual context.
-8. **Fire all 5 generations in parallel** using `run_in_background: true`. Use `--name` to save directly to the target folder.
-9. **Wait via Monitor tool** that watches the target folder for the final count
-10. **Restore face photos** from `face-backup/`
-11. **Open the target folder** — `open ../youtube-ab-tester/references/thumbnails/v{N}-{slug}/`
+6. **Write 5 prompts** by hand, each using a different golden reference from the chosen style's library. Never use subagents for prompt writing — they lose visual context.
+7. **Fire all 5 generations in parallel** using `run_in_background: true`. Use `--name` to save directly to the target folder.
+8. **Wait via Monitor tool** that watches the target folder for the final count
+9. **Open the target folder** — `open ../youtube-ab-tester/references/thumbnails/v{N}-{slug}/`
+
+The face reference is always `references/rays-face/go-to-face.jpg` — no isolation dance needed (the script hardcodes this).
 
 ### Where generations land
 
@@ -60,7 +60,7 @@ All thumbnails — the generated pool AND the eventual tested winners — live i
 cd .claude/skills/youtube-thumbnail-generator && npx ts-node scripts/generate.ts "<prompt>" \
   -n 1 -o "../youtube-ab-tester/references/thumbnails/v{N}-{slug}" \
   --name "<style-prefix>-<concept>-<variant>" \
-  -r "research/golden-references/<style>/<golden-ref>.png" \
+  -r "golden-references/<style>/<golden-ref>.png" \
   -t 240
 ```
 
@@ -82,10 +82,8 @@ These apply to every thumbnail Ray generates, regardless of style:
 - Expression: warm genuine smile, knowing smirk, or contemplative — NEVER shock, surprise, or exaggerated reactions
 - Shure SM7B podcast microphone rising from the bottom-right foreground (used when the composition has room for it)
 
-**Face references:**
-- Always isolate `references/rays-face/go-to-face.jpg` as the ONLY face reference before generating
-- Move other photos to `references/rays-face-backup/`, restore after the batch completes
-- Without isolation, outputs drift off-likeness because the script randomly samples up to 5 photos
+**Face reference:**
+- Hardcoded to `references/rays-face/go-to-face.jpg` — always used, always alone. No random sampling, no isolation step.
 
 **Generation mechanics:**
 - `-n 1` per run (never `-n 2`)
@@ -128,7 +126,7 @@ Naming convention for the `--name` flag: `<style>-<concept>-<variant>`
 Golden refs are previous generations that Ray liked enough to treat as canonical. They already have Ray's face baked in, so the model has less to reconcile between face ref + style ref.
 
 ```
-research/golden-references/
+golden-references/
 ├── matt-style/
 │   ├── ray-command-list-v1-37pct.png                  ← original command list (open-mouth, black tee, 37.2% R1 peak)
 │   ├── ray-command-list-v2-40pct.png                  ← ✅ BEST: subtly impressed, white oxford, 40.3% R2 peak — use this one
@@ -162,35 +160,6 @@ research/golden-references/
 ```
 
 When Ray marks a new generation as a winner, **save it to `matt-style/` (top level for command-list heroes, `liked-examples/` for other layouts) or `nate-style/`** so future sessions benefit.
-
----
-
-## Mode 1: Research competitor thumbnails
-
-(Unchanged from V15 — still useful for discovering new styles or expanding the reference library.)
-
-When the user wants to research new competitor thumbnails, there are four sources:
-
-### From a specific channel URL
-```bash
-yt-dlp --flat-playlist --print "%(id)s %(title)s" "<channel-url>" --playlist-end 15
-curl -sL "https://i.ytimg.com/vi/<VIDEO_ID>/maxresdefault.jpg" -o "research/competitor-thumbnails/<VIDEO_ID>.jpg"
-```
-
-### From YouTube Studio "What your audience watches"
-URL: `https://studio.youtube.com/channel/UCLA7cJBnqr0nLF2bQBD9uUg/analytics/tab-build_audience/period-default`
-
-Use browser automation (mcp__claude-in-chrome or Playwright). Extract video IDs from thumbnail image URLs and download.
-
-### From keyword search
-```bash
-python3 .claude/skills/supadata/scripts/supadata.py batch-thumbnails "<query>" --max 15 --out-dir research/competitor-thumbnails
-```
-
-### From user-provided HTML
-Extract video IDs from pasted HTML (look for `src="https://i.ytimg.com/vi/<ID>/..."`), download thumbnails.
-
-After downloading, visually inspect each with the Read tool and write a short style analysis to `research/analysis.md`.
 
 ---
 
@@ -253,7 +222,7 @@ Don't use clone mode when the user wants a different composition, expression, or
   "preferred_style": {
     "name": "Matt Pocock structured explainer",
     "description": "Structured diagram / comparison / mockup on black left half, Ray right-side with mic",
-    "reference_dir": "research/golden-references/matt-style/"
+    "reference_dir": "golden-references/matt-style/"
   },
   "global_feedback": {
     "facial_expressions": "Keep expressions modest and natural — no exaggerated shock/surprise. Contemplative, serious, warm smile, or subtly concerned work best.",
@@ -303,8 +272,6 @@ open http://localhost:8503
 - Node.js with dependencies installed (`npm install` in skill folder)
 - `GEMINI_API_KEY` in `.env` file
 - `references/rays-face/go-to-face.jpg` present
-- `yt-dlp` installed (for research mode)
-- Supadata skill installed (for research mode)
 - Streamlit installed (`pip install streamlit`) for the Lab
 
 ## Important notes

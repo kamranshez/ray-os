@@ -121,7 +121,7 @@ Or if the video is about an integration / connection between tools, skew toward 
 
 If Ray marks a new Nate-style generation as a winner:
 1. Identify the sub-family (folder-command, icons-black, cli-chat, agent-diagram, whiteboard)
-2. Copy to `research/golden-references/nate-style/<sub-family>/<descriptive-name>.png`
+2. Copy to `golden-references/nate-style/<sub-family>/<descriptive-name>.png`
 3. If the sub-family folder doesn't exist, create it
 4. Mention it in the session so the user knows it's saved
 

@@ -68,48 +68,22 @@ function loadImageAsBase64(imagePath: string): { data: string; mimeType: string 
   return { data, mimeType };
 }
 
-function loadFaceReferences(): { data: string; mimeType: string }[] {
-  if (!fs.existsSync(FACE_DIR)) {
-    console.warn("Warning: No face reference directory found at assets/face/");
+function loadFaceReferences(overridePath?: string): { data: string; mimeType: string }[] {
+  if (overridePath) {
+    if (!fs.existsSync(overridePath)) {
+      console.warn(`Warning: Face override not found: ${overridePath}`);
+      return [];
+    }
+    console.log(`  Face: ${path.basename(overridePath)} (override)`);
+    return [loadImageAsBase64(overridePath)];
+  }
+  const goToFace = path.join(FACE_DIR, "go-to-face.jpg");
+  if (!fs.existsSync(goToFace)) {
+    console.warn(`Warning: ${goToFace} not found.`);
     return [];
   }
-  const files = fs.readdirSync(FACE_DIR);
-  const imageFiles = files.filter((f) => {
-    const ext = path.extname(f).toLowerCase();
-    return [".png", ".jpg", ".jpeg", ".webp"].includes(ext);
-  });
-
-  if (imageFiles.length === 0) {
-    console.warn("Warning: No face reference images found in assets/face/");
-    console.warn("Add 3-5 photos of your face for consistent likeness in thumbnails.");
-    return [];
-  }
-
-  // Always prioritize go-to-face.jpg, then randomly fill remaining slots
-  const MAX_FACE_REFS = 5;
-  const GO_TO_FACE = "go-to-face.jpg";
-  let selected = imageFiles;
-  if (imageFiles.length > MAX_FACE_REFS) {
-    const hasGoTo = imageFiles.includes(GO_TO_FACE);
-    const others = imageFiles.filter((f) => f !== GO_TO_FACE);
-    // Fisher-Yates shuffle the non-go-to photos
-    for (let i = others.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [others[i], others[j]] = [others[j], others[i]];
-    }
-    if (hasGoTo) {
-      selected = [GO_TO_FACE, ...others.slice(0, MAX_FACE_REFS - 1)];
-    } else {
-      selected = others.slice(0, MAX_FACE_REFS);
-    }
-  }
-
-  console.log(`Randomly selected ${selected.length}/${imageFiles.length} face reference(s)...`);
-  return selected.map((f) => {
-    const imgPath = path.join(FACE_DIR, f);
-    console.log(`  Face: ${f}`);
-    return loadImageAsBase64(imgPath);
-  });
+  console.log(`  Face: go-to-face.jpg`);
+  return [loadImageAsBase64(goToFace)];
 }
 
 function findNextAvailableIndex(outputDir: string): number {

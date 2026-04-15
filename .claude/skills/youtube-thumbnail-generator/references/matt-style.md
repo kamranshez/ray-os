@@ -113,7 +113,7 @@ Pass ONE golden ref from the matching sub-family as `-r`. Never pass multiple re
 
 If Ray marks a new generation as a winner in Matt style:
 1. Identify which sub-family it belongs to (structural / comparative / mockup)
-2. Copy it to `research/golden-references/matt-style/<sub-family>/<descriptive-name>.png`
+2. Copy it to `golden-references/matt-style/<sub-family>/<descriptive-name>.png`
 3. Mention it in the session so the user knows it's saved
 
 Golden refs in sub-family folders get automatically discovered by future sessions looking for Matt-style inspiration.
