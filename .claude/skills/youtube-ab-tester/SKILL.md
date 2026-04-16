@@ -7,11 +7,16 @@ description: Generate A/B test title and thumbnail text options for Ray's YouTub
 
 You generate data-driven YouTube title and thumbnail text options for A/B testing, and record/analyze test results.
 
-Before generating any titles or thumbnail text, **always read this reference file first** — it is your ground truth:
+Before generating any titles or thumbnail text, **always read the reference data first** — it is your ground truth:
 
-- `references/ab-test-results.md` — All historical A/B test data (titles AND thumbnails), winning formulas, anti-patterns, and key learnings. Derive your proven formulas, verb rankings, and pattern hierarchy fresh from this data each time. Per-video thumbnail images live under `references/thumbnails/v{N}-{slug}/tested/` — browse those folders when you want to see what winning thumbnails actually look like.
+- `references/results/YYYY-MM/` — Per-video A/B test results organized by year-month folders (`2025-11/`, `2025-12/`, `2026-01/`, ...). Each file is `YYYY-MM-DD-slug.md` with the actual VidTempla upload date. **Read the most recent 4-6 video files (glob the latest month folder) for current patterns, plus the meta files for durable rules.**
+- `references/results/_master-summary.md` — Winning formula rankings and key rules (derived from all videos)
+- `references/results/_anti-patterns.md` — Documented failures to never repeat
+- `references/results/_tests-still-worth-running.md` — Untested hypotheses worth exploring
+- `references/results/_overview.md` — Document overview
+- Per-video thumbnail images live under `references/thumbnails/v{N}-{slug}/tested/` — browse those folders when you want to see what winning thumbnails actually look like.
 
-The reference data is the source of truth for what works and what doesn't. Rather than relying on a static list of formulas baked into this skill file, re-derive your recommendations from the actual test results each time. This ensures your suggestions reflect the latest patterns, not stale rankings.
+The reference data is the source of truth for what works and what doesn't. Rather than relying on a static list of formulas baked into this skill file, re-derive your recommendations from the actual test results each time. This ensures your suggestions reflect the latest patterns, not stale rankings. When you need older video data for cross-referencing, read those specific files on demand.
 
 ## Recency Weighting
 
@@ -104,7 +109,7 @@ When the user shares A/B test screenshots or results:
 2. Match each file in `variants` to its rank and pct from the screenshot.
 3. **Resolve each filename** using the lookup order in "Finding variant files" below. If a file lives only in the generator's `output/` folder, copy it into the v{N} folder first so the ab-tester archive becomes self-contained.
 4. Copy (don't move — keep the originals in the pool) each tested file into `references/thumbnails/v{N}-{slug}/tested/` as `{rank}-{pct}pct-{original-stem}.{ext}`. Example: `matt-structural-three-modes-b.png` → `tested/1st-38.5pct-matt-structural-three-modes-b.png`.
-5. Record results in `references/ab-test-results.md` with the established markdown table format. Round header: `### Title A/B Test Round N (YYYY-MM-DD)`.
+5. Record results in the video's individual file at `references/results/YYYY-MM/YYYY-MM-DD-slug.md` with the established markdown table format. Round header: `### Title A/B Test Round N (YYYY-MM-DD)`. For a brand new video, create the month folder if needed and a new file following the `YYYY-MM-DD-slug.md` naming convention (use VidTempla upload date).
 6. Write "Key takeaways" that reference specific data points from previous videos.
 7. End with a clear recommendation for the next round.
 
