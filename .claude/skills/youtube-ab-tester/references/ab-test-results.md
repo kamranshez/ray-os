@@ -1578,5 +1578,68 @@ Same title across all 3: "Claude Code just shipped the monitor tool"
 
 **Status:** Final. V23 thumbnail locked to `matt-command-list-oxford-c-subtly-impressed.png`. Expression exploration complete — subtly-impressed is confirmed as the best expression across 3 rounds of testing (40.3% R2 peak, 36.6% R3 confirmation). No further rounds needed.
 
+---
 
+## Video 24: Interactive Artifacts (3 Layers)
+
+**Published:** 2026-04-15
+**Thumbnail:** Face + "3 LAYERS OF ARTIFACTS" excalidraw flow (browser → claude code → channel with click/receive/send boxes). Thumbnail files in `references/thumbnails/v22-artifacts/`.
+
+This is a workflow/technique video, not a single-feature announcement. Format ceiling is pillar/thesis tier (~17K avg) rather than single-feature (~45K). "Anthropic Just Dropped" doesn't apply (the workflow is Ray's own technique layered on top of Claude Code Channels, Bun, and static artifacts), so testing had to find a different authority lever.
+
+### Failed Launch Titles (2026-04-15)
+
+Initial three titles underperformed immediately — video ranked 7/10 at 518 views within the first published batch, well below neighboring videos (886, 807, 628, 588, 556, 549). Percentages not captured before swap.
+
+| Title | Thumbnail | Result |
+|-------|-----------|--------|
+| The Claude Code Workflow Nobody Is Teaching Yet | 3 Layers of Artifacts | UNDERPERFORMED |
+| The Claude Code Technique Top 0.01% Users Swear By | 3 Layers of Artifacts | UNDERPERFORMED |
+| Interactive Artifacts Changed How I Use Claude Code | 3 Layers of Artifacts | UNDERPERFORMED |
+
+**Why they failed (post-mortem):**
+- **All three lacked concrete outcome payoff** — "nobody is teaching", "top 0.01%", and "changed how I use" all gesture at importance without promising *what viewers get*. Nick Saraev's "Claude Routines Just Dropped, And They Automate Everything" (82K views, 4.2K VPH) works because it has three concrete punches: named thing + release verb + specific outcome. These three titles had at most one
+- **"Top 0.01% Users Swear By"** — statistical authority worked in V11 (41.9%) but there it was personal ("60 Claude Code Tips From a Top 0.01% User"). Here, "Users Swear By" is third-person hearsay without the speaker owning the authority
+- **"Interactive Artifacts Changed How I Use Claude Code"** — personal transformation frame without Anthropic authority. V10 R2 established that personal-only frames without institutional authority floor at ~25% (25.4% for "I Control Claude Code From My Phone Now")
+- **No Anthropic authority across any of the three** — consistent with the 5-6 point authority tax observed across V12-V23
+
+### Title A/B Test Round 1 (2026-04-15) — Authority inversion pivot
+
+Hypothesis: If the workflow is legitimately something Anthropic's own Claude Code team uses, lead with that authority inversion ("even the people who built it use this"). This is the insight V15's 49.4% all-time winner ("Anthropic Just Dropped Their Internal Skills Strategy") leveraged — insider/internal framing beats outsider curiosity.
+
+Same thumbnail across all (face + "3 LAYERS OF ARTIFACTS" excalidraw flow).
+
+| Title | Thumbnail | Watch-time Share | Result |
+|-------|-----------|------------------|--------|
+| **Even Anthropic Engineers Use This Claude Code Workflow** | 3 Layers of Artifacts | **36.4%** | ✅ Leader |
+| The Claude Code Workflow Anthropic's Own Team Uses | 3 Layers of Artifacts | 32.1% | |
+| The Claude Code Workflow Nobody Is Teaching Yet | 3 Layers of Artifacts | 31.4% | (control from failed launch) |
+
+**Key takeaways:**
+- **5 point spread between winner and control** — authority inversion frame validated. "Even Anthropic Engineers" pulled 5 points above the failed-launch "Nobody Is Teaching" control on the same thumbnail
+- **"Even X uses this" is a new frame worth banking** — the word "Even" implies surprise ("the people who built it still use this workflow"), which IS the curiosity gap. Descriptive authority ("Own Team Uses") at 32.1% is flat because it states a fact without the surprise structure
+- **"Nobody Is Teaching" (31.4%) as control confirms the failed-launch diagnosis** — abstract social-proof without a concrete authority anchor floors in the low 30s
+- **New insight — authority inversion for non-Anthropic-feature videos:** When you can't use "Anthropic Just Dropped [feature]" (because the video is a technique, not a feature announcement), "Even Anthropic Engineers Use This [technique]" is the workaround. Both leverage institutional authority; the inversion frame works for techniques that predate Anthropic releases
+- Round 2 should push the "Even" structure harder and test V15's proven "Internal" keyword to see if 40%+ is reachable
+
+### Title A/B Test Round 2 (2026-04-16) — Push past 40% with "Even" + "Internal"
+
+Same thumbnail across all.
+
+| Title | Thumbnail | Watch-time Share | Result |
+|-------|-----------|------------------|--------|
+| **Even Anthropic Engineers Use This Claude Code Workflow** | 3 Layers of Artifacts | **39.2%** | ✅ WINNER |
+| Even Anthropic's Claude Code Team Uses This Trick | 3 Layers of Artifacts | 31.4% | |
+| The Claude Code Workflow Anthropic Uses Internally | 3 Layers of Artifacts | 29.4% | |
+
+**Key takeaways:**
+- **R1 winner surged from 36.4% → 39.2%** — "Even Anthropic Engineers" is the clear repeated winner across both rounds. Nearly 10 point gap over the weakest challenger in R2, wider than R1's 5 point spread. Settling near 40% ceiling for this thumbnail
+- **"Even Anthropic's Claude Code Team Uses This Trick" flopped at 31.4%** — surprising given it shares the "Even" structure + more specific team name. Two suspects: (a) "Trick" reads as smaller/lighter than "Workflow" — the video promises a multi-layer technique, not a one-line trick. Viewers may have sensed the mismatch. (b) "Claude Code Team" is more specific than "Engineers" but less evocative — "Engineers" carries universal dev authority; "Claude Code Team" feels like a smaller niche group
+- **"The Claude Code Workflow Anthropic Uses Internally" crashed at 29.4%** — surprising since "Internal" is V15's proven 49.4% keyword. The difference: V15 used the active-news frame ("Anthropic Just Dropped Their Internal [X] Strategy") where "Internal" modified the noun and was paired with a release verb. Here "Internally" is an adverb tacked onto the end of a descriptive sentence — it loses the "hidden/leaked" energy and reads flat
+- **New insight — "Even [institution] uses X" frame generalizes:** Two rounds both crown this exact structure. Worth testing on future workflow/technique videos where "Anthropic Just Dropped" doesn't apply. The frame leverages institutional authority by implying the institution itself is a user, not the source
+- **New anti-pattern — "Uses X Internally" adverb construction:** Moving "Internal" from adjective-on-noun ("Internal Skills Strategy") to adverb-on-verb ("Uses Internally") kills the keyword's power. The word needs to modify what the thing IS, not how it's used
+- **New insight — "Workflow" > "Trick" for multi-layer techniques:** When the video teaches a system (3 layers here), "Workflow" promises a complete method. "Trick" promises a quick tip. Match the noun to the scope of what you're teaching
+- **Confirmed — authority inversion is Ray's workaround for non-feature-announcement videos:** "Anthropic Just Dropped" needs an Anthropic release. "Even Anthropic Engineers Use This" works when the thing being taught is a technique Anthropic engineers happen to use. Two rounds of wins confirm it's a real formula
+
+**Status:** Recommend locking in **"Even Anthropic Engineers Use This Claude Code Workflow"** as the title. Two rounds of wins (36.4% → 39.2%) with widening spread. If views remain sub-target, the bottleneck is likely format (pillar/technique ceiling ~17K) or thumbnail — not title. Consider a thumbnail test as R3 if another lever is wanted.
 
