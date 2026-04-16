@@ -1,0 +1,41 @@
+# YouTube Outlier Scout -- Watchlist
+# Channels to monitor for outlier videos + keywords for discovery
+# Used by /youtube-outlier-scout skill
+
+channels:
+  - "@Chase-H-AI"
+  - "@RobShocks"
+  - "@mattpocockuk"
+  - "@MattPocockAI"
+  - "@intheworldofai"
+  - "@ColeMedin"
+  - "@nicksaraev"
+  - "@aarondfrancis"
+  - "@AgenticNolan"
+  - "@aiDotEngineer"
+  - "@BenAI92"
+  - "@briancasel"
+  - "@DavidOndrej"
+  - "@DevelopersDigest"
+  - "@Itssssss_Jack"
+  - "@jacobdietle"
+  - "@leonvanzyl"
+  - "@MarcinTeodoru"
+  - "@MetalSole"
+  - "@nateherk"
+  - "@rileybrownai"
+  - "@dylandavisAI"
+
+# Keywords for niche discovery (yt-dlp ytsearch)
+# Each keyword gets 20 results, filtered to last 24 hours
+keywords:
+  - "Claude Code"
+  - "AI agents"
+  - "agentic coding"
+  - "vibe coding"
+  - "RAG agents"
+  - "cursor"
+  - "codex"
+
+# Outlier threshold (multiplier of channel median views)
+min_multiplier: 3
