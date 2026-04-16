@@ -44,15 +44,23 @@ and extract title patterns worth stealing.
 
 **Primary data source: yt-dlp** (installed at `/opt/homebrew/bin/yt-dlp`)
 
-yt-dlp can pull view counts, titles, durations, and upload dates for any public channel
-without API quota limits:
+yt-dlp can pull video data for any public channel without API quota limits.
+**Important**: `--flat-playlist` does NOT return view counts. Use a two-step approach:
 
+**Step 1: Get video IDs (fast, ~2s)**
 ```bash
-yt-dlp --flat-playlist --print "%(id)s|%(title)s|%(view_count)s|%(duration)s|%(upload_date)s" \
-  "https://www.youtube.com/@ChannelHandle/videos" 2>/dev/null
+yt-dlp --flat-playlist --print "%(id)s" "https://www.youtube.com/@ChannelHandle/videos" 2>/dev/null
 ```
 
-This returns pipe-delimited rows: `videoId|title|viewCount|durationSeconds|uploadDate(YYYYMMDD)`
+**Step 2: Batch-fetch view counts in parallel (10 at a time, ~30s for 88 videos)**
+```bash
+yt-dlp --flat-playlist --print "%(id)s" "https://www.youtube.com/@ChannelHandle/videos" 2>/dev/null | \
+  xargs -P 10 -I {} sh -c 'yt-dlp --no-download --print "%(id)s|%(title)s|%(view_count)s|%(upload_date)s" "https://www.youtube.com/watch?v={}" 2>/dev/null' | \
+  sort -t'|' -k3 -rn
+```
+
+Returns pipe-delimited rows sorted by views: `videoId|title|viewCount|uploadDate(YYYYMMDD)`
+Use `timeout: 300000` for large channels.
 
 **Thumbnails**: available at `https://i.ytimg.com/vi/{VIDEO_ID}/maxresdefault.jpg`
 (fall back to `hqdefault.jpg` if maxres unavailable)
