@@ -278,6 +278,24 @@ Save to this skill's reports directory:
 
 Use today's date. If a report already exists for today, append `-v2`, `-v3`, etc.
 
+### Step 7 -- Send Telegram Summary
+
+After saving the report, send a condensed summary to Ray on Telegram using the
+telegram-message skill's send script:
+
+```bash
+bash ~/.claude/skills/telegram-message/scripts/send-message.sh "<summary>"
+```
+
+The Telegram message should be concise (Ray reads on his phone) and include:
+- Report date and channels/keywords scanned
+- Top 5 trending videos (last 48h) with view counts
+- Top title formulas with multipliers
+- Top 5 biggest outliers with multipliers
+- One line: "Full report saved to ray-os"
+
+Keep it under ~1500 characters. No markdown formatting (plain text only for Telegram).
+
 ## Watchlist Management
 
 When the user says `add @handle` or `remove @handle`:
