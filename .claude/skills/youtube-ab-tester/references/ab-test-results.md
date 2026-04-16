@@ -1641,5 +1641,32 @@ Same thumbnail across all.
 - **New insight — "Workflow" > "Trick" for multi-layer techniques:** When the video teaches a system (3 layers here), "Workflow" promises a complete method. "Trick" promises a quick tip. Match the noun to the scope of what you're teaching
 - **Confirmed — authority inversion is Ray's workaround for non-feature-announcement videos:** "Anthropic Just Dropped" needs an Anthropic release. "Even Anthropic Engineers Use This" works when the thing being taught is a technique Anthropic engineers happen to use. Two rounds of wins confirm it's a real formula
 
-**Status:** Recommend locking in **"Even Anthropic Engineers Use This Claude Code Workflow"** as the title. Two rounds of wins (36.4% → 39.2%) with widening spread. If views remain sub-target, the bottleneck is likely format (pillar/technique ceiling ~17K) or thumbnail — not title. Consider a thumbnail test as R3 if another lever is wanted.
+**Status:** Title locked. Moved to thumbnail testing (see Thumbnail R1 below).
+
+### Thumbnail A/B Test Round 1 (2026-04-16)
+
+Title locked across all 3: "Even Anthropic Engineers Use This Claude Code Workflow"
+
+Hypothesis: The excalidraw "3 Layers of Artifacts" thumbnail may have been capping title rounds in the high 30s. Test whether a Nate-style slash-command framing (white browser window + /artifact + flower icon + pill concepts) unlocks additional CTR by naming the workflow like a slash command, similar to Nick Saraev's /routines thumbnail that pulled 82K views / 4.2K VPH.
+
+| Thumbnail Style | File | Watch-time Share | Result |
+|----------------|------|------------------|--------|
+| **Nate-style white browser + /artifact + flower icon + STATIC/CLICKABLE/CHANNELS pills + red arrow, smiling face** | nate-routines-artifact-a.png | **39%** | ✅ WINNER |
+| Interactive Artifacts browser→claude-code flowchart (click/pin/save → receive/query/update, via channels) | v01-channels-baseline.png | 31.1% | (original control from title rounds) |
+| 3 LAYERS OF ARTIFACTS three-column (HTML / INTERACTIVE / CHANNEL icons) with black banner label | matt-structural-3col-layers-a.png | 30% | |
+
+**Key takeaways:**
+- **8-9 point spread** — genuine thumbnail signal. /artifact Nate-style beats both excalidraw alternatives by ~9 points on the same locked title
+- **Nate-style slash-command branding works for technique videos** — even though "/artifact" is not a real Claude Code command, framing the workflow *as if* it were a slash command creates the same visual recognition pattern that won V22 /advisor (41.1%) and V23 /monitor R2 (40.3%). The brain treats it as "one of those Claude Code slash commands" and pattern-matches to trust
+- **White browser background + warm smile outperformed dark excalidraw** — previous wisdom on this channel was face-forward dark excalidraw (V22/V23 command-list). This result suggests the Nate-style white-background "product" aesthetic is a real alternative format, not just a one-off
+- **STATIC/CLICKABLE/CHANNELS pills as the three-concept summary worked** — conveys the "3 layers" structure without relying on a literal 3-column layout. Pills read as product feature tags, not information to parse
+- **Red arrow from face pointing to /artifact** — strong directional cue, viewer's eye goes face → arrow → slash command, which is the exact reading order you want
+- **Flowchart thumbnail (v01-channels-baseline) at 31.1%** — the control that carried titles in the mid-30s regressed to 31.1% when paired with a stronger challenger, matching the V23 early-round volatility pattern (controls always drop ~6 points in subsequent rounds)
+- **Three-column "3 LAYERS OF ARTIFACTS" at 30% (lowest)** — the literal column layout that tried to visualize the 3-layer structure crashed. Diagnosis: three small icons requiring equal parsing attention + a black banner label = no single focal point, same anti-pattern as V22 R2 three-column bento (28.3%). Structural formats keep losing to concept/product framings on this channel
+- **New insight — "fake slash command" branding for techniques:** You can get the slash-command visual credibility without needing a real slash command. Nick Saraev's /routines is likely a similar move. Worth banking: any time you're naming a workflow/technique, try a Nate-style `/[name]` thumbnail as one of the three variants
+- **Confirmed anti-pattern — structural three-column icon layouts:** Third time this format has lost (V22 R2: 28.3%, V23 R1 bar-chart: 29.3%, now V24 R1: 30%). Retire this format from the default thumbnail pool
+
+**Thumbnail files:** `references/thumbnails/v22-artifacts/` — full pool + `tested/` with ranked copies (`1st-39pct-nate-routines-artifact-a.png`, `2nd-31.1pct-v01-channels-baseline.png`, `3rd-30pct-matt-structural-3col-layers-a.png`). Uploaded manifest in `uploaded.json`.
+
+**Status:** Strong signal. Lock in `nate-routines-artifact-a.png` OR run R2 to push past 40% with Nate-style variations (different smile/expression, different pill concepts, different arrow placement).
 
