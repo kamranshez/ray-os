@@ -6,6 +6,11 @@ kanban-plugin: board
 
 ## Backlog
 
+- [ ] [[01-solo-plus-cheap-verifier]] #agent-teams
+- [ ] [[02-parallel-voters]] #agent-teams
+- [ ] [[03-generator-plus-adversarial-critic]] #agent-teams
+- [ ] [[04-decomposed-swarm-independent-errors]] #agent-teams
+- [ ] [[05-environmental-attractors]] #agent-teams
 - [ ] [[wordpress-mcp]]
 - [ ] [[compound-engineering]] #claude-code
 - [ ] [[subagent-teams]] #claude-code
@@ -129,11 +134,6 @@ kanban-plugin: board
 - [ ] [[adversarial-critics-fighting-llm-agreement-bias]] #techniques
 - [ ] [[specs-vs-constraints-making-incorrect-code-unrepresentable]] #spec-driven-development
 - [ ] [[convergence-over-perfection-thesis]] #agent-teams
-- [ ] [[01-solo-plus-cheap-verifier]] #agent-teams
-- [ ] [[02-parallel-voters]] #agent-teams
-- [ ] [[03-generator-plus-adversarial-critic]] #agent-teams
-- [ ] [[04-decomposed-swarm-independent-errors]] #agent-teams
-- [ ] [[05-environmental-attractors]] #agent-teams
 
 
 ## Doing
