@@ -6,7 +6,12 @@ batch_name: "Techniques"
 class: "techniques"
 chapter: "Advanced Techniques"
 ---
+Integrate this comment
+>For reasons which it would take a while to unpack, if is often the case that the best (or sometimes only) way to find out what programming actually needs to be done, is to program something that's not it, and then replace it. This may need to be done multiple times. Programming is only occasionally the final product, it is much more often the means of working through what it is that is actually needed. This is very difficult for the people who ask for the software, to understand, and it is quite often very difficult for the people doing the programming to understand.
 
+>Most of what is being done, during programming, is working through the problem space in a way which will make it more obvious what your mistakes are, in your understanding of the problem and what a solution would look like. Once you have arrived at that understanding, then there are a variety of ways to make what you need, but that is not the rate-limiting step.
+
+- https://news.ycombinator.com/item?id=47752970
 # Scrappy-First
 
 Every new feature should get built twice. The first build is fake, fast, and isolated. The second build is real, integrated, and the one you ship. The trick is committing up front to throwing the first one away, because that's the only thing that lets you cut the corners that make it fast, and that's the only thing that lets v1 actually teach you what v2 should be.
