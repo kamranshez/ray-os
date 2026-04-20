@@ -117,27 +117,27 @@ kanban-plugin: board
 - [ ] [[knowing-which-skills-to-combine]] #skills
 - [ ] [[running-claude-in-a-dev-box]] #claude-code
 - [ ] [[deterministic-pathway-replacing-certain-tools]] #claude-code
+- [ ] [[specs-are-the-new-product]] #spec-driven-development
 
 
 ## To Do
 
 - [ ] [[auto-memory]] #claude-code
 - [ ] [[effort-for-skill]] #claude-code
-- [ ] [[frontend-design]]
 
 
 ## Doing
 
 - [ ] [[build-small-merge-big]] #techniques
-- [ ] [[worktrees]] #claude-code
-- [ ] [[telegram-channel]] #business
 - [ ] [[git-inside-of-vscode]] #claude-code
-- [ ] [[Ultrathink]]
 
 
 ## Done
 
+- [ ] [[worktrees]] #claude-code
 - [ ] Codex + Claude Code
+- [ ] [[telegram-channel]] #business
+- [ ] [[Ultrathink]]
 - [ ] Airtable Memory for Cloud Scheduled Tasks
 - [ ] Frontend Design
 - [ ] Remote Control #claude-code
