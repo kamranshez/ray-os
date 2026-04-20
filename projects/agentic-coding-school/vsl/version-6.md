@@ -49,11 +49,15 @@ It teaches you how to automate repetitive work, draft and review documents, anal
 
 It also goes deep into subagents, MCP servers, skills, hooks, prompt engineering, and context engineering. The strategies that massive organizations are using to make Claude Code work at scale.
 
+And it's not just the mechanics of the tool. The class also covers the practical ways I use Claude Code every day across business, research, content creation, and daily work. Real workflows you can copy, not theory.
+
 So whether you're an engineer, a founder, a marketer, accountant, lawyer, or someone who's never written a line of code, I guarantee that mastering this skill will revolutionise the way you work.
 
 And this class isn't some kind of YouTube content that gets outdated quickly. It's a curriculum that stays up to date with Claude Code updates.
 
 Whenever a new Claude Code update happens, there's a new video added to the class at no additional cost to you.
+
+And many of the techniques I teach in this class end up going mainstream two to three months after I cover them. So you're not just staying up to date. You're staying ahead of the curve.
 
  Organizations have bought this for entire teams and 3 to 5x'd their output. Many students have become the go-to Claude Code expert at their company. And many others have landed jobs specifically because they got good at this skill.
 
