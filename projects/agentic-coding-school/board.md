@@ -118,12 +118,22 @@ kanban-plugin: board
 - [ ] [[running-claude-in-a-dev-box]] #claude-code
 - [ ] [[deterministic-pathway-replacing-certain-tools]] #claude-code
 - [ ] [[specs-are-the-new-product]] #spec-driven-development
+- [ ] [[tdd-stops-the-cheating-agent]] #spec-driven-development
 
 
 ## To Do
 
 - [ ] [[auto-memory]] #claude-code
 - [ ] [[effort-for-skill]] #claude-code
+- [ ] [[blast-radius-proportional-verification]] #techniques
+- [ ] [[adversarial-critics-fighting-llm-agreement-bias]] #techniques
+- [ ] [[specs-vs-constraints-making-incorrect-code-unrepresentable]] #spec-driven-development
+- [ ] [[convergence-over-perfection-thesis]] #agent-teams
+- [ ] [[01-solo-plus-cheap-verifier]] #agent-teams
+- [ ] [[02-parallel-voters]] #agent-teams
+- [ ] [[03-generator-plus-adversarial-critic]] #agent-teams
+- [ ] [[04-decomposed-swarm-independent-errors]] #agent-teams
+- [ ] [[05-environmental-attractors]] #agent-teams
 
 
 ## Doing
