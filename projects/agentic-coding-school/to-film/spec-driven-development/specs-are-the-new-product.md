@@ -55,9 +55,9 @@ The spec was incomplete. So the product was broken. **The spec is the product.**
 
 ## Engineering Rigor Didn't Disappear, It Moved
 
-Here's what this does to your engineering practice. All the rigor you used to apply to code, the reviews, the edge case checks, the "wait, what happens if the user clicks this twice," all of that has to happen before a single line gets written.
+Here's what this does to your engineering practice. All the rigor you used to apply to code, the reviews, the edge case checks, the "wait, what happens if the user clicks this twice," all of that has to happen before a single line gets written. Practitioners at the retreat described it as **pre-reviewing the plan and post-reviewing the engineering**, instead of reviewing the code itself. Same instinct, different artifact.
 
-The techniques that come back are the ones agile was supposed to kill. **State machines. Decision tables. Formal PRDs.** The boring, structured, document-heavy practices that felt dead for fifteen years.
+The techniques that come back are the ones agile was supposed to kill. **State machines. Decision tables. Formal PRDs.** Structured requirement formats like EARS. The boring, document-heavy practices that felt dead for fifteen years, being rediscovered because user stories are too vague for an agent to execute correctly.
 
 They're back because the executor changed. When humans were the executors, cultural context filled the gaps in a loose spec. When machines are the executors, there are no gaps that get filled for free. Every gap is a production bug waiting to happen.
 
