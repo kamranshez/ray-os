@@ -1,0 +1,16 @@
+{
+  "video_title": "Anthropic Just Dropped the Biggest Subagent Upgrade Yet",
+  "uploaded_at": "2026-04-24",
+  "round": 1,
+  "test_type": "thumbnail",
+  "variants": [
+    "T1.png",
+    "T2.png",
+    "T3.png"
+  ],
+  "notes": {
+    "T1.png": "Face + Subagents 2.0 folder icon (control — carried all 3 title rounds)",
+    "T2.png": "Nate-style: face + smile + browser window with Subagents 2.0 + Claude flower icon + /btw /recap /dream pills + red arrow",
+    "T3.png": "Faceless dark: Subagents 2.0 + Claude flower + cloud-checklist icon"
+  }
+}
