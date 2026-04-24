@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Claude Code Auto Mode Works · Deep Dive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+    --page-bg: #1c1c20;
+    --page-text: #e2e2e6;
+    --page-dim: #6a6a74;
+    --page-muted: #44444e;
+    --badge-color: #c08060;
+    --badge-border: rgba(192, 128, 96, 0.45);
+    --badge-bg: rgba(192, 128, 96, 0.08);
+    --term-bg: #282830;
+    --term-header-bg: #2e2e36;
+    --term-border: #3a3a42;
+    --term-text: #d4d4dc;
+    --term-dim: #6e6e78;
+    --term-muted: #4a4a54;
+    --prompt-bg: #333340;
+    --dot-red: #ff5f57;
+    --dot-yellow: #febc2e;
+    --dot-green: #28c840;
+    --tool-blue: #7eb8d4;
+    --tool-green: #7ec87e;
+    --tool-orange: #d4a06b;
+    --tool-red: #d46b6b;
+    --tool-pink: #d46ba8;
+    --tool-purple: #9b7ed4;
+    --tool-cyan: #6bc8c8;
+    --tool-yellow: #d4c86b;
+}
+
+::selection { background: rgba(192, 128, 96, 0.45); color: #fff; text-shadow: none; }
+::-moz-selection { background: rgba(192, 128, 96, 0.45); color: #fff; text-shadow: none; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+    background: var(--page-bg);
+    color: var(--page-text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    height: 100vh; overflow: hidden;
+}
+
+.slide {
+    position: fixed; inset: 0;
+    display: none;
+    flex-direction: column;
+    padding: 64px 88px 48px;
+    opacity: 0; transition: opacity 0.3s;
+}
+.slide.active { display: flex; opacity: 1; }
+
+.slide-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 56px;
+    min-height: 0;
+}
+.slide-body.stacked {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+}
+.slide-body.stacked .slide-left {
+    flex: none; max-width: 100%;
+}
+
+.slide-left {
+    flex: 0 0 32%;
+    max-width: 32%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.slide-right {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column;
+    max-height: 100%;
+}
+
+.badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--badge-color);
+    border: 1.5px solid var(--badge-border);
+    background: var(--badge-bg);
+    padding: 5px 16px;
+    border-radius: 3px;
+    margin-bottom: 24px;
+    width: fit-content;
+}
+
+.slide-title {
+    font-size: 2.6rem; font-weight: 800;
+    letter-spacing: -0.035em; line-height: 1.12;
+    color: var(--page-text);
+}
+.slide-title.xl { font-size: 3.2rem; }
+
+.slide-desc {
+    margin-top: 16px;
+    font-size: 1.05rem;
+    color: var(--page-dim);
+    line-height: 1.6;
+    max-width: 38ch;
+}
+
+.analogy {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: var(--page-dim);
+    line-height: 1.7;
+}
+.analogy strong { color: var(--badge-color); }
+
+.callout {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: rgba(126, 200, 126, 0.06);
+    border: 1px solid rgba(126, 200, 126, 0.15);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: var(--page-dim);
+    line-height: 1.7;
+}
+.callout strong { color: var(--tool-green); }
+
+.terminal {
+    background: var(--term-bg);
+    border: 1px solid var(--term-border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column;
+    flex: 1; min-height: 0;
+}
+.term-header {
+    display: flex; align-items: center;
+    padding: 14px 20px;
+    background: var(--term-header-bg);
+    border-bottom: 1px solid var(--term-border);
+    flex-shrink: 0;
+}
+.term-dots { display: flex; gap: 8px; }
+.term-dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot-r { background: var(--dot-red); }
+.dot-y { background: var(--dot-yellow); }
+.dot-g { background: var(--dot-green); }
+.term-path {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--term-dim);
+}
+.term-body {
+    padding: 28px 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.9;
+    flex: 1; overflow: hidden;
+    display: flex; flex-direction: column;
+}
+.term-content { flex: 1; }
+
+.p {
+    display: block;
+    background: var(--prompt-bg);
+    padding: 7px 14px;
+    border-radius: 5px;
+    margin-bottom: 18px;
+    color: var(--term-text);
+}
+.p::before { content: '\276F  '; color: var(--term-dim); }
+
+.b::before { content: '\23FA  '; font-size: 0.65em; vertical-align: middle; }
+.b { color: var(--term-text); }
+
+.sub { padding-left: 24px; display: block; }
+.sub::before { content: '\2514\2500 '; color: var(--term-muted); }
+
+.ln { display: block; }
+.gap { display: block; height: 12px; }
+.sgap { display: block; height: 22px; }
+
+.c-tool { color: var(--tool-blue); }
+.c-green { color: var(--tool-green); }
+.c-orange { color: var(--tool-orange); }
+.c-red { color: var(--tool-red); }
+.c-pink { color: var(--tool-pink); }
+.c-purple { color: var(--tool-purple); }
+.c-cyan { color: var(--tool-cyan); }
+.c-yellow { color: var(--tool-yellow); }
+.c-dim { color: var(--term-dim); }
+.c-muted { color: var(--term-muted); }
+.c-text { color: var(--term-text); }
+
+.resp {
+    display: block;
+    background: rgba(126, 200, 126, 0.06);
+    border-left: 2px solid rgba(126, 200, 126, 0.2);
+    padding: 10px 16px;
+    border-radius: 0 4px 4px 0;
+    margin: 12px 0;
+    color: var(--term-text);
+    font-size: 0.76rem;
+    line-height: 1.8;
+}
+
+.term-footer { margin-top: auto; padding-top: 16px; }
+.cursor {
+    display: inline-block;
+    width: 8px; height: 15px;
+    background: var(--term-dim);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.prompt-bottom { display: block; margin-top: 12px; }
+.prompt-bottom::before { content: '\276F  '; color: var(--term-dim); }
+.shortcuts { display: block; color: var(--term-muted); font-size: 0.7rem; margin-top: 12px; }
+
+.term-cols { display: flex; gap: 32px; }
+.term-col { flex: 1; }
+.term-col-label {
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.1em; margin-bottom: 12px;
+    display: block;
+}
+
+.stats { display: flex; gap: 12px; margin-bottom: 16px; }
+.stat-box {
+    flex: 1;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--term-border);
+    border-radius: 8px;
+    padding: 16px; text-align: center;
+}
+.stat-v {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--badge-color);
+}
+.stat-l { font-size: 0.75rem; color: var(--page-dim); margin-top: 2px; }
+
+.cards-row { display: flex; gap: 14px; }
+.mini-card {
+    flex: 1;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--term-border);
+    border-radius: 8px;
+    padding: 24px 20px;
+    text-align: center;
+}
+.mini-card.hl {
+    border-color: var(--badge-color);
+    background: var(--badge-bg);
+}
+.mini-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+.mini-card p { font-size: 0.82rem; color: var(--page-dim); line-height: 1.5; }
+.mini-card .cl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; font-weight: 600;
+    color: var(--badge-color); letter-spacing: 0.1em;
+    margin-top: 10px; display: block;
+}
+
+.dt { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.dt th {
+    text-align: left; padding: 10px 14px;
+    border-bottom: 1px solid var(--term-border);
+    color: var(--page-dim); font-weight: 600;
+    font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.dt td {
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(58,58,66,0.4);
+    vertical-align: top;
+}
+.dt code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; color: var(--tool-blue);
+}
+
+.slide-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--page-muted);
+}
+</style>
+</head>
+<body>
+
+<!-- 1. TITLE -->
+<div class="slide active" data-n="1">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title xl">How Auto Mode<br>Actually Works</div>
+            <div class="slide-desc">A reverse-engineered look at the supervision system that lets Claude Code run autonomously.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header">
+                    <div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div>
+                    <span class="term-path">claude · auto mode</span>
+                </div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="p">edit the auth middleware and run the tests</span>
+                        <span class="ln"><span class="b c-tool">Read</span><span class="c-dim">("src/auth/middleware.ts")</span></span>
+                        <span class="ln"><span class="b c-tool">Edit</span><span class="c-dim">("src/auth/middleware.ts")</span></span>
+                        <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("npm test")</span></span>
+                        <span class="sub c-green">all checks passed · 142 tests · 4.2s</span>
+                        <span class="gap"></span>
+                        <span class="ln c-dim">no permission prompts shown</span>
+                        <span class="ln c-dim">supervised silently in the background</span>
+                    </div>
+                    <div class="term-footer">
+                        <span class="prompt-bottom"><span class="cursor"></span></span>
+                        <span class="shortcuts">? for shortcuts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>1 / N</span></div>
+</div>
+
+<!-- 2. THE CLASSIFIER -->
+<div class="slide" data-n="2">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title">A separate classifier judges every tool call</div>
+            <div class="slide-desc">Before any gated action runs, Claude Code makes a second API call whose only job is to answer one question: should this be blocked?</div>
+            <div class="analogy">Think of it as a <strong>safety reviewer</strong> sitting next to the agent, glancing at every action before it happens.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header">
+                    <div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div>
+                    <span class="term-path">classifier · request</span>
+                </div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="ln c-cyan">POST /v1/messages?beta=true</span>
+                        <span class="sgap"></span>
+                        <span class="ln"><span class="c-purple">model</span><span class="c-dim">:    server-configured Claude</span></span>
+                        <span class="ln"><span class="c-purple">system</span><span class="c-dim">:   security-monitor prompt</span></span>
+                        <span class="ln"><span class="c-purple">messages</span><span class="c-dim">: filtered transcript + new action</span></span>
+                        <span class="ln"><span class="c-purple">tool</span><span class="c-dim">:     </span><span class="c-orange">classify_result</span></span>
+                        <span class="sgap"></span>
+                        <span class="ln c-text">response →</span>
+                        <span class="resp"><span class="c-green">{ shouldBlock: false, reason: "..." }</span></span>
+                        <span class="ln c-dim">action runs · no prompt shown to user</span>
+                    </div>
+                    <div class="term-footer"><span class="shortcuts">one API call per gated tool action</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>2 / N</span></div>
+</div>
+
+<!-- 3. SERVER-CONFIGURED MODEL + PROMPT CACHE -->
+<div class="slide" data-n="3">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">THE MODEL</div>
+            <div class="slide-title">A server-chosen Claude, leaning on prompt cache</div>
+            <div class="slide-desc">The classifier runs on a model Anthropic picks server-side, decoupled from your active <code>/model</code>. In practice, observed as an Opus-class model.</div>
+            <div class="callout"><strong>Why it stays cheap:</strong> the classifier makes <strong>heavy use of prompt caching</strong>. The security prompt and the prior transcript are reused across every call, so each new check only pays for the latest turn.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header">
+                    <div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div>
+                    <span class="term-path">classifier · model</span>
+                </div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="ln c-cyan">model selection</span>
+                        <span class="sub c-dim">independent of your <span class="c-orange">/model</span> choice</span>
+                        <span class="sub c-dim">switching models doesn't disable the classifier</span>
+                        <span class="sub c-green">observed on the wire: claude-opus-4-7</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-cyan">prompt cache strategy</span>
+                        <span class="sub c-dim">cache the security-monitor prompt once</span>
+                        <span class="sub c-dim">cache the transcript prefix on every call</span>
+                        <span class="sub c-dim">1-hour TTL, explicitly opted in</span>
+                        <span class="sub c-green">~99% cache hit ratio in steady state</span>
+                    </div>
+                    <div class="term-footer"><span class="shortcuts">supervision overhead rounds to near-zero</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>3 / N</span></div>
+</div>
+
+<!-- 4. WHAT IT SEES: TRANSCRIPT + ANTI-INJECTION LAYERING -->
+<div class="slide" data-n="4">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">CONTEXT</div>
+            <div class="slide-title">It sees a filtered version of the whole transcript</div>
+            <div class="slide-desc">The classifier needs to know what you actually asked for, but not everything in the conversation is safe to show it.</div>
+            <div class="callout"><strong>Anti-injection by design:</strong> tool <strong>results</strong> are stripped so hostile content in a file or web page can't manipulate the classifier. A separate server-side probe scans incoming tool results before Claude reads them.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header">
+                    <div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div>
+                    <span class="term-path">transcript · builder</span>
+                </div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="term-cols" style="display:flex;gap:32px;">
+                            <span class="term-col">
+                                <span class="term-col-label c-green">INCLUDED</span>
+                                <span class="ln c-dim">all user text turns</span>
+                                <span class="ln c-dim">every tool call (name + args)</span>
+                                <span class="ln c-dim">queued slash commands</span>
+                                <span class="ln c-dim">your CLAUDE.md as user intent</span>
+                            </span>
+                            <span class="term-col" style="border-left:1px solid var(--term-border); padding-left:32px;">
+                                <span class="term-col-label c-red">STRIPPED</span>
+                                <span class="ln c-dim">tool RESULTS (anti-injection)</span>
+                                <span class="ln c-dim">user-attached images</span>
+                                <span class="ln c-dim">agent's prose between calls</span>
+                                <span class="ln c-dim">internal-only tool names</span>
+                            </span>
+                        </span>
+                        <span class="sgap"></span>
+                        <span class="ln c-muted">// each tool can also redact its own args</span>
+                        <span class="ln c-muted">// via toAutoClassifierInput()</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-cyan">the action being judged →</span>
+                        <span class="ln c-dim">appended last as the assistant's newest tool call</span>
+                    </div>
+                    <div class="term-footer"><span class="shortcuts">~8000 tokens of transcript in a real call</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>4 / N</span></div>
+</div>
+
+<!-- 5. BLOCK BY DEFAULT vs ALLOW BY DEFAULT -->
+<div class="slide" data-n="5">
+    <div class="slide-body stacked">
+        <div class="slide-left">
+            <div class="badge">THE RULES</div>
+            <div class="slide-title">What it blocks · what it allows</div>
+            <div class="slide-desc">The classifier trusts your working directory and your repo's configured remotes. Everything else is treated as external.</div>
+        </div>
+        <div class="slide-right">
+            <div class="cards-row">
+                <div class="mini-card" style="text-align:left;">
+                    <h4 style="color:var(--tool-red);">Blocked by default</h4>
+                    <p style="font-size:0.78rem; line-height:1.65;">
+                        • Downloading + executing code (<code style="color:var(--tool-blue);">curl | bash</code>)<br>
+                        • Sending sensitive data to external endpoints<br>
+                        • Production deploys and migrations<br>
+                        • Mass deletion on cloud storage<br>
+                        • Granting IAM or repo permissions<br>
+                        • Modifying shared infrastructure<br>
+                        • Irreversibly destroying pre-session files<br>
+                        • Force-push, or pushing directly to <code style="color:var(--tool-blue);">main</code>
+                    </p>
+                    <span class="cl" style="color:var(--tool-red);">EXTERNAL / DESTRUCTIVE</span>
+                </div>
+                <div class="mini-card" style="text-align:left;">
+                    <h4 style="color:var(--tool-green);">Allowed by default</h4>
+                    <p style="font-size:0.78rem; line-height:1.65;">
+                        • Local file ops in your working directory<br>
+                        • Installing dependencies declared in lock files<br>
+                        • Reading <code style="color:var(--tool-blue);">.env</code> and sending creds to their <em>matching</em> API<br>
+                        • Read-only HTTP requests<br>
+                        • Pushing to the branch you started on, or one Claude created<br>
+                        • Sandbox network requests still route through the classifier
+                    </p>
+                    <span class="cl" style="color:var(--tool-green);">LOCAL / TRUSTED</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>5 / N</span></div>
+</div>
+
+<!-- 6. BOUNDARIES FROM CHAT -->
+<div class="slide" data-n="6">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">USER INTENT</div>
+            <div class="slide-title">Boundaries you state in chat are honored</div>
+            <div class="slide-desc">Tell Claude "don't push" or "wait until I review before deploying", and the classifier blocks matching actions, even ones the default rules would allow.</div>
+            <div class="callout"><strong>Caveat:</strong> boundaries aren't stored as rules. The classifier re-reads them from the transcript on every check, so <strong>context compaction can erase them</strong>. For a hard guarantee, use a deny rule instead.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header">
+                    <div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div>
+                    <span class="term-path">claude · live boundary</span>
+                </div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="p">refactor the API client. don't push until I review</span>
+                        <span class="ln"><span class="b c-tool">Edit</span><span class="c-dim">("src/api/client.ts")</span></span>
+                        <span class="sub c-green">allowed · local working-dir edit</span>
+                        <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("npm test")</span></span>
+                        <span class="sub c-green">allowed · safe command</span>
+                        <span class="gap"></span>
+                        <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("git push origin refactor")</span></span>
+                        <span class="sub c-red">BLOCKED · user said don't push until review</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-dim">boundary stays in force until you lift it</span>
+                        <span class="ln c-dim">claude's own "I'm done" is not enough</span>
+                    </div>
+                    <div class="term-footer"><span class="shortcuts">low evidence bar to honor a boundary</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>6 / N</span></div>
+</div>
+
+<!-- 7. BROAD ALLOW RULES DROPPED ON ENTRY -->
+<div class="slide" data-n="7">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">ON ENTRY</div>
+            <div class="slide-title">Broad allow rules get dropped</div>
+            <div class="slide-desc">When you flip into auto mode, Claude Code strips wildcard allow rules that would defeat the classifier. Narrow rules carry over. Everything is restored when you leave.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header">
+                    <div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div>
+                    <span class="term-path">permissions · on auto-mode entry</span>
+                </div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="term-cols" style="display:flex;gap:32px;">
+                            <span class="term-col">
+                                <span class="term-col-label c-red">DROPPED</span>
+                                <span class="ln c-dim">Bash(*)</span>
+                                <span class="ln c-dim">Bash(python*)</span>
+                                <span class="ln c-dim">Bash(node*), Bash(npm*)</span>
+                                <span class="ln c-dim">package-manager run commands</span>
+                                <span class="ln c-dim">Agent(*) allow rules</span>
+                            </span>
+                            <span class="term-col" style="border-left:1px solid var(--term-border); padding-left:32px;">
+                                <span class="term-col-label c-green">CARRIED OVER</span>
+                                <span class="ln c-dim">Bash(npm test)</span>
+                                <span class="ln c-dim">Bash(git status)</span>
+                                <span class="ln c-dim">Read(*), Glob(*)</span>
+                                <span class="ln c-dim">narrow, specific allow rules</span>
+                                <span class="ln c-dim">all deny rules</span>
+                            </span>
+                        </span>
+                        <span class="sgap"></span>
+                        <span class="ln c-muted">// dropped rules are restored when you</span>
+                        <span class="ln c-muted">// switch out of auto mode</span>
+                    </div>
+                    <div class="term-footer"><span class="shortcuts">prevents broad pre-approvals from bypassing review</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>7 / N</span></div>
+</div>
+
+<!-- 8. FAST PATH + TWO STAGES -->
+<div class="slide" data-n="8">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">DEEP DIVE</div>
+            <div class="slide-title">Fast path,<br>then two stages</div>
+            <div class="slide-desc">Most actions never even hit the classifier. The ones that do try a cheap pass first; only borderline calls escalate.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header">
+                    <div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div>
+                    <span class="term-path">classifier · decision flow</span>
+                </div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="ln"><span class="b c-tool">Read</span><span class="c-dim"> / </span><span class="c-tool">Glob</span><span class="c-dim"> / safe-allowlist tool</span></span>
+                        <span class="sub c-green">→ allowed instantly · no API call</span>
+                        <span class="gap"></span>
+                        <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("echo hello && ls")</span></span>
+                        <span class="sub c-cyan">stage 1 · fast pass · 64 max tokens</span>
+                        <span class="sub c-dim">model outputs <span class="c-green">&lt;block&gt;no</span> · stops at &lt;/block&gt;</span>
+                        <span class="sub c-green">→ allowed in ~1.7s, ~7 output tokens</span>
+                        <span class="gap"></span>
+                        <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("rm -rf …")</span></span>
+                        <span class="sub c-orange">stage 1 unsure → stage 2 thinking pass</span>
+                        <span class="sub c-dim">4096 tokens · uses extended reasoning</span>
+                        <span class="sub c-red">→ blocked with explanation shown to user</span>
+                    </div>
+                    <div class="term-footer"><span class="shortcuts">two-stage XML classifier · server-configurable</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>8 / N</span></div>
+</div>
+
+<!-- 9. WHY IT'S BASICALLY FREE -->
+<div class="slide" data-n="9">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">PROMPT CACHING</div>
+            <div class="slide-title">Why it's basically free</div>
+            <div class="slide-desc">The transcript only grows by one turn at a time, and the system prompt stays the same. Both get cached server-side.</div>
+            <div class="callout"><strong>Result:</strong> ~99% of every classifier call is a cache read. Each safety check costs about a fraction of a cent.</div>
+        </div>
+        <div class="slide-right">
+            <div class="stats">
+                <div class="stat-box"><div class="stat-v">~99%</div><div class="stat-l">cache hit ratio</div></div>
+                <div class="stat-box"><div class="stat-v">7</div><div class="stat-l">output tokens</div></div>
+                <div class="stat-box"><div class="stat-v">1.7s</div><div class="stat-l">stage 1 latency</div></div>
+                <div class="stat-box"><div class="stat-v">~$0.001</div><div class="stat-l">per action</div></div>
+            </div>
+            <div class="terminal">
+                <div class="term-header">
+                    <div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div>
+                    <span class="term-path">wire capture · usage</span>
+                </div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="ln"><span class="c-cyan">input_tokens</span><span class="c-dim">:                </span><span class="c-orange">77</span><span class="c-dim">     // just the new action</span></span>
+                        <span class="ln"><span class="c-cyan">cache_creation_input_tokens</span><span class="c-dim">: </span><span class="c-orange">314</span><span class="c-dim">    // 1h cache write</span></span>
+                        <span class="ln"><span class="c-cyan">cache_read_input_tokens</span><span class="c-dim">:     </span><span class="c-orange">10,291</span><span class="c-dim"> // prompt + history</span></span>
+                        <span class="ln"><span class="c-cyan">output_tokens</span><span class="c-dim">:               </span><span class="c-orange">7</span><span class="c-dim">      // "&lt;block&gt;no"</span></span>
+                        <span class="sgap"></span>
+                        <span class="ln c-muted">// 1-hour cache TTL, explicitly opted into</span>
+                        <span class="ln c-muted">// so the prompt stays warm during long runs</span>
+                    </div>
+                    <div class="term-footer"><span class="shortcuts">supervision overhead rounds to zero</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>9 / N</span></div>
+</div>
+
+<!-- 10. STRIKE COUNTER FALLBACK -->
+<div class="slide" data-n="10">
+    <div class="slide-body">
+        <div class="slide-left">
+            <div class="badge">FALLBACK</div>
+            <div class="slide-title">Three strikes,<br>or twenty total</div>
+            <div class="slide-desc">If Claude keeps hitting blocks, auto mode pauses and Claude Code resumes prompting you for permission.</div>
+            <div class="callout"><strong>The thresholds:</strong> 3 consecutive blocks <em>or</em> 20 total in a session triggers fallback. An allowed action resets the consecutive counter. Headless <code style="color:var(--tool-blue);">-p</code> sessions abort instead.</div>
+        </div>
+        <div class="slide-right">
+            <div class="terminal">
+                <div class="term-header">
+                    <div class="term-dots"><div class="term-dot dot-r"></div><div class="term-dot dot-y"></div><div class="term-dot dot-g"></div></div>
+                    <span class="term-path">claude · denial tracking</span>
+                </div>
+                <div class="term-body">
+                    <div class="term-content">
+                        <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("kubectl delete …")</span><span class="c-red"> · BLOCKED  [1/3]</span></span>
+                        <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("kubectl scale --replicas=0")</span><span class="c-red"> · BLOCKED  [2/3]</span></span>
+                        <span class="ln"><span class="b c-tool">Bash</span><span class="c-dim">("kubectl drain node-1")</span><span class="c-red"> · BLOCKED  [3/3]</span></span>
+                        <span class="sgap"></span>
+                        <span class="resp"><span class="c-orange">⚠  Auto mode paused: repeated denials</span></span>
+                        <span class="ln c-dim">Claude Code resumes manual permission prompts.</span>
+                        <span class="ln c-dim">Approve once → auto mode resumes.</span>
+                        <span class="sgap"></span>
+                        <span class="ln c-muted">// thresholds: 3 in a row OR 20 total per session</span>
+                        <span class="ln c-muted">// any allowed action resets the consecutive count</span>
+                        <span class="ln c-muted">// /permissions → "Recently denied" tab → press r to retry</span>
+                    </div>
+                    <div class="term-footer"><span class="shortcuts">stops the agent from hammering against the rules</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-footer"><span>← → to navigate</span><span>10 / N</span></div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let current = 0;
+
+function go(n) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.slide-footer').forEach(f => {
+        f.querySelector('span:last-child').textContent = `${current + 1} / ${total}`;
+    });
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(total - 1);
+});
+
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+    const d = tx - e.changedTouches[0].clientX;
+    if (Math.abs(d) > 50) d > 0 ? go(current + 1) : go(current - 1);
+});
+
+document.querySelectorAll('.slide-footer').forEach((f, i) => {
+    f.querySelector('span:last-child').textContent = `${i + 1} / ${total}`;
+});
+</script>
+
+</body>
+</html>
