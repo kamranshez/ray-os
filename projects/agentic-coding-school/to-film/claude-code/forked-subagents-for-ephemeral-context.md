@@ -13,7 +13,7 @@ Kangwook Lee posted something about forked subagents that's worth sitting with. 
 
 That single sentence changes how you should think about forks.
 
-A fork isn't really about parallelism. It isn't really about isolation. It's about giving your agent a scratchpad. Somewhere it can dump a huge amount of evidence, reason over all of it, reach a conclusion, and then walk away leaving the scratch work behind.
+A fork isn't really about parallelism. It isn't really about isolation. It's a scratchpad. Somewhere your agent can run noisy tool calls, reason across multiple turns, you can FAQ itself about a decision, and then walk away leaving the scratch work behind.
 
 The conclusion comes home. The scratch work disappears.
 
@@ -23,58 +23,61 @@ The conclusion comes home. The scratch work disappears.
 
 ---
 
-## What Ephemeral Context Actually Is
+## You Can Chat With It
 
-Lee's pseudocode is short enough to memorize.
+Here's the part most people miss. A fork isn't a fire-and-forget batch job. It's a live subagent you can talk to.
 
-```
-while task not completed:
-    context = token_history + log
-    output = LLM(context)
-    token_history += [thoughts, action, result]
-```
+You spawn a fork, it loads up some context, it does some thinking, it returns a summary. Most people stop there. But the fork is still alive in your background panel. You can press into it and keep the conversation going.
 
-The `token_history` is the stable prefix. Task instruction, prior decisions, prior results. This grows slowly and stays cache friendly.
+You ask a follow up. "What about edge case X?" The fork answers, using everything it already loaded. You ask another. "Compare option two and option three side by side." It answers again. None of that round trip lands in your main session. The main session only sees the summary the fork sends back at the end of each turn.
 
-The `log` is the ephemeral part. Game state, sensor readings, a compiler dump, a 200 line stack trace, a freshly fetched search result. It's glued onto the context for one call. Then it's gone.
+This changes what a fork is for. It stops being a one-shot delegation. It becomes a side conversation you can pull into whenever you need to think out loud, with the full evidence on the table, and none of the noise leaking back into your main thread.
 
-After the call, you only persist the distillate. "Saw enemy at northeast ridge, fired, hit confirmed." Not the raw frame data. Not the 200 line log. Just the conclusion that future steps actually need.
+[IMAGE: dark background. Main session is a clean vertical conversation on the left. A side panel branches off labeled "fork" with a messy back-and-forth chat happening inside, while only small summary arrows feed back into the main conversation]
 
-Without ephemeral context, every observation accumulates forever. After ten turns your context is bloated with stale game frames or stale stack traces. The cache invalidates. Reasoning gets noisier. Cost goes up.
-
-With ephemeral context, the agent gets the rich present moment for free, and pays nothing for it later.
+![[images/ephemeral-context/chat-with-fork.png]]
 
 ---
 
-## The Fork Is the Easy Version
+## Three Use Cases That Earn Their Keep
 
-Anthropic shipped this primitive in Claude Code, but they shipped it wrapped as a fork.
+Three places where this pattern is obviously the right move.
 
-When you fork, the fork loads a huge amount of context, reasons over it, and returns a small structured result back to the main session. The main session's `token_history` only gets the conclusion. Everything the fork looked at to reach that conclusion is ephemeral by construction.
+**Noisy tool calls.** You need to run a bunch of tool calls to figure something out. Greps, web searches, MCP queries, log dumps. Each one returns a wall of output you have to read to find the signal. In your main session, all that output gets stuck in your history forever. In a fork, you let the fork do all the calling, all the reading, and just hand back a one paragraph "here's what I found." The 30k tokens of tool output never land in main.
 
-That's why forks feel different from regular subagents the moment you understand the framing. A regular subagent is about isolation. A fork is about discarding intermediate tokens. Same physical mechanism, different mental model.
+**Multi-turn reasoning.** Some decisions take five rounds of thinking. You consider option A, you find a problem, you pivot to option B, you check it against constraint X, you pivot again. That whole zig-zag is valuable for arriving at the answer, but useless to retain. Do the zig-zag in a fork. The fork sweats through all five rounds. The main session gets the conclusion, not the false starts.
 
-If you came up through Lee's framing first, you'd build forks before anyone asked for them. They're the obvious tool once you see "ephemeral context" as a primitive.
+**FAQ before committing.** You have a decision to make and you want to interrogate it before you ship. Spawn a fork. Ask it the obvious question. Push back. Ask the harder question. Push back again. Run a counter argument. Run a what-if. By the time you've exhausted your concerns, the fork has done a twenty message back and forth with you about the decision. You take the answer back to main. The twenty messages never bloat your main thread.
 
-[IMAGE: dark background, two boxes side by side. Left box labeled "Main Session token_history" stays small and stable. Right box labeled "Fork (ephemeral)" balloons to 200k tokens then disappears, leaving a small arrow back to the main box labeled "the answer"]
-
-![[images/ephemeral-context/fork-as-ephemeral.png]]
+The pattern under all three is the same. The thinking is rich and noisy. The output is small and clean. The fork holds the noise. The main session takes the cream.
 
 ---
 
-## Forks as a Working Scratchpad
+## The Summary-Per-Turn Flow
 
-This reframe gives you a new pattern. Treat the fork as a working scratchpad for a critical decision.
+Here's the mechanic worth understanding.
 
-You're at a moment in your main session where you need to make a real call. Pick the database schema. Choose between two architectures. Decide whether to ship the fix or roll back. The decision deserves real evidence. Logs, schemas, related code, a long doc, a benchmark output.
+When you talk to a fork, every turn returns a summary to your main session. You see it in main as a small tool result. The result is whatever the fork chose to surface from that turn. The rest of the fork's working tokens stay in the fork.
 
-You don't want to drag all of that into the main conversation. The main conversation has to keep moving past this decision and live with the cost forever. The decision doesn't.
+So a five turn conversation with a fork shows up in main as five small tool results. Not five long transcripts. Five summaries.
 
-So you fork. You load every piece of evidence into the fork. The fork chews through it. The fork returns a structured recommendation and a one paragraph rationale. That comes back to the main session. The 80,000 tokens of evidence stay in the fork, which then dies.
+You control what the summaries contain. If you tell the fork "give me the answer plus a one line note on what you considered," that's what comes back. If you say "just yes or no," that's what comes back. The fork is verbose with itself. It is concise with you.
 
-You got the depth without the bloat. Your main conversation continues at the same token weight it had before the decision started, plus a clean little block that says "here's what we decided and why."
+That compression is what makes the pattern usable. Without it, every fork interaction would still bloat main, just slower. With it, you can have arbitrarily deep conversations with a fork and your main session stays under budget.
 
-This is what Kangwook Lee meant by ephemeral context, expressed as a workflow you can run today.
+---
+
+## Why This Costs Almost Nothing
+
+The cache is what makes this affordable.
+
+Your main session's prefix is already cached. When you fork, the fork inherits that exact prefix verbatim. You only pay for the new tokens the fork generates and consumes inside its own working space.
+
+The next time you talk to that fork, its own working prefix is now also cached. So the multi-turn back and forth inside the fork is itself cheap. The cache is doing all the heavy lifting.
+
+This is the unlock. Interactive scratchpads would be too expensive in most setups, because every round of thinking would re-pay for the context. Forks dodge that bill by reusing the parent's cached prefix and then caching their own.
+
+So you can do this casually. Three forks running side conversations in the same main session, each chewing on different evidence, each costing almost nothing to keep talking to.
 
 ---
 
@@ -88,9 +91,7 @@ If yes, don't fork. Pull it into the main conversation directly. The evidence is
 
 If no, fork. The evidence matters now. It won't matter later. The fork is the right shape for it.
 
-This is the same call game agents make every frame. The current enemy position matters now. It won't matter in three seconds. So it goes into ephemeral context, not into history.
-
-Most decisions in a Claude Code session look like this and we've been getting it wrong by default. We dump the evidence into the main conversation because that's the only place the agent can reason. Now there's a second place. Use it.
+Most decisions in a Claude Code session look like this and we've been getting it wrong by default. We dump the evidence into the main conversation because that's the only place the agent can reason. Now there's a second place, and you can chat with it. Use it.
 
 [IMAGE: dark background, a fork in the road. Left path labeled "Will I need this in 3 turns?" leads to "Pull into main conversation". Right path labeled "Just for this decision?" leads to "Fork it"]
 
@@ -98,29 +99,13 @@ Most decisions in a Claude Code session look like this and we've been getting it
 
 ---
 
-## Why This Costs Almost Nothing
-
-The math works because of how the cache is keyed.
-
-Your main session's prefix is already cached. When you fork, the fork inherits that exact prefix verbatim. The cache covers the entire history up to the fork point. The fork then loads its ephemeral evidence, runs its reasoning, and returns. You only pay for the new tokens.
-
-The next time you fork from the same conversation, the prefix is *still* cached. You're not paying for context history twice. You're paying for the new evidence and the new reasoning, every time.
-
-This is the unlock. Ephemeral context as a pattern would be too expensive in most setups, because dragging huge evidence in and out of context would cost a fortune. Forks make it cheap because the expensive part, the prefix, is shared and cached.
-
-So you can do this casually. Three forks in one session, each loading 50k tokens of throwaway evidence, each returning a clean conclusion. Your main context grows by maybe 600 tokens of summaries. The bill barely moves.
-
----
-
 ## What Stays, What Goes
 
-The discipline is in the return value. The fork has to give you something small enough to live in your main session forever. If the fork returns 30k tokens, you've defeated the point. You've just moved the bloat from the fork into the main session.
+The discipline is in the return value. Each turn the fork sends back to main has to be small enough to live in your main session forever. If a turn returns 5k tokens, you've defeated the point. You've moved the bloat from the fork to the main session, just slower.
 
-So when you spawn the fork, tell it explicitly. *Return a one paragraph summary and a structured recommendation. Do not return the raw evidence. Do not return your full reasoning trace. Just the conclusion and one paragraph of why.*
+So when you spawn the fork, set the rule up front. *Each time I ask you something, return a short answer plus a one line note on what you considered. Do not return raw evidence. Do not return your reasoning trace. Just the conclusion.*
 
 That sentence is what makes the fork ephemeral instead of just delayed. Without it, you've built a slow round trip with no actual savings.
-
-The discipline transfers to anything else you build. If you ever write your own agent loop with ephemeral context, the same rule applies. The thing you append to history has to be small. Otherwise the loop is doing nothing.
 
 ---
 
@@ -128,13 +113,16 @@ The discipline transfers to anything else you build. If you ever write your own 
 
 This is the workflow worth filming.
 
-1. Open Claude Code in a project with a real decision to make. Pick something concrete, like "we have three candidate schemas for the events table, decide which one to ship."
+1. Open Claude Code in a project with a real decision. Pick something concrete, like "we have three candidate schemas for the events table, decide which one to ship."
 2. Show the main session at maybe 60k tokens. Keep that number visible.
-3. Prompt: "Spawn a forked subagent. Load all three candidate schemas, the migration history file, the query patterns file, and the perf benchmark output. Decide which schema we should ship. Return only a one paragraph recommendation and a bullet list of the top three reasons. Do not return the raw schemas or the benchmark dump."
-4. Show the fork starting at the same 60k tokens, then loading 40k more tokens of evidence. Total in the fork: ~100k.
-5. Fork returns. Show the result is roughly 300 tokens.
-6. Show the main session token count after the fork closes. It went from 60k to roughly 60.3k. The 40k of evidence never landed in main.
-7. Compare: do the same task without forking. Pull the schemas, history, query patterns, and benchmark into the main session directly. Show the token count balloon. Then show how the main session is now noisier for every subsequent message.
+3. Prompt: "Spawn a forked subagent. Load all three candidate schemas, the migration history file, the query patterns file, and the perf benchmark output. Be ready to chat about the tradeoffs. Each turn, return a short answer and a one line note on what you considered."
+4. The fork loads up. Show it ballooning to 100k+ tokens internally. Main is still 60k.
+5. First question: "Which schema gives us the best read latency for the dashboard query?"
+6. Fork answers in 200 tokens. Main grows by 200 tokens.
+7. Press in. Keep chatting. "What about write throughput?" "What if we sharded by user ID instead?" "Can option three handle the deletion case?" Five turns of FAQ.
+8. Each turn shows up in main as a small tool result. Main is now 61k tokens. Fork is 130k.
+9. Make the call. Take the recommendation back to main as a clean decision block.
+10. Compare: do the same back and forth in main directly. Show main balloon to 110k tokens. Then show how the main session is now noisier for every subsequent message.
 
 The viewer should watch the token counter and feel the difference. That's the whole pitch.
 
@@ -142,14 +130,16 @@ The viewer should watch the token counter and feel the difference. That's the wh
 
 ## Key Insight
 
-> A fork is not a separate agent. It is a scratchpad your agent uses during a critical decision and then throws away. Once you see forks this way, you stop using them for parallelism and start using them for thinking.
+> A fork is not a separate agent. It is a scratchpad your agent uses during a critical decision and then throws away. You can talk to it like a colleague, run it through five rounds of FAQ, and your main session never sees the noise.
 
 ---
 
 ## What Changes For You
 
-You start treating big decisions differently. You stop loading 80k tokens of evidence into your main conversation just to reason over it for one turn. You fork, you reason, you keep the conclusion, you let the evidence go.
+You stop dragging evidence into your main conversation just to reason over it. You stop running noisy tool calls in main. You stop having long internal debates with yourself in main and bloating the context with questions you didn't end up needing the answer to.
 
-Over a long session this is the difference between a main conversation that stays sharp through hour three and one that gets dull and confused by hour two. You're managing your main context like a budget instead of letting it bloat with every research detour.
+You fork. You chat. You decide. You take the conclusion back. The fork dies.
 
-Ephemeral context is the principle. The fork is just the cleanest way to use it.
+Over a long session this is the difference between a main conversation that stays sharp through hour three and one that gets dull and confused by hour two. You're managing your main context like a budget. The fork is where the spending happens.
+
+Ephemeral context is the principle. Chatting with a fork is the workflow.
