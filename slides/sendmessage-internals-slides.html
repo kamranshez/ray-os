@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SendMessage Internals: Deep Dive</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --page-bg: #1c1c20;
+            --page-text: #e2e2e6;
+            --page-dim: #6a6a74;
+            --page-muted: #44444e;
+
+            --badge-color: #c08060;
+            --badge-border: rgba(192, 128, 96, 0.45);
+            --badge-bg: rgba(192, 128, 96, 0.08);
+
+            --term-bg: #282830;
+            --term-header-bg: #2e2e36;
+            --term-border: #3a3a42;
+            --term-text: #d4d4dc;
+            --term-dim: #6e6e78;
+            --term-muted: #4a4a54;
+            --prompt-bg: #333340;
+
+            --dot-red: #ff5f57;
+            --dot-yellow: #febc2e;
+            --dot-green: #28c840;
+
+            --tool-blue: #7eb8d4;
+            --tool-green: #7ec87e;
+            --tool-orange: #d4a06b;
+            --tool-red: #d46b6b;
+            --tool-pink: #d46ba8;
+            --tool-purple: #9b7ed4;
+            --tool-cyan: #6bc8c8;
+            --tool-yellow: #d4c86b;
+        }
+
+        ::selection { background: rgba(192, 128, 96, 0.45); color: #fff; text-shadow: none; }
+        ::-moz-selection { background: rgba(192, 128, 96, 0.45); color: #fff; text-shadow: none; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            background: var(--page-bg);
+            color: var(--page-text);
+            font-family: 'Inter', -apple-system, sans-serif;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 64px 88px 48px;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .slide.active { display: flex; opacity: 1; }
+
+        .slide-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 56px;
+            min-height: 0;
+        }
+        .slide-body.stacked {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 28px;
+        }
+        .slide-body.stacked .slide-left {
+            flex: none; max-width: 100%;
+        }
+
+        .slide-left {
+            flex: 0 0 32%;
+            max-width: 32%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide-right {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            max-height: 100%;
+        }
+
+        .badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; font-weight: 600;
+            letter-spacing: 0.14em;
+            color: var(--badge-color);
+            border: 1.5px solid var(--badge-border);
+            background: var(--badge-bg);
+            padding: 5px 16px;
+            border-radius: 3px;
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+
+        .slide-title {
+            font-size: 2.6rem; font-weight: 800;
+            letter-spacing: -0.035em; line-height: 1.12;
+            color: var(--page-text);
+        }
+        .slide-title.xl { font-size: 3.4rem; }
+
+        .slide-desc {
+            margin-top: 18px;
+            font-size: 1.05rem;
+            color: var(--page-dim);
+            line-height: 1.55;
+            max-width: 95%;
+        }
+
+        .analogy {
+            margin-top: 20px;
+            padding: 14px 18px;
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--page-dim);
+            line-height: 1.7;
+        }
+        .analogy strong { color: var(--badge-color); }
+
+        .callout {
+            margin-top: 20px;
+            padding: 14px 18px;
+            background: rgba(126, 200, 126, 0.06);
+            border: 1px solid rgba(126, 200, 126, 0.15);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--page-dim);
+            line-height: 1.7;
+        }
+        .callout strong { color: var(--tool-green); }
+
+        .cards-row { display: flex; gap: 14px; }
+        .mini-card {
+            flex: 1;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--term-border);
+            border-radius: 8px;
+            padding: 26px 22px;
+            text-align: left;
+        }
+        .mini-card.hl {
+            border-color: var(--badge-color);
+            background: var(--badge-bg);
+        }
+        .mini-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+        .mini-card p { font-size: 0.85rem; color: var(--page-dim); line-height: 1.6; }
+        .mini-card .cl {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem; font-weight: 600;
+            color: var(--badge-color); letter-spacing: 0.12em;
+            margin-top: 14px; display: block;
+        }
+
+        .terminal {
+            background: var(--term-bg);
+            border: 1px solid var(--term-border);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+        }
+        .term-header {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            background: var(--term-header-bg);
+            border-bottom: 1px solid var(--term-border);
+            flex-shrink: 0;
+        }
+        .term-dots { display: flex; gap: 8px; }
+        .term-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-r { background: var(--dot-red); }
+        .dot-y { background: var(--dot-yellow); }
+        .dot-g { background: var(--dot-green); }
+        .term-path {
+            margin-left: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--term-dim);
+        }
+        .term-body {
+            padding: 28px 32px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            line-height: 1.9;
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .term-content { flex: 1; }
+        .term-footer { margin-top: auto; padding-top: 16px; }
+
+        .p {
+            display: block;
+            background: var(--prompt-bg);
+            padding: 7px 14px;
+            border-radius: 5px;
+            margin-bottom: 18px;
+            color: var(--term-text);
+        }
+        .p::before {
+            content: '\276F  ';
+            color: var(--term-dim);
+        }
+
+        .b::before { content: '\23FA  '; font-size: 0.65em; vertical-align: middle; }
+        .b { color: var(--term-text); }
+
+        .sub { padding-left: 24px; display: block; }
+        .sub::before { content: '\2514\2500 '; color: var(--term-muted); }
+
+        .ln { display: block; }
+        .gap { display: block; height: 12px; }
+        .sgap { display: block; height: 22px; }
+
+        .c-tool { color: var(--tool-blue); }
+        .c-green { color: var(--tool-green); }
+        .c-orange { color: var(--tool-orange); }
+        .c-red { color: var(--tool-red); }
+        .c-pink { color: var(--tool-pink); }
+        .c-purple { color: var(--tool-purple); }
+        .c-cyan { color: var(--tool-cyan); }
+        .c-yellow { color: var(--tool-yellow); }
+        .c-dim { color: var(--term-dim); }
+        .c-muted { color: var(--term-muted); }
+        .c-text { color: var(--term-text); }
+
+        .resp {
+            display: block;
+            background: rgba(126, 200, 126, 0.06);
+            border-left: 2px solid rgba(126, 200, 126, 0.2);
+            padding: 10px 16px;
+            border-radius: 0 4px 4px 0;
+            margin: 12px 0;
+            color: var(--term-text);
+            font-size: 0.76rem;
+            line-height: 1.8;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px; height: 15px;
+            background: var(--term-dim);
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        .prompt-bottom { display: block; margin-top: 12px; }
+        .prompt-bottom::before { content: '\276F  '; color: var(--term-dim); }
+        .shortcuts { display: block; color: var(--term-muted); font-size: 0.7rem; margin-top: 12px; }
+
+        .term-cols { display: flex; gap: 32px; }
+        .term-col { flex: 1; }
+        .term-col-label {
+            font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.12em; margin-bottom: 14px;
+            display: block;
+        }
+
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--page-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title (1B) -->
+    <div class="slide active" data-n="1">
+        <div class="slide-body">
+            <div class="slide-left">
+                <div class="badge">UNDER THE HOOD</div>
+                <div class="slide-title xl">The Walkie-Talkie</div>
+                <div class="slide-desc">One call. Three outcomes, decided by the target's state. Inside SendMessage and how Claude Code keeps background workers addressable.</div>
+            </div>
+            <div class="slide-right">
+                <div class="terminal">
+                    <div class="term-header">
+                        <div class="term-dots">
+                            <div class="term-dot dot-r"></div>
+                            <div class="term-dot dot-y"></div>
+                            <div class="term-dot dot-g"></div>
+                        </div>
+                        <span class="term-path">claude &middot; ~/ray-os</span>
+                    </div>
+                    <div class="term-body">
+                        <div class="term-content">
+                            <span class="p">send scout a follow up question</span>
+                            <span class="ln"><span class="b c-tool">SendMessage</span><span class="c-dim">(to=</span><span class="c-green">"scout"</span><span class="c-dim">, summary=</span><span class="c-green">"add one more question"</span><span class="c-dim">)</span></span>
+                            <span class="sub c-dim">Message queued for delivery to scout at its next tool round.</span>
+                            <span class="sgap"></span>
+                            <span class="p">now send it again, but scout just finished</span>
+                            <span class="ln"><span class="b c-tool">SendMessage</span><span class="c-dim">(to=</span><span class="c-green">"scout"</span><span class="c-dim">, summary=</span><span class="c-green">"one more pass"</span><span class="c-dim">)</span></span>
+                            <span class="sub c-dim">Agent "scout" was stopped (completed);</span>
+                            <span class="sub c-dim">resumed it in the background with your message.</span>
+                        </div>
+                        <div class="term-footer">
+                            <span class="prompt-bottom"><span class="cursor"></span></span>
+                            <span class="shortcuts">? for shortcuts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>&larr; &rarr; to navigate</span>
+            <span>1 / 5</span>
+        </div>
+    </div>
+
+    <!-- Slide 2: Workers and ID cards (2A) -->
+    <div class="slide" data-n="2">
+        <div class="slide-body">
+            <div class="slide-left">
+                <div class="badge">DEEP DIVE</div>
+                <div class="slide-title">Workers and ID cards</div>
+                <div class="slide-desc">Every subagent gets an employee number (agentId). You can also give it a nickname (name). Either one works as the recipient.</div>
+                <div class="analogy">
+                    Claude Code keeps a <strong>phonebook</strong> called <code style="color:var(--badge-color)">agentNameRegistry</code>. SendMessage looks up the name there first, falls back to treating the input as a raw agentId.
+                </div>
+            </div>
+            <div class="slide-right">
+                <div class="terminal">
+                    <div class="term-header">
+                        <div class="term-dots">
+                            <div class="term-dot dot-r"></div>
+                            <div class="term-dot dot-y"></div>
+                            <div class="term-dot dot-g"></div>
+                        </div>
+                        <span class="term-path">internals &middot; hiring</span>
+                    </div>
+                    <div class="term-body">
+                        <div class="term-content">
+                            <span class="p">launch scout in the background to research X</span>
+                            <span class="ln"><span class="b c-tool">Agent</span><span class="c-dim">(</span></span>
+                            <span class="ln"><span class="c-dim">  subagent_type=</span><span class="c-green">"Explore"</span><span class="c-dim">,</span></span>
+                            <span class="ln"><span class="c-dim">  name=</span><span class="c-green">"scout"</span><span class="c-dim">,</span></span>
+                            <span class="ln"><span class="c-dim">  run_in_background=</span><span class="c-purple">true</span><span class="c-dim">)</span></span>
+                            <span class="sub c-dim">Async agent launched successfully.</span>
+                            <span class="sub c-dim">agentId: <span class="c-orange">a0384a26221e39586</span></span>
+                            <span class="sub c-dim">output_file: ~/tasks/a0384a26221e39586.output</span>
+                            <span class="sgap"></span>
+                            <span class="ln c-dim"># both of these reach the same worker:</span>
+                            <span class="ln"><span class="b c-tool">SendMessage</span><span class="c-dim">(to=</span><span class="c-green">"scout"</span><span class="c-dim">, ...)</span>   <span class="c-muted"># by nickname</span></span>
+                            <span class="ln"><span class="b c-tool">SendMessage</span><span class="c-dim">(to=</span><span class="c-green">"a0384a26221e39586"</span><span class="c-dim">, ...)</span>  <span class="c-muted"># by ID</span></span>
+                        </div>
+                        <div class="term-footer">
+                            <span class="prompt-bottom"><span class="cursor"></span></span>
+                            <span class="shortcuts">? for shortcuts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>&larr; &rarr; to navigate</span>
+            <span>2 / 5</span>
+        </div>
+    </div>
+
+    <!-- Slide 3: Three paths (3A) -->
+    <div class="slide" data-n="3">
+        <div class="slide-body stacked">
+            <div class="slide-left">
+                <div class="badge">DEEP DIVE</div>
+                <div class="slide-title">Three paths, one tool</div>
+                <div class="slide-desc">SendMessage looks at the target's current state and picks a dispatch. The `to:` argument does not change; the behavior does.</div>
+            </div>
+            <div class="slide-right">
+                <div class="cards-row">
+                    <div class="mini-card">
+                        <h4>Worker is busy</h4>
+                        <p>Task is still running. Your message lands in <code style="color:var(--tool-cyan)">pendingMessages</code> and is delivered on the next tool round, prefixed with "The coordinator sent a message while you were working:".</p>
+                        <span class="cl">QUEUED</span>
+                    </div>
+                    <div class="mini-card hl">
+                        <h4>Worker clocked out</h4>
+                        <p>Task entry exists but status is completed, stopped, or failed. <code style="color:var(--tool-cyan)">resumeAgentBackground()</code> reads the transcript from disk and relaunches the agent under the same agentId.</p>
+                        <span class="cl">RESUMED</span>
+                    </div>
+                    <div class="mini-card">
+                        <h4>Task evicted, transcript remains</h4>
+                        <p>The in-memory task entry is gone (cleanup, eviction, session age), but the JSONL transcript is still on disk. Claude rebuilds the agent from that file and relaunches under the same agentId.</p>
+                        <span class="cl">REHYDRATED</span>
+                    </div>
+                </div>
+                <div class="callout">
+                    <strong>Key insight:</strong> the caller never decides which path to use. The dispatch is automatic, driven by whatever the task registry says about the target.
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>&larr; &rarr; to navigate</span>
+            <span>3 / 5</span>
+        </div>
+    </div>
+
+    <!-- Slide 4: Before/after stopped resume (5B) -->
+    <div class="slide" data-n="4">
+        <div class="slide-body">
+            <div class="slide-left">
+                <div class="badge">DEEP DIVE</div>
+                <div class="slide-title">Resurrecting a stopped agent</div>
+                <div class="slide-desc">Path 2: the transcript file is the seed. Same agentId gets a fresh query run, picking up everything the agent already knew.</div>
+                <div class="analogy">
+                    <strong>resumeAgentBackground()</strong> reads the JSONL transcript, reloads the agent definition from a sidecar, rebuilds the tool list, appends your new message, then relaunches under the same ID. The delta in tokens proves it is one continuous session.
+                </div>
+            </div>
+            <div class="slide-right">
+                <div class="terminal">
+                    <div class="term-header">
+                        <div class="term-dots">
+                            <div class="term-dot dot-r"></div>
+                            <div class="term-dot dot-y"></div>
+                            <div class="term-dot dot-g"></div>
+                        </div>
+                        <span class="term-path">internals &middot; task registry</span>
+                    </div>
+                    <div class="term-body">
+                        <div class="term-content">
+                            <div class="term-cols">
+                                <div class="term-col">
+                                    <span class="term-col-label c-dim">BEFORE (STOPPED)</span>
+                                    <span class="ln c-dim">agentId:</span>
+                                    <span class="ln"><span class="c-orange">  a0384a26221e39586</span></span>
+                                    <span class="ln c-dim">status:</span>
+                                    <span class="ln"><span class="c-red">  completed</span></span>
+                                    <span class="ln c-dim">output_file:</span>
+                                    <span class="ln c-cyan">  ~/tasks/a0384a...output</span>
+                                    <span class="ln c-dim">total_tokens:</span>
+                                    <span class="ln"><span class="c-yellow">  90,801</span></span>
+                                    <span class="sgap"></span>
+                                    <span class="ln c-muted"># task is idle on disk</span>
+                                </div>
+                                <div class="term-col" style="border-left:1px solid var(--term-border); padding-left:32px;">
+                                    <span class="term-col-label c-orange">AFTER (RESUMED)</span>
+                                    <span class="ln c-dim">agentId:</span>
+                                    <span class="ln"><span class="c-orange">  a0384a26221e39586</span>  <span class="c-green">(same)</span></span>
+                                    <span class="ln c-dim">status:</span>
+                                    <span class="ln"><span class="c-green">  running</span></span>
+                                    <span class="ln c-dim">output_file:</span>
+                                    <span class="ln c-cyan">  ~/tasks/a0384a...output</span>  <span class="c-green">(same)</span>
+                                    <span class="ln c-dim">total_tokens:</span>
+                                    <span class="ln"><span class="c-yellow">  106,841</span>  <span class="c-green">(+16,040)</span></span>
+                                    <span class="sgap"></span>
+                                    <span class="ln c-muted"># invocationKind: "resume"</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="term-footer">
+                            <span class="prompt-bottom"><span class="cursor"></span></span>
+                            <span class="shortcuts">? for shortcuts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>&larr; &rarr; to navigate</span>
+            <span>4 / 5</span>
+        </div>
+    </div>
+
+    <!-- Slide 5: Two worlds (7B) -->
+    <div class="slide" data-n="5">
+        <div class="slide-body">
+            <div class="slide-left">
+                <div class="badge">DEEP DIVE</div>
+                <div class="slide-title">Two worlds: local vs team</div>
+                <div class="slide-desc">SendMessage tries the local agent dispatch first. If the name is not in the registry, it falls through to the legacy team inbox (swarm mode).</div>
+                <div class="analogy">
+                    Same input, two totally different plumbing systems. Local path is in-memory task manipulation. Team path is file-based mailboxes under <code style="color:var(--badge-color)">~/.claude/teams/</code>.
+                </div>
+            </div>
+            <div class="slide-right">
+                <div class="terminal">
+                    <div class="term-header">
+                        <div class="term-dots">
+                            <div class="term-dot dot-r"></div>
+                            <div class="term-dot dot-y"></div>
+                            <div class="term-dot dot-g"></div>
+                        </div>
+                        <span class="term-path">internals &middot; dispatch</span>
+                    </div>
+                    <div class="term-body">
+                        <div class="term-content">
+                            <div class="term-cols">
+                                <div class="term-col">
+                                    <span class="term-col-label c-cyan">LOCAL AGENT ROUTE</span>
+                                    <span class="ln c-dim">1. look up name</span>
+                                    <span class="ln">   <span class="c-cyan">agentNameRegistry</span>.get(to)</span>
+                                    <span class="gap"></span>
+                                    <span class="ln c-dim">2. check task state</span>
+                                    <span class="ln">   <span class="c-cyan">appState</span>.tasks[agentId]</span>
+                                    <span class="gap"></span>
+                                    <span class="ln c-dim">3. dispatch</span>
+                                    <span class="ln"><span class="c-green">   running</span>  &rarr; queuePendingMessage()</span>
+                                    <span class="ln"><span class="c-orange">   stopped</span>  &rarr; resumeAgentBackground()</span>
+                                    <span class="ln"><span class="c-purple">   no task</span>  &rarr; resumeAgentBackground()</span>
+                                </div>
+                                <div class="term-col" style="border-left:1px solid var(--term-border); padding-left:32px;">
+                                    <span class="term-col-label c-orange">TEAM INBOX ROUTE</span>
+                                    <span class="ln c-dim">1. check team context</span>
+                                    <span class="ln">   <span class="c-cyan">teamContext.teamName</span> required</span>
+                                    <span class="gap"></span>
+                                    <span class="ln c-dim">2. write mailbox file</span>
+                                    <span class="ln c-green">   ~/.claude/teams/&lt;team&gt;/</span>
+                                    <span class="ln c-green">   inboxes/&lt;recipient&gt;</span>
+                                    <span class="gap"></span>
+                                    <span class="ln c-dim">3. broadcast variant</span>
+                                    <span class="ln">   <span class="c-yellow">to: "*"</span> writes to every</span>
+                                    <span class="ln">   teammate's inbox (team</span>
+                                    <span class="ln">   mode only, linear cost)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="term-footer">
+                            <span class="prompt-bottom"><span class="cursor"></span></span>
+                            <span class="shortcuts">? for shortcuts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>&larr; &rarr; to navigate</span>
+            <span>5 / 5</span>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+        let current = 0;
+
+        function go(n) {
+            slides[current].classList.remove('active');
+            current = Math.max(0, Math.min(n, total - 1));
+            slides[current].classList.add('active');
+            document.querySelectorAll('.slide-footer').forEach(f => {
+                f.querySelector('span:last-child').textContent = `${current + 1} / ${total}`;
+            });
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+            else if (e.key === 'Home') go(0);
+            else if (e.key === 'End') go(total - 1);
+        });
+
+        let tx = 0;
+        document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+        document.addEventListener('touchend', e => {
+            const d = tx - e.changedTouches[0].clientX;
+            if (Math.abs(d) > 50) d > 0 ? go(current + 1) : go(current - 1);
+        });
+
+        document.querySelectorAll('.slide-footer').forEach((f, i) => {
+            f.querySelector('span:last-child').textContent = `${i + 1} / ${total}`;
+        });
+    </script>
+</body>
+</html>

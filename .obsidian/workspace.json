@@ -11,10 +11,14 @@
             "id": "ce94c586e3e6b95d",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "socials/youtube/performance/2026-03.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "2026-03"
             }
           }
         ]
@@ -74,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 252.50043487548828,
-    "collapsed": true
+    "width": 252.50043487548828
   },
   "right": {
     "id": "99b289f72ba3f8e1",
@@ -179,8 +182,11 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "ce94c586e3e6b95d",
+  "active": "446ab2d10da273db",
   "lastOpenFiles": [
+    "projects/agentic-coding-school/to-film/claude-code/main-session-as-orchestrator.md",
+    "socials/youtube/videos/uploaded/claude-code-leak.md",
+    "socials/youtube/videos/uploaded/anthropic-skills-playbook.md",
     "socials/youtube/videos/5-skills-i-use-everyday.md",
     "socials/youtube/videos/interactive-artifacts-bun.md",
     "projects/agentic-coding-school/corrections.md",
@@ -195,11 +201,9 @@
     "socials/youtube/videos/uploaded/ultraplan.md",
     "socials/youtube/videos/uploaded/skills-2.0.md",
     "socials/youtube/videos/uploaded/cloud-scheduled-tasks.md",
-    "socials/youtube/videos/uploaded/claude-code-leak.md",
     "socials/youtube/videos/uploaded/claude-code-channels.md",
     "socials/youtube/videos/uploaded/btw.md",
     "socials/youtube/videos/uploaded/auto-dream-memory-consolidation.md",
-    "socials/youtube/videos/uploaded/anthropic-skills-playbook.md",
     "socials/youtube/videos/uploaded/50-tips-for-claude-code.md",
     "socials/youtube/videos/uploaded",
     "socials/CLAUDE.md",
@@ -208,7 +212,6 @@
     "research/the-software-factory.md",
     "research/ultraplan-variants-raw-analysis.md",
     "socials/linkedin/analysis/2026-02-viral-analysis.md",
-    "socials/linkedin/CLAUDE.md",
     "socials/x/articles/images/ultraplan-thumbnail-v2/excalidraw_4.png",
     "socials/x/articles/images/ultraplan-thumbnail-v2/excalidraw_5.png",
     "monitor-newsletter-gmail.html",
