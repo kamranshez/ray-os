@@ -1,5 +1,3 @@
-# Specs vs Constraints: Making Incorrect Code Unrepresentable
-
 ## What This Video Covers
 
 A distinction that unlocks safer agent work: specifications describe what should change, constraints describe what must not be touched. Most people conflate them. Pulling them apart lets you give agents freedom where freedom is safe, and hard guardrails where it isn't.

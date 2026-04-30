@@ -1,10 +1,11 @@
 ---
-duration: "6-10 min"
+duration: 6-10 min
 batch: 2
 order: 8
-batch_name: "Marketing Automation"
-class: "business"
-chapter: "Marketing Automation"
+batch_name: Marketing Automation
+class: business
+chapter: Marketing Automation
+status: filmed
 ---
 # The Hook
 
