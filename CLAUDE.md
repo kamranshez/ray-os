@@ -2,6 +2,12 @@
 
 Ray's centralised personal operating system — content, research, projects, and social media in one place.
 
+<important if="you are about to call any MCP tool (mcp__*) — Stripe, PostHog, Exa, etc.">
+**STOP.** First run `ls ./code-tools/<service>/` (e.g. `code-tools/stripe/`) to check for a local script that does this task. If a relevant script exists, use it via Bash instead of the MCP tool — these scripts are pre-built for common queries (aggregations, joins, formatting) that MCP tools handle poorly one-call-at-a-time.
+
+Only fall back to the MCP tool if no matching script exists. Mention which path you took in your first user-facing sentence ("Using code-tools/<service>/..." or "No matching script, using MCP...").
+</important>
+
 ## YouTube
 
 - **Channel**: https://www.youtube.com/@RAmjad/videos
