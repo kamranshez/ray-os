@@ -13,13 +13,15 @@ Search the extracted strings file for these feature-gated commands and determine
 | KAIROS | /assistant | DCE'd out — not in binary |
 | BRIDGE_MODE | /bridge | Partial — `bridge-kick` internal only |
 | DAEMON + BRIDGE_MODE | /remoteControlServer | DCE'd out |
-| HISTORY_SNIP | /force-snip | Stubbed (`isEnabled:()=>!1`) |
+| HISTORY_SNIP | /force-snip | Removed entirely from binary (was stubbed in prior versions) |
 | WORKFLOW_SCRIPTS | /workflows | DCE'd out |
 | KAIROS_GITHUB_WEBHOOKS | /subscribe-pr | DCE'd out |
-| TORCH | /torch | DCE'd out |
+| TORCH | /torch | DCE'd out (telemetry refs exist but no command) |
 | UDS_INBOX | /peers | DCE'd out |
-| FORK_SUBAGENT | /fork | DCE'd out (fork telemetry exists but no command) |
+| FORK_SUBAGENT | /fork | Registered command ("Spawn a background agent that inherits the full conversation"), gated by `tengu_copper_fox` (GB) + `CLAUDE_CODE_FORK_SUBAGENT` env var, default OFF |
 | *(runtime)* | /ultrareview | In binary, GrowthBook-gated (`tengu_review_bughunter_config.enabled`) |
+| *(runtime)* | /ultraplan | In binary, GrowthBook-gated (`tengu_ultraplan_config.enabled`), remote plan refinement |
+| SEDGE_LANTERN | /recap | In binary, GrowthBook-gated ON by default (`tengu_sedge_lantern`), session recap + away summary |
 
 For each one:
 - `grep -c 'name:"<command>"' <strings_file>` to check if registered
