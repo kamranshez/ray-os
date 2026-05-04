@@ -3,25 +3,43 @@
 <head>
 <meta charset="utf-8" />
 <title>two kinds of work — pre-decomposable vs unfolding</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Kalam:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  /* Excalidraw's actual fonts, loaded from their public repo via jsdelivr */
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
 <script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
 <style>
   :root {
-    --cream: #faf7f0;
-    --paper: #f5efe1;
-    --ink: #1f2937;
-    --ink-soft: #4b5563;
-    --ink-faint: #9ca3af;
-    --yellow: #fef3c7;
-    --blue: #dbeafe;
-    --green: #dcfce7;
-    --pink: #fce7f3;
-    --amber: #fed7aa;
-    --light-red: #fecaca;
-    --soft-emerald: #bbf7d0;
-    --rule: #d6cdb6;
+    /* Excalidraw palette */
+    --cream: #ffffff;          /* canvas */
+    --paper: #f8f9fa;          /* gray [1] — subtle off-white panels */
+    --ink: #1e1e1e;            /* black */
+    --ink-soft: #868e96;       /* gray [3] */
+    --ink-faint: #ced4da;      /* gray [2] */
+    --yellow: #ffec99;         /* yellow [1] */
+    --blue: #a5d8ff;           /* blue [1] */
+    --green: #b2f2bb;          /* green [1] */
+    --pink: #fcc2d7;           /* pink [1] */
+    --amber: #ffd8a8;          /* orange [1] */
+    --light-red: #ffc9c9;      /* red [1] */
+    --soft-emerald: #b2f2bb;   /* green [1] */
+    --violet: #d0bfff;         /* violet [1] */
+    --teal: #96f2d7;           /* teal [1] */
+    --rule: #ced4da;           /* gray [2] */
   }
   * { box-sizing: border-box; }
   html, body {
@@ -30,7 +48,7 @@
     color: var(--ink);
     width: 100vw; height: 100vh;
     overflow: hidden;
-    font-family: 'Crimson Pro', Georgia, serif;
+    font-family: 'Excalifont', cursive;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -39,7 +57,7 @@
     content: "";
     position: fixed; inset: 0;
     pointer-events: none;
-    background-image: radial-gradient(rgba(120,90,40,0.035) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(0,0,0,0.025) 1px, transparent 1px);
     background-size: 4px 4px;
     z-index: 1;
   }
@@ -56,7 +74,7 @@
     overflow-y: auto;
     padding: 10px 8px 60px;
     z-index: 15;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Excalifont', cursive;
   }
   .thumb-sidebar .thumb {
     background: var(--cream);
@@ -101,7 +119,7 @@
   .thumb-sidebar .thumb .num {
     font-size: 14px;
     color: var(--ink-soft);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Cascadia Code', ui-monospace, monospace;
     font-weight: 600;
   }
   .thumb-sidebar .thumb .label {
@@ -139,13 +157,13 @@
     z-index: 20;
   }
   .topbar .title {
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Excalifont', cursive;
     font-size: 26px;
     color: var(--ink);
     line-height: 1;
   }
   .topbar .counter {
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Excalifont', cursive;
     font-size: 22px;
     color: var(--ink-soft);
   }
@@ -195,7 +213,7 @@
     right: 14px;
     background: #ef4444;
     color: white;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Cascadia Code', ui-monospace, monospace;
     font-size: 11px;
     letter-spacing: 0.5px;
     padding: 4px 8px;
@@ -213,7 +231,7 @@
     border-radius: 50%;
     background: #ef4444;
     color: white;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Cascadia Code', ui-monospace, monospace;
     font-size: 14px;
     font-weight: 700;
     display: flex;
@@ -235,7 +253,7 @@
     top: -4px;
     background: #fef3c7;
     color: #1f2937;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Excalifont', cursive;
     font-size: 16px;
     padding: 4px 10px;
     border: 1.5px solid #1f2937;
@@ -257,7 +275,7 @@
   }
   .caption-area.fading { opacity: 0; }
   .caption-area h2 {
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Excalifont', cursive;
     font-weight: 700;
     margin: 0 0 6px;
     font-size: clamp(2.2rem, 4.2vw, 3.4rem);
@@ -265,12 +283,12 @@
     color: var(--ink);
   }
   .caption-area p {
-    font-family: 'Crimson Pro', Georgia, serif;
+    font-family: 'Excalifont', cursive;
     margin: 0 auto;
-    font-size: clamp(0.95rem, 1.3vw, 1.2rem);
-    line-height: 1.5;
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+    line-height: 1.4;
     color: var(--ink-soft);
-    max-width: 820px;
+    max-width: 920px;
   }
 
   /* ========== TAP ZONES ========== */
@@ -289,7 +307,7 @@
     position: fixed;
     bottom: 18px;
     z-index: 25;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Excalifont', cursive;
     font-size: 22px;
     background: #fff;
     border: 2px solid var(--ink);
@@ -313,7 +331,7 @@
   .nav-btn.prev { left: 24px; }
   .nav-btn.next { right: 24px; }
   .nav-btn .arrow {
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Excalifont', cursive;
     font-size: 28px;
     line-height: 1;
   }
@@ -324,7 +342,7 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 25;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Excalifont', cursive;
     font-size: 18px;
     background: var(--paper);
     border: 1.5px dashed var(--ink-soft);
@@ -390,20 +408,25 @@
 
 <script>
 (() => {
+  // Excalidraw palette
   const COLORS = {
-    ink: '#1f2937',
-    soft: '#4b5563',
-    faint: '#9ca3af',
-    yellow: '#fef3c7',
-    blue: '#dbeafe',
-    green: '#dcfce7',
-    pink: '#fce7f3',
-    amber: '#fed7aa',
-    paper: '#f5efe1',
-    emerald: '#10b981',
-    rose: '#ef4444',
-    lightRed: '#fecaca',
-    softEmerald: '#bbf7d0',
+    ink: '#1e1e1e',          // black
+    soft: '#868e96',         // gray [3]
+    faint: '#ced4da',         // gray [2]
+    yellow: '#ffec99',       // yellow [1]
+    blue: '#a5d8ff',         // blue [1]
+    green: '#b2f2bb',        // green [1]
+    pink: '#fcc2d7',         // pink [1]
+    amber: '#ffd8a8',        // orange [1]
+    paper: '#f8f9fa',        // gray [1]
+    emerald: '#2f9e44',      // green [4]
+    rose: '#e03131',         // red [4]
+    lightRed: '#ffc9c9',     // red [1]
+    softEmerald: '#b2f2bb',  // green [1] (alias)
+    violet: '#d0bfff',       // violet [1]
+    teal: '#96f2d7',         // teal [1]
+    blueStroke: '#1971c2',   // blue [4]
+    yellowStroke: '#f08c00', // yellow [4]
   };
 
   const svg = document.getElementById('sketch');
@@ -444,7 +467,7 @@
   const addText = (x,y, text, opts={}) => {
     const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     t.setAttribute('x', x); t.setAttribute('y', y);
-    t.setAttribute('font-family', opts.font || "'Patrick Hand', cursive");
+    t.setAttribute('font-family', opts.font || "'Excalifont', cursive");
     t.setAttribute('font-size', opts.size || 24);
     t.setAttribute('fill', opts.fill || COLORS.ink);
     t.setAttribute('text-anchor', opts.anchor || 'start');
@@ -543,7 +566,7 @@
       // dog ear
       addPath('M 1180 100 L 1220 100 L 1220 140 Z', { stroke: COLORS.ink, fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.4 });
 
-      addText(420, 165, 'prd.json', { size: 44, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(420, 165, 'prd.json', { size: 44, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(420, 185, 1180, 185, { stroke: COLORS.soft, strokeWidth: 1.2 });
 
       const items = [
@@ -560,8 +583,8 @@
         const y = 240 + i * 52;
         // checkbox
         addRect(440, y, 26, 26, { strokeWidth: 1.4 });
-        addText(490, y+22, '[ ]', { size: 22, font: "'JetBrains Mono', monospace", fill: COLORS.soft });
-        addText(560, y+22, s, { size: 26, font: "'JetBrains Mono', monospace", fill: COLORS.ink });
+        addText(490, y+22, '[ ]', { size: 22, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.soft });
+        addText(560, y+22, s, { size: 26, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.ink });
       });
 
       // marginalia
@@ -584,7 +607,7 @@
       // pinned goal at top
       addRect(360, 80, 880, 90, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
       addCircle(800, 76, 16, { fill: COLORS.rose, fillStyle: 'solid' });
-      addText(800, 125, 'cut p95 /api/checkout latency by 20%', { size: 26, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(800, 125, 'cut p95 /api/checkout latency by 20%', { size: 26, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
       addText(800, 154, '(287ms → ≤ 230ms)', { size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
 
       // Root
@@ -624,7 +647,7 @@
       addArrow(480, 585, 480, 670, { stroke: COLORS.emerald, strokeWidth: 2, curve: 0, arrowSize: 12 });
       addRect(360, 690, 240, 70, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
       addCheck(395, 725, 18, COLORS.emerald);
-      addText(500, 733, '-19%', { size: 28, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(500, 733, '-19%', { size: 28, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // marginalia
       addText(1180, 700, 'cannot be', { size: 28, fill: COLORS.soft });
@@ -642,7 +665,7 @@
     draw: () => {
       // prd.json on the left
       addRect(80, 100, 440, 600, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
-      addText(110, 160, 'prd.json', { size: 36, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(110, 160, 'prd.json', { size: 36, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(110, 178, 490, 178, { stroke: COLORS.soft });
       const ralphItems = [
         { s: 'migrate checkout.ts', done: true },
@@ -658,7 +681,7 @@
         const y = 220 + i * 52;
         addRect(120, y, 24, 24, { strokeWidth: 1.4, fill: it.done ? COLORS.softEmerald : (it.active ? COLORS.amber : '#fff'), fillStyle: 'solid' });
         if (it.done) addCheck(132, y+12, 14, COLORS.emerald);
-        addText(170, y+20, it.s, { size: 22, font: "'JetBrains Mono', monospace", fill: it.done ? COLORS.soft : COLORS.ink });
+        addText(170, y+20, it.s, { size: 22, font: "'Cascadia Code', ui-monospace, monospace", fill: it.done ? COLORS.soft : COLORS.ink });
       });
 
       // Arrow from prd to processes
@@ -676,10 +699,10 @@
       ];
       procs.forEach(p => {
         addRect(p.x, p.y, 200, 130, { fill: p.color, fillStyle: 'solid', strokeWidth: 1.6 });
-        addText(p.x+100, p.y+34, p.label, { size: 22, anchor: 'middle', weight: 600, font: "'JetBrains Mono', monospace" });
+        addText(p.x+100, p.y+34, p.label, { size: 22, anchor: 'middle', weight: 600, font: "'Cascadia Code', ui-monospace, monospace" });
         addLine(p.x+20, p.y+50, p.x+180, p.y+50, { stroke: COLORS.soft, strokeWidth: 0.8 });
         addText(p.x+100, p.y+82, 'one ticket:', { size: 16, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
-        addText(p.x+100, p.y+108, p.task, { size: 18, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+        addText(p.x+100, p.y+108, p.task, { size: 18, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
       });
 
       // big checkmark over process #5 area showing parallelism
@@ -689,7 +712,7 @@
       // Progress bar at bottom
       addRect(120, 770, 1360, 60, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.6 });
       addRect(124, 774, Math.round(1360 * 0.94) - 4, 52, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1 });
-      addText(800, 808, '47 / 50', { size: 32, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(800, 808, '47 / 50', { size: 32, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addText(120, 760, 'progress', { size: 22, fill: COLORS.soft });
     }
   };
@@ -702,7 +725,7 @@
     draw: () => {
       // single big session box
       addRect(180, 120, 1100, 660, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
-      addText(730, 175, 'one /goal session', { size: 36, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(730, 175, 'one /goal session', { size: 36, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(220, 195, 1240, 195, { stroke: COLORS.soft });
 
       // chaotic pile of 50 fragments
@@ -731,7 +754,7 @@
         const t = document.createElementNS('http://www.w3.org/2000/svg','text');
         t.setAttribute('x', f.x + f.w/2);
         t.setAttribute('y', f.y + f.h/2 + 5);
-        t.setAttribute('font-family', "'JetBrains Mono', monospace");
+        t.setAttribute('font-family', "'Cascadia Code', ui-monospace, monospace");
         t.setAttribute('font-size', 14);
         t.setAttribute('text-anchor', 'middle');
         t.setAttribute('fill', COLORS.ink);
@@ -770,11 +793,11 @@
     draw: () => {
       // Big session box containing the hypothesis tree
       addRect(140, 100, 1180, 720, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
-      addText(730, 150, '/goal — one session, one thread', { size: 30, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(730, 150, '/goal — one session, one thread', { size: 30, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // pinned goal at top
       addRect(280, 175, 900, 60, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.6 });
-      addText(730, 215, 'goal: cut p95 /api/checkout latency by 20%', { size: 22, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(730, 215, 'goal: cut p95 /api/checkout latency by 20%', { size: 22, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
 
       // root
       addEllipse(730, 290, 180, 48, { fill: '#fff', fillStyle: 'solid' });
@@ -810,9 +833,9 @@
 
       // final answer
       addRect(380, 620, 700, 80, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
-      addText(740, 660, 'fix N+1 in /cart  ·  287ms → 232ms', { size: 22, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(740, 660, 'fix N+1 in /cart  ·  287ms → 232ms', { size: 22, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addCheck(420, 660, 22, COLORS.emerald);
-      addText(960, 690, '(-19%) ✓', { size: 20, anchor: 'middle', weight: 700, fill: COLORS.emerald, font: "'JetBrains Mono', monospace" });
+      addText(960, 690, '(-19%) ✓', { size: 20, anchor: 'middle', weight: 700, fill: COLORS.emerald, font: "'Cascadia Code', ui-monospace, monospace" });
       addArrow(580, 590, 730, 620, { stroke: COLORS.emerald, strokeWidth: 2, curve: 0, arrowSize: 12 });
       addText(400, 740, 'final', { size: 20, fill: COLORS.soft, style: 'italic' });
 
@@ -833,7 +856,7 @@
     draw: () => {
       // pinned goal at top
       addRect(420, 90, 760, 70, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.6 });
-      addText(800, 137, 'goal: fix intermittent flake', { size: 24, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(800, 137, 'goal: fix intermittent flake', { size: 24, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
 
       // 3 separate process boxes (independent iterations) with contradictory hypotheses
       const iterBoxes = [
@@ -843,12 +866,12 @@
       ];
       iterBoxes.forEach(b => {
         addRect(b.x, b.y, 400, 280, { fill: b.color, fillStyle: 'solid', strokeWidth: 1.8 });
-        addText(b.x+200, b.y+50, b.label, { size: 30, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+        addText(b.x+200, b.y+50, b.label, { size: 30, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
         addLine(b.x+30, b.y+70, b.x+370, b.y+70, { stroke: COLORS.soft });
         addText(b.x+200, b.y+130, 'hypothesis:', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
         addText(b.x+200, b.y+180, b.hypo, { size: 26, anchor: 'middle', weight: 600 });
         addText(b.x+200, b.y+215, b.hypo2, { size: 26, anchor: 'middle', weight: 600 });
-        addText(b.x+200, b.y+255, 'exit 0', { size: 18, anchor: 'middle', font: "'JetBrains Mono', monospace", fill: COLORS.rose });
+        addText(b.x+200, b.y+255, 'exit 0', { size: 18, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.rose });
       });
 
       // dotted line between them on disk
@@ -943,7 +966,7 @@
       // PRD paper
       addRect(140, 170, 480, 480, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
       addPath('M 580 170 L 620 170 L 620 210 Z', { stroke: COLORS.ink, fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.4 });
-      addText(170, 220, 'prd.json', { size: 30, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(170, 220, 'prd.json', { size: 30, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(170, 235, 590, 235, { stroke: COLORS.soft });
 
       const prdLines = [
@@ -959,7 +982,7 @@
         const y = 275 + i * 48;
         addRect(180, y, 22, 22, { strokeWidth: 1.3, fill: l.done === true ? COLORS.softEmerald : '#fff', fillStyle: 'solid' });
         if (l.done === true) addCheck(191, y+11, 12, COLORS.emerald);
-        addText(220, y+18, l.s, { size: 20, font: "'JetBrains Mono', monospace", fill: l.done ? COLORS.ink : COLORS.faint });
+        addText(220, y+18, l.s, { size: 20, font: "'Cascadia Code', ui-monospace, monospace", fill: l.done ? COLORS.ink : COLORS.faint });
       });
 
       // floating pencil mid-stroke (over S04)
@@ -993,9 +1016,9 @@
       addCircle(932, 230, 14, { fill: COLORS.rose, fillStyle: 'solid', stroke: 'none' });
       addCircle(960, 230, 14, { fill: COLORS.amber, fillStyle: 'solid', stroke: 'none' });
       addCircle(988, 230, 14, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: 'none' });
-      addText(1020, 235, 'codex ~ ', { size: 18, fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+      addText(1020, 235, 'codex ~ ', { size: 18, fill: COLORS.soft, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(925, 250, 1480, 250, { stroke: COLORS.soft, strokeWidth: 0.8 });
-      addText(925, 295, '$ /goal cut p95 latency 20%', { size: 26, font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(925, 295, '$ /goal cut p95 latency 20%', { size: 26, font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
       // blinking cursor block
       addRect(1430, 275, 18, 28, { fill: COLORS.ink, fillStyle: 'solid', stroke: 'none' });
       addText(925, 345, 'one sentence. that\'s it.', { size: 22, fill: COLORS.soft, style: 'italic' });
@@ -1010,7 +1033,7 @@
         addLine(x, 480, x, 488, { strokeWidth: 1 });
         addLine(x, 542, x, 550, { strokeWidth: 1 });
       }
-      addText(1200, 522, '~ climbing', { size: 24, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(1200, 522, '~ climbing', { size: 24, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // animated upward arrows beside meter
       addArrow(1490, 600, 1490, 510, { stroke: COLORS.rose, strokeWidth: 2, curve: 0, arrowSize: 12 });
@@ -1036,18 +1059,18 @@
       // tape strip
       addRect(280, 200, 80, 22, { fill: '#ffffffcc', fillStyle: 'solid', stroke: COLORS.soft, strokeWidth: 0.7 });
       addRect(180, 220, 380, 200, { fill: COLORS.pink, fillStyle: 'solid', strokeWidth: 1.8 });
-      addText(370, 305, '"cut p95', { size: 28, anchor: 'middle', weight: 600, font: "'Patrick Hand', cursive" });
-      addText(370, 340, '/api/checkout', { size: 28, anchor: 'middle', weight: 600, font: "'Patrick Hand', cursive" });
-      addText(370, 375, 'latency by 20%."', { size: 28, anchor: 'middle', weight: 600, font: "'Patrick Hand', cursive" });
+      addText(370, 305, '"cut p95', { size: 28, anchor: 'middle', weight: 600, font: "'Excalifont', cursive" });
+      addText(370, 340, '/api/checkout', { size: 28, anchor: 'middle', weight: 600, font: "'Excalifont', cursive" });
+      addText(370, 375, 'latency by 20%."', { size: 28, anchor: 'middle', weight: 600, font: "'Excalifont', cursive" });
 
       // arrow down to /goal label
       addArrow(370, 440, 370, 600, { stroke: COLORS.ink, strokeWidth: 2, curve: -25, arrowSize: 14 });
       addRect(220, 620, 300, 80, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
-      addText(370, 672, '/goal', { size: 44, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(370, 672, '/goal', { size: 44, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // size label under sticky
       addText(370, 480, 'one sentence', { size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
-      addText(370, 510, '~ 8 tokens', { size: 18, anchor: 'middle', fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+      addText(370, 510, '~ 8 tokens', { size: 18, anchor: 'middle', fill: COLORS.soft, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // ===== RIGHT: large multi-page PRD =====
       // back pages (peeking)
@@ -1057,7 +1080,7 @@
       addRect(910, 170, 540, 660, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
       addPath('M 1410 170 L 1450 170 L 1450 210 Z', { stroke: COLORS.ink, fill: COLORS.paper, fillStyle: 'solid' });
 
-      addText(940, 220, 'prd.json', { size: 32, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(940, 220, 'prd.json', { size: 32, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(940, 238, 1420, 238, { stroke: COLORS.soft });
 
       const items = [
@@ -1073,9 +1096,9 @@
       items.forEach((s, i) => {
         const y = 280 + i * 44;
         addRect(950, y, 20, 20, { strokeWidth: 1.2 });
-        addText(985, y+17, s, { size: 20, font: "'JetBrains Mono', monospace" });
+        addText(985, y+17, s, { size: 20, font: "'Cascadia Code', ui-monospace, monospace" });
       });
-      addText(950, 660, '...+42 more', { size: 22, font: "'JetBrains Mono', monospace", fill: COLORS.faint, style: 'italic' });
+      addText(950, 660, '...+42 more', { size: 22, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.faint, style: 'italic' });
       // dotted continuation
       for (let i = 0; i < 18; i++) {
         addCircle(1100 + i*16, 700, 4, { fill: COLORS.faint, fillStyle: 'solid', stroke: 'none' });
@@ -1089,7 +1112,7 @@
       addArrow(1180, 820, 1180, 720, { stroke: COLORS.ink, strokeWidth: 2, curve: 25, arrowSize: 14 });
       // hmm — overlap risk. Use bottom layout: place ralph label adjacent to PRD
       addRect(1500, 700, 80, 80, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
-      addText(1540, 752, 'ralph', { size: 28, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(1540, 752, 'ralph', { size: 28, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addArrow(1450, 740, 1500, 740, { stroke: COLORS.ink, strokeWidth: 2, curve: 0, arrowSize: 12 });
 
       // size label
@@ -1109,12 +1132,12 @@
     draw: () => {
       // ===== Center: goal session running =====
       addRect(140, 130, 880, 660, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2 });
-      addText(580, 180, '/goal session — running', { size: 28, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(580, 180, '/goal session — running', { size: 28, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(180, 200, 980, 200, { stroke: COLORS.soft });
 
       // pinned goal at top
       addRect(220, 220, 720, 50, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.4 });
-      addText(580, 252, 'goal: cut p95 /api/checkout latency 20%', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(580, 252, 'goal: cut p95 /api/checkout latency 20%', { size: 20, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
 
       // turn cells stacking
       const cells = [
@@ -1126,7 +1149,7 @@
       cells.forEach((c, i) => {
         const y = 300 + i * 70;
         addRect(220, y, 720, 56, { fill: c.fill, fillStyle: 'solid', strokeWidth: c.dim ? 0.9 : 1.4, roughness: c.dim ? 2.2 : 1.4 });
-        addText(245, y+35, c.t, { size: 22, fill: c.dim ? COLORS.soft : COLORS.ink, font: "'JetBrains Mono', monospace" });
+        addText(245, y+35, c.t, { size: 22, fill: c.dim ? COLORS.soft : COLORS.ink, font: "'Cascadia Code', ui-monospace, monospace" });
         if (!c.dim) addCheck(910, y+28, 14, COLORS.emerald);
       });
 
@@ -1157,7 +1180,7 @@
       addCircle(1110, 250, 14, { fill: COLORS.rose, fillStyle: 'solid', stroke: 'none' });
       addCircle(1138, 250, 14, { fill: COLORS.amber, fillStyle: 'solid', stroke: 'none' });
       addCircle(1166, 250, 14, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: 'none' });
-      addText(1310, 257, '/side', { size: 26, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(1310, 257, '/side', { size: 26, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(1090, 275, 1530, 275, { stroke: COLORS.soft });
 
       addText(1110, 320, 'snapshot', { size: 22, weight: 700, fill: COLORS.soft, style: 'italic' });
@@ -1169,7 +1192,7 @@
         'metric: 287ms → 248ms (-14%)',
       ];
       snapLines.forEach((l, i) => {
-        addText(1110, 370 + i * 44, l, { size: 22, font: "'JetBrains Mono', monospace" });
+        addText(1110, 370 + i * 44, l, { size: 22, font: "'Cascadia Code', ui-monospace, monospace" });
       });
       addText(1110, 640, 'read-only view', { size: 20, fill: COLORS.soft, style: 'italic' });
 
@@ -1284,7 +1307,7 @@
       // ===== LEFT: paper-blue checklist (plan complete) =====
       addText(390, 145, 'plan complete', { size: 30, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       addRect(140, 180, 500, 520, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2 });
-      addText(170, 230, 'todo.md', { size: 30, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(170, 230, 'todo.md', { size: 30, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(170, 248, 610, 248, { stroke: COLORS.soft });
       const items = [
         'scaffold tables',
@@ -1297,9 +1320,9 @@
         const y = 290 + i * 70;
         addRect(180, y, 32, 32, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 1.4 });
         addCheck(196, y + 16, 16, COLORS.emerald);
-        addText(230, y + 24, s, { size: 22, font: "'JetBrains Mono', monospace" });
+        addText(230, y + 24, s, { size: 22, font: "'Cascadia Code', ui-monospace, monospace" });
       });
-      addText(390, 670, '5 / 5 done', { size: 26, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace", fill: COLORS.emerald });
+      addText(390, 670, '5 / 5 done', { size: 26, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.emerald });
 
       // ===== RIGHT: paper-amber metric chart (metric hit) =====
       addText(1180, 145, 'metric hit', { size: 30, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
@@ -1332,7 +1355,7 @@
       addText(cx0 + 220, targetY - 20, 'crossed ✓', { size: 22, anchor: 'middle', fill: COLORS.emerald, weight: 700, style: 'italic' });
 
       // metric label below the chart axis but inside the paper
-      addText(1170, 685, 'metric: 287ms → 228ms', { size: 20, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace", fill: COLORS.emerald });
+      addText(1170, 685, 'metric: 287ms → 228ms', { size: 20, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.emerald });
 
       // footnote
       addText(800, 850, 'vague is fine. unverifiable is not.', {
@@ -1350,10 +1373,10 @@
       addRect(120, 130, 740, 660, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
       addPath('M 820 130 L 860 130 L 860 170 Z', { stroke: COLORS.ink, fill: COLORS.paper, fillStyle: 'solid' });
 
-      addText(150, 190, 'prd.json', { size: 32, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(150, 190, 'prd.json', { size: 32, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(150, 208, 830, 208, { stroke: COLORS.soft });
-      addText(150, 250, 'goal: cut p95 /api/checkout', { size: 22, font: "'JetBrains Mono', monospace", fill: COLORS.soft });
-      addText(150, 280, '      latency by 20%', { size: 22, font: "'JetBrains Mono', monospace", fill: COLORS.soft });
+      addText(150, 250, 'goal: cut p95 /api/checkout', { size: 22, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.soft });
+      addText(150, 280, '      latency by 20%', { size: 22, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.soft });
       addLine(150, 300, 830, 300, { stroke: COLORS.faint, strokeWidth: 0.8 });
 
       const stories = [
@@ -1366,7 +1389,7 @@
       stories.forEach((s, i) => {
         const y = 350 + i * 70;
         addRect(170, y, 28, 28, { strokeWidth: 1.4 });
-        addText(220, y + 22, s, { size: 24, font: "'JetBrains Mono', monospace", fill: i < 2 ? COLORS.ink : COLORS.faint });
+        addText(220, y + 22, s, { size: 24, font: "'Cascadia Code', ui-monospace, monospace", fill: i < 2 ? COLORS.ink : COLORS.faint });
       });
 
       // floating pencil hovering, motion lines = stuck
@@ -1390,7 +1413,7 @@
       addCircle(1000, 260, 14, { fill: COLORS.amber, fillStyle: 'solid', stroke: 'none' });
       addCircle(1028, 260, 14, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: 'none' });
       addLine(960, 280, 1500, 280, { stroke: COLORS.soft });
-      addText(960, 330, '$ /goal cut p95 latency 20%', { size: 24, font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(960, 330, '$ /goal cut p95 latency 20%', { size: 24, font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
       addText(960, 372, 'one line. one metric.', { size: 20, fill: COLORS.soft, style: 'italic' });
 
       // curved arrow from prompt → metric hit
@@ -1399,7 +1422,7 @@
       // metric hit pill
       addRect(990, 600, 480, 90, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
       addCheck(1030, 645, 22, COLORS.emerald);
-      addText(1240, 656, 'metric hit', { size: 32, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(1240, 656, 'metric hit', { size: 32, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // footnote
       addText(800, 855, 'for these tasks, only the metric matters.', {
@@ -1415,7 +1438,7 @@
     draw: () => {
       // Outer ralph loop: prd.json on the left
       addRect(60, 100, 360, 660, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
-      addText(90, 158, 'prd.json', { size: 30, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(90, 158, 'prd.json', { size: 30, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(90, 174, 400, 174, { stroke: COLORS.soft });
       const outerItems = [
         { s: 'S01: oauth flow', done: true },
@@ -1429,7 +1452,7 @@
         const y = 210 + i * 70;
         addRect(110, y, 22, 22, { strokeWidth: 1.4, fill: it.done ? COLORS.softEmerald : (it.active ? COLORS.amber : '#fff'), fillStyle: 'solid' });
         if (it.done) addCheck(121, y+11, 13, COLORS.emerald);
-        addText(150, y+18, it.s, { size: 20, font: "'JetBrains Mono', monospace", fill: it.done ? COLORS.soft : COLORS.ink });
+        addText(150, y+18, it.s, { size: 20, font: "'Cascadia Code', ui-monospace, monospace", fill: it.done ? COLORS.soft : COLORS.ink });
       });
       addText(110, 700, 'ralph: outer loop', { size: 20, fill: COLORS.soft, style: 'italic' });
       addText(110, 728, 'fresh context per story', { size: 18, fill: COLORS.soft, style: 'italic' });
@@ -1441,12 +1464,12 @@
 
       // Inner /goal session for the active ticket
       addRect(620, 130, 800, 600, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
-      addText(1020, 180, '/goal — markdown sync task', { size: 24, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(1020, 180, '/goal — markdown sync task', { size: 24, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(660, 200, 1380, 200, { stroke: COLORS.soft });
 
       // Inner objective pill
       addRect(720, 220, 600, 56, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.6 });
-      addText(1020, 256, 'objective: implement S03 + tests pass', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(1020, 256, 'objective: implement S03 + tests pass', { size: 20, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
 
       // Turns inside the inner goal
       const turns = [
@@ -1457,7 +1480,7 @@
       ];
       turns.forEach((t, i) => {
         addCircle(700, t.y + 6, 14, { fill: COLORS.softEmerald, fillStyle: 'solid' });
-        addText(740, t.y + 12, t.label, { size: 19, font: "'JetBrains Mono', monospace" });
+        addText(740, t.y + 12, t.label, { size: 19, font: "'Cascadia Code', ui-monospace, monospace" });
       });
       // arrows between turns
       addArrow(700, 340, 700, 372, { stroke: COLORS.emerald, strokeWidth: 1.6, curve: 0, arrowSize: 8 });
@@ -1467,7 +1490,7 @@
       // completion audit
       addRect(720, 560, 600, 70, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
       addCheck(760, 595, 18, COLORS.emerald);
-      addText(1020, 602, 'update_goal(complete) — story passes', { size: 19, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(1020, 602, 'update_goal(complete) — story passes', { size: 19, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
 
       addText(1020, 690, 'macro discipline + micro discipline', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
 
@@ -1518,7 +1541,7 @@
 
       // ===== RIGHT: the actual diff =====
       addRect(960, 180, 540, 580, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
-      addText(990, 235, 'git diff', { size: 32, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(990, 235, 'git diff', { size: 32, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(990, 252, 1470, 252, { stroke: COLORS.soft });
 
       const files = [
@@ -1534,8 +1557,8 @@
         addRect(990, y, 480, 50, { fill, fillStyle: 'solid', strokeWidth: 1.4 });
         if (it.icon === 'check') addCheck(1018, y+25, 14, COLORS.emerald);
         else addCross(1018, y+25, 14, COLORS.rose);
-        addText(1058, y+33, it.f, { size: 22, font: "'JetBrains Mono', monospace", fill: it.state === 'changed' ? COLORS.ink : COLORS.soft });
-        addText(1300, y+33, it.state, { size: 18, font: "'JetBrains Mono', monospace", fill: it.state === 'changed' ? COLORS.emerald : COLORS.rose, weight: 600 });
+        addText(1058, y+33, it.f, { size: 22, font: "'Cascadia Code', ui-monospace, monospace", fill: it.state === 'changed' ? COLORS.ink : COLORS.soft });
+        addText(1300, y+33, it.state, { size: 18, font: "'Cascadia Code', ui-monospace, monospace", fill: it.state === 'changed' ? COLORS.emerald : COLORS.rose, weight: 600 });
       });
       addText(1230, 720, '2 of 5 actually touched', { size: 24, anchor: 'middle', fill: COLORS.rose, weight: 700, style: 'italic' });
     }
@@ -1547,54 +1570,54 @@
     caption: 'ralph and /goal — two completely different bets at the same problem',
     draw: () => {
       // big VS in middle
-      addText(800, 470, 'vs', { size: 80, anchor: 'middle', weight: 700, fill: COLORS.rose, font: "'JetBrains Mono', monospace" });
+      addText(800, 470, 'vs', { size: 80, anchor: 'middle', weight: 700, fill: COLORS.rose, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // ===== LEFT: Ralph =====
       addRect(80, 130, 640, 700, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2.4 });
-      addText(400, 200, 'Ralph', { size: 64, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
-      addText(400, 240, 'an external while-loop', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addText(400, 210, 'Ralph', { size: 76, anchor: 'middle', weight: 700 });
+      addText(400, 245, 'an external while-loop', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       addLine(120, 270, 680, 270, { stroke: COLORS.soft });
 
       // bash terminal
       addRect(120, 300, 560, 180, { fill: COLORS.ink, fillStyle: 'solid', strokeWidth: 1.4 });
-      addText(150, 340, '$ while ! done; do', { size: 22, fill: '#9be39b', font: "'JetBrains Mono', monospace" });
-      addText(150, 370, '    claude < prompt.md', { size: 22, fill: '#9be39b', font: "'JetBrains Mono', monospace" });
-      addText(150, 400, '  done', { size: 22, fill: '#9be39b', font: "'JetBrains Mono', monospace" });
-      addText(150, 450, '# fresh process every iter', { size: 18, fill: '#fbbf2466', font: "'JetBrains Mono', monospace", style: 'italic' });
+      addText(150, 340, '$ while ! done; do', { size: 22, fill: '#9be39b', font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(150, 370, '    claude < prompt.md', { size: 22, fill: '#9be39b', font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(150, 400, '  done', { size: 22, fill: '#9be39b', font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(150, 450, '# fresh process every iter', { size: 18, fill: '#fbbf2466', font: "'Cascadia Code', ui-monospace, monospace", style: 'italic' });
 
       // 3 spawned process icons
       const procs = [{ x: 160, c: COLORS.pink }, { x: 360, c: COLORS.blue }, { x: 560, c: COLORS.green }];
       procs.forEach((p, i) => {
         addRect(p.x, 530, 100, 100, { fill: p.c, fillStyle: 'solid', strokeWidth: 1.6 });
-        addText(p.x + 50, 555, `iter ${i+1}`, { size: 18, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+        addText(p.x + 50, 555, `iter ${i+1}`, { size: 18, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
         addLine(p.x + 12, 575, p.x + 88, 575, { stroke: COLORS.soft, strokeWidth: 0.8 });
         addText(p.x + 50, 605, 'fresh ctx', { size: 14, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       });
       addText(400, 700, 'memory: files on disk', { size: 22, anchor: 'middle', fill: COLORS.soft });
-      addText(400, 735, 'prd.json + progress.txt', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", fill: COLORS.soft });
+      addText(400, 735, 'prd.json + progress.txt', { size: 20, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.soft });
       addText(400, 790, 'discipline pattern.', { size: 24, anchor: 'middle', weight: 700, fill: COLORS.ink, style: 'italic' });
 
       // ===== RIGHT: /goal =====
       addRect(880, 130, 640, 700, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
-      addText(1200, 200, '/goal', { size: 64, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
-      addText(1200, 240, 'an internal state machine', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addText(1200, 210, '/goal', { size: 76, anchor: 'middle', weight: 700 });
+      addText(1200, 245, 'an internal state machine', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       addLine(920, 270, 1480, 270, { stroke: COLORS.soft });
 
       // codex prompt
       addRect(920, 300, 560, 100, { fill: COLORS.ink, fillStyle: 'solid', strokeWidth: 1.4 });
-      addText(950, 340, '› /goal cut p95 latency 20%', { size: 22, fill: '#9be39b', font: "'JetBrains Mono', monospace" });
-      addText(950, 375, '✓ goal set · auto-continues', { size: 18, fill: '#fbbf24', font: "'JetBrains Mono', monospace" });
+      addText(950, 340, '› /goal cut p95 latency 20%', { size: 22, fill: '#9be39b', font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(950, 375, '✓ goal set · auto-continues', { size: 18, fill: '#fbbf24', font: "'Cascadia Code', ui-monospace, monospace" });
 
       // single big session box continuing across turns
       addRect(960, 440, 480, 240, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 1.8 });
-      addText(1200, 480, 'one continuous thread', { size: 22, anchor: 'middle', weight: 600, font: "'JetBrains Mono', monospace" });
+      addText(1200, 480, 'one continuous thread', { size: 22, anchor: 'middle', weight: 600, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(990, 500, 1410, 500, { stroke: COLORS.soft });
       ['turn 1', 'turn 2 ↳ auto', 'turn 3 ↳ auto', 'turn 4 ↳ done'].forEach((t, i) => {
-        addText(1010, 535 + i * 35, t, { size: 19, font: "'JetBrains Mono', monospace" });
+        addText(1010, 535 + i * 35, t, { size: 19, font: "'Cascadia Code', ui-monospace, monospace" });
       });
 
       addText(1200, 715, 'memory: the thread itself', { size: 22, anchor: 'middle', fill: COLORS.soft });
-      addText(1200, 750, '+ persisted state DB', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", fill: COLORS.soft });
+      addText(1200, 750, '+ persisted state DB', { size: 20, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.soft });
       addText(1200, 790, 'infrastructure pattern.', { size: 24, anchor: 'middle', weight: 700, fill: COLORS.ink, style: 'italic' });
     }
   };
@@ -1613,23 +1636,23 @@
       ];
       states.forEach(s => {
         addRect(s.x - 160, s.y - 60, 320, 120, { fill: s.color, fillStyle: 'solid', strokeWidth: 2 });
-        addText(s.x, s.y - 5, s.label, { size: 28, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+        addText(s.x, s.y - 5, s.label, { size: 28, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
         addText(s.x, s.y + 32, s.sub, { size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       });
 
       // active <-> paused (user)
       addArrow(520, 220, 940, 220, { stroke: COLORS.ink, strokeWidth: 1.8, curve: -25, arrowSize: 12 });
       addArrow(940, 260, 520, 260, { stroke: COLORS.ink, strokeWidth: 1.8, curve: 25, arrowSize: 12 });
-      addText(730, 180, '/goal pause', { size: 18, anchor: 'middle', fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
-      addText(730, 295, '/goal resume', { size: 18, anchor: 'middle', fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+      addText(730, 180, '/goal pause', { size: 18, anchor: 'middle', fill: COLORS.soft, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(730, 295, '/goal resume', { size: 18, anchor: 'middle', fill: COLORS.soft, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // active -> budget-limited (auto)
       addArrow(360, 320, 360, 460, { stroke: COLORS.amber, strokeWidth: 2.2, curve: 0, arrowSize: 12 });
-      addText(380, 395, 'tokens > budget', { size: 18, fill: COLORS.amber, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(380, 395, 'tokens > budget', { size: 18, fill: COLORS.amber, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // active -> complete (model only, after audit)
       addArrow(520, 280, 940, 540, { stroke: COLORS.emerald, strokeWidth: 2.2, curve: 60, arrowSize: 12 });
-      addText(800, 380, 'update_goal(complete)', { size: 18, fill: COLORS.emerald, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(800, 380, 'update_goal(complete)', { size: 18, fill: COLORS.emerald, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addText(800, 405, '↑ model-only', { size: 16, fill: COLORS.emerald, style: 'italic' });
 
       // budget-limited -> complete (audit can still pass)
@@ -1649,8 +1672,8 @@
       addRect(1410, 90, 80, 720, { strokeWidth: 1.6 });
       addRect(1416, 96, 68, 360, { fill: COLORS.amber, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1 });
       addText(1450, 80, 'budget', { size: 20, anchor: 'middle', fill: COLORS.soft });
-      addText(1450, 470, '~50%', { size: 22, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
-      addText(1450, 850, '0', { size: 18, anchor: 'middle', fill: COLORS.faint, font: "'JetBrains Mono', monospace" });
+      addText(1450, 470, '~50%', { size: 22, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(1450, 850, '0', { size: 18, anchor: 'middle', fill: COLORS.faint, font: "'Cascadia Code', ui-monospace, monospace" });
 
       // bottom callout
       addText(800, 850, 'pause/resume = user · complete = model · everything else = runtime', {
@@ -1666,14 +1689,14 @@
     draw: () => {
       // top: /goal node
       addRect(640, 110, 320, 110, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2.4 });
-      addText(800, 175, '/goal', { size: 56, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(800, 185, '/goal', { size: 68, anchor: 'middle', weight: 700 });
 
       // Y-fork
       addArrow(720, 230, 380, 380, { stroke: COLORS.ink, strokeWidth: 2.4, curve: -40, arrowSize: 14 });
       addArrow(880, 230, 1220, 380, { stroke: COLORS.ink, strokeWidth: 2.4, curve: 40, arrowSize: 14 });
 
       // ===== LEFT BRANCH: at a SPEC =====
-      addText(380, 340, 'BRANCH A', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+      addText(380, 340, 'branch A', { size: 28, anchor: 'middle', weight: 700, fill: COLORS.soft });
       addRect(120, 400, 540, 380, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
       addText(390, 460, 'point at a SPEC', { size: 32, anchor: 'middle', weight: 700 });
       addText(390, 495, 'implement until done', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
@@ -1691,11 +1714,11 @@
         const y = 565 + i * 38;
         addRect(180, y, 20, 20, { strokeWidth: 1.2, fill: l.done ? COLORS.softEmerald : (l.active ? COLORS.amber : '#fff'), fillStyle: 'solid' });
         if (l.done) addCheck(190, y+10, 11, COLORS.emerald);
-        addText(215, y+16, l.s, { size: 18, font: "'JetBrains Mono', monospace", fill: l.done ? COLORS.soft : COLORS.ink });
+        addText(215, y+16, l.s, { size: 18, font: "'Cascadia Code', ui-monospace, monospace", fill: l.done ? COLORS.soft : COLORS.ink });
       });
 
       // ===== RIGHT BRANCH: at a VAGUE GOAL =====
-      addText(1220, 340, 'BRANCH B', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+      addText(1220, 340, 'branch B', { size: 28, anchor: 'middle', weight: 700, fill: COLORS.soft });
       addRect(940, 400, 540, 380, { fill: COLORS.pink, fillStyle: 'solid', strokeWidth: 2 });
       addText(1210, 460, 'point at a VAGUE GOAL', { size: 32, anchor: 'middle', weight: 700 });
       addText(1210, 495, 'explore until metric hits', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
@@ -1707,7 +1730,7 @@
       addText(1210, 615, '"cut p95 audio', { size: 26, anchor: 'middle', weight: 600 });
       addText(1210, 650, 'transcribe latency', { size: 26, anchor: 'middle', weight: 600 });
       addText(1210, 685, 'by 20%."', { size: 26, anchor: 'middle', weight: 600 });
-      addText(1210, 745, 'one sentence. ~ 8 tokens', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic', font: "'JetBrains Mono', monospace" });
+      addText(1210, 745, 'one sentence. ~ 8 tokens', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic', font: "'Cascadia Code', ui-monospace, monospace" });
 
       // bottom callout
       addText(800, 830, 'same /goal loop, two completely different jobs', {
@@ -1724,9 +1747,9 @@
       // ===== CENTER: /goal hub =====
       const cx = 800, cy = 460;
       addEllipse(cx, cy, 460, 200, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2.4 });
-      addText(cx, cy - 30, '/goal', { size: 30, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
-      addText(cx, cy + 5, 'cut p95 audio transcribe', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
-      addText(cx, cy + 30, 'latency by 20%', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(cx, cy - 25, '/goal', { size: 38, anchor: 'middle', weight: 700 });
+      addText(cx, cy + 5, 'cut p95 audio transcribe', { size: 20, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
+      addText(cx, cy + 30, 'latency by 20%', { size: 20, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
       addText(cx, cy + 60, 'regions: us-east, eu-west, ap-southeast', { size: 14, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
 
       // ===== SPOKES: resources radiating out =====
@@ -1743,7 +1766,7 @@
         // resource node
         addRect(s.x - 140, s.y - 50, 280, 100, { fill: s.color, fillStyle: 'solid', strokeWidth: 1.8 });
         addText(s.x, s.y - 14, s.label, { size: 22, anchor: 'middle', weight: 700 });
-        addText(s.x, s.y + 16, s.sub, { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic', font: "'JetBrains Mono', monospace" });
+        addText(s.x, s.y + 16, s.sub, { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic', font: "'Cascadia Code', ui-monospace, monospace" });
 
         // dashed connector to hub
         const startX = s.side === 'right' ? s.x + 140 : s.x - 140;
