@@ -384,7 +384,6 @@
 <aside class="thumb-sidebar" id="thumb-sidebar"></aside>
 
 <div class="topbar">
-  <div class="title">two kinds of work</div>
   <div class="counter"><span class="num" id="slide-num">1</span> / <span id="slide-total">10</span></div>
 </div>
 
@@ -559,7 +558,7 @@
   // -------- SLIDE 2: PRE-DECOMPOSABLE --------
   const slidePreDecomposable = {
     headline: 'pre-decomposable',
-    caption: 'example: notion integration — every story is known upfront',
+    caption: 'example: notion integration. every story is known upfront',
     draw: () => {
       // big paper
       addRect(380, 100, 840, 720, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
@@ -587,11 +586,6 @@
         addText(560, y+22, s, { size: 26, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.ink });
       });
 
-      // marginalia
-      addText(180, 405, 'known up', { size: 36, fill: COLORS.soft });
-      addText(180, 450, 'front', { size: 36, fill: COLORS.soft });
-      addArrow(290, 420, 420, 380, { stroke: COLORS.rose, strokeWidth: 1.8, curve: -20 });
-
       addText(1300, 540, 'finite.', { size: 38, weight: 700 });
       addText(1300, 590, 'parallel.', { size: 38, weight: 700 });
       addText(1300, 640, 'independent.', { size: 38, weight: 700 });
@@ -602,7 +596,7 @@
   // -------- SLIDE 3: UNFOLDING --------
   const slideUnfolding = {
     headline: 'unfolding',
-    caption: 'you only know the goal. the plan emerges. example: cut p95 /api/checkout latency by 20%',
+    caption: 'you only know the goal. the plan emerges.',
     draw: () => {
       // pinned goal at top
       addRect(360, 80, 880, 90, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
@@ -1132,7 +1126,7 @@
     draw: () => {
       // ===== Center: goal session running =====
       addRect(140, 130, 880, 660, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2 });
-      addText(580, 180, '/goal session — running', { size: 28, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(580, 180, '/goal session: running', { size: 28, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       addLine(180, 200, 980, 200, { stroke: COLORS.soft });
 
       // pinned goal at top
@@ -1290,7 +1284,7 @@
       addText(xMid + 14, y1 + 30, '↓ summary kicks in', { size: 18, fill: COLORS.soft, style: 'italic' });
 
       // footnote
-      addText(800, 830, "codex's summarizer is built for this — the conversation grows wiser, not bloated", {
+      addText(800, 830, "codex's summarizer is built for this. the conversation grows wiser, not bloated", {
         size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic'
       });
     }
@@ -1357,10 +1351,6 @@
       // metric label below the chart axis but inside the paper
       addText(1170, 685, 'metric: 287ms → 228ms', { size: 20, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.emerald });
 
-      // footnote
-      addText(800, 850, 'vague is fine. unverifiable is not.', {
-        size: 28, anchor: 'middle', fill: COLORS.soft, style: 'italic'
-      });
     }
   };
 
@@ -1510,7 +1500,7 @@
   // -------- OPENER: vibes-based completion --------
   const slideOpener = {
     headline: "the agent stops before it's actually done",
-    caption: '"vibes-based completion" — the model FEELS done, so it claims done',
+    caption: '"vibes-based completion": the model FEELS done, so it claims done',
     draw: () => {
       // ===== LEFT: agent declaring victory =====
       // little robot box
@@ -1685,7 +1675,7 @@
   // -------- TWO WAYS TO POINT /GOAL --------
   const slideTwoWays = {
     headline: 'two ways to point /goal',
-    caption: 'at a spec, or at a vague goal — two branches, same loop',
+    caption: 'at a spec, or at a vague goal. two branches, same loop',
     draw: () => {
       // top: /goal node
       addRect(640, 110, 320, 110, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2.4 });
@@ -1696,10 +1686,8 @@
       addArrow(880, 230, 1220, 380, { stroke: COLORS.ink, strokeWidth: 2.4, curve: 40, arrowSize: 14 });
 
       // ===== LEFT BRANCH: at a SPEC =====
-      addText(380, 340, 'branch A', { size: 28, anchor: 'middle', weight: 700, fill: COLORS.soft });
       addRect(120, 400, 540, 380, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
-      addText(390, 460, 'point at a SPEC', { size: 32, anchor: 'middle', weight: 700 });
-      addText(390, 495, 'implement until done', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addText(390, 475, 'point at a SPEC', { size: 36, anchor: 'middle', weight: 700 });
       addLine(150, 515, 630, 515, { stroke: COLORS.soft });
 
       // mini prd on a sticky inside
@@ -1718,10 +1706,8 @@
       });
 
       // ===== RIGHT BRANCH: at a VAGUE GOAL =====
-      addText(1220, 340, 'branch B', { size: 28, anchor: 'middle', weight: 700, fill: COLORS.soft });
       addRect(940, 400, 540, 380, { fill: COLORS.pink, fillStyle: 'solid', strokeWidth: 2 });
-      addText(1210, 460, 'point at a VAGUE GOAL', { size: 32, anchor: 'middle', weight: 700 });
-      addText(1210, 495, 'explore until metric hits', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addText(1210, 475, 'point at a VAGUE GOAL', { size: 36, anchor: 'middle', weight: 700 });
       addLine(970, 515, 1450, 515, { stroke: COLORS.soft });
 
       // sticky note inside
@@ -1730,12 +1716,6 @@
       addText(1210, 615, '"cut p95 audio', { size: 26, anchor: 'middle', weight: 600 });
       addText(1210, 650, 'transcribe latency', { size: 26, anchor: 'middle', weight: 600 });
       addText(1210, 685, 'by 20%."', { size: 26, anchor: 'middle', weight: 600 });
-      addText(1210, 745, 'one sentence. ~ 8 tokens', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic', font: "'Cascadia Code', ui-monospace, monospace" });
-
-      // bottom callout
-      addText(800, 830, 'same /goal loop, two completely different jobs', {
-        size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic'
-      });
     }
   };
 
@@ -1750,7 +1730,6 @@
       addText(cx, cy - 25, '/goal', { size: 38, anchor: 'middle', weight: 700 });
       addText(cx, cy + 5, 'cut p95 audio transcribe', { size: 20, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
       addText(cx, cy + 30, 'latency by 20%', { size: 20, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", weight: 600 });
-      addText(cx, cy + 60, 'regions: us-east, eu-west, ap-southeast', { size: 14, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
 
       // ===== SPOKES: resources radiating out =====
       const spokes = [
@@ -1784,10 +1763,6 @@
         }
       });
 
-      // bottom callout
-      addText(800, 850, 'no reach → /goal can\'t fix what it can\'t see', {
-        size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic'
-      });
     }
   };
 
@@ -1949,7 +1924,7 @@
 
       // diff lines
       const diffLines = [
-        { sign: '+', t: 'const cache = new Map(); // hack — global', col: COLORS.softEmerald, hi: true, note: 'hack' },
+        { sign: '+', t: 'const cache = new Map(); // hack: global', col: COLORS.softEmerald, hi: true, note: 'hack' },
         { sign: '+', t: 'console.log("DEBUG cart fetch", cart);', col: COLORS.softEmerald, hi: true, note: 'debug print' },
         { sign: '+', t: 'function getCart(id) { /* try v2 first */', col: COLORS.softEmerald, hi: true, note: 'duplicate' },
         { sign: '+', t: '  if (cache.has(id)) return cache.get(id);', col: COLORS.softEmerald },
@@ -1986,11 +1961,11 @@
     draw: () => {
       // 3 boxes, left-to-right, with arrows between
       // STEP 1: messy /goal output
-      addRect(40, 220, 420, 480, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+      addRect(20, 220, 460, 480, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
       addText(250, 200, 'step 1', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.soft });
       addText(250, 270, '/goal explores', { size: 26, anchor: 'middle', weight: 700 });
       addText(250, 300, '(scrappy branch)', { size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
-      addLine(70, 320, 430, 320, { stroke: COLORS.soft });
+      addLine(50, 320, 450, 320, { stroke: COLORS.soft });
       // tangle of code blocks (hacky)
       const tangles = [
         { y: 350, t: 'cache hack' },
@@ -2000,23 +1975,23 @@
         { y: 530, t: 'TODO?' },
       ];
       tangles.forEach(t => {
-        addRect(80, t.y, 340, 32, { fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.4, roughness: 2.4 });
-        addText(96, t.y + 22, '> ' + t.t, { size: 18, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.soft });
+        addRect(60, t.y, 380, 32, { fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.4, roughness: 2.4 });
+        addText(76, t.y + 22, '> ' + t.t, { size: 18, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.soft });
       });
       addText(250, 660, '✓ -19% but messy', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.rose, style: 'italic' });
 
       // arrow 1
-      addArrow(470, 460, 580, 460, { stroke: COLORS.ink, strokeWidth: 2.4, curve: 0, arrowSize: 14 });
+      addArrow(490, 460, 560, 460, { stroke: COLORS.ink, strokeWidth: 2.4, curve: 0, arrowSize: 14 });
       addText(525, 430, 'read', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       addText(525, 495, 'the diff', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
 
       // STEP 2: extract a clean spec
-      addRect(590, 220, 420, 480, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      addRect(570, 220, 460, 480, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
       addText(800, 200, 'step 2', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.soft });
       addText(800, 270, 'distill the lessons', { size: 26, anchor: 'middle', weight: 700 });
       addText(800, 300, 'into a real PRD', { size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
-      addLine(620, 320, 980, 320, { stroke: COLORS.soft });
-      addText(620, 360, 'prd.json (NEW)', { size: 22, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+      addLine(600, 320, 1000, 320, { stroke: COLORS.soft });
+      addText(600, 360, 'prd.json (NEW)', { size: 22, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
       const prd = [
         'S01: replace cache w/ memoized hook',
         'S02: rewrite getCart cleanly (no v1/v2)',
@@ -2026,35 +2001,34 @@
       ];
       prd.forEach((s, i) => {
         const y = 400 + i * 48;
-        addRect(630, y, 22, 22, { strokeWidth: 1.2 });
-        addText(665, y + 17, s, { size: 16, font: "'Cascadia Code', ui-monospace, monospace" });
+        addRect(610, y, 22, 22, { strokeWidth: 1.2 });
+        addText(645, y + 17, s, { size: 16, font: "'Cascadia Code', ui-monospace, monospace" });
       });
       addText(800, 660, 'now you have the spec', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.emerald, style: 'italic' });
 
       // arrow 2
-      addArrow(1020, 460, 1130, 460, { stroke: COLORS.ink, strokeWidth: 2.4, curve: 0, arrowSize: 14 });
+      addArrow(1040, 460, 1110, 460, { stroke: COLORS.ink, strokeWidth: 2.4, curve: 0, arrowSize: 14 });
       addText(1075, 430, 'hand', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       addText(1075, 495, 'it back', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
 
-      // STEP 3: throw away scrappy, ralph or branch A ships clean
-      addRect(1140, 220, 420, 480, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      // STEP 3: ship the spec clean
+      addRect(1120, 220, 460, 480, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
       addText(1350, 200, 'step 3', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.soft });
-      addText(1350, 270, 'ralph (or branch A)', { size: 26, anchor: 'middle', weight: 700 });
-      addText(1350, 300, 'ships it clean', { size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
-      addLine(1170, 320, 1530, 320, { stroke: COLORS.soft });
-      // mini ralph progress
+      addText(1350, 280, 'ship it clean', { size: 26, anchor: 'middle', weight: 700 });
+      addLine(1150, 320, 1550, 320, { stroke: COLORS.soft });
+      // mini progress
       ['S01 ✓', 'S02 ✓', 'S03 ✓', 'S04 ✓', 'S05 ✓'].forEach((s, i) => {
         const y = 360 + i * 48;
-        addRect(1180, y, 360, 36, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.4 });
-        addCheck(1200, y + 18, 14, COLORS.emerald);
-        addText(1230, y + 24, s + '  pass', { size: 18, font: "'Cascadia Code', ui-monospace, monospace" });
+        addRect(1170, y, 380, 36, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.4 });
+        addCheck(1190, y + 18, 14, COLORS.emerald);
+        addText(1220, y + 24, s + '  pass', { size: 18, font: "'Cascadia Code', ui-monospace, monospace" });
       });
       addText(1350, 660, 'fresh code, no scar tissue', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.emerald, style: 'italic' });
 
-      // bottom callout — throw-away red X over the scrappy box
-      addPath('M 60 240 L 440 680', { stroke: COLORS.rose, strokeWidth: 1.4, fill: 'none', roughness: 2.4 });
-      addPath('M 440 240 L 60 680', { stroke: COLORS.rose, strokeWidth: 1.4, fill: 'none', roughness: 2.4 });
-      addText(80, 745, 'throw away the scrappy branch', { size: 18, fill: COLORS.rose, weight: 700, style: 'italic' });
+      // bottom callout: throw-away red X over the scrappy box
+      addPath('M 40 240 L 460 680', { stroke: COLORS.rose, strokeWidth: 1.4, fill: 'none', roughness: 2.4 });
+      addPath('M 460 240 L 40 680', { stroke: COLORS.rose, strokeWidth: 1.4, fill: 'none', roughness: 2.4 });
+      addText(60, 745, 'throw away the scrappy branch', { size: 18, fill: COLORS.rose, weight: 700, style: 'italic' });
 
       addText(800, 870, 'unfolding work writes the spec. pre-decomposable work ships it.', {
         size: 26, anchor: 'middle', fill: COLORS.soft, style: 'italic'
@@ -2065,11 +2039,11 @@
   // -------- PERSONAL CLOSER (replaces matrix) --------
   const slideCloser = {
     headline: "my take",
-    caption: "use /goal when you can't be bothered specing. otherwise spec.",
+    caption: "ask: do I know what a good solution looks like? if yes, spec. if no, /goal.",
     draw: () => {
       // a single big decision question
       addRect(280, 130, 1040, 130, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2.4 });
-      addText(800, 200, 'can I be bothered writing the spec?', { size: 38, anchor: 'middle', weight: 700 });
+      addText(800, 200, 'do I know what a good solution looks like?', { size: 38, anchor: 'middle', weight: 700 });
 
       // Y fork
       addArrow(620, 270, 360, 400, { stroke: COLORS.ink, strokeWidth: 2.4, curve: -30, arrowSize: 14 });
@@ -2080,12 +2054,12 @@
       addRect(80, 420, 560, 360, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
       addText(360, 480, 'write the PRD', { size: 30, anchor: 'middle', weight: 700 });
       addText(360, 515, 'then run it through:', { size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
-      // two pills inside
-      addRect(120, 555, 220, 70, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 1.6 });
-      addText(230, 600, 'ralph', { size: 28, anchor: 'middle', weight: 700 });
-      addText(380, 600, 'or', { size: 26, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
-      addRect(420, 555, 220, 70, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 1.6 });
-      addText(530, 600, '/goal + spec', { size: 24, anchor: 'middle', weight: 700 });
+      // two pills inside (centered around box center x=360)
+      addRect(115, 555, 220, 70, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 1.6 });
+      addText(225, 600, 'ralph', { size: 28, anchor: 'middle', weight: 700 });
+      addText(360, 600, 'or', { size: 26, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addRect(385, 555, 220, 70, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 1.6 });
+      addText(495, 600, '/goal + spec', { size: 24, anchor: 'middle', weight: 700 });
       addText(360, 690, 'predictable. parallel.', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       addText(360, 720, 'ship it cleanly.', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
 
@@ -2101,10 +2075,6 @@
       addText(1240, 700, 'then read the diff.', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       addText(1240, 730, 'maybe scrappy-copy it.', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
 
-      // bottom takeaway
-      addText(800, 850, "stop asking which model. start asking: do I have a spec?", {
-        size: 28, anchor: 'middle', fill: COLORS.ink, weight: 700, style: 'italic'
-      });
     }
   };
 
@@ -2116,25 +2086,17 @@
   //             will be added in Pass 2.
   slides.length = 0;
   slides.push(
-    slideOpener,             // 1.  the agent stops before it's actually done
-    slideTwoSolutions,       // 2.  two kinds of solutions
-    slideTitle,              // 3.  two kinds of work
-    slidePreDecomposable,    // 4.  pre-decomposable
-    slideUnfolding,          // 5.  unfolding
-    slideVerifiable,         // 6.  a goal must be verifiable
-    slideMechanism,          // 7.  how /goal works behind the scenes
-    slideAudit,              // 8.  the audit prompt
-    slideTwoWays,            // 9.  two ways to point /goal
-    slideMap,                // 10. a real example: audio transcribe service
-    slideGoalUnf,            // 11. goal carries the hypothesis
-    slidePeek,               // 12. peek without breaking flow
-    slideCompaction,         // 13. compaction makes the thread richer
-    slideAutoResearch,       // 14. /goal is doing auto-research
-    slideContamination,      // 15. the risk: codebase contamination
-    slideScrappyCopy,        // 16. the scrappy-copy move
-    slideDecompositionCost,  // 17. decomposition isn't free
-    slideHybrid,             // 18. the hybrid: ralph wraps goal
-    slideCloser              // 19. my take (replaces matrix)
+    slideTitle,              // 1.  two kinds of work
+    slidePreDecomposable,    // 2.  pre-decomposable
+    slideUnfolding,          // 3.  unfolding
+    slideVerifiable,         // 4.  a goal must be verifiable
+    slideCompaction,         // 5.  compaction makes the thread richer
+    slideTwoWays,            // 6.  two ways to point /goal
+    slideMap,                // 7.  a real example: audio transcribe service
+    slidePeek,               // 8.  peek without breaking flow
+    slideContamination,      // 9.  the risk: codebase contamination
+    slideScrappyCopy,        // 10. the scrappy-copy move
+    slideCloser              // 11. my take
   );
 
   // ============== STATE / RENDER ==============
