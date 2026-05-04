@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Codex /goal -- How It Works (and how it compares to Ralph)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #0b0d10;
+    --panel: #12161b;
+    --panel-2: #161b22;
+    --line: #232a33;
+    --text: #e6edf3;
+    --dim: #8b949e;
+    --accent: #d97757;
+    --accent-2: #f0b27a;
+    --green: #5fb35a;
+    --yellow: #d4a72c;
+    --red: #d96f6f;
+    --blue: #6da8d8;
+    --purple: #b78ad9;
+    --mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 48px 28px 96px; }
+  h1 { font-size: 32px; margin: 0 0 6px; letter-spacing: -0.5px; }
+  h2 {
+    font-size: 20px;
+    margin: 56px 0 14px;
+    color: var(--accent-2);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  h3 { font-size: 15px; margin: 22px 0 8px; color: var(--accent); }
+  p { color: var(--text); margin: 8px 0 12px; }
+  .lede { color: var(--dim); font-size: 16px; margin-bottom: 32px; }
+  code, .k { color: var(--accent-2); background: #1d232b; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; border: 1px solid var(--line); color: var(--dim); margin-right: 6px; }
+  .term {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 12px 0 18px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.02), 0 8px 24px rgba(0,0,0,0.35);
+  }
+  .term-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #0f1318; border-bottom: 1px solid var(--line); }
+  .dot { width: 11px; height: 11px; border-radius: 50%; background: #3a4150; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+  .term-title { color: var(--dim); font-size: 12px; margin-left: 8px; }
+  .term-body { padding: 14px 16px; white-space: pre; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+  .term-body .prompt { color: var(--green); }
+  .term-body .cmd { color: var(--text); }
+  .term-body .out { color: var(--dim); }
+  .term-body .ok { color: var(--green); }
+  .term-body .warn { color: var(--yellow); }
+  .term-body .err { color: var(--red); }
+  .term-body .hi { color: var(--accent); }
+  .term-body .b { color: var(--text); font-weight: 600; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 14px 0 8px;
+  }
+  .state {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .state .name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .state .desc { color: var(--dim); font-size: 12px; }
+  .state.active .name { color: var(--green); }
+  .state.paused .name { color: var(--blue); }
+  .state.budget .name { color: var(--yellow); }
+  .state.complete .name { color: var(--purple); }
+  .flow {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin: 14px 0 18px;
+  }
+  .flow ol { margin: 0; padding-left: 22px; }
+  .flow li { margin: 6px 0; }
+  .flow li b { color: var(--accent-2); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .card h3 { margin-top: 0; }
+  .src { color: var(--dim); font-size: 12px; }
+  ul.tight { margin: 6px 0 12px; padding-left: 20px; }
+  ul.tight li { margin: 3px 0; }
+  .kbd { background: #1d232b; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px; font-size: 12px; }
+  .ascii { color: var(--dim); }
+  /* Ralph comparison styles */
+  .col { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+  .col h3 { margin-top: 0; font-size: 18px; }
+  .col.ralph { border-top: 3px solid var(--blue); }
+  .col.ralph h3 { color: var(--blue); }
+  .col.goal { border-top: 3px solid var(--accent); }
+  .col.goal h3 { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  th, td { padding: 10px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); font-size: 13px; }
+  th { background: #0f1318; color: var(--dim); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td:first-child { color: var(--accent-2); width: 22%; }
+  tr:last-child td { border-bottom: none; }
+  .pill.b { color: var(--blue); border-color: #2c4458; }
+  .pill.o { color: var(--accent); border-color: #4a2e21; }
+  blockquote { border-left: 3px solid var(--accent); margin: 12px 0; padding: 6px 14px; color: var(--dim); background: var(--panel); border-radius: 0 6px 6px 0; }
+  .verdict { background: linear-gradient(180deg, #161b22, #12161b); border: 1px solid var(--line); border-left: 3px solid var(--accent-2); padding: 16px 20px; border-radius: 8px; margin: 14px 0; }
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .two { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Codex <span style="color:var(--accent)">/goal</span></h1>
+  <div class="lede">A persistent, budget-aware autonomous loop. You give Codex a high-level objective once. It keeps working toward it across turns, watches its own token spend, and only stops when it can <i>prove</i> the objective is done.</div>
+
+  <h2>The 30-second version</h2>
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">codex</span></div>
+    <div class="term-body"><span class="prompt">$</span> <span class="cmd">codex</span>
+<span class="out">▌ ready</span>
+
+<span class="prompt">›</span> <span class="cmd">/goal ship the auth-rewrite branch with full test coverage --token-budget 200000</span>
+
+<span class="ok">✓ goal set</span> <span class="out">(active · budget 200k tokens)</span>
+
+<span class="hi">[turn 1]</span>  reads diff, runs tests, identifies 3 failing cases
+<span class="hi">[turn 2]</span>  <span class="ascii">↳ auto-continued</span> — fixes case 1, re-runs tests
+<span class="hi">[turn 3]</span>  <span class="ascii">↳ auto-continued</span> — fixes case 2 and 3
+<span class="hi">[turn 4]</span>  <span class="ascii">↳ auto-continued</span> — completion audit: all 3 fixes verified
+              calls <span class="b">update_goal(status="complete")</span>
+<span class="ok">✓ goal complete</span> <span class="out">— tokens: 47,310 of 200,000 · time: 312s</span></div>
+  </div>
+  <p>You typed one command. Codex ran four turns on its own, then declared itself done. No <code>/continue</code>, no nudging, no "are you still there?".</p>
+
+  <h2>The four states a goal can be in</h2>
+  <div class="grid">
+    <div class="state active"><div class="name">● active</div><div class="desc">Working. Idle turns are auto-continued.</div></div>
+    <div class="state paused"><div class="name">● paused</div><div class="desc">You hit Ctrl-C or ran <code>/goal pause</code>. Resumes on next thread load.</div></div>
+    <div class="state budget"><div class="name">● budgetLimited</div><div class="desc">Token budget exhausted. Model is steered to wrap up, not start new work.</div></div>
+    <div class="state complete"><div class="name">● complete</div><div class="desc">Model called <code>update_goal</code> after a passing audit.</div></div>
+  </div>
+  <p class="src">Source: <code>codex_protocol::ThreadGoalStatus</code> · transitions are owned by the runtime, not the model — the model can only mark <i>complete</i>.</p>
+
+  <h2>How a single goal turn actually flows</h2>
+  <div class="flow">
+    <ol>
+      <li><b>Turn starts.</b> Runtime reads the active goal from the per-thread state DB and snapshots the current token usage as the baseline.</li>
+      <li><b>Model works.</b> Tools run. After every non-goal tool call, the runtime accounts the delta: <code>(non_cached_input + output_tokens)</code> charged against the goal's budget; wall-clock seconds charged against time.</li>
+      <li><b>Budget check.</b> If accumulated tokens crossed the budget, the goal flips to <span style="color:var(--yellow)">budgetLimited</span> and a hidden <code>developer</code> message is injected mid-turn telling the model to wrap up.</li>
+      <li><b>Turn ends.</b> Final accounting pass. If no other input is queued and the goal is still active, the runtime <i>spawns its own next turn</i> — no user input required.</li>
+      <li><b>Continuation prompt.</b> The auto-spawned turn opens with a developer message containing the objective, current spend, remaining budget, and a strict "completion audit" instruction.</li>
+      <li><b>Loop.</b> Repeat from step 1 until the model calls <code>update_goal(status="complete")</code> — or the user pauses, clears, or interrupts.</li>
+    </ol>
+  </div>
+
+  <h2>The three model-facing tools</h2>
+  <div class="two">
+    <div class="card">
+      <h3>create_goal</h3>
+      <p>Starts the loop. One goal per thread; calling it twice is rejected.</p>
+      <div class="term"><div class="term-body" style="padding:10px 12px; font-size:12px;"><span class="b">{</span>
+  <span class="hi">"objective"</span>: <span class="ok">"ship auth-rewrite"</span>,
+  <span class="hi">"token_budget"</span>: <span class="warn">200000</span>
+<span class="b">}</span></div></div>
+    </div>
+    <div class="card">
+      <h3>get_goal</h3>
+      <p>Returns the current goal, status, tokens used, time used, remaining budget. Used by the model to self-check before deciding whether to keep going.</p>
+    </div>
+    <div class="card">
+      <h3>update_goal</h3>
+      <p><b>Only accepts <code>status: "complete"</code>.</b> The model cannot pause itself, cannot un-budget itself, cannot reset the timer. Pause / resume / budget changes are user-only.</p>
+    </div>
+    <div class="card">
+      <h3>/goal (you)</h3>
+      <p><code>/goal &lt;objective&gt;</code>, <code>/goal pause</code>, <code>/goal resume</code>, <code>/goal clear</code>. <code>/goal</code> alone shows the summary.</p>
+    </div>
+  </div>
+
+  <h2>The continuation prompt — where the magic actually lives</h2>
+  <p>This is the hidden developer message Codex injects every time it auto-starts a new turn. It's not the model deciding to keep going on vibes — it's a structured re-brief.</p>
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">templates/goals/continuation.md (abridged)</span></div>
+    <div class="term-body"><span class="out">Continue working toward the active thread goal.</span>
+
+<span class="hi">&lt;untrusted_objective&gt;</span>
+{{ objective }}
+<span class="hi">&lt;/untrusted_objective&gt;</span>
+
+<span class="b">Budget:</span>
+- Time spent: {{ time_used_seconds }}s
+- Tokens used: {{ tokens_used }} / {{ token_budget }}
+- Tokens remaining: {{ remaining_tokens }}
+
+<span class="b">Before deciding the goal is achieved, perform a completion audit:</span>
+- Restate the objective as concrete deliverables.
+- Build a prompt-to-artifact checklist mapping every requirement
+  to <span class="warn">concrete evidence</span> (files, commands, tests, PR state).
+- <span class="warn">Do not accept proxy signals</span> (passing tests, "looks done",
+  effort spent) as completion by themselves.
+- Treat uncertainty as not achieved. Keep working.
+
+Only call update_goal when the audit shows the objective is
+actually achieved. Do not mark complete because the budget is
+nearly exhausted or because you're stopping work.</div>
+  </div>
+  <p>Two things to notice. First, the objective is wrapped in <code>&lt;untrusted_objective&gt;</code> and XML-escaped — Codex assumes the goal text might be a prompt-injection attempt and tells the model not to treat it as instructions. Second, the prompt is aggressively anti-completion: <i>uncertainty is not done</i>.</p>
+
+  <h2>What happens when the budget runs out</h2>
+  <p>The goal flips to <span style="color:var(--yellow)">budgetLimited</span> and Codex injects a different developer prompt:</p>
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">templates/goals/budget_limit.md</span></div>
+    <div class="term-body"><span class="out">The active thread goal has reached its token budget.</span>
+
+The system has marked the goal as <span class="warn">budget_limited</span>, so do not
+start new substantive work. <span class="b">Wrap up this turn soon</span>: summarize
+useful progress, identify remaining work or blockers, and leave
+the user with a clear next step.
+
+<span class="b">Do not call update_goal unless the goal is actually complete.</span></div>
+  </div>
+  <p>Critical detail: a budget-exhausted goal is <i>not</i> a complete goal. The model is explicitly forbidden from declaring victory just because it ran out of tokens.</p>
+
+  <h2>Token accounting — what actually counts</h2>
+  <div class="card">
+    <p>Per <code>goal_token_delta_for_usage()</code>:</p>
+    <pre style="margin:6px 0; color:var(--accent-2); font-size:13px;">delta = non_cached_input + max(output_tokens, 0)</pre>
+    <ul class="tight">
+      <li><b>Cached input is free.</b> If your prompt cache hits, the goal isn't charged.</li>
+      <li><b>Reasoning tokens aren't double-counted.</b> They're already inside <code>output_tokens</code>.</li>
+      <li><b>Wall-clock time</b> is tracked separately, in seconds, alongside tokens.</li>
+      <li><b>The <code>update_goal</code> call itself doesn't count.</b> Bookkeeping shouldn't burn the budget.</li>
+    </ul>
+  </div>
+
+  <h2>Interrupts, pauses, and resumes</h2>
+  <div class="two">
+    <div class="card">
+      <h3>You hit <span class="kbd">Ctrl-C</span></h3>
+      <p>The active turn aborts. The runtime accounts the partial progress, then flips the goal to <code>paused</code>. No more auto-continuation until you resume.</p>
+    </div>
+    <div class="card">
+      <h3>You re-open the thread tomorrow</h3>
+      <p>On thread resume, paused goals are auto-reactivated. The token and time counters carry over from the state DB — they're persisted, not in-memory.</p>
+    </div>
+    <div class="card">
+      <h3>You're in plan mode</h3>
+      <p>Goals are <i>ignored</i> in plan mode. No accounting, no continuation. Plan mode is for thinking; goals are for doing.</p>
+    </div>
+    <div class="card">
+      <h3>The model tries to pause itself</h3>
+      <p>Rejected. <code>update_goal</code> only accepts <code>complete</code>. Pause / resume / budget changes are strictly user-controlled.</p>
+    </div>
+    <div class="card">
+      <h3>You type a message mid-loop</h3>
+      <p>Not blocked. Your message gets queued, and at the next turn boundary it lands <i>instead of</i> the auto-continuation prompt. The runtime explicitly checks for queued input before deciding to auto-continue (<code>goals.rs:1210</code>). Steer the loop without stopping it.</p>
+    </div>
+  </div>
+
+  <h2>Where it lives in the codebase</h2>
+  <ul class="tight src">
+    <li><code>codex-rs/core/src/goals.rs</code> — the runtime: accounting, continuation, pause/resume, budget steering</li>
+    <li><code>codex-rs/core/src/tools/handlers/goal.rs</code> — the three model tools</li>
+    <li><code>codex-rs/core/templates/goals/continuation.md</code> — the auto-continue prompt</li>
+    <li><code>codex-rs/core/templates/goals/budget_limit.md</code> — the wrap-up prompt</li>
+    <li><code>codex-rs/tui/src/chatwidget/goal_menu.rs</code> — the <code>/goal</code> summary view</li>
+    <li><code>codex-rs/tui/src/chatwidget/slash_dispatch.rs</code> — <code>/goal pause|resume|clear</code> dispatch</li>
+    <li>Persistence: per-thread <code>state_db</code> table — survives restarts; one goal per thread</li>
+  </ul>
+
+  <h2>How <code>/goal</code> compares to Ralph</h2>
+  <p>Ralph is the other well-known answer to "make the LLM keep working." It's a 75-line bash script that spawns <code>claude</code> over and over with a fixed prompt, fresh context every time, with state persisted in three files on disk. Same problem, opposite bet.</p>
+  <div class="two">
+    <div class="col ralph">
+      <span class="pill b">Ralph</span>
+      <h3>An external while-loop</h3>
+      <p>Bash spawns <code>claude</code> over and over with a fixed prompt. Each call is a <b>fresh, clean context</b>. Memory survives between iterations through three artifacts on disk: a JSON task list (<code>prd.json</code>), an append-only learnings log (<code>progress.txt</code>), and the git history. Stops when the model emits <code>&lt;promise&gt;COMPLETE&lt;/promise&gt;</code> or the iteration cap is hit.</p>
+      <p class="src" style="margin: 0;">Pattern, not a feature. Works with any CLI agent that takes a prompt and writes files.</p>
+    </div>
+    <div class="col goal">
+      <span class="pill o">/goal</span>
+      <h3>An internal state machine</h3>
+      <p>A first-class feature inside Codex. You set one objective with an optional token budget. The runtime owns a status machine, accounts every tool call against the budget, and auto-spawns continuation turns <b>inside the same thread</b> when idle. The model can only declare done after a structured completion audit.</p>
+      <p class="src" style="margin: 0;">Built into <code>codex-rs/core</code>. Persisted in a per-thread state DB.</p>
+    </div>
+  </div>
+
+  <h3>Side-by-side, the boring details</h3>
+  <table>
+    <thead><tr><th>Dimension</th><th>Ralph</th><th>Codex /goal</th></tr></thead>
+    <tbody>
+      <tr><td>Where the loop lives</td><td>External bash script (<code>ralph.sh</code>)</td><td>Inside the agent runtime (<code>codex-rs/core/src/goals.rs</code>)</td></tr>
+      <tr><td>Context model</td><td><b>Fresh per iteration.</b> New process, clean context, memory rehydrated from files.</td><td><b>Continuous within the thread.</b> Same conversation, just an auto-injected developer message between turns.</td></tr>
+      <tr><td>Memory between turns</td><td>Files: <code>prd.json</code>, <code>progress.txt</code>, <code>AGENTS.md</code>, git log</td><td>The thread itself + a persisted state DB row (objective, status, tokens used, time used)</td></tr>
+      <tr><td>Unit of work</td><td>A pre-decomposed list of user stories. One per iteration.</td><td>A single high-level objective. The model decomposes implicitly.</td></tr>
+      <tr><td>Decomposition</td><td><b>Up-front, by you / a PRD skill.</b> Each story must fit in one context window.</td><td><b>Lazy, by the model.</b> No explicit task list — the objective is just a string.</td></tr>
+      <tr><td>Stop condition</td><td><code>&lt;promise&gt;COMPLETE&lt;/promise&gt;</code> sentinel, or max iteration count</td><td>Model calls <code>update_goal(status="complete")</code> after a completion audit, or token budget hits, or user clears</td></tr>
+      <tr><td>Budget control</td><td>Iteration cap (default 10). No token awareness.</td><td>Token budget + wall-clock seconds, charged in real time. Cached input is free.</td></tr>
+      <tr><td>What happens at the limit</td><td>Loop exits. Whatever's done is done.</td><td>Status flips to <code>budgetLimited</code>; a steering prompt is injected mid-turn — explicitly forbids declaring complete.</td></tr>
+      <tr><td>Anti-fake-completion</td><td>Quality checks (<code>typecheck</code>, <code>lint</code>, <code>test</code>) gate the commit. CI must stay green.</td><td>Continuation prompt forces a "prompt-to-artifact checklist" against real evidence; uncertainty is treated as not done.</td></tr>
+      <tr><td>Coupling</td><td>Pattern. Works with any CLI agent.</td><td>Codex-only. <code>create_goal</code>, <code>get_goal</code>, <code>update_goal</code> are first-class tools.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Where they overlap</h3>
+  <ul class="tight">
+    <li><b>Both reject vibes-based completion.</b> Ralph requires green typecheck + tests before committing a story. <code>/goal</code> requires a prompt-to-artifact checklist with real evidence before <code>update_goal</code>.</li>
+    <li><b>Both make stop-conditions explicit.</b> Neither one trusts the model to "feel done."</li>
+    <li><b>Both assume the agent will hallucinate progress without external pressure.</b> Ralph's pressure is the test suite. <code>/goal</code>'s pressure is the audit instruction + budget meter.</li>
+  </ul>
+
+  <h3>Where they actually disagree</h3>
+  <p style="color: var(--blue);"><b>Ralph's bet:</b> context contamination is the enemy. Long-running threads <i>get worse</i> — the model gets confused by old turns, repeats earlier mistakes, drifts. Ralph kills the context after every story. Memory is intentionally narrow.</p>
+  <blockquote>Each PRD item should be small enough to complete in one context window. If a task is too big, the LLM runs out of context before finishing and produces poor code. — <code>README.md</code></blockquote>
+  <p style="color: var(--accent);"><b>/goal's bet:</b> continuity is the feature. The model has just been working on the problem; throwing away its context to start fresh is wasteful. Use a structured continuation prompt and a token budget to fight drift instead.</p>
+
+  <div class="verdict">
+    <b style="color: var(--accent-2);">The honest summary.</b> Ralph is a <i>discipline pattern</i>: it works because <i>you</i> wrote a good PRD, the test suite is real, and stories are small. <code>/goal</code> is an <i>infrastructure pattern</i>: it works because the runtime owns the state machine and the budget, so the model can't cheat the loop. Ralph is more portable; <code>/goal</code> is more integrated. Ralph wins when you can pre-decompose. <code>/goal</code> wins when the work is genuinely exploratory.
+  </div>
+
+  <h3>When to reach for which</h3>
+  <table>
+    <thead><tr><th>Situation</th><th>Reach for</th></tr></thead>
+    <tbody>
+      <tr><td>Building a known feature with a real test suite and CI</td><td><span class="pill b">Ralph</span> — pre-decompose, let it grind</td></tr>
+      <tr><td>Open-ended objective ("make the latency dashboard not suck")</td><td><span class="pill o">/goal</span> — the model decomposes lazily</td></tr>
+      <tr><td>You don't trust the model not to drift over 50 turns</td><td><span class="pill b">Ralph</span> — fresh context every iteration</td></tr>
+      <tr><td>You want to cap token spend, not iteration count</td><td><span class="pill o">/goal</span> — token budget is first-class</td></tr>
+      <tr><td>You're not on Codex (Claude Code, Cursor, etc.)</td><td><span class="pill b">Ralph</span> — it's just bash</td></tr>
+      <tr><td>You want pause/resume across days, with usage tracking</td><td><span class="pill o">/goal</span> — persisted state DB, auto-resume on thread reopen</td></tr>
+      <tr><td>You need provable, line-item completion of a spec</td><td><span class="pill b">Ralph</span> — <code>passes: true</code> per story is auditable</td></tr>
+      <tr><td>You want the agent to keep working on a moving target</td><td><span class="pill o">/goal</span> — one objective, model figures out the rest</td></tr>
+    </tbody>
+  </table>
+
+  <h2>The interesting hybrid</h2>
+  <p>The two patterns don't have to be either/or. You can run Ralph as the <b>outer loop</b> — fresh context, small stories, gated commits — and <i>set a <code>/goal</code> inside each iteration</i> to keep that single story focused. Ralph keeps the macro discipline (decomposed, CI-gated, auditable). <code>/goal</code> keeps the micro discipline (token-bounded, audit-gated, drift-resistant within the iteration). The bash script handles "what to do next." The state machine handles "are we done with what we're doing right now."</p>
+  <p>That's probably where this is heading: external orchestration patterns calling into agents that have their own internal loop primitives. Ralph showed the pattern; <code>/goal</code> is the runtime catching up.</p>
+
+  <h2>The gotcha — /goal makes prompting expensive again</h2>
+  <p>GPT-5.5 is so good at inferring intent from existing context that we all got lazy with prompting. On a normal thread you can throw a half-formed sentence at it and it figures out what you meant — the surrounding turns do the prompting work for you. <code>/goal</code> exposes this. On a <i>fresh project</i>, a vague <code>/goal</code> produces mush, because the model has no prior turns to absorb your intent from, and now it's about to spend thirty turns of autonomous work compounding whatever it guessed.</p>
+  <p><b>Fuzzy intent at turn one compounds across thirty turns of unsupervised work.</b> In normal mode, a bad prompt produces one bad turn and you correct it. In <code>/goal</code> mode, a bad prompt produces a runaway.</p>
+  <p>The fix isn't to write a longer objective string. It's to do a <b>setup interview</b> before flipping the autonomy on — agree on outcome, done criteria, decision style, and ask-before boundaries. Other people are already building this; the <code>@qhn/pi-goal</code> skill on Pi explicitly doesn't start autonomous work immediately — <code>/goal &lt;intent&gt;</code> first opens a setup interview where the assistant and user agree on those four things before the loop starts. Codex's <code>/goal</code> doesn't do this yet, but you can do it manually: treat the first few turns as the interview, only flip to <code>/goal</code> once you've actually agreed on what done means.</p>
+  <p>This pairs directly with the completion audit. The audit only works if you defined the done criteria. If you didn't, the model audits against its own guess of what you wanted — that's not verification, that's the model marking its own homework.</p>
+
+  <h2>Why this matters</h2>
+  <p>Most agent loops are <i>per-turn</i>. You ask, it answers, you ask again. <code>/goal</code> is the first first-class <i>multi-turn</i> primitive in Codex: a persistent objective with its own budget, its own status machine, its own completion audit, and its own self-driven continuation. The hard part isn't auto-continuing — anyone can put a while loop around an LLM. The hard part is the <i>discipline</i>: the runtime owns state transitions, the model can only declare done after an evidence-based audit, the budget is real, and a budget hit doesn't get to masquerade as completion.</p>
+  <p>It's a small feature with a lot of opinions baked into it.</p>
+
+</div>
+</body>
+</html>

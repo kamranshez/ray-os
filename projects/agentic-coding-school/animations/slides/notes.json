@@ -1,0 +1,96 @@
+{
+  "current" : 0,
+  "slides" : [
+    {
+      "caption" : "the spec is either upfront, or it unfolds",
+      "headline" : "two kinds of work",
+      "id" : 1,
+      "key" : "title",
+      "notes" : "Open with discovery framing. I was poking at Codex's new \/goal command and noticed something weird about the kind of work it's actually good at. It's not a feature announcement video. It's me trying to figure out, with you, why the same agent loop wins on one task and falls apart on another. The answer turned out to be about the work, not the agent. Two kinds of work. Two completely different shapes."
+    },
+    {
+      "caption" : "example: notion integration — every story is known upfront",
+      "headline" : "pre-decomposable",
+      "id" : 2,
+      "key" : "pre-decomposable",
+      "notes" : "Pre-decomposable work is anything where you can write the PRD before you start. Notion integration is the perfect example. Before I write any code I already know the eight stories. OAuth flow, page picker, markdown sync, child page recursion, webhook receiver, rate-limit wrapper, truncation, retrain hook. I am not discovering the plan as I go. The plan exists upfront. Every line is known up front."
+    },
+    {
+      "caption" : "you only know the goal. the plan emerges. example: cut p95 \/api\/checkout latency by 20%",
+      "headline" : "unfolding",
+      "id" : 3,
+      "key" : "unfolding",
+      "notes" : "Now flip it. Cut p95 latency on the checkout endpoint by 20%. I cannot write you the stories for this. I do not know if the fix is a missing index, an N+1 query, a payload size issue, or a cold start problem. I have to investigate, form a hypothesis, test it, and revise. The plan is not pre-existing. It unfolds. Each step is information I did not have when I started."
+    },
+    {
+      "caption" : "the model needs to know when to stop",
+      "headline" : "a goal must be verifiable",
+      "id" : 4,
+      "key" : "verifiable",
+      "notes" : "Here's the constraint people miss. A goal can be vague. It cannot be unverifiable. The model needs a stopping condition. Either a checklist that's all checked off, or a metric that crossed the threshold. P95 went from 287 to 228 milliseconds. Five out of five todos done. Either of those works. But 'make the code better' doesn't work. There's nothing to halt on. Vague is fine. Unverifiable is not."
+    },
+    {
+      "caption" : "if you don't know the path, you can't write the PRD",
+      "headline" : "some work resists decomposition",
+      "id" : 5,
+      "key" : "resists-decomposition",
+      "notes" : "This is the bit that took me a while to see. You literally cannot write the PRD for unfolding work. If I don't know whether it's the index or the N+1, what do I write? S01 colon investigate question mark? S02 colon optimize question mark? You can't pre-decompose what you haven't discovered yet. So for these tasks, the prompt collapses to one sentence. One metric. The decomposition has to happen inside the loop, not before it."
+    },
+    {
+      "caption" : "good compaction = signal up, noise down. the thread gets MORE useful over time.",
+      "headline" : "compaction makes the thread richer",
+      "id" : 6,
+      "key" : "compaction",
+      "notes" : "This was the unintuitive bit for me. I assumed long sessions get worse — context bloats, the model gets confused. But Codex's summarizer is built so that good compaction makes the thread richer, not noisier. Each compaction throws away the dead branches and keeps the live hypothesis. The conversation grows wiser. Lossy compaction is a real failure mode — but the curve is supposed to climb, not collapse."
+    },
+    {
+      "caption" : "goal's prompt can be one sentence. ralph's prompt must be the spec.",
+      "headline" : "vagueness is a feature",
+      "id" : 7,
+      "key" : "vagueness",
+      "notes" : "Look at the size difference. \/goal's prompt is a sticky note. Eight tokens. 'Cut p95 latency 20%.' Done. Ralph's prompt is the entire PRD. Every story spelled out. Four thousand tokens minimum. That's not a flaw — it's the contract. Ralph needs the spec because each iteration starts from scratch. \/goal can be vague because the thread carries the context. Different sizes. Different control loops."
+    },
+    {
+      "caption" : "ralph charges you upfront. goal charges you in tokens.",
+      "headline" : "decomposition isn't free",
+      "id" : 8,
+      "key" : "decomposition-cost",
+      "notes" : "Neither one is cheap. Ralph charges you upfront in time — thirty minutes of typing the spec before the loop runs at all. \/goal charges you in tokens — the session balloons as it explores, and you pay for every dead branch the model investigates. So when people say 'just use Ralph, it's simpler' or 'just use \/goal, it's faster' — they're both wrong. Pick the cost that fits the work."
+    },
+    {
+      "caption" : "each iteration takes one ticket. fresh context is fine — the work is parallel",
+      "headline" : "ralph eats this for breakfast",
+      "id" : 9,
+      "key" : "ralph-pre",
+      "notes" : "When the work IS pre-decomposable, Ralph is unbeatable. Each iteration grabs one ticket from the PRD, does it, exits clean. Fresh context next time? No problem — the next ticket doesn't need to know about the last one. They're independent. You can run five iterations in parallel. 47 out of 50 done with no thread of reasoning to maintain. This is Ralph's home turf."
+    },
+    {
+      "caption" : "one session trying to juggle 50 independent units of work — context bloat",
+      "headline" : "goal struggles here",
+      "id" : 10,
+      "key" : "goal-pre-struggles",
+      "notes" : "Run \/goal on the same workload and watch what happens. One session trying to juggle fifty independent units of work in the same thread. There's no separation of concerns inside one mind. The token meter overflows. Migrate src\/checkout doesn't need to know about migrate src\/admin, but they're sharing a context window. This is using the wrong tool. \/goal isn't bad here — it's just being used for work that wants to be parallel."
+    },
+    {
+      "caption" : "the chain of theories lives in the context. refining is one continuous thread",
+      "headline" : "goal carries the hypothesis",
+      "id" : 11,
+      "key" : "goal-unfolding-fits",
+      "notes" : "And now the inverse. On unfolding work, \/goal is the right shape. The chain of hypotheses lives in the context. Turn 12 ran the flamegraph, turn 13 spotted the N+1, turn 14 is profiling \/cart — each step builds on the last. If iteration two woke up fresh it would have to rerun the flamegraph. Refinement is one continuous thread. Tokens climb modestly because most branches die early."
+    },
+    {
+      "caption" : "\/side opens a snapshot · the loop keeps running",
+      "headline" : "peek without breaking flow",
+      "id" : 12,
+      "key" : "side-peek",
+      "notes" : "\/side is the feature that made me actually trust the long sessions. The session is running. I want to see what it's thinking — current turn, recent action, current theory, current metric. \/side gives me a read-only snapshot. The loop keeps running. I get observability without paying the interrupt cost. This matters because for unfolding work, interrupting to ask 'what are you doing?' resets the thread. \/side doesn't reset anything."
+    },
+    {
+      "caption" : "is the spec upfront, or does it unfold?",
+      "headline" : "the right tool depends on the work",
+      "id" : 13,
+      "key" : "matrix",
+      "notes" : "So here's the takeaway. Both Ralph and \/goal have a place. Ralph fits naturally on pre-decomposable work — finite, parallel, independent. \/goal is the right fit on unfolding work — vague prompt, verifiable metric, hypothesis carried through the thread. The wrong cells are where most of the noise online comes from. People use \/goal for refactors and complain about token costs. People use Ralph for debugging and complain it loses the thread. Choose by the shape of the work."
+    }
+  ]
+}

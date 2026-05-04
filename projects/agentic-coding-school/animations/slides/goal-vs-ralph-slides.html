@@ -1,0 +1,2066 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>two kinds of work — pre-decomposable vs unfolding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Kalam:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
+<style>
+  :root {
+    --cream: #faf7f0;
+    --paper: #f5efe1;
+    --ink: #1f2937;
+    --ink-soft: #4b5563;
+    --ink-faint: #9ca3af;
+    --yellow: #fef3c7;
+    --blue: #dbeafe;
+    --green: #dcfce7;
+    --pink: #fce7f3;
+    --amber: #fed7aa;
+    --light-red: #fecaca;
+    --soft-emerald: #bbf7d0;
+    --rule: #d6cdb6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--cream);
+    color: var(--ink);
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+    font-family: 'Crimson Pro', Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* subtle paper grain */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(120,90,40,0.035) 1px, transparent 1px);
+    background-size: 4px 4px;
+    z-index: 1;
+  }
+
+  /* ========== THUMBNAIL SIDEBAR ========== */
+  .thumb-sidebar {
+    position: fixed;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    width: 220px;
+    background: var(--paper);
+    border-right: 1px dashed var(--rule);
+    overflow-y: auto;
+    padding: 10px 8px 60px;
+    z-index: 15;
+    font-family: 'Patrick Hand', cursive;
+  }
+  .thumb-sidebar .thumb {
+    background: var(--cream);
+    border: 1.5px solid var(--ink-soft);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    box-shadow: 1px 2px 0 var(--ink-soft);
+    transition: transform 100ms ease;
+  }
+  .thumb-sidebar .thumb:hover {
+    transform: translate(-1px,-1px);
+    border-color: var(--ink);
+    box-shadow: 2px 3px 0 var(--ink);
+  }
+  .thumb-sidebar .thumb.active {
+    background: var(--yellow);
+    border-color: var(--ink);
+    border-width: 2px;
+    box-shadow: 3px 4px 0 var(--ink), inset 4px 0 0 var(--ink);
+    transform: translate(-1px,-1px);
+    padding-left: 14px;
+  }
+  .thumb-sidebar .thumb.active .num {
+    color: var(--ink);
+    font-weight: 800;
+  }
+  .thumb-sidebar .thumb.active .label {
+    font-weight: 700;
+  }
+  .thumb-sidebar .thumb.active::after {
+    content: '◀';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .thumb-sidebar .thumb { position: relative; }
+  .thumb-sidebar .thumb .num {
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+  .thumb-sidebar .thumb .label {
+    font-size: 18px;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-top: 2px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  @media (min-width: 900px) {
+    body:not(.sidebar-collapsed) .topbar,
+    body:not(.sidebar-collapsed) .stage { left: 220px; }
+  }
+  @media (max-width: 899px) {
+    .thumb-sidebar { display: none; }
+  }
+  body.sidebar-collapsed .thumb-sidebar { display: none; }
+  body.sidebar-collapsed .topbar,
+  body.sidebar-collapsed .stage { left: 0; }
+
+  /* ========== HEADER ========== */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 28px;
+    border-bottom: 1px dashed var(--rule);
+    background: var(--cream);
+    z-index: 20;
+  }
+  .topbar .title {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 26px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .topbar .counter {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 22px;
+    color: var(--ink-soft);
+  }
+  .topbar .counter .num { color: var(--ink); font-weight: 700; }
+
+  /* ========== SLIDE STAGE ========== */
+  .stage {
+    position: fixed;
+    top: 50px;
+    bottom: 0;
+    left: 0; right: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+  }
+  .sketch-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px 4px;
+    position: relative;
+  }
+  .sketch-wrap svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transition: opacity 250ms ease;
+  }
+  .sketch-wrap svg.fading { opacity: 0; }
+
+  /* ========== COMMENT MODE ========== */
+  #comment-overlay {
+    position: absolute;
+    inset: 12px 20px 4px;
+    pointer-events: none;
+    z-index: 8;
+  }
+  body.comment-mode #comment-overlay {
+    pointer-events: auto;
+    cursor: crosshair;
+  }
+  .comment-banner {
+    position: fixed;
+    top: 12px;
+    right: 14px;
+    background: #ef4444;
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 0 #1f2937;
+    display: none;
+    z-index: 30;
+    text-transform: uppercase;
+  }
+  body.comment-mode .comment-banner { display: block; }
+  .comment-pin {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #ef4444;
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    border: 2px solid #1f2937;
+    box-shadow: 1px 2px 0 #1f2937;
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 9;
+  }
+  .comment-pin:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  .comment-pin .tooltip {
+    position: absolute;
+    left: 34px;
+    top: -4px;
+    background: #fef3c7;
+    color: #1f2937;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 16px;
+    padding: 4px 10px;
+    border: 1.5px solid #1f2937;
+    border-radius: 4px;
+    white-space: nowrap;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 2px 2px 0 #1f2937;
+    display: none;
+  }
+  .comment-pin:hover .tooltip { display: block; }
+
+  .caption-area {
+    flex: 0 0 auto;
+    text-align: center;
+    padding: 8px 32px 70px;
+    transition: opacity 250ms ease;
+  }
+  .caption-area.fading { opacity: 0; }
+  .caption-area h2 {
+    font-family: 'Patrick Hand', cursive;
+    font-weight: 700;
+    margin: 0 0 6px;
+    font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+    line-height: 1.05;
+    color: var(--ink);
+  }
+  .caption-area p {
+    font-family: 'Crimson Pro', Georgia, serif;
+    margin: 0 auto;
+    font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 820px;
+  }
+
+  /* ========== TAP ZONES ========== */
+  .tap-zone {
+    position: fixed;
+    top: 50px; bottom: 0;
+    width: 50%;
+    z-index: 8;
+    cursor: pointer;
+  }
+  .tap-zone.left { left: 0; }
+  .tap-zone.right { right: 0; }
+
+  /* ========== NAV BUTTONS ========== */
+  .nav-btn {
+    position: fixed;
+    bottom: 18px;
+    z-index: 25;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 22px;
+    background: #fff;
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    padding: 6px 18px 8px;
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 2px 3px 0 var(--ink);
+    transition: transform 120ms ease, box-shadow 120ms ease, opacity 200ms ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 4px 0 var(--ink); }
+  .nav-btn:active { transform: translate(1px,2px); box-shadow: 0 0 0 var(--ink); }
+  .nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .nav-btn.prev { left: 24px; }
+  .nav-btn.next { right: 24px; }
+  .nav-btn .arrow {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .replay-btn {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 18px;
+    background: var(--paper);
+    border: 1.5px dashed var(--ink-soft);
+    border-radius: 10px;
+    padding: 4px 14px 6px;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .replay-btn:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+    border-style: solid;
+  }
+
+  /* draw-on animation */
+  .draw-on path,
+  .draw-on line,
+  .draw-on circle,
+  .draw-on rect {
+    stroke-dasharray: 1500;
+    stroke-dashoffset: 1500;
+    animation: drawOn 700ms ease forwards;
+  }
+  @keyframes drawOn {
+    to { stroke-dashoffset: 0; }
+  }
+  .draw-on text {
+    opacity: 0;
+    animation: fadeIn 500ms ease forwards;
+    animation-delay: 400ms;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="thumb-sidebar" id="thumb-sidebar"></aside>
+
+<div class="topbar">
+  <div class="title">two kinds of work</div>
+  <div class="counter"><span class="num" id="slide-num">1</span> / <span id="slide-total">10</span></div>
+</div>
+
+<div class="stage">
+  <div class="sketch-wrap" id="sketch-wrap">
+    <svg id="sketch" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="comment-overlay"></div>
+    <div id="comment-banner" class="comment-banner">● comment mode</div>
+  </div>
+  <div class="caption-area" id="caption">
+    <h2 id="headline">two kinds of work</h2>
+    <p id="caption-text">I noticed something weird about Codex's /goal command</p>
+  </div>
+</div>
+
+<div class="tap-zone left" id="tap-left"></div>
+<div class="tap-zone right" id="tap-right"></div>
+
+<button class="nav-btn prev" id="btn-prev"><span class="arrow">←</span> prev</button>
+<button class="nav-btn next" id="btn-next">next <span class="arrow">→</span></button>
+
+<script>
+(() => {
+  const COLORS = {
+    ink: '#1f2937',
+    soft: '#4b5563',
+    faint: '#9ca3af',
+    yellow: '#fef3c7',
+    blue: '#dbeafe',
+    green: '#dcfce7',
+    pink: '#fce7f3',
+    amber: '#fed7aa',
+    paper: '#f5efe1',
+    emerald: '#10b981',
+    rose: '#ef4444',
+    lightRed: '#fecaca',
+    softEmerald: '#bbf7d0',
+  };
+
+  const svg = document.getElementById('sketch');
+  let rc = rough.svg(svg);
+
+  const clearSvg = (s) => { while (s.firstChild) s.removeChild(s.firstChild); };
+
+  const addRect = (x, y, w, h, opts={}) => {
+    const node = rc.rectangle(x, y, w, h, {
+      stroke: COLORS.ink, strokeWidth: 1.6, roughness: 2.0, bowing: 1.6,
+      fill: opts.fill, fillStyle: opts.fillStyle || 'solid', fillWeight: 1,
+      hachureGap: 6, ...opts
+    });
+    svg.appendChild(node);
+    return node;
+  };
+  const addLine = (x1,y1,x2,y2, opts={}) => {
+    const node = rc.line(x1,y1,x2,y2, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.5, ...opts });
+    svg.appendChild(node);
+    return node;
+  };
+  const addCircle = (cx,cy,d, opts={}) => {
+    const node = rc.circle(cx,cy,d, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node);
+    return node;
+  };
+  const addEllipse = (cx,cy,w,h, opts={}) => {
+    const node = rc.ellipse(cx,cy,w,h, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.8, ...opts });
+    svg.appendChild(node);
+    return node;
+  };
+  const addPath = (path, opts={}) => {
+    const node = rc.path(path, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node);
+    return node;
+  };
+
+  const addText = (x,y, text, opts={}) => {
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('font-family', opts.font || "'Patrick Hand', cursive");
+    t.setAttribute('font-size', opts.size || 24);
+    t.setAttribute('fill', opts.fill || COLORS.ink);
+    t.setAttribute('text-anchor', opts.anchor || 'start');
+    if (opts.weight) t.setAttribute('font-weight', opts.weight);
+    if (opts.style) t.setAttribute('font-style', opts.style);
+    t.textContent = text;
+    svg.appendChild(t);
+    return t;
+  };
+
+  const addArrow = (x1,y1,x2,y2, opts={}) => {
+    const curve = opts.curve != null ? opts.curve : 30;
+    const cx = (x1+x2)/2 + curve;
+    const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+    const path = `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+    addPath(path, opts);
+    const angle = Math.atan2(y2-cy, x2-cx);
+    const ah = opts.arrowSize || 14;
+    const ax1 = x2 - ah*Math.cos(angle - Math.PI/7);
+    const ay1 = y2 - ah*Math.sin(angle - Math.PI/7);
+    const ax2 = x2 - ah*Math.cos(angle + Math.PI/7);
+    const ay2 = y2 - ah*Math.sin(angle + Math.PI/7);
+    addLine(x2,y2,ax1,ay1, opts);
+    addLine(x2,y2,ax2,ay2, opts);
+  };
+
+  // checkmark / x icon
+  const addCheck = (cx, cy, size=18, color=COLORS.emerald) => {
+    addPath(`M ${cx-size*0.6} ${cy} L ${cx-size*0.1} ${cy+size*0.5} L ${cx+size*0.7} ${cy-size*0.6}`, {
+      stroke: color, strokeWidth: 3.5, roughness: 1.2
+    });
+  };
+  const addCross = (cx, cy, size=18, color=COLORS.rose) => {
+    addLine(cx-size*0.6, cy-size*0.6, cx+size*0.6, cy+size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+    addLine(cx-size*0.6, cy+size*0.6, cx+size*0.6, cy-size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+  };
+
+  // ============== SLIDES ==============
+  const slides = [];
+
+  // -------- SLIDE 1: TITLE --------
+  const slideTitle = {
+    headline: 'two kinds of work',
+    caption: "I noticed something weird about Codex's /goal command",
+    draw: () => {
+      // Left box: tickets
+      addRect(180, 180, 540, 520, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      addText(450, 240, 'tickets', { size: 52, anchor: 'middle', weight: 700 });
+      // stack of papers
+      for (let i = 0; i < 5; i++) {
+        const y = 290 + i * 60;
+        addRect(260, y, 380, 44, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.4 });
+        addLine(290, y+22, 600, y+22, { stroke: COLORS.faint, strokeWidth: 1 });
+        addLine(290, y+32, 540, y+32, { stroke: COLORS.faint, strokeWidth: 1 });
+        // tiny checkbox
+        addRect(275, y+12, 18, 18, { strokeWidth: 1.2 });
+      }
+      addText(450, 660, 'tidy · enumerable · finite', { size: 26, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // Right box: tangle
+      addRect(880, 180, 540, 520, { fill: COLORS.pink, fillStyle: 'solid', strokeWidth: 2 });
+      addText(1150, 240, '? ?', { size: 52, anchor: 'middle', weight: 700 });
+
+      // tangled scribble of arrows
+      addPath('M 970 340 Q 1050 300 1120 360 T 1280 380 Q 1340 420 1280 470 T 1120 460 Q 1040 480 990 440 T 1020 380', {
+        stroke: COLORS.ink, strokeWidth: 2, roughness: 2.4, fill: 'none'
+      });
+      addPath('M 1000 420 Q 1100 460 1200 420 T 1340 470 Q 1300 540 1180 520 T 1020 510', {
+        stroke: COLORS.rose, strokeWidth: 2, roughness: 2.6, fill: 'none'
+      });
+      addPath('M 1080 360 Q 1180 400 1240 460 Q 1290 500 1240 540 Q 1180 560 1140 510', {
+        stroke: COLORS.ink, strokeWidth: 1.6, roughness: 2.4, fill: 'none'
+      });
+      // arrowheads sprinkled
+      addLine(1280, 470, 1268, 460, { strokeWidth: 1.6 });
+      addLine(1280, 470, 1268, 480, { strokeWidth: 1.6 });
+      addLine(1140, 510, 1128, 504, { strokeWidth: 1.6 });
+      addLine(1140, 510, 1128, 516, { strokeWidth: 1.6 });
+
+      // big "?"
+      addText(1150, 640, '?', { size: 96, anchor: 'middle', weight: 700, fill: COLORS.ink });
+
+      // divider scribble
+      addPath('M 800 200 Q 810 450 800 700', { stroke: COLORS.faint, strokeWidth: 1.2, roughness: 2, fill: 'none' });
+    }
+  };
+  slides.push(slideTitle);
+
+  // -------- SLIDE 2: PRE-DECOMPOSABLE --------
+  const slidePreDecomposable = {
+    headline: 'pre-decomposable',
+    caption: 'example: notion integration — every story is known upfront',
+    draw: () => {
+      // big paper
+      addRect(380, 100, 840, 720, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      // dog ear
+      addPath('M 1180 100 L 1220 100 L 1220 140 Z', { stroke: COLORS.ink, fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.4 });
+
+      addText(420, 165, 'prd.json', { size: 44, weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(420, 185, 1180, 185, { stroke: COLORS.soft, strokeWidth: 1.2 });
+
+      const items = [
+        'S01: notion oauth flow',
+        'S02: page picker UI',
+        'S03: markdown sync task',
+        'S04: child page recursion',
+        'S05: webhook receiver',
+        'S06: rate-limit wrapper',
+        'S07: 500KB truncation',
+        'S08: auto-retrain hook',
+      ];
+      items.forEach((s, i) => {
+        const y = 240 + i * 52;
+        // checkbox
+        addRect(440, y, 26, 26, { strokeWidth: 1.4 });
+        addText(490, y+22, '[ ]', { size: 22, font: "'JetBrains Mono', monospace", fill: COLORS.soft });
+        addText(560, y+22, s, { size: 26, font: "'JetBrains Mono', monospace", fill: COLORS.ink });
+      });
+
+      // marginalia
+      addText(180, 405, 'known up', { size: 36, fill: COLORS.soft });
+      addText(180, 450, 'front', { size: 36, fill: COLORS.soft });
+      addArrow(290, 420, 420, 380, { stroke: COLORS.rose, strokeWidth: 1.8, curve: -20 });
+
+      addText(1300, 540, 'finite.', { size: 38, weight: 700 });
+      addText(1300, 590, 'parallel.', { size: 38, weight: 700 });
+      addText(1300, 640, 'independent.', { size: 38, weight: 700 });
+    }
+  };
+  slides.push(slidePreDecomposable);
+
+  // -------- SLIDE 3: UNFOLDING --------
+  const slideUnfolding = {
+    headline: 'unfolding',
+    caption: 'you only know the goal. the plan emerges. example: cut p95 /api/checkout latency by 20%',
+    draw: () => {
+      // pinned goal at top
+      addRect(360, 80, 880, 90, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
+      addCircle(800, 76, 16, { fill: COLORS.rose, fillStyle: 'solid' });
+      addText(800, 125, 'cut p95 /api/checkout latency by 20%', { size: 26, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(800, 154, '(287ms → ≤ 230ms)', { size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // Root
+      addEllipse(800, 240, 200, 60, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 1.6 });
+      addText(800, 247, 'cut latency 20%', { size: 22, anchor: 'middle', weight: 600 });
+
+      // 4 children: network roundtrips? · query waterfall? · payload size? · cold start?
+      const children = [
+        { x: 250, label: 'network', label2: 'roundtrips?', dead: true },
+        { x: 640, label: 'query', label2: 'waterfall?', active: true },
+        { x: 1040, label: 'payload', label2: 'size?', dead: true },
+        { x: 1380, label: 'cold start?', label2: '', dead: true },
+      ];
+      children.forEach(c => {
+        addArrow(800, 270, c.x, 380, { stroke: COLORS.ink, curve: (c.x - 800) * 0.05, arrowSize: 12 });
+        addEllipse(c.x, 405, 170, 60, { fill: c.active ? COLORS.softEmerald : COLORS.pink, fillStyle: 'solid', strokeWidth: c.active ? 2 : 1.4 });
+        addText(c.x, c.label2 ? 400 : 412, c.label, { size: 19, anchor: 'middle', weight: 600 });
+        if (c.label2) addText(c.x, 422, c.label2, { size: 19, anchor: 'middle', weight: 600 });
+        if (c.dead) addCross(c.x + 90, 405, 14);
+      });
+
+      // query waterfall? -> N+1 in /cart? · missing index? · serialization?
+      const sub = [
+        { x: 480, label: 'N+1 in', label2: '/cart?', active: true },
+        { x: 700, label: 'missing', label2: 'index?', dead: true },
+        { x: 920, label: 'serialization?', label2: '', dead: true },
+      ];
+      sub.forEach(s => {
+        addArrow(640, 435, s.x, 530, { stroke: COLORS.ink, curve: (s.x - 640) * 0.04, arrowSize: 11 });
+        addEllipse(s.x, 555, 150, 54, { fill: s.active ? COLORS.softEmerald : COLORS.green, fillStyle: 'solid', strokeWidth: s.active ? 2 : 1.4 });
+        addText(s.x, s.label2 ? 552 : 562, s.label, { size: 18, anchor: 'middle', weight: 600 });
+        if (s.label2) addText(s.x, 574, s.label2, { size: 18, anchor: 'middle', weight: 600 });
+        if (s.dead) addCross(s.x + 80, 555, 13);
+      });
+
+      // active leaf result: ✓ -19%
+      addArrow(480, 585, 480, 670, { stroke: COLORS.emerald, strokeWidth: 2, curve: 0, arrowSize: 12 });
+      addRect(360, 690, 240, 70, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addCheck(395, 725, 18, COLORS.emerald);
+      addText(500, 733, '-19%', { size: 28, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+
+      // marginalia
+      addText(1180, 700, 'cannot be', { size: 28, fill: COLORS.soft });
+      addText(1180, 735, 'predicted', { size: 28, fill: COLORS.soft });
+      addText(1180, 770, 'from the goal', { size: 28, fill: COLORS.soft });
+      addArrow(1170, 730, 1010, 580, { stroke: COLORS.rose, strokeWidth: 1.6, curve: -10 });
+    }
+  };
+  slides.push(slideUnfolding);
+
+  // -------- SLIDE 4: RALPH ON PRE-DECOMPOSABLE --------
+  const slideRalphPre = {
+    headline: 'ralph eats this for breakfast',
+    caption: 'each iteration takes one ticket. fresh context is fine — the work is parallel',
+    draw: () => {
+      // prd.json on the left
+      addRect(80, 100, 440, 600, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      addText(110, 160, 'prd.json', { size: 36, weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(110, 178, 490, 178, { stroke: COLORS.soft });
+      const ralphItems = [
+        { s: 'migrate checkout.ts', done: true },
+        { s: 'migrate cart.ts', done: true },
+        { s: 'migrate auth.ts', done: true },
+        { s: 'migrate payments.ts', done: true },
+        { s: 'migrate inventory.ts', done: false, active: true },
+        { s: 'migrate shipping.ts', done: false },
+        { s: 'migrate orders.ts', done: false },
+        { s: '...', done: false },
+      ];
+      ralphItems.forEach((it, i) => {
+        const y = 220 + i * 52;
+        addRect(120, y, 24, 24, { strokeWidth: 1.4, fill: it.done ? COLORS.softEmerald : (it.active ? COLORS.amber : '#fff'), fillStyle: 'solid' });
+        if (it.done) addCheck(132, y+12, 14, COLORS.emerald);
+        addText(170, y+20, it.s, { size: 22, font: "'JetBrains Mono', monospace", fill: it.done ? COLORS.soft : COLORS.ink });
+      });
+
+      // Arrow from prd to processes
+      addArrow(540, 380, 700, 280, { stroke: COLORS.rose, strokeWidth: 2, curve: -20 });
+      addText(560, 350, 'one ticket', { size: 24, fill: COLORS.soft, style: 'italic' });
+      addText(560, 380, 'per iter', { size: 24, fill: COLORS.soft, style: 'italic' });
+
+      // 5 process boxes (Ralph iterations)
+      const procs = [
+        { x: 720, y: 180, color: COLORS.blue, label: 'iter N', task: 'cart.ts' },
+        { x: 940, y: 180, color: COLORS.pink, label: 'iter N+1', task: 'auth.ts' },
+        { x: 1160, y: 180, color: COLORS.green, label: 'iter N+2', task: 'payments.ts' },
+        { x: 720, y: 380, color: COLORS.amber, label: 'iter N+3', task: 'inventory.ts' },
+        { x: 940, y: 380, color: COLORS.yellow, label: 'iter N+4', task: 'shipping.ts' },
+      ];
+      procs.forEach(p => {
+        addRect(p.x, p.y, 200, 130, { fill: p.color, fillStyle: 'solid', strokeWidth: 1.6 });
+        addText(p.x+100, p.y+34, p.label, { size: 22, anchor: 'middle', weight: 600, font: "'JetBrains Mono', monospace" });
+        addLine(p.x+20, p.y+50, p.x+180, p.y+50, { stroke: COLORS.soft, strokeWidth: 0.8 });
+        addText(p.x+100, p.y+82, 'one ticket:', { size: 16, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+        addText(p.x+100, p.y+108, p.task, { size: 18, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      });
+
+      // big checkmark over process #5 area showing parallelism
+      addText(1200, 460, 'fresh context →', { size: 26, fill: COLORS.soft, style: 'italic' });
+      addText(1200, 495, 'no problem', { size: 26, fill: COLORS.emerald, weight: 600 });
+
+      // Progress bar at bottom
+      addRect(120, 770, 1360, 60, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.6 });
+      addRect(124, 774, Math.round(1360 * 0.94) - 4, 52, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1 });
+      addText(800, 808, '47 / 50', { size: 32, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(120, 760, 'progress', { size: 22, fill: COLORS.soft });
+    }
+  };
+  slides.push(slideRalphPre);
+
+  // -------- SLIDE 5: GOAL STRUGGLES on pre-decomposable --------
+  const slideGoalPre = {
+    headline: 'goal struggles here',
+    caption: 'one session trying to juggle 50 independent units of work — context bloat',
+    draw: () => {
+      // single big session box
+      addRect(180, 120, 1100, 660, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(730, 175, 'one /goal session', { size: 36, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(220, 195, 1240, 195, { stroke: COLORS.soft });
+
+      // chaotic pile of 50 fragments
+      const fragments = [];
+      const seed = 7;
+      let s = seed;
+      const rnd = () => { s = (s*9301 + 49297) % 233280; return s/233280; };
+      for (let i = 0; i < 50; i++) {
+        const x = 240 + rnd() * 980;
+        const y = 220 + rnd() * 470;
+        const w = 80 + rnd() * 70;
+        const h = 28 + rnd() * 16;
+        const angle = (rnd() - 0.5) * 18;
+        const colors = [COLORS.yellow, COLORS.pink, COLORS.green, COLORS.amber, '#fff'];
+        const col = colors[Math.floor(rnd() * colors.length)];
+        fragments.push({ x, y, w, h, angle, col, label: `S${String(i+1).padStart(2,'0')}` });
+      }
+      fragments.forEach(f => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+        g.setAttribute('transform', `rotate(${f.angle} ${f.x+f.w/2} ${f.y+f.h/2})`);
+        svg.appendChild(g);
+        const r = rc.rectangle(f.x, f.y, f.w, f.h, {
+          fill: f.col, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1.0, roughness: 1.6
+        });
+        g.appendChild(r);
+        const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+        t.setAttribute('x', f.x + f.w/2);
+        t.setAttribute('y', f.y + f.h/2 + 5);
+        t.setAttribute('font-family', "'JetBrains Mono', monospace");
+        t.setAttribute('font-size', 14);
+        t.setAttribute('text-anchor', 'middle');
+        t.setAttribute('fill', COLORS.ink);
+        t.textContent = f.label;
+        g.appendChild(t);
+      });
+
+      // sad face inside (sketched, two dots and downturned curve)
+      addCircle(620, 740, 8, { fill: COLORS.ink, fillStyle: 'solid', stroke: 'none' });
+      addCircle(700, 740, 8, { fill: COLORS.ink, fillStyle: 'solid', stroke: 'none' });
+      addPath('M 600 770 Q 660 750 720 770', { stroke: COLORS.ink, strokeWidth: 2.5, roughness: 1.4, fill: 'none' });
+
+      addText(820, 770, 'no separation of concerns inside one mind', { size: 22, fill: COLORS.soft, style: 'italic' });
+
+      // token thermometer — overflowing
+      addRect(1340, 200, 50, 540, { strokeWidth: 1.6 });
+      addRect(1346, 210, 38, 510, { fill: COLORS.rose, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1 });
+      addCircle(1365, 760, 70, { fill: COLORS.rose, fillStyle: 'solid' });
+      addText(1365, 188, 'tokens', { size: 22, anchor: 'middle', fill: COLORS.soft });
+      // overflow drips above the top
+      addPath('M 1346 210 Q 1340 180 1335 165', { stroke: COLORS.rose, strokeWidth: 3, fill: 'none', roughness: 1.6 });
+      addPath('M 1370 210 Q 1378 175 1390 160', { stroke: COLORS.rose, strokeWidth: 3, fill: 'none', roughness: 1.6 });
+      addCircle(1335, 158, 10, { fill: COLORS.rose, fillStyle: 'solid', stroke: 'none' });
+      addCircle(1392, 152, 10, { fill: COLORS.rose, fillStyle: 'solid', stroke: 'none' });
+      addText(1365, 770, 'OVER', { size: 22, anchor: 'middle', weight: 700, fill: '#fff' });
+
+      addText(1410, 130, 'overflows', { size: 28, fill: COLORS.rose, weight: 700, style: 'italic' });
+    }
+  };
+  slides.push(slideGoalPre);
+
+  // -------- SLIDE 6: GOAL FITS UNFOLDING --------
+  const slideGoalUnf = {
+    headline: 'goal carries the hypothesis',
+    caption: 'the chain of theories lives in the context. refining is one continuous thread',
+    draw: () => {
+      // Big session box containing the hypothesis tree
+      addRect(140, 100, 1180, 720, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(730, 150, '/goal — one session, one thread', { size: 30, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+
+      // pinned goal at top
+      addRect(280, 175, 900, 60, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.6 });
+      addText(730, 215, 'goal: cut p95 /api/checkout latency by 20%', { size: 22, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+
+      // root
+      addEllipse(730, 290, 180, 48, { fill: '#fff', fillStyle: 'solid' });
+      addText(730, 297, 'cut latency 20%', { size: 18, anchor: 'middle', weight: 600 });
+      // 4 child branches (network roundtrips, query waterfall (active), payload size, cold start)
+      const xs = [330, 580, 880, 1180];
+      const labels = [
+        { l: 'network roundtrips?', dead: true },
+        { l: 'query waterfall?', active: true },
+        { l: 'payload size?', dead: true },
+        { l: 'cold start?', dead: true },
+      ];
+      xs.forEach((x, i) => {
+        addArrow(730, 312, x, 380, { stroke: labels[i].active ? COLORS.emerald : COLORS.faint, strokeWidth: labels[i].active ? 2 : 1.2, curve: (x - 730) * 0.04, arrowSize: 10 });
+        addEllipse(x, 405, 200, 44, { fill: labels[i].active ? COLORS.softEmerald : '#fff', fillStyle: 'solid', strokeWidth: labels[i].active ? 2 : 1.2 });
+        addText(x, 412, labels[i].l, { size: 16, anchor: 'middle', weight: labels[i].active ? 700 : 500 });
+        if (labels[i].dead) addCross(x + 90, 405, 12);
+      });
+
+      // active path -> N+1 in /cart
+      addArrow(580, 430, 580, 510, { stroke: COLORS.emerald, strokeWidth: 2, curve: 0, arrowSize: 11 });
+      addEllipse(580, 540, 200, 44, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addText(580, 547, 'N+1 in /cart', { size: 18, anchor: 'middle', weight: 700 });
+
+      // refining arrow loops back to root branch
+      addPath('M 670 540 Q 770 480 720 420 Q 690 400 660 405', {
+        stroke: COLORS.emerald, strokeWidth: 2, fill: 'none', roughness: 1.4
+      });
+      addLine(660, 405, 672, 396, { stroke: COLORS.emerald, strokeWidth: 2 });
+      addLine(660, 405, 674, 414, { stroke: COLORS.emerald, strokeWidth: 2 });
+      addText(800, 470, 'refines on', { size: 20, fill: COLORS.emerald, style: 'italic', weight: 600 });
+      addText(800, 495, 'same thread', { size: 20, fill: COLORS.emerald, style: 'italic', weight: 600 });
+
+      // final answer
+      addRect(380, 620, 700, 80, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addText(740, 660, 'fix N+1 in /cart  ·  287ms → 232ms', { size: 22, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addCheck(420, 660, 22, COLORS.emerald);
+      addText(960, 690, '(-19%) ✓', { size: 20, anchor: 'middle', weight: 700, fill: COLORS.emerald, font: "'JetBrains Mono', monospace" });
+      addArrow(580, 590, 730, 620, { stroke: COLORS.emerald, strokeWidth: 2, curve: 0, arrowSize: 12 });
+      addText(400, 740, 'final', { size: 20, fill: COLORS.soft, style: 'italic' });
+
+      // thermometer modest climb
+      addRect(1380, 220, 44, 460, { strokeWidth: 1.4 });
+      addRect(1384, 460, 36, 218, { fill: COLORS.amber, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1 });
+      addCircle(1402, 700, 56, { fill: COLORS.amber, fillStyle: 'solid' });
+      addText(1402, 200, 'tokens', { size: 20, anchor: 'middle', fill: COLORS.soft });
+      addText(1402, 707, '~45%', { size: 18, anchor: 'middle', weight: 600 });
+    }
+  };
+  slides.push(slideGoalUnf);
+
+  // -------- SLIDE 7: RALPH STALLS on unfolding --------
+  const slideRalphLosesThread = {
+    headline: 'ralph loses the thread',
+    caption: 'iteration 2 wakes up. iteration 1\'s hypothesis is gone with the process',
+    draw: () => {
+      // pinned goal at top
+      addRect(420, 90, 760, 70, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.6 });
+      addText(800, 137, 'goal: fix intermittent flake', { size: 24, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+
+      // 3 separate process boxes (independent iterations) with contradictory hypotheses
+      const iterBoxes = [
+        { x: 100, y: 220, color: COLORS.pink, label: 'iter 1', hypo: '"must be a', hypo2: 'race condition"' },
+        { x: 600, y: 220, color: COLORS.blue, label: 'iter 2', hypo: '"must be a', hypo2: 'setup error"' },
+        { x: 1100, y: 220, color: COLORS.green, label: 'iter 3', hypo: '"actually it\'s', hypo2: 'the cleanup"' },
+      ];
+      iterBoxes.forEach(b => {
+        addRect(b.x, b.y, 400, 280, { fill: b.color, fillStyle: 'solid', strokeWidth: 1.8 });
+        addText(b.x+200, b.y+50, b.label, { size: 30, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+        addLine(b.x+30, b.y+70, b.x+370, b.y+70, { stroke: COLORS.soft });
+        addText(b.x+200, b.y+130, 'hypothesis:', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+        addText(b.x+200, b.y+180, b.hypo, { size: 26, anchor: 'middle', weight: 600 });
+        addText(b.x+200, b.y+215, b.hypo2, { size: 26, anchor: 'middle', weight: 600 });
+        addText(b.x+200, b.y+255, 'exit 0', { size: 18, anchor: 'middle', font: "'JetBrains Mono', monospace", fill: COLORS.rose });
+      });
+
+      // dotted line between them on disk
+      addPath('M 100 580 L 1500 580', { stroke: COLORS.faint, strokeWidth: 1.4, fill: 'none', strokeLineDash: [8, 8] });
+      // manually dashed
+      for (let x = 100; x < 1500; x += 22) {
+        addLine(x, 580, x+12, 580, { stroke: COLORS.faint, strokeWidth: 1.4, roughness: 0.6 });
+      }
+      addText(800, 615, 'the disk doesn\'t know what the previous iteration was THINKING', { size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // frustrated squiggle
+      addPath('M 600 690 Q 640 660 680 690 T 760 690 T 840 690 T 920 690 T 1000 690', {
+        stroke: COLORS.rose, strokeWidth: 2.5, roughness: 2.4, fill: 'none'
+      });
+      addText(800, 740, '🌀 each one starts from scratch', { size: 24, anchor: 'middle', fill: COLORS.rose, weight: 600 });
+      // sketched X over the linkage
+      addText(525, 360, '✗', { size: 56, anchor: 'middle', fill: COLORS.rose, weight: 700 });
+      addText(1025, 360, '✗', { size: 56, anchor: 'middle', fill: COLORS.rose, weight: 700 });
+    }
+  };
+  slides.push(slideRalphLosesThread);
+
+  // -------- SLIDE 8: TAKEAWAY MATRIX --------
+  const slideMatrix = {
+    headline: 'the right tool depends on the work',
+    caption: 'wrong cell = the complaint you see online',
+    draw: () => {
+      // 2x2 matrix
+      const x0 = 460, y0 = 160;
+      const cellW = 320, cellH = 220;
+      const labelW = 240, labelH = 80;
+
+      // Top column headers
+      addText(x0 + cellW/2, y0 - 30, 'Ralph', { size: 38, anchor: 'middle', weight: 700 });
+      addText(x0 + cellW + cellW/2, y0 - 30, 'Goal', { size: 38, anchor: 'middle', weight: 700 });
+
+      // Left row labels
+      addText(x0 - 30, y0 + cellH/2 + 10, 'Pre-decomposable', { size: 30, anchor: 'end', weight: 700 });
+      addText(x0 - 30, y0 + cellH + cellH/2 + 10, 'Unfolding', { size: 30, anchor: 'end', weight: 700 });
+
+      // Cells
+      // Top-left: Pre-decomp x Ralph = ✓
+      addRect(x0, y0, cellW, cellH, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addCheck(x0 + cellW/2, y0 + cellH/2 - 10, 50, COLORS.emerald);
+
+      // Top-right: Pre-decomp x Goal = ✗
+      addRect(x0 + cellW, y0, cellW, cellH, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+      addCross(x0 + cellW + cellW/2, y0 + cellH/2, 50, COLORS.rose);
+
+      // Bottom-left: Unfolding x Ralph = ✗
+      addRect(x0, y0 + cellH, cellW, cellH, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+      addCross(x0 + cellW/2, y0 + cellH + cellH/2, 50, COLORS.rose);
+
+      // Bottom-right: Unfolding x Goal = ✓
+      addRect(x0 + cellW, y0 + cellH, cellW, cellH, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addCheck(x0 + cellW + cellW/2, y0 + cellH + cellH/2 - 10, 50, COLORS.emerald);
+
+      // Arrows pointing to the two ✓ cells with handwritten labels
+      // Top-left arrow from above
+      addText(160, 200, 'fits', { size: 38, weight: 700, fill: COLORS.emerald });
+      addText(160, 245, 'naturally', { size: 38, weight: 700, fill: COLORS.emerald });
+      addArrow(310, 250, 470, 270, { stroke: COLORS.emerald, strokeWidth: 2.4, curve: -10, arrowSize: 14 });
+
+      // Bottom-right arrow from below
+      addText(1280, 540, 'right fit', { size: 38, weight: 700, fill: COLORS.emerald });
+      addArrow(1280, 555, 1130, 510, { stroke: COLORS.emerald, strokeWidth: 2.4, curve: 20, arrowSize: 14 });
+
+      // Bottom note
+      addText(800, 720, 'both have a place. choose by the shape of the work.', {
+        size: 32, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+
+      // doodle underline beneath the note
+      addPath('M 380 740 Q 800 760 1220 738', { stroke: COLORS.amber, strokeWidth: 3, fill: 'none', roughness: 1.6 });
+    }
+  };
+  slides.push(slideMatrix);
+
+  // ============== NEW SLIDES (spliced in below) ==============
+
+  // ---- "decomposition isn't free" -> insert at index 1 (slide 2) ----
+  const slideDecompositionCost = {
+    headline: "decomposition isn't free",
+    caption: 'ralph charges you upfront. goal charges you in tokens.',
+    draw: () => {
+      // divider squiggle
+      addPath('M 800 120 Q 810 450 800 780', { stroke: COLORS.faint, strokeWidth: 1.4, roughness: 2.4, fill: 'none' });
+
+      // ===== LEFT: PRD being filled in by floating pencil =====
+      addText(380, 130, 'ralph: pay upfront in time', { size: 30, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // PRD paper
+      addRect(140, 170, 480, 480, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      addPath('M 580 170 L 620 170 L 620 210 Z', { stroke: COLORS.ink, fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.4 });
+      addText(170, 220, 'prd.json', { size: 30, weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(170, 235, 590, 235, { stroke: COLORS.soft });
+
+      const prdLines = [
+        { s: 'S01 · notion oauth flow', done: true },
+        { s: 'S02 · page picker UI', done: true },
+        { s: 'S03 · markdown sync task', done: true },
+        { s: 'S04 · child page recursion', done: 'writing' },
+        { s: 'S05 · _____', done: false },
+        { s: 'S06 · _____', done: false },
+        { s: '...', done: false },
+      ];
+      prdLines.forEach((l, i) => {
+        const y = 275 + i * 48;
+        addRect(180, y, 22, 22, { strokeWidth: 1.3, fill: l.done === true ? COLORS.softEmerald : '#fff', fillStyle: 'solid' });
+        if (l.done === true) addCheck(191, y+11, 12, COLORS.emerald);
+        addText(220, y+18, l.s, { size: 20, font: "'JetBrains Mono', monospace", fill: l.done ? COLORS.ink : COLORS.faint });
+      });
+
+      // floating pencil mid-stroke (over S04)
+      const px = 470, py = 460;
+      // pencil body (rotated diagonal)
+      addPath(`M ${px} ${py} L ${px+90} ${py-90}`, { stroke: COLORS.amber, strokeWidth: 14, roughness: 1, fill: 'none' });
+      addPath(`M ${px} ${py} L ${px+90} ${py-90}`, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.2, fill: 'none' });
+      // tip
+      addPath(`M ${px-4} ${py+4} L ${px-18} ${py+18} L ${px+10} ${py+10} Z`, { fill: COLORS.ink, fillStyle: 'solid', strokeWidth: 1 });
+      // eraser end
+      addRect(px+82, py-100, 18, 18, { fill: COLORS.pink, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1.2 });
+      // scribble line being drawn
+      addPath(`M ${px-30} ${py+22} q 30 -8 60 0`, { stroke: COLORS.ink, strokeWidth: 1.6, roughness: 1.4, fill: 'none' });
+
+      // hourglass
+      const hx = 130, hy = 700;
+      addPath(`M ${hx} ${hy} L ${hx+60} ${hy} L ${hx+30} ${hy+38} L ${hx+60} ${hy+76} L ${hx} ${hy+76} L ${hx+30} ${hy+38} Z`, {
+        stroke: COLORS.ink, strokeWidth: 1.6, fill: COLORS.amber, fillStyle: 'solid'
+      });
+      // sand falling
+      addLine(hx+30, hy+38, hx+30, hy+72, { stroke: COLORS.amber, strokeWidth: 3 });
+      addText(hx+85, hy+30, '30 min', { size: 28, weight: 700, fill: COLORS.ink });
+      addText(hx+85, hy+60, 'of typing', { size: 22, fill: COLORS.soft, style: 'italic' });
+
+      // ===== RIGHT: terminal /goal prompt =====
+      addText(1200, 130, 'goal: pay in tokens', { size: 30, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // terminal box
+      addRect(900, 200, 600, 180, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2 });
+      // terminal header dots
+      addCircle(932, 230, 14, { fill: COLORS.rose, fillStyle: 'solid', stroke: 'none' });
+      addCircle(960, 230, 14, { fill: COLORS.amber, fillStyle: 'solid', stroke: 'none' });
+      addCircle(988, 230, 14, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: 'none' });
+      addText(1020, 235, 'codex ~ ', { size: 18, fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+      addLine(925, 250, 1480, 250, { stroke: COLORS.soft, strokeWidth: 0.8 });
+      addText(925, 295, '$ /goal cut p95 latency 20%', { size: 26, font: "'JetBrains Mono', monospace", weight: 600 });
+      // blinking cursor block
+      addRect(1430, 275, 18, 28, { fill: COLORS.ink, fillStyle: 'solid', stroke: 'none' });
+      addText(925, 345, 'one sentence. that\'s it.', { size: 22, fill: COLORS.soft, style: 'italic' });
+
+      // token meter
+      addText(1200, 450, 'tokens climbing as it works', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addRect(940, 480, 520, 70, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.8 });
+      addRect(944, 484, 260, 62, { fill: COLORS.amber, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1 });
+      // tick marks
+      for (let i = 1; i < 5; i++) {
+        const x = 940 + (520 / 5) * i;
+        addLine(x, 480, x, 488, { strokeWidth: 1 });
+        addLine(x, 542, x, 550, { strokeWidth: 1 });
+      }
+      addText(1200, 522, '~ climbing', { size: 24, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+
+      // animated upward arrows beside meter
+      addArrow(1490, 600, 1490, 510, { stroke: COLORS.rose, strokeWidth: 2, curve: 0, arrowSize: 12 });
+      addText(1510, 560, 'tokens', { size: 22, fill: COLORS.rose, weight: 600 });
+      addText(1510, 590, 'climb', { size: 22, fill: COLORS.rose, weight: 600 });
+
+      // dollar / fuel motif
+      addText(1200, 680, '$ $ $', { size: 44, anchor: 'middle', fill: COLORS.amber, weight: 700 });
+
+      // ===== Footnote =====
+      addText(800, 820, 'neither is cheap · pick the cost that fits the work', {
+        size: 26, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
+  // ---- "vagueness is a feature" -> insert at index 4 (slide 5) ----
+  const slideVagueness = {
+    headline: 'vagueness is a feature',
+    caption: "goal's prompt can be one sentence. ralph's prompt must be the spec.",
+    draw: () => {
+      // ===== LEFT: tiny sticky =====
+      // tape strip
+      addRect(280, 200, 80, 22, { fill: '#ffffffcc', fillStyle: 'solid', stroke: COLORS.soft, strokeWidth: 0.7 });
+      addRect(180, 220, 380, 200, { fill: COLORS.pink, fillStyle: 'solid', strokeWidth: 1.8 });
+      addText(370, 305, '"cut p95', { size: 28, anchor: 'middle', weight: 600, font: "'Patrick Hand', cursive" });
+      addText(370, 340, '/api/checkout', { size: 28, anchor: 'middle', weight: 600, font: "'Patrick Hand', cursive" });
+      addText(370, 375, 'latency by 20%."', { size: 28, anchor: 'middle', weight: 600, font: "'Patrick Hand', cursive" });
+
+      // arrow down to /goal label
+      addArrow(370, 440, 370, 600, { stroke: COLORS.ink, strokeWidth: 2, curve: -25, arrowSize: 14 });
+      addRect(220, 620, 300, 80, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
+      addText(370, 672, '/goal', { size: 44, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+
+      // size label under sticky
+      addText(370, 480, 'one sentence', { size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addText(370, 510, '~ 8 tokens', { size: 18, anchor: 'middle', fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+
+      // ===== RIGHT: large multi-page PRD =====
+      // back pages (peeking)
+      addRect(870, 130, 540, 660, { fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.4, roughness: 2.4 });
+      addRect(890, 150, 540, 660, { fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.4, roughness: 2.2 });
+      // front page
+      addRect(910, 170, 540, 660, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      addPath('M 1410 170 L 1450 170 L 1450 210 Z', { stroke: COLORS.ink, fill: COLORS.paper, fillStyle: 'solid' });
+
+      addText(940, 220, 'prd.json', { size: 32, weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(940, 238, 1420, 238, { stroke: COLORS.soft });
+
+      const items = [
+        'S01: notion oauth flow',
+        'S02: page picker UI',
+        'S03: markdown sync task',
+        'S04: child page recursion',
+        'S05: retry on 5xx',
+        'S06: rate-limit wrapper',
+        'S07: 500KB truncation',
+        'S08: auto-retrain hook',
+      ];
+      items.forEach((s, i) => {
+        const y = 280 + i * 44;
+        addRect(950, y, 20, 20, { strokeWidth: 1.2 });
+        addText(985, y+17, s, { size: 20, font: "'JetBrains Mono', monospace" });
+      });
+      addText(950, 660, '...+42 more', { size: 22, font: "'JetBrains Mono', monospace", fill: COLORS.faint, style: 'italic' });
+      // dotted continuation
+      for (let i = 0; i < 18; i++) {
+        addCircle(1100 + i*16, 700, 4, { fill: COLORS.faint, fillStyle: 'solid', stroke: 'none' });
+      }
+
+      // arrow down to ralph
+      // (the PRD already extends low; arrow squeezed to side)
+
+      // ralph label below
+      // Move arrow on the left side
+      addArrow(1180, 820, 1180, 720, { stroke: COLORS.ink, strokeWidth: 2, curve: 25, arrowSize: 14 });
+      // hmm — overlap risk. Use bottom layout: place ralph label adjacent to PRD
+      addRect(1500, 700, 80, 80, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
+      addText(1540, 752, 'ralph', { size: 28, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addArrow(1450, 740, 1500, 740, { stroke: COLORS.ink, strokeWidth: 2, curve: 0, arrowSize: 12 });
+
+      // size label
+      addText(1180, 770, 'a whole spec  ·  ~ 4k tokens', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // footnote
+      addText(800, 855, 'different sizes. different control loops.', {
+        size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
+  // ---- "peek without breaking flow" (/side) -> insert at index 9 (slide 10) ----
+  const slidePeek = {
+    headline: 'peek without breaking flow',
+    caption: 'long sessions stay observable · trust grows',
+    draw: () => {
+      // ===== Center: goal session running =====
+      addRect(140, 130, 880, 660, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2 });
+      addText(580, 180, '/goal session — running', { size: 28, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(180, 200, 980, 200, { stroke: COLORS.soft });
+
+      // pinned goal at top
+      addRect(220, 220, 720, 50, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.4 });
+      addText(580, 252, 'goal: cut p95 /api/checkout latency 20%', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+
+      // turn cells stacking
+      const cells = [
+        { fill: COLORS.yellow, t: 'turn 12 · ran flamegraph' },
+        { fill: COLORS.green, t: 'turn 13 · spotted N+1' },
+        { fill: COLORS.green, t: 'turn 14 · profiling /cart' },
+        { fill: COLORS.paper, t: 'turn 15 · ...', dim: true },
+      ];
+      cells.forEach((c, i) => {
+        const y = 300 + i * 70;
+        addRect(220, y, 720, 56, { fill: c.fill, fillStyle: 'solid', strokeWidth: c.dim ? 0.9 : 1.4, roughness: c.dim ? 2.2 : 1.4 });
+        addText(245, y+35, c.t, { size: 22, fill: c.dim ? COLORS.soft : COLORS.ink, font: "'JetBrains Mono', monospace" });
+        if (!c.dim) addCheck(910, y+28, 14, COLORS.emerald);
+      });
+
+      // motion lines around the box (still running indicator)
+      const motionLines = [
+        [110, 200, 70, 180], [110, 350, 60, 340], [110, 500, 70, 510],
+        [1050, 250, 1090, 230], [1050, 420, 1100, 420], [1050, 580, 1080, 600],
+      ];
+      motionLines.forEach(([x1,y1,x2,y2]) => {
+        addLine(x1, y1, x2, y2, { stroke: COLORS.amber, strokeWidth: 3 });
+      });
+      // dashed activity arc
+      for (let i = 0; i < 12; i++) {
+        const ang = (i / 12) * Math.PI * 2;
+        const r = 410;
+        const x1 = 580 + Math.cos(ang) * r;
+        const y1 = 460 + Math.sin(ang) * r * 0.55;
+        const x2 = 580 + Math.cos(ang+0.05) * r;
+        const y2 = 460 + Math.sin(ang+0.05) * r * 0.55;
+        addLine(x1, y1, x2, y2, { stroke: COLORS.rose, strokeWidth: 2, roughness: 0.6 });
+      }
+      addText(580, 760, 'still running · don\'t interrupt', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // ===== Right: /side window sliding in =====
+      addRect(1100, 200, 460, 480, { fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.6, roughness: 2.4 });
+      addRect(1080, 220, 460, 480, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2 });
+      // window header
+      addCircle(1110, 250, 14, { fill: COLORS.rose, fillStyle: 'solid', stroke: 'none' });
+      addCircle(1138, 250, 14, { fill: COLORS.amber, fillStyle: 'solid', stroke: 'none' });
+      addCircle(1166, 250, 14, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: 'none' });
+      addText(1310, 257, '/side', { size: 26, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(1090, 275, 1530, 275, { stroke: COLORS.soft });
+
+      addText(1110, 320, 'snapshot', { size: 22, weight: 700, fill: COLORS.soft, style: 'italic' });
+      const snapLines = [
+        'current turn: 14',
+        'recent: profiled cart route',
+        'theory: query waterfall',
+        '         in /cart',
+        'metric: 287ms → 248ms (-14%)',
+      ];
+      snapLines.forEach((l, i) => {
+        addText(1110, 370 + i * 44, l, { size: 22, font: "'JetBrains Mono', monospace" });
+      });
+      addText(1110, 640, 'read-only view', { size: 20, fill: COLORS.soft, style: 'italic' });
+
+      // dashed connector with lens
+      addCircle(1050, 400, 56, { stroke: COLORS.emerald, strokeWidth: 2.4, fill: '#dcfce7aa', fillStyle: 'solid' });
+      addLine(1080, 430, 1110, 460, { stroke: COLORS.emerald, strokeWidth: 4 });
+      addText(1050, 408, '👁', { size: 36, anchor: 'middle' });
+
+      // dashed line from session to /side
+      for (let i = 0; i < 6; i++) {
+        const x = 1010 + i * 14;
+        addLine(x, 400, x+8, 400, { stroke: COLORS.faint, strokeWidth: 1.4 });
+      }
+
+      // footnote
+      addText(800, 850, 'you get observability without paying interrupt cost', {
+        size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
+  // ---- "compaction makes the thread richer" -> insert at index 10 (slide 11) ----
+  const slideCompaction = {
+    headline: 'compaction makes the thread richer',
+    caption: 'good compaction = signal up, noise down. the thread gets MORE useful over time.',
+    draw: () => {
+      // chart geometry
+      const x0 = 220, x1 = 1480; // axes x range
+      const y0 = 720, y1 = 160;  // axis y range (y0 bottom, y1 top)
+      const xMid = (x0 + x1) / 2;
+
+      // chart title
+      addText(800, 110, 'thread value over time', { size: 32, anchor: 'middle', weight: 700, style: 'italic' });
+
+      // Y axis (with arrow head pointing up)
+      addLine(x0, y0, x0, y1 - 20, { strokeWidth: 2.4, roughness: 1.6 });
+      addLine(x0, y1 - 20, x0 - 12, y1 - 4, { strokeWidth: 2.4 });
+      addLine(x0, y1 - 20, x0 + 12, y1 - 4, { strokeWidth: 2.4 });
+      addText(x0 - 24, y1 - 10, 'value', { size: 26, anchor: 'end', weight: 700 });
+
+      // X axis (with arrow head pointing right)
+      addLine(x0, y0, x1 + 20, y0, { strokeWidth: 2.4, roughness: 1.6 });
+      addLine(x1 + 20, y0, x1 + 4, y0 - 12, { strokeWidth: 2.4 });
+      addLine(x1 + 20, y0, x1 + 4, y0 + 12, { strokeWidth: 2.4 });
+      addText(x1 + 30, y0 + 8, 'time', { size: 26, weight: 700 });
+
+      // Light grey gridlines
+      for (let i = 1; i <= 4; i++) {
+        const gy = y0 - (y0 - y1) * (i / 5);
+        addLine(x0 + 4, gy, x1, gy, { stroke: COLORS.faint, strokeWidth: 0.8, roughness: 0.5 });
+      }
+
+      // X tick labels
+      addText(x0, y0 + 36, 'start', { size: 22, anchor: 'middle', fill: COLORS.soft });
+      addText(xMid, y0 + 36, 'compaction', { size: 22, anchor: 'middle', fill: COLORS.soft, weight: 700 });
+
+      // dashed vertical line at compaction
+      for (let yy = y1; yy < y0; yy += 18) {
+        addLine(xMid, yy, xMid, yy + 10, { stroke: COLORS.soft, strokeWidth: 1.4, roughness: 0.6 });
+      }
+
+      // ===== GOOD compaction curve (rises through compaction, ends high) =====
+      // start point: (x0, y0 - 40)
+      // rises to (xMid, y0 - 280), continues to (x1, y0 - 480)
+      const goodPath = `M ${x0} ${y0 - 40}
+                        C ${x0+200} ${y0 - 60}, ${x0+360} ${y0 - 180}, ${xMid} ${y0 - 280}
+                        S ${x1 - 200} ${y0 - 460}, ${x1 - 20} ${y0 - 480}`;
+      addPath(goodPath, { stroke: COLORS.ink, strokeWidth: 4, roughness: 1.8, fill: 'none' });
+      // end dot
+      addCircle(x1 - 20, y0 - 480, 22, { fill: COLORS.ink, fillStyle: 'solid', stroke: COLORS.ink });
+
+      // good compaction label sticker (paper-amber)
+      const goodLabelX = x1 - 280, goodLabelY = y0 - 540;
+      addRect(goodLabelX, goodLabelY, 280, 56, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2, roughness: 2 });
+      addText(goodLabelX + 140, goodLabelY + 38, 'good compaction', { size: 26, anchor: 'middle', weight: 700 });
+      // tail to curve
+      addArrow(goodLabelX + 140, goodLabelY + 56, x1 - 30, y0 - 490, { stroke: COLORS.ink, strokeWidth: 1.6, curve: 10, arrowSize: 10 });
+
+      // ===== LOSSY compaction curve (rises, peaks just past compaction, drops) =====
+      const lossyPath = `M ${x0} ${y0 - 40}
+                         C ${x0+200} ${y0 - 80}, ${x0+360} ${y0 - 220}, ${xMid - 30} ${y0 - 320}
+                         C ${xMid + 60} ${y0 - 340}, ${xMid + 120} ${y0 - 240}, ${xMid + 220} ${y0 - 180}
+                         S ${x1 - 240} ${y0 - 100}, ${x1 - 20} ${y0 - 90}`;
+      addPath(lossyPath, { stroke: COLORS.faint, strokeWidth: 4, roughness: 2, fill: 'none' });
+      // end dot
+      addCircle(x1 - 20, y0 - 90, 20, { fill: COLORS.faint, fillStyle: 'solid', stroke: COLORS.faint });
+
+      // lossy compaction label sticker (paper-grey-ish using paper)
+      const lossyLabelX = x1 - 320, lossyLabelY = y0 - 60;
+      addRect(lossyLabelX, lossyLabelY, 280, 56, { fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 2, roughness: 2 });
+      addText(lossyLabelX + 140, lossyLabelY + 38, 'lossy compaction', { size: 26, anchor: 'middle', weight: 700, fill: COLORS.soft });
+      addArrow(lossyLabelX + 140, lossyLabelY, x1 - 30, y0 - 90, { stroke: COLORS.faint, strokeWidth: 1.6, curve: -10, arrowSize: 10 });
+
+      // small annotation near compaction line
+      addText(xMid + 14, y1 + 30, '↓ summary kicks in', { size: 18, fill: COLORS.soft, style: 'italic' });
+
+      // footnote
+      addText(800, 830, "codex's summarizer is built for this — the conversation grows wiser, not bloated", {
+        size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
+  // ---- "a goal must be verifiable" -> insert at index 3 (slide 4) ----
+  const slideVerifiable = {
+    headline: 'a goal must be verifiable',
+    caption: 'the model needs to know when to stop',
+    draw: () => {
+      // divider
+      addPath('M 800 130 Q 810 460 800 800', { stroke: COLORS.faint, strokeWidth: 1.4, roughness: 2.4, fill: 'none' });
+
+      // ===== LEFT: paper-blue checklist (plan complete) =====
+      addText(390, 145, 'plan complete', { size: 30, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addRect(140, 180, 500, 520, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2 });
+      addText(170, 230, 'todo.md', { size: 30, weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(170, 248, 610, 248, { stroke: COLORS.soft });
+      const items = [
+        'scaffold tables',
+        'auth flow',
+        'cart endpoints',
+        'stripe webhook',
+        'receipt email',
+      ];
+      items.forEach((s, i) => {
+        const y = 290 + i * 70;
+        addRect(180, y, 32, 32, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 1.4 });
+        addCheck(196, y + 16, 16, COLORS.emerald);
+        addText(230, y + 24, s, { size: 22, font: "'JetBrains Mono', monospace" });
+      });
+      addText(390, 670, '5 / 5 done', { size: 26, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace", fill: COLORS.emerald });
+
+      // ===== RIGHT: paper-amber metric chart (metric hit) =====
+      addText(1180, 145, 'metric hit', { size: 30, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addRect(900, 180, 540, 520, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
+
+      // chart axes
+      const cx0 = 950, cx1 = 1400, cy0 = 620, cy1 = 250;
+      addLine(cx0, cy0, cx0, cy1 - 10, { strokeWidth: 2 });
+      addLine(cx0, cy0, cx1 + 10, cy0, { strokeWidth: 2 });
+      addText(cx0 - 12, cy1 - 10, 'p95', { size: 20, anchor: 'end', weight: 600 });
+      addText(cx1 + 14, cy0 + 6, 't', { size: 20, weight: 600 });
+
+      // dashed target threshold
+      const targetY = cy1 + 200;
+      for (let xx = cx0 + 6; xx < cx1; xx += 22) {
+        addLine(xx, targetY, xx + 12, targetY, { stroke: COLORS.rose, strokeWidth: 2, roughness: 0.5 });
+      }
+      addText(cx1 + 18, targetY + 6, 'target:', { size: 18, fill: COLORS.rose, weight: 700, anchor: 'start' });
+      addText(cx1 + 18, targetY + 28, '-20%', { size: 18, fill: COLORS.rose, weight: 700, anchor: 'start' });
+
+      // metric curve crossing threshold from above
+      addPath(`M ${cx0+10} ${cy1+30}
+               C ${cx0+90} ${cy1+60}, ${cx0+170} ${cy1+130}, ${cx0+260} ${cy1+200}
+               S ${cx0+380} ${cy1+330}, ${cx1-20} ${cy1+340}`, {
+        stroke: COLORS.ink, strokeWidth: 3.4, roughness: 1.8, fill: 'none'
+      });
+      addCircle(cx1 - 20, cy1 + 340, 18, { fill: COLORS.emerald, fillStyle: 'solid', stroke: COLORS.ink });
+
+      // crossing annotation
+      addText(cx0 + 220, targetY - 20, 'crossed ✓', { size: 22, anchor: 'middle', fill: COLORS.emerald, weight: 700, style: 'italic' });
+
+      // metric label below the chart axis but inside the paper
+      addText(1170, 685, 'metric: 287ms → 228ms', { size: 20, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace", fill: COLORS.emerald });
+
+      // footnote
+      addText(800, 850, 'vague is fine. unverifiable is not.', {
+        size: 28, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
+  // ---- "some work resists decomposition" -> insert at index 4 (slide 5) ----
+  const slideResists = {
+    headline: 'some work resists decomposition',
+    caption: "if you don't know the path, you can't write the PRD",
+    draw: () => {
+      // ===== LEFT: PRD with mostly question marks =====
+      addRect(120, 130, 740, 660, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      addPath('M 820 130 L 860 130 L 860 170 Z', { stroke: COLORS.ink, fill: COLORS.paper, fillStyle: 'solid' });
+
+      addText(150, 190, 'prd.json', { size: 32, weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(150, 208, 830, 208, { stroke: COLORS.soft });
+      addText(150, 250, 'goal: cut p95 /api/checkout', { size: 22, font: "'JetBrains Mono', monospace", fill: COLORS.soft });
+      addText(150, 280, '      latency by 20%', { size: 22, font: "'JetBrains Mono', monospace", fill: COLORS.soft });
+      addLine(150, 300, 830, 300, { stroke: COLORS.faint, strokeWidth: 0.8 });
+
+      const stories = [
+        'S01: investigate ???',
+        'S02: optimize ???',
+        'S03: ???',
+        'S04: ???',
+        'S05: ???',
+      ];
+      stories.forEach((s, i) => {
+        const y = 350 + i * 70;
+        addRect(170, y, 28, 28, { strokeWidth: 1.4 });
+        addText(220, y + 22, s, { size: 24, font: "'JetBrains Mono', monospace", fill: i < 2 ? COLORS.ink : COLORS.faint });
+      });
+
+      // floating pencil hovering, motion lines = stuck
+      const px = 700, py = 470;
+      addPath(`M ${px} ${py} L ${px+90} ${py-90}`, { stroke: COLORS.amber, strokeWidth: 14, roughness: 1, fill: 'none' });
+      addPath(`M ${px} ${py} L ${px+90} ${py-90}`, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.2, fill: 'none' });
+      addPath(`M ${px-4} ${py+4} L ${px-18} ${py+18} L ${px+10} ${py+10} Z`, { fill: COLORS.ink, fillStyle: 'solid', strokeWidth: 1 });
+      addRect(px+82, py-100, 18, 18, { fill: COLORS.pink, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1.2 });
+
+      // motion lines (stuck wiggle)
+      addPath(`M ${px-40} ${py-20} q 14 -8 28 0`, { stroke: COLORS.rose, strokeWidth: 2, roughness: 1.4, fill: 'none' });
+      addPath(`M ${px-44} ${py-2} q 14 -8 28 0`, { stroke: COLORS.rose, strokeWidth: 2, roughness: 1.4, fill: 'none' });
+      addPath(`M ${px-40} ${py+16} q 14 -8 28 0`, { stroke: COLORS.rose, strokeWidth: 2, roughness: 1.4, fill: 'none' });
+      addText(px - 30, py + 70, 'stuck.', { size: 26, anchor: 'middle', fill: COLORS.rose, weight: 700, style: 'italic' });
+
+      addText(490, 760, "you can't write what you don't know", { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // ===== RIGHT: small terminal with one-line /goal =====
+      addRect(940, 230, 580, 180, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2 });
+      addCircle(972, 260, 14, { fill: COLORS.rose, fillStyle: 'solid', stroke: 'none' });
+      addCircle(1000, 260, 14, { fill: COLORS.amber, fillStyle: 'solid', stroke: 'none' });
+      addCircle(1028, 260, 14, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: 'none' });
+      addLine(960, 280, 1500, 280, { stroke: COLORS.soft });
+      addText(960, 330, '$ /goal cut p95 latency 20%', { size: 24, font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(960, 372, 'one line. one metric.', { size: 20, fill: COLORS.soft, style: 'italic' });
+
+      // curved arrow from prompt → metric hit
+      addArrow(1230, 410, 1230, 580, { stroke: COLORS.emerald, strokeWidth: 2.4, curve: 30, arrowSize: 14 });
+
+      // metric hit pill
+      addRect(990, 600, 480, 90, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addCheck(1030, 645, 22, COLORS.emerald);
+      addText(1240, 656, 'metric hit', { size: 32, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+
+      // footnote
+      addText(800, 855, 'for these tasks, only the metric matters.', {
+        size: 26, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
+  // -------- NEW SLIDE: HYBRID (Ralph outer, /goal inner) --------
+  const slideHybrid = {
+    headline: 'the hybrid: ralph wraps goal',
+    caption: 'outer loop = pre-decomposed stories. inner loop = one /goal per story.',
+    draw: () => {
+      // Outer ralph loop: prd.json on the left
+      addRect(60, 100, 360, 660, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      addText(90, 158, 'prd.json', { size: 30, weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(90, 174, 400, 174, { stroke: COLORS.soft });
+      const outerItems = [
+        { s: 'S01: oauth flow', done: true },
+        { s: 'S02: page picker', done: true },
+        { s: 'S03: markdown sync', done: false, active: true },
+        { s: 'S04: webhook recv', done: false },
+        { s: 'S05: rate-limit', done: false },
+        { s: 'S06: truncation', done: false },
+      ];
+      outerItems.forEach((it, i) => {
+        const y = 210 + i * 70;
+        addRect(110, y, 22, 22, { strokeWidth: 1.4, fill: it.done ? COLORS.softEmerald : (it.active ? COLORS.amber : '#fff'), fillStyle: 'solid' });
+        if (it.done) addCheck(121, y+11, 13, COLORS.emerald);
+        addText(150, y+18, it.s, { size: 20, font: "'JetBrains Mono', monospace", fill: it.done ? COLORS.soft : COLORS.ink });
+      });
+      addText(110, 700, 'ralph: outer loop', { size: 20, fill: COLORS.soft, style: 'italic' });
+      addText(110, 728, 'fresh context per story', { size: 18, fill: COLORS.soft, style: 'italic' });
+
+      // Arrow from active ticket out to the inner /goal session
+      addArrow(420, 350, 600, 350, { stroke: COLORS.rose, strokeWidth: 2.2, curve: 0, arrowSize: 12 });
+      addText(440, 320, 'spawn one /goal', { size: 18, fill: COLORS.rose, style: 'italic' });
+      addText(440, 380, 'per ticket', { size: 18, fill: COLORS.rose, style: 'italic' });
+
+      // Inner /goal session for the active ticket
+      addRect(620, 130, 800, 600, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(1020, 180, '/goal — markdown sync task', { size: 24, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(660, 200, 1380, 200, { stroke: COLORS.soft });
+
+      // Inner objective pill
+      addRect(720, 220, 600, 56, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.6 });
+      addText(1020, 256, 'objective: implement S03 + tests pass', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+
+      // Turns inside the inner goal
+      const turns = [
+        { y: 320, label: 'turn 1: read schema, plan' },
+        { y: 380, label: 'turn 2: write sync.ts' },
+        { y: 440, label: 'turn 3: tests fail, fix' },
+        { y: 500, label: 'turn 4: audit -> done' },
+      ];
+      turns.forEach((t, i) => {
+        addCircle(700, t.y + 6, 14, { fill: COLORS.softEmerald, fillStyle: 'solid' });
+        addText(740, t.y + 12, t.label, { size: 19, font: "'JetBrains Mono', monospace" });
+      });
+      // arrows between turns
+      addArrow(700, 340, 700, 372, { stroke: COLORS.emerald, strokeWidth: 1.6, curve: 0, arrowSize: 8 });
+      addArrow(700, 400, 700, 432, { stroke: COLORS.emerald, strokeWidth: 1.6, curve: 0, arrowSize: 8 });
+      addArrow(700, 460, 700, 492, { stroke: COLORS.emerald, strokeWidth: 1.6, curve: 0, arrowSize: 8 });
+
+      // completion audit
+      addRect(720, 560, 600, 70, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addCheck(760, 595, 18, COLORS.emerald);
+      addText(1020, 602, 'update_goal(complete) — story passes', { size: 19, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+
+      addText(1020, 690, 'macro discipline + micro discipline', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // Loop-back arrow: when /goal completes, ralph spawns the next iteration
+      addPath('M 1430 430 Q 1500 430 1500 200 Q 1500 90 1100 90 Q 700 90 420 90 Q 240 90 240 180', {
+        stroke: COLORS.rose, strokeWidth: 2, fill: 'none', roughness: 1.6
+      });
+      addLine(240, 180, 230, 168, { stroke: COLORS.rose, strokeWidth: 2 });
+      addLine(240, 180, 252, 170, { stroke: COLORS.rose, strokeWidth: 2 });
+      addText(1460, 480, 'on complete:', { size: 18, fill: COLORS.rose, style: 'italic' });
+      addText(1460, 504, 'next ticket', { size: 18, fill: COLORS.rose, style: 'italic' });
+    }
+  };
+
+  // ============== PASS 2: NEW SLIDES ==============
+
+  // -------- OPENER: vibes-based completion --------
+  const slideOpener = {
+    headline: "the agent stops before it's actually done",
+    caption: '"vibes-based completion" — the model FEELS done, so it claims done',
+    draw: () => {
+      // ===== LEFT: agent declaring victory =====
+      // little robot box
+      addRect(220, 540, 200, 200, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
+      // antenna
+      addLine(320, 540, 320, 500, { strokeWidth: 2 });
+      addCircle(320, 490, 18, { fill: COLORS.rose, fillStyle: 'solid' });
+      // eyes
+      addCircle(280, 605, 22, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.4 });
+      addCircle(360, 605, 22, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.4 });
+      addCircle(280, 605, 8, { fill: COLORS.ink, fillStyle: 'solid', stroke: 'none' });
+      addCircle(360, 605, 8, { fill: COLORS.ink, fillStyle: 'solid', stroke: 'none' });
+      // smiling mouth
+      addPath('M 280 670 Q 320 700 360 670', { stroke: COLORS.ink, strokeWidth: 2.5, fill: 'none', roughness: 1.4 });
+
+      // big speech bubble
+      addRect(140, 200, 540, 280, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2.4 });
+      // bubble tail
+      addPath('M 360 480 L 320 540 L 400 480 Z', { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 2 });
+      addCheck(220, 280, 38, COLORS.emerald);
+      addText(420, 295, 'all tasks', { size: 56, anchor: 'middle', weight: 700 });
+      addText(420, 365, 'complete!', { size: 56, anchor: 'middle', weight: 700 });
+      addText(420, 430, '"easy."', { size: 32, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // ===== DIVIDER =====
+      addText(800, 380, 'but actually...', { size: 30, anchor: 'middle', fill: COLORS.rose, weight: 700, style: 'italic' });
+      addArrow(770, 410, 880, 410, { stroke: COLORS.rose, strokeWidth: 2.4, curve: 0, arrowSize: 14 });
+
+      // ===== RIGHT: the actual diff =====
+      addRect(960, 180, 540, 580, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+      addText(990, 235, 'git diff', { size: 32, weight: 700, font: "'JetBrains Mono', monospace" });
+      addLine(990, 252, 1470, 252, { stroke: COLORS.soft });
+
+      const files = [
+        { f: 'auth.ts', state: 'changed', icon: 'check' },
+        { f: 'cart.ts', state: 'changed', icon: 'check' },
+        { f: 'checkout.ts', state: 'unchanged', icon: 'cross' },
+        { f: 'payments.ts', state: 'unchanged', icon: 'cross' },
+        { f: 'orders.ts', state: 'unchanged', icon: 'cross' },
+      ];
+      files.forEach((it, i) => {
+        const y = 290 + i * 70;
+        const fill = it.state === 'changed' ? COLORS.softEmerald : '#fff';
+        addRect(990, y, 480, 50, { fill, fillStyle: 'solid', strokeWidth: 1.4 });
+        if (it.icon === 'check') addCheck(1018, y+25, 14, COLORS.emerald);
+        else addCross(1018, y+25, 14, COLORS.rose);
+        addText(1058, y+33, it.f, { size: 22, font: "'JetBrains Mono', monospace", fill: it.state === 'changed' ? COLORS.ink : COLORS.soft });
+        addText(1300, y+33, it.state, { size: 18, font: "'JetBrains Mono', monospace", fill: it.state === 'changed' ? COLORS.emerald : COLORS.rose, weight: 600 });
+      });
+      addText(1230, 720, '2 of 5 actually touched', { size: 24, anchor: 'middle', fill: COLORS.rose, weight: 700, style: 'italic' });
+    }
+  };
+
+  // -------- TWO KINDS OF SOLUTIONS --------
+  const slideTwoSolutions = {
+    headline: 'two kinds of solutions',
+    caption: 'ralph and /goal — two completely different bets at the same problem',
+    draw: () => {
+      // big VS in middle
+      addText(800, 470, 'vs', { size: 80, anchor: 'middle', weight: 700, fill: COLORS.rose, font: "'JetBrains Mono', monospace" });
+
+      // ===== LEFT: Ralph =====
+      addRect(80, 130, 640, 700, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(400, 200, 'Ralph', { size: 64, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(400, 240, 'an external while-loop', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addLine(120, 270, 680, 270, { stroke: COLORS.soft });
+
+      // bash terminal
+      addRect(120, 300, 560, 180, { fill: COLORS.ink, fillStyle: 'solid', strokeWidth: 1.4 });
+      addText(150, 340, '$ while ! done; do', { size: 22, fill: '#9be39b', font: "'JetBrains Mono', monospace" });
+      addText(150, 370, '    claude < prompt.md', { size: 22, fill: '#9be39b', font: "'JetBrains Mono', monospace" });
+      addText(150, 400, '  done', { size: 22, fill: '#9be39b', font: "'JetBrains Mono', monospace" });
+      addText(150, 450, '# fresh process every iter', { size: 18, fill: '#fbbf2466', font: "'JetBrains Mono', monospace", style: 'italic' });
+
+      // 3 spawned process icons
+      const procs = [{ x: 160, c: COLORS.pink }, { x: 360, c: COLORS.blue }, { x: 560, c: COLORS.green }];
+      procs.forEach((p, i) => {
+        addRect(p.x, 530, 100, 100, { fill: p.c, fillStyle: 'solid', strokeWidth: 1.6 });
+        addText(p.x + 50, 555, `iter ${i+1}`, { size: 18, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+        addLine(p.x + 12, 575, p.x + 88, 575, { stroke: COLORS.soft, strokeWidth: 0.8 });
+        addText(p.x + 50, 605, 'fresh ctx', { size: 14, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      });
+      addText(400, 700, 'memory: files on disk', { size: 22, anchor: 'middle', fill: COLORS.soft });
+      addText(400, 735, 'prd.json + progress.txt', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", fill: COLORS.soft });
+      addText(400, 790, 'discipline pattern.', { size: 24, anchor: 'middle', weight: 700, fill: COLORS.ink, style: 'italic' });
+
+      // ===== RIGHT: /goal =====
+      addRect(880, 130, 640, 700, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(1200, 200, '/goal', { size: 64, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(1200, 240, 'an internal state machine', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addLine(920, 270, 1480, 270, { stroke: COLORS.soft });
+
+      // codex prompt
+      addRect(920, 300, 560, 100, { fill: COLORS.ink, fillStyle: 'solid', strokeWidth: 1.4 });
+      addText(950, 340, '› /goal cut p95 latency 20%', { size: 22, fill: '#9be39b', font: "'JetBrains Mono', monospace" });
+      addText(950, 375, '✓ goal set · auto-continues', { size: 18, fill: '#fbbf24', font: "'JetBrains Mono', monospace" });
+
+      // single big session box continuing across turns
+      addRect(960, 440, 480, 240, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 1.8 });
+      addText(1200, 480, 'one continuous thread', { size: 22, anchor: 'middle', weight: 600, font: "'JetBrains Mono', monospace" });
+      addLine(990, 500, 1410, 500, { stroke: COLORS.soft });
+      ['turn 1', 'turn 2 ↳ auto', 'turn 3 ↳ auto', 'turn 4 ↳ done'].forEach((t, i) => {
+        addText(1010, 535 + i * 35, t, { size: 19, font: "'JetBrains Mono', monospace" });
+      });
+
+      addText(1200, 715, 'memory: the thread itself', { size: 22, anchor: 'middle', fill: COLORS.soft });
+      addText(1200, 750, '+ persisted state DB', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", fill: COLORS.soft });
+      addText(1200, 790, 'infrastructure pattern.', { size: 24, anchor: 'middle', weight: 700, fill: COLORS.ink, style: 'italic' });
+    }
+  };
+
+  // -------- HOW /GOAL WORKS BEHIND THE SCENES --------
+  const slideMechanism = {
+    headline: 'how /goal works behind the scenes',
+    caption: 'a state machine the runtime owns. the model can only declare done.',
+    draw: () => {
+      // 4 state pills arranged in a square
+      const states = [
+        { x: 360, y: 240, label: 'ACTIVE', sub: 'auto-continues', color: COLORS.softEmerald },
+        { x: 1100, y: 240, label: 'PAUSED', sub: 'user-only', color: COLORS.blue },
+        { x: 360, y: 540, label: 'BUDGET-LIMITED', sub: 'wrap up soon', color: COLORS.amber },
+        { x: 1100, y: 540, label: 'COMPLETE', sub: 'after audit', color: COLORS.pink },
+      ];
+      states.forEach(s => {
+        addRect(s.x - 160, s.y - 60, 320, 120, { fill: s.color, fillStyle: 'solid', strokeWidth: 2 });
+        addText(s.x, s.y - 5, s.label, { size: 28, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+        addText(s.x, s.y + 32, s.sub, { size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      });
+
+      // active <-> paused (user)
+      addArrow(520, 220, 940, 220, { stroke: COLORS.ink, strokeWidth: 1.8, curve: -25, arrowSize: 12 });
+      addArrow(940, 260, 520, 260, { stroke: COLORS.ink, strokeWidth: 1.8, curve: 25, arrowSize: 12 });
+      addText(730, 180, '/goal pause', { size: 18, anchor: 'middle', fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+      addText(730, 295, '/goal resume', { size: 18, anchor: 'middle', fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+
+      // active -> budget-limited (auto)
+      addArrow(360, 320, 360, 460, { stroke: COLORS.amber, strokeWidth: 2.2, curve: 0, arrowSize: 12 });
+      addText(380, 395, 'tokens > budget', { size: 18, fill: COLORS.amber, weight: 700, font: "'JetBrains Mono', monospace" });
+
+      // active -> complete (model only, after audit)
+      addArrow(520, 280, 940, 540, { stroke: COLORS.emerald, strokeWidth: 2.2, curve: 60, arrowSize: 12 });
+      addText(800, 380, 'update_goal(complete)', { size: 18, fill: COLORS.emerald, weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(800, 405, '↑ model-only', { size: 16, fill: COLORS.emerald, style: 'italic' });
+
+      // budget-limited -> complete (audit can still pass)
+      addArrow(520, 540, 940, 540, { stroke: COLORS.faint, strokeWidth: 1.6, curve: 0, arrowSize: 10 });
+      addText(730, 525, 'if audit passes', { size: 16, anchor: 'middle', fill: COLORS.faint, style: 'italic' });
+
+      // self-loop on active = auto-continuation
+      addPath('M 280 200 Q 200 130 240 100 Q 320 70 360 130 L 380 165', {
+        stroke: COLORS.emerald, strokeWidth: 2.4, fill: 'none', roughness: 1.4
+      });
+      addLine(380, 165, 365, 158, { stroke: COLORS.emerald, strokeWidth: 2.4 });
+      addLine(380, 165, 372, 175, { stroke: COLORS.emerald, strokeWidth: 2.4 });
+      addText(180, 100, 'auto-continue', { size: 20, weight: 700, fill: COLORS.emerald });
+      addText(180, 125, 'every turn', { size: 18, fill: COLORS.emerald, style: 'italic' });
+
+      // token budget meter on the right
+      addRect(1410, 90, 80, 720, { strokeWidth: 1.6 });
+      addRect(1416, 96, 68, 360, { fill: COLORS.amber, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1 });
+      addText(1450, 80, 'budget', { size: 20, anchor: 'middle', fill: COLORS.soft });
+      addText(1450, 470, '~50%', { size: 22, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(1450, 850, '0', { size: 18, anchor: 'middle', fill: COLORS.faint, font: "'JetBrains Mono', monospace" });
+
+      // bottom callout
+      addText(800, 850, 'pause/resume = user · complete = model · everything else = runtime', {
+        size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
+  // -------- TWO WAYS TO POINT /GOAL --------
+  const slideTwoWays = {
+    headline: 'two ways to point /goal',
+    caption: 'at a spec, or at a vague goal — two branches, same loop',
+    draw: () => {
+      // top: /goal node
+      addRect(640, 110, 320, 110, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(800, 175, '/goal', { size: 56, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+
+      // Y-fork
+      addArrow(720, 230, 380, 380, { stroke: COLORS.ink, strokeWidth: 2.4, curve: -40, arrowSize: 14 });
+      addArrow(880, 230, 1220, 380, { stroke: COLORS.ink, strokeWidth: 2.4, curve: 40, arrowSize: 14 });
+
+      // ===== LEFT BRANCH: at a SPEC =====
+      addText(380, 340, 'BRANCH A', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+      addRect(120, 400, 540, 380, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      addText(390, 460, 'point at a SPEC', { size: 32, anchor: 'middle', weight: 700 });
+      addText(390, 495, 'implement until done', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addLine(150, 515, 630, 515, { stroke: COLORS.soft });
+
+      // mini prd on a sticky inside
+      addRect(160, 540, 460, 200, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.4 });
+      const specLines = [
+        { s: 'S01: oauth flow', done: true },
+        { s: 'S02: page picker', done: true },
+        { s: 'S03: markdown sync', done: false, active: true },
+        { s: 'S04: webhook recv', done: false },
+      ];
+      specLines.forEach((l, i) => {
+        const y = 565 + i * 38;
+        addRect(180, y, 20, 20, { strokeWidth: 1.2, fill: l.done ? COLORS.softEmerald : (l.active ? COLORS.amber : '#fff'), fillStyle: 'solid' });
+        if (l.done) addCheck(190, y+10, 11, COLORS.emerald);
+        addText(215, y+16, l.s, { size: 18, font: "'JetBrains Mono', monospace", fill: l.done ? COLORS.soft : COLORS.ink });
+      });
+
+      // ===== RIGHT BRANCH: at a VAGUE GOAL =====
+      addText(1220, 340, 'BRANCH B', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.soft, font: "'JetBrains Mono', monospace" });
+      addRect(940, 400, 540, 380, { fill: COLORS.pink, fillStyle: 'solid', strokeWidth: 2 });
+      addText(1210, 460, 'point at a VAGUE GOAL', { size: 32, anchor: 'middle', weight: 700 });
+      addText(1210, 495, 'explore until metric hits', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addLine(970, 515, 1450, 515, { stroke: COLORS.soft });
+
+      // sticky note inside
+      addRect(1010, 545, 80, 22, { fill: '#ffffffcc', fillStyle: 'solid', stroke: COLORS.soft, strokeWidth: 0.7 });
+      addRect(990, 565, 440, 160, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.6 });
+      addText(1210, 615, '"cut p95 audio', { size: 26, anchor: 'middle', weight: 600 });
+      addText(1210, 650, 'transcribe latency', { size: 26, anchor: 'middle', weight: 600 });
+      addText(1210, 685, 'by 20%."', { size: 26, anchor: 'middle', weight: 600 });
+      addText(1210, 745, 'one sentence. ~ 8 tokens', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic', font: "'JetBrains Mono', monospace" });
+
+      // bottom callout
+      addText(800, 830, 'same /goal loop, two completely different jobs', {
+        size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
+  // -------- AUDIO TRANSCRIBE MAP (real example) --------
+  const slideMap = {
+    headline: 'a real example: audio transcribe service',
+    caption: 'a goal is only as effective as the surface area it can act on',
+    draw: () => {
+      // ===== CENTER: /goal hub =====
+      const cx = 800, cy = 460;
+      addEllipse(cx, cy, 460, 200, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(cx, cy - 30, '/goal', { size: 30, anchor: 'middle', weight: 700, font: "'JetBrains Mono', monospace" });
+      addText(cx, cy + 5, 'cut p95 audio transcribe', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(cx, cy + 30, 'latency by 20%', { size: 20, anchor: 'middle', font: "'JetBrains Mono', monospace", weight: 600 });
+      addText(cx, cy + 60, 'regions: us-east, eu-west, ap-southeast', { size: 14, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // ===== SPOKES: resources radiating out =====
+      const spokes = [
+        { x: 140, y: 180, label: 'metrics dashboard', sub: 'read p95 by region', color: COLORS.blue, side: 'right' },
+        { x: 1280, y: 180, label: 'log aggregator', sub: 'read trace logs', color: COLORS.green, side: 'left' },
+        { x: 100, y: 480, label: 'flamegraph profiler', sub: 'sample running pods', color: COLORS.pink, side: 'right' },
+        { x: 1320, y: 480, label: 'staging cluster', sub: 'run experiments', color: COLORS.softEmerald, side: 'left' },
+        { x: 200, y: 760, label: 'codebase', sub: 'read + edit code', color: COLORS.yellow, side: 'right' },
+        { x: 1240, y: 760, label: 'cost meter', sub: 'know the budget', color: COLORS.lightRed, side: 'left' },
+      ];
+
+      spokes.forEach(s => {
+        // resource node
+        addRect(s.x - 140, s.y - 50, 280, 100, { fill: s.color, fillStyle: 'solid', strokeWidth: 1.8 });
+        addText(s.x, s.y - 14, s.label, { size: 22, anchor: 'middle', weight: 700 });
+        addText(s.x, s.y + 16, s.sub, { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic', font: "'JetBrains Mono', monospace" });
+
+        // dashed connector to hub
+        const startX = s.side === 'right' ? s.x + 140 : s.x - 140;
+        const endX = s.side === 'right' ? cx - 230 : cx + 230;
+        const endY = cy + (s.y < cy ? -60 : (s.y > cy + 100 ? 60 : 0));
+        const steps = 10;
+        for (let i = 0; i < steps; i++) {
+          const t1 = i / steps;
+          const t2 = (i + 0.5) / steps;
+          const x1 = startX + (endX - startX) * t1;
+          const y1 = s.y + (endY - s.y) * t1;
+          const x2 = startX + (endX - startX) * t2;
+          const y2 = s.y + (endY - s.y) * t2;
+          addLine(x1, y1, x2, y2, { stroke: COLORS.soft, strokeWidth: 1.4, roughness: 0.6 });
+        }
+      });
+
+      // bottom callout
+      addText(800, 850, 'no reach → /goal can\'t fix what it can\'t see', {
+        size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
+  // ============== FINAL SLIDE ORDER (Pass 1: reorder + drop) ==============
+  // Drops: slideRalphPre (eats for breakfast), slideGoalPre (struggles here),
+  //        slideRalphLosesThread, slideVagueness, slideResists
+  // New slides (mechanism, audit, two-ways-to-point, audio-transcribe map,
+  //             auto-research, contamination, scrappy-copy, opener, two-solutions, closer)
+  //             will be added in Pass 2.
+  slides.length = 0;
+  slides.push(
+    slideOpener,             // 1.  the agent stops before it's actually done
+    slideTwoSolutions,       // 2.  two kinds of solutions
+    slideTitle,              // 3.  two kinds of work
+    slidePreDecomposable,    // 4.  pre-decomposable
+    slideUnfolding,          // 5.  unfolding
+    slideVerifiable,         // 6.  a goal must be verifiable
+    slideMechanism,          // 7.  how /goal works behind the scenes
+    slideTwoWays,            // 8.  two ways to point /goal
+    slideMap,                // 9.  a real example: audio transcribe service
+    slideGoalUnf,            // 10. goal carries the hypothesis
+    slidePeek,               // 11. peek without breaking flow
+    slideCompaction,         // 12. compaction makes the thread richer
+    slideDecompositionCost,  // 13. decomposition isn't free
+    slideHybrid,             // 14. the hybrid: ralph wraps goal
+    slideMatrix              // 15. the right tool depends on the work
+  );
+
+  // ============== STATE / RENDER ==============
+  let current = 0;
+
+  const render = (idx, animate=true) => {
+    const slide = slides[idx];
+    const captionEl = document.getElementById('caption');
+    captionEl.classList.add('fading');
+    svg.classList.add('fading');
+
+    setTimeout(() => {
+      clearSvg(svg);
+      // re-grab roughjs instance after clear (svg same node, fine)
+      rc = rough.svg(svg);
+
+      // render slide
+      slide.draw();
+
+      // draw-on animation
+      if (animate) {
+        svg.classList.add('draw-on');
+        // restart animation
+        svg.getBoundingClientRect();
+      }
+
+      // update caption
+      document.getElementById('headline').textContent = slide.headline;
+      document.getElementById('caption-text').textContent = slide.caption;
+      document.getElementById('slide-num').textContent = (idx+1);
+
+      svg.classList.remove('fading');
+      captionEl.classList.remove('fading');
+
+      // remove draw-on class after animation done
+      if (animate) {
+        setTimeout(() => svg.classList.remove('draw-on'), 1200);
+      }
+
+      // disabled state
+      document.getElementById('btn-prev').disabled = idx === 0;
+      document.getElementById('btn-next').disabled = idx === slides.length - 1;
+      document.getElementById('slide-total').textContent = slides.length;
+    }, 220);
+  };
+
+  const goTo = (idx) => {
+    if (idx < 0 || idx >= slides.length) return;
+    if (idx === current) return;
+    current = idx;
+    render(current);
+  };
+
+  const next = () => goTo(current + 1);
+  const prev = () => goTo(current - 1);
+
+  // ============== NOTES.JSON SYNC ==============
+  const NOTES_URL = 'notes.json';
+  const SYNC_URL = 'http://localhost:7878/current';
+  let lastNotesHash = null;
+  let suppressLocalPost = false;
+
+  const applyNotes = (data) => {
+    if (!data || !Array.isArray(data.slides)) return;
+    data.slides.forEach((s, i) => {
+      if (slides[i]) {
+        if (s.headline) slides[i].headline = s.headline;
+        if (s.caption)  slides[i].caption  = s.caption;
+      }
+    });
+    // refresh visible caption
+    if (slides[current]) {
+      document.getElementById('headline').textContent = slides[current].headline;
+      document.getElementById('caption-text').textContent = slides[current].caption;
+    }
+    renderThumbs();
+  };
+
+  const fetchNotes = async () => {
+    try {
+      const r = await fetch(NOTES_URL + '?t=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) return null;
+      return await r.json();
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const pollNotes = async () => {
+    const data = await fetchNotes();
+    if (!data) return;
+    const hash = JSON.stringify(data);
+    if (hash === lastNotesHash) return;
+    lastNotesHash = hash;
+    applyNotes(data);
+    if (typeof data.current === 'number' && data.current !== current) {
+      suppressLocalPost = true;
+      goTo(data.current);
+      suppressLocalPost = false;
+    }
+  };
+
+  const postCurrent = (idx) => {
+    if (suppressLocalPost) return;
+    fetch(SYNC_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ current: idx })
+    }).catch(() => { /* offline / no server — silent */ });
+  };
+
+  // ============== THUMBNAIL SIDEBAR ==============
+  const sidebar = document.getElementById('thumb-sidebar');
+  const renderThumbs = () => {
+    sidebar.innerHTML = '';
+    slides.forEach((s, i) => {
+      const div = document.createElement('div');
+      div.className = 'thumb' + (i === current ? ' active' : '');
+      div.innerHTML = `<div class="num">${String(i+1).padStart(2,'0')}</div><div class="label">${s.headline}</div>`;
+      div.addEventListener('click', () => { goTo(i); postCurrent(i); });
+      sidebar.appendChild(div);
+    });
+  };
+
+  // wrap goTo to update thumbs
+  const _goTo = goTo;
+  const goToWithThumbs = (idx) => {
+    _goTo(idx);
+    renderThumbs();
+  };
+
+  // ============== SIDEBAR COLLAPSE (keyboard: S) ==============
+  const SIDEBAR_KEY = 'goal-vs-ralph-sidebar-collapsed';
+  const applySidebarState = (collapsed) => {
+    document.body.classList.toggle('sidebar-collapsed', collapsed);
+  };
+  applySidebarState(localStorage.getItem(SIDEBAR_KEY) === '1');
+  const toggleSidebar = () => {
+    const collapsed = !document.body.classList.contains('sidebar-collapsed');
+    applySidebarState(collapsed);
+    localStorage.setItem(SIDEBAR_KEY, collapsed ? '1' : '0');
+  };
+
+  // ============== INIT ==============
+  (async () => {
+    const initial = await fetchNotes();
+    if (initial) {
+      lastNotesHash = JSON.stringify(initial);
+      applyNotes(initial);
+      if (typeof initial.current === 'number') current = Math.max(0, Math.min(slides.length - 1, initial.current));
+    }
+    render(current);
+    renderThumbs();
+    setInterval(pollNotes, 1000);
+  })();
+
+  // Buttons
+  document.getElementById('btn-next').addEventListener('click', () => { next(); renderThumbs(); postCurrent(current); });
+  document.getElementById('btn-prev').addEventListener('click', () => { prev(); renderThumbs(); postCurrent(current); });
+
+  // Tap zones
+  document.getElementById('tap-left').addEventListener('click', () => { prev(); renderThumbs(); postCurrent(current); });
+  document.getElementById('tap-right').addEventListener('click', () => { next(); renderThumbs(); postCurrent(current); });
+
+  // ============== COMMENT MODE ==============
+  const COMMENTS_KEY = 'goal-vs-ralph-comments';
+  const overlay = document.getElementById('comment-overlay');
+  let comments = JSON.parse(localStorage.getItem(COMMENTS_KEY) || '{}'); // { [slideIdx]: [{x, y, text}] }
+
+  const saveComments = () => localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
+
+  const renderComments = () => {
+    overlay.querySelectorAll('.comment-pin').forEach(n => n.remove());
+    const list = comments[current] || [];
+    list.forEach((c, i) => {
+      const pin = document.createElement('div');
+      pin.className = 'comment-pin';
+      pin.style.left = (c.x * 100) + '%';
+      pin.style.top = (c.y * 100) + '%';
+      pin.textContent = (i + 1);
+      const tip = document.createElement('div');
+      tip.className = 'tooltip';
+      tip.textContent = c.text;
+      pin.appendChild(tip);
+      pin.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (document.body.classList.contains('comment-mode')) {
+          const newText = prompt('edit comment (leave empty to delete):', c.text);
+          if (newText === null) return;
+          if (newText.trim() === '') list.splice(i, 1);
+          else list[i].text = newText;
+          comments[current] = list;
+          saveComments();
+          renderComments();
+        }
+      });
+      overlay.appendChild(pin);
+    });
+  };
+
+  const toggleCommentMode = () => {
+    document.body.classList.toggle('comment-mode');
+    renderComments();
+  };
+
+  overlay.addEventListener('click', (e) => {
+    if (!document.body.classList.contains('comment-mode')) return;
+    if (e.target !== overlay) return; // clicked existing pin handled separately
+    const rect = overlay.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const text = prompt('comment:');
+    if (!text) return;
+    if (!comments[current]) comments[current] = [];
+    comments[current].push({ x, y, text });
+    saveComments();
+    renderComments();
+  });
+
+  const exportComments = () => {
+    const slidesWithComments = Object.entries(comments)
+      .filter(([_, arr]) => arr && arr.length)
+      .map(([idx, arr]) => ({
+        slide: parseInt(idx, 10) + 1,
+        headline: slides[idx]?.headline || '',
+        comments: arr.map((c, i) => ({ n: i + 1, x: +c.x.toFixed(3), y: +c.y.toFixed(3), text: c.text }))
+      }));
+    const blob = JSON.stringify({ exportedAt: new Date().toISOString(), slides: slidesWithComments }, null, 2);
+    navigator.clipboard.writeText(blob).then(() => {
+      alert('comments copied to clipboard (' + slidesWithComments.reduce((n, s) => n + s.comments.length, 0) + ' total)');
+    }).catch(() => {
+      // fallback: download as file
+      const a = document.createElement('a');
+      a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(blob);
+      a.download = 'slide-comments.json';
+      a.click();
+    });
+  };
+
+  const clearSlideComments = () => {
+    if (!comments[current] || !comments[current].length) return;
+    if (confirm('clear ' + comments[current].length + ' comment(s) on this slide?')) {
+      delete comments[current];
+      saveComments();
+      renderComments();
+    }
+  };
+
+  // re-render comments whenever slide changes
+  const _origRenderThumbs = renderThumbs;
+  // hook into navigation: render comments after each goTo
+  const origGoTo = goTo;
+  // simple: re-render on any nav by hooking navigation calls below
+  // but simpler — listen for slide-num text change via mutation observer:
+  new MutationObserver(renderComments).observe(document.getElementById('slide-num'), { childList: true });
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); renderThumbs(); postCurrent(current); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); renderThumbs(); postCurrent(current); }
+    else if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggleSidebar(); }
+    else if (e.key === 'c' || e.key === 'C') { e.preventDefault(); toggleCommentMode(); }
+    else if (e.key === 'Escape') { document.body.classList.remove('comment-mode'); }
+    else if ((e.key === 'e' || e.key === 'E') && document.body.classList.contains('comment-mode')) { e.preventDefault(); exportComments(); }
+    else if ((e.key === 'x' || e.key === 'X') && document.body.classList.contains('comment-mode')) { e.preventDefault(); clearSlideComments(); }
+  });
+
+  renderComments();
+})();
+</script>
+
+</body>
+</html>

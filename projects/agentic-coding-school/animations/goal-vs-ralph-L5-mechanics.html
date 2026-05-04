@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>L5 — Mechanics deep dive: /goal vs ralph</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  html, body { background: #020617; }
+  body { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .panel { transition: box-shadow 240ms ease, border-color 240ms ease, transform 240ms ease; }
+  .panel-active-goal { box-shadow: 0 0 0 1px rgba(168,85,247,.55), 0 0 24px -8px rgba(168,85,247,.55); border-color: rgba(168,85,247,.5) !important; }
+  .panel-active-ralph { box-shadow: 0 0 0 1px rgba(34,211,238,.55), 0 0 24px -8px rgba(34,211,238,.55); border-color: rgba(34,211,238,.5) !important; }
+  .flash-amber { animation: flashAmber 1200ms ease; }
+  .flash-emerald { animation: flashEmerald 1200ms ease; }
+  @keyframes flashAmber { 0%{background:#451a03} 100%{background:#0f172a} }
+  @keyframes flashEmerald { 0%{background:#022c22} 100%{background:#0f172a} }
+  .slide-in { animation: slideIn 380ms ease both; }
+  @keyframes slideIn { from { opacity:0; transform: translateY(6px) } to { opacity:1; transform:none } }
+  .dot-loop::after { content:'.'; animation: dots 1.2s steps(4,end) infinite; }
+  @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:''} }
+  .scroll-clip { max-height: 168px; overflow: hidden; position: relative; }
+  .scroll-clip::after { content:''; position:absolute; bottom:0; left:0; right:0; height:28px; background: linear-gradient(to bottom, rgba(15,23,42,0), rgba(15,23,42,1)); }
+  .pulse-green { animation: pulseGreen 1100ms ease 1; }
+  @keyframes pulseGreen { 0%,100% { box-shadow:0 0 0 0 rgba(16,185,129,0)} 50%{ box-shadow:0 0 0 6px rgba(16,185,129,.35)} }
+  .ring-progress { background: conic-gradient(#a855f7 var(--p,0%), #1e293b 0); }
+  .meter-fill { transition: width 320ms ease; }
+  .blink { animation: blink 1.1s steps(2,start) infinite; }
+  @keyframes blink { 50% { opacity: 0.25 } }
+</style>
+</head>
+<body class="text-slate-200">
+
+<div class="max-w-[1400px] mx-auto px-6 py-8">
+
+  <!-- Header -->
+  <div class="mb-6">
+    <div class="text-[11px] uppercase tracking-[0.25em] text-slate-500">level 5 · mechanics</div>
+    <h1 class="text-2xl md:text-3xl text-slate-100 mt-1">deep dive — what's actually happening</h1>
+    <p class="text-slate-400 text-sm mt-1">real artifacts from <span class="text-purple-300">openai/codex</span> and <span class="text-cyan-300">claude-ralph-wiggum</span></p>
+  </div>
+
+  <!-- Two columns -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+    <!-- ===================== GOAL COLUMN ===================== -->
+    <section class="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
+      <!-- title bar -->
+      <div class="flex items-center gap-3 mb-4">
+        <div class="flex gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400/80"></span>
+        </div>
+        <div class="text-xs text-slate-400">codex · <span class="text-purple-300">/goal</span> session</div>
+        <div class="ml-auto flex items-center gap-2 text-[10px]">
+          <span id="goal-state-chip" class="px-2 py-0.5 rounded bg-purple-500/15 text-purple-200 border border-purple-500/30">active</span>
+          <span class="text-slate-500">turn <span id="goal-turn" class="text-slate-300">0</span></span>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+
+        <!-- Tool calls panel -->
+        <div id="p-tool" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">tool call</div>
+            <div class="text-[10px] text-purple-300/70">goalManager</div>
+          </div>
+          <div id="tool-stream" class="text-[12.5px] leading-relaxed space-y-1.5 min-h-[72px]"></div>
+        </div>
+
+        <!-- Token meter -->
+        <div id="p-tokens" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">token usage</div>
+            <div class="text-[10px] text-slate-500">non_cached_input + output / budget</div>
+          </div>
+          <div class="flex items-baseline gap-2 mb-2">
+            <span id="tok-total" class="text-2xl text-slate-100 tabular-nums">0</span>
+            <span class="text-slate-500 text-sm">/ 1,000,000</span>
+            <span id="tok-pct" class="ml-auto text-xs text-purple-300 tabular-nums">0.0%</span>
+          </div>
+          <div class="h-1.5 w-full bg-slate-800 rounded overflow-hidden">
+            <div id="tok-bar" class="meter-fill h-full bg-purple-500/70" style="width:0%"></div>
+          </div>
+          <div class="mt-2 grid grid-cols-3 gap-2 text-[11px] text-slate-400">
+            <div>nci: <span id="tok-nci" class="text-cyan-300 tabular-nums">0</span></div>
+            <div>out: <span id="tok-out" class="text-cyan-300 tabular-nums">0</span></div>
+            <div>cached: <span id="tok-cached" class="text-slate-500 tabular-nums">0</span></div>
+          </div>
+        </div>
+
+        <!-- Auto-compact -->
+        <div id="p-compact" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3 opacity-60">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">auto-compact</div>
+            <div id="compact-status" class="text-[10px] text-slate-500">idle</div>
+          </div>
+          <div id="compact-body" class="text-[12px] text-slate-400 leading-relaxed">
+            triggers when total &gt; 75% of budget
+          </div>
+        </div>
+
+        <!-- Continuation prompt -->
+        <div id="p-cont" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3 opacity-60">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">continuation prompt · developer</div>
+            <div class="text-[10px] text-slate-500">injected between turns</div>
+          </div>
+          <div id="cont-body" class="text-[12.5px] text-slate-500 italic">— awaiting turn boundary —</div>
+        </div>
+
+        <!-- Queued interjection -->
+        <div id="p-queue" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3 opacity-60">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">queued message · user</div>
+            <div id="queue-status" class="text-[10px] text-slate-500">empty</div>
+          </div>
+          <div id="queue-body" class="text-[12.5px] text-slate-500 italic">— no queued messages —</div>
+        </div>
+
+        <!-- Budget guardrail -->
+        <div id="p-budget" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3 opacity-60">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">budget guardrail</div>
+            <div class="text-[10px] text-slate-500">prompt sent if budget hit</div>
+          </div>
+          <div id="budget-body" class="text-[12px] text-slate-500 leading-relaxed">
+            "Summarize progress. Do NOT mark complete just because budget ran out."
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== RALPH COLUMN ===================== -->
+    <section class="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
+      <!-- title bar -->
+      <div class="flex items-center gap-3 mb-4">
+        <div class="flex gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400/80"></span>
+        </div>
+        <div class="text-xs text-slate-400">ralph · <span class="text-cyan-300">bash loop</span></div>
+        <div class="ml-auto flex items-center gap-2 text-[10px]">
+          <span id="ralph-state-chip" class="px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-200 border border-cyan-500/30">running</span>
+          <span class="text-slate-500">iter <span id="ralph-iter" class="text-slate-300">0</span> / 10</span>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+
+        <!-- Bash loop -->
+        <div id="r-loop" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">bash loop</div>
+            <div class="text-[10px] text-cyan-300/70">ralph.sh</div>
+          </div>
+          <div class="text-[12.5px] leading-relaxed">
+            <div class="text-slate-500"><span class="text-rose-400">for</span> i <span class="text-rose-400">in</span> {1..10}; <span class="text-rose-400">do</span></div>
+            <div id="loop-iters" class="ml-3 grid grid-cols-10 gap-1 my-1.5"></div>
+            <div class="text-slate-500"><span class="text-rose-400">done</span></div>
+          </div>
+        </div>
+
+        <!-- prd.json -->
+        <div id="r-prd" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">prd.json</div>
+            <div class="text-[10px] text-slate-500">user stories</div>
+          </div>
+          <pre id="prd-body" class="text-[11.5px] leading-snug whitespace-pre"></pre>
+        </div>
+
+        <!-- progress.txt -->
+        <div id="r-progress" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3 opacity-80">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">progress.txt</div>
+            <div class="text-[10px] text-slate-500">append-only</div>
+          </div>
+          <div class="scroll-clip">
+            <div id="progress-body" class="text-[11.5px] leading-snug text-slate-400 space-y-0.5"></div>
+          </div>
+        </div>
+
+        <!-- AGENTS.md -->
+        <div id="r-agents" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3 opacity-80">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">AGENTS.md</div>
+            <div class="text-[10px] text-slate-500">distilled patterns</div>
+          </div>
+          <div id="agents-body" class="text-[11.5px] leading-snug text-slate-400 space-y-0.5">
+            <div><span class="text-slate-600">#</span> Patterns learned by ralph</div>
+          </div>
+        </div>
+
+        <!-- git log -->
+        <div id="r-git" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3 opacity-80">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">git log</div>
+            <div class="text-[10px] text-slate-500">--oneline</div>
+          </div>
+          <div id="git-body" class="text-[11.5px] leading-snug font-mono space-y-0.5"></div>
+        </div>
+
+        <!-- Sentinel watcher -->
+        <div id="r-sentinel" class="panel rounded-lg border border-slate-800 bg-slate-900 p-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500">sentinel watcher</div>
+            <div id="sentinel-status" class="text-[10px] text-slate-500">grep -q '&lt;promise&gt;COMPLETE&lt;/promise&gt;'</div>
+          </div>
+          <div id="sentinel-body" class="text-[11.5px] text-slate-400 leading-snug">
+            <span class="text-slate-500">scanning iter stdout</span><span class="blink"> ▍</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-8 flex items-center justify-between gap-4">
+    <p class="text-slate-500 text-sm italic">
+      <span class="text-purple-300">/goal</span> moves intent into the prompt itself
+      <span class="text-slate-600 mx-2">·</span>
+      <span class="text-cyan-300">ralph</span> moves intent into the filesystem
+    </p>
+    <button id="replay" class="text-xs px-3 py-1.5 rounded border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-slate-100 transition">↻ replay</button>
+  </div>
+
+</div>
+
+<script>
+(() => {
+  // ============== state ==============
+  const state = {
+    tick: 0,
+    running: false,
+    goal: {
+      turn: 0,
+      tokens: { nci: 0, out: 0, cached: 0, total: 0 },
+      tools: [],
+      compactStatus: 'idle',
+      contMsg: null,
+      queue: { text: null, status: 'empty' },
+      budgetFired: false,
+      complete: false,
+    },
+    ralph: {
+      iter: 0,
+      stories: [
+        { id: 'S01', name: 'auth: signup + login', passes: false },
+        { id: 'S02', name: 'cart: add/remove items', passes: false },
+        { id: 'S03', name: 'checkout: stripe webhook', passes: false },
+        { id: 'S04', name: 'orders: receipt email', passes: false },
+        { id: 'S05', name: 'admin: refund flow', passes: false },
+      ],
+      progress: [],
+      agents: [],
+      git: [],
+      sentinel: 'scanning',
+      done: false,
+    },
+  };
+
+  // ============== SCRIPT (timeline) ==============
+  // tick = 200ms; total ~37s
+  const SCRIPT = [
+    // --- intro ---
+    { t: 2,  side:'goal',  kind:'tool', call:`<span class="text-cyan-300">create_goal</span>({ <span class="text-cyan-300">prompt</span>: <span class="text-amber-300">"ship checkout v2"</span>, <span class="text-cyan-300">budgetTokens</span>: <span class="text-emerald-300">1_000_000</span> })`, active:'p-tool' },
+    { t: 3,  side:'ralph', kind:'iter', n:1, active:'r-loop' },
+
+    // --- early work, both sides ---
+    { t: 6,  side:'goal',  kind:'tokens', nci: 8200, out: 1100 },
+    { t: 7,  side:'ralph', kind:'progress', text:'## Iter 1 — S01 scaffold'},
+    { t: 8,  side:'ralph', kind:'git', hash:'a3f1c2', msg:'feat: S01 scaffold auth tables', active:'r-git' },
+
+    { t: 10, side:'goal',  kind:'turn', n:1 },
+    { t: 11, side:'goal',  kind:'cont', text:'Audit completion against the original goal. If uncertain, mark not achieved.', active:'p-cont' },
+    { t: 12, side:'goal',  kind:'tool', call:`<span class="text-cyan-300">get_goal</span>()  <span class="text-slate-500">→</span> { <span class="text-cyan-300">status</span>: <span class="text-amber-300">"active"</span>, <span class="text-cyan-300">tokensUsed</span>: <span class="text-emerald-300">9300</span> }`, active:'p-tool' },
+
+    { t: 13, side:'ralph', kind:'iter', n:2 },
+    { t: 14, side:'ralph', kind:'story', id:'S01', passes:true, active:'r-prd' },
+    { t: 15, side:'ralph', kind:'progress', text:'## Iter 2 — S01 PASS, S02 wiring' },
+    { t: 16, side:'ralph', kind:'git', hash:'b71e09', msg:'feat: S01 - signup/login passing' },
+    { t: 17, side:'ralph', kind:'agents', text:'Pattern: use IF NOT EXISTS for migrations', active:'r-agents' },
+
+    { t: 18, side:'goal',  kind:'tokens', nci: 142000, out: 18200 },
+    { t: 20, side:'goal',  kind:'turn', n:2 },
+    { t: 21, side:'goal',  kind:'tool', call:`<span class="text-cyan-300">get_goal</span>()  <span class="text-slate-500">→</span> { <span class="text-cyan-300">status</span>: <span class="text-amber-300">"active"</span> }` },
+
+    { t: 22, side:'ralph', kind:'iter', n:3 },
+    { t: 23, side:'ralph', kind:'story', id:'S02', passes:true },
+    { t: 24, side:'ralph', kind:'progress', text:'## Iter 3 — S02 PASS, starting S03 webhook' },
+    { t: 25, side:'ralph', kind:'git', hash:'c2d8aa', msg:'feat: S02 - cart add/remove' },
+
+    // --- queued user message arrives mid-loop ---
+    { t: 27, side:'goal',  kind:'queue', text:'also handle apple pay', status:'queued', active:'p-queue' },
+    { t: 30, side:'goal',  kind:'tokens', nci: 410000, out: 51200 },
+
+    { t: 31, side:'ralph', kind:'iter', n:4 },
+    { t: 32, side:'ralph', kind:'progress', text:'## Iter 4 — S03 webhook signature verify' },
+
+    { t: 33, side:'goal',  kind:'turn', n:3 },
+    { t: 34, side:'goal',  kind:'queue-deliver', active:'p-queue' },
+    { t: 35, side:'goal',  kind:'tool', call:`<span class="text-cyan-300">get_goal</span>()  <span class="text-slate-500">→</span> integrating user note: apple pay` },
+
+    { t: 36, side:'ralph', kind:'iter', n:5 },
+    { t: 37, side:'ralph', kind:'story', id:'S03', passes:true },
+    { t: 38, side:'ralph', kind:'git', hash:'9f0e44', msg:'feat: S03 - stripe webhook + sig verify' },
+    { t: 39, side:'ralph', kind:'agents', text:'Pattern: verify stripe sig BEFORE parsing body' },
+
+    // --- compaction ---
+    { t: 42, side:'goal',  kind:'tokens', nci: 720000, out: 88000 },
+    { t: 44, side:'goal',  kind:'compact-start', active:'p-compact' },
+    { t: 49, side:'goal',  kind:'compact-end' },
+
+    { t: 45, side:'ralph', kind:'iter', n:6 },
+    { t: 46, side:'ralph', kind:'progress', text:'## Iter 6 — S04 receipt email template' },
+    { t: 48, side:'ralph', kind:'git', hash:'1ad221', msg:'chore: receipt email template' },
+
+    { t: 50, side:'goal',  kind:'tokens', nci: 180000, out: 22000, cached: 410000 },
+    { t: 52, side:'goal',  kind:'turn', n:4 },
+    { t: 53, side:'goal',  kind:'cont', text:'Audit completion against the original goal. If uncertain, mark not achieved.' },
+
+    { t: 53, side:'ralph', kind:'iter', n:7 },
+    { t: 54, side:'ralph', kind:'story', id:'S04', passes:true },
+    { t: 55, side:'ralph', kind:'progress', text:'## Iter 7 — S04 PASS, S05 refund flow' },
+
+    { t: 57, side:'goal',  kind:'tool', call:`<span class="text-cyan-300">get_goal</span>()  <span class="text-slate-500">→</span> 4/5 user concerns addressed` },
+
+    { t: 58, side:'ralph', kind:'iter', n:8 },
+    { t: 59, side:'ralph', kind:'git', hash:'88c011', msg:'feat: S04 - receipt email send' },
+
+    // budget late-warning (informational, not exhausted)
+    { t: 60, side:'goal',  kind:'budget-warn', active:'p-budget' },
+
+    { t: 62, side:'ralph', kind:'iter', n:9 },
+    { t: 63, side:'ralph', kind:'story', id:'S05', passes:true },
+    { t: 64, side:'ralph', kind:'progress', text:'## Iter 9 — S05 PASS, all stories green' },
+    { t: 65, side:'ralph', kind:'git', hash:'42e7b3', msg:'feat: S05 - admin refund + audit log' },
+
+    { t: 66, side:'goal',  kind:'tokens', nci: 240000, out: 31000, cached: 410000 },
+    { t: 68, side:'goal',  kind:'turn', n:5 },
+    { t: 69, side:'goal',  kind:'tool', call:`<span class="text-cyan-300">update_goal</span>({ <span class="text-cyan-300">status</span>: <span class="text-amber-300">"complete"</span> })`, active:'p-tool' },
+    { t: 71, side:'goal',  kind:'complete' },
+
+    { t: 70, side:'ralph', kind:'iter', n:10 },
+    { t: 72, side:'ralph', kind:'sentinel-match', active:'r-sentinel' },
+    { t: 74, side:'ralph', kind:'done' },
+  ];
+
+  // ============== DOM helpers ==============
+  const $ = (id) => document.getElementById(id);
+
+  const setActive = (panelId, side) => {
+    document.querySelectorAll('.panel-active-goal,.panel-active-ralph').forEach(el => {
+      el.classList.remove('panel-active-goal','panel-active-ralph');
+    });
+    if (!panelId) return;
+    const el = $(panelId);
+    if (!el) return;
+    el.classList.add(side === 'goal' ? 'panel-active-goal' : 'panel-active-ralph');
+    el.classList.remove('opacity-60','opacity-80');
+  };
+
+  // initial loop iterators
+  const loopIters = $('loop-iters');
+  for (let i=1;i<=10;i++){
+    const d = document.createElement('div');
+    d.className = 'h-6 rounded bg-slate-800/60 text-[10px] flex items-center justify-center text-slate-500';
+    d.textContent = i;
+    d.id = `iter-${i}`;
+    loopIters.appendChild(d);
+  }
+
+  // initial prd render
+  const renderPrd = () => {
+    const lines = ['{','  "stories": ['];
+    state.ralph.stories.forEach((s,i) => {
+      const passColor = s.passes ? 'text-emerald-400' : 'text-rose-400';
+      const passVal = s.passes ? 'true ' : 'false';
+      lines.push(`    { <span class="text-cyan-300">"id"</span>: <span class="text-amber-300">"${s.id}"</span>, <span class="text-cyan-300">"passes"</span>: <span class="${passColor}">${passVal}</span>, <span class="text-cyan-300">"name"</span>: <span class="text-amber-300">"${s.name}"</span> }${i<state.ralph.stories.length-1?',':''}`);
+    });
+    lines.push('  ]');
+    lines.push('}');
+    $('prd-body').innerHTML = lines.join('\n');
+  };
+  renderPrd();
+
+  // ============== animated number tween for tokens ==============
+  let tokTarget = { nci:0, out:0, cached:0 };
+  const fmt = (n) => n.toLocaleString();
+  const tweenTokens = () => {
+    const t = state.goal.tokens;
+    const ease = (a,b) => a + (b-a) * 0.18;
+    t.nci    = Math.round(ease(t.nci, tokTarget.nci));
+    t.out    = Math.round(ease(t.out, tokTarget.out));
+    t.cached = Math.round(ease(t.cached, tokTarget.cached));
+    t.total  = t.nci + t.out;
+    $('tok-nci').textContent = fmt(t.nci);
+    $('tok-out').textContent = fmt(t.out);
+    $('tok-cached').textContent = fmt(t.cached);
+    $('tok-total').textContent = fmt(t.total);
+    const pct = (t.total / 1_000_000) * 100;
+    $('tok-pct').textContent = pct.toFixed(1) + '%';
+    $('tok-bar').style.width = Math.min(100, pct) + '%';
+    if (pct > 75) $('tok-bar').classList.add('bg-amber-400/80');
+    else $('tok-bar').classList.remove('bg-amber-400/80');
+  };
+  setInterval(tweenTokens, 80);
+
+  // ============== event handlers ==============
+  const handle = (ev) => {
+    if (ev.active) setActive(ev.active, ev.side);
+
+    if (ev.side === 'goal') {
+      const g = state.goal;
+      switch (ev.kind) {
+        case 'tool': {
+          const stream = $('tool-stream');
+          const row = document.createElement('div');
+          row.className = 'slide-in text-slate-300 break-all';
+          row.innerHTML = `<span class="text-slate-600">›</span> ${ev.call}`;
+          stream.appendChild(row);
+          while (stream.children.length > 4) stream.removeChild(stream.firstChild);
+          break;
+        }
+        case 'tokens': {
+          tokTarget.nci    = ev.nci ?? tokTarget.nci;
+          tokTarget.out    = ev.out ?? tokTarget.out;
+          tokTarget.cached = ev.cached ?? tokTarget.cached;
+          break;
+        }
+        case 'turn': {
+          g.turn = ev.n;
+          $('goal-turn').textContent = ev.n;
+          break;
+        }
+        case 'cont': {
+          $('cont-body').classList.remove('italic','text-slate-500');
+          $('cont-body').classList.add('text-slate-200','slide-in');
+          $('cont-body').innerHTML = `<span class="text-slate-500">"</span>${ev.text}<span class="text-slate-500">"</span>`;
+          $('p-cont').classList.remove('opacity-60');
+          break;
+        }
+        case 'queue': {
+          $('p-queue').classList.remove('opacity-60');
+          $('queue-status').innerHTML = '<span class="text-amber-300">📥 will be delivered next turn</span>';
+          $('queue-body').classList.remove('italic','text-slate-500');
+          $('queue-body').classList.add('text-slate-200','slide-in');
+          $('queue-body').innerHTML = `<span class="text-slate-500">"</span>${ev.text}<span class="text-slate-500">"</span>`;
+          break;
+        }
+        case 'queue-deliver': {
+          $('queue-status').innerHTML = '<span class="text-emerald-300">✓ delivered at turn boundary</span>';
+          $('p-queue').classList.add('flash-emerald');
+          setTimeout(()=> $('p-queue').classList.remove('flash-emerald'), 1400);
+          break;
+        }
+        case 'compact-start': {
+          $('p-compact').classList.remove('opacity-60');
+          $('p-compact').classList.add('flash-amber');
+          $('compact-status').innerHTML = '<span class="text-amber-300 dot-loop">compacting</span>';
+          $('compact-body').innerHTML = `
+            <div class="text-amber-300/90 text-[11px] uppercase tracking-widest">CONTEXT CHECKPOINT COMPACTION</div>
+            <div class="mt-1.5 text-slate-300 text-[12px]">summary written → <span class="text-emerald-300">410k cached</span></div>
+            <div class="mt-2 h-1 w-full bg-slate-800 rounded overflow-hidden">
+              <div class="h-full bg-amber-400/70 meter-fill" id="compact-bar" style="width:5%"></div>
+            </div>`;
+          let p = 5;
+          const iv = setInterval(() => {
+            p += 12; if (p>=100){ p=100; clearInterval(iv);}
+            const b = document.getElementById('compact-bar');
+            if (b) b.style.width = p + '%';
+          }, 220);
+          break;
+        }
+        case 'compact-end': {
+          $('compact-status').innerHTML = '<span class="text-emerald-300">✓ summary written</span>';
+          tokTarget.nci = 180000; tokTarget.out = 22000; tokTarget.cached = 410000;
+          break;
+        }
+        case 'budget-warn': {
+          $('p-budget').classList.remove('opacity-60');
+          $('budget-body').innerHTML = `
+            <div class="text-slate-200 text-[12px]">"Summarize progress. <span class="text-rose-300">Do NOT mark complete</span> just because budget ran out."</div>
+            <div class="text-[10px] text-slate-500 mt-1">— guardrail injected by /goal subsystem at 75%+ usage</div>`;
+          break;
+        }
+        case 'complete': {
+          g.complete = true;
+          const chip = $('goal-state-chip');
+          chip.textContent = 'complete';
+          chip.className = 'px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-200 border border-emerald-500/30';
+          $('p-tool').classList.add('flash-emerald');
+          break;
+        }
+      }
+    } else if (ev.side === 'ralph') {
+      const r = state.ralph;
+      switch (ev.kind) {
+        case 'iter': {
+          r.iter = ev.n;
+          $('ralph-iter').textContent = ev.n;
+          // mark prior done, current active
+          for (let i=1;i<=10;i++){
+            const el = $(`iter-${i}`);
+            if (!el) continue;
+            if (i < ev.n){ el.className = 'h-6 rounded bg-cyan-500/20 text-[10px] flex items-center justify-center text-cyan-300'; }
+            else if (i === ev.n){ el.className = 'h-6 rounded bg-cyan-400/40 text-[10px] flex items-center justify-center text-cyan-100 font-bold ring-1 ring-cyan-300'; }
+            else { el.className = 'h-6 rounded bg-slate-800/60 text-[10px] flex items-center justify-center text-slate-500'; }
+          }
+          break;
+        }
+        case 'story': {
+          const s = r.stories.find(x => x.id === ev.id);
+          if (s) { s.passes = ev.passes; renderPrd(); $('r-prd').classList.add('flash-emerald'); setTimeout(()=>$('r-prd').classList.remove('flash-emerald'),1300); }
+          break;
+        }
+        case 'progress': {
+          r.progress.push(ev.text);
+          const body = $('progress-body');
+          const div = document.createElement('div');
+          div.className = 'slide-in';
+          div.innerHTML = `<span class="text-slate-600">${String(r.progress.length).padStart(2,'0')}</span>  ${ev.text}`;
+          body.appendChild(div);
+          body.parentElement.scrollTop = body.parentElement.scrollHeight;
+          // keep small
+          while (body.children.length > 8) body.removeChild(body.firstChild);
+          break;
+        }
+        case 'agents': {
+          const body = $('agents-body');
+          const div = document.createElement('div');
+          div.className = 'slide-in';
+          div.innerHTML = `<span class="text-slate-600">+</span> ${ev.text}`;
+          body.appendChild(div);
+          break;
+        }
+        case 'git': {
+          const body = $('git-body');
+          const div = document.createElement('div');
+          div.className = 'slide-in';
+          div.innerHTML = `<span class="text-amber-300">${ev.hash}</span> <span class="text-slate-300">${ev.msg}</span>`;
+          body.appendChild(div);
+          while (body.children.length > 6) body.removeChild(body.firstChild);
+          break;
+        }
+        case 'sentinel-match': {
+          $('sentinel-body').innerHTML = `<span class="text-emerald-300">✓ match</span>: <span class="text-slate-300">&lt;promise&gt;COMPLETE&lt;/promise&gt;</span> on iter 10 stdout → <span class="text-emerald-300">exit 0</span>`;
+          $('r-sentinel').classList.add('flash-emerald','pulse-green');
+          break;
+        }
+        case 'done': {
+          const chip = $('ralph-state-chip');
+          chip.textContent = 'done';
+          chip.className = 'px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-200 border border-emerald-500/30';
+          break;
+        }
+      }
+    }
+  };
+
+  // ============== driver ==============
+  let driver = null;
+  const start = () => {
+    if (state.running) return;
+    state.running = true;
+    driver = setInterval(() => {
+      state.tick++;
+      SCRIPT.filter(e => e.t === state.tick).forEach(handle);
+      if (state.tick > 80) {
+        clearInterval(driver);
+        state.running = false;
+      }
+    }, 200);
+  };
+
+  const reset = () => {
+    if (driver) clearInterval(driver);
+    state.tick = 0; state.running = false;
+    state.goal = { turn:0, tokens:{nci:0,out:0,cached:0,total:0}, tools:[], compactStatus:'idle', contMsg:null, queue:{text:null,status:'empty'}, budgetFired:false, complete:false };
+    state.ralph = { iter:0, stories: state.ralph.stories.map(s=>({...s,passes:false})), progress:[], agents:[], git:[], sentinel:'scanning', done:false };
+    tokTarget = { nci:0, out:0, cached:0 };
+
+    // reset DOM
+    $('tool-stream').innerHTML = '';
+    $('goal-turn').textContent = '0';
+    $('cont-body').className = 'text-[12.5px] text-slate-500 italic';
+    $('cont-body').textContent = '— awaiting turn boundary —';
+    $('p-cont').classList.add('opacity-60');
+    $('queue-status').className = 'text-[10px] text-slate-500';
+    $('queue-status').textContent = 'empty';
+    $('queue-body').className = 'text-[12.5px] text-slate-500 italic';
+    $('queue-body').textContent = '— no queued messages —';
+    $('p-queue').classList.add('opacity-60');
+    $('compact-status').className = 'text-[10px] text-slate-500';
+    $('compact-status').textContent = 'idle';
+    $('compact-body').className = 'text-[12px] text-slate-400 leading-relaxed';
+    $('compact-body').innerHTML = 'triggers when total &gt; 75% of budget';
+    $('p-compact').classList.add('opacity-60');
+    $('p-budget').classList.add('opacity-60');
+    $('budget-body').className = 'text-[12px] text-slate-500 leading-relaxed';
+    $('budget-body').innerHTML = '"Summarize progress. Do NOT mark complete just because budget ran out."';
+    const gchip = $('goal-state-chip'); gchip.textContent='active'; gchip.className='px-2 py-0.5 rounded bg-purple-500/15 text-purple-200 border border-purple-500/30';
+
+    $('ralph-iter').textContent = '0';
+    for (let i=1;i<=10;i++){ const el=$(`iter-${i}`); el.className='h-6 rounded bg-slate-800/60 text-[10px] flex items-center justify-center text-slate-500'; el.textContent=i; }
+    $('progress-body').innerHTML='';
+    $('agents-body').innerHTML='<div><span class="text-slate-600">#</span> Patterns learned by ralph</div>';
+    $('git-body').innerHTML='';
+    $('sentinel-body').innerHTML = '<span class="text-slate-500">scanning iter stdout</span><span class="blink"> ▍</span>';
+    $('r-sentinel').classList.remove('flash-emerald','pulse-green');
+    const rchip = $('ralph-state-chip'); rchip.textContent='running'; rchip.className='px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-200 border border-cyan-500/30';
+    renderPrd();
+
+    document.querySelectorAll('.panel-active-goal,.panel-active-ralph').forEach(el => el.classList.remove('panel-active-goal','panel-active-ralph'));
+  };
+
+  $('replay').addEventListener('click', () => { reset(); setTimeout(start, 200); });
+
+  // autoplay via IntersectionObserver
+  const root = document.querySelector('section');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting && !state.running && state.tick === 0) start(); });
+  }, { threshold: 0.3 });
+  io.observe(root);
+
+})();
+</script>
+</body>
+</html>
