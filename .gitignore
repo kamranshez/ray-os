@@ -5,3 +5,12 @@
 
 # Video transcriber outputs (generated transcript files)
 .claude/skills/video-transcriber/outputs/
+
+# macOS finder metadata
+.DS_Store
+
+# Swift Package Manager build artifacts (e.g. SpeakerNotes macOS app)
+.build/
+.swiftpm/
+*.xcuserstate
+DerivedData/
