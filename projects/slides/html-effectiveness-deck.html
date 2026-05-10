@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>HTML Effectiveness — deck</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-display: swap;
+  }
+</style>
+<script src="./rough.js"></script>
+<style>
+  :root {
+    --bg: #121212;
+    --paper: #1a1a1a;
+    --panel: #1e1e1e;
+    --ink: #ececec;
+    --ink-soft: #9a9a9a;
+    --ink-faint: #4a4a4a;
+    --rule: #2a2a2a;
+    --yellow: #ffec99;
+    --blue: #a5d8ff;
+    --green: #b2f2bb;
+    --pink: #fcc2d7;
+    --amber: #ffd8a8;
+    --violet: #d0bfff;
+    --teal: #96f2d7;
+    --rose: #ff8787;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+    font-family: 'Excalifont', cursive;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 4px 4px;
+    z-index: 1;
+  }
+
+  /* ========= MINI COUNTER (bottom-right) ========= */
+  .counter {
+    position: fixed;
+    top: 18px; right: 22px;
+    z-index: 20;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 13px;
+    color: var(--ink-faint);
+    letter-spacing: 0.05em;
+  }
+  .counter .num { color: var(--yellow); font-weight: 700; }
+
+  /* ========= NOTES PANEL ========= */
+  .notes-panel {
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    width: 380px;
+    background: var(--paper);
+    border-right: 1px dashed var(--rule);
+    padding: 26px 26px 110px;
+    overflow-y: auto;
+    z-index: 15;
+    transition: transform 220ms ease;
+    display: flex;
+    flex-direction: column;
+  }
+  body:not(.notes-open) .notes-panel {
+    transform: translateX(-380px);
+  }
+  .notes-panel .label {
+    font-family: 'Cascadia Code', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--yellow);
+    margin-bottom: 12px;
+  }
+  .notes-panel .slide-title {
+    font-family: 'Excalifont', cursive;
+    font-size: 24px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .notes-panel .body {
+    font-family: 'Excalifont', cursive;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink);
+    flex: 1 1 auto;
+  }
+  .notes-panel .body p { margin: 0 0 14px; }
+  .notes-panel .body em {
+    background: rgba(255,236,153,0.16);
+    color: var(--yellow);
+    font-style: normal;
+    padding: 0 4px;
+    border-radius: 3px;
+  }
+  .notes-actions {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .notes-btn {
+    font-family: 'Excalifont', cursive;
+    font-size: 15px;
+    padding: 5px 12px 7px;
+    background: var(--bg);
+    color: var(--ink);
+    border: 1.5px solid var(--ink-soft);
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink-faint);
+    transition: all 100ms ease;
+  }
+  .notes-btn:hover {
+    transform: translate(-1px,-1px);
+    box-shadow: 3px 3px 0 var(--ink-soft);
+    border-color: var(--yellow);
+    color: var(--yellow);
+  }
+  .notes-btn:active { transform: translate(1px,1px); box-shadow: 0 0 0 var(--ink-faint); }
+
+  /* ========= STAGE ========= */
+  .stage {
+    position: fixed;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 5;
+    transition: left 220ms ease;
+  }
+  body.notes-open .stage { left: 380px; }
+
+  .sketch-wrap {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 32px;
+    position: relative;
+  }
+  .sketch-wrap svg {
+    width: 100%; height: 100%;
+    display: block;
+    transition: opacity 200ms ease;
+  }
+  .sketch-wrap svg.fading { opacity: 0; }
+
+  /* ========= TAP / NAV ========= */
+  .tap-zone {
+    position: fixed;
+    top: 0; bottom: 0;
+    width: 38%;
+    z-index: 8;
+    cursor: pointer;
+  }
+  .tap-zone.left { left: 0; }
+  .tap-zone.right { right: 0; }
+  body.notes-open .tap-zone.left { left: 380px; width: calc(38% - 190px); }
+
+  .nav-btn {
+    position: fixed;
+    bottom: 18px;
+    z-index: 25;
+    font-family: 'Excalifont', cursive;
+    font-size: 18px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 5px 14px 7px;
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 2px 3px 0 var(--ink);
+    transition: transform 100ms ease, box-shadow 100ms ease, opacity 200ms ease;
+  }
+  .nav-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 4px 0 var(--ink); }
+  .nav-btn:active { transform: translate(1px,2px); box-shadow: 0 0 0 var(--ink); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .nav-btn.prev { left: 24px; }
+  .nav-btn.next { right: 24px; }
+  body.notes-open .nav-btn.prev { left: 404px; }
+
+  .notes-toggle {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 12px;
+    background: transparent;
+    border: 1.5px dashed var(--ink-faint);
+    border-radius: 10px;
+    padding: 4px 14px 6px;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .notes-toggle:hover { color: var(--yellow); border-color: var(--yellow); }
+  body.notes-open .notes-toggle { color: var(--yellow); border-color: var(--yellow); }
+
+</style>
+</head>
+<body>
+
+<div class="counter"><span class="num" id="slide-num">1</span> / <span id="slide-total">15</span></div>
+
+<aside class="notes-panel" id="notes-panel">
+  <div class="label">speaker notes</div>
+  <h2 class="slide-title" id="notes-title">…</h2>
+  <div class="body" id="notes-body"></div>
+  <div class="notes-actions">
+    <button class="notes-btn" id="btn-export">⤓ export markdown</button>
+    <button class="notes-btn" id="btn-export-clip">⧉ copy to clipboard</button>
+  </div>
+</aside>
+
+<div class="stage">
+  <div class="sketch-wrap" id="sketch-wrap">
+    <svg id="sketch" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+</div>
+
+<div class="tap-zone left" id="tap-left"></div>
+<div class="tap-zone right" id="tap-right"></div>
+
+<button class="nav-btn prev" id="btn-prev">← prev</button>
+<button class="nav-btn next" id="btn-next">next →</button>
+
+
+<script>
+const COLORS = {
+  bg: '#121212', ink: '#ececec', soft: '#9a9a9a', faint: '#4a4a4a',
+  paper: '#1a1a1a', panel: '#1e1e1e',
+  yellow: '#ffec99', blue: '#a5d8ff', green: '#b2f2bb',
+  pink: '#fcc2d7', amber: '#ffd8a8', violet: '#d0bfff', teal: '#96f2d7',
+  strokeBlue: '#74c0fc', strokeYellow: '#ffd43b', strokeGreen: '#8ce99a',
+  strokePink: '#faa2c1', strokeViolet: '#b197fc', strokeAmber: '#ffc078',
+  rose: '#ff8787',
+};
+
+function el(tag, attrs={}) {
+  const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+
+function H(svg, rc) {
+  return {
+    rect(x,y,w,h,o={}) {
+      const n = rc.rectangle(x,y,w,h, {
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.6,
+        roughness: o.roughness || 1.8, bowing: o.bowing || 1.5,
+        fill: o.fill, fillStyle: o.fillStyle || 'solid', fillWeight: 1,
+        hachureGap: 6, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    line(x1,y1,x2,y2,o={}) {
+      const n = rc.line(x1,y1,x2,y2,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.5, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    circle(cx,cy,d,o={}) {
+      const n = rc.circle(cx,cy,d,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.5, fill: o.fill, fillStyle: o.fillStyle||'solid', ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    path(d,o={}) {
+      const n = rc.path(d,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.6, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    text(x,y,t,o={}) {
+      const n = el('text',{
+        x, y,
+        'font-family': o.font || "'Excalifont', cursive",
+        'font-size': o.size || 30,
+        fill: o.fill || COLORS.ink,
+        'text-anchor': o.anchor || 'start',
+      });
+      if (o.weight) n.setAttribute('font-weight', o.weight);
+      if (o.style) n.setAttribute('font-style', o.style);
+      n.textContent = t;
+      svg.appendChild(n); return n;
+    },
+    arrow(x1,y1,x2,y2,o={}) {
+      const curve = o.curve != null ? o.curve : 0;
+      const cx = (x1+x2)/2 + curve;
+      const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+      const d = curve === 0
+        ? `M ${x1} ${y1} L ${x2} ${y2}`
+        : `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+      this.path(d, o);
+      const ang = Math.atan2(y2-cy, x2-cx);
+      const ah = o.head || 16;
+      this.line(x2,y2, x2-ah*Math.cos(ang-Math.PI/7), y2-ah*Math.sin(ang-Math.PI/7), o);
+      this.line(x2,y2, x2-ah*Math.cos(ang+Math.PI/7), y2-ah*Math.sin(ang+Math.PI/7), o);
+    },
+    underline(x,y,w,o={}) {
+      const dy = 6, segs = 6;
+      let d = `M ${x} ${y}`;
+      for (let i=1;i<=segs;i++) {
+        const xi = x + (w*i/segs);
+        const yi = y + (i%2===0 ? 0 : dy);
+        d += ` L ${xi} ${yi}`;
+      }
+      this.path(d,{stroke: o.stroke || COLORS.yellow, strokeWidth: 3, roughness: 1.2});
+    },
+    sticky(x,y,w,h,fill,o={}) {
+      this.rect(x,y,w,h,{fill, fillStyle:'solid', stroke: COLORS.ink, strokeWidth:1.6, roughness:2.0, bowing:1.8, ...o});
+    },
+  };
+}
+
+function kicker(h, x, y, text, color, opts={}) {
+  h.text(x, y, text, { size: opts.size || 22, fill: color || COLORS.yellow, font: "'Cascadia Code', monospace", anchor: opts.anchor || 'start' });
+}
+
+function robot(h, cx, cy, scale=1) {
+  const s = scale;
+  h.rect(cx-50*s, cy-60*s, 100*s, 90*s, { fill: COLORS.paper, roughness: 2 });
+  h.line(cx, cy-60*s, cx, cy-90*s);
+  h.circle(cx, cy-95*s, 14*s, { fill: COLORS.yellow });
+  h.circle(cx-22*s, cy-30*s, 14*s, { fill: COLORS.ink });
+  h.circle(cx+22*s, cy-30*s, 14*s, { fill: COLORS.ink });
+  h.path(`M ${cx-18*s} ${cy} Q ${cx} ${cy+12*s} ${cx+18*s} ${cy}`, { stroke: COLORS.green, strokeWidth: 2 });
+}
+
+function person(h, cx, cy, scale=1) {
+  const s = scale;
+  h.circle(cx, cy-50*s, 60*s, { fill: COLORS.paper });
+  h.path(`M ${cx-15*s} ${cy-45*s} Q ${cx} ${cy-32*s} ${cx+15*s} ${cy-45*s}`, { stroke: COLORS.green, strokeWidth: 2 });
+  h.circle(cx-15*s, cy-58*s, 8*s, { fill: COLORS.ink });
+  h.circle(cx+15*s, cy-58*s, 8*s, { fill: COLORS.ink });
+  h.path(`M ${cx-50*s} ${cy+50*s} L ${cx} ${cy-20*s} L ${cx+50*s} ${cy+50*s} Z`, { stroke: COLORS.ink });
+}
+
+// ========= SLIDES =========
+const SLIDES = [
+
+  // 1 — Anthropic quote
+  {
+    title: 'Anthropic quote',
+    notes: `Read the quote slowly. <em>Pause</em> on "4.9M views." Then say: "they're right — but here's what they didn't show you. i've been doing this for 8 months."`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      h.rect(200, 180, 1200, 540, { fill: COLORS.paper, fillStyle: 'solid', roughness: 2 });
+      h.text(260, 300, '"Markdown has become', { size: 50, style: 'italic' });
+      h.text(260, 370, ' a restricting format.', { size: 50, style: 'italic' });
+      h.text(260, 480, ' I now prefer HTML', { size: 50, style: 'italic' });
+      h.text(260, 550, ' as an output format."', { size: 50, style: 'italic' });
+      h.text(260, 660, '— Anthropic, May 2026', { size: 26, fill: COLORS.soft });
+      h.text(1340, 690, '4.9M views', { size: 26, anchor:'end', fill: COLORS.yellow, font: "'Cascadia Code', monospace" });
+    }
+  },
+
+  // 2 — Ask for richer surfaces (positive thesis)
+  {
+    title: 'Ask for richer surfaces',
+    notes: `<em>This is the line.</em> Not "stop asking for documents" — <em>"ask claude for richer surfaces."</em> Frame it positively. The whole video is about giving you better surfaces to work on. Pause after the line lands.`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      h.text(800, 320, 'ask claude', { size: 90, weight: 700, anchor: 'middle' });
+      h.text(800, 430, 'for', { size: 70, weight: 700, anchor: 'middle', fill: COLORS.soft });
+      h.text(800, 580, 'RICHER SURFACES.', { size: 130, weight: 700, anchor: 'middle', fill: COLORS.yellow });
+      h.underline(280, 605, 1040);
+    }
+  },
+
+  // 3 — Surfaces are for decisions
+  {
+    title: 'Surfaces are for decisions',
+    notes: `<em>Why surfaces matter.</em> We make decisions based on what we can see. Words give thin signal. A surface gives charts, mockups, tradeoffs side-by-side, sliders. <em>Richer surface, better decision.</em> This isn't aesthetic — it's epistemic.`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      h.text(800, 290, 'surfaces are for', { size: 50, anchor: 'middle', fill: COLORS.soft });
+      h.text(800, 380, 'making decisions.', { size: 80, weight: 700, anchor: 'middle' });
+      h.text(800, 600, 'richer surface = better decision.', { size: 64, weight: 700, anchor: 'middle', fill: COLORS.yellow });
+      h.underline(220, 625, 1160);
+    }
+  },
+
+  // 4 — Markdown vs HTML compare
+  {
+    title: 'Markdown vs HTML',
+    notes: `Side-by-side compare. Markdown gives you bullets. HTML gives you SVG, tables, scripts. Walk the +s on the right. Don't dwell — next slide consolidates this into 4 reasons.`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      h.rect(140, 200, 620, 540, { fill: COLORS.paper, roughness: 2 });
+      h.rect(840, 200, 620, 540, { fill: COLORS.paper, roughness: 2, stroke: COLORS.yellow, strokeWidth: 2 });
+      kicker(h, 180, 250, 'markdown', COLORS.strokeAmber);
+      const md = (y,t,c) => h.text(180, y, t, { size: 22, font:"'Cascadia Code', monospace", fill: c||COLORS.ink });
+      md(310,'# Plan'); md(350,'- step 1'); md(390,'- step 2');
+      md(460,'no diagrams', COLORS.faint);
+      md(500,'no color', COLORS.faint);
+      md(540,'no interaction', COLORS.faint);
+      kicker(h, 880, 250, 'html', COLORS.strokeGreen);
+      const ht = (y,t,c) => h.text(880, y, t, { size: 22, font:"'Cascadia Code', monospace", fill: c||COLORS.ink });
+      ht(310,'<svg>...<\/svg>', COLORS.blue);
+      ht(350,'<table>...<\/table>', COLORS.blue);
+      ht(390,'<script>...<\/script>', COLORS.blue);
+      ht(460,'+ diagrams', COLORS.strokeGreen);
+      ht(500,'+ interaction', COLORS.strokeGreen);
+      ht(540,'+ shareable', COLORS.strokeGreen);
+    }
+  },
+
+  // 6 — 3 reasons list
+  {
+    title: 'Why HTML wins · 3 reasons',
+    notes: `Brisk pace. <em>Density</em> — richer info per token. <em>Readability</em> — people actually read it. <em>Two-way</em> — the surface can talk back. Land on #3: that's the bridge to the channel artifact section later.`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      h.text(200, 240, 'why html beats markdown:', { size: 42 });
+      const items = [
+        'richer info per token',
+        'people actually read it',
+        'you can interact with it',
+      ];
+      items.forEach((t,i) => {
+        const y = 360 + i*90;
+        h.text(220, y, `${i+1}`, { size: 56, weight: 700, fill: COLORS.yellow, font: "'Cascadia Code', monospace" });
+        h.text(310, y, t, { size: 44 });
+      });
+    }
+  },
+
+  // 7 — Demo: 6 onboarding designs
+  {
+    title: 'Demo · 6 onboarding designs',
+    notes: `<em>First example.</em> Open Claude Code. Ask: "generate 6 distinct onboarding approaches in one HTML grid, with the tradeoff labelled on each." Show the result. Punchline: <em>"point at one, don't read three."</em>`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      const cols = 3, rows = 2;
+      const gx = 240, gy = 200, cw = 360, ch = 250, gap = 30;
+      for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
+        const x = gx + c*(cw+gap), y = gy + r*(ch+gap);
+        h.rect(x, y, cw, ch, { fill: COLORS.paper, roughness: 2.2 });
+        h.text(x+20, y+40, `design ${r*cols+c+1}`, { size: 22, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+        h.line(x+20, y+70, x+cw-20, y+70);
+        h.rect(x+20, y+90, cw-40, 80, { fill: COLORS.panel });
+        h.line(x+20, y+200, x+cw-60, y+200, { stroke: COLORS.soft });
+        h.line(x+20, y+220, x+cw-100, y+220, { stroke: COLORS.soft });
+      }
+    }
+  },
+
+  // 8 — Demo: meeting transcript → idea web (MOVED UP)
+  {
+    title: 'Demo · meeting transcript → idea web',
+    notes: `<em>The showpiece.</em> Paste a 60-min meeting transcript — Granola, Otter, anything. Get back: an idea web with connections, decisions made, action items, open questions. <em>Connections you literally can't see in a doc.</em> Deeper move — feed it 3 weeks of meetings and see which ideas keep resurfacing, which got resolved, which are zombies nobody owns.`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      h.rect(140, 180, 940, 580, { fill: COLORS.paper, roughness: 2.2 });
+      kicker(h, 180, 230, 'idea web', COLORS.strokePink);
+      const nodes = [
+        {x:300,y:380,t:'pricing'}, {x:600,y:330,t:'onboarding', hot:true}, {x:900,y:380,t:'churn'},
+        {x:400,y:560,t:'activation'}, {x:780,y:580,t:'retention'},
+      ];
+      h.line(300,380, 600,330, { stroke: COLORS.faint });
+      h.line(600,330, 900,380, { stroke: COLORS.faint });
+      h.line(400,560, 600,330, { stroke: COLORS.faint });
+      h.line(900,380, 780,580, { stroke: COLORS.faint });
+      nodes.forEach(n => {
+        h.circle(n.x, n.y, 90, { fill: n.hot ? COLORS.pink : COLORS.bg, stroke: n.hot ? COLORS.pink : COLORS.ink });
+        h.text(n.x, n.y+8, n.t, { size: 20, anchor:'middle', fill: n.hot ? '#1e1e1e' : COLORS.ink });
+      });
+      const rx = 1120;
+      h.rect(rx, 200, 350, 150, { fill: COLORS.paper });
+      h.text(rx+20, 250, '✓ decisions', { size: 26, weight:700, fill: COLORS.green });
+      h.text(rx+20, 300, '3 made', { size: 22, fill: COLORS.soft });
+      h.rect(rx, 380, 350, 150, { fill: COLORS.paper });
+      h.text(rx+20, 430, '→ actions', { size: 26, weight:700, fill: COLORS.yellow });
+      h.text(rx+20, 480, '7 to do', { size: 22, fill: COLORS.soft });
+      h.rect(rx, 560, 350, 150, { fill: COLORS.paper });
+      h.text(rx+20, 610, '? open', { size: 26, weight:700, fill: COLORS.amber });
+      h.text(rx+20, 660, '4 unresolved', { size: 22, fill: COLORS.soft });
+    }
+  },
+
+  // 8 — Demo · mermaid sequence diagram
+  {
+    title: 'Demo · mermaid sequence diagram',
+    notes: `<em>Quick mermaid demo.</em> "Draw this OAuth flow as a mermaid sequence diagram." Mermaid is for anything sequential or relational — sequence, state machines, ER, git graphs. <em>The shape of the system, drawn for you.</em>`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      // 3 actors as boxes
+      const actors = [
+        {x: 280, label: 'User'},
+        {x: 760, label: 'App'},
+        {x: 1280, label: 'AuthServer'},
+      ];
+      actors.forEach(a => {
+        h.rect(a.x - 110, 230, 220, 70, { fill: COLORS.paper, roughness: 1.8 });
+        h.text(a.x, 275, a.label, { size: 30, anchor: 'middle', weight: 700 });
+        // lifeline
+        h.line(a.x, 300, a.x, 770, { stroke: COLORS.faint, strokeWidth: 1.4 });
+      });
+      // messages
+      const msgs = [
+        {y: 350, from: 280, to: 760, t: 'click login', dashed: false},
+        {y: 420, from: 760, to: 1280, t: 'redirect to auth', dashed: false},
+        {y: 490, from: 1280, to: 760, t: 'auth code', dashed: true},
+        {y: 560, from: 760, to: 1280, t: 'exchange code', dashed: false},
+        {y: 630, from: 1280, to: 760, t: 'access token', dashed: true},
+        {y: 700, from: 760, to: 280, t: 'logged in ✓', dashed: false},
+      ];
+      msgs.forEach(m => {
+        const mx = (m.from + m.to) / 2;
+        const stroke = m.dashed ? COLORS.green : COLORS.ink;
+        h.text(mx, m.y - 8, m.t, { size: 20, anchor: 'middle', fill: stroke });
+        // arrow line
+        if (m.dashed) {
+          // simulate dashed
+          const steps = 14;
+          for (let i=0; i<steps; i+=2) {
+            const x1 = m.from + (m.to - m.from) * (i/steps);
+            const x2 = m.from + (m.to - m.from) * ((i+1)/steps);
+            h.line(x1, m.y, x2, m.y, { stroke, strokeWidth: 1.6, roughness: 0.8 });
+          }
+        } else {
+          h.line(m.from, m.y, m.to, m.y, { stroke, strokeWidth: 1.6, roughness: 0.8 });
+        }
+        // arrowhead
+        const dir = m.to > m.from ? 1 : -1;
+        h.line(m.to, m.y, m.to - 14*dir, m.y - 7, { stroke, strokeWidth: 1.6, roughness: 0.8 });
+        h.line(m.to, m.y, m.to - 14*dir, m.y + 7, { stroke, strokeWidth: 1.6, roughness: 0.8 });
+      });
+    }
+  },
+
+  // 10 — Demo: motion can't be described
+  {
+    title: "Demo · motion can't be described",
+    notes: `<em>Motion can't be described, only felt.</em> A paragraph of prose can't substitute for dragging a slider. Show duration + easing sliders with live preview. This is what HTML unlocks that markdown structurally can't.`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      h.text(800, 350, "motion can't be described.", { size: 56, weight:700, anchor:'middle' });
+      h.text(800, 470, 'only felt.', { size: 100, weight:700, anchor:'middle', fill: COLORS.yellow });
+      h.underline(580, 495, 440);
+      h.text(800, 620, 'a paragraph of prose ≠ a slider you drag.', { size: 26, anchor:'middle', fill: COLORS.soft });
+    }
+  },
+
+  // 11 — Demo: feature explainer tabs
+  {
+    title: 'Demo · how rate limiting works',
+    notes: `Demo. Ask Claude: "explain how rate limiting works in this repo" — get a tabbed HTML page. Punchline: <em>read the code? half a day. read this? 3 minutes.</em> Optimised for someone reading it once.`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      const tabs = [
+        {x: 240, t: 'tl;dr', active:true},
+        {x: 420, t: 'flow'},
+        {x: 580, t: 'code'},
+        {x: 740, t: 'faq'},
+      ];
+      tabs.forEach(t => {
+        h.rect(t.x, 220, 140, 60, { fill: t.active ? COLORS.yellow : COLORS.paper, roughness: 2 });
+        h.text(t.x+70, 260, t.t, { size: 24, anchor:'middle', fill: t.active ? '#1e1e1e' : COLORS.soft });
+      });
+      h.rect(240, 300, 1120, 380, { fill: COLORS.paper, roughness: 2 });
+      h.text(280, 380, 'token-bucket · per user', { size: 32 });
+      h.text(280, 440, '100 req / min · refills 1.66/sec', { size: 28, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+      h.text(280, 500, 'burst 200', { size: 28, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+      h.text(280, 580, 'returns 429 + retry-after', { size: 28, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+    }
+  },
+
+  // 12 — Live data dashboard (swapped earlier)
+  {
+    title: 'Live data · what to tackle today',
+    notes: `MCP-wired artifact. Pulls Slack, Linear, GitHub, email — all into one page. The artifact does the prioritization for you. Third level of the ladder: your surface now has live, real-world data. <em>You stop opening five tabs. You open one page.</em>`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      const cards = [
+        {x:200, y:200, c:COLORS.yellow, t:'▲ slack', s:'3 threads · 1 escalation'},
+        {x:830, y:200, c:COLORS.blue, t:'◆ linear', s:'2 p0 · 7 p1'},
+        {x:200, y:470, c:COLORS.violet, t:'⌥ github', s:'4 PRs blocked on me'},
+        {x:830, y:470, c:COLORS.green, t:'✉ email', s:'2 needing reply'},
+      ];
+      cards.forEach(c => {
+        h.rect(c.x, c.y, 570, 220, { fill: COLORS.paper, roughness: 2.2 });
+        h.text(c.x+30, c.y+70, c.t, { size: 38, weight:700, fill: c.c });
+        h.text(c.x+30, c.y+150, c.s, { size: 26, fill: COLORS.soft });
+      });
+    }
+  },
+
+  // 13 — Format follows reader (Dex nuance)
+  {
+    title: 'Format follows reader',
+    notes: `<em>The honest nuance.</em> Dex Horthy pushed back: markdown still wins for what the *model* reads — token-efficient, less noise. HTML wins for what *you* read. <em>Format follows reader.</em> Don't dump 4000 lines of HTML back into context. Use markdown for specs the agent consumes; use HTML for surfaces you consume.`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      robot(h, 380, 380, 1.4);
+      h.text(380, 540, 'markdown', { size: 50, weight: 700, anchor:'middle', fill: COLORS.amber });
+      h.text(380, 600, 'token efficient', { size: 24, anchor:'middle', fill: COLORS.soft });
+      h.line(800, 240, 800, 720, { stroke: COLORS.faint, strokeWidth: 1 });
+      person(h, 1220, 380, 1.4);
+      h.text(1220, 540, 'HTML', { size: 50, weight: 700, anchor:'middle', fill: COLORS.green });
+      h.text(1220, 600, 'rich + readable', { size: 24, anchor:'middle', fill: COLORS.soft });
+      h.text(800, 820, 'format follows reader.', { size: 30, anchor:'middle', fill: COLORS.yellow });
+      h.underline(540, 840, 520);
+    }
+  },
+
+  // 14 — Channel artifact (swapped after live data)
+  {
+    title: 'Channel artifact · close the loop',
+    notes: `<em>Now we go beyond the post.</em> Thariq stops at "copy JSON, paste back into Claude." Channel artifacts close the loop — the browser sends edits directly over a websocket. Claude Code applies them. The page hot-reloads. <em>No copy-paste. No context switch.</em>`,
+    draw: (svg, rc) => {
+      const h = H(svg,rc);
+      kicker(h, 230, 240, "thariq's stop", COLORS.strokeAmber);
+      h.text(230, 360, 'copy json', { size: 44 });
+      h.text(230, 420, 'paste into claude', { size: 44 });
+      h.text(230, 480, 'press enter', { size: 44, fill: COLORS.soft });
+      h.arrow(720, 400, 940, 400, { stroke: COLORS.yellow, strokeWidth: 3, head: 24 });
+      kicker(h, 1000, 240, 'channel artifact', COLORS.strokeGreen);
+      h.text(1000, 360, 'browser sends', { size: 44 });
+      h.text(1000, 420, 'directly to claude', { size: 44 });
+      h.text(1000, 480, 'auto reload', { size: 44, fill: COLORS.yellow });
+    }
+  },
+
+];
+
+// ========= NAVIGATION =========
+const svg = document.getElementById('sketch');
+const slideNum = document.getElementById('slide-num');
+const slideTotal = document.getElementById('slide-total');
+const notesTitle = document.getElementById('notes-title');
+const notesBody = document.getElementById('notes-body');
+
+slideTotal.textContent = SLIDES.length;
+let idx = 0;
+
+function clearSvg(s) { while (s.firstChild) s.removeChild(s.firstChild); }
+
+function render(i) {
+  if (i < 0 || i >= SLIDES.length) return;
+  idx = i;
+  const slide = SLIDES[i];
+  slideNum.textContent = i + 1;
+  notesTitle.textContent = slide.title;
+  notesBody.innerHTML = `<p>${slide.notes}</p>`;
+  svg.classList.add('fading');
+  setTimeout(() => {
+    clearSvg(svg);
+    if (typeof rough !== 'undefined') {
+      const rc = rough.svg(svg);
+      try { slide.draw(svg, rc); }
+      catch(e) { console.error('Draw error', i, e); }
+    }
+    svg.classList.remove('fading');
+  }, 100);
+  document.getElementById('btn-prev').disabled = i === 0;
+  document.getElementById('btn-next').disabled = i === SLIDES.length - 1;
+}
+
+function next() { if (idx < SLIDES.length - 1) render(idx + 1); }
+function prev() { if (idx > 0) render(idx - 1); }
+function toggleNotes() { document.body.classList.toggle('notes-open'); }
+
+document.getElementById('btn-next').addEventListener('click', next);
+document.getElementById('btn-prev').addEventListener('click', prev);
+document.getElementById('tap-right').addEventListener('click', next);
+document.getElementById('tap-left').addEventListener('click', prev);
+
+// Strip <em> for plain text export
+function stripHtml(s) {
+  return s.replace(/<em>(.*?)<\/em>/g, '*$1*').replace(/<[^>]+>/g, '');
+}
+
+function buildMarkdown() {
+  let out = `# HTML Effectiveness — Speaker Deck\n\n`;
+  out += `${SLIDES.length} slides · generated ${new Date().toISOString().split('T')[0]}\n\n---\n\n`;
+  SLIDES.forEach((s, i) => {
+    out += `## ${i+1}. ${s.title}\n\n`;
+    out += stripHtml(s.notes) + '\n\n';
+  });
+  return out;
+}
+
+function flashButton(btn, msg, ms=1800) {
+  const orig = btn.textContent;
+  btn.textContent = msg;
+  setTimeout(() => { btn.textContent = orig; }, ms);
+}
+
+document.getElementById('btn-export').addEventListener('click', (e) => {
+  const md = buildMarkdown();
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'html-effectiveness-notes.md';
+  a.click();
+  URL.revokeObjectURL(url);
+  flashButton(e.currentTarget, '✓ downloaded');
+});
+
+document.getElementById('btn-export-clip').addEventListener('click', async (e) => {
+  const md = buildMarkdown();
+  const btn = e.currentTarget;
+  try {
+    await navigator.clipboard.writeText(md);
+    flashButton(btn, '✓ copied');
+  } catch {
+    flashButton(btn, "couldn't copy — see console");
+    console.log(md);
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+  else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); toggleNotes(); }
+  else if (e.key === 'Home') { e.preventDefault(); render(0); }
+  else if (e.key === 'End') { e.preventDefault(); render(SLIDES.length - 1); }
+});
+
+render(0);
+</script>
+</body>
+</html>
