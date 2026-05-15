@@ -1,0 +1,1152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Dex insight — slide picker (dark, sketch)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-display: swap;
+  }
+</style>
+<script src="./rough.js"></script>
+<style>
+  :root {
+    --bg: #121212;
+    --paper: #1a1a1a;
+    --panel: #1e1e1e;
+    --ink: #ececec;
+    --ink-soft: #9a9a9a;
+    --ink-faint: #4a4a4a;
+    --yellow: #ffec99;
+    --blue: #a5d8ff;
+    --green: #b2f2bb;
+    --pink: #fcc2d7;
+    --amber: #ffd8a8;
+    --violet: #d0bfff;
+    --teal: #96f2d7;
+    --light-red: #ffc9c9;
+    --rule: #2a2a2a;
+    --accent: #ffec99;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Excalifont', cursive;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 4px 4px;
+    z-index: 1;
+  }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(18,18,18,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px dashed var(--rule);
+    padding: 14px 28px;
+    display: flex; align-items: center; gap: 18px;
+  }
+  header h1 {
+    margin: 0;
+    font-family: 'Excalifont', cursive;
+    font-size: 24px;
+    color: var(--ink);
+  }
+  header h1 .muted { color: var(--ink-soft); font-size: 18px; }
+  header .spacer { flex: 1; }
+  header .count {
+    font-family: 'Cascadia Code', ui-monospace, monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    padding: 8px 14px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink-faint);
+  }
+  header .count b { color: var(--yellow); font-weight: 700; }
+  header button {
+    font-family: 'Excalifont', cursive;
+    font-size: 18px;
+    padding: 6px 16px 8px;
+    background: var(--yellow);
+    color: #1e1e1e;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 2px 3px 0 var(--ink);
+    transition: transform 100ms ease;
+  }
+  header button:hover { transform: translate(-1px,-1px); box-shadow: 3px 4px 0 var(--ink); }
+  header button:active { transform: translate(1px,2px); box-shadow: 0 0 0 var(--ink); }
+  header button.secondary { background: var(--paper); color: var(--ink); }
+
+  main { padding: 36px 28px 120px; max-width: 1700px; margin: 0 auto; position: relative; z-index: 2; }
+  .topic { margin-bottom: 56px; }
+  .topic-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .topic-num { font-family: 'Cascadia Code', monospace; font-size: 14px; color: var(--ink-faint); }
+  .topic-title { font-family: 'Excalifont', cursive; font-size: 22px; color: var(--ink); }
+  .topic-section {
+    margin-left: auto;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--yellow);
+  }
+  .variations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .var-card {
+    background: var(--paper);
+    border: 2px solid var(--ink-faint);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 3px 4px 0 var(--ink-faint);
+    transition: all 120ms ease;
+  }
+  .var-card:hover {
+    transform: translate(-1px,-1px);
+    box-shadow: 4px 5px 0 var(--ink-soft);
+    border-color: var(--ink-soft);
+  }
+  .var-card.selected {
+    border-color: var(--yellow);
+    box-shadow: 4px 5px 0 var(--yellow);
+    background: #1f1d12;
+  }
+  .slide {
+    aspect-ratio: 16 / 9;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1.5px dashed var(--rule);
+  }
+  .slide svg { width: 100%; height: 100%; display: block; }
+  .var-meta { padding: 12px 14px; }
+  .var-meta .head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .var-meta .label {
+    font-family: 'Cascadia Code', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+  .var-meta .rank { font-family: 'Cascadia Code', monospace; font-size: 13px; color: var(--yellow); }
+  .var-meta textarea {
+    width: 100%;
+    min-height: 50px;
+    background: var(--bg);
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: var(--ink);
+    font-family: 'Excalifont', cursive;
+    font-size: 15px;
+    line-height: 1.3;
+    resize: vertical;
+  }
+  .var-meta textarea:focus { outline: none; border-color: var(--yellow); }
+  .select-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 6px 12px 8px;
+    background: var(--bg);
+    color: var(--ink);
+    border: 2px solid var(--ink-soft);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Excalifont', cursive;
+    font-size: 17px;
+    box-shadow: 2px 2px 0 var(--ink-soft);
+    transition: all 100ms ease;
+  }
+  .select-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--ink-soft); border-color: var(--ink); }
+  .var-card.selected .select-btn {
+    background: var(--yellow);
+    color: #1e1e1e;
+    border-color: var(--yellow);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .toast {
+    position: fixed;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--yellow);
+    color: #1e1e1e;
+    padding: 8px 22px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 3px 4px 0 var(--ink);
+    font-family: 'Excalifont', cursive;
+    font-size: 18px;
+    transition: transform 220ms ease;
+    z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Dex insight <span class="muted">— "markdown for models, HTML for humans" · 10 concepts × 3 vars</span></h1>
+  <div class="spacer"></div>
+  <div class="count"><b id="selCount">0</b> selected</div>
+  <button class="secondary" id="clearBtn">clear</button>
+  <button id="copyBtn">copy as JSON</button>
+</header>
+
+<main id="grid"></main>
+
+<div class="toast" id="toast">copied</div>
+
+<script>
+const COLORS = {
+  bg: '#121212', ink: '#ececec', soft: '#9a9a9a', faint: '#4a4a4a',
+  paper: '#1a1a1a', panel: '#1e1e1e',
+  yellow: '#ffec99', blue: '#a5d8ff', green: '#b2f2bb',
+  pink: '#fcc2d7', amber: '#ffd8a8', violet: '#d0bfff', teal: '#96f2d7',
+  lightRed: '#ffc9c9',
+  strokeBlue: '#74c0fc', strokeYellow: '#ffd43b', strokeGreen: '#8ce99a',
+  strokePink: '#faa2c1', strokeViolet: '#b197fc', strokeAmber: '#ffc078',
+  rose: '#ff8787',
+};
+
+function el(tag, attrs={}) {
+  const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+
+function H(svg, rc) {
+  return {
+    rect(x,y,w,h,o={}) {
+      const n = rc.rectangle(x,y,w,h, {
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.6,
+        roughness: o.roughness || 1.8, bowing: o.bowing || 1.5,
+        fill: o.fill, fillStyle: o.fillStyle || 'solid', fillWeight: 1,
+        hachureGap: 6, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    line(x1,y1,x2,y2,o={}) {
+      const n = rc.line(x1,y1,x2,y2,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.5, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    circle(cx,cy,d,o={}) {
+      const n = rc.circle(cx,cy,d,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.5, fill: o.fill, fillStyle: o.fillStyle||'solid', ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    path(d,o={}) {
+      const n = rc.path(d,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.6, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    text(x,y,t,o={}) {
+      const n = el('text',{
+        x, y,
+        'font-family': o.font || "'Excalifont', cursive",
+        'font-size': o.size || 30,
+        fill: o.fill || COLORS.ink,
+        'text-anchor': o.anchor || 'start',
+      });
+      if (o.weight) n.setAttribute('font-weight', o.weight);
+      if (o.style) n.setAttribute('font-style', o.style);
+      n.textContent = t;
+      svg.appendChild(n); return n;
+    },
+    arrow(x1,y1,x2,y2,o={}) {
+      const curve = o.curve != null ? o.curve : 0;
+      const cx = (x1+x2)/2 + curve;
+      const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+      const d = curve === 0
+        ? `M ${x1} ${y1} L ${x2} ${y2}`
+        : `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+      this.path(d, o);
+      const ang = Math.atan2(y2-cy, x2-cx);
+      const ah = o.head || 16;
+      this.line(x2,y2, x2-ah*Math.cos(ang-Math.PI/7), y2-ah*Math.sin(ang-Math.PI/7), o);
+      this.line(x2,y2, x2-ah*Math.cos(ang+Math.PI/7), y2-ah*Math.sin(ang+Math.PI/7), o);
+    },
+    underline(x,y,w,o={}) {
+      const dy = 6, segs = 6;
+      let d = `M ${x} ${y}`;
+      for (let i=1;i<=segs;i++) {
+        const xi = x + (w*i/segs);
+        const yi = y + (i%2===0 ? 0 : dy);
+        d += ` L ${xi} ${yi}`;
+      }
+      this.path(d,{stroke: o.stroke || COLORS.yellow, strokeWidth: 3, roughness: 1.2});
+    },
+    sticky(x,y,w,h,fill,o={}) {
+      this.rect(x,y,w,h,{fill, fillStyle:'solid', stroke: COLORS.ink, strokeWidth:1.6, roughness:2.0, bowing:1.8, ...o});
+    },
+  };
+}
+
+function kicker(h, x, y, text, color) {
+  h.text(x, y, text, { size: 22, fill: color || COLORS.yellow, font: "'Cascadia Code', monospace" });
+}
+
+// little reusable glyphs
+function robot(h, cx, cy, scale=1, mood='happy') {
+  const s = scale;
+  // head
+  h.rect(cx-50*s, cy-60*s, 100*s, 90*s, { fill: COLORS.paper, roughness: 2 });
+  // antenna
+  h.line(cx, cy-60*s, cx, cy-90*s);
+  h.circle(cx, cy-95*s, 14*s, { fill: COLORS.yellow });
+  // eyes
+  h.circle(cx-22*s, cy-30*s, 14*s, { fill: COLORS.ink });
+  h.circle(cx+22*s, cy-30*s, 14*s, { fill: COLORS.ink });
+  // mouth
+  if (mood === 'happy') {
+    h.path(`M ${cx-18*s} ${cy} Q ${cx} ${cy+12*s} ${cx+18*s} ${cy}`, { stroke: COLORS.green, strokeWidth: 2 });
+  } else if (mood === 'sweat') {
+    h.line(cx-18*s, cy+5*s, cx+18*s, cy+5*s, { stroke: COLORS.rose, strokeWidth: 2 });
+    // sweat drop
+    h.circle(cx+45*s, cy-35*s, 14*s, { fill: COLORS.blue });
+  } else {
+    h.line(cx-18*s, cy+3*s, cx+18*s, cy+3*s, { stroke: COLORS.soft, strokeWidth: 2 });
+  }
+}
+
+function person(h, cx, cy, scale=1) {
+  const s = scale;
+  h.circle(cx, cy-50*s, 60*s, { fill: COLORS.paper });
+  // smile
+  h.path(`M ${cx-15*s} ${cy-45*s} Q ${cx} ${cy-32*s} ${cx+15*s} ${cy-45*s}`, { stroke: COLORS.green, strokeWidth: 2 });
+  // eyes
+  h.circle(cx-15*s, cy-58*s, 8*s, { fill: COLORS.ink });
+  h.circle(cx+15*s, cy-58*s, 8*s, { fill: COLORS.ink });
+  // body (triangle-ish)
+  h.path(`M ${cx-50*s} ${cy+50*s} L ${cx} ${cy-20*s} L ${cx+50*s} ${cy+50*s} Z`, { stroke: COLORS.ink });
+}
+
+const TOPICS = [
+
+  // ============================================================
+  // 1: Two-column "in vs out"
+  // ============================================================
+  { id: 1, section: "in vs out", title: 'Two-column · format follows reader',
+    vars: [
+      { kind: "split-classic", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // left column - markdown / agent
+        h.rect(140, 200, 620, 540, { fill: COLORS.paper, roughness: 2 });
+        kicker(h, 180, 250, 'agent reads', COLORS.strokeAmber);
+        h.text(180, 340, 'markdown', { size: 64, weight: 700, fill: COLORS.amber });
+        const md = (y,t) => h.text(180, y, t, { size: 22, font:"'Cascadia Code', monospace", fill: COLORS.soft });
+        md(420, '# plan');
+        md(460, '- step 1');
+        md(500, '- step 2');
+        md(560, 'tight tokens');
+        md(600, 'lean context');
+
+        // right column - html / human
+        h.rect(840, 200, 620, 540, { fill: COLORS.paper, roughness: 2, stroke: COLORS.yellow, strokeWidth: 2 });
+        kicker(h, 880, 250, 'you read', COLORS.strokeGreen);
+        h.text(880, 340, 'HTML', { size: 64, weight: 700, fill: COLORS.green });
+        h.rect(880, 400, 200, 80, { fill: COLORS.panel });
+        h.rect(1100, 400, 320, 80, { fill: COLORS.panel });
+        h.line(880, 520, 1420, 520, { stroke: COLORS.soft });
+        h.line(880, 560, 1300, 560, { stroke: COLORS.soft });
+        h.line(880, 600, 1380, 600, { stroke: COLORS.soft });
+
+        h.text(800, 820, 'format follows reader.', { size: 28, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "split-icons", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // left
+        robot(h, 380, 380, 1.4);
+        h.text(380, 540, 'markdown', { size: 50, weight: 700, anchor:'middle', fill: COLORS.amber });
+        h.text(380, 600, 'token efficient', { size: 24, anchor:'middle', fill: COLORS.soft });
+        // arrow divider
+        h.line(800, 240, 800, 720, { stroke: COLORS.faint, strokeWidth: 1 });
+        // right
+        person(h, 1220, 380, 1.4);
+        h.text(1220, 540, 'HTML', { size: 50, weight: 700, anchor:'middle', fill: COLORS.green });
+        h.text(1220, 600, 'rich + readable', { size: 24, anchor:'middle', fill: COLORS.soft });
+
+        h.text(800, 820, 'format follows reader.', { size: 30, anchor:'middle', fill: COLORS.yellow });
+        h.underline(540, 840, 520);
+      }},
+      { kind: "split-arrows", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // labels
+        kicker(h, 140, 250, 'in', COLORS.strokeAmber);
+        kicker(h, 1380, 250, 'out', COLORS.strokeGreen);
+        // boxes
+        h.rect(140, 290, 540, 380, { fill: COLORS.paper, roughness: 2 });
+        h.text(170, 360, 'spec', { size: 50, weight: 700, fill: COLORS.amber });
+        h.text(170, 430, 'CLAUDE.md', { size: 30, font:"'Cascadia Code', monospace", fill: COLORS.soft });
+        h.text(170, 480, 'plan.md', { size: 30, font:"'Cascadia Code', monospace", fill: COLORS.soft });
+        h.text(170, 530, 'context', { size: 30, font:"'Cascadia Code', monospace", fill: COLORS.soft });
+        h.text(170, 600, '→ markdown', { size: 32, fill: COLORS.amber });
+
+        h.rect(920, 290, 540, 380, { fill: COLORS.paper, roughness: 2 });
+        h.text(950, 360, 'output', { size: 50, weight: 700, fill: COLORS.green });
+        h.text(950, 430, 'report', { size: 30, font:"'Cascadia Code', monospace", fill: COLORS.soft });
+        h.text(950, 480, 'dashboard', { size: 30, font:"'Cascadia Code', monospace", fill: COLORS.soft });
+        h.text(950, 530, 'mockup', { size: 30, font:"'Cascadia Code', monospace", fill: COLORS.soft });
+        h.text(950, 600, '→ HTML', { size: 32, fill: COLORS.green });
+
+        h.arrow(700, 480, 900, 480, { stroke: COLORS.yellow, strokeWidth: 3, head: 22 });
+        h.text(800, 820, 'format follows reader.', { size: 28, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 2: Quote slab — Dex's tweet
+  // ============================================================
+  { id: 2, section: "quote", title: "Quote slab · Dex's pushback",
+    vars: [
+      { kind: "tweet-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // big quote panel
+        h.rect(180, 180, 1240, 420, { fill: COLORS.paper, roughness: 2 });
+        h.text(220, 280, '"markdown is for models.', { size: 50, style: 'italic' });
+        h.text(220, 360, '  HTML is for humans."', { size: 50, style: 'italic' });
+        h.text(220, 470, '— @dexhorthy', { size: 26, fill: COLORS.soft });
+        // response
+        h.text(800, 720, 'agreed. surfaces are for humans.', { size: 36, anchor:'middle', fill: COLORS.yellow });
+        h.underline(360, 740, 880);
+      }},
+      { kind: "side-by-side", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // quote on left
+        h.rect(120, 220, 720, 480, { fill: COLORS.paper, roughness: 2 });
+        kicker(h, 160, 270, 'dex says', COLORS.strokeAmber);
+        h.text(160, 360, '"markdown', { size: 44, style:'italic' });
+        h.text(160, 420, ' for models,', { size: 44, style:'italic' });
+        h.text(160, 510, ' HTML', { size: 44, style:'italic' });
+        h.text(160, 570, ' for humans."', { size: 44, style:'italic' });
+        h.text(160, 660, '@dexhorthy', { size: 22, fill: COLORS.soft });
+
+        // response on right
+        kicker(h, 920, 270, 'i say', COLORS.strokeGreen);
+        h.text(920, 380, 'agreed.', { size: 70, weight: 700, fill: COLORS.yellow });
+        h.text(920, 470, 'surfaces are', { size: 50 });
+        h.text(920, 540, 'for humans.', { size: 50 });
+        h.underline(920, 560, 360);
+
+        h.arrow(840, 460, 920, 460, { stroke: COLORS.yellow, strokeWidth: 3, head: 22 });
+      }},
+      { kind: "stamp", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // Dex tweet styled like a screenshot
+        h.rect(200, 180, 1200, 400, { fill: COLORS.paper, roughness: 2 });
+        h.circle(260, 240, 50, { fill: COLORS.blue });
+        h.text(330, 245, '@dexhorthy', { size: 28, weight: 700 });
+        h.text(330, 280, '8h', { size: 22, fill: COLORS.soft });
+        h.text(220, 360, '"the real value of markdown:', { size: 36 });
+        h.text(220, 410, ' clear summary for HUMANS', { size: 36, fill: COLORS.amber });
+        h.text(220, 460, ' AND token-efficient for MODELS', { size: 36, fill: COLORS.amber });
+        h.text(220, 530, ' HTML only hits one of these."', { size: 32, fill: COLORS.soft });
+
+        // big stamp diagonally
+        h.rect(900, 640, 380, 100, { fill: COLORS.yellow, roughness: 2.5 });
+        h.text(1090, 705, 'EXACTLY.', { size: 56, weight: 700, anchor:'middle', fill: '#1e1e1e' });
+      }},
+    ]},
+
+  // ============================================================
+  // 3: Decision tree
+  // ============================================================
+  { id: 3, section: "decision", title: "Decision tree · who reads next",
+    vars: [
+      { kind: "tree-classic", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // root
+        h.rect(620, 180, 360, 90, { fill: COLORS.paper, roughness: 2 });
+        h.text(800, 235, 'who reads it next?', { size: 28, anchor:'middle' });
+
+        // three branches
+        h.line(800, 270, 350, 430, { stroke: COLORS.faint });
+        h.line(800, 270, 800, 430, { stroke: COLORS.faint });
+        h.line(800, 270, 1250, 430, { stroke: COLORS.faint });
+
+        // agent
+        h.rect(180, 430, 340, 110, { fill: COLORS.paper, stroke: COLORS.amber, strokeWidth: 2, roughness: 2 });
+        h.text(350, 480, 'agent', { size: 32, anchor:'middle', fill: COLORS.amber });
+        h.text(350, 515, '→ markdown', { size: 24, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.soft });
+
+        // human
+        h.rect(630, 430, 340, 110, { fill: COLORS.paper, stroke: COLORS.green, strokeWidth: 2, roughness: 2 });
+        h.text(800, 480, 'you', { size: 32, anchor:'middle', fill: COLORS.green });
+        h.text(800, 515, '→ HTML', { size: 24, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.soft });
+
+        // both
+        h.rect(1080, 430, 340, 110, { fill: COLORS.paper, stroke: COLORS.violet, strokeWidth: 2, roughness: 2 });
+        h.text(1250, 480, 'both', { size: 32, anchor:'middle', fill: COLORS.violet });
+        h.text(1250, 515, '→ channel artifact', { size: 22, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.soft });
+
+        h.text(800, 720, 'pick the format from the reader.', { size: 28, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "tree-flow", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // diamond
+        h.path('M 800 200 L 1080 360 L 800 520 L 520 360 Z', { stroke: COLORS.yellow, strokeWidth: 2 });
+        h.text(800, 350, 'who reads', { size: 30, anchor:'middle' });
+        h.text(800, 390, 'this next?', { size: 30, anchor:'middle' });
+
+        // labels on lines
+        h.text(380, 320, 'claude', { size: 22, anchor:'end', fill: COLORS.amber });
+        h.text(1220, 320, 'me', { size: 22, fill: COLORS.green });
+        h.text(800, 580, 'both ↔', { size: 22, anchor:'middle', fill: COLORS.violet });
+
+        // outputs
+        h.arrow(520, 360, 280, 360, { stroke: COLORS.amber, head: 18 });
+        h.text(280, 430, 'markdown', { size: 36, anchor:'end', weight: 700, fill: COLORS.amber });
+        h.text(280, 470, '.md, plan, spec', { size: 20, anchor:'end', fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+
+        h.arrow(1080, 360, 1320, 360, { stroke: COLORS.green, head: 18 });
+        h.text(1320, 430, 'HTML', { size: 36, weight: 700, fill: COLORS.green });
+        h.text(1320, 470, 'report, mockup, dash', { size: 20, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+
+        h.arrow(800, 520, 800, 700, { stroke: COLORS.violet, head: 18 });
+        h.text(800, 750, 'channel artifact', { size: 28, anchor:'middle', weight: 700, fill: COLORS.violet });
+      }},
+      { kind: "tree-table", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'who reads it next →');
+        // table
+        h.rect(200, 240, 1200, 480, { fill: COLORS.paper, roughness: 2 });
+        h.line(200, 360, 1400, 360, { stroke: COLORS.faint });
+        h.line(200, 480, 1400, 480, { stroke: COLORS.faint });
+        h.line(700, 240, 700, 720, { stroke: COLORS.faint });
+
+        h.text(450, 320, 'claude', { size: 36, anchor:'middle', fill: COLORS.amber, weight: 700 });
+        h.text(1050, 320, 'markdown', { size: 36, anchor:'middle', fill: COLORS.amber });
+
+        h.text(450, 440, 'you', { size: 36, anchor:'middle', fill: COLORS.green, weight: 700 });
+        h.text(1050, 440, 'HTML', { size: 36, anchor:'middle', fill: COLORS.green });
+
+        h.text(450, 580, 'both', { size: 36, anchor:'middle', fill: COLORS.violet, weight: 700 });
+        h.text(1050, 580, 'channel artifact', { size: 32, anchor:'middle', fill: COLORS.violet });
+
+        h.text(450, 670, 'reader', { size: 22, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.faint });
+        h.text(1050, 670, 'format', { size: 22, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.faint });
+      }},
+    ]},
+
+  // ============================================================
+  // 4: The honest tradeoff
+  // ============================================================
+  { id: 4, section: "tradeoff", title: "The honest tradeoff",
+    vars: [
+      { kind: "plus-minus", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(200, 220, 'the tradeoff i\'m making.', { size: 42 });
+        h.underline(200, 240, 580);
+        // pluses
+        kicker(h, 200, 320, 'wins', COLORS.strokeGreen);
+        const wins = ['+ denser surfaces','+ people actually read it','+ interactive when needed'];
+        wins.forEach((t,i) => h.text(220, 380 + i*60, t, { size: 32, fill: COLORS.green }));
+        // minuses
+        kicker(h, 870, 320, 'costs', COLORS.strokePink);
+        const costs = ['− slower to generate','− don\'t loop into context','− diffs are noisy'];
+        costs.forEach((t,i) => h.text(890, 380 + i*60, t, { size: 32, fill: COLORS.rose }));
+
+        h.text(800, 760, "good deal. for output.", { size: 28, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "scale", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 220, "the tradeoff", { size: 56, weight: 700, anchor:'middle' });
+        h.underline(620, 240, 360);
+        // balance scale
+        h.line(800, 320, 800, 700, { stroke: COLORS.ink, strokeWidth: 2 });
+        h.line(400, 420, 1200, 420, { stroke: COLORS.ink, strokeWidth: 2 });
+        // left pan (good)
+        h.rect(280, 440, 280, 180, { fill: COLORS.paper, stroke: COLORS.green, strokeWidth: 2, roughness: 2 });
+        h.text(420, 490, '+ density', { size: 24, anchor:'middle', fill: COLORS.green });
+        h.text(420, 530, '+ readable', { size: 24, anchor:'middle', fill: COLORS.green });
+        h.text(420, 570, '+ interactive', { size: 24, anchor:'middle', fill: COLORS.green });
+
+        // right pan (cost)
+        h.rect(1040, 440, 280, 180, { fill: COLORS.paper, stroke: COLORS.rose, strokeWidth: 2, roughness: 2 });
+        h.text(1180, 490, '− slower', { size: 24, anchor:'middle', fill: COLORS.rose });
+        h.text(1180, 530, '− 4x tokens', { size: 24, anchor:'middle', fill: COLORS.rose });
+        h.text(1180, 570, '− noisy diffs', { size: 24, anchor:'middle', fill: COLORS.rose });
+
+        // base
+        h.path('M 700 700 L 900 700 L 850 740 L 750 740 Z', { fill: COLORS.paper });
+        h.text(800, 800, 'i take this trade.', { size: 28, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "honest-list", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fully honest about this');
+        h.text(200, 280, "HTML costs you:", { size: 38, fill: COLORS.amber });
+        const costs = ['2-4x more tokens','2-4x more time','noisy version control'];
+        costs.forEach((t,i) => {
+          h.text(240, 350 + i*55, '✗', { size: 32, fill: COLORS.rose });
+          h.text(290, 350 + i*55, t, { size: 30, fill: COLORS.soft });
+        });
+        h.text(200, 560, "you pay this for:", { size: 38, fill: COLORS.green });
+        const wins = ['outputs you actually read','outputs you can share','outputs you can click'];
+        wins.forEach((t,i) => {
+          h.text(240, 630 + i*55, '✓', { size: 32, fill: COLORS.green });
+          h.text(290, 630 + i*55, t, { size: 30 });
+        });
+      }},
+    ]},
+
+  // ============================================================
+  // 5: Two layers diagram
+  // ============================================================
+  { id: 5, section: "layers", title: "Two layers · the stack",
+    vars: [
+      { kind: "stacked", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // top layer (HTML)
+        h.rect(200, 220, 1200, 200, { fill: COLORS.paper, stroke: COLORS.yellow, strokeWidth: 2.5, roughness: 2 });
+        kicker(h, 240, 270, 'this video');
+        h.text(240, 350, 'what YOU read', { size: 50, weight: 700 });
+        h.text(800, 400, 'HTML · dashboards · reports', { size: 26, fill: COLORS.green, anchor:'middle' });
+
+        // divider
+        h.line(200, 460, 1400, 460, { stroke: COLORS.faint, strokeWidth: 1 });
+
+        // bottom layer (markdown)
+        h.rect(200, 480, 1200, 200, { fill: COLORS.paper, roughness: 2 });
+        h.text(240, 560, 'what CLAUDE reads', { size: 50, weight: 700, fill: COLORS.amber });
+        h.text(800, 620, 'markdown · CLAUDE.md · plans', { size: 26, fill: COLORS.soft, anchor:'middle' });
+
+        h.text(800, 770, 'two layers. one video.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "iceberg", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // surface line
+        h.line(140, 470, 1460, 470, { stroke: COLORS.blue, strokeWidth: 2, roughness: 0.6 });
+        h.text(160, 450, 'visible surface', { size: 22, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+
+        // above water - HTML
+        h.path('M 700 230 L 950 470 L 450 470 Z', { fill: COLORS.yellow, roughness: 2.2 });
+        h.text(700, 380, 'HTML', { size: 50, anchor:'middle', weight: 700, fill: '#1e1e1e' });
+        h.text(700, 200, 'what you see', { size: 24, anchor:'middle', fill: COLORS.yellow });
+
+        // below - markdown
+        h.path('M 700 470 L 1100 760 L 300 760 Z', { fill: COLORS.paper, stroke: COLORS.amber, strokeWidth: 2, roughness: 2.2 });
+        h.text(700, 600, 'markdown', { size: 50, anchor:'middle', weight: 700, fill: COLORS.amber });
+        h.text(700, 660, 'CLAUDE.md, specs,', { size: 22, anchor:'middle', fill: COLORS.soft });
+        h.text(700, 700, 'plans, instructions', { size: 22, anchor:'middle', fill: COLORS.soft });
+
+        h.text(1280, 820, 'this video: top layer.', { size: 22, anchor:'end', fill: COLORS.yellow });
+      }},
+      { kind: "labeled", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // top
+        h.rect(400, 200, 800, 140, { fill: '#2a280f', stroke: COLORS.yellow, strokeWidth: 2.5, roughness: 2 });
+        h.text(800, 260, 'output layer', { size: 28, anchor:'middle', fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+        h.text(800, 310, 'HTML — what you read', { size: 38, anchor:'middle' });
+
+        // arrow
+        h.arrow(800, 350, 800, 430, { stroke: COLORS.faint });
+        h.text(840, 400, 'rendered from', { size: 22, fill: COLORS.soft });
+
+        // bottom
+        h.rect(400, 450, 800, 140, { fill: COLORS.paper, roughness: 2 });
+        h.text(800, 510, 'context layer', { size: 28, anchor:'middle', fill: COLORS.amber, font:"'Cascadia Code', monospace" });
+        h.text(800, 560, 'markdown — what claude reads', { size: 38, anchor:'middle' });
+
+        // big bracket to right
+        h.text(800, 700, 'this video lives in the top.', { size: 30, anchor:'middle', fill: COLORS.yellow });
+        h.underline(440, 720, 720);
+      }},
+    ]},
+
+  // ============================================================
+  // 6: Rule-of-thumb card
+  // ============================================================
+  { id: 6, section: "rule", title: "Rule-of-thumb card",
+    vars: [
+      { kind: "three-lines", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 200, 'rule of thumb', null);
+        h.text(800, 200, 'rule of thumb', { size: 28, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.yellow });
+
+        h.text(200, 350, 'markdown', { size: 50, weight: 700, fill: COLORS.amber });
+        h.text(540, 350, 'if claude reads it next', { size: 36, fill: COLORS.soft });
+
+        h.text(200, 470, 'HTML', { size: 50, weight: 700, fill: COLORS.green });
+        h.text(540, 470, 'if YOU read it next', { size: 36, fill: COLORS.soft });
+
+        h.text(200, 590, 'channel', { size: 50, weight: 700, fill: COLORS.violet });
+        h.text(540, 590, 'if both edit it together', { size: 36, fill: COLORS.soft });
+
+        h.line(180, 270, 1420, 270, { stroke: COLORS.faint });
+        h.line(180, 760, 1420, 760, { stroke: COLORS.faint });
+      }},
+      { kind: "sticky-stack", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 200, 'rule of thumb', { size: 36, anchor:'middle', fill: COLORS.yellow });
+        h.underline(620, 220, 360);
+        // 3 stickies
+        h.sticky(200, 280, 380, 220, COLORS.amber);
+        h.text(390, 360, 'markdown', { size: 32, weight: 700, anchor:'middle', fill: '#1e1e1e' });
+        h.text(390, 400, 'if claude', { size: 24, anchor:'middle', fill: '#1e1e1e' });
+        h.text(390, 430, 'reads it', { size: 24, anchor:'middle', fill: '#1e1e1e' });
+        h.text(390, 470, 'next.', { size: 24, anchor:'middle', fill: '#1e1e1e' });
+
+        h.sticky(610, 320, 380, 220, COLORS.green);
+        h.text(800, 400, 'HTML', { size: 38, weight: 700, anchor:'middle', fill: '#1e1e1e' });
+        h.text(800, 440, 'if you', { size: 24, anchor:'middle', fill: '#1e1e1e' });
+        h.text(800, 470, 'read it', { size: 24, anchor:'middle', fill: '#1e1e1e' });
+        h.text(800, 510, 'next.', { size: 24, anchor:'middle', fill: '#1e1e1e' });
+
+        h.sticky(1020, 280, 380, 220, COLORS.violet);
+        h.text(1210, 360, 'channel', { size: 32, weight: 700, anchor:'middle', fill: '#1e1e1e' });
+        h.text(1210, 400, 'if both', { size: 24, anchor:'middle', fill: '#1e1e1e' });
+        h.text(1210, 430, 'edit it', { size: 24, anchor:'middle', fill: '#1e1e1e' });
+        h.text(1210, 470, 'together.', { size: 24, anchor:'middle', fill: '#1e1e1e' });
+
+        h.text(800, 700, 'pick by reader, not by taste.', { size: 28, anchor:'middle', fill: COLORS.soft });
+      }},
+      { kind: "if-this", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(200, 240, 'if claude reads it', { size: 40, fill: COLORS.amber });
+        h.arrow(800, 230, 1000, 230, { stroke: COLORS.amber });
+        h.text(1040, 240, 'markdown', { size: 50, weight: 700 });
+
+        h.text(200, 400, 'if YOU read it', { size: 40, fill: COLORS.green });
+        h.arrow(800, 390, 1000, 390, { stroke: COLORS.green });
+        h.text(1040, 400, 'HTML', { size: 50, weight: 700 });
+
+        h.text(200, 560, 'if both edit it', { size: 40, fill: COLORS.violet });
+        h.arrow(800, 550, 1000, 550, { stroke: COLORS.violet });
+        h.text(1040, 560, 'channel artifact', { size: 40, weight: 700 });
+
+        h.text(200, 740, 'pick by reader →', { size: 22, fill: COLORS.faint, font:"'Cascadia Code', monospace" });
+      }},
+    ]},
+
+  // ============================================================
+  // 7: Anti-pattern slide
+  // ============================================================
+  { id: 7, section: "anti-pattern", title: "Anti-pattern · don't do this",
+    vars: [
+      { kind: "redx-prompt", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 200, "don't do this.", { size: 56, weight: 700, anchor:'middle', fill: COLORS.rose });
+        h.underline(560, 220, 480, { stroke: COLORS.rose });
+
+        // mock prompt panel
+        h.rect(200, 280, 1200, 360, { fill: COLORS.paper, roughness: 2 });
+        h.text(240, 340, '> prompt to claude:', { size: 24, font:"'Cascadia Code', monospace", fill: COLORS.faint });
+        h.text(240, 400, '"here\'s the report. update it"', { size: 30, font:"'Cascadia Code', monospace" });
+        h.text(240, 450, '<html>...4000 lines...</html>', { size: 26, font:"'Cascadia Code', monospace", fill: COLORS.amber });
+        h.text(240, 500, '<svg>...</svg>', { size: 26, font:"'Cascadia Code', monospace", fill: COLORS.amber });
+        h.text(240, 550, '<style>...</style>', { size: 26, font:"'Cascadia Code', monospace", fill: COLORS.amber });
+
+        // big red X over panel
+        h.line(220, 300, 1380, 620, { stroke: COLORS.rose, strokeWidth: 8, roughness: 1.4 });
+        h.line(1380, 300, 220, 620, { stroke: COLORS.rose, strokeWidth: 8, roughness: 1.4 });
+
+        h.text(800, 740, "don't dump output back into context.", { size: 28, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "loop-warning", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'common mistake', COLORS.rose);
+        // diagram: HTML being looped back
+        h.rect(180, 280, 380, 180, { fill: COLORS.paper, stroke: COLORS.green, strokeWidth: 2, roughness: 2 });
+        h.text(370, 360, 'HTML output', { size: 32, anchor:'middle', fill: COLORS.green });
+        h.text(370, 400, '(big, rich)', { size: 22, anchor:'middle', fill: COLORS.soft });
+
+        h.rect(1040, 280, 380, 180, { fill: COLORS.paper, stroke: COLORS.amber, strokeWidth: 2, roughness: 2 });
+        h.text(1230, 360, 'claude context', { size: 32, anchor:'middle', fill: COLORS.amber });
+        h.text(1230, 400, '(should be lean)', { size: 22, anchor:'middle', fill: COLORS.soft });
+
+        h.path('M 560 370 Q 800 280 1040 370', { stroke: COLORS.rose, strokeWidth: 4 });
+        h.line(800, 320, 800, 250, { stroke: COLORS.rose, strokeWidth: 4 });
+        h.line(770, 280, 830, 280, { stroke: COLORS.rose, strokeWidth: 4 });
+        h.line(770, 280, 830, 280, { stroke: COLORS.rose, strokeWidth: 6 });
+        h.line(770, 250, 830, 280, { stroke: COLORS.rose, strokeWidth: 6 });
+        h.line(830, 250, 770, 280, { stroke: COLORS.rose, strokeWidth: 6 });
+
+        h.text(800, 600, 'tokens explode.', { size: 36, anchor:'middle', fill: COLORS.rose });
+        h.text(800, 660, 'model perf degrades.', { size: 36, anchor:'middle', fill: COLORS.rose });
+        h.text(800, 760, 'use markdown for context, HTML for you.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "good-vs-bad", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // bad
+        h.rect(140, 220, 620, 480, { fill: COLORS.paper, stroke: COLORS.rose, strokeWidth: 2, roughness: 2 });
+        kicker(h, 180, 270, '✗ bad', COLORS.rose);
+        h.text(180, 360, 'feed HTML back', { size: 36 });
+        h.text(180, 410, 'to claude as input', { size: 36 });
+        h.text(180, 510, '→ 4x tokens', { size: 26, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+        h.text(180, 550, '→ noisy attention', { size: 26, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+        h.text(180, 590, '→ slower turns', { size: 26, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+
+        // good
+        h.rect(840, 220, 620, 480, { fill: COLORS.paper, stroke: COLORS.green, strokeWidth: 2, roughness: 2 });
+        kicker(h, 880, 270, '✓ good', COLORS.green);
+        h.text(880, 360, 'export to markdown', { size: 36 });
+        h.text(880, 410, 'or paste a copy-button', { size: 36 });
+        h.text(880, 510, '→ lean context', { size: 26, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+        h.text(880, 550, '→ fast turns', { size: 26, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+        h.text(880, 590, '→ same surface', { size: 26, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+
+        h.text(800, 770, 'you read HTML. claude reads markdown.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 8: Two-reader framing (3 characters)
+  // ============================================================
+  { id: 8, section: "characters", title: "Two readers · 3-frame",
+    vars: [
+      { kind: "three-frames", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // 3 panels
+        // panel 1: robot reading markdown - happy
+        h.rect(120, 240, 440, 440, { fill: COLORS.paper, roughness: 2 });
+        robot(h, 340, 380, 1.4, 'happy');
+        h.text(340, 540, 'reads markdown', { size: 24, anchor:'middle', fill: COLORS.amber });
+        h.text(340, 580, '✓', { size: 50, anchor:'middle', fill: COLORS.green });
+
+        // panel 2: human reading HTML - happy
+        h.rect(580, 240, 440, 440, { fill: COLORS.paper, roughness: 2 });
+        person(h, 800, 400, 1.4);
+        h.text(800, 540, 'reads HTML', { size: 24, anchor:'middle', fill: COLORS.green });
+        h.text(800, 580, '✓', { size: 50, anchor:'middle', fill: COLORS.green });
+
+        // panel 3: robot reading HTML - sweat
+        h.rect(1040, 240, 440, 440, { fill: COLORS.paper, roughness: 2 });
+        robot(h, 1260, 380, 1.4, 'sweat');
+        h.text(1260, 540, 'reads HTML', { size: 24, anchor:'middle', fill: COLORS.green });
+        h.text(1260, 580, '✗', { size: 50, anchor:'middle', fill: COLORS.rose });
+
+        h.text(800, 760, 'match the format to the reader.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "matrix", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // grid headers
+        h.text(540, 240, 'markdown', { size: 32, anchor:'middle', fill: COLORS.amber });
+        h.text(1040, 240, 'HTML', { size: 32, anchor:'middle', fill: COLORS.green });
+
+        // robot row
+        h.text(180, 380, 'robot', { size: 30, anchor:'start', fill: COLORS.amber });
+        robot(h, 540, 400, 0.9, 'happy');
+        h.text(540, 480, '✓ great', { size: 22, anchor:'middle', fill: COLORS.green });
+
+        robot(h, 1040, 400, 0.9, 'sweat');
+        h.text(1040, 480, '✗ blows context', { size: 22, anchor:'middle', fill: COLORS.rose });
+
+        // human row
+        h.text(180, 660, 'you', { size: 30, anchor:'start', fill: COLORS.green });
+        person(h, 540, 670, 0.9);
+        h.text(540, 740, '~ ok', { size: 22, anchor:'middle', fill: COLORS.soft });
+
+        person(h, 1040, 670, 0.9);
+        h.text(1040, 740, '✓ great', { size: 22, anchor:'middle', fill: COLORS.green });
+
+        // grid lines
+        h.line(360, 280, 1240, 280, { stroke: COLORS.faint });
+        h.line(360, 530, 1240, 530, { stroke: COLORS.faint });
+        h.line(800, 280, 800, 770, { stroke: COLORS.faint });
+      }},
+      { kind: "happy-paths", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'each reader, their format');
+        // top: robot + markdown - happy
+        robot(h, 320, 360, 1.0, 'happy');
+        h.arrow(420, 360, 600, 360, { stroke: COLORS.green, head: 18 });
+        h.rect(620, 300, 320, 120, { fill: COLORS.paper, stroke: COLORS.amber, strokeWidth: 2, roughness: 2 });
+        h.text(780, 380, 'markdown', { size: 36, anchor:'middle', fill: COLORS.amber });
+
+        // arrow split right
+        h.text(1000, 380, '✓ happy', { size: 32, fill: COLORS.green });
+
+        // bottom: person + HTML - happy
+        person(h, 320, 620, 1.0);
+        h.arrow(420, 620, 600, 620, { stroke: COLORS.green, head: 18 });
+        h.rect(620, 560, 320, 120, { fill: COLORS.paper, stroke: COLORS.green, strokeWidth: 2, roughness: 2 });
+        h.text(780, 640, 'HTML', { size: 36, anchor:'middle', fill: COLORS.green });
+        h.text(1000, 640, '✓ happy', { size: 32, fill: COLORS.green });
+      }},
+    ]},
+
+  // ============================================================
+  // 9: Token economics
+  // ============================================================
+  { id: 9, section: "economics", title: "Token economics · cost",
+    vars: [
+      { kind: "bars", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'tokens per artifact');
+        // markdown bar - small
+        h.rect(280, 580, 200, 100, { fill: COLORS.amber, roughness: 2 });
+        h.text(380, 720, 'markdown', { size: 28, anchor:'middle' });
+        h.text(380, 555, '~500', { size: 22, anchor:'middle', fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+
+        // html bar - 4x
+        h.rect(700, 280, 200, 400, { fill: COLORS.green, roughness: 2 });
+        h.text(800, 720, 'HTML', { size: 28, anchor:'middle' });
+        h.text(800, 255, '~2000', { size: 22, anchor:'middle', fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+
+        // axis
+        h.line(140, 680, 1100, 680, { stroke: COLORS.faint });
+
+        h.text(1180, 360, 'fine for output', { size: 28, fill: COLORS.green });
+        h.text(1180, 410, 'you read once.', { size: 28, fill: COLORS.green });
+        h.text(1180, 500, 'NOT fine for', { size: 28, fill: COLORS.rose });
+        h.text(1180, 550, 'context you', { size: 28, fill: COLORS.rose });
+        h.text(1180, 600, 'reload every turn.', { size: 28, fill: COLORS.rose });
+      }},
+      { kind: "math", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'do the math');
+        // equation-like layout
+        h.text(200, 320, 'output, read once', { size: 32, fill: COLORS.soft });
+        h.text(800, 320, '→', { size: 40 });
+        h.text(900, 320, '4x tokens', { size: 38, fill: COLORS.green });
+        h.text(1200, 320, "= fine.", { size: 38, fill: COLORS.green });
+
+        h.line(180, 360, 1420, 360, { stroke: COLORS.faint });
+
+        h.text(200, 460, 'input, every turn', { size: 32, fill: COLORS.soft });
+        h.text(800, 460, '→', { size: 40 });
+        h.text(900, 460, '4x × N turns', { size: 38, fill: COLORS.rose });
+        h.text(1300, 460, "= bad.", { size: 38, fill: COLORS.rose });
+
+        h.text(800, 660, 'pay it once. not every turn.', { size: 36, weight: 700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(360, 685, 880);
+      }},
+      { kind: "compounding", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'compounding cost');
+        // turns axis with growing bars
+        const turns = [1,2,3,4,5,6];
+        turns.forEach((t,i) => {
+          const x = 220 + i*180;
+          const tinyH = 30;
+          h.rect(x, 700-tinyH, 60, tinyH, { fill: COLORS.amber });
+          const hugeH = 50 + i*70;
+          h.rect(x+80, 700-hugeH, 60, hugeH, { fill: COLORS.green });
+          h.text(x+70, 730, `t${t}`, { size: 22, anchor:'middle', fill: COLORS.faint, font:"'Cascadia Code', monospace" });
+        });
+
+        // legend
+        h.rect(1320, 220, 30, 30, { fill: COLORS.amber });
+        h.text(1360, 245, 'markdown', { size: 22 });
+        h.rect(1320, 270, 30, 30, { fill: COLORS.green });
+        h.text(1360, 295, 'HTML reloaded', { size: 22 });
+
+        h.text(800, 330, "if you reload HTML each turn,", { size: 30, anchor:'middle', fill: COLORS.soft });
+        h.text(800, 380, 'cost compounds.', { size: 38, anchor:'middle', fill: COLORS.rose });
+      }},
+    ]},
+
+  // ============================================================
+  // 10: The reframe
+  // ============================================================
+  { id: 10, section: "reframe", title: "The reframe",
+    vars: [
+      { kind: "single-line", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 360, "this isn't HTML vs markdown.", { size: 60, weight: 700, anchor:'middle' });
+        h.text(800, 540, "it's INPUT vs OUTPUT.", { size: 90, weight: 700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(360, 565, 880);
+      }},
+      { kind: "strikethrough", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 280, "the wrong question:", { size: 28, anchor:'middle', fill: COLORS.soft });
+        h.text(800, 380, 'HTML vs markdown', { size: 70, weight: 700, anchor:'middle', fill: COLORS.soft });
+        h.line(380, 360, 1220, 360, { stroke: COLORS.rose, strokeWidth: 5, roughness: 1.4 });
+
+        h.text(800, 540, "the right question:", { size: 28, anchor:'middle', fill: COLORS.green });
+        h.text(800, 640, 'input vs output', { size: 90, weight: 700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(380, 670, 840);
+      }},
+      { kind: "boxed", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // huge boxed reframe
+        h.rect(180, 240, 1240, 420, { fill: COLORS.paper, stroke: COLORS.yellow, strokeWidth: 3, roughness: 2 });
+        h.text(800, 380, 'input', { size: 110, weight: 700, anchor:'middle', fill: COLORS.amber });
+        h.text(800, 460, 'vs', { size: 50, anchor:'middle', fill: COLORS.soft });
+        h.text(800, 580, 'output', { size: 110, weight: 700, anchor:'middle', fill: COLORS.green });
+
+        h.text(800, 740, "that's the whole debate.", { size: 28, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+];
+
+// ================================================================
+// RENDER
+// ================================================================
+const grid = document.getElementById('grid');
+const selCount = document.getElementById('selCount');
+const state = { selections: new Map() };
+
+function renderAll() {
+  if (typeof rough === 'undefined') {
+    grid.innerHTML = '<div style="color:#ff8787;font-size:24px;padding:40px;font-family:monospace">rough.js failed to load — check your internet connection or CDN access.</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  for (const t of TOPICS) {
+    const topic = document.createElement('section');
+    topic.className = 'topic';
+    topic.innerHTML = `
+      <div class="topic-head">
+        <div class="topic-num">#${String(t.id).padStart(2,'0')}</div>
+        <div class="topic-title">${t.title}</div>
+        <div class="topic-section">${t.section}</div>
+      </div>
+      <div class="variations" id="vars-${t.id}"></div>
+    `;
+    grid.appendChild(topic);
+    const vars = topic.querySelector('.variations');
+    t.vars.forEach((v, idx) => {
+      const key = `${t.id}-${idx}`;
+      const card = document.createElement('div');
+      card.className = 'var-card';
+      card.dataset.key = key;
+      card.innerHTML = `
+        <div class="slide" data-slide></div>
+        <div class="var-meta">
+          <div class="head">
+            <span class="label">var ${String.fromCharCode(65+idx)} · ${v.kind}</span>
+            <span class="rank" data-rank></span>
+          </div>
+          <textarea placeholder="brief description / why you like this..." data-desc></textarea>
+          <button class="select-btn" data-select>select</button>
+        </div>
+      `;
+      vars.appendChild(card);
+
+      const slideHost = card.querySelector('[data-slide]');
+      const svg = el('svg', {
+        viewBox: '0 0 1600 900',
+        preserveAspectRatio: 'xMidYMid meet',
+        width: '100%',
+        height: '100%',
+      });
+      slideHost.appendChild(svg);
+      try {
+        const rc = rough.svg(svg);
+        v.draw(svg, rc);
+      } catch(e) {
+        console.error('Draw error for topic', t.id, 'var', idx, e);
+        slideHost.innerHTML = `<div style="padding:20px;color:#ff8787;font-family:monospace;font-size:12px">draw error: ${e.message}</div>`;
+      }
+
+      const btn = card.querySelector('[data-select]');
+      const desc = card.querySelector('[data-desc]');
+      btn.addEventListener('click', () => toggleSelect(t.id, idx, desc, card));
+      desc.addEventListener('input', () => {
+        const sel = state.selections.get(key);
+        if (sel) sel.description = desc.value;
+      });
+    });
+  }
+}
+
+function toggleSelect(topicId, varIdx, descEl, card) {
+  const key = `${topicId}-${varIdx}`;
+  if (state.selections.has(key)) {
+    state.selections.delete(key);
+    card.classList.remove('selected');
+    card.querySelector('[data-select]').textContent = 'select';
+  } else {
+    state.selections.set(key, {
+      topicId, varIdx, description: descEl.value,
+      order: state.selections.size + 1
+    });
+    card.classList.add('selected');
+    card.querySelector('[data-select]').textContent = '✓ selected';
+  }
+  refreshRanks();
+  selCount.textContent = state.selections.size;
+}
+
+function refreshRanks() {
+  document.querySelectorAll('.var-card').forEach(c => {
+    c.querySelector('[data-rank]').textContent = '';
+  });
+  let i = 1;
+  for (const [key, sel] of state.selections) {
+    const card = document.querySelector(`.var-card[data-key="${key}"]`);
+    if (card) card.querySelector('[data-rank]').textContent = `#${i}`;
+    sel.order = i;
+    i++;
+  }
+}
+
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  const out = [...state.selections.values()].map(s => {
+    const t = TOPICS.find(x => x.id === s.topicId);
+    const v = t.vars[s.varIdx];
+    return {
+      order: s.order,
+      topicId: s.topicId,
+      topic: t.title,
+      section: t.section,
+      variation: String.fromCharCode(65 + s.varIdx),
+      kind: v.kind,
+      description: s.description || '',
+    };
+  });
+  const json = JSON.stringify(out, null, 2);
+  try {
+    await navigator.clipboard.writeText(json);
+    showToast(`copied ${out.length} slide${out.length===1?'':'s'}`);
+  } catch {
+    showToast("couldn't copy — open console");
+    console.log(json);
+  }
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  state.selections.clear();
+  document.querySelectorAll('.var-card.selected').forEach(c => {
+    c.classList.remove('selected');
+    c.querySelector('[data-select]').textContent = 'select';
+    c.querySelector('[data-rank]').textContent = '';
+  });
+  selCount.textContent = '0';
+});
+
+const toast = document.getElementById('toast');
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+renderAll();
+</script>
+</body>
+</html>

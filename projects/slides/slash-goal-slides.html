@@ -1208,6 +1208,89 @@
     }
   };
 
+  // -------- THE /goal CONTRACT (four-part anatomy) --------
+  const slideContract = {
+    headline: 'the /goal contract',
+    caption: 'four fields. fill them in before you fire the loop.',
+    draw: () => {
+      // sub-header
+      addText(800, 130, 'a goal is a contract Codex signs before it starts working.', {
+        size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+
+      // four sticky cards in a 2x2 grid
+      const cards = [
+        {
+          x: 120, y: 200, w: 660, h: 280,
+          color: COLORS.blue,
+          tag: '01',
+          title: 'OBJECTIVE',
+          sub: 'one sentence. one outcome.',
+          example: '"migrate /api/cart from v1 → v2"',
+        },
+        {
+          x: 820, y: 200, w: 660, h: 280,
+          color: COLORS.lightRed,
+          tag: '02',
+          title: "DON'T TOUCH",
+          sub: 'the rails. what stays unchanged.',
+          example: '• keep v1 path live (rollback)\n• no schema changes\n• public types frozen',
+          multi: true,
+        },
+        {
+          x: 120, y: 510, w: 660, h: 280,
+          color: COLORS.violet,
+          tag: '03',
+          title: 'VALIDATION',
+          sub: 'the command that proves progress.',
+          example: '$ pnpm test:contract --suite=cart',
+          mono: true,
+        },
+        {
+          x: 820, y: 510, w: 660, h: 280,
+          color: COLORS.softEmerald,
+          tag: '04',
+          title: 'STOP CONDITION',
+          sub: 'the metric that halts the loop.',
+          example: 'all contract tests green\n+ legacy parity ≥ 99.5%',
+          multi: true,
+        },
+      ];
+
+      cards.forEach(c => {
+        addRect(c.x, c.y, c.w, c.h, { fill: c.color, fillStyle: 'solid', strokeWidth: 2 });
+        // tag badge
+        addRect(c.x + 20, c.y + 20, 56, 40, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.4 });
+        addText(c.x + 48, c.y + 48, c.tag, { size: 22, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+        // title
+        addText(c.x + 100, c.y + 50, c.title, { size: 28, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+        // subtitle
+        addText(c.x + 30, c.y + 100, c.sub, { size: 20, fill: COLORS.soft, style: 'italic' });
+        // divider
+        addLine(c.x + 30, c.y + 120, c.x + c.w - 30, c.y + 120, { stroke: COLORS.soft });
+        // example
+        if (c.multi) {
+          c.example.split('\n').forEach((line, i) => {
+            addText(c.x + 40, c.y + 165 + i * 36, line, {
+              size: 20, weight: 600,
+              font: c.mono ? "'Cascadia Code', ui-monospace, monospace" : 'inherit',
+            });
+          });
+        } else {
+          addText(c.x + 40, c.y + 175, c.example, {
+            size: 22, weight: 600,
+            font: c.mono ? "'Cascadia Code', ui-monospace, monospace" : 'inherit',
+          });
+        }
+      });
+
+      // bottom takeaway
+      addText(800, 850, 'no contract → drift. fill all four → /goal can run for hours unattended.', {
+        size: 24, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+
   // ---- "compaction makes the thread richer" -> insert at index 10 (slide 11) ----
   const slideCompaction = {
     headline: 'compaction makes the thread richer',
@@ -2075,6 +2158,181 @@
       addText(1240, 700, 'then read the diff.', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
       addText(1240, 730, 'maybe scrappy-copy it.', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
 
+      // class reference cards — ralph (YES) + autoresearch (NO)
+      addRect(80, 810, 560, 50, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 1.6 });
+      addText(100, 842, '↳ class:', { size: 16, weight: 700, fill: COLORS.soft });
+      addText(190, 842, '"Ralph Loop"', { size: 18, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(360, 842, 'Master Claude Code › Advanced', { size: 14, fill: COLORS.soft, style: 'italic' });
+
+      addRect(960, 810, 560, 50, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 1.6 });
+      addText(980, 842, '↳ class:', { size: 16, weight: 700, fill: COLORS.soft });
+      addText(1070, 842, '"Autoresearch"', { size: 18, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(1260, 842, 'Bonus Techniques › Advanced', { size: 14, fill: COLORS.soft, style: 'italic' });
+    }
+  };
+
+  // -------- RALPH LOOP, BUT IN-WINDOW --------
+  const slideRalphLoop = {
+    headline: 'Ralph loop, but compacted in one window',
+    caption: 'point /goal at a plan. it grinds checkpoints across turns. no fresh sessions.',
+    draw: () => {
+      // ===== LEFT: the plan =====
+      addRect(60, 120, 360, 540, { fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 2 });
+      addText(240, 160, 'plan.md', { size: 24, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(240, 188, '(decomposed up front)', { size: 14, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addLine(80, 208, 400, 208, { stroke: COLORS.soft });
+
+      const steps = [
+        { id: 'S01', label: 'extract types',     state: 'done' },
+        { id: 'S02', label: 'migrate /api/cart', state: 'done' },
+        { id: 'S03', label: 'parity tests',      state: 'active' },
+        { id: 'S04', label: 'rollback flag',     state: 'pending' },
+        { id: 'S05', label: 'cut over',          state: 'pending' },
+        { id: 'S06', label: 'remove v1',         state: 'pending' },
+      ];
+      steps.forEach((s, i) => {
+        const y = 230 + i * 64;
+        const fill = s.state === 'done' ? COLORS.softEmerald : s.state === 'active' ? COLORS.amber : '#fff';
+        addRect(80, y, 320, 50, { fill, fillStyle: 'solid', strokeWidth: 1.4 });
+        addText(95, y + 32, s.id, { size: 16, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+        addText(150, y + 32, s.label, { size: 16 });
+        if (s.state === 'done') addCheck(370, y + 26, 12, COLORS.emerald);
+        if (s.state === 'active') addText(370, y + 36, '◀', { size: 18, fill: COLORS.rose, weight: 700 });
+      });
+
+      // arrow plan -> window
+      addArrow(425, 410, 510, 410, { stroke: COLORS.ink, strokeWidth: 2.4, curve: 0, arrowSize: 14 });
+      addText(467, 392, '/goal', { size: 16, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace", fill: COLORS.blueStroke });
+
+      // ===== MIDDLE: ONE WINDOW with turns + compact between =====
+      addRect(530, 120, 600, 540, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2.2 });
+      addText(830, 160, 'one window. one /goal.', { size: 22, anchor: 'middle', weight: 700 });
+      addText(830, 186, 'turns compact in-place. context stays warm.', { size: 14, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addLine(550, 206, 1110, 206, { stroke: COLORS.soft });
+
+      const turns = [
+        { type: 'turn', label: 'turn 1: ship S01', tag: '✓' },
+        { type: 'compact' },
+        { type: 'turn', label: 'turn 2: ship S02', tag: '✓' },
+        { type: 'compact' },
+        { type: 'turn', label: 'turn 3: ship S03', tag: 'in progress', active: true },
+      ];
+      let y = 226;
+      turns.forEach(t => {
+        if (t.type === 'compact') {
+          addText(830, y + 26, '↓ compact (signal up, noise down)', { size: 15, anchor: 'middle', fill: COLORS.violet, weight: 700, style: 'italic' });
+          y += 50;
+        } else {
+          addRect(560, y, 540, 56, { fill: t.active ? COLORS.softEmerald : '#fff', fillStyle: 'solid', strokeWidth: 1.4 });
+          addText(580, y + 35, t.label, { size: 18, weight: t.active ? 700 : 600, font: "'Cascadia Code', ui-monospace, monospace" });
+          addText(1080, y + 35, t.tag, { size: 16, anchor: 'end', fill: t.active ? COLORS.rose : COLORS.emerald, weight: 700, style: 'italic' });
+          y += 76;
+        }
+      });
+
+      addText(830, 630, "don't stop until it's achieved.", { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // ===== RIGHT: contrast vs original Ralph =====
+      addRect(1170, 120, 370, 540, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+      addText(1355, 160, 'original Ralph', { size: 22, anchor: 'middle', weight: 700 });
+      addText(1355, 186, '(Wiggum bash script)', { size: 14, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addLine(1190, 206, 1520, 206, { stroke: COLORS.soft });
+
+      [0, 1, 2].forEach(i => {
+        const yy = 230 + i * 76;
+        addRect(1200, yy, 310, 56, { fill: '#fff', fillStyle: 'solid', strokeWidth: 1.4 });
+        addText(1220, yy + 35, `fresh claude #${i+1}`, { size: 15, font: "'Cascadia Code', ui-monospace, monospace" });
+        addCross(1485, yy + 28, 8, COLORS.rose);
+      });
+      addText(1355, 480, 'cold context every task', { size: 16, anchor: 'middle', fill: COLORS.rose, weight: 700, style: 'italic' });
+
+      addText(1355, 535, '/goal version:', { size: 16, anchor: 'middle', weight: 700, fill: COLORS.soft });
+      addRect(1200, 555, 310, 56, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 1.6 });
+      addCheck(1218, 583, 12, COLORS.emerald);
+      addText(1248, 590, 'one window, compacted', { size: 15, font: "'Cascadia Code', ui-monospace, monospace", weight: 700 });
+      addText(1355, 635, 'memory survives, cost drops', { size: 14, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // ===== Bottom: tweet quote card =====
+      addRect(60, 700, 1480, 170, { fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 2 });
+      // left accent bar
+      addRect(60, 700, 8, 170, { fill: COLORS.blueStroke, fillStyle: 'solid', strokeWidth: 0 });
+      // avatar circle
+      addEllipse(130, 740, 56, 56, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 1.4 });
+      addText(130, 750, '🦀', { size: 28, anchor: 'middle' });
+      addText(180, 738, 'Felipe Coury', { size: 22, weight: 700 });
+      addText(310, 738, '@fcoury', { size: 18, fill: COLORS.soft });
+      addText(395, 738, '✓ OpenAI', { size: 16, fill: COLORS.blueStroke, weight: 700 });
+      addText(180, 778, '"/goal also lands in Codex CLI 0.128.0.', { size: 20, weight: 600, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(180, 808, ' Our take on the Ralph loop: keep a goal alive across turns.', { size: 20, weight: 600, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(180, 838, ' Don\'t stop until it\'s achieved."', { size: 20, weight: 600, font: "'Cascadia Code', ui-monospace, monospace" });
+    }
+  };
+
+  // -------- OPEN-ENDED /goal: PLAN UNFOLDS (technical example) --------
+  const slideAutoResearchClass = {
+    headline: 'open-ended /goal, the plan unfolds',
+    caption: 'objective + constraints, but the path isn\'t known. /goal discovers it.',
+    draw: () => {
+      // sub-header contrast line
+      addText(800, 130, 'Ralph: plan known → execute it.   open-ended: plan unknown → search for it.', {
+        size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+
+      // ===== top: objective + constraints box (technical) =====
+      addRect(160, 170, 1280, 130, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
+      addText(180, 210, 'objective:', { size: 18, weight: 700, fill: COLORS.soft });
+      addText(310, 210, '"make the canvas run at 30% more FPS"', { size: 24, weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(180, 250, 'constraints:', { size: 18, weight: 700, fill: COLORS.soft });
+      addText(330, 250, 'looks the same · public API stays · no new libraries', { size: 18, font: "'Cascadia Code', ui-monospace, monospace" });
+      addText(180, 280, 'metric:', { size: 18, weight: 700, fill: COLORS.soft });
+      addText(280, 280, '$ pnpm bench:render   FPS must hit 1.30x baseline', { size: 18, font: "'Cascadia Code', ui-monospace, monospace" });
+
+      // ===== middle: search tree of unfolding hypotheses =====
+      // root
+      addEllipse(800, 360, 200, 56, { fill: COLORS.violet, fillStyle: 'solid', strokeWidth: 1.8 });
+      addText(800, 368, 'hypothesize', { size: 20, anchor: 'middle', weight: 700 });
+
+      // 5 first-level branches
+      const lvl1 = [
+        { x: 200,  label: 'GPU batch',    dead: true,  delta: '+4%'  },
+        { x: 460,  label: 'cull offscreen', dead: false, delta: '+11%' },
+        { x: 800,  label: 'redraw diffs', dead: false, delta: '+18%' },
+        { x: 1140, label: 'paint sync',   dead: true,  delta: '−2%'  },
+        { x: 1400, label: 'gc tuning',    dead: true,  delta: '+1%'  },
+      ];
+      lvl1.forEach(b => {
+        const alive = !b.dead;
+        addArrow(800, 388, b.x, 470, { stroke: alive ? COLORS.emerald : COLORS.faint, strokeWidth: alive ? 2 : 1.2, curve: (b.x - 800) * 0.04, arrowSize: 10 });
+        addEllipse(b.x, 500, 200, 50, { fill: alive ? COLORS.softEmerald : COLORS.paper, fillStyle: 'solid', strokeWidth: alive ? 2 : 1.2 });
+        addText(b.x, 502, b.label, { size: 17, anchor: 'middle', weight: alive ? 700 : 500, fill: alive ? COLORS.ink : COLORS.soft });
+        addText(b.x, 545, b.delta, { size: 15, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", fill: alive ? COLORS.emerald : COLORS.soft, weight: 700 });
+        if (b.dead) addCross(b.x + 105, 500, 12);
+      });
+
+      // children of "redraw diffs"
+      const lvl2 = [
+        { x: 660, label: 'dirty rects',   alive: false, delta: '+9%'  },
+        { x: 800, label: 'tile cache',    alive: true,  delta: '+27%' },
+        { x: 940, label: 'layer split',   alive: false, delta: '+12%' },
+      ];
+      lvl2.forEach(b => {
+        addArrow(800, 525, b.x, 620, { stroke: b.alive ? COLORS.emerald : COLORS.faint, strokeWidth: b.alive ? 2 : 1.2, curve: (b.x - 800) * 0.05, arrowSize: 10 });
+        addEllipse(b.x, 650, 170, 46, { fill: b.alive ? COLORS.softEmerald : COLORS.paper, fillStyle: 'solid', strokeWidth: b.alive ? 2 : 1.2 });
+        addText(b.x, 652, b.label, { size: 16, anchor: 'middle', weight: b.alive ? 700 : 500, fill: b.alive ? COLORS.ink : COLORS.soft });
+        addText(b.x, 690, b.delta, { size: 14, anchor: 'middle', font: "'Cascadia Code', ui-monospace, monospace", fill: b.alive ? COLORS.emerald : COLORS.soft, weight: 700 });
+        if (!b.alive) addCross(b.x + 90, 650, 11);
+      });
+
+      // halt callout near tile cache
+      addArrow(800, 700, 800, 740, { stroke: COLORS.emerald, strokeWidth: 2.4, curve: 0, arrowSize: 12 });
+      addRect(620, 750, 360, 50, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addCheck(640, 778, 14, COLORS.emerald);
+      addText(800, 782, 'fps +31%, halt', { size: 20, anchor: 'middle', weight: 700, font: "'Cascadia Code', ui-monospace, monospace" });
+
+      // marginalia
+      addText(60, 500, 'expand', { size: 20, fill: COLORS.violet, weight: 700 });
+      addText(1500, 500, 'prune', { size: 20, anchor: 'end', fill: COLORS.rose, weight: 700 });
+
     }
   };
 
@@ -2090,13 +2348,16 @@
     slidePreDecomposable,    // 2.  pre-decomposable
     slideUnfolding,          // 3.  unfolding
     slideVerifiable,         // 4.  a goal must be verifiable
-    slideCompaction,         // 5.  compaction makes the thread richer
+    slideContract,           // 5.  the /goal contract (4-part anatomy)
+    slideCompaction,         // 6.  compaction makes the thread richer
     slideTwoWays,            // 6.  two ways to point /goal
     slideMap,                // 7.  a real example: audio transcribe service
     slidePeek,               // 8.  peek without breaking flow
     slideContamination,      // 9.  the risk: codebase contamination
     slideScrappyCopy,        // 10. the scrappy-copy move
-    slideCloser              // 11. my take
+    slideRalphLoop,          // 11. Ralph loop, in-window (plan known)
+    slideAutoResearchClass,  // 12. open-ended /goal, plan unfolds
+    slideCloser              // 13. my take
   );
 
   // ============== STATE / RENDER ==============

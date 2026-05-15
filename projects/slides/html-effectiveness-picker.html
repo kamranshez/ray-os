@@ -1,0 +1,1528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>HTML Effectiveness — slide picker (dark, sketch)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-display: swap;
+  }
+</style>
+<script src="./rough.js"></script>
+<style>
+  :root {
+    --bg: #121212;            /* canvas */
+    --paper: #1a1a1a;         /* subtle dark panel */
+    --panel: #1e1e1e;
+    --ink: #ececec;           /* "black" inverted */
+    --ink-soft: #9a9a9a;
+    --ink-faint: #4a4a4a;
+    --yellow: #ffec99;
+    --blue: #a5d8ff;
+    --green: #b2f2bb;
+    --pink: #fcc2d7;
+    --amber: #ffd8a8;
+    --violet: #d0bfff;
+    --teal: #96f2d7;
+    --light-red: #ffc9c9;
+    --rule: #2a2a2a;
+    --accent: #ffec99;        /* yellow as primary highlight on dark */
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Excalifont', cursive;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* paper grain */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 4px 4px;
+    z-index: 1;
+  }
+
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(18,18,18,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px dashed var(--rule);
+    padding: 14px 28px;
+    display: flex; align-items: center; gap: 18px;
+  }
+  header h1 {
+    margin: 0;
+    font-family: 'Excalifont', cursive;
+    font-size: 24px;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  header h1 .muted { color: var(--ink-soft); font-size: 18px; }
+  header .spacer { flex: 1; }
+  header .count {
+    font-family: 'Cascadia Code', ui-monospace, monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    padding: 8px 14px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink-faint);
+  }
+  header .count b { color: var(--yellow); font-weight: 700; }
+
+  header button {
+    font-family: 'Excalifont', cursive;
+    font-size: 18px;
+    padding: 6px 16px 8px;
+    background: var(--yellow);
+    color: #1e1e1e;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 2px 3px 0 var(--ink);
+    transition: transform 100ms ease;
+  }
+  header button:hover { transform: translate(-1px,-1px); box-shadow: 3px 4px 0 var(--ink); }
+  header button:active { transform: translate(1px,2px); box-shadow: 0 0 0 var(--ink); }
+  header button.secondary {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  main { padding: 36px 28px 120px; max-width: 1700px; margin: 0 auto; position: relative; z-index: 2; }
+
+  .topic { margin-bottom: 56px; }
+  .topic-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .topic-num {
+    font-family: 'Cascadia Code', monospace;
+    font-size: 14px;
+    color: var(--ink-faint);
+  }
+  .topic-title {
+    font-family: 'Excalifont', cursive;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .topic-section {
+    margin-left: auto;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--yellow);
+  }
+
+  .variations {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .var-card {
+    background: var(--paper);
+    border: 2px solid var(--ink-faint);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 3px 4px 0 var(--ink-faint);
+    transition: all 120ms ease;
+  }
+  .var-card:hover {
+    transform: translate(-1px,-1px);
+    box-shadow: 4px 5px 0 var(--ink-soft);
+    border-color: var(--ink-soft);
+  }
+  .var-card.selected {
+    border-color: var(--yellow);
+    box-shadow: 4px 5px 0 var(--yellow);
+    background: #1f1d12;
+  }
+
+  .slide {
+    aspect-ratio: 16 / 9;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1.5px dashed var(--rule);
+  }
+  .slide svg { width: 100%; height: 100%; display: block; }
+
+  .var-meta { padding: 12px 14px; }
+  .var-meta .head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .var-meta .label {
+    font-family: 'Cascadia Code', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+  .var-meta .rank {
+    font-family: 'Cascadia Code', monospace;
+    font-size: 13px;
+    color: var(--yellow);
+  }
+  .var-meta textarea {
+    width: 100%;
+    min-height: 50px;
+    background: var(--bg);
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: var(--ink);
+    font-family: 'Excalifont', cursive;
+    font-size: 15px;
+    line-height: 1.3;
+    resize: vertical;
+  }
+  .var-meta textarea:focus {
+    outline: none;
+    border-color: var(--yellow);
+  }
+  .select-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 6px 12px 8px;
+    background: var(--bg);
+    color: var(--ink);
+    border: 2px solid var(--ink-soft);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Excalifont', cursive;
+    font-size: 17px;
+    box-shadow: 2px 2px 0 var(--ink-soft);
+    transition: all 100ms ease;
+  }
+  .select-btn:hover {
+    transform: translate(-1px,-1px);
+    box-shadow: 3px 3px 0 var(--ink-soft);
+    border-color: var(--ink);
+  }
+  .var-card.selected .select-btn {
+    background: var(--yellow);
+    color: #1e1e1e;
+    border-color: var(--yellow);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--yellow);
+    color: #1e1e1e;
+    padding: 8px 22px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 3px 4px 0 var(--ink);
+    font-family: 'Excalifont', cursive;
+    font-size: 18px;
+    transition: transform 220ms ease;
+    z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>HTML Effectiveness <span class="muted">— slide picker · dark · 3 variations each</span></h1>
+  <div class="spacer"></div>
+  <div class="count"><b id="selCount">0</b> selected</div>
+  <button class="secondary" id="clearBtn">clear</button>
+  <button id="copyBtn">copy as JSON</button>
+</header>
+
+<main id="grid"></main>
+
+<div class="toast" id="toast">copied</div>
+
+<script>
+// ================================================================
+// Excalidraw-flavored DARK palette
+// ================================================================
+const COLORS = {
+  bg: '#121212',
+  ink: '#ececec',
+  soft: '#9a9a9a',
+  faint: '#4a4a4a',
+  paper: '#1a1a1a',
+  panel: '#1e1e1e',
+  yellow: '#ffec99',
+  blue: '#a5d8ff',
+  green: '#b2f2bb',
+  pink: '#fcc2d7',
+  amber: '#ffd8a8',
+  violet: '#d0bfff',
+  teal: '#96f2d7',
+  lightRed: '#ffc9c9',
+  // strokes/text on dark — use light fills tinted for headers
+  strokeBlue: '#74c0fc',
+  strokeYellow: '#ffd43b',
+  strokeGreen: '#8ce99a',
+  strokePink: '#faa2c1',
+  strokeViolet: '#b197fc',
+  strokeAmber: '#ffc078',
+  rose: '#ff8787',
+};
+
+// Each variation gets a fresh SVG and a fresh rough.svg() instance.
+// Drawing helpers below operate on (svg, rc).
+
+function el(tag, attrs={}) {
+  const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+
+function H(svg, rc) {
+  return {
+    rect(x,y,w,h,o={}) {
+      const n = rc.rectangle(x,y,w,h, {
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.6,
+        roughness: o.roughness || 1.8, bowing: o.bowing || 1.5,
+        fill: o.fill, fillStyle: o.fillStyle || 'solid', fillWeight: 1,
+        hachureGap: 6, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    line(x1,y1,x2,y2,o={}) {
+      const n = rc.line(x1,y1,x2,y2,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.5, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    circle(cx,cy,d,o={}) {
+      const n = rc.circle(cx,cy,d,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.5, fill: o.fill, fillStyle: o.fillStyle||'solid', ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    path(d,o={}) {
+      const n = rc.path(d,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.6, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    text(x,y,t,o={}) {
+      const n = el('text',{
+        x, y,
+        'font-family': o.font || "'Excalifont', cursive",
+        'font-size': o.size || 30,
+        fill: o.fill || COLORS.ink,
+        'text-anchor': o.anchor || 'start',
+      });
+      if (o.weight) n.setAttribute('font-weight', o.weight);
+      if (o.style) n.setAttribute('font-style', o.style);
+      n.textContent = t;
+      svg.appendChild(n); return n;
+    },
+    arrow(x1,y1,x2,y2,o={}) {
+      const curve = o.curve != null ? o.curve : 0;
+      const cx = (x1+x2)/2 + curve;
+      const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+      const d = curve === 0
+        ? `M ${x1} ${y1} L ${x2} ${y2}`
+        : `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+      this.path(d, o);
+      const ang = Math.atan2(y2-cy, x2-cx);
+      const ah = o.head || 16;
+      this.line(x2,y2, x2-ah*Math.cos(ang-Math.PI/7), y2-ah*Math.sin(ang-Math.PI/7), o);
+      this.line(x2,y2, x2-ah*Math.cos(ang+Math.PI/7), y2-ah*Math.sin(ang+Math.PI/7), o);
+    },
+    underline(x,y,w,o={}) {
+      // wavy underline
+      const dy = 6;
+      const segs = 6;
+      let d = `M ${x} ${y}`;
+      for (let i=1;i<=segs;i++) {
+        const xi = x + (w*i/segs);
+        const yi = y + (i%2===0 ? 0 : dy);
+        d += ` L ${xi} ${yi}`;
+      }
+      this.path(d,{stroke: o.stroke || COLORS.yellow, strokeWidth: 3, roughness: 1.2});
+    },
+    sticky(x,y,w,h,fill,o={}) {
+      this.rect(x,y,w,h,{fill, fillStyle:'solid', stroke: COLORS.ink, strokeWidth:1.6, roughness:2.0, bowing:1.8, ...o});
+    },
+  };
+}
+
+// ================================================================
+// SLIDE LAYOUTS — each takes (svg, rc) and draws a 1600x900 scene
+// ================================================================
+
+// helper: title slide with optional subtitle
+function titleSlide(svg, rc, line1, line2, sub, opts={}) {
+  const h = H(svg,rc);
+  h.text(800, 380, line1, { size: 92, weight: 700, anchor: 'middle' });
+  if (line2) h.text(800, 490, line2, { size: 92, weight: 700, anchor: 'middle', fill: opts.color || COLORS.yellow });
+  if (sub) h.text(800, 600, sub, { size: 30, anchor: 'middle', fill: COLORS.soft });
+}
+
+function kicker(h, x, y, text, color) {
+  h.text(x, y, text, { size: 22, fill: color || COLORS.yellow, font: "'Cascadia Code', monospace" });
+}
+
+// ================================================================
+// TOPICS — 3 vars each
+// ================================================================
+const TOPICS = [
+
+  // ---- 1: COLD OPEN ----
+  { id: 1, section: "Cold open", title: "Hook — channel artifact demo",
+    vars: [
+      { kind: "demo-frame", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // sketched browser frame
+        h.rect(180, 180, 1240, 540, { stroke: COLORS.ink, strokeWidth: 2, roughness: 2 });
+        h.line(180, 240, 1420, 240);
+        h.circle(220, 210, 14, { fill: COLORS.rose });
+        h.circle(250, 210, 14, { fill: COLORS.strokeAmber });
+        h.circle(280, 210, 14, { fill: COLORS.strokeGreen });
+        h.text(800, 360, 'click anywhere on this page —', { size: 50, anchor: 'middle' });
+        h.text(800, 440, 'claude rewrites the file.', { size: 50, anchor: 'middle', fill: COLORS.yellow });
+        h.text(800, 540, '[ live demo · 30s ]', { size: 22, anchor: 'middle', fill: COLORS.soft, font: "'Cascadia Code', monospace" });
+        h.underline(440, 460, 720);
+      }},
+      { kind: "bold-q", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 380, 'what if every', { size: 90, weight: 700, anchor: 'middle' });
+        h.text(800, 490, 'claude output', { size: 90, weight: 700, anchor: 'middle' });
+        h.text(800, 620, 'was a TOOL?', { size: 110, weight: 700, anchor: 'middle', fill: COLORS.yellow });
+        h.underline(440, 645, 720);
+      }},
+      { kind: "tweet-quote", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.rect(200, 220, 1200, 480, { fill: COLORS.paper, fillStyle: 'solid', roughness: 2 });
+        h.text(260, 320, '"Markdown has become', { size: 42, style: 'italic' });
+        h.text(260, 380, ' a restricting format.', { size: 42, style: 'italic' });
+        h.text(260, 460, ' I now prefer HTML', { size: 42, style: 'italic' });
+        h.text(260, 520, ' as an output format."', { size: 42, style: 'italic' });
+        h.text(260, 620, '— Anthropic, May 2026', { size: 24, fill: COLORS.soft });
+        h.text(1340, 660, '1.7M views', { size: 22, anchor:'end', fill: COLORS.yellow, font: "'Cascadia Code', monospace" });
+      }},
+    ]},
+
+  // ---- 2: THESIS LINE ----
+  { id: 2, section: "Thesis", title: "The unifying line",
+    vars: [
+      { kind: "thesis-xl", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 340, 'stop asking claude for', { size: 70, weight: 700, anchor: 'middle' });
+        // strikethrough on "documents"
+        h.text(800, 460, 'documents.', { size: 100, weight: 700, anchor: 'middle', fill: COLORS.soft });
+        h.line(420, 440, 1180, 440, { stroke: COLORS.rose, strokeWidth: 5, roughness: 1.4 });
+        h.text(800, 620, 'ask for SURFACES.', { size: 100, weight: 700, anchor: 'middle', fill: COLORS.yellow });
+        h.underline(370, 645, 860);
+      }},
+      { kind: "split-arrow", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 250, 'before');
+        h.text(200, 360, 'document', { size: 70, weight: 700 });
+        h.text(200, 430, 'read once · file · forget', { size: 26, fill: COLORS.soft });
+        kicker(h, 1000, 250, 'after', COLORS.strokeGreen);
+        h.text(1000, 360, 'surface', { size: 70, weight: 700, fill: COLORS.yellow });
+        h.text(1000, 430, 'read · click · edit · ship', { size: 26, fill: COLORS.soft });
+        h.arrow(720, 360, 980, 360, { stroke: COLORS.yellow, strokeWidth: 3, head: 22 });
+      }},
+      { kind: "subtle", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 250, 'the real shift');
+        h.text(200, 360, 'the artifact stops being the END', { size: 50 });
+        h.text(200, 430, 'of a claude turn.', { size: 50 });
+        h.text(200, 580, 'it becomes the START', { size: 50, fill: COLORS.yellow });
+        h.text(200, 650, 'of the next one.', { size: 50, fill: COLORS.yellow });
+        h.underline(200, 670, 460);
+      }},
+    ]},
+
+  // ---- 3: AHEAD OF THE CURVE ----
+  { id: 3, section: "Thesis", title: "I've been saying this",
+    vars: [
+      { kind: "timeline", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, '8 months teaching this');
+        // horizontal timeline line
+        h.line(200, 500, 1400, 500, { strokeWidth: 2 });
+        const stops = [
+          {x:260, label:'sep 25', sub:'understanding output'},
+          {x:460, label:'oct 25', sub:'mermaid diagrams'},
+          {x:660, label:'jan 26', sub:'artifact planning'},
+          {x:860, label:'apr 26', sub:'interactive html'},
+          {x:1060, label:'apr 26', sub:'channel artifacts'},
+          {x:1300, label:'may 26', sub:'anthropic post', hot:true},
+        ];
+        stops.forEach(s => {
+          h.circle(s.x, 500, 22, { fill: s.hot ? COLORS.yellow : COLORS.bg, strokeWidth: 2 });
+          h.text(s.x, 470, s.label, { size: 18, anchor:'middle', font: "'Cascadia Code', monospace", fill: s.hot ? COLORS.yellow : COLORS.soft });
+          h.text(s.x, 560, s.sub, { size: 20, anchor:'middle', fill: s.hot ? COLORS.yellow : COLORS.ink });
+        });
+      }},
+      { kind: "badge", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // sticky-note badge
+        h.sticky(540, 220, 520, 130, COLORS.yellow);
+        h.text(800, 310, '8 MONTHS EARLY', { size: 56, weight: 700, anchor:'middle', fill: '#1e1e1e' });
+        h.text(800, 480, "i've been doing this since april.", { size: 38, anchor:'middle' });
+        h.text(800, 580, '5 videos in the school.', { size: 28, anchor:'middle', fill: COLORS.soft });
+        h.text(800, 640, 'this is the deeper playbook.', { size: 28, anchor:'middle', fill: COLORS.soft });
+      }},
+      { kind: "calm", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 250, 'credibility note', COLORS.strokeAmber);
+        h.text(200, 380, 'anthropic just confirmed something', { size: 44 });
+        h.text(200, 440, "i've taught for months.", { size: 44 });
+        h.text(200, 580, "today i'll show you what goes", { size: 36, fill: COLORS.yellow });
+        h.text(200, 640, "further than the post.", { size: 36, fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ---- 4: MARKDOWN'S FAILURE MODE ----
+  { id: 4, section: "Why HTML", title: "Markdown's failure mode",
+    vars: [
+      { kind: "ascii-color", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'markdown trying to show color', COLORS.strokeAmber);
+        // mock terminal block
+        h.rect(200, 260, 1200, 440, { fill: COLORS.paper, fillStyle:'solid', roughness: 2 });
+        const term = (y, t, c) => h.text(240, y, t, { size: 26, font: "'Cascadia Code', monospace", fill: c || COLORS.strokeGreen });
+        term(310, '🟧 orange · 🟦 blue · 🟪 violet', COLORS.ink);
+        term(370, '// ascii diagram with unicode "colors"', COLORS.faint);
+        term(440, '+----+----+----+', COLORS.soft);
+        term(490, '| ▓▓ | ░░ | ▒▒ |', COLORS.soft);
+        term(540, '+----+----+----+', COLORS.soft);
+        term(620, "this is a real claude code output.", COLORS.yellow);
+      }},
+      { kind: "stat", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 360, '100 LINES', { size: 160, weight: 700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(380, 380, 840);
+        h.text(800, 500, '= unread.', { size: 70, weight: 700, anchor:'middle' });
+        h.text(800, 620, "no one reads a long markdown spec.", { size: 28, anchor:'middle', fill: COLORS.soft });
+        h.text(800, 670, "you barely will.", { size: 28, anchor:'middle', fill: COLORS.soft });
+      }},
+      { kind: "compare", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.rect(140, 200, 620, 540, { fill: COLORS.paper, roughness: 2 });
+        h.rect(840, 200, 620, 540, { fill: COLORS.paper, roughness: 2, stroke: COLORS.yellow, strokeWidth: 2 });
+        kicker(h, 180, 250, 'markdown', COLORS.strokeAmber);
+        const md = (y,t,c) => h.text(180, y, t, { size: 22, font: "'Cascadia Code', monospace", fill: c||COLORS.ink });
+        md(310,'# Plan'); md(350,'- step 1'); md(390,'- step 2');
+        md(460,'no diagrams', COLORS.faint);
+        md(500,'no color', COLORS.faint);
+        md(540,'no interaction', COLORS.faint);
+        kicker(h, 880, 250, 'html', COLORS.strokeGreen);
+        const ht = (y,t,c) => h.text(880, y, t, { size: 22, font: "'Cascadia Code', monospace", fill: c||COLORS.ink });
+        ht(310,'<svg>...</svg>', COLORS.blue);
+        ht(350,'<table>...</table>', COLORS.blue);
+        ht(390,'<script>...<\/script>', COLORS.blue);
+        ht(460,'+ diagrams', COLORS.strokeGreen);
+        ht(500,'+ interaction', COLORS.strokeGreen);
+        ht(540,'+ shareable', COLORS.strokeGreen);
+      }},
+    ]},
+
+  // ---- 5: 4 REASONS ----
+  { id: 5, section: "Why HTML", title: "The 4 reasons HTML wins",
+    vars: [
+      { kind: "quad", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 200, 'why html wins', null); // overridden below
+        h.text(800, 200, 'why html wins', { size: 28, anchor:'middle', font: "'Cascadia Code', monospace", fill: COLORS.yellow });
+        const cells = [
+          {x:200, y:280, c:COLORS.yellow, t:'DENSITY', s:'tables · svg · code · canvas'},
+          {x:830, y:280, c:COLORS.blue, t:'READABLE', s:'tabs · charts · nav'},
+          {x:200, y:520, c:COLORS.green, t:'SHAREABLE', s:'open in any browser'},
+          {x:830, y:520, c:COLORS.pink, t:'TWO-WAY', s:'buttons · sliders · forms'},
+        ];
+        cells.forEach(c => {
+          h.rect(c.x, c.y, 570, 200, { fill: COLORS.paper, roughness: 2.2, bowing: 2 });
+          h.text(c.x+30, c.y+70, c.t, { size: 44, weight: 700, fill: c.c });
+          h.text(c.x+30, c.y+140, c.s, { size: 24, fill: COLORS.soft });
+        });
+      }},
+      { kind: "list", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(200, 240, 'why html beats markdown:', { size: 42 });
+        const items = [
+          'richer info per token',
+          'people actually read it',
+          'share a link, not a file',
+          'you can interact with it',
+        ];
+        items.forEach((t,i) => {
+          const y = 360 + i*90;
+          h.text(220, y, `${i+1}`, { size: 56, weight: 700, fill: COLORS.yellow, font: "'Cascadia Code', monospace" });
+          h.text(310, y, t, { size: 44 });
+        });
+        h.underline(310, 660, 590);
+      }},
+      { kind: "icons", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 240, '4 reasons html wins', { size: 32, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.yellow });
+        const items = [
+          {x:300, ic:'▦', t:'density'},
+          {x:620, ic:'◉', t:'read'},
+          {x:940, ic:'⌬', t:'share'},
+          {x:1260, ic:'☞', t:'interact'},
+        ];
+        items.forEach(it => {
+          h.circle(it.x, 460, 110, { fill: COLORS.paper });
+          h.text(it.x, 480, it.ic, { size: 80, anchor:'middle', fill: COLORS.yellow });
+          h.text(it.x, 620, it.t, { size: 32, anchor:'middle' });
+        });
+      }},
+    ]},
+
+  // ---- 6: ESCALATION LADDER ----
+  { id: 6, section: "Ladder", title: "The 4 levels",
+    vars: [
+      { kind: "ladder", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'escalation ladder');
+        const steps = [
+          {y:280, lvl:'L1', label:'static html', color: COLORS.soft},
+          {y:380, lvl:'L2', label:'channel artifact (loop)', color: COLORS.blue},
+          {y:480, lvl:'L3', label:'mcp-wired live data', color: COLORS.violet},
+          {y:600, lvl:'L4', label:'hosted mini-app', color: COLORS.yellow, active:true},
+        ];
+        steps.forEach(s => {
+          h.rect(220, s.y, 1160, 80, { fill: s.active ? '#2a280f' : COLORS.paper, stroke: s.active ? COLORS.yellow : COLORS.ink, strokeWidth: s.active ? 2 : 1.4, roughness: 2 });
+          h.text(260, s.y+55, s.lvl, { size: 36, weight: 700, fill: s.color, font: "'Cascadia Code', monospace" });
+          h.text(400, s.y+55, s.label, { size: 36, fill: s.active ? COLORS.yellow : COLORS.ink });
+        });
+      }},
+      { kind: "stairs", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'artifact graduation');
+        h.text(200, 290, 'a doc today → a tool tomorrow.', { size: 38 });
+        // stairs
+        const base = 670;
+        const sh = 60;
+        const sw = 220;
+        for (let i=0;i<4;i++) {
+          h.rect(380 + i*sw, base - i*sh, sw, sh*(i+1), { fill: i===3 ? COLORS.yellow : COLORS.paper, fillStyle:'solid', roughness: 2 });
+        }
+        h.text(490, 670, 'L1', { size: 24, weight:700, font:"'Cascadia Code', monospace", fill: COLORS.soft });
+        h.text(710, 610, 'L2', { size: 24, weight:700, font:"'Cascadia Code', monospace", fill: COLORS.blue });
+        h.text(930, 550, 'L3', { size: 24, weight:700, font:"'Cascadia Code', monospace", fill: COLORS.violet });
+        h.text(1150, 490, 'L4', { size: 24, weight:700, font:"'Cascadia Code', monospace", fill: '#1e1e1e' });
+      }},
+      { kind: "title-only", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 400, 'every artifact is', { size: 80, weight:700, anchor:'middle' });
+        h.text(800, 540, 'a tool in waiting.', { size: 100, weight:700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(330, 565, 940);
+      }},
+    ]},
+
+  // ---- 7: SECTION HEADER — BASICS ----
+  { id: 7, section: "Section header", title: "Basics montage opener",
+    vars: [
+      { kind: "section-1", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 280, 'PART 1 · 5 demos', COLORS.strokeAmber);
+        h.text(800, 280, 'PART 1 · 5 demos', { size: 28, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.strokeAmber });
+        h.text(800, 460, 'the basics.', { size: 130, weight:700, anchor:'middle' });
+        h.text(800, 580, 'stuff anthropic showed in the post.', { size: 30, anchor:'middle', fill: COLORS.soft });
+      }},
+      { kind: "section-2", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'act 1', COLORS.strokeAmber);
+        h.text(200, 380, "things you've already seen.", { size: 64, weight:700 });
+        h.text(200, 510, "i'll move fast through these.", { size: 32, fill: COLORS.soft });
+        h.text(200, 570, "the deep cuts come later.", { size: 32, fill: COLORS.soft });
+      }},
+      { kind: "section-3", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 380, '▌ chapter 1', { size: 90, weight:700, anchor:'middle', fill: COLORS.strokeAmber });
+        h.text(800, 510, 'html, the basics.', { size: 48, anchor:'middle' });
+        h.underline(450, 530, 700);
+      }},
+    ]},
+
+  // ---- 8: VISUAL DESIGN GRID ----
+  { id: 8, section: "Demo · basics", title: "Demo — visual design directions",
+    vars: [
+      { kind: "title-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'demo 1', COLORS.strokeAmber);
+        h.text(200, 380, 'six onboarding designs', { size: 64, weight:700 });
+        h.text(200, 460, 'in one html.', { size: 64, weight:700, fill: COLORS.yellow });
+        h.text(200, 580, "point at one — don't read three.", { size: 28, fill: COLORS.soft });
+      }},
+      { kind: "mock-grid", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        const cols = 3, rows = 2;
+        const gx = 240, gy = 200, cw = 360, ch = 250, gap = 30;
+        for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
+          const x = gx + c*(cw+gap), y = gy + r*(ch+gap);
+          h.rect(x, y, cw, ch, { fill: COLORS.paper, roughness: 2.2 });
+          h.text(x+20, y+40, `design ${r*cols+c+1}`, { size: 22, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+          h.line(x+20, y+70, x+cw-20, y+70);
+          h.rect(x+20, y+90, cw-40, 80, { fill: COLORS.panel });
+          h.line(x+20, y+200, x+cw-60, y+200, { stroke: COLORS.soft });
+          h.line(x+20, y+220, x+cw-100, y+220, { stroke: COLORS.soft });
+        }
+      }},
+      { kind: "prompt-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'the prompt');
+        h.rect(200, 250, 1200, 460, { fill: COLORS.paper, roughness: 2 });
+        const code = (y, t, c) => h.text(240, y, t, { size: 28, font:"'Cascadia Code', monospace", fill: c||COLORS.ink });
+        code(330, '› generate 6 distinct onboarding', COLORS.yellow);
+        code(380, '  approaches. lay them out as');
+        code(430, '  one html grid so i can compare');
+        code(480, '  side by side.', null);
+        code(560, '  label each tradeoff.', COLORS.strokeGreen);
+      }},
+    ]},
+
+  // ---- 9: ANNOTATED PR DIFF ----
+  { id: 9, section: "Demo · basics", title: "Demo — annotated PR diff",
+    vars: [
+      { kind: "title-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'demo 2', COLORS.strokeAmber);
+        h.text(200, 380, 'a PR you', { size: 64, weight:700 });
+        h.text(200, 460, "would actually review.", { size: 64, weight:700, fill: COLORS.yellow });
+        h.text(200, 580, 'margin notes · severity tags · jump links.', { size: 28, fill: COLORS.soft });
+      }},
+      { kind: "diff-mock", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // diff panel
+        h.rect(160, 200, 900, 520, { fill: COLORS.paper, roughness: 2 });
+        const code = (y, t, c) => h.text(190, y, t, { size: 24, font:"'Cascadia Code', monospace", fill: c||COLORS.ink });
+        code(250, '@@ -12,3 +12,7 @@', COLORS.faint);
+        code(300, '- tokens.refresh()', COLORS.rose);
+        code(360, '+ await tokens.refresh()', COLORS.strokeGreen);
+        code(410, '+ if (!tokens.valid) {', COLORS.strokeGreen);
+        code(460, '+   throw new Error()', COLORS.strokeGreen);
+        code(510, '+ }', COLORS.strokeGreen);
+        // sticky note in margin
+        h.sticky(1100, 240, 360, 220, COLORS.yellow);
+        h.text(1130, 290, '⚠ HIGH', { size: 32, weight: 700, fill: COLORS.rose, font:"'Cascadia Code', monospace" });
+        h.text(1130, 350, 'missing await caused', { size: 26, fill: '#1e1e1e' });
+        h.text(1130, 390, 'last week\'s outage', { size: 26, fill: '#1e1e1e' });
+        // arrow connecting note to diff
+        h.arrow(1100, 350, 950, 320, { curve: -10, stroke: COLORS.rose, strokeWidth: 2 });
+      }},
+      { kind: "vs", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 230, 230, 'github default', COLORS.strokeAmber);
+        h.text(230, 360, 'scrolling diff', { size: 44 });
+        h.text(230, 420, 'no context · no severity', { size: 26, fill: COLORS.soft });
+        h.arrow(720, 360, 980, 360, { stroke: COLORS.yellow, strokeWidth: 3, head: 24 });
+        kicker(h, 1020, 230, 'html artifact', COLORS.strokeGreen);
+        h.text(1020, 360, 'annotated', { size: 44, fill: COLORS.yellow });
+        h.text(1020, 420, 'severity · why-it-matters', { size: 26, fill: COLORS.soft });
+      }},
+    ]},
+
+  // ---- 10: ANIMATION SANDBOX ----
+  { id: 10, section: "Demo · basics", title: "Demo — animation sandbox",
+    vars: [
+      { kind: "title-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'demo 3', COLORS.strokeAmber);
+        h.text(200, 380, 'tune the motion', { size: 64, weight:700 });
+        h.text(200, 460, 'before you ship it.', { size: 64, weight:700, fill: COLORS.yellow });
+        h.text(200, 580, 'duration · easing · color · live preview.', { size: 28, fill: COLORS.soft });
+      }},
+      { kind: "sliders", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.rect(280, 200, 1040, 520, { fill: COLORS.paper, roughness: 2 });
+        // slider 1
+        h.text(330, 270, 'duration', { size: 28 });
+        h.text(1240, 270, '220ms', { size: 28, anchor:'end', fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+        h.line(330, 320, 1240, 320, { stroke: COLORS.faint, strokeWidth: 4 });
+        h.line(330, 320, 660, 320, { stroke: COLORS.yellow, strokeWidth: 4 });
+        h.circle(660, 320, 26, { fill: COLORS.yellow });
+        // slider 2
+        h.text(330, 410, 'easing', { size: 28 });
+        h.text(1240, 410, 'cubic-out', { size: 28, anchor:'end', fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+        h.line(330, 460, 1240, 460, { stroke: COLORS.faint, strokeWidth: 4 });
+        h.line(330, 460, 880, 460, { stroke: COLORS.yellow, strokeWidth: 4 });
+        h.circle(880, 460, 26, { fill: COLORS.yellow });
+        // copy button
+        h.rect(330, 580, 280, 80, { fill: COLORS.bg });
+        h.text(470, 632, 'copy params', { size: 28, anchor:'middle' });
+      }},
+      { kind: "feel", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 350, "motion can't be described.", { size: 56, weight:700, anchor:'middle' });
+        h.text(800, 470, 'only felt.', { size: 100, weight:700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(580, 495, 440);
+        h.text(800, 620, 'a paragraph of prose ≠ a slider you drag.', { size: 26, anchor:'middle', fill: COLORS.soft });
+      }},
+    ]},
+
+  // ---- 11: FEATURE EXPLAINER ----
+  { id: 11, section: "Demo · basics", title: "Demo — feature explainer",
+    vars: [
+      { kind: "title-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'demo 4', COLORS.strokeAmber);
+        h.text(200, 380, '"explain how rate limiting', { size: 50, weight:700 });
+        h.text(200, 450, 'works in this repo."', { size: 50, weight:700, fill: COLORS.yellow });
+        h.text(200, 580, 'tl;dr · diagram · code · gotchas · faq.', { size: 28, fill: COLORS.soft });
+      }},
+      { kind: "tabs", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // tabs
+        const tabs = [
+          {x: 240, t: 'tl;dr', active:true},
+          {x: 420, t: 'flow'},
+          {x: 580, t: 'code'},
+          {x: 740, t: 'faq'},
+        ];
+        tabs.forEach(t => {
+          h.rect(t.x, 220, 140, 60, { fill: t.active ? COLORS.yellow : COLORS.paper, roughness: 2 });
+          h.text(t.x+70, 260, t.t, { size: 24, anchor:'middle', fill: t.active ? '#1e1e1e' : COLORS.soft });
+        });
+        // tl;dr panel
+        h.rect(240, 300, 1120, 380, { fill: COLORS.paper, roughness: 2 });
+        h.text(280, 380, 'token-bucket · per user', { size: 32 });
+        h.text(280, 440, '100 req / min · refills 1.66/sec', { size: 28, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+        h.text(280, 500, 'burst 200', { size: 28, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+        h.text(280, 580, 'returns 429 + retry-after', { size: 28, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+      }},
+      { kind: "vs", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 360, 'read the code? half a day.', { size: 50, weight:700, anchor:'middle' });
+        h.text(800, 510, 'read this? 3 minutes.', { size: 70, weight:700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(440, 540, 720);
+        h.text(800, 640, 'made for someone reading it once.', { size: 28, anchor:'middle', fill: COLORS.soft });
+      }},
+    ]},
+
+  // ---- 12: TICKET TRIAGE BOARD ----
+  { id: 12, section: "Demo · basics", title: "Demo — ticket triage board",
+    vars: [
+      { kind: "title-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'demo 5', COLORS.strokeAmber);
+        h.text(200, 380, 'drag 30 tickets across', { size: 56, weight:700 });
+        h.text(200, 450, 'now / next / later / cut.', { size: 56, weight:700, fill: COLORS.yellow });
+        h.text(200, 580, 'copy as markdown · paste into linear.', { size: 28, fill: COLORS.soft });
+      }},
+      { kind: "kanban", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        const cols = ['now','next','later','cut'];
+        const colColors = [COLORS.yellow, COLORS.blue, COLORS.soft, COLORS.rose];
+        const cw = 320, gx = 100, gy = 200, gap = 20;
+        cols.forEach((c, i) => {
+          const x = gx + i*(cw+gap);
+          h.rect(x, gy, cw, 530, { fill: COLORS.paper, roughness: 2 });
+          h.text(x+30, gy+50, c, { size: 32, weight:700, fill: colColors[i] });
+          for (let k=0;k<3;k++) {
+            h.sticky(x+25, gy+100 + k*120, cw-50, 100, i===0?COLORS.yellow : COLORS.panel);
+            h.text(x+50, gy+150 + k*120, 'ticket', { size: 22, fill: i===0 ? '#1e1e1e' : COLORS.soft });
+          }
+        });
+      }},
+      { kind: "principle", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'the principle');
+        h.text(200, 360, 'throwaway editor', { size: 58, weight:700 });
+        h.text(200, 420, 'for the exact thing', { size: 58, weight:700 });
+        h.text(200, 480, "you're working on.", { size: 58, weight:700 });
+        h.text(200, 620, 'always end with: copy as <thing>', { size: 32, fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ---- 13: SECTION HEADER — CLOSING THE LOOP ----
+  { id: 13, section: "Section header", title: "Closing the loop opener",
+    vars: [
+      { kind: "section-1", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 280, 'PART 2', null);
+        h.text(800, 280, 'PART 2', { size: 28, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.yellow });
+        h.text(800, 460, 'close the loop.', { size: 130, weight:700, anchor:'middle' });
+        h.underline(420, 485, 760);
+        h.text(800, 600, 'the post stops here. we keep going.', { size: 28, anchor:'middle', fill: COLORS.soft });
+      }},
+      { kind: "section-2", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'act 2');
+        h.text(200, 380, "don't copy and paste", { size: 60, weight:700 });
+        h.text(200, 450, 'back into claude.', { size: 60, weight:700 });
+        h.text(200, 600, 'make the page do it.', { size: 60, weight:700, fill: COLORS.yellow });
+      }},
+      { kind: "section-3", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 380, '▌ chapter 2', { size: 90, weight:700, anchor:'middle', fill: COLORS.yellow });
+        h.text(800, 510, 'artifacts that talk back.', { size: 48, anchor:'middle' });
+      }},
+    ]},
+
+  // ---- 14: CHANNEL ARTIFACT DEMO ----
+  { id: 14, section: "Demo · loop", title: "Demo — channel artifact",
+    vars: [
+      { kind: "flow", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'channel artifact');
+        const steps = [
+          {x:300, t:'browser', s:'click → comment', c: COLORS.yellow},
+          {x:300, t:'channel', s:'ws send', c: COLORS.blue},
+          {x:300, t:'claude code', s:'edit file', c: COLORS.green},
+          {x:300, t:'browser', s:'hot reload', c: COLORS.amber},
+        ];
+        steps.forEach((s, i) => {
+          const y = 290 + i*100;
+          h.rect(s.x, y, 380, 70, { fill: COLORS.paper, roughness: 2 });
+          h.text(s.x+20, y+45, s.t + ':', { size: 26, weight:700, fill: s.c, font:"'Cascadia Code', monospace" });
+          h.text(s.x+220, y+45, s.s, { size: 26, fill: COLORS.ink });
+          if (i < steps.length-1) {
+            h.arrow(s.x+190, y+70, s.x+190, y+98, { stroke: s.c });
+          }
+        });
+        h.sticky(800, 350, 480, 220, COLORS.yellow);
+        h.text(820, 410, 'the loop', { size: 30, weight:700, fill: '#1e1e1e' });
+        h.text(820, 470, 'no copy-paste.', { size: 26, fill: '#1e1e1e' });
+        h.text(820, 510, 'no context switch.', { size: 26, fill: '#1e1e1e' });
+      }},
+      { kind: "comparison", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 230, 240, "thariq's stop", COLORS.strokeAmber);
+        h.text(230, 360, 'copy json', { size: 44 });
+        h.text(230, 420, 'paste into claude', { size: 44 });
+        h.text(230, 480, 'press enter', { size: 44, fill: COLORS.soft });
+        h.arrow(720, 400, 940, 400, { stroke: COLORS.yellow, strokeWidth: 3, head: 24 });
+        kicker(h, 1000, 240, 'channel artifact', COLORS.strokeGreen);
+        h.text(1000, 360, 'browser sends', { size: 44 });
+        h.text(1000, 420, 'directly to claude', { size: 44 });
+        h.text(1000, 480, 'auto reload', { size: 44, fill: COLORS.yellow });
+      }},
+      { kind: "demo-frame", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.rect(180, 180, 1240, 540, { stroke: COLORS.ink, strokeWidth: 2, roughness: 2 });
+        h.line(180, 240, 1420, 240);
+        h.circle(220, 210, 14, { fill: COLORS.rose });
+        h.circle(250, 210, 14, { fill: COLORS.strokeAmber });
+        h.circle(280, 210, 14, { fill: COLORS.strokeGreen });
+        h.text(800, 360, 'i click on a button.', { size: 44, anchor:'middle' });
+        h.text(800, 440, 'claude rewrites the component.', { size: 44, anchor:'middle', fill: COLORS.yellow });
+        h.text(800, 560, 'no copy-paste. no prompt. just clicks.', { size: 24, anchor:'middle', fill: COLORS.soft });
+      }},
+    ]},
+
+  // ---- 15: PER-SECTION REGENERATE ----
+  { id: 15, section: "Demo · loop", title: "Demo — per-section regenerate",
+    vars: [
+      { kind: "title-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'deeper move');
+        h.text(200, 380, 'every section has', { size: 60, weight:700 });
+        h.text(200, 450, 'a "↻ regenerate" button.', { size: 60, weight:700, fill: COLORS.yellow });
+        h.text(200, 580, 'artifact prompts itself.', { size: 32, fill: COLORS.soft });
+      }},
+      { kind: "mock", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // 3 stacked sections
+        const sections = [
+          {y: 220, t: 'tl;dr', s: 'rate limit per user', c: COLORS.ink},
+          {y: 360, t: 'flow', s: 'regenerating…', c: COLORS.yellow, active: true},
+          {y: 500, t: 'gotchas', s: '3 edge cases', c: COLORS.ink},
+        ];
+        sections.forEach(s => {
+          h.rect(180, s.y, 1240, 110, { fill: s.active ? '#2a280f' : COLORS.paper, stroke: s.active ? COLORS.yellow : COLORS.ink, strokeWidth: s.active ? 2 : 1.4, roughness: 2 });
+          h.text(220, s.y+50, s.t, { size: 30, weight:700, fill: s.c });
+          h.text(220, s.y+90, s.s, { size: 24, fill: COLORS.soft });
+          // regenerate button
+          h.rect(1300, s.y+30, 90, 50, { fill: COLORS.bg });
+          h.text(1345, s.y+65, '↻', { size: 32, anchor:'middle', fill: s.active ? COLORS.yellow : COLORS.soft });
+        });
+      }},
+      { kind: "principle", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'artifact = prompt surface');
+        h.text(200, 380, "the page isn't read-only.", { size: 56, weight:700 });
+        h.text(200, 540, "it's a control panel", { size: 56, weight:700, fill: COLORS.yellow });
+        h.text(200, 610, 'for claude code.', { size: 56, weight:700, fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ---- 16: SECTION HEADER — LIVE DATA ----
+  { id: 16, section: "Section header", title: "Live data opener",
+    vars: [
+      { kind: "section-1", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 280, 'PART 3', COLORS.strokeBlue);
+        h.text(800, 280, 'PART 3', { size: 28, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.blue });
+        h.text(800, 460, 'give it data.', { size: 130, weight:700, anchor:'middle' });
+        h.underline(450, 485, 700, { stroke: COLORS.blue });
+      }},
+      { kind: "section-2", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'act 3', COLORS.strokeBlue);
+        h.text(200, 380, 'artifacts that fetch', { size: 56, weight:700 });
+        h.text(200, 450, 'from your real systems.', { size: 56, weight:700 });
+        h.text(200, 590, 'slack · linear · github · stripe · posthog.', { size: 28, fill: COLORS.blue });
+      }},
+      { kind: "section-3", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 380, '▌ chapter 3', { size: 90, weight:700, anchor:'middle', fill: COLORS.blue });
+        h.text(800, 510, 'mcp-wired artifacts.', { size: 48, anchor:'middle' });
+      }},
+    ]},
+
+  // ---- 17: DIGEST DASHBOARD ----
+  { id: 17, section: "Demo · live", title: "Demo — what to tackle today",
+    vars: [
+      { kind: "title-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'demo 6', COLORS.strokeBlue);
+        h.text(200, 380, '"what should i', { size: 64, weight:700 });
+        h.text(200, 450, 'tackle today?"', { size: 64, weight:700, fill: COLORS.yellow });
+        h.text(200, 580, 'slack + linear + github + email → one ranked list.', { size: 26, fill: COLORS.soft });
+      }},
+      { kind: "dashboard", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        const cards = [
+          {x:200, y:220, c:COLORS.yellow, t:'▲ slack', s:'3 threads · 1 escalation'},
+          {x:830, y:220, c:COLORS.blue, t:'◆ linear', s:'2 p0 · 7 p1'},
+          {x:200, y:480, c:COLORS.violet, t:'⌥ github', s:'4 PRs blocked on me'},
+          {x:830, y:480, c:COLORS.green, t:'✉ email', s:'2 needing reply'},
+        ];
+        cards.forEach(c => {
+          h.rect(c.x, c.y, 570, 220, { fill: COLORS.paper, roughness: 2.2 });
+          h.text(c.x+30, c.y+70, c.t, { size: 38, weight:700, fill: c.c });
+          h.text(c.x+30, c.y+150, c.s, { size: 26, fill: COLORS.soft });
+        });
+      }},
+      { kind: "ranked-list", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, "today's queue", COLORS.strokeBlue);
+        const items = [
+          {n:1, t:'reply to acme — churn risk', hot: true},
+          {n:2, t:"review jess's PR — blocking ship", hot: true},
+          {n:3, t:'fix LIN-422 (rate limit)'},
+          {n:4, t:'investigate sentry spike'},
+        ];
+        items.forEach((it,i) => {
+          const y = 290 + i*90;
+          h.text(220, y, `${it.n}`, { size: 56, weight:700, fill: it.hot ? COLORS.yellow : COLORS.soft, font:"'Cascadia Code', monospace" });
+          h.text(310, y, it.t, { size: 36, fill: it.hot ? COLORS.ink : COLORS.soft });
+        });
+      }},
+    ]},
+
+  // ---- 18: SECTION HEADER — WEB OF ARTIFACTS ----
+  { id: 18, section: "Section header", title: "Web of artifacts opener",
+    vars: [
+      { kind: "section-1", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 280, 'PART 4', COLORS.strokeViolet);
+        h.text(800, 280, 'PART 4', { size: 28, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.violet });
+        h.text(800, 460, 'a web of artifacts.', { size: 110, weight:700, anchor:'middle' });
+        h.underline(280, 485, 1040, { stroke: COLORS.violet });
+        h.text(800, 600, 'one feature · many linked html files.', { size: 28, anchor:'middle', fill: COLORS.soft });
+      }},
+      { kind: "section-2", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'act 4', COLORS.strokeViolet);
+        h.text(200, 380, 'stop making', { size: 70, weight:700 });
+        h.text(200, 460, 'one giant doc.', { size: 70, weight:700 });
+        h.text(200, 600, 'make a constellation.', { size: 70, weight:700, fill: COLORS.violet });
+      }},
+      { kind: "section-3", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 380, '▌ chapter 4', { size: 90, weight:700, anchor:'middle', fill: COLORS.violet });
+        h.text(800, 510, 'artifact webs.', { size: 48, anchor:'middle' });
+      }},
+    ]},
+
+  // ---- 19: WEB OF ARTIFACTS DEMO ----
+  { id: 19, section: "Demo · web", title: "Demo — referral program web",
+    vars: [
+      { kind: "tree", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        const code = (y, t, c) => h.text(240, y, t, { size: 30, font:"'Cascadia Code', monospace", fill: c||COLORS.ink });
+        code(240, 'referral-program/', COLORS.violet);
+        code(300, '├ 00-index.html', COLORS.yellow);
+        code(360, '├ 01-explore-options.html');
+        code(420, '├ 02-design-mockup.html');
+        code(480, '├ 03-data-flow.html');
+        code(540, '├ 04-implementation-plan.html');
+        code(600, '├ 05-pr-writeup.html');
+        code(660, '└ 06-launch-checklist.html');
+        h.sticky(1100, 350, 380, 200, COLORS.violet);
+        h.text(1130, 410, 'one feature', { size: 28, weight:700, fill: '#1e1e1e' });
+        h.text(1130, 460, 'seven linked', { size: 28, weight:700, fill: '#1e1e1e' });
+        h.text(1130, 510, 'html files', { size: 28, weight:700, fill: '#1e1e1e' });
+      }},
+      { kind: "graph", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // hub + spokes
+        const cx = 800, cy = 460;
+        h.circle(cx, cy, 110, { fill: COLORS.violet });
+        h.text(cx, cy+10, 'index', { size: 32, weight:700, anchor:'middle', fill: '#1e1e1e' });
+        const nodes = [
+          {x: 350, y: 260, t:'explore'},
+          {x: 1250, y: 260, t:'design'},
+          {x: 1320, y: 460, t:'plan'},
+          {x: 1250, y: 660, t:'PR'},
+          {x: 350, y: 660, t:'launch'},
+          {x: 280, y: 460, t:'data flow'},
+        ];
+        nodes.forEach(n => {
+          h.line(cx, cy, n.x, n.y, { stroke: COLORS.faint, strokeWidth: 2 });
+          h.circle(n.x, n.y, 80, { fill: COLORS.paper });
+          h.text(n.x, n.y+8, n.t, { size: 22, anchor:'middle' });
+        });
+      }},
+      { kind: "principle", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'why this matters', COLORS.strokeViolet);
+        h.text(200, 360, 'hand the index', { size: 56, weight:700 });
+        h.text(200, 420, 'to a teammate.', { size: 56, weight:700 });
+        h.text(200, 540, 'they walk the entire feature', { size: 36, fill: COLORS.yellow });
+        h.text(200, 590, 'lifecycle in 5 minutes.', { size: 36, fill: COLORS.yellow });
+        h.text(200, 680, 'no standup. no notion. no PRD.', { size: 24, fill: COLORS.soft });
+      }},
+    ]},
+
+  // ---- 20: SECTION HEADER — MEETING TRANSCRIPT ----
+  { id: 20, section: "Section header", title: "Meeting transcript opener",
+    vars: [
+      { kind: "section-1", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 280, 'PART 5', COLORS.strokePink);
+        h.text(800, 280, 'PART 5', { size: 28, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.pink });
+        h.text(800, 460, 'meeting → idea web.', { size: 110, weight:700, anchor:'middle' });
+        h.underline(290, 485, 1020, { stroke: COLORS.pink });
+      }},
+      { kind: "section-2", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'the showpiece', COLORS.strokePink);
+        h.text(200, 380, 'paste a 60-min', { size: 60, weight:700 });
+        h.text(200, 450, 'transcript.', { size: 60, weight:700 });
+        h.text(200, 590, 'get a navigable map', { size: 44, fill: COLORS.pink });
+        h.text(200, 650, 'of every idea.', { size: 44, fill: COLORS.pink });
+      }},
+      { kind: "section-3", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 380, '▌ chapter 5', { size: 90, weight:700, anchor:'middle', fill: COLORS.pink });
+        h.text(800, 510, 'transcript → web of ideas.', { size: 44, anchor:'middle' });
+      }},
+    ]},
+
+  // ---- 21: MEETING TRANSCRIPT DEMO ----
+  { id: 21, section: "Demo · meeting", title: "Demo — transcript idea web",
+    vars: [
+      { kind: "panels", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // left panel: idea web
+        h.rect(140, 180, 940, 580, { fill: COLORS.paper, roughness: 2.2 });
+        kicker(h, 180, 230, 'idea web', COLORS.strokePink);
+        // nodes
+        const nodes = [
+          {x:300,y:380,t:'pricing'}, {x:600,y:330,t:'onboarding', hot:true}, {x:900,y:380,t:'churn'},
+          {x:400,y:550,t:'activation'}, {x:780,y:580,t:'retention'},
+        ];
+        // edges
+        h.line(300,380, 600,330, { stroke: COLORS.faint });
+        h.line(600,330, 900,380, { stroke: COLORS.faint });
+        h.line(400,550, 600,330, { stroke: COLORS.faint });
+        h.line(900,380, 780,580, { stroke: COLORS.faint });
+        nodes.forEach(n => {
+          h.circle(n.x, n.y, 90, { fill: n.hot ? COLORS.pink : COLORS.bg, stroke: n.hot ? COLORS.pink : COLORS.ink });
+          h.text(n.x, n.y+8, n.t, { size: 20, anchor:'middle', fill: n.hot ? '#1e1e1e' : COLORS.ink });
+        });
+        // right column
+        const rx = 1120;
+        h.rect(rx, 180, 350, 170, { fill: COLORS.paper });
+        h.text(rx+20, 230, '✓ decisions', { size: 26, weight:700, fill: COLORS.green });
+        h.text(rx+20, 280, '3 made', { size: 22, fill: COLORS.soft });
+        h.rect(rx, 380, 350, 170, { fill: COLORS.paper });
+        h.text(rx+20, 430, '→ actions', { size: 26, weight:700, fill: COLORS.yellow });
+        h.text(rx+20, 480, '7 to do', { size: 22, fill: COLORS.soft });
+        h.rect(rx, 580, 350, 170, { fill: COLORS.paper });
+        h.text(rx+20, 630, '? open', { size: 26, weight:700, fill: COLORS.amber });
+        h.text(rx+20, 680, '4 unresolved', { size: 22, fill: COLORS.soft });
+      }},
+      { kind: "title-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'demo 7', COLORS.strokePink);
+        h.text(200, 380, 'paste granola transcript →', { size: 50, weight:700 });
+        h.text(200, 540, 'connections you literally', { size: 36, fill: COLORS.pink });
+        h.text(200, 590, "couldn't see in a doc.", { size: 36, fill: COLORS.pink });
+      }},
+      { kind: "deep-move", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'deeper', COLORS.strokePink);
+        h.text(200, 380, 'feed it 3 weeks', { size: 60, weight:700 });
+        h.text(200, 450, 'of meetings.', { size: 60, weight:700 });
+        h.text(200, 590, 'see which ideas keep resurfacing.', { size: 28, fill: COLORS.soft });
+        h.text(200, 630, 'which got resolved.', { size: 28, fill: COLORS.soft });
+        h.text(200, 670, 'which are zombies nobody owns.', { size: 28, fill: COLORS.pink });
+      }},
+    ]},
+
+  // ---- 22: WORK SURFACE — MEETING PREP ----
+  { id: 22, section: "Demo · work", title: "Demo — meeting prep brief",
+    vars: [
+      { kind: "title-card", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'bonus');
+        h.text(200, 380, '"i have a meeting', { size: 60, weight:700 });
+        h.text(200, 450, 'in 30 min."', { size: 60, weight:700, fill: COLORS.yellow });
+        h.text(200, 580, 'last 5 emails · last slack · open tickets · last PR.', { size: 26, fill: COLORS.soft });
+      }},
+      { kind: "use-case-list", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'work surfaces');
+        const items = [
+          'meeting prep brief',
+          'async standup digest',
+          '1:1 prep page',
+          'customer health card',
+          'postmortem builder',
+        ];
+        items.forEach((t,i) => {
+          h.text(220, 360 + i*65, '·', { size: 36, fill: COLORS.yellow });
+          h.text(260, 360 + i*65, t, { size: 36 });
+        });
+      }},
+      { kind: "stat", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 360, '30 SEC', { size: 160, weight:700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(540, 380, 520);
+        h.text(800, 510, 'to spin up a meeting prep page.', { size: 38, anchor:'middle' });
+        h.text(800, 620, 'no notion template. no app.', { size: 26, anchor:'middle', fill: COLORS.soft });
+      }},
+    ]},
+
+  // ---- 23: SECTION HEADER — MERMAID ----
+  { id: 23, section: "Section header", title: "Mermaid opener",
+    vars: [
+      { kind: "section-1", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 280, 'INTERLUDE', COLORS.strokeGreen);
+        h.text(800, 280, 'INTERLUDE', { size: 28, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.green });
+        h.text(800, 460, 'mermaid.', { size: 140, weight:700, anchor:'middle' });
+        h.underline(550, 485, 500, { stroke: COLORS.green });
+        h.text(800, 600, 'for relationships.', { size: 38, anchor:'middle', fill: COLORS.soft });
+      }},
+      { kind: "section-2", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'when to reach for mermaid', COLORS.strokeGreen);
+        const items = ['sequence diagrams (oauth)','state machines','ER diagrams','git branch graphs'];
+        items.forEach((t,i) => {
+          h.text(220, 360 + i*70, '·', { size: 36, fill: COLORS.green });
+          h.text(260, 360 + i*70, t, { size: 36 });
+        });
+      }},
+      { kind: "demo-frame", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.rect(180, 180, 1240, 540, { roughness: 2 });
+        kicker(h, 220, 240, '▶ live demo', COLORS.strokeGreen);
+        h.text(800, 440, '"draw this oauth flow', { size: 46, weight:700, anchor:'middle' });
+        h.text(800, 510, 'as a mermaid sequence diagram."', { size: 46, weight:700, anchor:'middle', fill: COLORS.green });
+      }},
+    ]},
+
+  // ---- 24: SECTION HEADER — MINI APP ----
+  { id: 24, section: "Section header", title: "Mini-app opener",
+    vars: [
+      { kind: "section-1", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 280, 'FINAL ACT', COLORS.strokeAmber);
+        h.text(800, 280, 'FINAL ACT', { size: 28, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.amber });
+        h.text(800, 460, 'artifact → mini-app.', { size: 110, weight:700, anchor:'middle' });
+        h.underline(280, 485, 1040, { stroke: COLORS.amber });
+      }},
+      { kind: "section-2", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'act 6', COLORS.strokeAmber);
+        h.text(200, 380, 'when an artifact is', { size: 56, weight:700 });
+        h.text(200, 450, 'too useful to throw away,', { size: 56, weight:700 });
+        h.text(200, 600, 'host it.', { size: 90, weight:700, fill: COLORS.amber });
+      }},
+      { kind: "thesis", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 400, 'every artifact is', { size: 80, weight:700, anchor:'middle' });
+        h.text(800, 540, 'a tool in waiting.', { size: 100, weight:700, anchor:'middle', fill: COLORS.amber });
+        h.underline(330, 565, 940, { stroke: COLORS.amber });
+      }},
+    ]},
+
+  // ---- 25: HOSTED MINI APP DEMO ----
+  { id: 25, section: "Demo · mini-app", title: "Demo — host on Vercel with auth",
+    vars: [
+      { kind: "transition", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'the prompt', COLORS.strokeAmber);
+        h.rect(200, 250, 1200, 360, { fill: COLORS.paper, roughness: 2 });
+        const code = (y, t, c) => h.text(240, y, t, { size: 26, font:"'Cascadia Code', monospace", fill: c||COLORS.ink });
+        code(310, '› wrap this artifact in a tiny', COLORS.amber);
+        code(360, '  bun + hono server. pull data via');
+        code(410, '  env vars instead of mcp. deploy');
+        code(460, '  to vercel. add basic auth.');
+        h.text(200, 670, '90 seconds later: team-standup.yourdomain.com', { size: 24, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+      }},
+      { kind: "url", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 800, 280, 'PASSWORD PROTECTED', COLORS.strokeAmber);
+        h.text(800, 280, 'PASSWORD PROTECTED', { size: 26, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.amber });
+        h.rect(280, 380, 1040, 140, { fill: COLORS.paper, roughness: 2.5, strokeWidth: 2 });
+        h.text(800, 470, 'standup.team.com', { size: 60, weight:700, anchor:'middle', fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+        h.text(800, 600, 'your whole team uses it.', { size: 32, anchor:'middle' });
+        h.text(800, 650, 'no claude code needed.', { size: 32, anchor:'middle', fill: COLORS.soft });
+      }},
+      { kind: "provocation", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'the provocation', COLORS.strokeAmber);
+        h.text(200, 380, 'half the saas you', { size: 60, weight:700 });
+        h.text(200, 450, 'pay $200/mo for', { size: 60, weight:700 });
+        h.text(200, 600, 'is one html + a vercel deploy.', { size: 44, fill: COLORS.amber });
+      }},
+    ]},
+
+  // ---- 26: THESIS RECAP ----
+  { id: 26, section: "Close", title: "Thesis recap",
+    vars: [
+      { kind: "big", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 320, 'stop asking claude', { size: 80, weight:700, anchor:'middle' });
+        h.text(800, 410, 'for documents.', { size: 80, weight:700, anchor:'middle', fill: COLORS.soft });
+        h.line(420, 395, 1180, 395, { stroke: COLORS.rose, strokeWidth: 4 });
+        h.text(800, 600, 'ask for SURFACES.', { size: 110, weight:700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(330, 625, 940);
+      }},
+      { kind: "ladder-recap", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'recap');
+        const steps = [
+          {t:'L1 static · read', c: COLORS.soft},
+          {t:'L2 channel · read + edit', c: COLORS.blue},
+          {t:'L3 mcp · read + edit + live', c: COLORS.violet},
+          {t:'L4 hosted · your whole team', c: COLORS.yellow, hot: true},
+        ];
+        steps.forEach((s,i) => {
+          const y = 280 + i*100;
+          h.rect(220, y, 1160, 80, { fill: s.hot ? '#2a280f' : COLORS.paper, stroke: s.hot ? COLORS.yellow : COLORS.ink, strokeWidth: s.hot?2:1.4, roughness: 2 });
+          h.text(260, y+55, s.t, { size: 32, weight:700, fill: s.c, font:"'Cascadia Code', monospace" });
+        });
+      }},
+      { kind: "metaphor", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 230, 'the move');
+        h.text(200, 380, 'markdown ENDS', { size: 70, weight:700 });
+        h.text(200, 460, 'the conversation.', { size: 70, weight:700 });
+        h.text(200, 600, 'html CONTINUES it.', { size: 80, weight:700, fill: COLORS.yellow });
+        h.underline(200, 625, 800);
+      }},
+    ]},
+
+  // ---- 27: CTA ----
+  { id: 27, section: "Close", title: "Class CTA",
+    vars: [
+      { kind: "cta-bold", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 360, 'the full playbook', { size: 80, weight:700, anchor:'middle' });
+        h.text(800, 470, 'is in the class.', { size: 100, weight:700, anchor:'middle', fill: COLORS.yellow });
+        h.underline(370, 495, 860);
+        h.text(800, 620, 'agenticcoding.school', { size: 36, anchor:'middle', font:"'Cascadia Code', monospace", fill: COLORS.soft });
+      }},
+      { kind: "cta-list", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'in the workflows class');
+        const items = [
+          'interactive html artifacts',
+          'bun hot reload setup',
+          'channel artifacts (full)',
+          'mcp wiring patterns',
+          'artifact → mini-app graduation',
+        ];
+        items.forEach((t,i) => {
+          h.text(220, 290 + i*65, '·', { size: 32, fill: COLORS.yellow });
+          h.text(260, 290 + i*65, t, { size: 30 });
+        });
+        h.text(220, 690, '→ agenticcoding.school', { size: 30, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+      }},
+      { kind: "cta-soft", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        h.text(800, 360, "i've been doing this", { size: 50, anchor:'middle' });
+        h.text(800, 420, 'for 8 months.', { size: 50, anchor:'middle' });
+        h.text(800, 540, 'if you want the deep cuts —', { size: 40, anchor:'middle', fill: COLORS.yellow });
+        h.text(800, 640, 'join the school. link below.', { size: 28, anchor:'middle', fill: COLORS.soft });
+      }},
+    ]},
+];
+
+// ================================================================
+// RENDER
+// ================================================================
+const grid = document.getElementById('grid');
+const selCount = document.getElementById('selCount');
+
+const state = { selections: new Map() };
+
+function renderAll() {
+  if (typeof rough === 'undefined') {
+    grid.innerHTML = '<div style="color:#ff8787;font-size:24px;padding:40px;font-family:monospace">rough.js failed to load — check your internet connection or CDN access.</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  for (const t of TOPICS) {
+    const topic = document.createElement('section');
+    topic.className = 'topic';
+    topic.innerHTML = `
+      <div class="topic-head">
+        <div class="topic-num">#${String(t.id).padStart(2,'0')}</div>
+        <div class="topic-title">${t.title}</div>
+        <div class="topic-section">${t.section}</div>
+      </div>
+      <div class="variations" id="vars-${t.id}"></div>
+    `;
+    grid.appendChild(topic);
+    const vars = topic.querySelector('.variations');
+    t.vars.forEach((v, idx) => {
+      const key = `${t.id}-${idx}`;
+      const card = document.createElement('div');
+      card.className = 'var-card';
+      card.dataset.key = key;
+      card.innerHTML = `
+        <div class="slide" data-slide></div>
+        <div class="var-meta">
+          <div class="head">
+            <span class="label">var ${String.fromCharCode(65+idx)} · ${v.kind}</span>
+            <span class="rank" data-rank></span>
+          </div>
+          <textarea placeholder="brief description / why you like this..." data-desc></textarea>
+          <button class="select-btn" data-select>select</button>
+        </div>
+      `;
+      vars.appendChild(card);
+
+      // Build SVG inside the slide host directly
+      const slideHost = card.querySelector('[data-slide]');
+      const svg = el('svg', {
+        viewBox: '0 0 1600 900',
+        preserveAspectRatio: 'xMidYMid meet',
+        width: '100%',
+        height: '100%',
+      });
+      slideHost.appendChild(svg);
+      try {
+        const rc = rough.svg(svg);
+        v.draw(svg, rc);
+      } catch(e) {
+        console.error('Draw error for topic', t.id, 'var', idx, e);
+        slideHost.innerHTML = `<div style="padding:20px;color:#ff8787;font-family:monospace;font-size:12px">draw error: ${e.message}</div>`;
+      }
+
+      const btn = card.querySelector('[data-select]');
+      const desc = card.querySelector('[data-desc]');
+      btn.addEventListener('click', () => toggleSelect(t.id, idx, desc, card));
+      desc.addEventListener('input', () => {
+        const sel = state.selections.get(key);
+        if (sel) sel.description = desc.value;
+      });
+    });
+  }
+}
+
+function toggleSelect(topicId, varIdx, descEl, card) {
+  const key = `${topicId}-${varIdx}`;
+  if (state.selections.has(key)) {
+    state.selections.delete(key);
+    card.classList.remove('selected');
+    card.querySelector('[data-select]').textContent = 'select';
+  } else {
+    state.selections.set(key, {
+      topicId, varIdx, description: descEl.value,
+      order: state.selections.size + 1
+    });
+    card.classList.add('selected');
+    card.querySelector('[data-select]').textContent = '✓ selected';
+  }
+  refreshRanks();
+  selCount.textContent = state.selections.size;
+}
+
+function refreshRanks() {
+  document.querySelectorAll('.var-card').forEach(c => {
+    c.querySelector('[data-rank]').textContent = '';
+  });
+  let i = 1;
+  for (const [key, sel] of state.selections) {
+    const card = document.querySelector(`.var-card[data-key="${key}"]`);
+    if (card) card.querySelector('[data-rank]').textContent = `#${i}`;
+    sel.order = i;
+    i++;
+  }
+}
+
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  const out = [...state.selections.values()].map(s => {
+    const t = TOPICS.find(x => x.id === s.topicId);
+    const v = t.vars[s.varIdx];
+    return {
+      order: s.order,
+      topicId: s.topicId,
+      topic: t.title,
+      section: t.section,
+      variation: String.fromCharCode(65 + s.varIdx),
+      kind: v.kind,
+      description: s.description || '',
+    };
+  });
+  const json = JSON.stringify(out, null, 2);
+  try {
+    await navigator.clipboard.writeText(json);
+    showToast(`copied ${out.length} slide${out.length===1?'':'s'}`);
+  } catch {
+    showToast("couldn't copy — open console");
+    console.log(json);
+  }
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  state.selections.clear();
+  document.querySelectorAll('.var-card.selected').forEach(c => {
+    c.classList.remove('selected');
+    c.querySelector('[data-select]').textContent = 'select';
+    c.querySelector('[data-rank]').textContent = '';
+  });
+  selCount.textContent = '0';
+});
+
+const toast = document.getElementById('toast');
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+renderAll();
+</script>
+</body>
+</html>

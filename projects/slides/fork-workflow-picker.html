@@ -1,0 +1,1159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Fork workflow — slide picker (dark, sketch)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-display: swap;
+  }
+</style>
+<script src="./rough.js"></script>
+<style>
+  :root {
+    --bg: #121212;
+    --paper: #1a1a1a;
+    --panel: #1e1e1e;
+    --ink: #ececec;
+    --ink-soft: #9a9a9a;
+    --ink-faint: #4a4a4a;
+    --yellow: #ffec99;
+    --blue: #a5d8ff;
+    --green: #b2f2bb;
+    --pink: #fcc2d7;
+    --amber: #ffd8a8;
+    --violet: #d0bfff;
+    --teal: #96f2d7;
+    --light-red: #ffc9c9;
+    --rule: #2a2a2a;
+    --accent: #ffec99;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Excalifont', cursive;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 4px 4px;
+    z-index: 1;
+  }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(18,18,18,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px dashed var(--rule);
+    padding: 14px 28px;
+    display: flex; align-items: center; gap: 18px;
+  }
+  header h1 {
+    margin: 0;
+    font-family: 'Excalifont', cursive;
+    font-size: 24px;
+    color: var(--ink);
+  }
+  header h1 .muted { color: var(--ink-soft); font-size: 18px; }
+  header .spacer { flex: 1; }
+  header .count {
+    font-family: 'Cascadia Code', ui-monospace, monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    padding: 8px 14px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink-faint);
+  }
+  header .count b { color: var(--yellow); font-weight: 700; }
+  header button {
+    font-family: 'Excalifont', cursive;
+    font-size: 18px;
+    padding: 6px 16px 8px;
+    background: var(--yellow);
+    color: #1e1e1e;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 2px 3px 0 var(--ink);
+    transition: transform 100ms ease;
+  }
+  header button:hover { transform: translate(-1px,-1px); box-shadow: 3px 4px 0 var(--ink); }
+  header button:active { transform: translate(1px,2px); box-shadow: 0 0 0 var(--ink); }
+  header button.secondary { background: var(--paper); color: var(--ink); }
+
+  main { padding: 36px 28px 120px; max-width: 1700px; margin: 0 auto; position: relative; z-index: 2; }
+  .topic { margin-bottom: 56px; }
+  .topic-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .topic-num { font-family: 'Cascadia Code', monospace; font-size: 14px; color: var(--ink-faint); }
+  .topic-title { font-family: 'Excalifont', cursive; font-size: 22px; color: var(--ink); }
+  .topic-section {
+    margin-left: auto;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--yellow);
+  }
+  .variations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .var-card {
+    background: var(--paper);
+    border: 2px solid var(--ink-faint);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 3px 4px 0 var(--ink-faint);
+    transition: all 120ms ease;
+  }
+  .var-card:hover {
+    transform: translate(-1px,-1px);
+    box-shadow: 4px 5px 0 var(--ink-soft);
+    border-color: var(--ink-soft);
+  }
+  .var-card.selected {
+    border-color: var(--yellow);
+    box-shadow: 4px 5px 0 var(--yellow);
+    background: #1f1d12;
+  }
+  .slide {
+    aspect-ratio: 16 / 9;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1.5px dashed var(--rule);
+  }
+  .slide svg { width: 100%; height: 100%; display: block; }
+  .var-meta { padding: 12px 14px; }
+  .var-meta .head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .var-meta .label {
+    font-family: 'Cascadia Code', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+  .var-meta .rank { font-family: 'Cascadia Code', monospace; font-size: 13px; color: var(--yellow); }
+  .var-meta textarea {
+    width: 100%;
+    min-height: 50px;
+    background: var(--bg);
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: var(--ink);
+    font-family: 'Excalifont', cursive;
+    font-size: 15px;
+    line-height: 1.3;
+    resize: vertical;
+  }
+  .var-meta textarea:focus { outline: none; border-color: var(--yellow); }
+  .select-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 6px 12px 8px;
+    background: var(--bg);
+    color: var(--ink);
+    border: 2px solid var(--ink-soft);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Excalifont', cursive;
+    font-size: 17px;
+    box-shadow: 2px 2px 0 var(--ink-soft);
+    transition: all 100ms ease;
+  }
+  .select-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--ink-soft); border-color: var(--ink); }
+  .var-card.selected .select-btn {
+    background: var(--yellow);
+    color: #1e1e1e;
+    border-color: var(--yellow);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .toast {
+    position: fixed;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--yellow);
+    color: #1e1e1e;
+    padding: 8px 22px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 3px 4px 0 var(--ink);
+    font-family: 'Excalifont', cursive;
+    font-size: 18px;
+    transition: transform 220ms ease;
+    z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Fork workflow <span class="muted">— "fork = side workspace" · 10 concepts × 3 vars</span></h1>
+  <div class="spacer"></div>
+  <div class="count"><b id="selCount">0</b> selected</div>
+  <button class="secondary" id="clearBtn">clear</button>
+  <button id="copyBtn">copy as JSON</button>
+</header>
+
+<main id="grid"></main>
+
+<div class="toast" id="toast">copied</div>
+
+<script>
+const COLORS = {
+  bg: '#121212', ink: '#ececec', soft: '#9a9a9a', faint: '#4a4a4a',
+  paper: '#1a1a1a', panel: '#1e1e1e',
+  yellow: '#ffec99', blue: '#a5d8ff', green: '#b2f2bb',
+  pink: '#fcc2d7', amber: '#ffd8a8', violet: '#d0bfff', teal: '#96f2d7',
+  lightRed: '#ffc9c9',
+  strokeBlue: '#74c0fc', strokeYellow: '#ffd43b', strokeGreen: '#8ce99a',
+  strokePink: '#faa2c1', strokeViolet: '#b197fc', strokeAmber: '#ffc078',
+  rose: '#ff8787',
+};
+
+function el(tag, attrs={}) {
+  const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+
+function H(svg, rc) {
+  return {
+    rect(x,y,w,h,o={}) {
+      const n = rc.rectangle(x,y,w,h, {
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.6,
+        roughness: o.roughness || 1.8, bowing: o.bowing || 1.5,
+        fill: o.fill, fillStyle: o.fillStyle || 'solid', fillWeight: 1,
+        hachureGap: 6, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    line(x1,y1,x2,y2,o={}) {
+      const n = rc.line(x1,y1,x2,y2,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.5, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    circle(cx,cy,d,o={}) {
+      const n = rc.circle(cx,cy,d,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.5, fill: o.fill, fillStyle: o.fillStyle||'solid', ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    path(d,o={}) {
+      const n = rc.path(d,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4,
+        roughness: o.roughness || 1.6, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    text(x,y,t,o={}) {
+      const n = el('text',{
+        x, y,
+        'font-family': o.font || "'Excalifont', cursive",
+        'font-size': o.size || 30,
+        fill: o.fill || COLORS.ink,
+        'text-anchor': o.anchor || 'start',
+      });
+      if (o.weight) n.setAttribute('font-weight', o.weight);
+      if (o.style) n.setAttribute('font-style', o.style);
+      n.textContent = t;
+      svg.appendChild(n); return n;
+    },
+    arrow(x1,y1,x2,y2,o={}) {
+      const curve = o.curve != null ? o.curve : 0;
+      const cx = (x1+x2)/2 + curve;
+      const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+      const d = curve === 0
+        ? `M ${x1} ${y1} L ${x2} ${y2}`
+        : `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+      this.path(d, o);
+      const ang = Math.atan2(y2-cy, x2-cx);
+      const ah = o.head || 16;
+      this.line(x2,y2, x2-ah*Math.cos(ang-Math.PI/7), y2-ah*Math.sin(ang-Math.PI/7), o);
+      this.line(x2,y2, x2-ah*Math.cos(ang+Math.PI/7), y2-ah*Math.sin(ang+Math.PI/7), o);
+    },
+    underline(x,y,w,o={}) {
+      const dy = 6, segs = 6;
+      let d = `M ${x} ${y}`;
+      for (let i=1;i<=segs;i++) {
+        const xi = x + (w*i/segs);
+        const yi = y + (i%2===0 ? 0 : dy);
+        d += ` L ${xi} ${yi}`;
+      }
+      this.path(d,{stroke: o.stroke || COLORS.yellow, strokeWidth: 3, roughness: 1.2});
+    },
+    sticky(x,y,w,h,fill,o={}) {
+      this.rect(x,y,w,h,{fill, fillStyle:'solid', stroke: COLORS.ink, strokeWidth:1.6, roughness:2.0, bowing:1.8, ...o});
+    },
+  };
+}
+
+function kicker(h, x, y, text, color) {
+  h.text(x, y, text, { size: 22, fill: color || COLORS.yellow, font: "'Cascadia Code', monospace" });
+}
+
+// ============================================================
+// reusable glyphs
+// ============================================================
+function mainAgent(h, cx, cy, scale=1) {
+  const s = scale;
+  h.rect(cx-60*s, cy-50*s, 120*s, 100*s, { fill: COLORS.paper, stroke: COLORS.yellow, strokeWidth: 2, roughness: 2 });
+  h.text(cx, cy+10*s, 'main', { size: 26*s, anchor:'middle', fill: COLORS.yellow });
+}
+
+function forkAgent(h, cx, cy, scale=1, color) {
+  const s = scale;
+  const c = color || COLORS.blue;
+  h.rect(cx-50*s, cy-40*s, 100*s, 80*s, { fill: COLORS.paper, stroke: c, strokeWidth: 1.6, roughness: 2 });
+  h.text(cx, cy+8*s, 'fork', { size: 22*s, anchor:'middle', fill: c });
+}
+
+const TOPICS = [
+
+  // ============================================================
+  // 1: Variation forks — picker pattern
+  // ============================================================
+  { id: 1, section: "variations", title: 'Variation forks · pick from N',
+    vars: [
+      { kind: "fanout-picker", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork → variations → pick');
+        mainAgent(h, 280, 450, 1.2);
+        // 3 fork branches
+        const forks = [{y:280, c:COLORS.blue},{y:450, c:COLORS.green},{y:620, c:COLORS.pink}];
+        forks.forEach((f,i) => {
+          h.line(360, 450, 720, f.y, { stroke: f.c, strokeWidth: 1.6 });
+          forkAgent(h, 800, f.y, 1.0, f.c);
+          h.arrow(880, f.y, 1080, f.y, { stroke: f.c, head: 14 });
+          h.rect(1100, f.y-50, 220, 100, { fill: COLORS.panel, roughness: 2 });
+          h.text(1210, f.y+8, 'var '+(i+1), { size: 24, anchor:'middle' });
+        });
+        h.text(800, 800, 'pick the strongest. discard the rest.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "picker-grid", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'side picker');
+        // mini grid of options
+        const cols = 3, rows = 2;
+        const gx = 200, gy = 260, cw = 360, ch = 200, gap = 24;
+        for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
+          const x = gx + c*(cw+gap), y = gy + r*(ch+gap);
+          const idx = r*cols+c;
+          const isPick = idx === 1;
+          h.rect(x, y, cw, ch, {
+            fill: isPick ? '#1f1d12' : COLORS.paper,
+            stroke: isPick ? COLORS.yellow : COLORS.faint,
+            strokeWidth: isPick ? 2.5 : 1.4,
+            roughness: 2
+          });
+          h.text(x+30, y+50, 'var '+(idx+1), { size: 22, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+          if (isPick) h.text(x+cw-50, y+40, '#1', { size: 22, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+          h.line(x+30, y+90, x+cw-30, y+90, { stroke: COLORS.faint });
+          h.line(x+30, y+120, x+cw-80, y+120, { stroke: COLORS.faint });
+        }
+        h.text(800, 820, 'main thread integrates the pick.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "branch-merge", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // git-graph style
+        h.line(200, 450, 1400, 450, { stroke: COLORS.yellow, strokeWidth: 3 });
+        h.text(200, 420, 'main', { size: 22, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+        // branches up
+        h.path('M 500 450 Q 600 350 700 280', { stroke: COLORS.blue, strokeWidth: 2 });
+        h.path('M 500 450 Q 600 470 700 450', { stroke: COLORS.green, strokeWidth: 2 });
+        h.path('M 500 450 Q 600 550 700 620', { stroke: COLORS.pink, strokeWidth: 2 });
+        // dots on branches
+        [{y:280,c:COLORS.blue,t:'A'},{y:450,c:COLORS.green,t:'B'},{y:620,c:COLORS.pink,t:'C'}].forEach((p,i) => {
+          h.circle(700, p.y, 36, { fill: p.c });
+          h.text(700, p.y+8, p.t, { size: 24, anchor:'middle', fill: '#1e1e1e', weight: 700 });
+        });
+        // merge B back
+        h.path('M 700 450 Q 900 450 1100 450', { stroke: COLORS.green, strokeWidth: 2 });
+        h.circle(1100, 450, 28, { fill: COLORS.yellow });
+        h.text(1100, 458, '✓', { size: 26, anchor:'middle', fill: '#1e1e1e', weight: 700 });
+        h.text(1180, 460, 'merged', { size: 26, fill: COLORS.yellow });
+        h.text(800, 800, '3 forks. 1 merge. zero context bloat.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 2: Objection-handling fork
+  // ============================================================
+  { id: 2, section: "objections", title: "Objection-handling fork",
+    vars: [
+      { kind: "scout-list", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork hunts the replies');
+        forkAgent(h, 300, 380, 1.2, COLORS.pink);
+        h.arrow(380, 380, 580, 380, { stroke: COLORS.pink, head: 18 });
+        // returns punch list
+        h.rect(620, 260, 780, 380, { fill: COLORS.paper, roughness: 2 });
+        h.text(660, 310, 'top objections', { size: 28, weight: 700, fill: COLORS.pink });
+        const items = [
+          { n:'42', t:'token cost' },
+          { n:'31', t:'noisy diffs' },
+          { n:'18', t:'just use MDX' },
+          { n:'12', t:'markdown also for humans' },
+          { n: '7', t:"doesn't scale" },
+        ];
+        items.forEach((o,i) => {
+          h.text(680, 380 + i*48, o.n, { size: 22, font:"'Cascadia Code', monospace", fill: COLORS.yellow });
+          h.text(760, 380 + i*48, o.t, { size: 22 });
+        });
+        h.text(800, 760, 'pre-empt the comments before recording.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "tweet-stack", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork reads the threads');
+        // mock tweet stack
+        for (let i=0;i<4;i++) {
+          h.rect(180 + i*8, 260 + i*8, 720, 110, { fill: COLORS.paper, roughness: 2 });
+        }
+        h.circle(230, 320, 36, { fill: COLORS.blue });
+        h.text(280, 310, '@dexhorthy', { size: 20, weight: 700 });
+        h.text(280, 340, '"markdown is for models..."', { size: 22, fill: COLORS.soft });
+        // arrow to ranking
+        h.arrow(940, 350, 1080, 350, { stroke: COLORS.yellow, head: 18 });
+        h.rect(1100, 280, 380, 240, { fill: COLORS.paper, stroke: COLORS.yellow, strokeWidth: 2, roughness: 2 });
+        h.text(1290, 330, 'punch list', { size: 26, anchor:'middle', fill: COLORS.yellow });
+        const pl = ['• tokens', '• diffs', '• MDX'];
+        pl.forEach((t,i) => h.text(1140, 390 + i*40, t, { size: 22 }));
+        h.text(800, 720, 'addressable objections, ranked.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "vote-bars", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork counts the votes');
+        const data = [
+          {t:'token cost', v:42},
+          {t:'noisy diffs', v:31},
+          {t:'use MDX', v:18},
+          {t:'md for humans too', v:12},
+        ];
+        const maxW = 700;
+        data.forEach((d,i) => {
+          const y = 320 + i*100;
+          h.text(180, y+30, d.t, { size: 26 });
+          h.rect(560, y, (d.v/45)*maxW, 50, { fill: COLORS.pink, roughness: 1.8 });
+          h.text(580 + (d.v/45)*maxW, y+34, d.v+' likes', { size: 22, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+        });
+        h.text(800, 800, 'pick the top 3 to address in the video.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 3: Demo-idea fork
+  // ============================================================
+  { id: 3, section: "ideation", title: "Demo-idea fork · brainstorm 30",
+    vars: [
+      { kind: "numbered-list", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork brainstorms 30');
+        forkAgent(h, 300, 450, 1.2, COLORS.green);
+        h.arrow(380, 450, 540, 450, { stroke: COLORS.green, head: 18 });
+        h.rect(580, 260, 820, 480, { fill: COLORS.paper, roughness: 2 });
+        const ideas = [
+          { n:'1.', t:'onboarding designs', star:true },
+          { n:'2.', t:'mermaid diagrams', star:false },
+          { n:'3.', t:'meeting transcript web', star:true },
+          { n:'4.', t:'rate-limit explainer', star:false },
+          { n:'5.', t:'live data dashboard', star:true },
+          { n:'…', t:'(25 more)', star:false },
+        ];
+        ideas.forEach((o,i) => {
+          h.text(610, 320 + i*60, o.n, { size: 24, font:"'Cascadia Code', monospace", fill: COLORS.faint });
+          h.text(680, 320 + i*60, o.t, { size: 26, fill: o.star ? COLORS.yellow : COLORS.ink });
+          if (o.star) h.text(1340, 320 + i*60, '★', { size: 28, fill: COLORS.yellow });
+        });
+        h.text(800, 800, 'star the keepers, drop the rest.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "starboard", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, '30 ideas, you star');
+        // grid 6x5
+        const cols=6, rows=5;
+        const gx=200, gy=260, cw=200, ch=88, gap=10;
+        const stars = [0,3,5,8,11,14,19,23];
+        for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
+          const idx = r*cols+c;
+          const x = gx + c*(cw+gap), y = gy + r*(ch+gap);
+          const isStar = stars.includes(idx);
+          h.rect(x, y, cw, ch, {
+            fill: isStar ? '#1f1d12' : COLORS.paper,
+            stroke: isStar ? COLORS.yellow : COLORS.faint,
+            strokeWidth: isStar ? 2 : 1,
+            roughness: 1.8
+          });
+          h.text(x+18, y+34, '#'+(idx+1), { size: 16, fill: COLORS.faint, font:"'Cascadia Code', monospace" });
+          h.text(x+cw/2, y+62, 'idea', { size: 18, anchor:'middle', fill: isStar ? COLORS.yellow : COLORS.soft });
+          if (isStar) h.text(x+cw-26, y+30, '★', { size: 22, fill: COLORS.yellow });
+        }
+        h.text(800, 820, '8 keepers from 30. fork did the work.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "funnel", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // top: prompt
+        h.rect(580, 220, 440, 100, { fill: COLORS.paper, roughness: 2 });
+        h.text(800, 280, '"brainstorm 30 demos"', { size: 26, anchor:'middle' });
+        // funnel sides
+        h.path('M 400 380 L 580 380 L 700 600 L 480 600 Z', { stroke: COLORS.green, strokeWidth: 2 });
+        h.path('M 1020 380 L 1200 380 L 1120 600 L 900 600 Z', { stroke: COLORS.green, strokeWidth: 2 });
+        h.text(800, 470, '30 ideas', { size: 36, anchor:'middle', fill: COLORS.green });
+        // narrow bottom: keepers
+        h.rect(700, 660, 200, 100, { fill: COLORS.yellow, roughness: 2 });
+        h.text(800, 720, '5 keepers', { size: 30, anchor:'middle', weight: 700, fill: '#1e1e1e' });
+        // arrow flow
+        h.arrow(800, 320, 800, 380, { stroke: COLORS.yellow, head: 14 });
+        h.arrow(800, 600, 800, 660, { stroke: COLORS.yellow, head: 14 });
+        h.text(1280, 470, 'fork did 25', { size: 26, fill: COLORS.soft });
+        h.text(1280, 510, 'units of work', { size: 26, fill: COLORS.soft });
+        h.text(1280, 560, 'in the dark.', { size: 26, fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 4: Style-audit fork
+  // ============================================================
+  { id: 4, section: "audit", title: "Style-audit fork · before recording",
+    vars: [
+      { kind: "checklist", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork audits the deck', COLORS.violet);
+        h.rect(180, 260, 1240, 480, { fill: COLORS.paper, roughness: 2 });
+        const items = [
+          { ok:false, t:'slide 3 · title wraps to 2 lines'},
+          { ok:false, t:'slide 7 · kicker color drifts'},
+          { ok:true,  t:'slide 9 · OK'},
+          { ok:false, t:'slide 11 · font size mismatch (44 vs 38)'},
+          { ok:true,  t:'slide 12 · OK'},
+          { ok:false, t:'slide 14 · text overflows panel'},
+        ];
+        items.forEach((o,i) => {
+          const y = 320 + i*65;
+          h.text(220, y, o.ok ? '✓' : '✗', { size: 30, fill: o.ok ? COLORS.green : COLORS.rose });
+          h.text(280, y, o.t, { size: 26, fill: o.ok ? COLORS.soft : COLORS.ink });
+        });
+        h.text(800, 800, 'fix the list. then record.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "screenshot-grid", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork screenshots every slide', COLORS.violet);
+        const cols=5, rows=3;
+        const gx=180, gy=260, cw=260, ch=140, gap=14;
+        const flagged = [2,5,9,12];
+        for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
+          const idx = r*cols+c;
+          const x = gx + c*(cw+gap), y = gy + r*(ch+gap);
+          const isFlag = flagged.includes(idx);
+          h.rect(x, y, cw, ch, {
+            fill: COLORS.paper,
+            stroke: isFlag ? COLORS.rose : COLORS.faint,
+            strokeWidth: isFlag ? 2 : 1,
+            roughness: 1.6
+          });
+          h.line(x+20, y+30, x+cw-20, y+30, { stroke: COLORS.faint });
+          h.line(x+20, y+50, x+cw-60, y+50, { stroke: COLORS.faint });
+          h.line(x+20, y+70, x+cw-30, y+70, { stroke: COLORS.faint });
+          if (isFlag) h.text(x+cw-30, y+25, '⚠', { size: 22, fill: COLORS.rose });
+          h.text(x+10, y+ch-10, '#'+(idx+1), { size: 12, fill: COLORS.faint, font:"'Cascadia Code', monospace" });
+        }
+        h.text(800, 800, '4 issues flagged. ready to fix.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "punch-list", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'punch list out');
+        // Two columns: issue + fix
+        h.rect(160, 260, 600, 460, { fill: COLORS.paper, stroke: COLORS.rose, strokeWidth: 2, roughness: 2 });
+        kicker(h, 200, 310, 'issue', COLORS.rose);
+        const issues = ['title wraps','kicker drift','overflow','off-grid'];
+        issues.forEach((t,i) => h.text(200, 380 + i*70, t, { size: 28 }));
+
+        h.rect(840, 260, 600, 460, { fill: COLORS.paper, stroke: COLORS.green, strokeWidth: 2, roughness: 2 });
+        kicker(h, 880, 310, 'fix', COLORS.green);
+        const fixes = ['drop 6pt','use COLORS.amber','shrink rect','snap to 20'];
+        fixes.forEach((t,i) => h.text(880, 380 + i*70, t, { size: 28 }));
+
+        h.arrow(770, 480, 830, 480, { stroke: COLORS.yellow, head: 16 });
+        h.text(800, 780, 'audit before record. always.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 5: Speaker-notes pass fork
+  // ============================================================
+  { id: 5, section: "notes", title: "Speaker-notes pass · target tone",
+    vars: [
+      { kind: "before-after", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork rewrites in tone', COLORS.amber);
+        h.rect(140, 260, 620, 480, { fill: COLORS.paper, roughness: 2 });
+        kicker(h, 180, 310, 'before', COLORS.soft);
+        h.text(180, 380, 'this is how you', { size: 26 });
+        h.text(180, 415, 'leverage the surface', { size: 26 });
+        h.text(180, 450, 'for richer outputs and', { size: 26 });
+        h.text(180, 485, 'higher signal density,', { size: 26 });
+        h.text(180, 520, 'enabling seamless...', { size: 26, fill: COLORS.faint });
+
+        h.arrow(770, 500, 830, 500, { stroke: COLORS.yellow, strokeWidth: 3, head: 18 });
+
+        h.rect(840, 260, 620, 480, { fill: COLORS.paper, stroke: COLORS.green, strokeWidth: 2, roughness: 2 });
+        kicker(h, 880, 310, 'after — tight 30s', COLORS.green);
+        h.text(880, 380, 'point. don\'t read.', { size: 36, weight: 700 });
+        h.text(880, 440, 'one slider beats', { size: 26 });
+        h.text(880, 475, 'a paragraph.', { size: 26 });
+        h.text(880, 540, '— 8s.', { size: 22, fill: COLORS.faint, font:"'Cascadia Code', monospace" });
+        h.text(800, 800, 'side file. diff. merge what works.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "tone-knobs", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'pick the tone', COLORS.amber);
+        // 3 dials
+        const tones = [
+          { label:'conversational', sel:false },
+          { label:'tight 30s', sel:true },
+          { label:'one quote/slide', sel:false },
+        ];
+        tones.forEach((t,i) => {
+          const cx = 320 + i*440;
+          const cy = 440;
+          h.circle(cx, cy, 180, { fill: t.sel ? '#1f1d12' : COLORS.paper, stroke: t.sel ? COLORS.yellow : COLORS.faint, strokeWidth: t.sel ? 2.5 : 1.5 });
+          h.text(cx, cy+5, t.label, { size: 24, anchor:'middle', fill: t.sel ? COLORS.yellow : COLORS.soft });
+          if (t.sel) {
+            h.line(cx, cy-90, cx, cy-110, { stroke: COLORS.yellow, strokeWidth: 3 });
+            h.text(cx, cy-125, '✓ pick', { size: 20, anchor:'middle', fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+          }
+        });
+        h.text(800, 720, 'fork rewrites all 14 slides in this tone.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+        h.text(800, 770, 'you diff. you keep what works.', { size: 22, anchor:'middle', fill: COLORS.soft });
+      }},
+      { kind: "diff-panel", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'merge the rewrite');
+        // diff-style panel
+        h.rect(180, 260, 1240, 480, { fill: COLORS.paper, roughness: 2 });
+        const lines = [
+          { sign:'-', t:'this is how surfaces enable richer output...', c:COLORS.rose },
+          { sign:'+', t:'point. don\'t read.', c:COLORS.green },
+          { sign:' ', t:'pause after the line lands.', c:COLORS.soft },
+          { sign:'-', t:'we then leverage the artifact to...', c:COLORS.rose },
+          { sign:'+', t:'one slider > a paragraph.', c:COLORS.green },
+          { sign:' ', t:'subtext: deeper move with 3 weeks.', c:COLORS.soft },
+        ];
+        lines.forEach((l,i) => {
+          h.text(220, 320 + i*55, l.sign, { size: 28, font:"'Cascadia Code', monospace", fill: l.c, weight: 700 });
+          h.text(280, 320 + i*55, l.t, { size: 24, font:"'Cascadia Code', monospace", fill: l.c });
+        });
+        h.text(800, 800, 'fork in side file. you in main.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 6: Title/thumbnail fork
+  // ============================================================
+  { id: 6, section: "packaging", title: "Title + thumbnail fork",
+    vars: [
+      { kind: "title-list", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, '15 titles · 6 thumbnails', COLORS.pink);
+        // titles col
+        h.rect(140, 260, 720, 480, { fill: COLORS.paper, roughness: 2 });
+        kicker(h, 180, 310, 'titles', COLORS.pink);
+        const titles = [
+          'Stop using Markdown.',
+          'HTML is the new Markdown',
+          'Anthropic was right',
+          'I\'ve been doing this 8 months',
+          'Surfaces > Documents',
+        ];
+        titles.forEach((t,i) => h.text(180, 380 + i*60, (i+1)+'. '+t, { size: 22 }));
+        // thumbs col
+        h.rect(900, 260, 540, 480, { fill: COLORS.paper, roughness: 2 });
+        kicker(h, 940, 310, 'thumbs', COLORS.pink);
+        for (let i=0;i<6;i++) {
+          const x = 940 + (i%3)*150;
+          const y = 360 + Math.floor(i/3)*180;
+          h.rect(x, y, 130, 150, { fill: COLORS.panel, roughness: 1.6 });
+          h.text(x+65, y+85, '#'+(i+1), { size: 20, anchor:'middle', fill: COLORS.faint });
+        }
+        h.text(800, 800, 'fork generates. you A/B test.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "ab-side", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'side-by-side from fork');
+        // Two thumbnail mocks
+        h.rect(160, 270, 580, 360, { fill: COLORS.paper, stroke: COLORS.amber, strokeWidth: 2, roughness: 2 });
+        h.text(450, 350, 'STOP', { size: 70, anchor:'middle', weight: 700, fill: COLORS.amber });
+        h.text(450, 430, 'WRITING MD', { size: 70, anchor:'middle', weight: 700 });
+        h.text(450, 590, 'A · 12% CTR', { size: 22, anchor:'middle', fill: COLORS.soft });
+
+        h.rect(840, 270, 580, 360, { fill: COLORS.paper, stroke: COLORS.green, strokeWidth: 2, roughness: 2 });
+        h.text(1130, 380, 'HTML is', { size: 60, anchor:'middle', weight: 700 });
+        h.text(1130, 460, 'the new MD', { size: 60, anchor:'middle', weight: 700, fill: COLORS.yellow });
+        h.text(1130, 590, 'B · 18% CTR', { size: 22, anchor:'middle', fill: COLORS.green });
+
+        h.text(800, 740, '6 thumbs × 15 titles, ranked.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "package-line", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'deck → fork → package', COLORS.pink);
+        // pipeline
+        h.rect(180, 380, 220, 140, { fill: COLORS.paper, roughness: 2 });
+        h.text(290, 460, 'locked', { size: 26, anchor:'middle' });
+        h.text(290, 495, 'deck', { size: 26, anchor:'middle', fill: COLORS.soft });
+
+        h.arrow(420, 450, 540, 450, { stroke: COLORS.yellow, head: 16 });
+
+        h.rect(560, 380, 220, 140, { fill: COLORS.paper, stroke: COLORS.pink, strokeWidth: 2, roughness: 2 });
+        h.text(670, 450, 'fork', { size: 28, anchor:'middle', fill: COLORS.pink });
+        h.text(670, 490, '15 + 6', { size: 22, anchor:'middle', fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+
+        h.arrow(800, 450, 920, 450, { stroke: COLORS.yellow, head: 16 });
+
+        h.rect(940, 380, 460, 140, { fill: COLORS.paper, stroke: COLORS.green, strokeWidth: 2, roughness: 2 });
+        h.text(1170, 440, 'title + thumb', { size: 26, anchor:'middle' });
+        h.text(1170, 480, 'A/B winners', { size: 22, anchor:'middle', fill: COLORS.green });
+
+        h.text(800, 700, 'packaging is its own job. give it to a fork.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 7: Counter-deck fork
+  // ============================================================
+  { id: 7, section: "steel-man", title: "Counter-deck fork · steel-man",
+    vars: [
+      { kind: "twin-decks", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'two decks · same topic', COLORS.violet);
+        // your deck
+        h.rect(160, 260, 580, 460, { fill: COLORS.paper, stroke: COLORS.yellow, strokeWidth: 2, roughness: 2 });
+        kicker(h, 200, 310, 'your deck', COLORS.yellow);
+        h.text(200, 390, '"HTML wins"', { size: 36 });
+        for (let i=0;i<5;i++) h.rect(200 + i*70, 460, 60, 80, { fill: COLORS.panel, roughness: 1.4 });
+        h.text(200, 600, 'pro-HTML', { size: 22, fill: COLORS.yellow });
+
+        // counter deck
+        h.rect(860, 260, 580, 460, { fill: COLORS.paper, stroke: COLORS.violet, strokeWidth: 2, roughness: 2 });
+        kicker(h, 900, 310, 'fork\'s counter-deck', COLORS.violet);
+        h.text(900, 390, '"markdown wins"', { size: 36 });
+        for (let i=0;i<5;i++) h.rect(900 + i*70, 460, 60, 80, { fill: COLORS.panel, roughness: 1.4 });
+        h.text(900, 600, 'pro-markdown', { size: 22, fill: COLORS.violet });
+
+        h.text(800, 800, 'merge the strongest pieces. ship one.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "mirror", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // mirror line
+        h.line(800, 240, 800, 760, { stroke: COLORS.faint, strokeWidth: 1 });
+        h.text(800, 220, 'mirror', { size: 22, anchor:'middle', fill: COLORS.faint, font:"'Cascadia Code', monospace" });
+
+        h.text(420, 380, 'thesis →', { size: 36, anchor:'middle', fill: COLORS.yellow });
+        h.text(420, 450, 'HTML is richer', { size: 28, anchor:'middle' });
+        h.text(420, 540, 'demos × 6', { size: 22, anchor:'middle', fill: COLORS.soft });
+        h.text(420, 580, 'closer: surfaces', { size: 22, anchor:'middle', fill: COLORS.soft });
+
+        h.text(1180, 380, '← antithesis', { size: 36, anchor:'middle', fill: COLORS.violet });
+        h.text(1180, 450, 'markdown is leaner', { size: 28, anchor:'middle' });
+        h.text(1180, 540, 'demos × 6', { size: 22, anchor:'middle', fill: COLORS.soft });
+        h.text(1180, 580, 'closer: tokens', { size: 22, anchor:'middle', fill: COLORS.soft });
+
+        h.text(800, 760, 'see your blind spots before the comments do.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "merge-arrows", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'steel-man → merge', COLORS.violet);
+        // your slides on top
+        for (let i=0;i<5;i++) {
+          h.rect(200 + i*220, 280, 180, 120, { fill: COLORS.paper, stroke: COLORS.yellow, strokeWidth: 1.5, roughness: 2 });
+          h.text(290 + i*220, 350, 'mine '+(i+1), { size: 20, anchor:'middle', fill: COLORS.yellow });
+        }
+        // counter on bottom
+        for (let i=0;i<5;i++) {
+          h.rect(200 + i*220, 580, 180, 120, { fill: COLORS.paper, stroke: COLORS.violet, strokeWidth: 1.5, roughness: 2 });
+          h.text(290 + i*220, 650, 'counter '+(i+1), { size: 20, anchor:'middle', fill: COLORS.violet });
+        }
+        // merge arrows on a couple
+        h.arrow(290+1*220, 580, 290+1*220, 410, { stroke: COLORS.green, strokeWidth: 2, head: 14 });
+        h.arrow(290+3*220, 580, 290+3*220, 410, { stroke: COLORS.green, strokeWidth: 2, head: 14 });
+        h.text(800, 800, 'absorb 2 best from your critic. ship.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 8: Storyboard / shot-list fork
+  // ============================================================
+  { id: 8, section: "production", title: "Storyboard · shot list",
+    vars: [
+      { kind: "shot-table", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork → shot list', COLORS.teal);
+        h.rect(160, 260, 1280, 480, { fill: COLORS.paper, roughness: 2 });
+        // header
+        h.line(160, 320, 1440, 320, { stroke: COLORS.faint });
+        h.line(380, 260, 380, 740, { stroke: COLORS.faint });
+        h.line(800, 260, 800, 740, { stroke: COLORS.faint });
+        h.line(1100, 260, 1100, 740, { stroke: COLORS.faint });
+        h.text(190, 300, 'slide', { size: 22, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+        h.text(420, 300, 'b-roll', { size: 22, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+        h.text(840, 300, 'on-screen', { size: 22, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+        h.text(1140, 300, 'cut', { size: 22, fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+        const rows = [
+          ['#1','anthropic post','quote anim','0:08'],
+          ['#2','ide screen','underline','0:14'],
+          ['#7','onboarding ui','grid pop-in','0:22'],
+          ['#8','meeting recap','idea-web zoom','0:30'],
+        ];
+        rows.forEach((r,i) => {
+          const y = 380 + i*80;
+          r.forEach((c,j) => {
+            const xs = [190, 420, 840, 1140];
+            h.text(xs[j], y, c, { size: 22, fill: COLORS.soft });
+          });
+        });
+        h.text(800, 800, 'drop straight into the editor.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "filmstrip", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'storyboard frames', COLORS.teal);
+        // film perforations
+        for (let i=0;i<6;i++) {
+          const x = 200 + i*210;
+          h.rect(x, 280, 180, 280, { fill: COLORS.paper, roughness: 1.6 });
+          h.text(x+90, 340, '#'+(i+1), { size: 20, anchor:'middle', fill: COLORS.faint, font:"'Cascadia Code', monospace" });
+          h.line(x+20, 380, x+160, 380, { stroke: COLORS.faint });
+          h.line(x+20, 410, x+130, 410, { stroke: COLORS.faint });
+          h.line(x+20, 440, x+150, 440, { stroke: COLORS.faint });
+          h.text(x+90, 510, ('0:'+String(8+i*10).padStart(2,'0')), { size: 18, anchor:'middle', fill: COLORS.yellow, font:"'Cascadia Code', monospace" });
+          h.rect(x-4, 270, 188, 8, { fill: COLORS.faint });
+          h.rect(x-4, 562, 188, 8, { fill: COLORS.faint });
+        }
+        h.text(800, 700, '6 frames. cut points. ready to edit.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "annotated-timeline", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'timeline · annotated', COLORS.teal);
+        h.line(180, 460, 1420, 460, { stroke: COLORS.ink, strokeWidth: 2 });
+        const stops = [
+          {x: 240, label:'#1 hook',  cut:'0:08'},
+          {x: 480, label:'#3 thesis', cut:'0:22'},
+          {x: 720, label:'#7 demo',   cut:'0:42'},
+          {x: 960, label:'#10 demo',  cut:'1:08'},
+          {x:1200, label:'#13 close', cut:'1:34'},
+          {x:1380, label:'CTA',       cut:'1:50'},
+        ];
+        stops.forEach(s => {
+          h.circle(s.x, 460, 22, { fill: COLORS.yellow });
+          h.line(s.x, 460, s.x, 380, { stroke: COLORS.faint });
+          h.text(s.x, 360, s.label, { size: 22, anchor:'middle' });
+          h.text(s.x, 520, s.cut, { size: 18, anchor:'middle', fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+        });
+        h.text(800, 720, 'fork plans the cut. you film against it.', { size: 24, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 9: Class-CTA fork (MCP)
+  // ============================================================
+  { id: 9, section: "mcp", title: "Class-CTA fork · MCP lookup",
+    vars: [
+      { kind: "mcp-mapping", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork queries MCP', COLORS.blue);
+        // slides column
+        h.rect(160, 260, 380, 460, { fill: COLORS.paper, roughness: 2 });
+        kicker(h, 200, 310, 'slide', COLORS.yellow);
+        ['#3','#7','#9','#10','#13'].forEach((s,i) => h.text(200, 390 + i*60, s, { size: 26 }));
+        // arrows
+        for (let i=0;i<5;i++) h.arrow(560, 390 + i*60 - 8, 700, 390 + i*60 - 8, { stroke: COLORS.blue, head: 12 });
+        // class videos column
+        h.rect(720, 260, 720, 460, { fill: COLORS.paper, stroke: COLORS.blue, strokeWidth: 1.6, roughness: 2 });
+        kicker(h, 760, 310, 'class video', COLORS.blue);
+        const classes = [
+          'output understanding',
+          'mermaid for engineers',
+          'artifact planning',
+          'channel artifacts',
+          'live MCP dashboards',
+        ];
+        classes.forEach((c,i) => h.text(760, 390 + i*60, '→ '+c, { size: 24, fill: COLORS.soft }));
+        h.text(800, 800, 'description timestamps + class links, automated.', { size: 22, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "video-cards", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork pulls related videos', COLORS.blue);
+        const videos = [
+          { x:180, title:'mermaid class', dur:'12:04', match:'slide #9' },
+          { x:680, title:'artifact planning', dur:'18:44', match:'slide #7' },
+          { x:1180, title:'channel artifacts', dur:'15:20', match:'slide #13' },
+        ];
+        videos.forEach(v => {
+          h.rect(v.x, 280, 380, 380, { fill: COLORS.paper, roughness: 2 });
+          h.rect(v.x+20, 300, 340, 200, { fill: COLORS.panel });
+          h.text(v.x+190, 410, '▶', { size: 60, anchor:'middle', fill: COLORS.yellow });
+          h.text(v.x+30, 540, v.title, { size: 24, weight: 700 });
+          h.text(v.x+30, 580, v.dur, { size: 20, fill: COLORS.soft, font:"'Cascadia Code', monospace" });
+          h.text(v.x+30, 620, '→ pairs with '+v.match, { size: 20, fill: COLORS.blue });
+        });
+        h.text(800, 760, 'fork did the lookup. you ship the description.', { size: 22, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "description-block", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'fork drafts the description', COLORS.blue);
+        h.rect(180, 260, 1240, 480, { fill: COLORS.paper, roughness: 2 });
+        const lines = [
+          '0:00  intro',
+          '0:22  thesis · richer surfaces',
+          '0:42  demo · onboarding designs',
+          '       → see also: artifact planning class',
+          '1:08  demo · mermaid sequence',
+          '       → see also: mermaid for engineers',
+          '1:34  closer · channel artifacts',
+          '       → see also: channel artifacts class',
+        ];
+        lines.forEach((t,i) => {
+          h.text(220, 320 + i*50, t, { size: 22, font:"'Cascadia Code', monospace", fill: t.startsWith('  ') ? COLORS.blue : COLORS.ink });
+        });
+        h.text(800, 800, 'description-ready output, no manual mapping.', { size: 22, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+  // ============================================================
+  // 10: "What would change" fork
+  // ============================================================
+  { id: 10, section: "what-if", title: "'What would change?' fork · A/B",
+    vars: [
+      { kind: "two-cuts", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'what if 5 min instead of 15?');
+        // 15-min deck
+        h.rect(140, 280, 620, 380, { fill: COLORS.paper, roughness: 2 });
+        kicker(h, 180, 330, '15-min cut', COLORS.green);
+        for (let i=0;i<14;i++) {
+          const x = 180 + (i%7)*60;
+          const y = 380 + Math.floor(i/7)*80;
+          h.rect(x, y, 50, 70, { fill: COLORS.panel, roughness: 1.4 });
+        }
+        h.text(180, 600, '14 slides · all demos', { size: 22, fill: COLORS.soft });
+
+        // 5-min cut
+        h.rect(840, 280, 620, 380, { fill: COLORS.paper, stroke: COLORS.yellow, strokeWidth: 2.5, roughness: 2 });
+        kicker(h, 880, 330, '5-min cut', COLORS.yellow);
+        for (let i=0;i<6;i++) {
+          h.rect(880 + i*90, 380, 80, 100, { fill: COLORS.panel, roughness: 1.4 });
+        }
+        h.text(880, 580, '6 slides · 1 demo', { size: 22, fill: COLORS.soft });
+        h.text(880, 615, 'new closer: rule-of-thumb', { size: 22, fill: COLORS.yellow });
+
+        h.text(800, 740, 'fork pruned the deck. you compare.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+      { kind: "what-if-spec", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        kicker(h, 200, 200, 'hypothetical → spec');
+        // input
+        h.rect(180, 260, 1240, 120, { fill: COLORS.paper, stroke: COLORS.violet, strokeWidth: 2, roughness: 2 });
+        h.text(220, 320, 'what if I made this for non-engineers?', { size: 32, fill: COLORS.violet });
+        // arrow
+        h.arrow(800, 400, 800, 460, { stroke: COLORS.yellow, head: 16 });
+        // output
+        h.rect(180, 480, 1240, 280, { fill: COLORS.paper, roughness: 2 });
+        kicker(h, 220, 530, 'fork returns', COLORS.green);
+        h.text(220, 600, '· cut: meeting transcript demo (too technical)', { size: 24 });
+        h.text(220, 650, '· keep: onboarding designs (relatable)', { size: 24 });
+        h.text(220, 700, '· new closer: "this works for any role"', { size: 24, fill: COLORS.yellow });
+      }},
+      { kind: "branch-options", draw: (svg,rc) => {
+        const h = H(svg,rc);
+        // root: current deck
+        h.rect(640, 220, 320, 100, { fill: COLORS.paper, stroke: COLORS.yellow, strokeWidth: 2, roughness: 2 });
+        h.text(800, 280, 'current deck', { size: 28, anchor:'middle' });
+        // 3 branches: what-ifs
+        const opts = [
+          { x: 280, label: '5 min cut',     sub:'10 → 6 slides',  c:COLORS.green },
+          { x: 800, label: 'non-engineers', sub:'cut 2 demos',    c:COLORS.violet },
+          { x: 1320, label: 'class-only',   sub:'add CTA × 3',    c:COLORS.pink },
+        ];
+        opts.forEach(o => {
+          h.line(800, 320, o.x, 460, { stroke: o.c, strokeWidth: 1.6 });
+          h.rect(o.x-180, 480, 360, 180, { fill: COLORS.paper, stroke: o.c, strokeWidth: 1.8, roughness: 2 });
+          h.text(o.x, 540, o.label, { size: 28, anchor:'middle', fill: o.c });
+          h.text(o.x, 590, o.sub, { size: 22, anchor:'middle', fill: COLORS.soft });
+          h.text(o.x, 630, '→ pruned deck', { size: 20, anchor:'middle', fill: COLORS.faint, font:"'Cascadia Code', monospace" });
+        });
+        h.text(800, 770, 'A/B the structure before you commit.', { size: 26, anchor:'middle', fill: COLORS.yellow });
+      }},
+    ]},
+
+];
+
+// ================================================================
+// RENDER
+// ================================================================
+const grid = document.getElementById('grid');
+const selCount = document.getElementById('selCount');
+const state = { selections: new Map() };
+
+function renderAll() {
+  if (typeof rough === 'undefined') {
+    grid.innerHTML = '<div style="color:#ff8787;font-size:24px;padding:40px;font-family:monospace">rough.js failed to load — check your internet connection or CDN access.</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  for (const t of TOPICS) {
+    const topic = document.createElement('section');
+    topic.className = 'topic';
+    topic.innerHTML = `
+      <div class="topic-head">
+        <div class="topic-num">#${String(t.id).padStart(2,'0')}</div>
+        <div class="topic-title">${t.title}</div>
+        <div class="topic-section">${t.section}</div>
+      </div>
+      <div class="variations" id="vars-${t.id}"></div>
+    `;
+    grid.appendChild(topic);
+    const vars = topic.querySelector('.variations');
+    t.vars.forEach((v, idx) => {
+      const key = `${t.id}-${idx}`;
+      const card = document.createElement('div');
+      card.className = 'var-card';
+      card.dataset.key = key;
+      card.innerHTML = `
+        <div class="slide" data-slide></div>
+        <div class="var-meta">
+          <div class="head">
+            <span class="label">var ${String.fromCharCode(65+idx)} · ${v.kind}</span>
+            <span class="rank" data-rank></span>
+          </div>
+          <textarea placeholder="brief description / why you like this..." data-desc></textarea>
+          <button class="select-btn" data-select>select</button>
+        </div>
+      `;
+      vars.appendChild(card);
+
+      const slideHost = card.querySelector('[data-slide]');
+      const svg = el('svg', {
+        viewBox: '0 0 1600 900',
+        preserveAspectRatio: 'xMidYMid meet',
+        width: '100%',
+        height: '100%',
+      });
+      slideHost.appendChild(svg);
+      try {
+        const rc = rough.svg(svg);
+        v.draw(svg, rc);
+      } catch(e) {
+        console.error('Draw error for topic', t.id, 'var', idx, e);
+        slideHost.innerHTML = `<div style="padding:20px;color:#ff8787;font-family:monospace;font-size:12px">draw error: ${e.message}</div>`;
+      }
+
+      const btn = card.querySelector('[data-select]');
+      const desc = card.querySelector('[data-desc]');
+      btn.addEventListener('click', () => toggleSelect(t.id, idx, desc, card));
+      desc.addEventListener('input', () => {
+        const sel = state.selections.get(key);
+        if (sel) sel.description = desc.value;
+      });
+    });
+  }
+}
+
+function toggleSelect(topicId, varIdx, descEl, card) {
+  const key = `${topicId}-${varIdx}`;
+  if (state.selections.has(key)) {
+    state.selections.delete(key);
+    card.classList.remove('selected');
+    card.querySelector('[data-select]').textContent = 'select';
+  } else {
+    state.selections.set(key, {
+      topicId, varIdx, description: descEl.value,
+      order: state.selections.size + 1
+    });
+    card.classList.add('selected');
+    card.querySelector('[data-select]').textContent = '✓ selected';
+  }
+  refreshRanks();
+  selCount.textContent = state.selections.size;
+}
+
+function refreshRanks() {
+  document.querySelectorAll('.var-card').forEach(c => {
+    c.querySelector('[data-rank]').textContent = '';
+  });
+  let i = 1;
+  for (const [key, sel] of state.selections) {
+    const card = document.querySelector(`.var-card[data-key="${key}"]`);
+    if (card) card.querySelector('[data-rank]').textContent = `#${i}`;
+    sel.order = i;
+    i++;
+  }
+}
+
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  const out = [...state.selections.values()].map(s => {
+    const t = TOPICS.find(x => x.id === s.topicId);
+    const v = t.vars[s.varIdx];
+    return {
+      order: s.order,
+      topicId: s.topicId,
+      topic: t.title,
+      section: t.section,
+      variation: String.fromCharCode(65 + s.varIdx),
+      kind: v.kind,
+      description: s.description || '',
+    };
+  });
+  const json = JSON.stringify(out, null, 2);
+  try {
+    await navigator.clipboard.writeText(json);
+    showToast(`copied ${out.length} slide${out.length===1?'':'s'}`);
+  } catch {
+    showToast("couldn't copy — open console");
+    console.log(json);
+  }
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  state.selections.clear();
+  document.querySelectorAll('.var-card.selected').forEach(c => {
+    c.classList.remove('selected');
+    c.querySelector('[data-select]').textContent = 'select';
+    c.querySelector('[data-rank]').textContent = '';
+  });
+  selCount.textContent = '0';
+});
+
+const toast = document.getElementById('toast');
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+renderAll();
+</script>
+</body>
+</html>
