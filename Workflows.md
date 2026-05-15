@@ -1,0 +1,6 @@
+- Having workflows with fresh context windows each time.
+- Eg, one for one phase. Another for another. Etc.
+- 3 Approaches
+	- Just continue and compact
+	- Assign to subagents
+	- Do in the main session and Ralph loop

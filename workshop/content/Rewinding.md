@@ -1,0 +1,2 @@
+- Don’t change intent too often
+- Rewind to prevent mess in the context window
