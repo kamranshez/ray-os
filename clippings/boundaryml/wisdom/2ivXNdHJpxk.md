@@ -9,21 +9,6 @@ channel: BoundaryML
 Vaibhav (BAML) and Dex (HumanLayer) discuss building interruptible agents that can be safely cancelled and resteered without losing prior work or context.
 
 ### IDEAS
-- Interruptability extends human-in-the-loop beyond approval into mid-flight steering and cancellation without restarting agent execution entirely.
-- Cleanly cancellable and resumable agents land in the 99th percentile for user experience and safety today.
-- Claude Code interrupts are timed: stopping during a tool call counts as denial with redirection.
-- Queued messages let users insert context at the next safe boundary instead of forcing immediate interruption mid-flow.
-- Building interruptible agents requires shared state across threads, foreground UI thread, and background pipeline thread coordination.
-- A new user message during an active agent loop must queue separately rather than starting a fresh conversation chain.
-- The first event from backend to frontend should always be the conversation or session ID for tracking.
-- Two implementation paths exist: polling for queued messages between LLM calls, or threading with race-based cancellation.
-- The threading approach kills the agent thread immediately on new input and restarts from last known state.
-- The polling approach prioritizes finishing current LLM work before injecting queued user messages cleanly.
-- Both approaches can coexist: poll every second but also allow immediate hard interrupts for urgent corrections.
-- Different message urgencies deserve different injection policies — immediate interrupt versus next-message-boundary versus end-of-task.
-- Custom tickers can reset polling intervals based on agent activity or new user interaction signals.
-- The supervisor pattern uses a smarter model running asynchronously to detect drift and inject corrections.
-- Voice agents need fast inference for responsiveness paired with slower supervisor models monitoring for off-track behavior.
 - Frameworks save scaffolding time but fight you when reaching into black boxes to customize internal flows.
 - Owning the flow yourself is feasible because AI coding agents can implement complex orchestration from architectural diagrams.
 - The best agent products today reinvented UX rather than just wrapping LLMs in conventional chat interfaces.
