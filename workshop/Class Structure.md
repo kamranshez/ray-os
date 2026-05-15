@@ -1,15 +1,15 @@
-A 5-day intensive built from the ACS material. Pre-work covers tooling; each day is one coherent mental model.
+A 7-day live workshop. Day 0 is async pre-work — install, basics, get-to-Quick-Build. Days 1–7 are the live curriculum. Structure follows option A1 (Layered, one concept per day, Skills and Automation each get their own day).
 
-> [!note] Proposed structure — see [Merges](#merges) and [Open questions](#open-questions) at the bottom.
-
-# Pre-work — Fundamentals
-Short async videos before Day 1. Not a "day".
-- Using Claude Code — basic commands; point at the rest of the class for depth
-- Using Codex — basic commands; point at the rest of the class for depth
+# Day 0 — Foundations & Setup *(async pre-work, not live)*
+Self-paced videos people watch before Day 1 so live time isn't burned on installs.
+- Install Claude Code (MacOS / Windows)
+- Install Codex
+- Terminal basics, Git basics
 - [[Using the MCP]]
+- A Quick Build — ship one thing end-to-end before Day 1
 
 # Day 1 — Alignment
-Getting the agent and the human pointed at the same target before any code runs.
+Getting agent + human pointed at the same target before any code runs.
 - [[Spec Developer]]
 - [[Status of Agents]]
 - [[Prototypes as specs]]
@@ -19,7 +19,7 @@ Getting the agent and the human pointed at the same target before any code runs.
 - [[Missions]] + [[Defining Good Goals]] + [[goal]]  *(merge — see below)*
 
 # Day 2 — Steering
-Keeping the agent on-rails once it's running. Long-context behaviour, intent drift, sycophancy.
+Keeping the run on-rails. Long-context behaviour, intent drift, sycophancy.
 - [[sycophantic-models-suggestions-as-commands]]
 - [[asking-for-options-preserves-judgment]]
 - [[long-context-demands-active-human-steering]] + [[recent-context-dominates-attention]] + [[long-context-inverts-dumb-zone-advice]]  *(merge)*
@@ -34,64 +34,71 @@ How context flows between sessions, subagents, and tools.
 - [[Subagent Architectures]]
 - [[CLIs vs MCPs]]
 - [[context-strategy-correlated-with-engagement]]
-- [[Workflows]]
+- [[1M Context]]
 
-# Day 4 — Skills & Verification
-Two halves of one idea: teach the model your shape (skills), then prove it stayed in shape (verification).
-
-**Skills**
+# Day 4 — Skills
+Encoding your taste so you don't have to repeat yourself.
 - [[Off-distribution]]
 - [[Markdown over architecture]]
 - [[teach-models-to-think-like-your-engineers]]
-- [[Every PR]]
-- [[Automate Anything and Everything]]
+- [[Creating Skills]]
+- [[Types of Skills]]
+- [[Forked Contexts for Skills]]
+- [[Skills + Subagents]]
 
-**Verification**
+# Day 5 — Automation & Workflows
+Removing yourself from the loop on everything that isn't taste.
+- [[Workflows]]
+- [[Every PR]]
+- [[OpenAI Symphony]]
+- [[Mermaid Diagram Generator]]
+- [[Automate Anything and Everything]]
+- [[Hooks]]
+- [[Routines]]
+- [[Remote Control]]
+
+# Day 6 — Verification
+Proving the agent stayed in shape.
 - [[Languages]] + [[files-matter-less-in-agent-friendly-languages]]  *(merge)*
 - [[Verification Architectures]]
 - [[Verifying with Codex]]
 - [[Adversial Reviewers]]
 - [[agent-benchmark-harness]]
+- [[security-review]]
+- [[ultrareview]]
 
-# Day 5 — Agent Teams & Loopy AI
-Multi-agent systems and self-running loops. The "what does this look like at scale" day.
-
-**Agent Teams**
+# Day 7 — Agent Teams & Loopy AI
+Multi-agent systems and self-running loops.
 - [[convergence-over-perfection-thesis]]
 - [[01-solo-plus-cheap-verifier]]
 - [[02-parallel-voters]]
 - [[03-generator-plus-adversarial-critic]]
 - [[04-decomposed-swarm-independent-errors]]
 - [[05-environmental-attractors]]
-
-**Loopy AI**
-- [[Autoresearch]]
 - [[Ralph]]
+- [[Autoresearch]]
 - [[Removing Bottlenecks]]
-- [[OpenAI Symphony]]
-- [[Mermaid Diagram Generator]]
 
 ---
 
 # Merges
 
-- **Goals trio** → merge [[Missions]], [[Defining Good Goals]], [[goal]] into a single "Goals & Missions" note. All three are the same atom from different angles; splitting them dilutes the lesson.
+- **Goals trio** → merge [[Missions]], [[Defining Good Goals]], [[goal]] into one "Goals & Missions" note. Same atom, three angles.
 - **Long-context trio** → merge [[long-context-demands-active-human-steering]], [[recent-context-dominates-attention]], [[long-context-inverts-dumb-zone-advice]] into one "How long context actually behaves" note.
-- **Adversarial overlap** → [[Adversial Reviewers]] and [[03-generator-plus-adversarial-critic]] cover the same pattern. Keep the archetype version in Day 5 and have Day 4 link to it instead of duplicating.
-- **Subagent overlap** → [[Subagent Architectures]] and [[Verification Architectures]] both describe orchestrator/critic shapes. Split cleanly: Subagent Architectures = *how to wire them*, Verification Architectures = *what to verify with them*.
-- **Languages + agent-friendly languages** → merge [[Languages]] and [[files-matter-less-in-agent-friendly-languages]]. Same point: pick a language with strong verification + flat file layout.
+- **Adversarial overlap** → [[Adversial Reviewers]] and [[03-generator-plus-adversarial-critic]] cover the same pattern. Keep the archetype version in Day 7; Day 6 links to it instead of duplicating.
+- **Subagent overlap** → [[Subagent Architectures]] = *how to wire them*, [[Verification Architectures]] = *what to verify with them*. Split cleanly.
+- **Languages pair** → merge [[Languages]] + [[files-matter-less-in-agent-friendly-languages]].
 
 # Separations
 
-- **Pull Skills out of "Verifying"** — currently buried under Day Verifying in the old draft, but Skills is its own mental model and deserves equal weight on Day 4.
-- **Agent Teams gets its own slot** — was implicit before. The 6 archetype notes + thesis are enough material for a full half-day.
-- **Spec Developer ≠ Prototypes as specs** — related but distinct: spec developer is the human-facing interview, prototypes-as-specs is the artifact. Keep separate on Day 1.
+- Skills (Day 4) and Verification (Day 6) get their own days instead of being collapsed together.
+- Automation (Day 5) is its own day, not folded into Workflows or Loops.
+- Agent Teams + Loopy AI share Day 7 but stay logically distinct sections.
 
 # Open questions
 
-- Should Day 3 (Context) come *before* Day 2 (Steering)? Steering relies on knowing what a context window is.
-- Is Day 5 too packed? Could split into Day 5 = Agent Teams, Day 6 = Loopy AI for a 6-day class (justifies the $299 → $599 jump).
-- `cohort-pivot-strategy.md` is meta/business, not class content — move out of `workshop/ideas/`.
+- Is Day 5 (Automation) reachable before Day 6 (Verification)? Argument against: you automate things you can't yet trust. Argument for: most Day 5 automation is *humans-in-the-loop* (PR gates, scheduled runs to phone), so trust is less load-bearing.
+- Day 7 packs 6 archetypes + 3 loop topics — may need to drop one or split if pacing dies.
 
 # Pricing
 See [[Pricing Structure]].
