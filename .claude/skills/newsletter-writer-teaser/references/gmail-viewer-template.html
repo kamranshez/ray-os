@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>__TOPIC__ newsletter options</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root {
+    --bg: #f6f8fc;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --border-strong: #d5d9e0;
+    --text: #202124;
+    --text-muted: #5f6368;
+    --text-subtle: #80868b;
+    --accent: #1a73e8;
+    --accent-bg: #e8f0fe;
+    --accent-bg-strong: #d3e3fd;
+    --hover: #f1f3f4;
+    --shadow: 0 1px 2px 0 rgba(60,64,67,.08), 0 1px 3px 1px rgba(60,64,67,.08);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Google Sans", Roboto, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Gmail topbar */
+  .gmail-topbar {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    height: 56px;
+    flex-shrink: 0;
+  }
+  .gmail-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    color: var(--text-muted);
+    font-weight: 400;
+    min-width: 220px;
+  }
+  .gmail-logo svg { width: 32px; height: 32px; }
+  .search-bar {
+    flex: 1;
+    max-width: 720px;
+    margin: 0 32px;
+    background: #eaf1fb;
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: var(--text-subtle);
+    font-size: 14px;
+  }
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mode-toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 20px;
+    padding: 3px;
+  }
+  .mode-toggle button {
+    background: transparent;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .mode-toggle button.active {
+    background: var(--accent-bg-strong);
+    color: var(--accent);
+  }
+  .profile-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffb454 0%, #ea4335 100%);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  /* 3-column layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 400px 1fr;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+  }
+
+  /* Column 1: Sidebar */
+  .sidebar {
+    padding: 16px 0 16px 12px;
+    background: var(--bg);
+    overflow-y: auto;
+  }
+  .compose-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px 14px 20px;
+    background: #c2e7ff;
+    color: #001d35;
+    border: none;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    font-family: inherit;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0 12px 0 26px;
+    height: 32px;
+    border-radius: 0 16px 16px 0;
+    color: var(--text);
+    font-size: 14px;
+    cursor: default;
+  }
+  .sidebar-item.active {
+    background: var(--accent-bg-strong);
+    font-weight: 700;
+    color: #001d35;
+  }
+  .sidebar-item .count {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Column 2: Inbox list */
+  .inbox-col {
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .inbox-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+    color: var(--text);
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .inbox-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .inbox-row {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    background: var(--surface);
+    transition: background 0.12s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .inbox-row:hover { background: var(--hover); }
+  .inbox-row.active {
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    padding-left: 13px;
+  }
+  .inbox-row .row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .inbox-row .sender {
+    font-weight: 700;
+    color: var(--text);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .inbox-row .time {
+    color: var(--text-muted);
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .inbox-row .subject {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .inbox-row .preview {
+    color: var(--text-muted);
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .hook-badge {
+    display: inline-block;
+    font-size: 10px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  /* Column 3: Reading pane */
+  .reading-col {
+    background: var(--surface);
+    overflow-y: auto;
+  }
+  .email-view {
+    display: none;
+    padding: 28px 56px 96px;
+    max-width: 900px;
+  }
+  .email-view.active { display: block; }
+
+  .email-subject {
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    margin: 0 0 16px;
+    line-height: 1.3;
+  }
+  .email-subject .hook-badge { vertical-align: middle; margin-right: 8px; }
+  .email-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+  }
+  .sender-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffb454 0%, #ea4335 100%);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 500;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .sender-info { flex: 1; min-width: 0; }
+  .sender-name {
+    font-weight: 700;
+    color: var(--text);
+    font-size: 14px;
+  }
+  .sender-recipient {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  .email-date {
+    color: var(--text-muted);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .email-body {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .email-body p { margin: 0 0 16px; }
+  .email-body .thumb-wrap { margin: 24px 0; }
+  .email-body .thumb-wrap img {
+    width: 100%;
+    max-width: 560px;
+    border-radius: 8px;
+    display: block;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .email-actions {
+    margin-top: 32px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .email-actions button {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    padding: 8px 24px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .email-actions button:hover { background: var(--hover); }
+  .email-actions button.primary {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  /* Compare mode (side-by-side variations) */
+  .compare-view {
+    display: none;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: var(--bg);
+    padding: 20px;
+  }
+  .layout.compare-mode { grid-template-columns: 220px 1fr; }
+  .layout.compare-mode .inbox-col { display: none; }
+  .layout.compare-mode .reading-col { display: none; }
+  .layout.compare-mode .compare-view { display: flex; gap: 16px; }
+
+  .compare-card {
+    flex: 0 0 420px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  .compare-card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .compare-card-header .hook-badge { margin-bottom: 8px; }
+  .compare-card-header .subj {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: 4px;
+  }
+  .compare-card-header .prev {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .compare-card-body {
+    padding: 20px 22px;
+    overflow-y: auto;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .compare-card-body p { margin: 0 0 12px; }
+  .compare-card-body .thumb-wrap img {
+    width: 100%;
+    border-radius: 6px;
+    display: block;
+    margin: 12px 0;
+    border: 1px solid var(--border);
+  }
+  .compare-card-footer {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .compare-card-footer button {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .compare-card-footer button.primary {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  /* Headlines mode (dedicated subjects + previews page) */
+  .headlines-view {
+    display: none;
+    overflow-y: auto;
+    background: var(--bg);
+    padding: 32px 48px 64px;
+  }
+  .layout.headlines-mode { grid-template-columns: 220px 1fr; }
+  .layout.headlines-mode .inbox-col { display: none; }
+  .layout.headlines-mode .reading-col { display: none; }
+  .layout.headlines-mode .headlines-view { display: block; }
+
+  .headlines-header {
+    max-width: 1100px;
+    margin: 0 auto 24px;
+  }
+  .headlines-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 6px;
+  }
+  .headlines-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 4px;
+  }
+  .headlines-current {
+    font-size: 12px;
+    color: var(--text-subtle);
+  }
+  .headlines-current b { color: var(--text); font-weight: 600; }
+
+  .headlines-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .headlines-col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .headlines-col-header {
+    padding: 14px 18px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .headlines-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .headline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text);
+    transition: background 0.1s ease;
+  }
+  .headline-item:last-child { border-bottom: none; }
+  .headline-item:hover { background: var(--hover); }
+  .headline-item.selected {
+    background: var(--accent-bg);
+    font-weight: 500;
+  }
+  .headline-item.selected::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: -4px;
+  }
+  .headline-item .num {
+    color: var(--text-subtle);
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+    width: 18px;
+    margin-top: 2px;
+  }
+  .headline-item.preview-row { color: var(--text-muted); font-size: 13px; }
+  .headline-item.preview-row.selected { color: var(--text); }
+
+  kbd {
+    background: #f1f3f4;
+    border: 1px solid var(--border-strong);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 11px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<!-- Gmail topbar -->
+<div class="gmail-topbar">
+  <div class="gmail-logo">
+    <svg viewBox="0 0 24 24"><path fill="#4285f4" d="M22,6c0-1.1-0.9-2-2-2H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6z"/><path fill="#34a853" d="M4,20h6V10l-8-6v14C2,19.1,2.9,20,4,20z"/><path fill="#fbbc04" d="M14,20h6c1.1,0,2-0.9,2-2V4l-8,6V20z"/><path fill="#ea4335" d="M2,4l10,7.5L22,4v2.5L12,14L2,6.5V4z"/><path fill="#c5221f" d="M2,4l10,7.5L22,4H2z"/></svg>
+    Gmail
+  </div>
+  <div class="search-bar">Search mail</div>
+  <div class="topbar-actions">
+    <div class="mode-toggle">
+      <button class="active" id="mode-inbox" onclick="setMode('inbox')">Inbox</button>
+      <button id="mode-headlines" onclick="setMode('headlines')">Headlines</button>
+      <button id="mode-compare" onclick="setMode('compare')">Compare all</button>
+    </div>
+    <div class="profile-dot">R</div>
+  </div>
+</div>
+
+<div class="layout" id="layout">
+  <!-- Column 1: Sidebar -->
+  <aside class="sidebar">
+    <button class="compose-btn">
+      <span style="font-size: 20px;">✏️</span> Compose
+    </button>
+    <div class="sidebar-item active"><span>📥</span> Inbox <span class="count">5</span></div>
+    <div class="sidebar-item"><span>⭐</span> Starred</div>
+    <div class="sidebar-item"><span>🕒</span> Snoozed</div>
+    <div class="sidebar-item"><span>📤</span> Sent</div>
+    <div class="sidebar-item"><span>📝</span> Drafts</div>
+  </aside>
+
+  <!-- Column 2: Inbox list -->
+  <div class="inbox-col">
+    <div class="inbox-header">Inbox · 5 variations for __TOPIC__</div>
+    <div class="inbox-list" id="inbox-list"></div>
+  </div>
+
+  <!-- Column 3: Reading pane -->
+  <div class="reading-col" id="reading-col"></div>
+
+  <!-- Compare mode view (replaces inbox + reading pane) -->
+  <div class="compare-view" id="compare-view"></div>
+
+  <!-- Headlines mode view (10 subjects + 10 previews on a separate page) -->
+  <div class="headlines-view" id="headlines-view">
+    <div class="headlines-header">
+      <h2 class="headlines-title">Subject lines &amp; preview snippets</h2>
+      <p class="headlines-sub">Pick one of each. Your selection applies to every body variation in the inbox and compare views.</p>
+      <p class="headlines-current">Currently selected: <b id="hl-current-subj"></b> · <span id="hl-current-prev"></span></p>
+    </div>
+    <div class="headlines-grid">
+      <div class="headlines-col">
+        <div class="headlines-col-header">Subject lines · 10 options</div>
+        <div class="headlines-list" id="subjects-list"></div>
+      </div>
+      <div class="headlines-col">
+        <div class="headlines-col-header">Preview snippets · 10 options</div>
+        <div class="headlines-list" id="previews-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // Fill in the placeholders below when rendering this template.
+  //
+  // VARIATIONS: 5 newsletter body variations, each with:
+  //   {
+  //     hook: "Polling Is Dead",
+  //     body: ["Hey friends,", "...", "[THUMBNAIL]", "..."]
+  //   }
+  // Use "[THUMBNAIL]" as a paragraph entry to mark where the video thumbnail goes.
+  //
+  // SUBJECTS: 10 subject line options (global pool, applies to any variation).
+  // PREVIEWS: 10 preview snippet options (global pool, applies to any variation).
+  //
+  // Subjects and previews live on the dedicated "Headlines" tab in the viewer,
+  // so they don't clutter the email page. Selection is global: pick one subject
+  // and one preview, and it applies to whichever body variation you're viewing.
+  // ============================================================
+  const VARIATIONS = __VARIATIONS_JSON__;
+  const SUBJECTS = __SUBJECTS_JSON__;
+  const PREVIEWS = __PREVIEWS_JSON__;
+  const THUMBNAIL_PATH = "__THUMBNAIL_PATH__";
+  const VIDEO_URL = "__VIDEO_URL__";
+  const TOPIC = "__TOPIC__";
+  // ============================================================
+
+  const SENDER_NAME = "Ray Amjad";
+  const RECIPIENT = "to me";
+
+  // Global selection: one subject and one preview across all variations.
+  let selSubj = 0;
+  let selPrev = 0;
+
+  const inboxList = document.getElementById('inbox-list');
+  const readingCol = document.getElementById('reading-col');
+  const compareView = document.getElementById('compare-view');
+  const layout = document.getElementById('layout');
+  const subjectsList = document.getElementById('subjects-list');
+  const previewsList = document.getElementById('previews-list');
+
+  function buildBodyHtml(body) {
+    return body.map(p => {
+      if (p === '[THUMBNAIL]') {
+        return `<div class="thumb-wrap"><a href="${VIDEO_URL}" target="_blank"><img src="${THUMBNAIL_PATH}" alt="Watch the video" /></a></div>`;
+      }
+      return `<p>${escapeHtml(p)}</p>`;
+    }).join('');
+  }
+
+  // Render inbox rows, reading pane, and compare cards
+  VARIATIONS.forEach((v, i) => {
+    const row = document.createElement('div');
+    row.className = 'inbox-row' + (i === 0 ? ' active' : '');
+    row.dataset.index = i;
+    row.innerHTML = `
+      <div class="row-top">
+        <div class="sender">${SENDER_NAME}</div>
+        <div class="time">${timeLabel(i)}</div>
+      </div>
+      <div class="subject"><span class="hook-badge">${escapeHtml(v.hook)}</span> <span class="subject-text" id="inbox-subj-${i}"></span></div>
+      <div class="preview" id="inbox-prev-${i}"></div>
+    `;
+    row.addEventListener('click', () => selectVariation(i));
+    inboxList.appendChild(row);
+
+    const view = document.createElement('div');
+    view.className = 'email-view' + (i === 0 ? ' active' : '');
+    view.dataset.index = i;
+    view.innerHTML = `
+      <h1 class="email-subject">
+        <span class="hook-badge">${escapeHtml(v.hook)}</span><br>
+        <span id="email-subj-${i}"></span>
+      </h1>
+      <div class="email-meta">
+        <div class="sender-avatar">R</div>
+        <div class="sender-info">
+          <div class="sender-name">${SENDER_NAME}</div>
+          <div class="sender-recipient">${RECIPIENT}</div>
+        </div>
+        <div class="email-date">Fri, ${timeLabel(i)}</div>
+      </div>
+      <div class="email-body">${buildBodyHtml(v.body)}</div>
+      <div class="email-actions">
+        <button class="primary" onclick="copyBody(${i}, this)">Copy body</button>
+        <button onclick="copyPair(${i}, this)">Copy subject + preview</button>
+        <button onclick="copyAll(${i}, this)">Copy all</button>
+        <button onclick="setMode('headlines')">Change subject / preview</button>
+      </div>
+    `;
+    readingCol.appendChild(view);
+
+    const card = document.createElement('div');
+    card.className = 'compare-card';
+    card.dataset.index = i;
+    card.innerHTML = `
+      <div class="compare-card-header">
+        <div class="hook-badge">${escapeHtml(v.hook)}</div>
+        <div class="subj" id="cmp-subj-${i}"></div>
+        <div class="prev" id="cmp-prev-${i}"></div>
+      </div>
+      <div class="compare-card-body">${buildBodyHtml(v.body)}</div>
+      <div class="compare-card-footer">
+        <button class="primary" onclick="copyCompare(${i}, this)">Copy body</button>
+        <button onclick="setMode('inbox'); selectVariation(${i});">Open</button>
+      </div>
+    `;
+    compareView.appendChild(card);
+  });
+
+  // Render the Headlines tab: 10 subjects on the left, 10 previews on the right
+  SUBJECTS.forEach((s, j) => {
+    const el = document.createElement('div');
+    el.className = 'headline-item subject-row' + (j === 0 ? ' selected' : '');
+    el.dataset.idx = j;
+    el.innerHTML = `<div class="num">${j + 1}.</div><div>${escapeHtml(s)}</div>`;
+    el.addEventListener('click', () => { selSubj = j; applySelection(); });
+    subjectsList.appendChild(el);
+  });
+  PREVIEWS.forEach((p, j) => {
+    const el = document.createElement('div');
+    el.className = 'headline-item preview-row' + (j === 0 ? ' selected' : '');
+    el.dataset.idx = j;
+    el.innerHTML = `<div class="num">${j + 1}.</div><div>${escapeHtml(p)}</div>`;
+    el.addEventListener('click', () => { selPrev = j; applySelection(); });
+    previewsList.appendChild(el);
+  });
+
+  // Push the current selSubj/selPrev into every rendered surface
+  function applySelection() {
+    const s = SUBJECTS[selSubj];
+    const p = PREVIEWS[selPrev];
+
+    VARIATIONS.forEach((_, i) => {
+      const iSubj = document.getElementById(`inbox-subj-${i}`);
+      const iPrev = document.getElementById(`inbox-prev-${i}`);
+      const eSubj = document.getElementById(`email-subj-${i}`);
+      const cSubj = document.getElementById(`cmp-subj-${i}`);
+      const cPrev = document.getElementById(`cmp-prev-${i}`);
+      if (iSubj) iSubj.textContent = s;
+      if (iPrev) iPrev.textContent = p;
+      if (eSubj) eSubj.textContent = s;
+      if (cSubj) cSubj.textContent = s;
+      if (cPrev) cPrev.textContent = p;
+    });
+
+    document.querySelectorAll('#subjects-list .headline-item').forEach((el, i) => {
+      el.classList.toggle('selected', i === selSubj);
+    });
+    document.querySelectorAll('#previews-list .headline-item').forEach((el, i) => {
+      el.classList.toggle('selected', i === selPrev);
+    });
+
+    document.getElementById('hl-current-subj').textContent = s;
+    document.getElementById('hl-current-prev').textContent = p;
+  }
+
+  function selectVariation(i) {
+    document.querySelectorAll('.inbox-row').forEach((r, idx) => r.classList.toggle('active', idx === i));
+    document.querySelectorAll('.email-view').forEach((v, idx) => v.classList.toggle('active', idx === i));
+    readingCol.scrollTop = 0;
+  }
+
+  function setMode(mode) {
+    document.getElementById('mode-inbox').classList.toggle('active', mode === 'inbox');
+    document.getElementById('mode-headlines').classList.toggle('active', mode === 'headlines');
+    document.getElementById('mode-compare').classList.toggle('active', mode === 'compare');
+    layout.classList.toggle('compare-mode', mode === 'compare');
+    layout.classList.toggle('headlines-mode', mode === 'headlines');
+  }
+
+  function flash(btn, label) {
+    const old = btn.textContent;
+    btn.textContent = label;
+    setTimeout(() => btn.textContent = old, 1400);
+  }
+
+  function copyBody(i, btn) {
+    const view = document.querySelectorAll('.email-view')[i];
+    navigator.clipboard.writeText(view.querySelector('.email-body').innerText)
+      .then(() => flash(btn, 'Copied ✓'));
+  }
+  function copyPair(i, btn) {
+    const text = `Subject: ${SUBJECTS[selSubj]}\nPreview: ${PREVIEWS[selPrev]}`;
+    navigator.clipboard.writeText(text).then(() => flash(btn, 'Copied ✓'));
+  }
+  function copyAll(i, btn) {
+    const view = document.querySelectorAll('.email-view')[i];
+    const body = view.querySelector('.email-body').innerText;
+    const text = `Subject: ${SUBJECTS[selSubj]}\nPreview: ${PREVIEWS[selPrev]}\n\n${body}`;
+    navigator.clipboard.writeText(text).then(() => flash(btn, 'Copied ✓'));
+  }
+  function copyCompare(i, btn) {
+    const card = document.querySelectorAll('.compare-card')[i];
+    navigator.clipboard.writeText(card.querySelector('.compare-card-body').innerText)
+      .then(() => flash(btn, 'Copied ✓'));
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'c' || e.key === 'C') { setMode('compare'); return; }
+    if (e.key === 'h' || e.key === 'H') { setMode('headlines'); return; }
+    if (e.key === 'i' || e.key === 'I' || e.key === 'Escape') { setMode('inbox'); return; }
+    const n = parseInt(e.key, 10);
+    if (n >= 1 && n <= VARIATIONS.length) {
+      setMode('inbox');
+      selectVariation(n - 1);
+    }
+  });
+
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;');
+  }
+
+  function timeLabel(i) {
+    const labels = ['10:42 AM', '10:41 AM', '10:40 AM', '10:39 AM', '10:38 AM'];
+    return labels[i] || '';
+  }
+
+  // Initial paint
+  applySelection();
+</script>
+</body>
+</html>
