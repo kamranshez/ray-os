@@ -1,0 +1,1 @@
+How scope works in Claude Code and Codex
