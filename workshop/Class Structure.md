@@ -1,6 +1,3 @@
-# To Include Somewhere
-- [[OpenAI Symphony]] *(NEW)*
-
 # Day 0 — Foundations & Setup 
 0. [[Where We're Going]]
 1. [[Installing CC + Cmux (Mac)]]
@@ -42,6 +39,7 @@
 * [[Gravitational Pull from Older Models]]
 * [[High-Level Coherence, Low-Level Implementation]]
 * [[Getting Prompt Feedback]]
+* [[Persona Vectors]]
 
 # Day 4 — Planning
 * [[Plans to PRDs]]
@@ -86,6 +84,7 @@
 4. [[Every PR]]
 5. [[Removing Bottlenecks]]
 6. [[Missions]]
+7. [[OpenAI Symphony]]
 
 # Day 9 — Loopy AI
 - [[Ralph Loops]]
