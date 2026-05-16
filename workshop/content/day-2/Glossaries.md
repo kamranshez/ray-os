@@ -1,14 +1,3 @@
----
-status: stub
-acs:
-  - class: fundamental-techniques
-    title: "Customized Terminology for Better Prompts"
-  - class: fundamental-techniques
-    title: "Reducing Agent Confusion in Growing Projects"
-mapping: mapped-partial
-day: 1
-block: core
----
 Combine it with the customised terminology for better prompting. 
 
 See this conversation: https://x.com/i/grok?conversation=2044769391401996491

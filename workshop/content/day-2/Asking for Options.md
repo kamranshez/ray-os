@@ -1,13 +1,3 @@
----
-status: stub
-acs:
-  - class: fundamental-techniques
-    title: "Multiple Proposals"
-mapping: mapped-partial
-day: 2
-block: core
----
-
 # Asking models for options preserves human judgment
 
 ## The idea

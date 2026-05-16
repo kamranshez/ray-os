@@ -1,18 +1,3 @@
----
-status: stub
-acs:
-  - class: claude-code
-    title: "Spec Developer"
-  - class: claude-code
-    title: "Checking After Spec Developer"
-  - class: claude-code
-    title: "Benefits of Spec Developer"
-  - class: fundamental-techniques
-    title: "Clarifying Questions"
-mapping: mapped
-day: 2
-block: core
----
 The human-facing interview skill that produces a spec before any code is written.
 
 ## Models drift toward two possible truths if specs contain ambiguity

@@ -1,15 +1,3 @@
----
-status: stub
-acs:
-  - class: fundamental-techniques
-    title: "Artifact Planning"
-  - class: fundamental-techniques
-    title: "Multimodal Models for PRDs"
-mapping: mapped-partial
-day: 4
-block: core
----
-
 * Better at writing new code rather editing existing code.
 * Especially within the same context window.
 

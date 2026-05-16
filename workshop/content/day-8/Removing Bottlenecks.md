@@ -1,12 +1,3 @@
----
-status: stub
-acs: []
-mapping: workshop-original
-day: 8
-block: core
-recording-needed: true
----
-
 * Get it to analyse previous transcripts
 
 ## Automate anything and everything
