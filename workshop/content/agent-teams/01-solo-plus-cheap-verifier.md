@@ -1,3 +1,11 @@
+---
+status: stub
+acs: []
+mapping: workshop-original
+day: 7
+block: core
+recording-needed: true
+---
 # Archetype 1: Solo + Cheap Verifier
 
 ## What This Video Covers

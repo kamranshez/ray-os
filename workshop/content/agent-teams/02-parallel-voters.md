@@ -1,3 +1,11 @@
+---
+status: stub
+acs: []
+mapping: workshop-original
+day: 7
+block: core
+recording-needed: true
+---
 # Archetype 2: Parallel Voters
 
 ## What This Video Covers

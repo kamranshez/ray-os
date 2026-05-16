@@ -1,7 +1,11 @@
 ---
-tags: [agentic-coding, llm-behavior, prompting, design-process]
-date: 2026-05-06
-source: AI That Works podcast — Vibhav (BAML) + Dex (HumanLayer)
+status: stub
+acs:
+  - class: fundamental-techniques
+    title: "Multiple Proposals"
+mapping: mapped-partial
+day: 2
+block: core
 ---
 
 # Asking models for options preserves human judgment

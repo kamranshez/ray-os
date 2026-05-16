@@ -1,7 +1,10 @@
 ---
-tags: [agentic-coding, design-process, ticket-writing]
-date: 2026-05-06
-source: AI That Works podcast — Vibhav (BAML) + Dex (HumanLayer)
+status: stub
+acs: []
+mapping: workshop-original
+day: 1
+block: core
+recording-needed: true
 ---
 
 # Auto-advancing through design without reading guarantees compounding mistakes

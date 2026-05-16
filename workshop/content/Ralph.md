@@ -1,3 +1,12 @@
+---
+status: stub
+acs:
+  - class: claude-code
+    title: "Ralph Loop (aka Ralph Wiggum)"
+mapping: mapped-partial
+day: 7
+block: core
+---
 Stub — the Ralph loop: run the same prompt in a fresh window over and over until the goal is met. Cheap, dumb, surprisingly effective.
 
 Pairs with [[Autoresearch]] (eval-driven variant) and [[goal]] / [[Missions]].

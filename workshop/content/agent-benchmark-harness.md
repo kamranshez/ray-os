@@ -1,7 +1,11 @@
 ---
-tags: [workshop, idea, benchmarking, devops, evals]
-date: 2026-05-04
-aliases: [context-layer-benchmark]
+status: stub
+acs:
+  - class: advanced-techniques
+    title: "Benchmarking Tools & MCPs"
+mapping: mapped-partial
+day: 6
+block: deep-cut
 ---
 
 ## The idea

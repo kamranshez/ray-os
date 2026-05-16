@@ -1,3 +1,11 @@
+---
+status: stub
+acs: []
+mapping: workshop-original
+day: 7
+block: core
+recording-needed: true
+---
 # Convergence Over Perfection: The Thesis
 
 ## What This Video Covers

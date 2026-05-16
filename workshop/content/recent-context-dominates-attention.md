@@ -1,7 +1,10 @@
 ---
-tags: [agentic-coding, context-windows, llm-behavior]
-date: 2026-05-06
-source: AI That Works podcast — Vibhav (BAML) + Dex (HumanLayer)
+status: stub
+acs: []
+mapping: workshop-original
+day: 2
+block: core
+recording-needed: true
 ---
 
 # Recent context dominates model attention

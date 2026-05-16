@@ -1,7 +1,10 @@
 ---
-tags: [agentic-coding, language-design, code-organization]
-date: 2026-05-06
-source: AI That Works podcast — Vibhav (BAML) + Dex (HumanLayer)
+status: stub
+acs: []
+mapping: workshop-original
+day: 6
+block: deep-cut
+recording-needed: true
 ---
 
 # Files matter less in agent-friendly languages

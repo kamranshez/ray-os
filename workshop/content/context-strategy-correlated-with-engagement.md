@@ -1,7 +1,10 @@
 ---
-tags: [agentic-coding, context-windows, workflow]
-date: 2026-05-06
-source: AI That Works podcast — Vibhav (BAML) + Dex (HumanLayer)
+status: stub
+acs: []
+mapping: workshop-original
+day: 3
+block: deep-cut
+recording-needed: true
 ---
 
 # Context window strategy is correlated with engagement level

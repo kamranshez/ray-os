@@ -1,3 +1,11 @@
+---
+status: stub
+acs: []
+mapping: workshop-original
+day: 7
+block: core
+recording-needed: true
+---
 # Archetype 3: Generator + Adversarial Critic
 
 ## What This Video Covers

@@ -1,7 +1,10 @@
 ---
-tags: [workshop, idea, context-engineering, exemplar-alignment, code-review]
-date: 2026-05-04
-source: https://about.roblox.com/newsroom/2026/01/doubled-ai-code-acceptance-teaching-models-think-like-roblox-engineers
+status: stub
+acs: []
+mapping: workshop-original
+day: 4
+block: deep-cut
+recording-needed: true
 ---
 
 ## The idea

@@ -1,7 +1,11 @@
 ---
-tags: [agentic-coding, llm-behavior, prompting]
-date: 2026-05-06
-source: AI That Works podcast — Vibhav (BAML) + Dex (HumanLayer)
+status: stub
+acs:
+  - class: fundamental-techniques
+    title: "Dealing with Syncophancy"
+mapping: mapped
+day: 2
+block: core
 ---
 
 # Models are sycophantic, so suggestions arrive as commands

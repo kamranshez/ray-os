@@ -1,3 +1,11 @@
+---
+status: stub
+acs: []
+mapping: workshop-original
+day: 7
+block: core
+recording-needed: true
+---
 # Archetype 4: Decomposed Swarm with Independent Errors
 
 ## What This Video Covers
