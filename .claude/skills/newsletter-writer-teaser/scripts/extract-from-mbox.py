@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract Matt Pocock newsletter emails from a Google Takeout mbox file."""
+"""Extract newsletter emails from a Google Takeout mbox file, filtered by sender."""
 
 import argparse
 import email
@@ -79,8 +79,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("mbox", type=Path)
     parser.add_argument("outdir", type=Path)
-    parser.add_argument("--filter", default="pocock|aihero",
-                        help="Regex applied to From: header (case-insensitive)")
+    parser.add_argument("--filter", required=True,
+                        help="Regex applied to From: header (case-insensitive), e.g. 'sender-name|newsletter-domain'")
     args = parser.parse_args()
 
     args.outdir.mkdir(parents=True, exist_ok=True)
@@ -111,7 +111,7 @@ def main():
         index_rows.append((extracted + 1, subject, date, fname))
         extracted += 1
 
-    index = ["# Pocock Email Index", ""]
+    index = ["# Example Email Index", ""]
     for n, subject, date, fname in index_rows:
         index.append(f"{n}. [{subject}]({fname}) — {date}")
     (args.outdir / "INDEX.md").write_text("\n".join(index) + "\n", encoding="utf-8")
