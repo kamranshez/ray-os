@@ -1,7 +1,3 @@
-# Workshop
-
-A 7-day live workshop being built by combining material across the Agentic Coding School catalogue (147-video Master Claude Code class, Codex, Techniques, Context Engineering, Prompt Engineering, Workflows). The workshop is the *distilled* version — the canonical path through the material, not a re-recording of every video.
-
 ## What a "stub" is (read this before touching content/)
 
 Every file in `content/` is one of three things. The YAML frontmatter at the top of each file says which:
