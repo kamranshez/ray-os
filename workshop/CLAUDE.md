@@ -4,7 +4,11 @@ A 7-day live workshop being built by combining material across the Agentic Codin
 
 ## Current stage
 
-Curriculum design, structure **A1 locked** (see [[Class Structure]]). Day 0 is async pre-work; Days 1–7 are live. Most `content/` notes are intentional stubs — placeholders with links to source material that will expand into full topic write-ups. Pricing sketched in [[Pricing Structure]] ($299 early-bird → $599 → $3k with coaching). No live content recorded yet.
+Curriculum design, structure **A1 locked** with **comprehensive ACS video mapping applied** (see [[Class Structure]]). Day 0 is async pre-work; Days 1–7 are live, each with Core watch-along / Practice / Deep cuts blocks drawn from the 289-video ACS catalogue. Most `content/` notes are intentional stubs. Pricing sketched in [[Pricing Structure]] ($299 early-bird → $599 → $3k with coaching).
+
+**Net-new recording planned** (see Class Structure's Recording Plan section): convergence thesis + 5 archetypes (Day 7), Status of Agents, long-context trio synthesis, Missions/Goals merge, Languages, Removing Bottlenecks, OpenAI Symphony.
+
+**Pending follow-up pass**: stub triage — ~17 stubs to slim to one-line pointers (ACS video covers them), ~10 to expand past their matching ACS video.
 
 ## Folder map
 
