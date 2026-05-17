@@ -43,6 +43,7 @@
 # Day 4 — Planning
 - [ ] [[Plans to PRDs]]
 - [ ] [[Implementing Plans in Phases]]
+- [ ] [[Kanban Decomposition]]
 - [ ] [[Handoff]]
 - [ ] [[Prototyping]]
 - [ ] [[Coplanning]]
@@ -58,6 +59,7 @@
 - [ ] [[Using Public GitHub Repos]]
 - [ ] [[CLIs vs MCPs]]
 - [ ] [[Context Layer]]
+- [ ] [[Designing Codebases AI Loves]]
 - [ ] [[Subagent Teams]]
 - [ ] [[Subagent Teams for Debugging]]
 
@@ -68,6 +70,7 @@
 - [ ] [[Measuring Skill Effectiveness]]
 - [ ] [[Blog Post to Skill]]
 - [ ] [[Simplify Skill]]
+- [ ] [[Improve My Codebase Skill]]
 
 # Day 7 - Verification
 - [ ] [[Different Models for Reviews]]
