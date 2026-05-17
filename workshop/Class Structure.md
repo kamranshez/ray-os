@@ -76,6 +76,7 @@
 - [ ] [[Adversial Reviewers]]
 - [ ] [[Verifying Reviewers]]
 - [ ] [[Using Codex for Review]]]]
+- [ ] [[Red-Green-Refactor]]
 
 # Day 8 — Automation & Workflows
 - [ ] [[Slack as Your Command Center]]
