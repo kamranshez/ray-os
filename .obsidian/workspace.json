@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "843aabb45abe4df3",
+        "id": "8dc40e9e37901f2a",
         "type": "tabs",
         "children": [
           {
-            "id": "6357a8f85c7727b7",
+            "id": "5c77c3e8f183bc1e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "workshop/Class Structure.md",
+                "file": "Dashboard.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Class Structure"
+              "title": "Dashboard"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "autore",
+                "query": "effective goals",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -182,34 +182,35 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "6357a8f85c7727b7",
+  "active": "5c77c3e8f183bc1e",
   "lastOpenFiles": [
-    "workshop/CLAUDE.md",
-    "workshop/Class Structure.md",
-    "workshop/content/day-2/HTML Artefacts for Output.md",
     "goal.md",
-    "workshop/content/day-8/Every PR.md",
-    "workshop/content/day-8/Removing Bottlenecks.md",
-    "workshop/content/day-6/Markdown over Architecture.md",
-    "workshop/content/day-7/Multi Subagents for Hard Problems.md",
-    "workshop/content/day-6/Measuring Skill Effectiveness.md",
-    "workshop/content/day-6/Simplify Skill.md",
-    "workshop/content/day-2/Goal In, Strategy Out.md",
-    "workshop/content/day-3/Tackling Big Features.md",
-    "workshop/content/day-3/Dealing with Syncophancy.md",
-    "workshop/content/day-2/Understanding Output.md",
-    "workshop/content/day-2/HTML Artefacts.md",
-    "workshop/content/day-2/Spec Developer.md",
-    "workshop/content/day-2/Auto Memory.md",
-    "workshop/content/day-2/Glossaries.md",
-    "workshop/content/day-2/Nested Agent.MD's.md",
-    "workshop/content/day-2/Agents.MD.md",
+    "Dashboard.md",
+    "workshop/Class Structure.md",
+    "workshop/content/day-1/Context is Everything.md",
+    "workshop/content/day-1/Codebase Entropy.md",
+    "workshop/content/day-1/Status of Agents.md",
     "workshop/content/day-0/Office Hours.md",
     "workshop/content/day-0/Overview of Codex App.md",
     "workshop/content/day-0/Install Codex App.md",
     "workshop/content/day-0/Scope (Project & User Level).md",
     "workshop/content/day-0/Basic Commands for CC.md",
     "workshop/content/day-0/Navigating to Slack.md",
+    "workshop/content/day-0/Installing CC + Ghostty (Windows).md",
+    "workshop/content/day-0/Installing CC + Cmux (Mac).md",
+    "workshop/content/day-0/Where We're Going.md",
+    "workshop/CLAUDE.md",
+    "CleanShot 2026-05-17 at 16.09.13@2x.png",
+    "workshop/content/day-9/Writing Effective Goals.md",
+    "workshop/content/day-7/Red-Green-Refactor.md",
+    "workshop/content/day-7/Playwright for TDD.md",
+    "workshop/content/day-2/HTML Artefacts for Output.md",
+    "workshop/content/day-8/Every PR.md",
+    "workshop/content/day-8/Removing Bottlenecks.md",
+    "workshop/content/day-6/Markdown over Architecture.md",
+    "workshop/content/day-7/Multi Subagents for Hard Problems.md",
+    "workshop/content/day-6/Measuring Skill Effectiveness.md",
+    "workshop/content/day-6/Simplify Skill.md",
     "projects/agentic-coding-school/ideas/agent-teams",
     "projects/agentic-coding-school/ideas",
     "workshop/content/unsorted/agent-teams",
@@ -229,7 +230,6 @@
     "projects/agentic-coding-school/to-film/codex-app/images/04-subagents-in-general/the-mental-model.png",
     "projects/agentic-coding-school/to-film/codex-app/images/04-subagents-in-general/coordination-discipline.png",
     "projects/agentic-coding-school/to-film/codex-app/images/04-subagents-in-general/spawn-agent-tool.png",
-    "projects/agentic-coding-school/to-film/codex-app/images/04-subagents-in-general/parameters.png",
     "Untitled.canvas"
   ]
 }

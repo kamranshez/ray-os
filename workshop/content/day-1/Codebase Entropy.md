@@ -6,14 +6,12 @@ recording-needed: true
 day: 1
 block: core
 ---
-
 The load-bearing mental model for the whole workshop: **AI is a multiplier on your codebase, not an additive**. A clean repo compounds AI gains upward. A messy one accelerates decay faster than humans can refactor it back. The sign of the multiplication is set by what you bring to the table.
-
-This is the frame every later day plugs into. Alignment (Day 2), codebase design (Day 5), skills (Day 6), verification (Day 7) — all of it is "how you push back on entropy so AI keeps amplifying upward instead of downward."
-
 ## The thesis in one line
 
-Productivity gains from AI correlate weakly with token spend (~0.20 R²) and strongly with codebase cleanliness (~0.40 R²). How you use AI matters more than how much you use it, and the codebase it lands in matters most of all.
+Productivity gains from AI correlate weakly with token spend (~0.20 R²) and strongly with codebase cleanliness (~0.40 R²). 
+
+Stanford Study
 
 ## The entropy spiral
 
