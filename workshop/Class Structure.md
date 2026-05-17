@@ -11,6 +11,7 @@
 
 # Day 1 — Fundamentals
 - [ ] [[Status of Agents]]
+- [ ] [[Codebase Entropy]]
 - [ ] [[Context is Everything]]
 - [ ] [[Subagents]]
 - [ ] [[Understanding a Repo]]
