@@ -80,6 +80,7 @@
 - [ ] [[Verifying Reviewers]]
 - [ ] [[Using Codex for Review]]]]
 - [ ] [[Red-Green-Refactor]]
+- [ ] [[Playwright for TDD]]
 
 # Day 8 — Automation & Workflows
 - [ ] [[Slack as Your Command Center]]
