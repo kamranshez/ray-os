@@ -1,3 +1,6 @@
+# Ideas to Cover
+* Improve codebase architecture / https://github.com/michaelshimeles/skills/blob/main/code-structure/SKILL.md. Run it as a routine.
+
 # Day 0 — Foundations & Setup 
 - [ ] [[Where We're Going]]
 - [ ] [[Installing CC + Cmux (Mac)]]
