@@ -6,12 +6,6 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] [[01-solo-plus-cheap-verifier]] #agent-teams
-- [ ] [[02-parallel-voters]] #agent-teams
-- [ ] [[03-generator-plus-adversarial-critic]] #agent-teams
-- [ ] [[04-decomposed-swarm-independent-errors]] #agent-teams
-- [ ] [[05-environmental-attractors]] #agent-teams
-- [ ] [[wordpress-mcp]]
 - [ ] [[compound-engineering]] #claude-code
 - [ ] [[subagent-teams]] #claude-code
 - [ ] [[background-hooks]] #claude-code
@@ -26,10 +20,8 @@ kanban-plugin: board
 - [ ] [[playwright-agent-browser]] #claude-code
 - [ ] [[blocking-risky-commands-with-hooks]] #claude-code
 - [ ] [[hooks-with-slash-commands-skills-subagents]] #claude-code
-- [ ] [[http-hooks]] #claude-code
 - [ ] [[finding-skills-for-things-you-want]] #claude-code
 - [ ] [[skills-vs-subagents]] #claude-code
-- [ ] [[claude-code-in-xcode]] #claude-code
 - [ ] [[claude-code-lab]] #claude-code
 - [ ] [[building-effective-agent-teams]] #claude-code
 - [ ] [[agent-teams-with-debate]] #claude-code
@@ -39,16 +31,27 @@ kanban-plugin: board
 - [ ] [[deploying-skills-to-cloud]] #claude-code
 - [ ] [[computer-use]] #claude-code
 - [ ] [[global-claude-md-personal-profile]] #claude-code
-- [ ] [[mcps-connectors-that-i-use]] #claude-code
 - [ ] [[dynamic-context-injection-for-skills]] #claude-code
-- [ ] [[auto-mode]] #claude-code
 - [ ] [[making-prompt-based-hooks]] #claude-code
 - [ ] [[a-quick-build]] #claude-code
 - [ ] [[using-git-in-vscode-version]] #claude-code
 - [ ] [[effort-for-subagents]] #claude-code
 - [ ] [[checkpoints-and-rewind]] #claude-code
 - [ ] [[mcp-json]] #claude-code
-- [ ] [[cmux]] #claude-code
+- [ ] [[code-execution-with-mcp]] #claude-code
+- [ ] [[designing-slides]] #claude-code
+- [ ] [[forked-subagents]] #claude-code
+- [ ] [[forked-subagents-for-ephemeral-context]] #claude-code
+- [ ] [[main-session-as-orchestrator]] #claude-code
+- [ ] [[running-claude-in-a-dev-box]] #claude-code
+- [ ] [[worktrees]] #claude-code
+- [ ] [[clarifying-questions]] #claude-code
+- [ ] [[disable-model-invoked-skills]] #claude-code
+- [ ] [[using-screenshots]] #claude-code
+- [ ] [[05-approvals-sandbox-review-modes]] #codex-app
+- [ ] [[action-read-through-docs]] #codex-app
+- [ ] [[making-subagents]] #codex-app
+- [ ] [[nested-subagents]] #codex-app
 - [ ] [[box-cli-filesystem-for-ai-agents]] #business
 - [ ] [[deep-research-with-exa]] #business
 - [ ] [[social-media-content-engine]] #business
@@ -56,11 +59,10 @@ kanban-plugin: board
 - [ ] [[lead-research-and-outreach]] #business
 - [ ] [[agent-mail]] #business
 - [ ] [[skills-as-team-knowledge-base]] #business
-- [ ] [[self-auditing-ai-checks-its-own-work]] #business
 - [ ] [[remotion]] #business
-- [ ] [[self-annealing-workflows]] #business
-- [ ] [[auto-research]] #business
-- [ ] [[imessage-channel]] #business
+- [ ] [[auto-research-for-non-technical-work]] #business
+- [ ] [[notebooklm-intake-claude-code-action]] #business
+- [ ] [[ship-with-monitoring-routines]] #business
 - [ ] [[01-steering-distributions]] #prompt-engineering
 - [ ] [[03-archetype-teams]] #prompt-engineering
 - [ ] [[04-living-archetypes]] #prompt-engineering
@@ -70,25 +72,18 @@ kanban-plugin: board
 - [ ] [[08-constraints-and-negatives]] #prompt-engineering
 - [ ] [[09-interview-style-prompting]] #prompt-engineering
 - [ ] [[10-iterative-refinement]] #prompt-engineering
-- [ ] [[11-temperature-and-parameters]] #prompt-engineering
 - [ ] [[stochastic-consensus-and-fan-out-fan-in]] #techniques
-- [ ] [[video-to-action-pipeline]] #techniques
 - [ ] [[prompt-contracts]] #techniques
 - [ ] [[core-agent-loop]] #techniques
-- [ ] [[subagent-verification-loops]] #techniques
 - [ ] [[always-force-a-constraint-restatement-before-code]] #techniques
 - [ ] [[getting-shit-done]] #techniques
 - [ ] [[llms-have-an-easier-time-writing-things]] #techniques
 - [ ] [[refactoring-to-save-on-context]] #techniques
-- [ ] [[task-shaped-wrappers]] #techniques
 - [ ] [[scrappy-first]] #techniques
 - [ ] [[designing-interfaces]] #techniques
-- [ ] [[context-layer-summarised]] #context-engineering
+- [ ] [[something-deeper-at-play]] #techniques
 - [ ] [[code-field]] #context-engineering
 - [ ] [[company-as-a-file-system]] #context-engineering
-- [ ] [[language-server-protocol]] #context-engineering
-- [ ] [[signal-to-noise-ratio]] #context-engineering
-- [ ] [[consolers-as-a-skill]] #skills
 - [ ] [[1-1-why-skills-change-everything]] #skills
 - [ ] [[1-2-how-skills-work-under-the-hood]] #skills
 - [ ] [[1-3-set-up-your-workspace]] #skills
@@ -120,7 +115,6 @@ kanban-plugin: board
 - [ ] [[6-4-companies-are-graphs-of-algorithms]] #skills
 - [ ] [[7-1-sharing-skills-with-your-team]] #skills
 - [ ] [[knowing-which-skills-to-combine]] #skills
-- [ ] [[running-claude-in-a-dev-box]] #claude-code
 - [ ] [[deterministic-pathway-replacing-certain-tools]] #claude-code
 - [ ] [[specs-are-the-new-product]] #spec-driven-development
 - [ ] [[tdd-stops-the-cheating-agent]] #spec-driven-development
@@ -133,7 +127,6 @@ kanban-plugin: board
 - [ ] [[blast-radius-proportional-verification]] #techniques
 - [ ] [[adversarial-critics-fighting-llm-agreement-bias]] #techniques
 - [ ] [[specs-vs-constraints-making-incorrect-code-unrepresentable]] #spec-driven-development
-- [ ] [[convergence-over-perfection-thesis]] #agent-teams
 
 
 ## Doing
@@ -142,48 +135,10 @@ kanban-plugin: board
 - [ ] [[git-inside-of-vscode]] #claude-code
 
 
-## Done
-
-- [ ] [[worktrees]] #claude-code
-- [ ] Codex + Claude Code
-- [ ] [[telegram-channel]] #business
-- [ ] [[Ultrathink]]
-- [ ] Airtable Memory for Cloud Scheduled Tasks
-- [ ] Frontend Design
-- [ ] Remote Control #claude-code
-- [ ] [[02-scaling-taste]] #prompt-engineering
-- [x] [[persona-vectors]] #prompt-engineering
-- [x] [[boxing-the-model-in]] #techniques
-- [x] [[closing-the-loop]] #techniques
-- [x] [[delete-your-readme]] #techniques
-- [x] [[goal-in-strategy-out]] #techniques
-- [x] [[gravitional-pull-from-older-models]] #techniques
-- [x] [[high-level-strategy-low-level-details]] #techniques
-- [x] [[just-run-it-again]] #techniques
-- [x] [[one-pattern-per-thing]] #techniques
-- [x] [[1m-context-window]] #techniques
-- [x] [[batch-skill]] #techniques
-- [x] [[simplify-skill]] #techniques
-- [x] [[scope-and-settings]] #claude-code
-- [x] Context Engineering in 10 Minutes #context-engineering
-- [x] CE: Intro #context-engineering
-- [x] CE: The Prompt Isn't the Problem #context-engineering
-- [x] CE: Signal to Noise #context-engineering
-- [x] CE: Why Search Isn't Enough #context-engineering
-- [x] CE: Instruction Following Limits #context-engineering
-- [x] CE: Cognitive Inertia #context-engineering
-- [x] CE: Progressive Disclosure #context-engineering
-- [x] CE: The Context Layer #context-engineering
-- [x] CE: Anatomy of a Node #context-engineering
-- [x] CE: Examples #context-engineering
-- [x] CE: Maintenance #context-engineering
-- [x] CE: Working with Model Limits #context-engineering
-
-
 
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,false,false,false,false,false,false,false]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,false,false,false,false,false,false]}
 ```
 %%
