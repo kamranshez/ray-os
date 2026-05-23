@@ -1,0 +1,4 @@
+{
+  "_comment": "Known broken utm_campaign values that should map to a real videoId. Add new entries when fetch_stripe surfaces a near-match in anomalies. Format: {broken_value: real_videoId}",
+  "SbB5gc_1K8": "YSbB5gc_1K8"
+}

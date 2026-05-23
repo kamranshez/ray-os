@@ -14,7 +14,8 @@ Write scripts for Ray's YouTube channel (@RAmjad) — Claude Code tutorials and 
    - `skills-2.0-script.md` — 40k views in 2 days
    - `btw-and-fork-script.md` — 30k views in 1 day
 2. Read `socials/youtube/improvements.md` in the project root — active production improvements. Apply any that are relevant.
-3. If the video topic relates to an existing script in `socials/youtube/videos/`, read it for context on what's already been covered.
+3. Read `socials/youtube/promotion-playbook.md` — the 7-move promotion playbook derived from the 2026-05-23 transcript-pattern analysis (demo surface, objection-handler script, named free artifact, micro-scarcity, single CTA, free-video cross-link, refund stat). The positioning question batch below pulls from this file. If `socials/youtube/free-class-videos.md` exists, also read it — it's the index of free class videos used to pre-pick the cross-link in rule #6.
+4. If the video topic relates to an existing script in `socials/youtube/videos/`, read it for context on what's already been covered.
 
 ## Before drafting — ask the user 4 upfront questions
 
@@ -38,7 +39,15 @@ The top 3 videos by views all coined a term ("context pollution," "capability up
 **Q4 — Live deadline + price escalation.** *Only ask if Q2 is masterclass.* What's the concrete deadline and price change to cite in the closing urgency pitch?
 The Kills OpenClaw template requires real numbers: "lifetime plan retires [date], price goes up to [amount] after." If there's no real deadline, fall back to a softer close — don't manufacture fake urgency, the audience can smell it.
 
-Only after all four answers are in hand should you start drafting the script.
+After Q1-Q4 are answered, fire a **second AskUserQuestion batch (positioning batch)** drawn from `socials/youtube/promotion-playbook.md`. These three decisions cascade through the script's demo and close sections; they're cheap to lock in upfront and expensive to retrofit:
+
+**Q5 — Demo surface.** Which project is on screen during the main demo? Default is the masterclass landing page or its MCP server (rule #1 in the playbook). Only swap if the topic structurally demands a different surface (HyperWhisper for a Mac feature, RayOS for a daily-workflow video). The top-3 RPV videos all used the masterclass as the demo substrate. Pitch and demo collapse into the same section when this is done right.
+
+**Q6 — Free class video cross-link.** Which free video in the class pairs with this topic? This goes in the close (playbook rule #6). Pre-pick from `socials/youtube/free-class-videos.md` if it exists; if not, ask Ray to name one or flag that a free companion video should be recorded. The verbatim close shape is in the playbook. If Ray can't name a pairing, fall back to the MCP install ("install the masterclass MCP, it'll recommend videos based on your workflow") — still a class-platform tripwire.
+
+**Q7 — Named free artifact.** *Ask if Q2 is masterclass or newsletter.* What's the named free artifact tied to this video — PDF cheat sheet, downloadable skill, checklist, dashboard template? Generic "free videos in my newsletter" is wallpaper (playbook rule #3). Must be specific. If Ray can't name one in 10 seconds, pause and brainstorm — for newsletter-goal videos this is the load-bearing pitch element.
+
+Only after Q1-Q4 AND Q5-Q7 are in hand should you start drafting. The playbook's rules #2 (verbatim objection-handler), #4 (micro-scarcity), #5 (single CTA enforcement), and #7 (refund stat in close) are applied automatically during drafting — no questions needed; just bake them in.
 
 ## The Meta-Pattern (what all 3 hits share)
 
