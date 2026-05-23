@@ -4,7 +4,7 @@
 
 **Why this exists:** The transcript analysis identified six convergent patterns separating HIGH-RPV ($0.43-$1.20/view) from LOW-RPV (<$0.10/view) videos. This playbook converts those patterns into concrete promotion moves that can be locked in pre-script. The scriptwriter skill at `.claude/skills/youtube-scriptwriter` (same repo) reads this file as additional interview context.
 
-**Mirrored to:** `socials/youtube/promotion-playbook.md` in this repo (kept in sync manually for now). Skill was relocated from agentic-coding-school to ray-os on 2026-05-23 since the analysis is about Ray's YouTube channel, not the school product codebase.
+**Mirrored to:** `projects/agentic-coding-school/promotion-playbook.md` in this repo (kept in sync manually for now). Skill was relocated from agentic-coding-school to ray-os on 2026-05-23 since the analysis is about Ray's YouTube channel, not the school product codebase.
 
 ---
 
