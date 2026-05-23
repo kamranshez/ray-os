@@ -7,12 +7,12 @@ triggers:
 media: video
 status: posted
 engagement:
-  reactions: 0
+  reactions: 11
   comments: 0
   reposts: 0
-  impressions: 2
-  last_checked: 2026-04-10
-url: null
+  impressions: 878
+  last_checked: 2026-05-22
+url: https://www.linkedin.com/feed/update/urn:li:activity:7448159501817606144/
 video: null
 notes: Post 4 chosen from /advisor batch. Leads with Mythos, explains /advisor as quality gate. Paired with video clip.
 ---

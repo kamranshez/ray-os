@@ -4,16 +4,17 @@ hook: "Imagine leaving Claude Code watching your production logs for 3 hours whi
 triggers:
   primary: aspiration
   secondary: curiosity gap
-media: video (pending)
-status: draft
+media: video
+status: posted
 engagement:
-  reactions: null
-  comments: null
-  reposts: null
-  impressions: null
-url: null
+  reactions: 10
+  comments: 1
+  reposts: 0
+  impressions: 1214
+  last_checked: 2026-05-22
+url: https://www.linkedin.com/feed/update/urn:li:activity:7448285193423044608/
 video: null
-notes: Post 9 chosen from /monitor batch. Aspiration-led angle — "walking away from production logs" as the emotional hook. Saved as draft, Ray wants to come back to it later before posting.
+notes: Post 9 chosen from /monitor batch. Aspiration-led angle — "walking away from production logs" as the emotional hook. Found already live during the 2026-05-22 performance check (posted ~mid-April with a video attached); status flipped draft to posted.
 ---
 
 Imagine leaving Claude Code watching your production logs for 3 hours while you go to lunch.

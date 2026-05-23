@@ -9,13 +9,11 @@
 #   status: pending | in_progress | blocked | done
 #   related_post: (optional) path to draft in references/post-history/
 
-- task: Finalize and post /monitor LinkedIn draft
+- task: Check engagement on workflow-tool post
   description: >
-    Post 9 from the /monitor batch — aspiration angle, "walking away from
-    production logs." Ray saved it as a draft and wants to review before posting.
-    When resuming: review the copy, attach the /monitor video clip, then post
-    via the linkedin skill and flip status from `draft` → `posted` in the
-    post-history file.
-  due: 2026-04-12
+    Workflow tool post (curiosity gap + aspiration) went live 2026-05-22.
+    Pull reactions, comments, reposts, impressions via the linkedin skill
+    and fill in the `engagement` block in the post-history file.
+  due: 2026-05-25
   status: pending
-  related_post: references/post-history/2026-04-10_monitor-walk-away.md
+  related_post: references/post-history/2026-05-22_workflow-tool.md

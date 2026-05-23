@@ -5,10 +5,11 @@ archetype: The News + Insight
 media: text only
 status: posted
 engagement:
-  reactions: 9
+  reactions: 11
   comments: 0
   reposts: 0
-  impressions: 1114
+  impressions: 1183
+  last_checked: 2026-05-22
 notes: Voice Mode announcement. Shorter format, capitalized. Includes skeptic counterpoint quote and remote control callback. User edited from initial draft — removed push-to-talk detail paragraph and "isn't dead" closer.
 ---
 
