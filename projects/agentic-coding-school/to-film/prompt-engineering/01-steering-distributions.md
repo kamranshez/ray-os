@@ -16,7 +16,7 @@ When you say "find bugs related to cost counting," that distribution collapses. 
 
 The model has a finite computational budget per forward pass. Broad prompts spread that budget thin. Specific prompts concentrate it.
 
-![[images/attention-is-zero-sum.png]]
+![[attention-is-zero-sum.png]]
 ### How This Differs From Persona Vectors
 
 In the previous video we covered persona vectors — changing *how* the model reasons. Attention steering is the complementary concept: changing *where* the model focuses.
@@ -32,7 +32,7 @@ A persona vector will often implicitly steer attention as a side effect — the 
 
 The strongest prompts combine both: persona (how to think) plus task specification (where to look). They're complementary vectors pointing in different directions through the same latent space.
 
-![[images/persona-vector-vs-attention-steering.png]]
+![[persona-vector-vs-attention-steering.png]]
 ### Why Default Distributions Are Dangerous
 
 Every prompt has a default distribution — the region of output space the model gravitates toward based on training data frequency. The more common a pattern was in training, the more likely the model produces it.
@@ -52,7 +52,7 @@ Think of prompting less like writing a job description and more like pointing a 
 
 The skill is knowing when you need breadth versus precision, and being specific about the dimensions that matter most for your task.
 
-![[images/broad-vs-narrow-beam.png]]
+![[broad-vs-narrow-beam.png]]
 ### Diminishing Returns of Long Prompts
 
 This is also why extremely long system prompts that try to cover every scenario often underperform. You're not giving the model more capability — you're creating competition between directives for the model's attention budget. A focused prompt that nails the three or four highest-leverage dimensions often beats an exhaustive one.
@@ -61,7 +61,7 @@ Ten things to check in one prompt → the model's prior weighting decides what g
 
 Three focused, specific directives → full computational budget on each one.
 
-![[images/focus-vs-overload.png]]
+![[focus-vs-overload.png]]
 ### Demo
 
 1. Show a codebase with a subtle cost-counting bug (e.g., rounding error in billing logic)

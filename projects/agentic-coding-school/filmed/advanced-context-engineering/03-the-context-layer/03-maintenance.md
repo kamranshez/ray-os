@@ -8,7 +8,7 @@ The same is true for your layer. Without maintenance, **drift** creeps in—node
 
 But here's the good news: maintenance can be automated. And when done right, it doesn't just prevent rot—it continuously improves agent performance. Each cycle compounds.
 
-![[images/03-maintenance/03-maintenance-2.png]]
+![[03-maintenance-2.png]]
 
 ---
 
@@ -28,7 +28,7 @@ This can be done manually by engineers after significant changes. But because th
 
 **The cost:** 5-10 minutes per significant PR when done manually. Compare that to 20+ minutes of agent confusion per engineer when nodes drift—plus the bugs from following outdated patterns.
 
-![[images/03-maintenance/03-maintenance-11.png]]
+![[03-maintenance-11.png]]
 
 ---
 
@@ -50,11 +50,11 @@ Update order:
 
 Most changes only affect leaf nodes. The [[01 - Hierarchical Context|hierarchy]] localizes the maintenance burden—you're not rewriting the whole layer for every change.
 
-![[images/03-maintenance/03-maintenance-4.png]]
+![[03-maintenance-4.png]]
 
 
 
-![[images/03-maintenance/03-maintenance-3.png]]
+![[03-maintenance-3.png]]
 
 
 ---
@@ -79,7 +79,7 @@ Remember the [[03 - Common Mistakes#The "Would It Mislead?" Test|"Would It Misle
 
 The question is always: **Would an agent reading the current node make a mistake on this code?** If yes, update. If no, leave it.
 
-![[images/03-maintenance/03-maintenance-12.png]]
+![[03-maintenance-12.png]]
 
 ---
 
@@ -115,7 +115,7 @@ The goal: **the node should be self-contained enough that an agent can operate s
 When new decisions happen in Slack, capture them into the relevant node. Don't let tribal knowledge accumulate in chat where it can't be found.
 
 
-![[images/03-maintenance/03-maintenance-5.png]]
+![[03-maintenance-5.png]]
 
 ---
 
@@ -140,7 +140,7 @@ Think about what this means:
 
 Build once. Agents help maintain. Each cycle compounds into a knowledge base that gets better with use.
 
-![[images/03-maintenance/03-maintenance-10.png]]
+![[03-maintenance-10.png]]
 
 ---
 
@@ -163,7 +163,7 @@ At the end of significant sessions, prompt for updates:
 
 This keeps the layer evolving with the project. The agent becomes a collaborator in maintaining its own context.
 
-![[images/03-maintenance/03-maintenance-7.png]]
+![[03-maintenance-7.png]]
 
 ---
 
@@ -194,7 +194,7 @@ Agent monitors merges, proposes updates, runs them through CI. Human approves or
 
 This is the endgame—but start manual, automate when you understand the patterns. You need to know what good maintenance looks like before you can evaluate automated suggestions.
 
-![[images/03-maintenance/03-maintenance.png]]
+![[03-maintenance.png]]
 
 ---
 
@@ -215,7 +215,7 @@ The biggest risk is **drift**—nodes that describe how the code used to work, n
 - Trust agent feedback: if agents keep getting something wrong, the node might be stale
 - Add node updates to your PR checklist, right next to "update tests"
 
-![[images/03-maintenance/03-maintenance-6.png]]
+![[03-maintenance-6.png]]
 
 ---
 
@@ -238,7 +238,7 @@ How do you know the layer is healthy?
 
 This is the payoff. The upfront investment is real. But the maintenance cost per PR is small—and the value grows with every task.
 
-![[images/03-maintenance/03-maintenance-8.png]]
+![[03-maintenance-8.png]]
 
 ---
 
@@ -262,7 +262,7 @@ Better context for next change
 
 This is the compounding effect. Each cycle makes the layer more accurate, more complete, more valuable. The garden grows healthier with each season.
 
-![[images/03-maintenance/03-maintenance-9.png]]
+![[03-maintenance-9.png]]
 
 ---
 

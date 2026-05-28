@@ -18,7 +18,7 @@ The bottleneck isn't your prompt. It's context.
 
 **The right context takes you dramatically further.** When the model has the information it needs—the patterns, the constraints, the "why" behind your architecture—it produces good plans. And once the plan is good, the code is good.
 
-![[images/01-context-engineering-in-10-minutes/01-context-engineering-in-10-minutes-4.png]]
+![[01-context-engineering-in-10-minutes-4.png]]
 
 ---
 
@@ -33,7 +33,7 @@ We start with **fundamental ideas**—the constraints that explain why naive app
 
 These aren't arbitrary limitations. They're fundamental to how attention works. Once you understand them, everything else clicks.
 
-![[images/01-context-engineering-in-10-minutes/01-context-engineering-in-10-minutes-2.png]]
+![[01-context-engineering-in-10-minutes-2.png]]
 
 ---
 
@@ -57,7 +57,7 @@ Together, they capture what code alone cannot express:
 
 The agent gets exactly the context it needs—nothing more, nothing less.
 
-![[images/01-context-engineering-in-10-minutes/01-context-engineering-in-10-minutes.png]]
+![[01-context-engineering-in-10-minutes.png]]
 
 ---
 
@@ -86,7 +86,7 @@ When an agent touches a file in `payment/`, it automatically loads:
 It doesn't load billing or frontend context. That's noise for this task.
 
 
-![[images/01-context-engineering-in-10-minutes/01-context-engineering-in-10-minutes-3.png]]
+![[01-context-engineering-in-10-minutes-3.png]]
 
 ---
 
@@ -104,7 +104,7 @@ They start behaving like **senior engineers who know where the bodies are buried
 The context layer is how you bridge the gap between what AI can do and what you're currently getting.
 
 
-![[images/01-context-engineering-in-10-minutes/01-context-engineering-in-10-minutes-5.png]]
+![[01-context-engineering-in-10-minutes-5.png]]
 
 ---
 

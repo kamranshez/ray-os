@@ -2,7 +2,7 @@
 date: 2026-04-09
 status: scripting
 ---
-![[images/interactive-artifacts-bun/three-layers-of-interactive-artifacts.png]]
+![[three-layers-of-interactive-artifacts.png]]
 
 > **Example artifact:** `agentic-coding-school/tasks/cc-curriculum-reorder.html`. Content-flow reorder of all 132 Claude Code course videos, built from 10 parallel transcript-dependency subagents. Used as the "this scales" callback inside the rapid fire montage.
 
@@ -78,8 +78,8 @@ Two, it is a conversational surface where you can edit the tool itself in the sa
 
 This is what Adam from the Claude Code team called "flying" in the recent Anthropic webinar. You stop switching between "I am building the tool" and "I am using the tool". Claude handles both sides at once.
 
-![[images/interactive-artifacts-bun/dual-mode-insight-two-jobs.png]]
-![[images/interactive-artifacts-bun/dual-mode-insight-build-and-use.png]]
+![[dual-mode-insight-two-jobs.png]]
+![[dual-mode-insight-build-and-use.png]]
 ## Rapid fire: the pattern is infinite
 
 Every one of these follows the same three-layer shape. Static, interactive, channels.

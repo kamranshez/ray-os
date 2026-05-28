@@ -32,7 +32,7 @@ But here's the problem. One agent, one pass means one perspective. It reads top 
 
 And that's actually the same limitation human code review has. One reviewer, one pass, linear reading. The important bugs live in the interactions between components, and no single-pass review reliably catches those.
 
-![[images/ultrareview-hidden-bug-hunter/one-agent-one-pass-limitation.png]]
+![[one-agent-one-pass-limitation.png]]
 ### What Ultrareview Actually Is (1:30–3:30)
 
 *Terminal on screen — run `/ultrareview`*
@@ -70,7 +70,7 @@ And this matters more than people realize. I actually covered this in a previous
 
 The result? "Review complete — no findings." Which in this case is actually good news — it means five agents couldn't find a real bug in my branch. But when they do find something, you know it's been independently verified, not just flagged by a pattern matcher.
 
-![[images/ultrareview-hidden-bug-hunter/four-stage-bughunter-pipeline.png]]
+![[four-stage-bughunter-pipeline.png]]
 ### Two Modes of Operation (3:30–5:00)
 
 *Back to terminal*
@@ -81,7 +81,7 @@ Now there are two ways to run it.
 
 **Mode 2 — PR mode.** `/ultrareview 42`. You pass a PR number. This one doesn't need to bundle anything — it checks out `refs/pull/42/head` directly from GitHub. So it works with any repo size, but you need to have pushed a PR first.
 
-![[images/ultrareview-hidden-bug-hunter/branch-mode-vs-pr-mode.png]]
+![[branch-mode-vs-pr-mode.png]]
 
 ### The Billing Model (5:00–6:30)
 
@@ -113,7 +113,7 @@ That's how you reduce false positives. Not by making one agent smarter, but by m
 
 And the fleet architecture means it scales. Five agents today, twenty tomorrow. Each one catches things the others miss. It's parallel exploration of the bug space, not serial scanning.
 
-![[images/ultrareview-hidden-bug-hunter/adversarial-verification-shift.png]]
+![[adversarial-verification-shift.png]]
 ### What You Can Do Right Now (10:30–12:30)
 
 Now — ultrareview is still behind a feature flag. Most people don't have it yet. But here's the thing. The architecture isn't magic. It's the same multi-agent pattern you can set up yourself today with any coding agent that supports subagents.
@@ -126,7 +126,7 @@ Now — ultrareview is still behind a feature flag. Most people don't have it ye
 
 The point is: you don't need to wait for Anthropic to flip a flag. The pattern is fleet of agents, independent exploration, then verification. You can build that today.
 
-![[images/ultrareview-hidden-bug-hunter/diy-multi-agent-review-setup.png]]
+![[diy-multi-agent-review-setup.png]]
 ### Building Your Own Ultrareview Skill (12:30–14:30)
 
 Actually — let's build it. Right now. I'm going to turn this into a Claude Code skill that replicates the ultrareview pipeline using multiple models and multiple agents.
@@ -161,7 +161,7 @@ The skill orchestrates all of this. You run `/fleet-review` and it:
 
 And the whole thing takes maybe 5–8 minutes. Faster than ultrareview because you're running locally — no repo bundling, no cloud teleportation. But you're getting the same architecture: fleet find, independent verify, dedupe.
 
-![[images/ultrareview-hidden-bug-hunter/fleet-review-cross-model-pipeline.png]]
+![[fleet-review-cross-model-pipeline.png]]
 ### What Two Reviews Actually Found (14:30–16:00)
 
 So I ran two independent reviews on the same PR. One came back with twenty-two findings. The other came back with eight. Three direct overlaps.
@@ -172,7 +172,7 @@ The second review ignored most of the codebase entirely. It picked one user flow
 
 One thinks like an auditor — scan everything, categorize, prioritize. The other thinks like an attacker — pick a path and break it. Neither one alone caught everything.
 
-![[images/ultrareview-hidden-bug-hunter/auditor-vs-attacker-review-styles.png]]
+![[auditor-vs-attacker-review-styles.png]]
 ### Closer (16:00–16:30)
 
 So that's ultrareview — Anthropic's cloud-based multi-agent bug hunter. And now you've got your own version as a skill. Three Claude agents, two Codex agents, cross-model verification. You can run it today on any repo, no feature flag required.

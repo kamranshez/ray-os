@@ -22,7 +22,7 @@ This isn't a theory. Anthropic published testimonials from companies using 1M co
 
 (Show testimonial screenshots on screen here — flick through them quickly)
 
-![[images/1m-context-window/intake-pattern.png]]
+![[intake-pattern.png]]
 
 ---
 ## Coding: scout, worker, synthesizer
@@ -63,9 +63,9 @@ Before 1M, these long implementation sessions would hit compaction and lose the 
 
 **Path 2 — Scout, worker, synthesizer.** The session scouts the codebase and plans. Workers implement in fresh windows. The synthesizer verifies the assembled result against the original plan. Before 1M, you could sustain maybe 5-6 worker cycles before the coordinator hit compaction. Now you can sustain 15-20+. Use this for anything where the implementation itself requires significant reasoning — where the plan can't capture every decision in advance, or where subagents need to make judgment calls that could conflict with each other.
 
-![[images/1m-context-window/scout-worker-synthesizer.png]]
-![[images/1m-context-window/why-fresh-subagents.png]]
-![[images/1m-context-window/three-paths.png]]
+![[scout-worker-synthesizer.png]]
+![[why-fresh-subagents.png]]
+![[three-paths.png]]
 
 ---
 
@@ -88,7 +88,7 @@ Same structure works for:
 
 The 1M window lets you load everything at once. The different orderings make sure you actually find everything that's in there.
 
-![[images/1m-context-window/data-analysis-ordering.png]]
+![[data-analysis-ordering.png]]
 
 ---
 
@@ -104,7 +104,7 @@ For simple tasks, the intake and the execution are the same thing. There's nothi
 
 The distinction is **task intensity.** Simple and repetitive? Let the window fill up. Complex and creative? Read wide, then work narrow.
 
-![[images/1m-context-window/simple-tasks.png]]
+![[simple-tasks.png]]
 
 ---
 
@@ -122,4 +122,4 @@ When the project is done, start fresh. The context from the last project isn't h
 
 **The one-liner version:** 1M tokens doesn't mean one session all day. It means the sessions that need to be long can finally be long — and the rest should still be short.
 
-![[images/1m-context-window/when-to-start-fresh.png]]
+![[when-to-start-fresh.png]]

@@ -8,7 +8,7 @@ Non-technical tasks don't have that. When you ask an AI to write YouTube titles,
 
 The gap between "the AI produced output" and "the output performed well" is where most teams lose compounding. If you never feed those results back, every run starts from scratch. Closing the loop means connecting real-world outcomes back to the AI's process so that future runs are measurably better than past ones.
 
-![[images/closing-the-loop/closing-the-loop.png]]
+![[closing-the-loop.png]]
 
 ## What's actually happening
 
@@ -41,7 +41,7 @@ Without a loop, quality assessment is anecdotal. A loop forces you to pick a met
 
 Once you can measure, you can improve. Without measurement, the model/tooling doesn't get better — you just _hope_ it does.
 
-![[images/closing-the-loop/closing-the-loop-2.png]]
+![[closing-the-loop-2.png]]
 
 ---
 
@@ -77,7 +77,7 @@ Generic models optimize for general helpfulness. Your organization has specific 
 
 Without that translation, you get **definition drift** — the AI's idea of "good" and your team's idea of "good" slowly diverge, and nobody notices until the gap is painful.
 
-![[images/closing-the-loop/closing-the-loop-3.png]]
+![[closing-the-loop-3.png]]
 
 ---
 
@@ -118,6 +118,6 @@ You don't need to instrument everything. Pick:
 
 Make that task the _gold standard_ with full feedback artifacts, so the pattern spreads naturally.
 
-![[images/closing-the-loop/closing-the-loop-4.png]]
+![[closing-the-loop-4.png]]
 
 
