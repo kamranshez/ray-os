@@ -68,17 +68,35 @@ Ray ran a different slate again — neither of the recommended remaining open-qu
 
 **Where it stands:** Three rounds, nine titles. The audience pattern is now decisive — "Anthropic Just Dropped the [noun] [universal social proof]" — and within that, "Update Everyone's Been Waiting For" leads at 35.9%. The R1/R2 control's regression means R3 numbers are the more reliable steady-state read.
 
+### Title A/B Test Round 4 (2026-05-29) — early snapshot, ~8d 11h remaining
+
+Two new frames against the R3 leader (now promoted to control). Same thumbnail across all (face + `/workflows` folder). **Early read — test still has ~8.5 days to run, expect drift.**
+
+| Title | Thumbnail Text | Watch-time Share | Result |
+|-------|---------------|------------------|--------|
+| **Anthropic Just Dropped the Update Everyone's Been Waiting For** | /workflows | **34.8%** | ✅ Leader (R3 winner — control) |
+| Claude Code Just Had Its Biggest Update in Months | /workflows | 34.1% | |
+| Anthropic Just Dropped the Update Claude Code Always Needed | /workflows | 31.2% | |
+
+**Key takeaways (early snapshot):**
+
+- **Control held: 35.9% → 34.8% (−1.1pt).** This is the confirmation R3 needed. After the R1/R2 "40%" turned out to be sampling-artifact optimism, the control has now posted 35.9% → 34.8% across two consecutive rounds — a genuine **~34–35% steady state**. "the Update Everyone's Been Waiting For" is a validated, ship-ready title that has led both rounds it's appeared as control.
+- **"Claude Code Just Had Its Biggest Update in Months" ties the control at 34.1% (0.7pt gap) — the most significant result of R4.** This is the first title in twelve to (a) **drop the "Anthropic Just Dropped" authority opener** entirely and (b) lead with a magnitude/recency frame instead — yet it still ties the leader. It does this *despite* naming "Claude Code" (which restates what the `/workflows` thumbnail already shows — the R2 complementarity handicap). **The "[Tool]'s Biggest Update in [timeframe]" formula (~37% historical avg) holds up as a real alternative to the social-proof anchor.** "Anthropic Just Dropped" is reliable but, confirmed again, not required.
+- **"Anthropic Just Dropped the Update Claude Code Always Needed" lowest at 31.2%.** Two compounding drags: (a) "Claude Code" restates the thumbnail (R2's complementarity lesson, cost ~5pt there too); (b) **"Always Needed" frames the *tool's* gap, not the *viewer's* benefit** — "Claude Code needed this" is about the product being incomplete, whereas "Everyone's Been Waiting For" is about viewer desire. Confirms R3's core lesson: **anticipation/desire ("waiting for") > plain need ("needed"/"always needed"), and viewer-centric social proof > product-centric.**
+- **R4 spread: 3.6pt — narrowest yet.** Progressive compression continues unbroken: R1 20.8pt → R2 17.4pt → R3 5.2pt → R4 3.6pt. R4 deliberately tested genuinely diverse frames (anticipation, magnitude/recency, product-need) and they still landed within 3.6pt. **This is the textbook "switch to thumbnail" signal** — 3+ diverse title frames now produce near-identical results, which means the `/workflows` folder thumbnail (constant across all twelve titles) is the ceiling, not the wording.
+- **Still untested after four rounds:** V14's "Anthropic Just Dropped the Feature Nobody Knew They Needed" (46.8% original) and clean "Anthropic Just Dropped Claude Code Workflows". Dropped from every slate R2–R4.
+
+**Where it stands:** Four rounds, twelve titles. Three of the last four rounds converge on ~34–35% regardless of frame. Title testing has fully converged — the audience-preferred wording is locked and the remaining spread (3.6pt) is noise. The ceiling is now the thumbnail.
+
 ### Recommendation
 
-Two defensible paths:
+**Lock the title and move to thumbnail testing (strong recommendation).** Four rounds of progressive compression (20.8 → 17.4 → 5.2 → 3.6pt) on a constant `/workflows` thumbnail is the definitive "switch to thumbnail" signal. Ship the validated leader — **"Anthropic Just Dropped the Update Everyone's Been Waiting For"** (~34–35% steady state across two rounds as control) — or its co-equal **"Claude Code Just Had Its Biggest Update in Months"** if you want a non-"Anthropic" opener for variety. Then create `references/thumbnails/v25-workflow-tool/` and run a command-list / Nate-style `/workflows` thumbnail round (V22 41.1%, V23 40.3%, V24 39% precedents). The folder icon has been the ceiling all four rounds.
 
-**Path 1 — Lock and move to thumbnail (recommended).** Ship "Anthropic Just Dropped the Update Everyone's Been Waiting For" (35.9%). Title testing has converged (5.2pt spread); the next ceiling lift is the thumbnail. The `/workflows` folder icon has been the constant ceiling all three rounds. Create `references/thumbnails/v25-workflow-tool/` and run a command-list / Nate-style `/workflows` thumbnail round (V22 41.1%, V23 40.3%, V24 39% precedents).
-
-**Path 2 — One more title round, then lock regardless.** Finally test the two open R1 questions:
-1. **Anthropic Just Dropped the Update Everyone's Been Waiting For** — R3 leader, control (35.9%)
-2. **Anthropic Just Dropped the Feature Nobody Knew They Needed** — V14's 46.8% original, never tested
+**If you insist on one more title round before locking,** finally close the two questions open since R1 — both have outscoring potential the convergence hasn't ruled out:
+1. **Anthropic Just Dropped the Update Everyone's Been Waiting For** — R3/R4 leader, control (~34–35%)
+2. **Anthropic Just Dropped the Feature Nobody Knew They Needed** — V14's 46.8% original, never tested on this video
 3. **Anthropic Just Dropped Claude Code Workflows** — clean de-handicapped, never tested
 
-Path 1 is the higher-ROI move given the title-spread compression. Path 2 is defensible only if you genuinely want to close the V14 question before locking.
+But this is low-ROI now: the audience has shown a locked frame across twelve titles. The thumbnail is the higher-leverage move.
 
-**Hard rules (final):** never ship the parenthetical "(It's Awesome)" version; the Pocock personal/opinion frame is retired; 2nd-person "You Didn't Know You [verb]" is now also retired.
+**Hard rules (final):** never ship the parenthetical "(It's Awesome)" version; the Pocock personal/opinion frame is retired; 2nd-person "You Didn't Know You [verb]" is now also retired; product-centric need framing ("Claude Code Always Needed") underperforms viewer-centric desire framing.
