@@ -1,6 +1,6 @@
 ---
 duration: "12-18 min"
-class: "business"
+class: "automation"
 chapter: "Advanced"
 status: to-film
 ---
@@ -150,6 +150,16 @@ Then the agent proposes the next experiment, reading the previous lessons first.
 
 That is the difference between AI-generated ideas and auto research. AI-generated ideas reset every time. Auto research accumulates.
 
+## Running it on autopilot: the mission loop
+
+Everything above describes the logic. The thing that actually runs it every day is a mission.
+
+A mission is a long-running loop whose state lives in a file. You hand the agent a `MISSION.md`, and each run is one step. The agent reads the mission, forms a hypothesis, does the work, outputs its artifacts, then schedules the next step for some hours or days later. If it hits something only you can decide, it flags `needs_human` and waits instead of guessing.
+
+![[mission.png]]
+
+That is the whole shape. `MISSION.md` holds the objective and the running log. Each step reads it, acts, writes the result back, and queues the next run. `/artifacts` and `/steps` let you see what it produced and where it sits in the sequence. The experiment table from earlier is exactly what the mission reads and writes on every step. So the mission loop and the experiment loop are the same loop seen from two sides. The mission is the scheduler. The table is the memory.
+
 ## The daily Slack report
 
 The human still needs to stay in the loop. So after the agent evaluates the experiments, it posts a daily report.
@@ -226,5 +236,5 @@ For non-technical work, that might be the highest-leverage version of auto resea
 ## Connection to existing content
 
 - **Closing the Loop** (filmed) covers the autopilot pattern in plain terms. This video is the operator-grade version: same idea, but with a structured experiment table and a real test budget.
-- **Auto Research (Karpathy Loop)** (to-film, claude-code class) introduces the concept on the technical side. This is the non-technical companion video.
+- **Auto Research (Karpathy Loop)** (to-film, loopy-ai class) introduces the concept on the technical side. This is the non-technical companion video.
 - The `/autoresearch` skill in the skills library can be pointed at any of these surfaces once the experiment table exists.

@@ -1,1 +1,0 @@
-* See ![[mission.png]]
