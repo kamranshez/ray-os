@@ -320,25 +320,46 @@ def generate_html(posts: list[dict]) -> str:
 
 <script>
 function copyPost(btn, text) {{
-    navigator.clipboard.writeText(text).then(() => {{
-        btn.classList.add('copied');
-        btn.innerHTML = `
+    var copiedHtml = `
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             Copied!
         `;
-        setTimeout(() => {{
-            btn.classList.remove('copied');
-            btn.innerHTML = `
+    var copyHtml = `
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
                     <path d="M3 10V3C3 2.44772 3.44772 2 4 2H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
                 Copy
             `;
+    function showCopied() {{
+        btn.classList.add('copied');
+        btn.innerHTML = copiedHtml;
+        setTimeout(() => {{
+            btn.classList.remove('copied');
+            btn.innerHTML = copyHtml;
         }}, 2000);
-    }});
+    }}
+    function fallbackCopy() {{
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {{ document.execCommand('copy'); }} catch (e) {{}}
+        document.body.removeChild(ta);
+        showCopied();
+    }}
+    // navigator.clipboard is unavailable on file:// (non-secure context) — fall back to execCommand.
+    if (navigator.clipboard && navigator.clipboard.writeText) {{
+        navigator.clipboard.writeText(text).then(showCopied).catch(fallbackCopy);
+    }} else {{
+        fallbackCopy();
+    }}
 }}
 </script>
 

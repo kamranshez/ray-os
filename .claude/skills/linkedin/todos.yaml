@@ -14,6 +14,17 @@
     Workflow tool post (curiosity gap + aspiration) went live 2026-05-22.
     Pull reactions, comments, reposts, impressions via the linkedin skill
     and fill in the `engagement` block in the post-history file.
+    Checked 2026-05-29: 16 reactions, 3 comments, 0 reposts, 760 impressions.
   due: 2026-05-25
-  status: pending
+  status: done
   related_post: references/post-history/2026-05-22_workflow-tool.md
+
+- task: Check engagement on Dynamic Workflows post (Post 1)
+  description: >
+    "More agents used to mean more mess" (belief disruption + aspiration)
+    went live 2026-05-29. Captured at 5 impressions ~18 min after posting.
+    Pull updated reactions, comments, reposts, impressions and update the
+    `engagement` block + last_checked.
+  due: 2026-06-01
+  status: pending
+  related_post: references/post-history/2026-05-29_dynamic-workflows-more-agents-more-mess.md

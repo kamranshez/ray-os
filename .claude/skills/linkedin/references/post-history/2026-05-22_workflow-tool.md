@@ -7,11 +7,11 @@ triggers:
 media: text only
 status: posted
 engagement:
-  reactions: 0
-  comments: 0
+  reactions: 16
+  comments: 3
   reposts: 0
-  impressions: 9
-  last_checked: 2026-05-22
+  impressions: 760
+  last_checked: 2026-05-29
 url: https://www.linkedin.com/posts/rayamjad_anthropic-shipped-a-feature-this-week-that-ugcPost-7463587621756252161-Xegc
 notes: Post 5 chosen from workflow-tool batch. Source = /Users/ray/Downloads/transcript.srt (Claude Code workflow tool, deterministic multi-agent orchestration). Ray edited "off by default behind an env var" to "off by default right now."
 ---
