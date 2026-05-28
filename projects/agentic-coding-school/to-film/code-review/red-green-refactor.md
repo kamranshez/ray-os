@@ -1,5 +1,5 @@
 https://simonwillison.net/guides/agentic-engineering-patterns/red-green-tdd/
-![[CleanShot 2026-05-17 at 16.09.13@2x.png]]
+![[red-green-refactor.png]]
 
 Optional but powerful closing technique for Day 7. Where reviewers catch problems after the fact, Red-Green-Refactor prevents them upstream by making the test the spec.
 
