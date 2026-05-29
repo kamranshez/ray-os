@@ -24,386 +24,78 @@
 <script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
 <style>
   :root {
-    /* Excalidraw dark palette */
-    --cream: #1c1c1c;          /* canvas */
-    --paper: #262626;          /* subtle dark panels */
-    --ink: #e8e8e8;            /* light strokes + text */
-    --ink-soft: #9b9b9b;       /* secondary text */
-    --ink-faint: #555555;      /* subtle lines */
-    --yellow: #4d4526;         /* dark amber */
-    --blue: #1f3a4d;           /* dark blue */
-    --green: #234a2c;          /* dark green */
-    --pink: #4d2a39;           /* dark pink */
-    --amber: #523a23;          /* dark orange */
-    --light-red: #4d2626;      /* dark red */
-    --soft-emerald: #234a2c;   /* dark green */
-    --violet: #352c4d;         /* dark violet */
-    --teal: #1d4642;           /* dark teal */
-    --rule: #3a3a3a;           /* dashed rule */
+    --cream: #1c1c1c; --paper: #262626; --ink: #e8e8e8; --ink-soft: #9b9b9b;
+    --ink-faint: #555555; --rule: #3a3a3a;
   }
   * { box-sizing: border-box; }
   html, body {
-    margin: 0; padding: 0;
-    background: var(--cream);
-    color: var(--ink);
-    width: 100vw; height: 100vh;
-    overflow: hidden;
-    font-family: 'Excalifont', cursive;
-    -webkit-font-smoothing: antialiased;
+    margin: 0; padding: 0; background: var(--cream); color: var(--ink);
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Excalifont', cursive; -webkit-font-smoothing: antialiased;
   }
-
-  /* subtle paper grain */
   body::before {
-    content: "";
-    position: fixed; inset: 0;
-    pointer-events: none;
+    content: ""; position: fixed; inset: 0; pointer-events: none;
     background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 4px 4px;
-    z-index: 1;
+    background-size: 4px 4px; z-index: 1;
   }
 
-  /* ========== THUMBNAIL SIDEBAR ========== */
-  .thumb-sidebar {
-    position: fixed;
-    top: 50px;
-    bottom: 0;
-    left: 0;
-    width: 220px;
-    background: var(--paper);
-    border-right: 1px dashed var(--rule);
-    overflow-y: auto;
-    padding: 10px 8px 60px;
-    z-index: 15;
-    font-family: 'Excalifont', cursive;
-  }
-  .thumb-sidebar .thumb {
-    background: var(--cream);
-    border: 1.5px solid var(--ink-soft);
-    border-radius: 8px;
-    padding: 8px 10px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    box-shadow: 1px 2px 0 var(--ink-soft);
-    transition: transform 100ms ease;
-  }
-  .thumb-sidebar .thumb:hover {
-    transform: translate(-1px,-1px);
-    border-color: var(--ink);
-    box-shadow: 2px 3px 0 var(--ink);
-  }
-  .thumb-sidebar .thumb.active {
-    background: var(--yellow);
-    border-color: var(--ink);
-    border-width: 2px;
-    box-shadow: 3px 4px 0 var(--ink), inset 4px 0 0 var(--ink);
-    transform: translate(-1px,-1px);
-    padding-left: 14px;
-  }
-  .thumb-sidebar .thumb.active .num {
-    color: var(--ink);
-    font-weight: 800;
-  }
-  .thumb-sidebar .thumb.active .label {
-    font-weight: 700;
-  }
-  .thumb-sidebar .thumb.active::after {
-    content: '◀';
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    color: var(--ink);
-  }
-  .thumb-sidebar .thumb { position: relative; }
-  .thumb-sidebar .thumb .num {
-    font-size: 14px;
-    color: var(--ink-soft);
-    font-family: 'Cascadia Code', ui-monospace, monospace;
-    font-weight: 600;
-  }
-  .thumb-sidebar .thumb .label {
-    font-size: 18px;
-    color: var(--ink);
-    line-height: 1.15;
-    margin-top: 2px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-  @media (min-width: 900px) {
-    body:not(.sidebar-collapsed) .topbar,
-    body:not(.sidebar-collapsed) .stage { left: 220px; }
-  }
-  @media (max-width: 899px) {
-    .thumb-sidebar { display: none; }
-  }
-  body.sidebar-collapsed .thumb-sidebar { display: none; }
-  body.sidebar-collapsed .topbar,
-  body.sidebar-collapsed .stage { left: 0; }
-
-  /* ========== HEADER ========== */
-  .topbar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 28px;
-    border-bottom: 1px dashed var(--rule);
-    background: var(--cream);
-    z-index: 20;
-  }
-  .topbar .title {
-    font-family: 'Excalifont', cursive;
-    font-size: 26px;
-    color: var(--ink);
-    line-height: 1;
-  }
-  .topbar .counter {
-    font-family: 'Excalifont', cursive;
-    font-size: 22px;
-    color: var(--ink-soft);
-  }
-  .topbar .counter .num { color: var(--ink); font-weight: 700; }
-
-  /* ========== SLIDE STAGE ========== */
+  /* ===== STAGE (full height, no topbar, no sidebar) ===== */
   .stage {
-    position: fixed;
-    top: 50px;
-    bottom: 0;
-    left: 0; right: 0;
-    display: flex;
-    flex-direction: column;
-    z-index: 5;
+    position: fixed; top: 0; bottom: 0; left: 0; right: 0;
+    display: flex; flex-direction: column; z-index: 5;
   }
   .sketch-wrap {
-    flex: 1 1 auto;
-    min-height: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px 4px;
-    position: relative;
+    flex: 1 1 auto; min-height: 0; display: flex; align-items: center;
+    justify-content: center; padding: 8px 14px 2px; position: relative;
   }
   .sketch-wrap svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-    transition: opacity 250ms ease;
+    width: 100%; height: 100%; display: block; transition: opacity 250ms ease;
   }
   .sketch-wrap svg.fading { opacity: 0; }
 
-  /* ========== COMMENT MODE ========== */
-  #comment-overlay {
-    position: absolute;
-    inset: 12px 20px 4px;
-    pointer-events: none;
-    z-index: 8;
-  }
-  body.comment-mode #comment-overlay {
-    pointer-events: auto;
-    cursor: crosshair;
-  }
-  .comment-banner {
-    position: fixed;
-    top: 12px;
-    right: 14px;
-    background: #ef4444;
-    color: white;
-    font-family: 'Cascadia Code', ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.5px;
-    padding: 4px 8px;
-    border-radius: 4px;
-    box-shadow: 1px 1px 0 #1f2937;
-    display: none;
-    z-index: 30;
-    text-transform: uppercase;
-  }
-  body.comment-mode .comment-banner { display: block; }
-  .comment-pin {
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #ef4444;
-    color: white;
-    font-family: 'Cascadia Code', ui-monospace, monospace;
-    font-size: 14px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: translate(-50%, -50%);
-    border: 2px solid #1f2937;
-    box-shadow: 1px 2px 0 #1f2937;
-    pointer-events: auto;
-    cursor: pointer;
-    z-index: 9;
-  }
-  .comment-pin:hover {
-    transform: translate(-50%, -50%) scale(1.15);
-  }
-  .comment-pin .tooltip {
-    position: absolute;
-    left: 34px;
-    top: -4px;
-    background: #fef3c7;
-    color: #1f2937;
-    font-family: 'Excalifont', cursive;
-    font-size: 16px;
-    padding: 4px 10px;
-    border: 1.5px solid #1f2937;
-    border-radius: 4px;
-    white-space: nowrap;
-    max-width: 320px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    box-shadow: 2px 2px 0 #1f2937;
-    display: none;
-  }
-  .comment-pin:hover .tooltip { display: block; }
-
   .caption-area {
-    flex: 0 0 auto;
-    text-align: center;
-    padding: 8px 32px 70px;
+    flex: 0 0 auto; text-align: center; padding: 2px 28px 50px;
     transition: opacity 250ms ease;
   }
   .caption-area.fading { opacity: 0; }
   .caption-area h2 {
-    font-family: 'Excalifont', cursive;
-    font-weight: 700;
-    margin: 0 0 6px;
-    font-size: clamp(2.2rem, 4.2vw, 3.4rem);
-    line-height: 1.05;
-    color: var(--ink);
+    font-family: 'Excalifont', cursive; font-weight: 700; margin: 0 0 6px;
+    font-size: clamp(1.6rem, 2.8vw, 2.35rem); line-height: 1.05; color: var(--ink);
   }
   .caption-area p {
-    font-family: 'Excalifont', cursive;
-    margin: 0 auto;
-    font-size: clamp(1.1rem, 1.6vw, 1.45rem);
-    line-height: 1.4;
-    color: var(--ink-soft);
-    max-width: 920px;
+    font-family: 'Excalifont', cursive; margin: 0 auto;
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem); line-height: 1.4;
+    color: var(--ink-soft); max-width: 980px;
   }
 
-  /* ========== TAP ZONES ========== */
-  .tap-zone {
-    position: fixed;
-    top: 50px; bottom: 0;
-    width: 50%;
-    z-index: 8;
-    cursor: pointer;
-  }
+  /* ===== TAP ZONES ===== */
+  .tap-zone { position: fixed; top: 0; bottom: 0; width: 50%; z-index: 8; cursor: pointer; }
   .tap-zone.left { left: 0; }
   .tap-zone.right { right: 0; }
 
-  /* ========== NAV BUTTONS ========== */
-  .nav-btn {
-    position: fixed;
-    bottom: 18px;
-    z-index: 25;
-    font-family: 'Excalifont', cursive;
-    font-size: 22px;
-    background: #2e2e2e;
-    border: 2px solid var(--ink);
-    border-radius: 14px;
-    padding: 6px 18px 8px;
-    color: var(--ink);
-    cursor: pointer;
-    box-shadow: 2px 3px 0 var(--ink);
-    transition: transform 120ms ease, box-shadow 120ms ease, opacity 200ms ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .nav-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 4px 0 var(--ink); }
-  .nav-btn:active { transform: translate(1px,2px); box-shadow: 0 0 0 var(--ink); }
-  .nav-btn:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    transform: none;
-  }
-  .nav-btn.prev { left: 24px; }
-  .nav-btn.next { right: 24px; }
-  .nav-btn .arrow {
-    font-family: 'Excalifont', cursive;
-    font-size: 28px;
-    line-height: 1;
-  }
-
-  .replay-btn {
-    position: fixed;
-    bottom: 22px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 25;
-    font-family: 'Excalifont', cursive;
-    font-size: 18px;
-    background: var(--paper);
-    border: 1.5px dashed var(--ink-soft);
-    border-radius: 10px;
-    padding: 4px 14px 6px;
-    color: var(--ink-soft);
-    cursor: pointer;
-  }
-  .replay-btn:hover {
-    color: var(--ink);
-    border-color: var(--ink);
-    border-style: solid;
-  }
-
   /* draw-on animation */
-  .draw-on path,
-  .draw-on line,
-  .draw-on circle,
-  .draw-on rect {
-    stroke-dasharray: 1500;
-    stroke-dashoffset: 1500;
-    animation: drawOn 700ms ease forwards;
+  .draw-on path, .draw-on line, .draw-on circle, .draw-on rect {
+    stroke-dasharray: 1500; stroke-dashoffset: 1500; animation: drawOn 700ms ease forwards;
   }
-  @keyframes drawOn {
-    to { stroke-dashoffset: 0; }
-  }
-  .draw-on text {
-    opacity: 0;
-    animation: fadeIn 500ms ease forwards;
-    animation-delay: 400ms;
-  }
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
+  @keyframes drawOn { to { stroke-dashoffset: 0; } }
+  .draw-on text { opacity: 0; animation: fadeIn 500ms ease forwards; animation-delay: 400ms; }
+  @keyframes fadeIn { to { opacity: 1; } }
 </style>
 </head>
 <body>
 
-<aside class="thumb-sidebar" id="thumb-sidebar"></aside>
-
-<div class="topbar">
-  <div class="counter"><span class="num" id="slide-num">1</span> / <span id="slide-total">9</span></div>
-</div>
-
 <div class="stage">
   <div class="sketch-wrap" id="sketch-wrap">
     <svg id="sketch" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
-    <div id="comment-overlay"></div>
-    <div id="comment-banner" class="comment-banner">● comment mode</div>
   </div>
   <div class="caption-area" id="caption">
     <h2 id="headline">you already have a workflow</h2>
-    <p id="caption-text">Claude Code's Workflow tool</p>
+    <p id="caption-text">a job you run over and over, and Claude is the one running it</p>
   </div>
 </div>
 
 <div class="tap-zone left" id="tap-left"></div>
 <div class="tap-zone right" id="tap-right"></div>
-
-<button class="nav-btn prev" id="btn-prev"><span class="arrow">←</span> prev</button>
-<button class="nav-btn next" id="btn-next">next <span class="arrow">→</span></button>
 
 <script>
 (() => {
@@ -887,6 +579,49 @@
   };
   slides.push(slideDeterminism);
 
+  // -------- SLIDE: RESUME A RUN (append a step, pay only for it) --------
+  const slideResume = {
+    headline: 'resume a run, pay for the new step only',
+    caption: 'append a step at the end and resume: steps 1 through 8 replay from the journal for free, and only the new step does real work',
+    draw: () => {
+      // the run, resumed: 8 cached steps + 1 live
+      addText(80, 142, 'resume the run', { size: 22, fill: COLORS.soft, style: 'italic', font: MONO });
+      for (let i = 0; i < 8; i++) {
+        const x = 80 + i*112;
+        addRect(x, 168, 96, 92, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 1.8 });
+        addText(x+48, 206, 'S' + (i+1), { size: 22, anchor: 'middle', weight: 700, font: MONO });
+        addCheck(x+48, 236, 10, COLORS.emerald);
+      }
+      addLine(80, 282, 976, 282, { stroke: COLORS.emerald, strokeWidth: 1.6 });
+      addText(528, 318, 'replayed from the journal  .  0 tokens  .  instant', { size: 20, anchor: 'middle', fill: COLORS.emerald, weight: 700, style: 'italic' });
+      addArrow(980, 214, 1076, 214, { stroke: COLORS.ink, strokeWidth: 2, curve: 0, arrowSize: 11 });
+      addRect(1080, 148, 320, 150, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(1240, 202, 'step 9', { size: 30, anchor: 'middle', weight: 700, font: MONO });
+      addText(1240, 242, 'the only live run', { size: 19, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addText(1240, 276, '~100k tokens', { size: 18, anchor: 'middle', fill: COLORS.ink, font: MONO });
+
+      // the bill: a fresh run vs the resume
+      addText(80, 402, 'the bill', { size: 22, fill: COLORS.soft, style: 'italic', font: MONO });
+      addText(92, 450, 'fresh run', { size: 22, weight: 700, fill: COLORS.rose, font: MONO });
+      addRect(340, 423, 1060, 46, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+      addText(370, 454, '9 agents  .  ~900k tokens  .  ~50s', { size: 21, weight: 700, font: MONO });
+      addText(92, 537, 'resume', { size: 22, weight: 700, fill: COLORS.emerald, font: MONO });
+      addRect(340, 510, 135, 46, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addText(407, 541, '1 agent', { size: 20, anchor: 'middle', weight: 700, font: MONO });
+      addText(500, 541, '.  ~100k tokens  .  ~8s', { size: 21, fill: COLORS.soft, font: MONO });
+
+      // the three guardrails
+      addText(80, 632, 'the rules', { size: 22, fill: COLORS.soft, style: 'italic', font: MONO });
+      const rules = ['resume with resumeFromRunId', 'append the step at the end', 'same session'];
+      rules.forEach((t, i) => {
+        const x = 80 + i*500;
+        addRect(x, 650, 470, 70, { fill: COLORS.card, fillStyle: 'solid', strokeWidth: 1.6 });
+        addText(x+235, 692, t, { size: 18, anchor: 'middle', weight: 700, font: MONO });
+      });
+    }
+  };
+  slides.push(slideResume);
+
   // -------- SLIDE 11: WHEN TO REACH FOR IT --------
   const slideClose = {
     headline: 'when to reach for a workflow',
@@ -919,248 +654,34 @@
 
   // ============== STATE / RENDER ==============
   let current = 0;
-
   const render = (idx, animate=true) => {
     const slide = slides[idx];
     const captionEl = document.getElementById('caption');
     captionEl.classList.add('fading');
     svg.classList.add('fading');
-
     setTimeout(() => {
       clearSvg(svg);
       rc = rough.svg(svg);
-
       slide.draw();
-
-      if (animate) {
-        svg.classList.add('draw-on');
-        svg.getBoundingClientRect();
-      }
-
+      if (animate) { svg.classList.add('draw-on'); svg.getBoundingClientRect(); }
       document.getElementById('headline').textContent = slide.headline;
       document.getElementById('caption-text').textContent = slide.caption;
-      document.getElementById('slide-num').textContent = (idx+1);
-
       svg.classList.remove('fading');
       captionEl.classList.remove('fading');
-
-      if (animate) {
-        setTimeout(() => svg.classList.remove('draw-on'), 1200);
-      }
-
-      document.getElementById('btn-prev').disabled = idx === 0;
-      document.getElementById('btn-next').disabled = idx === slides.length - 1;
-      document.getElementById('slide-total').textContent = slides.length;
+      if (animate) setTimeout(() => svg.classList.remove('draw-on'), 1200);
     }, 220);
   };
-
-  const goTo = (idx) => {
-    if (idx < 0 || idx >= slides.length) return;
-    if (idx === current) return;
-    current = idx;
-    render(current);
-  };
-
+  const goTo = (idx) => { if (idx < 0 || idx >= slides.length || idx === current) return; current = idx; render(current); };
   const next = () => goTo(current + 1);
   const prev = () => goTo(current - 1);
 
-  // ============== NOTES.JSON SYNC ==============
-  const NOTES_URL = 'notes.json';
-  const SYNC_URL = 'http://localhost:7878/current';
-  let lastNotesHash = null;
-  let suppressLocalPost = false;
-
-  const applyNotes = (data) => {
-    if (!data || !Array.isArray(data.slides)) return;
-    data.slides.forEach((s, i) => {
-      if (slides[i]) {
-        if (s.headline) slides[i].headline = s.headline;
-        if (s.caption)  slides[i].caption  = s.caption;
-      }
-    });
-    if (slides[current]) {
-      document.getElementById('headline').textContent = slides[current].headline;
-      document.getElementById('caption-text').textContent = slides[current].caption;
-    }
-    renderThumbs();
-  };
-
-  const fetchNotes = async () => {
-    try {
-      const r = await fetch(NOTES_URL + '?t=' + Date.now(), { cache: 'no-store' });
-      if (!r.ok) return null;
-      return await r.json();
-    } catch (e) {
-      return null;
-    }
-  };
-
-  const pollNotes = async () => {
-    const data = await fetchNotes();
-    if (!data) return;
-    const hash = JSON.stringify(data);
-    if (hash === lastNotesHash) return;
-    lastNotesHash = hash;
-    applyNotes(data);
-    if (typeof data.current === 'number' && data.current !== current) {
-      suppressLocalPost = true;
-      goTo(data.current);
-      suppressLocalPost = false;
-    }
-  };
-
-  const postCurrent = (idx) => {
-    if (suppressLocalPost) return;
-    fetch(SYNC_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ current: idx })
-    }).catch(() => { /* offline / no server — silent */ });
-  };
-
-  // ============== THUMBNAIL SIDEBAR ==============
-  const sidebar = document.getElementById('thumb-sidebar');
-  const renderThumbs = () => {
-    sidebar.innerHTML = '';
-    slides.forEach((s, i) => {
-      const div = document.createElement('div');
-      div.className = 'thumb' + (i === current ? ' active' : '');
-      div.innerHTML = `<div class="num">${String(i+1).padStart(2,'0')}</div><div class="label">${s.headline}</div>`;
-      div.addEventListener('click', () => { goTo(i); postCurrent(i); });
-      sidebar.appendChild(div);
-    });
-  };
-
-  // ============== SIDEBAR COLLAPSE (keyboard: S) ==============
-  const SIDEBAR_KEY = 'workflow-tool-sidebar-collapsed';
-  const applySidebarState = (collapsed) => {
-    document.body.classList.toggle('sidebar-collapsed', collapsed);
-  };
-  applySidebarState(localStorage.getItem(SIDEBAR_KEY) === '1');
-  const toggleSidebar = () => {
-    const collapsed = !document.body.classList.contains('sidebar-collapsed');
-    applySidebarState(collapsed);
-    localStorage.setItem(SIDEBAR_KEY, collapsed ? '1' : '0');
-  };
-
-  // ============== INIT ==============
-  (async () => {
-    const initial = await fetchNotes();
-    if (initial) {
-      lastNotesHash = JSON.stringify(initial);
-      applyNotes(initial);
-      if (typeof initial.current === 'number') current = Math.max(0, Math.min(slides.length - 1, initial.current));
-    }
-    render(current);
-    renderThumbs();
-    setInterval(pollNotes, 1000);
-  })();
-
-  // Buttons
-  document.getElementById('btn-next').addEventListener('click', () => { next(); renderThumbs(); postCurrent(current); });
-  document.getElementById('btn-prev').addEventListener('click', () => { prev(); renderThumbs(); postCurrent(current); });
-
-  // Tap zones
-  document.getElementById('tap-left').addEventListener('click', () => { prev(); renderThumbs(); postCurrent(current); });
-  document.getElementById('tap-right').addEventListener('click', () => { next(); renderThumbs(); postCurrent(current); });
-
-  // ============== COMMENT MODE ==============
-  const COMMENTS_KEY = 'workflow-tool-comments';
-  const overlay = document.getElementById('comment-overlay');
-  let comments = JSON.parse(localStorage.getItem(COMMENTS_KEY) || '{}');
-
-  const saveComments = () => localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
-
-  const renderComments = () => {
-    overlay.querySelectorAll('.comment-pin').forEach(n => n.remove());
-    const list = comments[current] || [];
-    list.forEach((c, i) => {
-      const pin = document.createElement('div');
-      pin.className = 'comment-pin';
-      pin.style.left = (c.x * 100) + '%';
-      pin.style.top = (c.y * 100) + '%';
-      pin.textContent = (i + 1);
-      const tip = document.createElement('div');
-      tip.className = 'tooltip';
-      tip.textContent = c.text;
-      pin.appendChild(tip);
-      pin.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (document.body.classList.contains('comment-mode')) {
-          const newText = prompt('edit comment (leave empty to delete):', c.text);
-          if (newText === null) return;
-          if (newText.trim() === '') list.splice(i, 1);
-          else list[i].text = newText;
-          comments[current] = list;
-          saveComments();
-          renderComments();
-        }
-      });
-      overlay.appendChild(pin);
-    });
-  };
-
-  const toggleCommentMode = () => {
-    document.body.classList.toggle('comment-mode');
-    renderComments();
-  };
-
-  overlay.addEventListener('click', (e) => {
-    if (!document.body.classList.contains('comment-mode')) return;
-    if (e.target !== overlay) return;
-    const rect = overlay.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    const text = prompt('comment:');
-    if (!text) return;
-    if (!comments[current]) comments[current] = [];
-    comments[current].push({ x, y, text });
-    saveComments();
-    renderComments();
-  });
-
-  const exportComments = () => {
-    const slidesWithComments = Object.entries(comments)
-      .filter(([_, arr]) => arr && arr.length)
-      .map(([idx, arr]) => ({
-        slide: parseInt(idx, 10) + 1,
-        headline: slides[idx]?.headline || '',
-        comments: arr.map((c, i) => ({ n: i + 1, x: +c.x.toFixed(3), y: +c.y.toFixed(3), text: c.text }))
-      }));
-    const blob = JSON.stringify({ exportedAt: new Date().toISOString(), slides: slidesWithComments }, null, 2);
-    navigator.clipboard.writeText(blob).then(() => {
-      alert('comments copied to clipboard (' + slidesWithComments.reduce((n, s) => n + s.comments.length, 0) + ' total)');
-    }).catch(() => {
-      const a = document.createElement('a');
-      a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(blob);
-      a.download = 'slide-comments.json';
-      a.click();
-    });
-  };
-
-  const clearSlideComments = () => {
-    if (!comments[current] || !comments[current].length) return;
-    if (confirm('clear ' + comments[current].length + ' comment(s) on this slide?')) {
-      delete comments[current];
-      saveComments();
-      renderComments();
-    }
-  };
-
-  new MutationObserver(renderComments).observe(document.getElementById('slide-num'), { childList: true });
-
-  // Keyboard
+  render(current);
+  document.getElementById('tap-left').addEventListener('click', prev);
+  document.getElementById('tap-right').addEventListener('click', next);
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); renderThumbs(); postCurrent(current); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); renderThumbs(); postCurrent(current); }
-    else if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggleSidebar(); }
-    else if (e.key === 'c' || e.key === 'C') { e.preventDefault(); toggleCommentMode(); }
-    else if (e.key === 'Escape') { document.body.classList.remove('comment-mode'); }
-    else if ((e.key === 'e' || e.key === 'E') && document.body.classList.contains('comment-mode')) { e.preventDefault(); exportComments(); }
-    else if ((e.key === 'x' || e.key === 'X') && document.body.classList.contains('comment-mode')) { e.preventDefault(); clearSlideComments(); }
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
   });
-
-  renderComments();
 })();
 </script>
 
