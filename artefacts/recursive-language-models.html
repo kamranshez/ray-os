@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code is now a Recursive Language Model</title>
+<style>
+  :root{
+    --bg:#0c0e14; --panel:#141823; --panel-2:#1b2130; --ink:#e7ebf3;
+    --muted:#9aa6bd; --faint:#6b7689; --line:#262e3f;
+    --accent:#7c9cff; --accent-2:#5ee0c0; --warn:#ff8a6b; --gold:#ffce6b;
+    --code-bg:#0a0c12; --radius:16px; --maxw:940px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:radial-gradient(1200px 700px at 80% -10%, #1a2233 0%, var(--bg) 55%);
+    color:var(--ink);font:16px/1.65 ui-sans-serif,-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+  nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(12,14,20,.72);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;gap:6px;align-items:center;height:54px;overflow-x:auto;scrollbar-width:none}
+  nav .wrap::-webkit-scrollbar{display:none}
+  nav .brand{font-weight:700;color:var(--ink);margin-right:14px;white-space:nowrap;font-size:14px}
+  nav .brand b{color:var(--accent-2)}
+  nav a{color:var(--muted);font-size:13px;padding:6px 10px;border-radius:8px;white-space:nowrap}
+  nav a:hover{color:var(--ink);background:var(--panel-2);text-decoration:none}
+
+  header{padding:60px 0 26px}
+  .eyebrow{display:inline-block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);border:1px solid var(--line);padding:5px 11px;border-radius:999px;background:var(--panel)}
+  h1{font-size:clamp(30px,5.4vw,52px);line-height:1.06;margin:18px 0 14px;letter-spacing:-.02em}
+  h1 .grad{background:linear-gradient(95deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font-size:clamp(17px,2.4vw,20px);color:var(--muted);max-width:760px}
+  .lede b{color:var(--ink);font-weight:600}
+  .credit{margin-top:18px;font-size:13px;color:var(--faint)}
+  .credit a{color:var(--muted)}
+
+  section{padding:40px 0;border-top:1px solid var(--line)}
+  .kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  h2{font-size:clamp(23px,3.6vw,33px);margin:8px 0 16px;letter-spacing:-.01em}
+  h3{font-size:18px;margin:26px 0 8px}
+  p{color:#cdd5e6}
+  .muted{color:var(--muted)}
+  strong{color:#fff}
+  .big{font-size:19px;line-height:1.5}
+  em{color:var(--gold);font-style:italic}
+  .lead-in{color:var(--accent-2);font-weight:600}
+
+  .callout{background:linear-gradient(180deg,rgba(94,224,192,.08),transparent);border:1px solid var(--line);border-left:3px solid var(--accent-2);border-radius:0 12px 12px 0;padding:16px 18px;margin:16px 0}
+  .callout b{color:var(--accent-2)}
+  .callout.accent{border-left-color:var(--accent);background:linear-gradient(180deg,rgba(124,156,255,.1),transparent)}
+  .callout.accent b{color:var(--accent)}
+  .callout.gold{border-left-color:var(--gold);background:linear-gradient(180deg,rgba(255,206,107,.09),transparent)}
+  .callout.gold b{color:var(--gold)}
+
+  .quote{border-left:3px solid var(--accent);background:var(--panel);padding:16px 20px;border-radius:0 12px 12px 0;color:#dbe2f0;font-size:15.5px}
+  .quote .src{display:block;margin-top:10px;color:var(--faint);font-size:12.5px}
+  .hl{background:linear-gradient(transparent 62%, rgba(124,156,255,.32) 0);padding:0 1px}
+
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font:13.5px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#d5def2;margin:14px 0}
+  .c-com{color:#5d6b86;font-style:italic} .c-key{color:#ff9bb3} .c-fn{color:var(--accent-2)} .c-str{color:var(--gold)} .c-var{color:#9fc0ff}
+  code.inl{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#cfe0ff}
+
+  /* generic diagram shell */
+  .dia{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0}
+  .dia .cap{font-size:12.5px;color:var(--faint);text-align:center;margin-top:12px}
+  .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .arrow{color:var(--faint);font-size:20px;font-weight:700}
+  .node{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;text-align:center;min-width:92px}
+  .node .t{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+  .node .v{font-weight:700;font-size:13.5px;margin-top:3px}
+  .node.warn{border-color:var(--warn);background:rgba(255,138,107,.08)}
+  .node.root{border-color:var(--accent);background:rgba(124,156,255,.1)}
+  .node.sub{border-color:var(--accent-2);background:rgba(94,224,192,.07)}
+  .node.big{min-width:200px}
+
+  /* value vs reference */
+  .vref{display:grid;gap:14px}
+  .vref .lane{border:1px solid var(--line);border-radius:12px;padding:14px}
+  .vref .lane.bad{border-color:rgba(255,138,107,.5)}
+  .vref .lane.good{border-color:rgba(94,224,192,.5)}
+  .vref .tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;margin-bottom:10px}
+  .vref .bad .tag{color:var(--warn)} .vref .good .tag{color:var(--accent-2)}
+
+  /* who reads it */
+  .who{display:grid;gap:12px}
+  .who .top{display:flex;justify-content:center}
+  .who .conn{height:16px;width:2px;background:var(--line);margin:0 auto}
+  .who .slices{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+  /* interleave contrast: flat tool calls vs subagent inside code */
+  .ilv{display:grid;gap:14px}
+  @media(min-width:760px){.ilv{grid-template-columns:1fr 1fr}}
+  .ilv .lane{border:1px solid var(--line);border-radius:12px;padding:15px}
+  .ilv .lane.flat{border-color:rgba(255,138,107,.45)}
+  .ilv .lane.code{border-color:rgba(94,224,192,.5)}
+  .ilv .tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;margin-bottom:12px}
+  .ilv .flat .tag{color:var(--warn)} .ilv .code .tag{color:var(--accent-2)}
+  .bubbles{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+  .bubble{background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:12px;color:#cfe0ff}
+  .inbox{border:1px solid var(--warn);border-radius:10px;padding:9px 12px;background:rgba(255,138,107,.08);text-align:center;font-size:12.5px;color:#ffd0c0}
+  .frame{position:relative;border:1px dashed var(--accent-2);border-radius:10px;padding:18px 12px 12px;background:rgba(94,224,192,.05);margin:8px 0}
+  .frame>.lbl{position:absolute;top:-9px;left:12px;background:var(--panel);padding:0 7px;font:600 11px ui-monospace,Menlo,monospace;color:var(--accent-2)}
+  .gate{border:1px solid var(--gold);border-radius:10px;padding:8px 11px;background:rgba(255,206,107,.08);font:600 12px ui-monospace,Menlo,monospace;color:var(--gold);text-align:center}
+  .stack{display:grid;gap:8px;justify-items:center}
+
+  /* nested orchestration tree */
+  .tree{display:grid;gap:10px;justify-items:center}
+  .tree .lvl{display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
+  .tree .grp{display:grid;gap:8px;justify-items:center;border:1px dashed var(--line);border-radius:12px;padding:10px}
+  .tree .pair{display:flex;gap:8px}
+  .tree .conn{height:12px;width:2px;background:var(--line)}
+  .tnode{border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:12px;background:var(--panel-2);min-width:74px;text-align:center}
+  .tnode.root{border-color:var(--accent);background:rgba(124,156,255,.12);font-weight:700}
+  .tnode.par{border-color:var(--accent-2);background:rgba(94,224,192,.08)}
+  .tlbl{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+
+  /* symbolic env */
+  .sym{display:grid;gap:12px}
+  @media(min-width:720px){.sym{grid-template-columns:1fr 1fr 1fr}}
+  .sym .opt{border:1px solid var(--line);border-radius:12px;padding:13px;background:var(--panel-2)}
+  .sym .opt .h{font-weight:700;font-size:14px;color:var(--accent)}
+  .sym .opt .s{font-size:12.5px;color:var(--muted);margin-top:5px}
+  .sym .core{margin-top:6px;border:1px dashed var(--accent-2);border-radius:12px;padding:13px;background:rgba(94,224,192,.06);text-align:center}
+
+  /* before / after */
+  .ba{display:grid;gap:14px}
+  @media(min-width:720px){.ba{grid-template-columns:1fr 1fr}}
+  .ba .col{border:1px solid var(--line);border-radius:12px;padding:16px}
+  .ba .col.before{border-color:rgba(255,138,107,.4)}
+  .ba .col.after{border-color:rgba(94,224,192,.45)}
+  .ba .h{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;margin-bottom:8px}
+  .ba .before .h{color:var(--warn)} .ba .after .h{color:var(--accent-2)}
+  .ba p{font-size:14px;margin:6px 0 0}
+
+  table{width:100%;border-collapse:collapse;margin:8px 0;font-size:14px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--faint);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+  td:first-child{color:var(--accent-2);font-weight:600;white-space:nowrap}
+  td.eq{color:#cfe0ff;font-family:ui-monospace,Menlo,monospace;font-size:13px}
+
+  .grid{display:grid;gap:16px}
+  @media(min-width:680px){.grid.two{grid-template-columns:1fr 1fr}}
+  .ucard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .ucard .num{font-size:12px;font-weight:800;color:var(--bg);background:var(--accent-2);width:24px;height:24px;border-radius:7px;display:grid;place-items:center}
+  .ucard h4{margin:12px 0 6px;font-size:16px}
+  .ucard .was{font-size:12px;color:var(--warn);font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-top:10px}
+  .ucard .now{font-size:12px;color:var(--accent-2);font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-top:8px}
+  .ucard p{font-size:13.5px;color:var(--muted);margin:3px 0 0}
+
+  /* myth -> reality */
+  .myth{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;background:var(--panel)}
+  .myth .m{color:var(--warn);font-weight:700;font-size:14px}
+  .myth .m::before{content:"Myth  ";font-size:10.5px;letter-spacing:.12em;color:var(--faint);font-weight:800}
+  .myth .r{color:#d7dded;font-size:14.5px;margin-top:7px}
+  .myth .r::before{content:"Reality  ";font-size:10.5px;letter-spacing:.12em;color:var(--accent-2);font-weight:800;display:inline}
+
+  /* escalating options */
+  .opt-tier{border:1px solid var(--line);border-left-width:4px;border-radius:12px;padding:15px 18px;margin:14px 0;background:var(--panel)}
+  .opt-tier.bad{border-left-color:var(--warn)}
+  .opt-tier.ok{border-left-color:var(--gold)}
+  .opt-tier.best{border-left-color:var(--accent-2);background:linear-gradient(180deg,rgba(94,224,192,.07),var(--panel))}
+  .opt-tier .badge{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--faint)}
+  .opt-tier.bad .badge{color:var(--warn)}
+  .opt-tier.ok .badge{color:var(--gold)}
+  .opt-tier.best .badge{color:var(--accent-2)}
+  .opt-tier h3{margin:7px 0 6px;font-size:18px}
+  .opt-tier p{font-size:14.5px;margin:0;color:#cdd5e6}
+
+  footer{padding:46px 0 70px;color:var(--faint);font-size:13px;border-top:1px solid var(--line)}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand">CC <b>=</b> RLM</span>
+    <a href="#problem">The leash</a>
+    <a href="#flip">By reference</a>
+    <a href="#who">Who reads it</a>
+    <a href="#breakthrough">The breakthrough</a>
+    <a href="#whynow">Why now</a>
+    <a href="#options">The payoff</a>
+    <a href="#workflow">It IS one</a>
+    <a href="#possible">What's unlocked</a>
+    <a href="#limits">Honest limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="eyebrow">Concept explainer</span>
+    <h1>Claude Code is now a<br><span class="grad">recursive language model</span></h1>
+    <p class="lede">Every model is on a leash, and the leash is its context window. A <b>recursive language model</b> slips the leash: it leaves the giant input <b>outside</b> the model and writes <b>code that calls other models</b> to read it in pieces. With dynamic workflows, Claude Code now does exactly this. Point it at a repo ten times bigger than its window and it can reason across the whole thing.</p>
+    <p class="credit">Source idea: Recursive Language Models, Alex L. Zhang with Tim Kraska and Omar Khattab (MIT CSAIL), blog Oct 2025, paper Dec 2025 (arXiv:2512.24601), code at github.com/alexzhang13/rlm.</p>
+  </div>
+</header>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="wrap">
+    <div class="kicker">Start with the pain</div>
+    <h2>The context window is a leash</h2>
+    <p class="big">A normal model has one context window. You stuff things into it, and the model reads <strong>all of it</strong> every single time it thinks. The bigger the pile, the more it has to weigh every token against every other token.</p>
+    <p>Past a certain size the model gets <strong>worse</strong>, not better, even though everything technically fits. That degradation has a name: <strong>context rot</strong>. Search makes it worse, because exploring fills the window with dead ends before it finds what matters.</p>
+    <div class="dia">
+      <div class="row">
+        <div class="node big warn"><div class="t">one context window</div><div class="v">a 2M line repo crammed in</div></div>
+        <span class="arrow">&rarr;</span>
+        <div class="node warn"><div class="t">model</div><div class="v">re-reads all of it, every turn</div></div>
+        <span class="arrow">&rarr;</span>
+        <div class="node"><div class="t">answer</div><div class="v">fuzzy, then it hits the ceiling</div></div>
+      </div>
+      <div class="cap">The bottleneck is not raw intelligence. It is that one window has to hold, and re-read, everything at once.</div>
+    </div>
+    <p class="muted">So the real question is not how to get a bigger window. It is how to stop needing one.</p>
+  </div>
+</section>
+
+<!-- THE FLIP -->
+<section id="flip">
+  <div class="wrap">
+    <div class="kicker">The reframe</div>
+    <h2>Context by reference, not by value</h2>
+    <p class="big">Here is the move. Stop passing the data <em>by value</em>, copied into the window. Pass it <em>by reference</em>, left outside as an object the model reaches into with code.</p>
+    <p>The long input is loaded as a variable in a code environment. The model is handed only a little metadata about it: how long it is, a short preview, and how to reach in. Then it <strong>writes code</strong> to peek, grep, slice, and pull back only the pieces that matter.</p>
+
+    <div class="dia">
+      <div class="vref">
+        <div class="lane bad">
+          <div class="tag">By value (normal LLM)</div>
+          <div class="row">
+            <div class="node big warn"><div class="t">10M tokens</div><div class="v">poured into the window</div></div>
+            <span class="arrow">&rarr;</span>
+            <div class="node warn"><div class="t">overflow</div><div class="v">context rot</div></div>
+          </div>
+        </div>
+        <div class="lane good">
+          <div class="tag">By reference (recursive LM)</div>
+          <div class="row">
+            <div class="node big"><div class="t">10M tokens</div><div class="v">stay outside, as a variable</div></div>
+            <span class="arrow">&rarr;</span>
+            <div class="node root"><div class="t">model</div><div class="v">gets only "len=10M, first 2k chars"</div></div>
+            <span class="arrow">&rarr;</span>
+            <div class="node sub"><div class="t">writes code</div><div class="v">grep, slice, call a sub-model</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">Same input. Left: it has to fit. Right: it never has to fit, because the model reads it through code.</div>
+    </div>
+
+    <h3>And the substrate is swappable</h3>
+    <p>One quick definition, because it comes up a lot. A <strong>REPL</strong>, short for read-eval-print loop, is just an interactive coding shell. You type one line of code, it runs right away, and your variables stick around for the next line. Python's prompt is a REPL. A Jupyter notebook cell is a REPL. The original paper uses a Python REPL, but that is the demo, not the definition.</p>
+    <p>The load-bearing choice is that the context lives <strong>outside the neural network</strong>, as an object you only touch through code. Lots of things can be that object.</p>
+    <div class="dia">
+      <div class="sym">
+        <div class="opt"><div class="h">A Python REPL</div><div class="s">the prompt as a string variable you slice with code. The version in the paper.</div></div>
+        <div class="opt"><div class="h">A filesystem + bash</div><div class="s">files are already addressed variables. Bash is already a REPL. grep, head, and a shell give you the same thing.</div></div>
+        <div class="opt"><div class="h">Any symbolic env</div><div class="s">anything the model can query programmatically to read part of a thing it never fully loads.</div></div>
+      </div>
+      <div class="sym" style="margin-top:0">
+        <div></div>
+        <div class="core"><strong>The common core:</strong> the input is an object, navigated by code. Not tokens, poured into a window.</div>
+        <div></div>
+      </div>
+      <div class="cap">"Bash is already a REPL. Files are already addressed variables." The substrate is swappable. The principle is not.</div>
+    </div>
+
+    <div class="quote">
+      Prior work has explored ways to address this by <span class="hl">storing context as an object that lives outside the context window</span>. For example, context can be <span class="hl">an object in a REPL that the LLM programmatically accesses by writing code to filter or slice it</span>.
+      <span class="src">Anthropic engineering, "Scaling Managed Agents: Decoupling the brain from the hands" (Apr 2026). That one sentence is essentially a definition of a recursive language model.</span>
+    </div>
+  </div>
+</section>
+
+<!-- WHO READS IT -->
+<section id="who">
+  <div class="wrap">
+    <div class="kicker">The obvious question</div>
+    <h2>If the main model never reads the input, who does?</h2>
+    <p class="big"><span class="lead-in">A fair thing to ask.</span> A different model does. Many of them, actually. The root model only ever sees <strong>metadata and summaries</strong>. The raw text is read by separate <strong>worker calls</strong>, each one looking at a single slice in its own clean window.</p>
+    <div class="dia">
+      <div class="who">
+        <div class="top"><div class="node root" style="min-width:240px"><div class="t">root model</div><div class="v">sees only: length, a preview, the summaries</div></div></div>
+        <div class="conn"></div>
+        <div class="slices">
+          <div class="node sub"><div class="t">worker call 1</div><div class="v">reads slice 1</div></div>
+          <div class="node sub"><div class="t">worker call 2</div><div class="v">reads slice 2</div></div>
+          <div class="node sub"><div class="t">worker call 3</div><div class="v">reads slice 3</div></div>
+          <div class="node sub"><div class="t">...</div><div class="v">reads slice N</div></div>
+        </div>
+        <div class="conn"></div>
+        <div class="top"><div class="node" style="min-width:240px"><div class="t">flows back up</div><div class="v">one tiny summary per worker</div></div></div>
+      </div>
+      <div class="cap">Each worker is a fresh, separate model call. It reads its slice, returns a short answer, and then its window (and everything raw it read) is thrown away.</div>
+    </div>
+    <p>So when you hear "the model never sees the whole thing as a string," it means the <strong>root</strong> model never does. The reading is delegated to a fleet of one-shot worker models, and only their distilled answers come home. That is why the root stays sharp no matter how huge the input gets. In the paper, the root is <strong>GPT-5</strong> and the per-slice workers are the cheaper <strong>GPT-5-mini</strong>.</p>
+    <div class="callout accent">
+      <b>So far, nothing here is new.</b> Fanning work out to fresh-window workers is what coding agents already do. The new part is not the fan-out. It is what you are allowed to put <em>around</em> those worker calls. That is the next beat.
+    </div>
+  </div>
+</section>
+
+<!-- THE BREAKTHROUGH -->
+<section id="breakthrough">
+  <div class="wrap">
+    <div class="kicker">The actual unlock</div>
+    <h2>The breakthrough: a subagent becomes a function in your code</h2>
+    <p class="big"><span class="lead-in">This is the whole thing.</span> The leap is not that the model can spawn subagents. Tool-calling already let it do that. The leap is that a subagent is now a <strong>function you call from inside real code</strong>, so you can wrap it in loops, conditionals, filters, batching, and stop conditions, and <strong>the model writes that control flow itself.</strong> The decomposition logic and the model calls live in the same program.</p>
+
+    <p>With plain tool-calling, the model emits a flat list of independent calls and every result comes back. With code, the model expresses <em>how the calls relate</em>: the order, the dependencies, the filter, the stop condition. And only what the code chooses to keep ever returns to the root.</p>
+
+    <div class="dia">
+      <div class="ilv">
+        <div class="lane flat">
+          <div class="tag">Old: flat tool calls</div>
+          <div class="stack">
+            <div class="bubbles">
+              <span class="bubble">call A</span><span class="bubble">call B</span>
+              <span class="bubble">call C</span><span class="bubble">call D</span>
+            </div>
+            <span class="arrow">&darr;</span>
+            <div class="inbox">root inbox: <strong>every</strong> result returns, noise and all</div>
+          </div>
+        </div>
+        <div class="lane code">
+          <div class="tag">New: a function inside code</div>
+          <div class="frame">
+            <span class="lbl">for f of files { ... filter(isReal) }</span>
+            <div class="stack">
+              <div class="node sub" style="min-width:150px"><div class="t">agent(f)</div><div class="v">one model call</div></div>
+              <span class="arrow">&darr;</span>
+              <div class="gate">keep only survivors</div>
+            </div>
+          </div>
+          <div style="text-align:center"><span class="arrow">&darr;</span></div>
+          <div class="inbox" style="border-color:var(--accent-2);background:rgba(94,224,192,.08);color:#bdf3e5">root gets <strong>only</strong> what the code let through</div>
+        </div>
+      </div>
+      <div class="cap">Left: the model lists calls, the room fills up. Right: control flow wraps the model call, so code decides what survives.</div>
+    </div>
+
+    <p>This is also the paper's central distinction. Its weak strawman scaffold has a code action <em>and</em> a separate sub-model action, but it can only delegate a few tasks it verbalizes out loud. The real recursive language model invokes the model <strong>programmatically</strong>, inside arbitrarily large loops, storing results as variables. Same two ingredients. One puts the model call inside the code. That is interleaving.</p>
+
+    <h3>What that looks like in the shipped tool</h3>
+    <p>These are real shapes from Claude Code's workflow tooling. Read them as "a subagent is just <code class="inl">agent(...)</code>, and ordinary code surrounds it."</p>
+
+    <p class="muted" style="margin-bottom:4px">Interleave a sequence: each file's findings get verified the moment <em>that</em> file's review lands, with no waiting for the slowest reviewer. Code controls the scheduling.</p>
+    <pre><span class="c-key">const</span> <span class="c-var">out</span> = <span class="c-key">await</span> <span class="c-fn">pipeline</span>(
+  <span class="c-var">files</span>,
+  f  =&gt; <span class="c-fn">agent</span>(<span class="c-str">`review ${f}`</span>, { schema: FINDINGS }),         <span class="c-com">// stage 1</span>
+  rv =&gt; <span class="c-fn">parallel</span>(rv.findings.map(x =&gt; () =&gt;            <span class="c-com">// stage 2, as soon as stage 1 lands</span>
+    <span class="c-fn">agent</span>(<span class="c-str">`try to refute: ${x.title}`</span>, { schema: VERDICT }))))</pre>
+
+    <p class="muted" style="margin-bottom:4px">Let code decide whether to even spawn the next wave. If nothing was found, the whole verification phase never runs. A flat list of tool calls cannot express "skip the rest."</p>
+    <pre><span class="c-key">const</span> <span class="c-var">found</span> = (<span class="c-key">await</span> <span class="c-fn">parallel</span>(finders)).flatMap(r =&gt; r.findings)
+<span class="c-key">if</span> (<span class="c-var">found</span>.length === <span class="c-var">0</span>) <span class="c-key">return</span> { note: <span class="c-str">"clean, nothing to verify"</span> }
+<span class="c-key">const</span> <span class="c-var">checked</span> = <span class="c-key">await</span> <span class="c-fn">parallel</span>(<span class="c-var">found</span>.map(verify))</pre>
+
+    <p class="muted" style="margin-bottom:4px">And here is the part you cared about most. Results land in a variable. Code filters to the survivors. Only those come home. The rest is discarded before it ever touches the root.</p>
+    <pre><span class="c-key">const</span> <span class="c-var">confirmed</span> = results.flat().filter(Boolean)
+  .filter(f =&gt; f.verdict?.isReal)        <span class="c-com">// the gate: code keeps only what passed</span>
+<span class="c-key">return</span> { <span class="c-var">confirmed</span> }                      <span class="c-com">// rejected findings never reach the root</span></pre>
+
+    <div class="callout gold">
+      <b>The discard is the point, and the caveat is honest.</b> Fan out the plain way and the model receives every result, so it has to read the noise before it can ignore it. Here the noise never arrives, because code is the gate. One catch: discarding reclaims your <em>context and attention</em>, not your money. The discarded subagents still ran and spent their tokens. You buy a clean root window, not a free one.
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOW -->
+<section id="whynow">
+  <div class="wrap">
+    <div class="kicker">The fair objection</div>
+    <h2>You could fan out before. So why does this matter now?</h2>
+    <p class="big"><span class="lead-in">Be honest first.</span> The pattern is old. Letting a model write code as its actions is old. Delegating to sub-models is old. In production agent systems, the loop of "write code, externalize the context, fan out sub-calls, aggregate" was already common before this had a name. Nobody owns it. If your gut says "this is just an agent in a for loop," you are partly right.</p>
+
+    <p>So here is the precise line, and it is worth getting right, because smart engineers will push on it. Fanning out can be done with plain tool-calling. That is what coding agents did. But filling a fixed <strong>template</strong> with prompts for later sub-calls is not the same as <strong>writing arbitrary code where a sub-agent is a function you call</strong>. The first lets you fan out. The second lets you say exactly how, interleaved with your own logic. Almost nothing shipped with that second kind of flexibility.</p>
+
+    <p>And the reason it did not is the real answer to "why now." It is a <strong>model-training</strong> story, not a framework story.</p>
+
+    <div class="callout accent">
+      <b>The capability was sitting there, and the model could not drive it.</b> As the RLM author put it, code plus sub-agent calls inside a REPL "was much worse than just asking the model to do sub-calls. This is mainly a model training issue." The primitive existed for a year. Models simply could not steer it reliably. Freeform code with sub-agents as functions is hard to train, hard to guardrail, hard to sandbox, so it never became a serious thing. Nothing was missing except a model good enough to write and run the code.
+    </div>
+
+    <p>That is where <strong>Opus 4.8</strong> comes in, and it is the most interesting part. This model has very likely been trained with exactly this behavior in mind, through reinforcement learning, to write and steer these orchestration programs reliably. Anthropic credits it with better tool-triggering, longer-running agents, and stronger long-context handling, which is precisely the skill set this pattern needs. The capability stopped being a research idea the moment a frontier model was trained to actually drive it.</p>
+
+    <p class="muted" style="font-size:14px">Worth a precise footnote so you do not overclaim on camera. The exact phrasing "perhaps the first frontier model seriously trained to be a recursive language model" is the RLM author's framing, not an official Anthropic claim. But the direction is well supported: in the paper, a small model post-trained on about 1,000 recursion traces jumped roughly 28%, and the scaffold handled over 10M tokens with off-the-shelf models and no fine-tuning. The behavior is clearly trainable, and this release is the first time it shows up in a shipping frontier model.</p>
+  </div>
+</section>
+
+<!-- THE PAYOFF: THREE WAYS -->
+<section id="options">
+  <div class="wrap">
+    <div class="kicker">The payoff</div>
+    <h2>Now the three ways line up</h2>
+    <p class="big">Take everything you just saw and point it at a real job: a full review across a codebase that does not fit. There are three ways to run it, and they get better in order.</p>
+
+    <div class="opt-tier bad">
+      <div class="badge">Option 1 &middot; do not</div>
+      <h3>Load everything into the main context</h3>
+      <p>Pour the whole codebase into one window and ask it to make decisions. It will not fit, and even the part that fits rots. The model drowns. This is the problem restated, not a solution.</p>
+    </div>
+
+    <div class="opt-tier ok">
+      <div class="badge">Option 2 &middot; better</div>
+      <h3>Fan out a bunch of subagents</h3>
+      <p>Split the work across subagents, each reading part of the codebase in its own window. Much better, because no single window holds everything. But every subagent dumps its full result back into your main context, useful or not. The window fills with noise, and you have almost no control over what comes back. This is the part people call old news. They are right that it exists.</p>
+    </div>
+
+    <div class="opt-tier best">
+      <div class="badge">Option 3 &middot; this is the RLM</div>
+      <h3>Fan out subagents, orchestrated by code</h3>
+      <p>This is everything from the last two beats, made concrete. Code drives the fan-out: it greps to narrow, decides how many batches and subagents, runs them inside loops and conditionals, then keeps only the ones that found something useful and discards the rest. Only the real insights come home. Same subagents as Option 2. The difference is that the model wrote code to gate what survives, and Opus 4.8 is finally good enough to write that code well. That is a recursive language model.</p>
+    </div>
+
+    <div class="callout">
+      <b>The whole argument in one line.</b> Option 2 is fan-out. Option 3 is fan-out plus a gate the model wrote. The gate is the part that was hard, and it is the part that just started working.
+    </div>
+  </div>
+</section>
+
+<!-- WHY A WORKFLOW -->
+<section id="workflow">
+  <div class="wrap">
+    <div class="kicker">Putting it together</div>
+    <h2>So a Workflow <em>is</em> a recursive language model</h2>
+    <p class="big"><span class="lead-in">Now Option 3 is just literal.</span> A dynamic workflow in Claude Code is the recursive language model pattern made concrete, with the REPL swapped for a shell and a script.</p>
+    <p>The root model writes one JavaScript file: the orchestration program. Inside it, <code class="inl">agent(...)</code> is a function call to another model. The deterministic JS, the loops, the fan-out, the conditionals, is the decomposition, and it spends <strong>zero</strong> model tokens. Only the leaf <code class="inl">agent()</code> calls cost anything, and each one gets a brand new, empty window, does one job, and returns only a compact result. The root's own context barely grows.</p>
+
+    <pre><span class="c-com">// the root model wrote this script once. each agent() call is a model.</span>
+<span class="c-key">const</span> <span class="c-var">files</span> = listChangedFiles()              <span class="c-com">// the raw material stays out here</span>
+
+<span class="c-com">// fan out: one fresh-context model per file</span>
+<span class="c-key">const</span> <span class="c-var">findings</span> = <span class="c-key">await</span> <span class="c-fn">parallel</span>(<span class="c-var">files</span>.map(f =&gt; () =&gt;
+  <span class="c-fn">agent</span>(<span class="c-str">`review ${f} for bugs`</span>, { schema: FINDINGS, model: <span class="c-str">'haiku'</span> })))
+
+<span class="c-com">// the root stitches the summaries. it never read a single file.</span>
+<span class="c-key">return</span> <span class="c-key">await</span> <span class="c-fn">agent</span>(<span class="c-str">`synthesize: ${JSON.stringify(findings)}`</span>)</pre>
+
+    <p class="muted" style="font-size:14px">Notice the inversion. In a normal chat, the model decides each next step and the work piles into one window. In a workflow, <strong>JavaScript decides the control flow</strong> and the model only does leaf work in throwaway windows. That is "the model writes the loop," shipped.</p>
+
+    <h3>How the pieces line up</h3>
+    <table>
+      <thead><tr><th>Recursive language model</th><th>In a Workflow</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>recursive_llm(q, chunk)</td><td class="eq">agent(prompt, &#123;schema&#125;)</td><td class="muted">A fresh-context model call over one slice, returning a tidy value.</td></tr>
+        <tr><td>For-loop over chunks</td><td class="eq">parallel() / pipeline()</td><td class="muted">Fan out over many inputs, then combine.</td></tr>
+        <tr><td>Prompt as a variable</td><td class="eq">files, args, the repo</td><td class="muted">The bulk lives outside the root; only compact results return.</td></tr>
+        <tr><td>Cheap model for the bulk</td><td class="eq">agent(p, &#123;model:'haiku'&#125;)</td><td class="muted">Same lever as GPT-5 root with GPT-5-mini workers.</td></tr>
+        <tr><td>FINAL(answer)</td><td class="eq">return answer</td><td class="muted">End by handing one value back to the caller.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- POSSIBLE -->
+<section id="possible">
+  <div class="wrap">
+    <div class="kicker">The payoff in practice</div>
+    <h2>What is now possible, and why it was not before</h2>
+    <p class="big"><span class="lead-in">Back to that review job.</span> The headline: run a real analysis across a repo that does not fit in the window. Not retrieve one snippet. Touch <strong>everything</strong>.</p>
+
+    <div class="dia">
+      <div class="ba">
+        <div class="col before">
+          <div class="h">Before: one window</div>
+          <p>You point Claude at a 2.3M line monorepo and say "audit every module for this unsafe auth pattern." It greps, opens files, and each file it reads is now parked in the one window forever. Around file 150 the window is bloated, it forgets findings from file 12, contradicts itself, and somewhere near 5% of the repo it hits the ceiling and stops. Honest answer: infeasible. Your fallback is 40 separate chats stapled together by hand.</p>
+        </div>
+        <div class="col after">
+          <div class="h">After: a dynamic workflow</div>
+          <p>The orchestrator lists the files and groups them into batches (one cheap call). It fans out, roughly 10 to 16 at a time, until all of them drain. Each subagent opens only its batch in a clean window and returns one tiny verdict like <code class="inl">&#123;module, unsafeCallSites, severity&#125;</code>. Its scratch work is discarded. The root then synthesizes a few hundred one-paragraph verdicts (which <em>do</em> fit) into one ranked migration plan. The repo never had to fit anywhere.</p>
+        </div>
+      </div>
+      <div class="cap">And it is journaled. If it dies at batch 180, you resume and 1 to 180 replay from cache. You pay only for 181 onward.</div>
+    </div>
+
+    <p>The reason this is new is not that any single piece is new. It is that each capability below had a hard blocker before, and putting the model call inside code removes it.</p>
+
+    <div class="grid two" style="margin-top:4px">
+      <div class="ucard">
+        <h4>Near-unbounded context</h4>
+        <div class="was">Was impossible because</div>
+        <p>every file the model read stayed in the one window. You ran out of room a few percent into a big repo.</p>
+        <div class="now">Now works because</div>
+        <p>each slice reads in its own window and is discarded after. Total material is bounded by your token budget, not by any one window.</p>
+      </div>
+      <div class="ucard">
+        <h4>Selective attention</h4>
+        <div class="was">Was impossible because</div>
+        <p>a single model cannot un-read its input. Once a chunk is in the window, it costs attention forever, relevant or not.</p>
+        <div class="now">Now works because</div>
+        <p>plain code greps and filters first, so irrelevant chunks are skipped before any model call is ever made.</p>
+      </div>
+      <div class="ucard">
+        <h4>Long-horizon autonomy</h4>
+        <div class="was">Was impossible because</div>
+        <p>a run that went for hundreds of steps drowned in its own accumulated context and started to drift and contradict itself.</p>
+        <div class="now">Now works because</div>
+        <p>the loop's state lives in variables, not in the window. The root can drive hundreds of steps without rot, with a hard agent cap so cost cannot run away.</p>
+      </div>
+      <div class="ucard">
+        <h4>Self-verification</h4>
+        <div class="was">Was impossible because</div>
+        <p>checking the work competed for the same window as the work itself, so verification made the rot worse.</p>
+        <div class="now">Now works because</div>
+        <p>each skeptic runs in a clean window and is told to refute one finding. Only the verdicts return, and you keep what survives a majority.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:22px">
+      <b>The one-liner.</b> A Workflow turns Claude Code from "a model you talk to" into "a model that writes a program that calls models." That is a recursive language model. It is why it can read far more, think far longer, and stay sharp far longer than any single window allows.
+    </div>
+  </div>
+</section>
+
+<!-- LIMITS -->
+<section id="limits">
+  <div class="wrap">
+    <div class="kicker">So you do not get burned</div>
+    <h2>Honest limits, stated plainly</h2>
+    <p>These are the things a sharp viewer will push back on. Say them first.</p>
+
+    <div class="myth">
+      <div class="m">It is just an agent in a for loop, nothing new.</div>
+      <div class="r">Partly true. The loop is old. The new part is that the model writes the loop, a sub-agent is a function inside it, and the context lives outside the window as an object the code navigates. Lead with that distinction and you are honest. Oversell "brand new paradigm" and engineers will call it out.</div>
+    </div>
+    <div class="myth">
+      <div class="m">It recurses forever, all the way down.</div>
+      <div class="r">No, and the limits are worth knowing. A sub-agent cannot spawn its own sub-agent. And a workflow can call another workflow only one level deep: the workflow it calls cannot itself call a third one. What <em>does</em> nest freely is the plain control flow. Inside one script, a pipeline can sit inside a pipeline, and a parallel fan-out can sit inside a pipeline stage, as deep as you write it. So you get depth from how you structure the code, not from workflows calling workflows. For real model-level recursion past one level, a sub-agent has to shell out to a fresh Claude instance.</div>
+    </div>
+    <div class="myth">
+      <div class="m">Live code and frozen code are the same.</div>
+      <div class="r">The deepest difference. A pure RLM writes its control flow live and can re-slice based on what it just saw. A Workflow's control flow is JavaScript the model authored once, before any result is known. It cannot rewrite its own loop mid-run. You trade live adaptivity for resumability and reproducibility.</div>
+    </div>
+
+    <div class="callout accent" style="margin-top:22px">
+      <b>The closing line.</b> Claude Code stopped being a model you talk to. It is now a model that writes a program that calls models, and decides in code what is worth keeping. That is a recursive language model, and that is why it can take on a job that never fit in the window at all.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Concept artifact, single file, no dependencies. RLM source: Alex L. Zhang, Tim Kraska, Omar Khattab, MIT CSAIL (arXiv:2512.24601). Quote source: Anthropic, "Scaling Managed Agents." Author commentary from Alex Zhang on X.
+  </div>
+</footer>
+
+<script>
+  const links = [...document.querySelectorAll('nav a')];
+  const map = {};
+  links.forEach(l=>{ map[l.getAttribute('href').slice(1)] = l; });
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(l=>{ l.style.color=''; l.style.background=''; });
+        const a = map[e.target.id];
+        if(a){ a.style.color='var(--ink)'; a.style.background='var(--panel-2)'; }
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('section[id]').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
