@@ -1,0 +1,88 @@
+{
+ "quote": {
+  "tweet_id": "2060581555072815455",
+  "screen_name": null,
+  "name": null,
+  "followers": null,
+  "created_at": "Sat May 30 04:38:21 +0000 2026",
+  "text": "I think this is too much power but wow",
+  "favorites": 85,
+  "replies": 4,
+  "views": "9486",
+  "in_reply_to": null
+ },
+ "replies": [
+  {
+   "tweet_id": "2060695270598271455",
+   "screen_name": "PhantomAstral",
+   "name": "egghead",
+   "followers": 10,
+   "created_at": "Sat May 30 12:10:13 +0000 2026",
+   "text": "@Dimillian I feel like this ruins the fun of prompting &amp; vibecoding",
+   "favorites": null,
+   "replies": 0,
+   "views": "12",
+   "in_reply_to": "Dimillian"
+  },
+  {
+   "tweet_id": "2060688276567085525",
+   "screen_name": "iGotRootBlog",
+   "name": "Mads",
+   "followers": 123,
+   "created_at": "Sat May 30 11:42:25 +0000 2026",
+   "text": "@Dimillian Haven\u2019t tried it yet, can it manage threads across connected devices?",
+   "favorites": null,
+   "replies": 0,
+   "views": "13",
+   "in_reply_to": "Dimillian"
+  },
+  {
+   "tweet_id": "2060681208468512940",
+   "screen_name": "mysticaltech",
+   "name": "The Canaanite",
+   "followers": 8267,
+   "created_at": "Sat May 30 11:14:20 +0000 2026",
+   "text": "@Dimillian Much needed, especially if doable via the CLI, I can have hermes or openclaw do that too.",
+   "favorites": null,
+   "replies": 0,
+   "views": "39",
+   "in_reply_to": "Dimillian"
+  },
+  {
+   "tweet_id": "2060616885981610298",
+   "screen_name": "m13v_",
+   "name": "Matt",
+   "followers": 1895,
+   "created_at": "Sat May 30 06:58:44 +0000 2026",
+   "text": "@EverydayAI_ @Dimillian those multi-window computer-use demos look fast until the task needs your inbox, calendar, and crm at once. the cross-app pull is where most stall. Runner's the one i've seen actually finish the job across apps, not just click around one window. written with ai",
+   "favorites": null,
+   "replies": 0,
+   "views": "18",
+   "in_reply_to": "EverydayAI_"
+  },
+  {
+   "tweet_id": "2060582734406262863",
+   "screen_name": "EverydayAI_",
+   "name": "Jordan Talks Everyday AI",
+   "followers": 2881,
+   "created_at": "Sat May 30 04:43:02 +0000 2026",
+   "text": "@Dimillian I assumed this is what everyone was doing before? Multiple windows plus computer use? \n\nThis obviously looks muuuuuch faster.",
+   "favorites": null,
+   "replies": 1,
+   "views": "139",
+   "in_reply_to": "Dimillian"
+  },
+  {
+   "tweet_id": "2060581555072815455",
+   "screen_name": "Dimillian",
+   "name": "Thomas Ricouard",
+   "followers": 50449,
+   "created_at": "Sat May 30 04:38:21 +0000 2026",
+   "text": "I think this is too much power but wow",
+   "favorites": 85,
+   "replies": 4,
+   "views": "9639",
+   "in_reply_to": null
+  }
+ ]
+}

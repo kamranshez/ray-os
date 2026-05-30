@@ -1,0 +1,40 @@
+{
+ "quote": {
+  "tweet_id": "2060519146962682043",
+  "screen_name": null,
+  "name": null,
+  "followers": null,
+  "created_at": "Sat May 30 00:30:21 +0000 2026",
+  "text": "Just ask codex.",
+  "favorites": 23,
+  "replies": 1,
+  "views": "2292",
+  "in_reply_to": null
+ },
+ "replies": [
+  {
+   "tweet_id": "2060556356026077471",
+   "screen_name": "RuangPersfektif",
+   "name": "Global Perspective \ud83c\udf10",
+   "followers": 308,
+   "created_at": "Sat May 30 02:58:13 +0000 2026",
+   "text": "@RayFernando1337 The new skill might be knowing what to delegate.",
+   "favorites": null,
+   "replies": 0,
+   "views": "9",
+   "in_reply_to": "RayFernando1337"
+  },
+  {
+   "tweet_id": "2060519146962682043",
+   "screen_name": "RayFernando1337",
+   "name": "Ray Fernando",
+   "followers": 36037,
+   "created_at": "Sat May 30 00:30:21 +0000 2026",
+   "text": "Just ask codex.",
+   "favorites": 23,
+   "replies": 1,
+   "views": "2299",
+   "in_reply_to": null
+  }
+ ]
+}

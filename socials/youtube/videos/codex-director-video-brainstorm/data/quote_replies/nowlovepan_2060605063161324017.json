@@ -1,0 +1,52 @@
+{
+ "quote": {
+  "tweet_id": "2060605063161324017",
+  "screen_name": null,
+  "name": null,
+  "followers": null,
+  "created_at": "Sat May 30 06:11:45 +0000 2026",
+  "text": "AI\uac00 \uc9c1\uc811 AI\ub97c \uad00\ub9ac\ud574\uc90c \nCodex\uac00 \uc55e\uc73c\ub85c \uc2a4\uc2a4\ub85c \uc2a4\ub808\ub4dc\ub97c \ub9cc\ub4e4\uace0\n\uac80\uc0c9,\uc815\ub9ac,\uc911\uc694\ud55c \uc2a4\ub808\ub4dc\ub97c \uace0\uc815\ud574\uc11c \n\ubcd1\ub82c\uc791\uc5c5\uc744 \uc9c4\ud589\ud569\ub2c8\ub2e4 \n\n\uad00\ub9ac\ud558\uae30 \ud798\ub4e4\uc5c8\ub294\ub370 \uc774\uc81c \uc54c\uc544\uc11c \uad00\ub9ac \uc798\ud574\uc8fc\ub098?",
+  "favorites": 14,
+  "replies": 3,
+  "views": "1558",
+  "in_reply_to": null
+ },
+ "replies": [
+  {
+   "tweet_id": "2060660847052255639",
+   "screen_name": "bokgyun",
+   "name": "BG \ud83c\udf0aRIVER \ud83d\udc2cTermMax",
+   "followers": 1836,
+   "created_at": "Sat May 30 09:53:25 +0000 2026",
+   "text": "@nowlovepan \uc774\uc820 \ucf54\ub371\uc2a4\uac00 \uc798\ud558\ub098\ubcf4\ub124",
+   "favorites": null,
+   "replies": 0,
+   "views": "4",
+   "in_reply_to": "nowlovepan"
+  },
+  {
+   "tweet_id": "2060653043981664648",
+   "screen_name": "nowlovepan",
+   "name": "\uac10\uc790",
+   "followers": 10804,
+   "created_at": "Sat May 30 09:22:25 +0000 2026",
+   "text": "@Yeonsik_X Ai\uac00 \uc9c1\uc811 \ub2e4\ub8e8\ub294 ai\ub294 \uacfc\uc5f0.. \u314b\u314b \uae30\ub300\ub429\ub2c8\ub2e4",
+   "favorites": 1,
+   "replies": 0,
+   "views": "13",
+   "in_reply_to": "Yeonsik_X"
+  },
+  {
+   "tweet_id": "2060605063161324017",
+   "screen_name": "nowlovepan",
+   "name": "\uac10\uc790",
+   "followers": 10804,
+   "created_at": "Sat May 30 06:11:45 +0000 2026",
+   "text": "AI\uac00 \uc9c1\uc811 AI\ub97c \uad00\ub9ac\ud574\uc90c \nCodex\uac00 \uc55e\uc73c\ub85c \uc2a4\uc2a4\ub85c \uc2a4\ub808\ub4dc\ub97c \ub9cc\ub4e4\uace0\n\uac80\uc0c9,\uc815\ub9ac,\uc911\uc694\ud55c \uc2a4\ub808\ub4dc\ub97c \uace0\uc815\ud574\uc11c \n\ubcd1\ub82c\uc791\uc5c5\uc744 \uc9c4\ud589\ud569\ub2c8\ub2e4 \n\n\uad00\ub9ac\ud558\uae30 \ud798\ub4e4\uc5c8\ub294\ub370 \uc774\uc81c \uc54c\uc544\uc11c \uad00\ub9ac \uc798\ud574\uc8fc\ub098?",
+   "favorites": 16,
+   "replies": 3,
+   "views": "1581",
+   "in_reply_to": null
+  }
+ ]
+}

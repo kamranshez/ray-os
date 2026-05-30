@@ -1,0 +1,88 @@
+{
+ "quote": {
+  "tweet_id": "2060475821765046408",
+  "screen_name": null,
+  "name": null,
+  "followers": null,
+  "created_at": "Fri May 29 21:38:12 +0000 2026",
+  "text": "If you don\u2019t see this tweet you\u2019d never know this exists. How many other features go unused like this",
+  "favorites": 4,
+  "replies": 3,
+  "views": "3476",
+  "in_reply_to": null
+ },
+ "replies": [
+  {
+   "tweet_id": "2060509573329621310",
+   "screen_name": "snercc",
+   "name": "crens",
+   "followers": 15,
+   "created_at": "Fri May 29 23:52:19 +0000 2026",
+   "text": "@zruss Real",
+   "favorites": null,
+   "replies": 0,
+   "views": "11",
+   "in_reply_to": "zruss"
+  },
+  {
+   "tweet_id": "2060508061110882392",
+   "screen_name": "Jpegs93",
+   "name": "Jpegs93 \ud83c\udde8\ud83c\uddf4",
+   "followers": 354,
+   "created_at": "Fri May 29 23:46:18 +0000 2026",
+   "text": "@SwiftCop @zruss If you don\u2019t see this tweet you\u2019d never know this exists. How many other features go unused like this",
+   "favorites": null,
+   "replies": 0,
+   "views": "12",
+   "in_reply_to": "SwiftCop"
+  },
+  {
+   "tweet_id": "2060501229294211270",
+   "screen_name": "Daanimal1124",
+   "name": "Daan",
+   "followers": 1513,
+   "created_at": "Fri May 29 23:19:09 +0000 2026",
+   "text": "@zruss Ty Zruss",
+   "favorites": null,
+   "replies": 0,
+   "views": "113",
+   "in_reply_to": "zruss"
+  },
+  {
+   "tweet_id": "2060491897425064361",
+   "screen_name": "zruss",
+   "name": "zruss",
+   "followers": 13055,
+   "created_at": "Fri May 29 22:42:05 +0000 2026",
+   "text": "@SwiftCop Yes",
+   "favorites": 1,
+   "replies": 0,
+   "views": "922",
+   "in_reply_to": "SwiftCop"
+  },
+  {
+   "tweet_id": "2060490542996164958",
+   "screen_name": "SwiftCop",
+   "name": "Anthony",
+   "followers": 23982,
+   "created_at": "Fri May 29 22:36:42 +0000 2026",
+   "text": "@zruss If you don\u2019t see this tweet you\u2019d never know this exists. How many other features go unused like this",
+   "favorites": null,
+   "replies": 2,
+   "views": "1157",
+   "in_reply_to": "zruss"
+  },
+  {
+   "tweet_id": "2060475821765046408",
+   "screen_name": "zruss",
+   "name": "zruss",
+   "followers": 13055,
+   "created_at": "Fri May 29 21:38:12 +0000 2026",
+   "text": "If you don\u2019t see this tweet you\u2019d never know this exists. How many other features go unused like this",
+   "favorites": 4,
+   "replies": 3,
+   "views": "3493",
+   "in_reply_to": null
+  }
+ ]
+}

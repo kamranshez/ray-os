@@ -1,0 +1,64 @@
+{
+ "quote": {
+  "tweet_id": "2060484205457338699",
+  "screen_name": null,
+  "name": null,
+  "followers": null,
+  "created_at": "Fri May 29 22:11:31 +0000 2026",
+  "text": "Codex creating Codex threads is pretty neat\n\nFor example, you can queue messages like \u201conce done, do {XYZ} in a new thread\u201d",
+  "favorites": 61,
+  "replies": 3,
+  "views": "2709",
+  "in_reply_to": null
+ },
+ "replies": [
+  {
+   "tweet_id": "2060638238318964757",
+   "screen_name": "mrstrijker",
+   "name": "Mr Strijker",
+   "followers": 150,
+   "created_at": "Sat May 30 08:23:35 +0000 2026",
+   "text": "@gabrielchua It's a huge quality of life update, honestly one of the better ones imo",
+   "favorites": null,
+   "replies": 0,
+   "views": "9",
+   "in_reply_to": "gabrielchua"
+  },
+  {
+   "tweet_id": "2060559436465508505",
+   "screen_name": "RuangPersfektif",
+   "name": "Global Perspective \ud83c\udf10",
+   "followers": 308,
+   "created_at": "Sat May 30 03:10:27 +0000 2026",
+   "text": "@gabrielchua The todo list is slowly turning into a delegation list.",
+   "favorites": null,
+   "replies": 0,
+   "views": "9",
+   "in_reply_to": "gabrielchua"
+  },
+  {
+   "tweet_id": "2060495092226683386",
+   "screen_name": "abenz_mato",
+   "name": "Alexander Benz",
+   "followers": 71,
+   "created_at": "Fri May 29 22:54:46 +0000 2026",
+   "text": "@gabrielchua The queue-messages pattern is what makes it feel like an actual system. Less like prompting, more like scheduling work.",
+   "favorites": 1,
+   "replies": 0,
+   "views": "21",
+   "in_reply_to": "gabrielchua"
+  },
+  {
+   "tweet_id": "2060484205457338699",
+   "screen_name": "gabrielchua",
+   "name": "Gabriel Chua",
+   "followers": 11880,
+   "created_at": "Fri May 29 22:11:31 +0000 2026",
+   "text": "Codex creating Codex threads is pretty neat\n\nFor example, you can queue messages like \u201conce done, do {XYZ} in a new thread\u201d",
+   "favorites": 61,
+   "replies": 3,
+   "views": "2712",
+   "in_reply_to": null
+  }
+ ]
+}

@@ -1,0 +1,136 @@
+{
+ "quote": {
+  "tweet_id": "2060652640015376789",
+  "screen_name": null,
+  "name": null,
+  "followers": null,
+  "created_at": "Sat May 30 09:20:49 +0000 2026",
+  "text": "using this pattern even for my own personal assistant thing. everything is agent.",
+  "favorites": 20,
+  "replies": 4,
+  "views": "3123",
+  "in_reply_to": null
+ },
+ "replies": [
+  {
+   "tweet_id": "2060708815041933723",
+   "screen_name": "compileandpush",
+   "name": "Compile And Push",
+   "followers": 82,
+   "created_at": "Sat May 30 13:04:02 +0000 2026",
+   "text": "@abdulmuminyqn @threepointone Tunneling projects on your coding agent? Clever hack. What's the performance impact on multiple tunnels open simultaneously?",
+   "favorites": null,
+   "replies": 0,
+   "views": null,
+   "in_reply_to": "abdulmuminyqn"
+  },
+  {
+   "tweet_id": "2060694873359966357",
+   "screen_name": "abdulmuminyqn",
+   "name": "yaqeen",
+   "followers": 311,
+   "created_at": "Sat May 30 12:08:38 +0000 2026",
+   "text": "@threepointone nothing fancy, just broader access.. using it like claude cowork.\n\nand it a hack I use to work on multiple project on my lil coding agent I built by just tunneling the server for remote access instead of ssh \ud83e\udee0",
+   "favorites": 1,
+   "replies": 1,
+   "views": "26",
+   "in_reply_to": "threepointone"
+  },
+  {
+   "tweet_id": "2060673459449950652",
+   "screen_name": "tobeycodes",
+   "name": "@tobeycodes",
+   "followers": 1400,
+   "created_at": "Sat May 30 10:43:32 +0000 2026",
+   "text": "@threepointone i can't wait for codex to be cooking dinner",
+   "favorites": null,
+   "replies": 0,
+   "views": "38",
+   "in_reply_to": "threepointone"
+  },
+  {
+   "tweet_id": "2060665770959311059",
+   "screen_name": "threepointone",
+   "name": "sunil pai",
+   "followers": 52157,
+   "created_at": "Sat May 30 10:12:59 +0000 2026",
+   "text": "@abdulmuminyqn excellent. what\u2019s your setup look like?",
+   "favorites": null,
+   "replies": 1,
+   "views": "29",
+   "in_reply_to": "abdulmuminyqn"
+  },
+  {
+   "tweet_id": "2060661112610124132",
+   "screen_name": "abdulmuminyqn",
+   "name": "yaqeen",
+   "followers": 311,
+   "created_at": "Sat May 30 09:54:29 +0000 2026",
+   "text": "@threepointone I have an agent running on ~/home on my machine. it has been great soo far.",
+   "favorites": 1,
+   "replies": 1,
+   "views": "52",
+   "in_reply_to": "threepointone"
+  },
+  {
+   "tweet_id": "2060659096521412774",
+   "screen_name": "threepointone",
+   "name": "sunil pai",
+   "followers": 52157,
+   "created_at": "Sat May 30 09:46:28 +0000 2026",
+   "text": "@fforres oh no",
+   "favorites": null,
+   "replies": 0,
+   "views": "70",
+   "in_reply_to": "fforres"
+  },
+  {
+   "tweet_id": "2060656928012021785",
+   "screen_name": "fforres",
+   "name": "fforres",
+   "followers": 5874,
+   "created_at": "Sat May 30 09:37:51 +0000 2026",
+   "text": "@threepointone But What if I get tired of managing my agent threads??",
+   "favorites": 2,
+   "replies": 1,
+   "views": "258",
+   "in_reply_to": "threepointone"
+  },
+  {
+   "tweet_id": "2060656337302806746",
+   "screen_name": "threepointone",
+   "name": "sunil pai",
+   "followers": 52157,
+   "created_at": "Sat May 30 09:35:30 +0000 2026",
+   "text": "@anthonyringoet yup",
+   "favorites": 1,
+   "replies": 0,
+   "views": "35",
+   "in_reply_to": "anthonyringoet"
+  },
+  {
+   "tweet_id": "2060655880207519760",
+   "screen_name": "anthonyringoet",
+   "name": "Anthony",
+   "followers": 649,
+   "created_at": "Sat May 30 09:33:41 +0000 2026",
+   "text": "@threepointone Your personal assistant thing. On Think?",
+   "favorites": null,
+   "replies": 1,
+   "views": "41",
+   "in_reply_to": "threepointone"
+  },
+  {
+   "tweet_id": "2060652640015376789",
+   "screen_name": "threepointone",
+   "name": "sunil pai",
+   "followers": 52157,
+   "created_at": "Sat May 30 09:20:49 +0000 2026",
+   "text": "using this pattern even for my own personal assistant thing. everything is agent.",
+   "favorites": 20,
+   "replies": 4,
+   "views": "3209",
+   "in_reply_to": null
+  }
+ ]
+}

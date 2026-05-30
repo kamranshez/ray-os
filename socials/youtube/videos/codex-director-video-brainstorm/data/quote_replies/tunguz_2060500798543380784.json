@@ -1,0 +1,40 @@
+{
+ "quote": {
+  "tweet_id": "2060500798543380784",
+  "screen_name": null,
+  "name": null,
+  "followers": null,
+  "created_at": "Fri May 29 23:17:27 +0000 2026",
+  "text": "Codex managing Codex managing \u2026 https://t.co/wYpi9r3KDH",
+  "favorites": 7,
+  "replies": 1,
+  "views": "2978",
+  "in_reply_to": null
+ },
+ "replies": [
+  {
+   "tweet_id": "2060512490535170273",
+   "screen_name": "jjh",
+   "name": "jjh",
+   "followers": 972,
+   "created_at": "Sat May 30 00:03:54 +0000 2026",
+   "text": "@tunguz That\u2019s called RLM now apparently.",
+   "favorites": null,
+   "replies": 0,
+   "views": "62",
+   "in_reply_to": "tunguz"
+  },
+  {
+   "tweet_id": "2060500798543380784",
+   "screen_name": "tunguz",
+   "name": "Bojan Tunguz",
+   "followers": 283527,
+   "created_at": "Fri May 29 23:17:27 +0000 2026",
+   "text": "Codex managing Codex managing \u2026 https://t.co/wYpi9r3KDH",
+   "favorites": 7,
+   "replies": 1,
+   "views": "2986",
+   "in_reply_to": null
+  }
+ ]
+}
