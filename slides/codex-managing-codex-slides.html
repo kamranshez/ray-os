@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>codex director . hand-drawn deck</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  /* Excalidraw's actual fonts, from their public repo via jsdelivr */
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+</style>
+<script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
+<style>
+  :root {
+    --cream: #1c1c1c; --paper: #262626; --ink: #e8e8e8; --ink-soft: #9b9b9b;
+    --ink-faint: #555555; --rule: #3a3a3a;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--cream); color: var(--ink);
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Excalifont', cursive; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 4px 4px; z-index: 1;
+  }
+
+  /* ===== STAGE (full height, no topbar, no sidebar) ===== */
+  .stage {
+    position: fixed; top: 0; bottom: 0; left: 0; right: 0;
+    display: flex; flex-direction: column; z-index: 5;
+  }
+  .sketch-wrap {
+    flex: 1 1 auto; min-height: 0; display: flex; align-items: center;
+    justify-content: center; padding: 8px 14px 2px; position: relative;
+  }
+  .sketch-wrap svg {
+    width: 100%; height: 100%; display: block; transition: opacity 250ms ease;
+  }
+  .sketch-wrap svg.fading { opacity: 0; }
+
+  .caption-area {
+    flex: 0 0 auto; text-align: center; padding: 2px 28px 50px;
+    transition: opacity 250ms ease;
+  }
+  .caption-area.fading { opacity: 0; }
+  .caption-area h2 {
+    font-family: 'Excalifont', cursive; font-weight: 700; margin: 0 0 6px;
+    font-size: clamp(1.6rem, 2.8vw, 2.35rem); line-height: 1.05; color: var(--ink);
+  }
+  .caption-area p {
+    font-family: 'Excalifont', cursive; margin: 0 auto;
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem); line-height: 1.4;
+    color: var(--ink-soft); max-width: 980px;
+  }
+
+  /* ===== TAP ZONES ===== */
+  .tap-zone { position: fixed; top: 0; bottom: 0; width: 50%; z-index: 8; cursor: pointer; }
+  .tap-zone.left { left: 0; }
+  .tap-zone.right { right: 0; }
+
+  /* draw-on animation */
+  .draw-on path, .draw-on line, .draw-on circle, .draw-on rect {
+    stroke-dasharray: 1500; stroke-dashoffset: 1500; animation: drawOn 700ms ease forwards;
+  }
+  @keyframes drawOn { to { stroke-dashoffset: 0; } }
+  .draw-on text { opacity: 0; animation: fadeIn 500ms ease forwards; animation-delay: 400ms; }
+  @keyframes fadeIn { to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="sketch-wrap" id="sketch-wrap">
+    <svg id="sketch" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="caption-area" id="caption">
+    <h2 id="headline">the idea</h2>
+    <p id="caption-text">one sentence that says what this slide shows</p>
+  </div>
+</div>
+
+<div class="tap-zone left" id="tap-left"></div>
+<div class="tap-zone right" id="tap-right"></div>
+
+<script>
+(() => {
+  // ===== Excalidraw dark palette. Use colour for MEANING, not decoration:
+  //   rose / lightRed  = problem, cost, failure
+  //   emerald / green  = success, done, the good path
+  //   blue/violet/amber/yellow/card = neutral stages or categories
+  //   soft = secondary text   faint = subtle lines
+  const COLORS = {
+    ink: '#e8e8e8', soft: '#9b9b9b', faint: '#555555', card: '#323232',
+    yellow: '#4d4526', blue: '#1f3a4d', green: '#234a2c', pink: '#4d2a39',
+    amber: '#523a23', paper: '#262626', emerald: '#5bd66f', rose: '#ff6b6b',
+    lightRed: '#4d2626', softEmerald: '#234a2c', violet: '#352c4d', teal: '#1d4642',
+    blueStroke: '#74b9e7', yellowStroke: '#f0a429',
+  };
+  const MONO = "'Cascadia Code', ui-monospace, monospace";
+
+  // Optional per-slide text scale. Default 1 = author at native sizes.
+  // A slide may set { scale: 1.2 } to bump all its non-mono text at once.
+  let TEXT_SCALE = 1, MONO_SCALE = 1;
+
+  const svg = document.getElementById('sketch');
+  let rc = rough.svg(svg);
+  const clearSvg = (s) => { while (s.firstChild) s.removeChild(s.firstChild); };
+
+  const addRect = (x, y, w, h, opts={}) => {
+    const node = rc.rectangle(x, y, w, h, {
+      stroke: COLORS.ink, strokeWidth: 1.6, roughness: 2.0, bowing: 1.6,
+      fill: opts.fill, fillStyle: opts.fillStyle || 'solid', fillWeight: 1, hachureGap: 6, ...opts
+    });
+    svg.appendChild(node); return node;
+  };
+  const addLine = (x1,y1,x2,y2, opts={}) => {
+    const node = rc.line(x1,y1,x2,y2, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.5, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addCircle = (cx,cy,d, opts={}) => {
+    const node = rc.circle(cx,cy,d, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addEllipse = (cx,cy,w,h, opts={}) => {
+    const node = rc.ellipse(cx,cy,w,h, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.8, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addPath = (path, opts={}) => {
+    const node = rc.path(path, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addText = (x,y, text, opts={}) => {
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('font-family', opts.font || "'Excalifont', cursive");
+    const isMono = (opts.font || '').indexOf('Cascadia') !== -1;
+    t.setAttribute('font-size', (opts.size || 24) * (isMono ? MONO_SCALE : TEXT_SCALE));
+    t.setAttribute('fill', opts.fill || COLORS.ink);
+    t.setAttribute('text-anchor', opts.anchor || 'start');
+    if (opts.weight) t.setAttribute('font-weight', opts.weight);
+    if (opts.style) t.setAttribute('font-style', opts.style);
+    t.textContent = text; svg.appendChild(t); return t;
+  };
+  // Curved arrow with a head. curve:0 = straight. Make it REACH its target
+  // (end on the box edge), never overshoot into the next box or float in space.
+  const addArrow = (x1,y1,x2,y2, opts={}) => {
+    const curve = opts.curve != null ? opts.curve : 30;
+    const cx = (x1+x2)/2 + curve; const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+    addPath(`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`, opts);
+    const angle = Math.atan2(y2-cy, x2-cx); const ah = opts.arrowSize || 14;
+    addLine(x2,y2, x2 - ah*Math.cos(angle - Math.PI/7), y2 - ah*Math.sin(angle - Math.PI/7), opts);
+    addLine(x2,y2, x2 - ah*Math.cos(angle + Math.PI/7), y2 - ah*Math.sin(angle + Math.PI/7), opts);
+  };
+  const addCheck = (cx, cy, size=18, color=COLORS.emerald) => {
+    addPath(`M ${cx-size*0.6} ${cy} L ${cx-size*0.1} ${cy+size*0.5} L ${cx+size*0.7} ${cy-size*0.6}`, {
+      stroke: color, strokeWidth: 3.5, roughness: 1.2
+    });
+  };
+  const addCross = (cx, cy, size=18, color=COLORS.rose) => {
+    addLine(cx-size*0.6, cy-size*0.6, cx+size*0.6, cy+size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+    addLine(cx-size*0.6, cy+size*0.6, cx+size*0.6, cy-size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+  };
+
+  // ============== SLIDES ==============
+  // Each slide = one idea, one diagram. headline + caption go in the DOM
+  // caption-area (below the canvas); the SVG holds the diagram and short
+  // FUNCTIONAL labels only. Do NOT add a clever one-line "thesis" at the
+  // bottom of the canvas — the caption already carries the message.
+  const slides = [];
+
+  // ---- local helpers ----
+  const box = (x, y, w, h, text, o = {}) => {
+    addRect(x, y, w, h, { fill: o.fill || COLORS.card, fillStyle: 'solid', strokeWidth: o.sw || 2, stroke: o.stroke || COLORS.ink });
+    const cx = x + w/2;
+    addText(cx, y + h/2 + (o.sub ? -4 : 8), text, { size: o.size || 24, anchor: 'middle', weight: 700, font: o.mono ? MONO : undefined, fill: o.tc || COLORS.ink });
+    if (o.sub) addText(cx, y + h/2 + 26, o.sub, { size: o.subSize || 16, anchor: 'middle', fill: COLORS.soft, font: o.subMono ? MONO : undefined });
+  };
+  const arr = (x1, y1, x2, y2, o = {}) => addArrow(x1, y1, x2, y2, { stroke: o.stroke || COLORS.soft, strokeWidth: o.sw || 2, curve: o.curve != null ? o.curve : 0, arrowSize: o.as || 12 });
+
+  // --- multi-pov race ---
+  slides.push({
+    headline: 'multi-pov race',
+    caption: 'three angles on the same issue, three real diffs; keep one, bin two',
+    draw: () => {
+      box(640, 110, 320, 100, 'one hard issue', { fill: COLORS.yellow, size: 24 });
+      const labels = ['perf', 'minimal diff', 'simple'], xs = [180, 640, 1100], win = 1;
+      labels.forEach((t, i) => { const x = xs[i], cx = x + 160; arr(800, 210, cx, 320, { stroke: COLORS.faint, sw: 1.6, curve: (cx-800)*0.03, as: 9 }); box(x, 325, 320, 130, t, { fill: COLORS.blue, size: 22, mono: true, sub: 'draft PR', subSize: 15, subMono: true }); if (i === win) { addCheck(cx, 540, 22); addText(cx, 600, 'merge', { size: 20, anchor: 'middle', fill: COLORS.emerald, weight: 700, font: MONO }); } else { addCross(cx, 540, 20); addText(cx, 600, 'archive', { size: 18, anchor: 'middle', fill: COLORS.soft, font: MONO }); } });
+    }
+  });
+
+  // --- a three-tier org ---
+  slides.push({
+    headline: 'a three-tier org',
+    caption: 'thread automations watch the system, a director coordinates, delegates do the work',
+    draw: () => {
+      box(620, 110, 360, 100, 'thread automations', { fill: COLORS.violet, size: 24, sub: 'tier 0', subSize: 15, subMono: true });
+      arr(800, 210, 800, 270, { as: 12 });
+      box(620, 270, 360, 100, 'director', { fill: COLORS.yellow, size: 26, sub: 'tier 1 . coordinates', subSize: 15, subMono: true });
+      const x0 = 170;
+      for (let i = 0; i < 4; i++) { const x = x0 + i*320, cx = x + 130; arr(800, 370, cx, 470, { stroke: COLORS.faint, sw: 1.4, curve: (cx-800)*0.03, as: 9 }); box(x, 475, 260, 120, 'delegate', { fill: COLORS.blue, size: 20, sub: 'tier 2', subSize: 14, subMono: true }); }
+    }
+  });
+
+  // --- thread promotion ---
+  slides.push({
+    headline: 'thread promotion',
+    caption: 'a finished delegate can be archived, or promoted into a standing monitor',
+    draw: () => {
+      box(150, 330, 300, 140, 'delegate', { fill: COLORS.blue, size: 26, sub: 'work done', subSize: 16 });
+      arr(450, 400, 600, 400, { as: 12 });
+      box(620, 220, 320, 120, 'archive', { fill: COLORS.card, size: 24, sub: 'out of sight', subSize: 15, tc: COLORS.soft });
+      arr(560, 380, 620, 290, { stroke: COLORS.faint, sw: 1.6, as: 10 });
+      arr(560, 420, 620, 510, { stroke: COLORS.emerald, sw: 2, as: 12 });
+      box(620, 470, 360, 140, 'promote to monitor', { fill: COLORS.softEmerald, size: 22, sub: 'reports on a cadence', subSize: 15 });
+      addCircle(1090, 540, 70, { stroke: COLORS.emerald, strokeWidth: 2 });
+      addText(1090, 548, 'weekly', { size: 18, anchor: 'middle', font: MONO, fill: COLORS.emerald });
+    }
+  });
+
+  // --- compaction makes the thread richer (ported from the goal deck, same layout, dark theme) ---
+  slides.push({
+    headline: 'compaction makes the thread richer',
+    caption: 'good compaction = signal up, noise down. the thread gets more useful over time',
+    draw: () => {
+      const x0 = 220, x1 = 1480;     // axes x range
+      const y0 = 720, y1 = 160;      // axis y range (y0 bottom, y1 top)
+      const xMid = (x0 + x1) / 2;
+
+      addText(800, 110, 'thread value over time', { size: 32, anchor: 'middle', weight: 700, style: 'italic' });
+
+      // Y axis
+      addLine(x0, y0, x0, y1 - 20, { strokeWidth: 2.4, roughness: 1.6 });
+      addLine(x0, y1 - 20, x0 - 12, y1 - 4, { strokeWidth: 2.4 });
+      addLine(x0, y1 - 20, x0 + 12, y1 - 4, { strokeWidth: 2.4 });
+      addText(x0 - 24, y1 - 10, 'value', { size: 26, anchor: 'end', weight: 700 });
+
+      // X axis
+      addLine(x0, y0, x1 + 20, y0, { strokeWidth: 2.4, roughness: 1.6 });
+      addLine(x1 + 20, y0, x1 + 4, y0 - 12, { strokeWidth: 2.4 });
+      addLine(x1 + 20, y0, x1 + 4, y0 + 12, { strokeWidth: 2.4 });
+      addText(x1 + 30, y0 + 8, 'time', { size: 26, weight: 700 });
+
+      // gridlines
+      for (let i = 1; i <= 4; i++) { const gy = y0 - (y0 - y1) * (i / 5); addLine(x0 + 4, gy, x1, gy, { stroke: COLORS.faint, strokeWidth: 0.8, roughness: 0.5 }); }
+
+      // x tick labels
+      addText(x0, y0 + 36, 'start', { size: 22, anchor: 'middle', fill: COLORS.soft });
+      addText(xMid, y0 + 36, 'compaction', { size: 22, anchor: 'middle', fill: COLORS.soft, weight: 700 });
+
+      // dashed vertical line at compaction
+      for (let yy = y1; yy < y0; yy += 18) { addLine(xMid, yy, xMid, yy + 10, { stroke: COLORS.soft, strokeWidth: 1.4, roughness: 0.6 }); }
+
+      // GOOD compaction curve (rises through compaction, ends high)
+      const goodPath = `M ${x0} ${y0 - 40} C ${x0+200} ${y0 - 60}, ${x0+360} ${y0 - 180}, ${xMid} ${y0 - 280} S ${x1 - 200} ${y0 - 460}, ${x1 - 20} ${y0 - 480}`;
+      addPath(goodPath, { stroke: COLORS.emerald, strokeWidth: 4, roughness: 1.8, fill: 'none' });
+      addCircle(x1 - 20, y0 - 480, 22, { fill: COLORS.emerald, fillStyle: 'solid', stroke: COLORS.emerald });
+      const goodLabelX = x1 - 280, goodLabelY = y0 - 540;
+      addRect(goodLabelX, goodLabelY, 280, 56, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2, roughness: 2 });
+      addText(goodLabelX + 140, goodLabelY + 38, 'good compaction', { size: 26, anchor: 'middle', weight: 700 });
+      addArrow(goodLabelX + 140, goodLabelY + 56, x1 - 30, y0 - 490, { stroke: COLORS.emerald, strokeWidth: 1.6, curve: 10, arrowSize: 10 });
+
+      // LOSSY compaction curve (rises, peaks just past compaction, drops)
+      const lossyPath = `M ${x0} ${y0 - 40} C ${x0+200} ${y0 - 80}, ${x0+360} ${y0 - 220}, ${xMid - 30} ${y0 - 320} C ${xMid + 60} ${y0 - 340}, ${xMid + 120} ${y0 - 240}, ${xMid + 220} ${y0 - 180} S ${x1 - 240} ${y0 - 100}, ${x1 - 20} ${y0 - 90}`;
+      addPath(lossyPath, { stroke: COLORS.faint, strokeWidth: 4, roughness: 2, fill: 'none' });
+      addCircle(x1 - 20, y0 - 90, 20, { fill: COLORS.faint, fillStyle: 'solid', stroke: COLORS.faint });
+      const lossyLabelX = x1 - 320, lossyLabelY = y0 - 60;
+      addRect(lossyLabelX, lossyLabelY, 280, 56, { fill: COLORS.card, fillStyle: 'solid', strokeWidth: 2, roughness: 2 });
+      addText(lossyLabelX + 140, lossyLabelY + 38, 'lossy compaction', { size: 26, anchor: 'middle', weight: 700, fill: COLORS.soft });
+      addArrow(lossyLabelX + 140, lossyLabelY, x1 - 30, y0 - 90, { stroke: COLORS.faint, strokeWidth: 1.6, curve: -10, arrowSize: 10 });
+
+      addText(xMid + 14, y1 + 30, 'summary kicks in', { size: 18, fill: COLORS.soft, style: 'italic' });
+      addText(800, 830, 'the summarizer is built for this; the conversation grows wiser, not bloated', { size: 22, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+    }
+  });
+
+  // ============== STATE / RENDER ==============
+  let current = 0;
+  const render = (idx, animate=true) => {
+    const slide = slides[idx];
+    const captionEl = document.getElementById('caption');
+    captionEl.classList.add('fading');
+    svg.classList.add('fading');
+    setTimeout(() => {
+      clearSvg(svg);
+      rc = rough.svg(svg);
+      TEXT_SCALE = slide.scale != null ? slide.scale : 1;
+      MONO_SCALE = slide.monoScale != null ? slide.monoScale : 1;
+      slide.draw();
+      if (animate) { svg.classList.add('draw-on'); svg.getBoundingClientRect(); }
+      document.getElementById('headline').textContent = slide.headline;
+      document.getElementById('caption-text').textContent = slide.caption;
+      svg.classList.remove('fading');
+      captionEl.classList.remove('fading');
+      if (animate) setTimeout(() => svg.classList.remove('draw-on'), 1200);
+    }, 220);
+  };
+  const goTo = (idx) => { if (idx < 0 || idx >= slides.length || idx === current) return; current = idx; render(current); };
+  const next = () => goTo(current + 1);
+  const prev = () => goTo(current - 1);
+
+  render(current);
+  document.getElementById('tap-left').addEventListener('click', prev);
+  document.getElementById('tap-right').addEventListener('click', next);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+})();
+</script>
+</body>
+</html>
