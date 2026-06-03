@@ -1,6 +1,4 @@
 ---
-duration: "5-8 min"
-order: 16
 class: "skills"
 chapter: "Build Your AI Employees"
 status: "adapt"

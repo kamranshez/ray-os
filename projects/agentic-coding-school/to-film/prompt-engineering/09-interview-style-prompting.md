@@ -1,8 +1,4 @@
 ---
-duration: "10-15 min"
-batch: 2
-order: 11
-batch_name: "Foundations"
 class: "prompt-engineering"
 chapter: "Core Techniques"
 ---

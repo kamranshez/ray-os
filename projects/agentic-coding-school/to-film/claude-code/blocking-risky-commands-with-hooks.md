@@ -1,8 +1,4 @@
 ---
-duration: "1-4 min"
-batch: 3
-order: 2
-batch_name: "Hooks"
 class: "claude-code"
 chapter: "Hooks"
 ---

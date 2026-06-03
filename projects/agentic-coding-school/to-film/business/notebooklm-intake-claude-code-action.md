@@ -1,8 +1,4 @@
 ---
-duration: "12-16 min"
-batch: 1
-order: 2
-batch_name: "Research & Intelligence"
 class: "business"
 chapter: "Research & Intelligence"
 ---

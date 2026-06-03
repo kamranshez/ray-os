@@ -1,6 +1,4 @@
 ---
-duration: "8-10 min"
-order: 15
 class: "skills"
 chapter: "Build Your AI Employees"
 status: "new"

@@ -1,6 +1,4 @@
 ---
-duration: "7-10 min"
-order: 25
 class: "skills"
 chapter: "Ship It"
 status: "adapt"

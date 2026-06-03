@@ -1,8 +1,4 @@
 ---
-duration: "10-14 min"
-batch: 1
-order: 2
-batch_name: "Spec-Driven Development"
 class: "spec-driven-development"
 chapter: "Tests as the Contract"
 ---

@@ -1,8 +1,4 @@
 ---
-duration: "5-9 min"
-batch: 1
-order: 9
-batch_name: "Quick Wins"
 class: "claude-code"
 chapter: "Advanced"
 ---

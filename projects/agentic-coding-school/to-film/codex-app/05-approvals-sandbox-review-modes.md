@@ -1,6 +1,4 @@
 ---
-duration: "6-8 min"
-order: 5
 class: "codex-app"
 chapter: "Codex App"
 status: "to-film"

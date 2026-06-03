@@ -1,8 +1,4 @@
 ---
-duration: "10-15 min"
-batch: 1
-order: 3
-batch_name: "Seed Thinking"
 class: "prompt-engineering"
 chapter: "Steering Models"
 ---

@@ -2,7 +2,6 @@
 tags: [course, script, skills]
 status: draft
 lesson: "5.3 Self-Improving Skills"
-duration: "8-10 min"
 ---
 
 ## Self-Improving Skills

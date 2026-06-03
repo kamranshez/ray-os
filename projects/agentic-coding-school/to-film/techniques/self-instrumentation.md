@@ -1,6 +1,4 @@
 ---
-duration: "10-14 min"
-batch_name: "Techniques"
 class: "techniques"
 chapter: "Advanced Techniques"
 ---

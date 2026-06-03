@@ -1,8 +1,4 @@
 ---
-duration: "8-12 min"
-batch: 2
-order: 2
-batch_name: "Advanced Subagents"
 class: "claude-code"
 chapter: "Subagents"
 ---

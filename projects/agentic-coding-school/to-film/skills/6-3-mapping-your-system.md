@@ -2,7 +2,6 @@
 tags: [course, script, skills]
 status: draft
 lesson: "6.3 Mapping Your System"
-duration: "7-10 min"
 ---
 
 ## Mapping Your System

@@ -1,6 +1,4 @@
 ---
-duration: "7-10 min"
-order: 2
 class: "skills"
 chapter: "The Blank Slate"
 status: "new"

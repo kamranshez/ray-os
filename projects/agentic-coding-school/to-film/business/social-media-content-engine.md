@@ -1,8 +1,4 @@
 ---
-duration: "10-15 min"
-batch: 1
-order: 3
-batch_name: "Content Production"
 class: "business"
 chapter: "Content Production"
 ---

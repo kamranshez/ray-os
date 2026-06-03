@@ -1,6 +1,4 @@
 ---
-duration: "8-10 min"
-order: 4
 class: "skills"
 chapter: "Your First Skill"
 status: "new"

@@ -1,8 +1,4 @@
 ---
-duration: "1-4 min"
-batch: 1
-order: 13
-batch_name: "Quick Wins"
 class: "claude-code"
 chapter: "Desktop App"
 ---

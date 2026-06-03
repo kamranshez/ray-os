@@ -1,6 +1,4 @@
 ---
-duration: "10-12 min"
-order: 17
 class: "skills"
 chapter: "Quality Control"
 status: "new"

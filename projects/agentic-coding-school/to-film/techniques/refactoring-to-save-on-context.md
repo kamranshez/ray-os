@@ -1,8 +1,4 @@
 ---
-duration: "1-4 min"
-batch: 2
-order: 4
-batch_name: "Bonus Techniques"
 class: "techniques"
 chapter: "Advanced Techniques"
 ---

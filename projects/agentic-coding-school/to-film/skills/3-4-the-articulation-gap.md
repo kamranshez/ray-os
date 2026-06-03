@@ -1,6 +1,4 @@
 ---
-duration: "10-12 min"
-order: 12
 class: "skills"
 chapter: "Make It Yours"
 status: "new"

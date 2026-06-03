@@ -1,8 +1,4 @@
 ---
-duration: "1-4 min"
-batch: 7
-order: 2
-batch_name: "Context Engineering"
 class: "context-engineering"
 chapter: "Advanced Techniques"
 ---

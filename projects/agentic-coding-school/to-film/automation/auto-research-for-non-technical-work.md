@@ -1,5 +1,4 @@
 ---
-duration: "12-18 min"
 class: "automation"
 chapter: "Advanced"
 status: to-film

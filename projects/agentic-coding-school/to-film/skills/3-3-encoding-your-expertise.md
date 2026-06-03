@@ -1,6 +1,4 @@
 ---
-duration: "10-15 min"
-order: 11
 class: "skills"
 chapter: "Make It Yours"
 status: "adapt"

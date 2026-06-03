@@ -1,8 +1,4 @@
 ---
-duration: "8-12 min"
-batch: 2
-order: 4
-batch_name: "Skills for Business"
 class: "business"
 chapter: "Skills for Business"
 ---

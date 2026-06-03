@@ -1,8 +1,4 @@
 ---
-duration: "10-15 min"
-batch: 2
-order: 7
-batch_name: "Marketing Automation"
 class: "business"
 chapter: "Marketing Automation"
 ---

@@ -2,7 +2,6 @@
 tags: [course, script, skills]
 status: draft
 lesson: "5.2 A/B Testing Reference Files"
-duration: "7-10 min"
 ---
 
 ## A/B Testing Reference Files

@@ -1,6 +1,4 @@
 ---
-duration: "10-12 min"
-order: 25
 class: "skills"
 chapter: "Wire It All Together"
 status: "new"

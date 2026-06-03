@@ -1,5 +1,4 @@
 ---
-duration: "3-5 min"
 class: "techniques"
 chapter: "Fundamental Techniques"
 ---

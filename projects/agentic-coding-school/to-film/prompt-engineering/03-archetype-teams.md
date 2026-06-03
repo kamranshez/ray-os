@@ -1,8 +1,4 @@
 ---
-duration: "12-18 min"
-batch: 1
-order: 5
-batch_name: "Seed Thinking"
 class: "prompt-engineering"
 chapter: "Archetype Teams"
 ---

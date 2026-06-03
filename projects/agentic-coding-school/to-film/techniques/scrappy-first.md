@@ -1,8 +1,4 @@
 ---
-duration: "5-7 min"
-batch: 3
-order: 2
-batch_name: "Techniques"
 class: "techniques"
 chapter: "Advanced Techniques"
 ---
