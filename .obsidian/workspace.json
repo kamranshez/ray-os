@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "8dc40e9e37901f2a",
+        "id": "c7ed589c448eb0d2",
         "type": "tabs",
         "children": [
           {
-            "id": "5c77c3e8f183bc1e",
+            "id": "6d7ccfffda266a3f",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Dashboard.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Dashboard"
+              "title": "New tab"
             }
           }
         ]
@@ -182,10 +178,41 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "5c77c3e8f183bc1e",
+  "active": "446ab2d10da273db",
   "lastOpenFiles": [
-    "goal.md",
+    "saved-view.png",
+    "viewer-check.png",
+    "socials/youtube/videos/codex-director-video-brainstorm/tweets-viewer.html",
+    "socials/youtube/videos/codex-director-video-brainstorm/build_viewer.py",
+    "slides/codex-director-slides.html",
+    "slides/codex-director-picker.html.tmp.71317.d523b69090ff",
+    "socials/youtube/videos/codex-director-video-brainstorm/video-script.md",
+    "socials/youtube/videos/codex-director-video-brainstorm/self-managing-coding-agents-director-pattern.md",
+    "slides/codex-director-picker.html",
+    "socials/youtube/videos/codex-director-video-brainstorm/x-thread-insights.md",
+    "socials/youtube/videos/5-skills-i-use-everyday.md",
+    "socials/CLAUDE.md",
     "Dashboard.md",
+    "slides/claude-code-dynamic-workflows-slides.html",
+    "socials/youtube/videos/claude-code-dynamic-workflows.md",
+    "socials/youtube/videos/claude-code-recursive-language-model.md",
+    "undefined/session-log.jsonl",
+    "undefined/context-pack.md",
+    "undefined",
+    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-12-upgrade-arrow.jpg",
+    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-11-recap-flow.jpg",
+    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-10-why-now-timeline.jpg",
+    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-09-parallel-vs-pipeline.jpg",
+    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-08-where-cost-goes.jpg",
+    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-07-recursive-descent.jpg",
+    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-06-too-big-for-window.jpg",
+    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-05-tool-vs-function.jpg",
+    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-04-context-outside-window.jpg",
+    "socials/youtube/videos/images/claude-code-recursive-language-model",
+    "socials/youtube/videos/images",
+    "research/twitter/a1zhang/a1zhang-digest-2026-05-29.md",
+    "clippings/twitter/a1zhang/a1zhang-digest-2026-05-29.md",
+    "goal.md",
     "workshop/Class Structure.md",
     "workshop/content/day-1/Context is Everything.md",
     "workshop/content/day-1/Codebase Entropy.md",
@@ -199,37 +226,6 @@
     "workshop/content/day-0/Installing CC + Ghostty (Windows).md",
     "workshop/content/day-0/Installing CC + Cmux (Mac).md",
     "workshop/content/day-0/Where We're Going.md",
-    "workshop/CLAUDE.md",
-    "CleanShot 2026-05-17 at 16.09.13@2x.png",
-    "workshop/content/day-9/Writing Effective Goals.md",
-    "workshop/content/day-7/Red-Green-Refactor.md",
-    "workshop/content/day-7/Playwright for TDD.md",
-    "workshop/content/day-2/HTML Artefacts for Output.md",
-    "workshop/content/day-8/Every PR.md",
-    "workshop/content/day-8/Removing Bottlenecks.md",
-    "workshop/content/day-6/Markdown over Architecture.md",
-    "workshop/content/day-7/Multi Subagents for Hard Problems.md",
-    "workshop/content/day-6/Measuring Skill Effectiveness.md",
-    "workshop/content/day-6/Simplify Skill.md",
-    "projects/agentic-coding-school/ideas/agent-teams",
-    "projects/agentic-coding-school/ideas",
-    "workshop/content/unsorted/agent-teams",
-    "workshop/content/unsorted",
-    "workshop/content/day-9",
-    "workshop/content/day-8",
-    "workshop/content/day-7",
-    "workshop/content/day-6",
-    "workshop/content/day-5",
-    "workshop/content/day-4",
-    "workshop/images/libraries-vs-products.png",
-    "workshop/images/mission.png",
-    "socials/x/articles/images/excalidraw_5.png",
-    "socials/x/articles/images/excalidraw_4.png",
-    "projects/agentic-coding-school/to-film/codex-app/images/04-subagents-in-general/good-vs-bad.png",
-    "projects/agentic-coding-school/to-film/codex-app/images/04-subagents-in-general/spawn-agent-flow.png",
-    "projects/agentic-coding-school/to-film/codex-app/images/04-subagents-in-general/the-mental-model.png",
-    "projects/agentic-coding-school/to-film/codex-app/images/04-subagents-in-general/coordination-discipline.png",
-    "projects/agentic-coding-school/to-film/codex-app/images/04-subagents-in-general/spawn-agent-tool.png",
     "Untitled.canvas"
   ]
 }
