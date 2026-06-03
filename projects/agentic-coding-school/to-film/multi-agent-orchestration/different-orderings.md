@@ -4,8 +4,6 @@ The technique is not a better model. It's a wrapper around the model that does f
 
 That's it. Same model in every box. The scaffold is doing the work.
 
-![[different-orderings-1.png]]
-
 ---
 
 ## Where this came from
@@ -18,6 +16,25 @@ Nicholas Carlini ran this pipeline against several content management systems an
 Anthropic's red team ran a stronger internal model called Mythos Preview through almost the exact same scaffold. It found a 27-year-old NULL deref in OpenBSD, a 17-year-old remote code execution in FreeBSD's NFS daemon, and a 16-year-old bug in FFmpeg's H.264 decoder that has been there since the commit that added H.264.
 
 Different models. Same four-step pipeline. The pipeline is the interesting part.
+
+---
+
+## The four-step pipeline at a glance
+
+Before we walk through each step, here is the whole shape.
+
+You take one model. You point it at a codebase. Then you wrap it in four steps:
+
+1. **Rank.** Score every file from 1 to 5 by how likely it is to hold an interesting bug. Drop the 1s and 2s. Hunt the rest in priority order.
+2. **Fan out.** Spawn one agent per surviving file, in parallel. Each agent runs in its own clean context.
+3. **Perturb.** Give every agent the same audit prompt, but a different starting file as a hint. The starting file is what makes each run take a different path through the code.
+4. **Verify.** Pass every bug report through a second fresh agent that asks, "is this real?" Drop anything the second agent rejects.
+
+Same model in every box. Same prompt in every box. The four steps together are doing the work that people assume the model is doing.
+
+The rest of this video is each of those four steps in detail, plus why it works, plus what it generalises to beyond security.
+
+![[images/different-orderings/overview/excalidraw_1.png]]
 
 ---
 
@@ -38,6 +55,8 @@ And here is Anthropic describing the same step:
 > — Anthropic Red Team, Mythos Preview write-up
 
 Two people, independently, both running this in production, reached the same recipe.
+
+![[images/different-orderings/step-1-rank/excalidraw_1.png]]
 
 ---
 
@@ -61,7 +80,7 @@ The starting file is a seed. The agent reads it first. It builds its initial men
 
 You aren't asking 100 different questions. You're asking the same question from 100 different doors.
 
-![[different-orderings-2.png]]
+![[images/different-orderings/step-2-many-starts/excalidraw_1.png]]
 
 ---
 
@@ -74,6 +93,8 @@ Start agent A on `auth/session.go`. It spends its budget thinking about token va
 Running the same agent 100 times on the same project gets you 100 slightly-different runs along the same path. Running 100 agents from 100 different starting files gets you 100 completely different paths through the codebase. The coverage curve is not even close.
 
 This is also why the parallelism is free in wall-clock time. Each agent has its own clean context. They don't talk to each other. You fan them out, wait, fan them back in.
+
+![[images/different-orderings/step-3-different-doors/excalidraw_1.png]]
 
 ---
 
@@ -92,7 +113,7 @@ This is the step that earns the 100% true-positive rate. Carlini ran the full pi
 
 Where you can also run a real oracle, do. For C and C++ codebases, that means compiling with AddressSanitizer and running the candidate input. The crash is either real or it isn't. The model doesn't get a vote.
 
-![[different-orderings-3.png]]
+![[images/different-orderings/step-4-verify/excalidraw_1.png]]
 
 ---
 
@@ -109,6 +130,8 @@ That is a recovery claim, not a cold-discovery claim. The models were pointed at
 > — AISLE
 
 The ranker, the parallel fan-out, the perturbed starting files, the verifier. None of those four pieces is the model. All four of them can be assembled in an afternoon. You could write the scripts in fifteen minutes.
+
+![[images/different-orderings/scaffold-is-moat/excalidraw_1.png]]
 
 ---
 
@@ -135,8 +158,6 @@ The pattern is always the same. Cheap ranker, parallel fan-out, perturbed entry 
 3. Run the verification pass. Fresh agent, "is this real?" prompt. Filter the false positives.
 4. Re-run the same audit without the ranker and without the perturbed starting files. Show how much narrower the result set is.
 5. Point the exact same pipeline at a non-security task. Dead code detection runs in front of the camera in about three minutes.
-
-![[different-orderings-4.png]]
 
 ---
 
