@@ -1,7 +1,13 @@
 ---
-name: excalidraw-gen
-description: Generate excalidraw-style explanation images using Gemini API. Use when the user wants to create visual explanations, diagrams, or illustrations in the hand-drawn excalidraw aesthetic. Supports parallel generation of multiple variations with configurable timeout. Triggers on requests like "generate an excalidraw image", "create a visual explanation", "make a diagram for [concept]", or "illustrate [topic] in excalidraw style".
+name: excalidraw-gemini
+description: Generate excalidraw-style explanation images using the Gemini API (gemini-3-pro-image-preview). Use when the user wants to create visual explanations, diagrams, or illustrations in the hand-drawn excalidraw aesthetic via the Gemini path. Supports parallel generation of multiple variations with configurable timeout. Triggers on requests like "generate an excalidraw image with gemini", "excalidraw-gemini", "use gemini for excalidraw", or when the user explicitly asks for the Gemini route. Sibling skill [[excalidraw-codex]] does the same job through the `codex exec` headless CLI — default to whichever variant the user names; if unspecified, ask.
 ---
+
+## Engine
+
+This skill calls the **Gemini API** (`gemini-3-pro-image-preview`) via a bundled Node/TypeScript script. Requires `GEMINI_API_KEY` in `.env`.
+
+For the **Codex CLI** path (no API key, uses Codex's bundled `image_gen` tool, often faster), see [[excalidraw-codex]] instead.
 
 ## Prompt Content Rule — CRITICAL
 
@@ -40,7 +46,7 @@ For a single section:
 3. Run the generate command, passing the **entire section content verbatim** as the prompt (never summarize):
 
 ```bash
-cd .claude/skills/excalidraw-gen && npx ts-node scripts/generate.ts "<entire section content verbatim>" -n 10 -o "/path/to/images/<section-name>"
+cd .claude/skills/excalidraw-gemini && npx ts-node scripts/generate.ts "<entire section content verbatim>" -n 10 -o "/path/to/images/<section-name>"
 ```
 
 4. Add all 10 image embeds to the markdown after the section (see "Adding Image Embeds" below)
@@ -65,7 +71,7 @@ For an entire markdown file:
 **Subagent template:**
 ```
 Run this bash command (timeout 900000ms):
-cd "/path/to/.claude/skills/excalidraw-gen" && npx ts-node scripts/generate.ts "<entire section content verbatim>" -n 10 -o "/path/to/images/<section-name>"
+cd "/path/to/.claude/skills/excalidraw-gemini" && npx ts-node scripts/generate.ts "<entire section content verbatim>" -n 10 -o "/path/to/images/<section-name>"
 ```
 
 **Batch workflow:**
@@ -78,7 +84,7 @@ Batch 2: section-3, section-4 → wait for completion
 ## Generate Command
 
 ```bash
-cd .claude/skills/excalidraw-gen && npx ts-node scripts/generate.ts <prompt> [options]
+cd .claude/skills/excalidraw-gemini && npx ts-node scripts/generate.ts <prompt> [options]
 ```
 
 **Prompt requirements — CRITICAL:**
@@ -99,7 +105,7 @@ cd .claude/skills/excalidraw-gen && npx ts-node scripts/generate.ts <prompt> [op
 For X/Twitter article cover images, use **21:9** (the closest supported ratio to 5:2). X articles display cover images in a wide cinematic format.
 
 ```bash
-cd .claude/skills/excalidraw-gen && npx ts-node scripts/generate.ts "<prompt>" -n 5 -a 21:9 -o "/path/to/images/<slug>"
+cd .claude/skills/excalidraw-gemini && npx ts-node scripts/generate.ts "<prompt>" -n 5 -a 21:9 -o "/path/to/images/<slug>"
 ```
 
 Use a bold, high-contrast design with minimal text (3-5 words max). The image must be readable at small sizes in the X feed. Skip the white background instruction for thumbnails — use vibrant colors instead.
