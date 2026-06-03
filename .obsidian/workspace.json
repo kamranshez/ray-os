@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "c7ed589c448eb0d2",
+        "id": "744ad3b9953f28d1",
         "type": "tabs",
         "children": [
           {
-            "id": "6d7ccfffda266a3f",
+            "id": "5839c182781f4054",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "projects/agentic-coding-school/to-film/multi-agent-orchestration/different-orderings.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "different-orderings"
             }
           }
         ]
@@ -74,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 252.50043487548828
+    "width": 252.50043487548828,
+    "collapsed": true
   },
   "right": {
     "id": "99b289f72ba3f8e1",
@@ -178,38 +183,39 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "446ab2d10da273db",
+  "active": "5839c182781f4054",
   "lastOpenFiles": [
-    "saved-view.png",
-    "viewer-check.png",
-    "socials/youtube/videos/codex-director-video-brainstorm/tweets-viewer.html",
-    "socials/youtube/videos/codex-director-video-brainstorm/build_viewer.py",
-    "slides/codex-director-slides.html",
-    "slides/codex-director-picker.html.tmp.71317.d523b69090ff",
+    "Untitled Kanban.md",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/different-orderings.md",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/different-orderings.excalidraw",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/step-4-verify/excalidraw_1.png",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/scaffold-is-moat/excalidraw_1.png",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/step-2-many-starts/excalidraw_1.png",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/step-1-rank/excalidraw_1.png",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/overview/excalidraw_1.png",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/different-orderings.md.tmp.48302.8a062b24a4a8",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/step-3-different-doors/excalidraw_1.png",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/step-4-verify",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/step-3-different-doors",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/step-2-many-starts",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/step-1-rank",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/scaffold-is-moat",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings/overview",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images/different-orderings",
+    "projects/agentic-coding-school/to-film/multi-agent-orchestration/images",
+    "images/mcp-server-works-variation-3.png",
+    "images/mcp-server-works-variation-2.png",
+    "images/mcp-server-works-variation-1.png",
+    "socials/youtube/videos/uploaded/images/mcp-server-works/how-mcp-server-works.png",
+    "socials/youtube/videos/5-skills-i-use-everyday.md",
     "socials/youtube/videos/codex-director-video-brainstorm/video-script.md",
     "socials/youtube/videos/codex-director-video-brainstorm/self-managing-coding-agents-director-pattern.md",
-    "slides/codex-director-picker.html",
     "socials/youtube/videos/codex-director-video-brainstorm/x-thread-insights.md",
-    "socials/youtube/videos/5-skills-i-use-everyday.md",
     "socials/CLAUDE.md",
     "Dashboard.md",
-    "slides/claude-code-dynamic-workflows-slides.html",
     "socials/youtube/videos/claude-code-dynamic-workflows.md",
     "socials/youtube/videos/claude-code-recursive-language-model.md",
-    "undefined/session-log.jsonl",
     "undefined/context-pack.md",
-    "undefined",
-    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-12-upgrade-arrow.jpg",
-    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-11-recap-flow.jpg",
-    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-10-why-now-timeline.jpg",
-    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-09-parallel-vs-pipeline.jpg",
-    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-08-where-cost-goes.jpg",
-    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-07-recursive-descent.jpg",
-    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-06-too-big-for-window.jpg",
-    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-05-tool-vs-function.jpg",
-    "socials/youtube/videos/images/claude-code-recursive-language-model/claude-code-recursive-language-model-04-context-outside-window.jpg",
-    "socials/youtube/videos/images/claude-code-recursive-language-model",
-    "socials/youtube/videos/images",
     "research/twitter/a1zhang/a1zhang-digest-2026-05-29.md",
     "clippings/twitter/a1zhang/a1zhang-digest-2026-05-29.md",
     "goal.md",
@@ -225,7 +231,6 @@
     "workshop/content/day-0/Navigating to Slack.md",
     "workshop/content/day-0/Installing CC + Ghostty (Windows).md",
     "workshop/content/day-0/Installing CC + Cmux (Mac).md",
-    "workshop/content/day-0/Where We're Going.md",
     "Untitled.canvas"
   ]
 }
