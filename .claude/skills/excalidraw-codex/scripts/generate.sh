@@ -2,7 +2,9 @@
 # Generate excalidraw-style images via the headless Codex CLI (`codex exec`).
 #
 # Wraps `codex exec --json` with these conveniences:
-#   - Attaches all reference images in this skill's assets/ folder by default.
+#   - Attaches the bundled reference images from assets/ by default. The
+#     wrapper prompt tells codex they are STYLE EXAMPLES ONLY so it copies
+#     the aesthetic without reusing their subject matter.
 #   - Asks the Codex CLI to produce N variations inside ONE session.
 #   - After codex finishes, collects every PNG that landed under
 #     ~/.codex/generated_images/<thread_id>/ and copies them into the user's
@@ -38,6 +40,7 @@ while [[ $# -gt 0 ]]; do
     -n|--count)  COUNT="$2";  shift 2 ;;
     -a|--aspect) ASPECT="$2"; shift 2 ;;
     -r|--ref)    REFS+=("$2"); shift 2 ;;
+    --default-refs) USE_DEFAULT_REFS=1; shift ;;
     --no-default-refs) USE_DEFAULT_REFS=0; shift ;;
     -h|--help)
       sed -n '2,22p' "$0"; exit 0 ;;
@@ -59,23 +62,33 @@ if [[ $USE_DEFAULT_REFS -eq 1 ]]; then
 fi
 
 CODEX_ARGS=(exec --skip-git-repo-check --json)
-for r in "${REFS[@]}"; do
+for r in "${REFS[@]+"${REFS[@]}"}"; do
   CODEX_ARGS+=(-i "$r")
 done
 
 # Wrap the user's prompt with strict directives:
 #   * Generate exactly N images (variations of the same concept) in this call.
-#   * Match the attached reference images' hand-drawn excalidraw aesthetic.
+#   * Describe the excalidraw aesthetic in words (refs are off by default
+#     because attaching prior concept diagrams caused subject-matter bleed).
 #   * Don't copy files anywhere, don't run sips/find/git — just generate.
+if [[ ${#REFS[@]} -gt 0 ]]; then
+  STYLE_BLOCK="The reference images attached are STYLE EXAMPLES ONLY. Match their
+hand-drawn excalidraw aesthetic — do NOT reuse their subject matter, diagrams,
+labels, or composition. Your image's subject is defined entirely by the Image
+content section below."
+else
+  STYLE_BLOCK="Excalidraw hand-drawn aesthetic: sketchy black outlines on a pure
+white background, slight imperfect lines, handwritten-style labels, soft accent
+colors only. When people or avatars are needed, draw a small cute light-blue
+robot character (round head, antenna, simple smiling face, two short arms)."
+fi
+
 WRAPPED_PROMPT=$(cat <<EOF
 You are running headlessly. Do not load skills, do not read files, do not copy
 or move outputs anywhere — just call the image_gen tool ${COUNT} time(s) in this
 single turn to produce ${COUNT} distinct variations of the image described below.
 
-The reference images attached show the excalidraw hand-drawn aesthetic you must
-match: sketchy black outlines on a white background, slight imperfect lines,
-handwritten-style labels, soft accent colors only, the same cute light-blue
-robot character when people/avatars are needed.
+${STYLE_BLOCK}
 
 Aspect ratio: ${ASPECT}. Background: pure white #FFFFFF — no gradients, no
 textures. After all images are generated, your final message should just list
@@ -91,7 +104,7 @@ EOF
 TMP_LOG="$(mktemp)"
 trap 'rm -f "$TMP_LOG"' EXIT
 
-codex "${CODEX_ARGS[@]}" "$WRAPPED_PROMPT" 2>&1 | tee "$TMP_LOG" >/dev/null
+printf '%s' "$WRAPPED_PROMPT" | codex "${CODEX_ARGS[@]}" - 2>&1 | tee "$TMP_LOG" >/dev/null
 
 THREAD_ID=$(grep -m1 -o '"thread_id":"[^"]*"' "$TMP_LOG" | head -1 | sed 's/.*"thread_id":"\([^"]*\)".*/\1/')
 if [[ -z "$THREAD_ID" ]]; then

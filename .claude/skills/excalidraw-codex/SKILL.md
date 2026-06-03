@@ -86,11 +86,12 @@ generate.sh -p "<verbatim prompt>" -o /abs/out/dir [options]
 - `-n, --count` — Number of variations per call (default 5). Codex produces N images in a single session.
 - `-a, --aspect` — Aspect ratio hint embedded in the prompt (default `16:9`). Codex doesn't expose ratio flags directly; the wrapper inlines this into the directive.
 - `-r, --ref <file>` — Add an extra reference image. Repeatable. The wrapper auto-attaches every `reference*.png` from `assets/` unless `--no-default-refs` is passed.
-- `--no-default-refs` — Skip the bundled `assets/reference*.png` images (use only `-r` files).
+- `--no-default-refs` — Skip the bundled `assets/reference*.png` images (use only `-r` files, or none).
 
 **Defaults baked into the wrapper:**
 - `codex exec --skip-git-repo-check --json` — headless, JSONL events on stdout.
-- Auto-attaches `assets/reference1.png` … `reference4.png` so the model copies the cute light-blue robot and sketchy aesthetic.
+- Auto-attaches `assets/reference1.png` … `reference4.png` so the model copies the pencil-textured robot and sketchy aesthetic. The wrapper text explicitly tells codex the refs are **STYLE EXAMPLES ONLY** — do not reuse their subject matter, labels, or composition. This prevents the prior failure mode where codex pattern-matched the refs' diagrams (MCP/agent boxes) and ignored the actual prompt content.
+- Prompt is passed via stdin (codex's `-i` flag is variadic and would otherwise eat a positional prompt as another image path).
 - Prompt is wrapped with: "Do not load skills, do not read files, do not copy outputs — call `image_gen` N times in this single turn and list the saved paths." This is necessary because, left alone, the Codex agent auto-loads `~/.codex/skills/imagegen` and burns ~150k tokens reading skill markdown and copying outputs around.
 - Pure white background and excalidraw aesthetic directives are inlined in the wrapper prompt.
 
@@ -109,7 +110,7 @@ For X/Twitter article cover images use `-a 21:9`:
   -n 5 -a 21:9
 ```
 
-For vibrant brand-colored thumbnails (not the white-background look), pass `--no-default-refs` so the bundled excalidraw refs don't pull the result back toward sketchy white.
+For vibrant brand-colored thumbnails (not the white-background look), the default no-refs mode already avoids the sketchy-white pull. If you want a specific style example, attach it explicitly with `-r path/to/style.png`.
 
 ## Adding Image Embeds
 
