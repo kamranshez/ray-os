@@ -178,9 +178,11 @@ python3 <skill-dir>/scripts/push.py --draft ~/Downloads/sentence-mining/<source>
 
 This:
 - Calls AnkiConnect `addNotes` with the full card list
-- **Tags** every card with EXACTLY one tag: `claude-sentence-mining` (video) OR `claude-sentence-bank` (bank).
+- **Tags** every card with two tags:
+  - `claude-sentence-mining` (video) OR `claude-sentence-bank` (bank) — the permanent kind tag
+  - `i1` / `i2` / `i3` / `i?` — the current i-level (count of unknown content words in the sentence) so Ray can filter by complexity in Anki
 
-  No other tags are added — Ray asked in June 2026 that the skill only emit `claude-*` tags, after the per-run `source:*`, `speaker:*`, `bank:*`, `auto-mined:*`, and `i1/i2/i?` tags accumulated without adding study value. The full context (`source_id`, `source_url`, `i_level`, `speaker`, `bank_id`, mining date) still lives in the draft JSON for debugging — it just doesn't ride along into Anki.
+  Other context — per-run `source:*`, `speaker:*`, `bank:*`, `auto-mined:*` — is intentionally NOT promoted to tags (Ray asked these be dropped in June 2026 because they cluttered the tag tree without adding study value). The full data still lives in the draft JSON for debugging.
 - Sentence field is prefixed with `<b>A:</b> ` for video diarized cards so it's clear who's talking
 - Nothing is suspended — Ray studies them all and decides per-card
 
