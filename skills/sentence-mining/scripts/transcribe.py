@@ -44,12 +44,16 @@ def main(video_path):
     # preference order with automatic fallback — Universal-3 Pro is the newest and
     # most accurate (≤10% WER on Japanese), Universal-2 is the safety net in case
     # Pro can't process this specific audio.
+    # `speaker_labels` adds diarization (A/B/...). We deliberately don't pass
+    # `speakers_expected` — videos may have 1, 2, or N speakers and we want
+    # auto-detection.
     job = _req("POST", "/transcript", {**headers, "content-type": "application/json"}, data={
         "audio_url": audio_url,
         "language_code": "ja",
         "speech_models": ["universal-3-pro", "universal-2"],
         "punctuate": True,
         "format_text": True,
+        "speaker_labels": True,
     })
     job_id = job["id"]
 
@@ -59,13 +63,22 @@ def main(video_path):
             break
         if status["status"] == "error":
             sys.exit(f"AssemblyAI error: {status.get('error')}")
-        time.sleep(2)
+        time.sleep(1)
 
-    # Flat word stream with timings. AssemblyAI's sentence segmentation is unreliable
-    # for fast/casual Japanese speech, so we don't use it — Claude does sentence
-    # splitting + correction with full context in the next step (see SKILL.md).
+    # Build a word-id → speaker map from the utterances array (utterance.words[].speaker).
+    # Match by start_ms since AssemblyAI doesn't carry word ids across the two arrays.
+    speaker_by_start = {}
+    for utt in (status.get("utterances") or []):
+        for w in (utt.get("words") or []):
+            speaker_by_start[w["start"]] = utt.get("speaker") or w.get("speaker")
+
     raw_words = [
-        {"text": w["text"], "start_ms": w["start"], "end_ms": w["end"]}
+        {
+            "text": w["text"],
+            "start_ms": w["start"],
+            "end_ms": w["end"],
+            "speaker": speaker_by_start.get(w["start"]),
+        }
         for w in (status.get("words") or [])
     ]
     full_text = (status.get("text") or "").strip()
@@ -77,7 +90,7 @@ def main(video_path):
         "words": raw_words,
         # `sentences` is intentionally absent — Claude fills it in step 2.5 of
         # SKILL.md by reading `words` + `full_text` and emitting corrected,
-        # well-split chunks with preserved timing.
+        # well-split chunks with preserved timing + speaker labels.
     }
     print(json.dumps(out, ensure_ascii=False, indent=2))
 

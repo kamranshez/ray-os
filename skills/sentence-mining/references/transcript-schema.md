@@ -11,15 +11,15 @@ The file goes through two stages:
   "audio_duration_ms": 17400,
   "full_text": "あのね、あなたに必要なのは気迫なの。それさえあれば...",
   "words": [
-    {"text": "あのね", "start_ms": 1234, "end_ms": 1750},
-    {"text": "、",     "start_ms": 1750, "end_ms": 1800},
-    {"text": "あなたに", "start_ms": 1800, "end_ms": 2200},
+    {"text": "あのね", "start_ms": 1234, "end_ms": 1750, "speaker": "A"},
+    {"text": "、",     "start_ms": 1750, "end_ms": 1800, "speaker": "A"},
+    {"text": "あなたに", "start_ms": 1800, "end_ms": 2200, "speaker": "A"},
     ...
   ]
 }
 ```
 
-Flat word stream with timings, no sentence segmentation. AssemblyAI's own sentence breaks are unreliable for casual/fast Japanese speech, so we don't ship them.
+Flat word stream with timings + per-word `speaker` label from AssemblyAI diarization. We don't pass `speakers_expected` — auto-detection handles 1, 2, or N speakers. AssemblyAI's own sentence breaks are unreliable for casual/fast Japanese speech, so we don't ship them.
 
 ## Stage B: after Claude's correction + splitting (Step 2.5 of SKILL.md)
 
@@ -33,8 +33,9 @@ The same file gains a `sentences` array:
       "text": "あのね、あなたに必要なのは気迫なの。",
       "start_ms": 1234,
       "end_ms": 4567,
+      "speaker": "A",
       "words": [
-        {"text": "あのね", "start_ms": 1234, "end_ms": 1750},
+        {"text": "あのね", "start_ms": 1234, "end_ms": 1750, "speaker": "A"},
         ...
       ]
     },

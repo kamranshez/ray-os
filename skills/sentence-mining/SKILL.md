@@ -73,17 +73,23 @@ Record the resulting file path. Everything below assumes you know `VIDEO_PATH` a
 python3 <skill-dir>/scripts/transcribe.py "$VIDEO_PATH" > ~/Downloads/sentence-mining/$SOURCE_ID.transcript.json
 ```
 
-Output now contains only `full_text` and a flat `words` array with word-level timings. **Sentence splitting is intentionally NOT done here** — see Step 2.5 below.
+Output contains `full_text` and a flat `words` array. Each word has `start_ms`, `end_ms`, and a **`speaker`** label (`"A"`, `"B"`, …) from AssemblyAI's diarization pass. **Sentence splitting is intentionally NOT done here** — see Step 2.5 below.
 
-Why: AssemblyAI's Japanese sentence segmenter is unreliable for casual/fast speech, and earlier rule-based splitters chopped at character/duration caps regardless of meaning, producing mid-clause cards. You (Claude) do this with full context instead.
+Why no rule-based splitter: AssemblyAI's Japanese sentence segmenter is unreliable for casual/fast speech, and earlier rule-based splitters chopped at character/duration caps regardless of meaning. You (Claude) do this with full context instead.
+
+Why diarization: speaker turn changes are the strongest "natural meaning boundary" signal we have, much better than punctuation alone for casual conversation. We deliberately don't pass `speakers_expected` — auto-detection handles 1, 2, or N speakers.
 
 ## Step 2.5: Correct + split (YOU do this, inline — no script)
 
 Read the raw transcript. You have:
 - `full_text`: the entire transcribed string (may contain mistranscriptions)
-- `words`: every spoken word with `start_ms` / `end_ms`
+- `words`: every spoken word with `start_ms`, `end_ms`, and a `speaker` label (e.g. `"A"`, `"B"`)
 
-Your job is to produce a `sentences` array where each sentence is a card-worthy chunk: roughly **3–10 seconds** of audio, **20–50 Japanese characters**, ending at a natural meaning boundary (sentence-final particle, clause break, topic shift, or hard punctuation).
+Your job is to produce a `sentences` array where each sentence is a card-worthy chunk: roughly **3–12 seconds** of audio, **20–60 Japanese characters**, ending at a natural meaning boundary.
+
+**Speaker turn = strongest natural boundary.** Every time the speaker changes, close the current chunk. Within a single speaker's turn you can let a chunk run a bit longer (up to ~12s / 60 chars) if it adds useful context — that's the whole point of having diarization. Inside a long turn, prefer secondary boundaries: sentence-final particle, clause break, hard punctuation.
+
+A chunk's `speaker` field is the speaker of its words. If a chunk straddles speakers (rare — usually means diarization mis-tagged a backchannel), pick the dominant speaker and don't worry about it; backchannels like "うん" and "そうだね" are the known weak spot.
 
 **Correction pass first.** Walk through `full_text`. For each suspicious sequence — anything that doesn't read as natural Japanese — figure out what was likely actually said given the surrounding context, and substitute. Common patterns:
 - Phonetically similar mistakes (`線理眼` → `千里眼`, `特度` → `得度`)
@@ -92,10 +98,11 @@ Your job is to produce a `sentences` array where each sentence is a card-worthy 
 
 Don't over-correct — if something is ambiguous, leave it. The point is to fix obvious errors, not rewrite the speaker's words.
 
-**Then split.** Use the corrected text plus the word-level timings to decide chunk boundaries. Each chunk needs:
+**Then split.** Use the corrected text plus the word-level timings + speaker labels to decide chunk boundaries. Each chunk needs:
 - `text`: the corrected sentence (one self-contained thought, no run-ons)
 - `start_ms`: from the first word in the chunk
 - `end_ms`: from the last word
+- `speaker`: the dominant speaker label for the chunk
 - `words`: the slice of the input `words` array spanning the chunk (timing must be monotonic; don't reorder)
 
 When you correct text, the `text` field reflects the correction but the `words` array preserves original timings — ffmpeg slices audio off `start_ms`/`end_ms`, so the correction is purely textual.
@@ -117,6 +124,8 @@ Before moving on, print a short summary of the splits in chat (duration + char c
 
 ## Step 3: Analyze — tokenize, diff, dedupe, rank
 
+Single video:
+
 ```bash
 python3 <skill-dir>/scripts/analyze.py \
     --transcript ~/Downloads/sentence-mining/$SOURCE_ID.transcript.json \
@@ -124,6 +133,25 @@ python3 <skill-dir>/scripts/analyze.py \
     --source-url "$URL" \
     > ~/Downloads/sentence-mining/$SOURCE_ID.candidates.json
 ```
+
+**Batch mode (preferred when mining ≥2 videos)** — share one mecab + jamdict + AnkiConnect load across all of them. Write a manifest file `manifest.json`:
+
+```json
+[
+  {"transcript": "~/Downloads/sentence-mining/instagram-AAA.transcript.json", "source_id": "instagram-AAA", "source_url": "https://..."},
+  {"transcript": "~/Downloads/sentence-mining/instagram-BBB.transcript.json", "source_id": "instagram-BBB", "source_url": "https://..."}
+]
+```
+
+Then run:
+
+```bash
+python3 <skill-dir>/scripts/analyze.py \
+    --manifest ~/Downloads/sentence-mining/manifest.json \
+    --output-dir ~/Downloads/sentence-mining/
+```
+
+The batch form writes one `<source-id>.candidates.json` per entry. Same analysis per video, but jamdict (~100MB index) opens once instead of N times, and the `findNotes`/`notesInfo` AnkiConnect dedup query runs once instead of N times — that query was the source of the parallel-run timeout we hit before.
 
 This single script does everything deterministic:
 - Tokenizes each sentence with mecab
@@ -136,7 +164,7 @@ This single script does everything deterministic:
 - Ranks remaining unknowns by JPDB lemma priority (lower line number in `ja-JPDBv2.2-lemma-priority.csv` = more frequent = higher priority)
 - Caps output at 50 candidates
 
-Output: a list of candidate cards with `lemma`, `reading`, `sentence`, `sentence_start_ms`, `sentence_end_ms`, `target_word_start_ms`, `unknown_count_in_sentence`, `jpdb_rank`, `deck`, and `i_level` (`i1`, `i2`, `i3`, …). Deck routing:
+Output: a list of candidate cards with `lemma`, `reading`, `sentence`, `sentence_start_ms`, `sentence_end_ms`, `target_word_start_ms`, `unknown_count_in_sentence`, `jpdb_rank`, `deck`, `i_level` (`i1`, `i2`, `i3`, …), and `speaker` (carried through from the splitting step). Deck routing:
 
 - **i+1 cards** (one unknown — cleanest context) → `Ray's Sentence Cards` (Ray's main study deck; they enter normal daily review)
 - **i+2 and higher** → `Ray's Sentence Mining Deferred` (top-level sibling deck, NOT a subdeck — kept separate so Ray can sweep messy ones out later, but cards stay unsuspended)
@@ -144,6 +172,20 @@ Output: a list of candidate cards with `lemma`, `reading`, `sentence`, `sentence
 Both decks are checked for duplicates before adding.
 
 Read this file. If it's empty or has zero candidates, tell Ray why (all words known? all dupes? no Japanese detected?) and stop.
+
+## Step 3.5: Curate — drop low-value candidates (YOU do this, inline)
+
+Before generating explanations, walk the candidate list and drop entries that aren't worth a card. Filter aggressively — a Ray-quality card teaches a generalizable word he'll hit again, not a one-off label from this specific video. Drop:
+
+- **Pop-culture proper nouns** — anime/manga/game titles (`ヒーローアカデミア`, `鬼滅`), character names, song titles, group/idol names. Real-world brand or place names that someone might genuinely encounter in life (`スターバックスコーヒー`, `富士山`, `東京`) are fine; pop-culture-specific titles are not.
+- **mecab fragments** — lemmas that are clearly mid-word cuts (`ざいって` from "うざいって", `けんぽ` from "じゃんけんぽい", `ーマジ`, `ゃんけんじゃね`). Tell: the lemma starts with a particle/conjugation marker, ends mid-syllable, or doesn't match any JMDict entry.
+- **Transcription garbage** — words that read as nonsense given the sentence's clear topic, especially when JPDB rank is `1000000000` (no entry exists) and the sentence has other obvious AssemblyAI errors. Don't try to rescue a contaminated sentence; drop the candidate.
+- **Trail-off / partial sentences** — if the candidate's `sentence` ends mid-clause or starts with a connecting particle ("はい、のトール一つ"), the audio clip will sound broken. Drop unless you can re-anchor the sentence to a clean boundary.
+- **Compound katakana redundant with components** — if both `アイスアメリカーノ` and `アメリカーノ` are candidates from the same video, drop the compound — the simpler word is more learnable.
+
+When dropping is judgment-call, lean toward dropping. Ray would rather mine 3 great cards than 15 mediocre ones.
+
+Apply the curation by deleting entries from `data["candidates"]` and saving the file back. Print a short "kept N / dropped M because …" summary in chat.
 
 ## Step 4: Generate explanations (Claude does this directly)
 
@@ -220,7 +262,7 @@ python3 <skill-dir>/scripts/push.py --draft ~/Downloads/sentence-mining/$SOURCE_
 
 This:
 - Calls AnkiConnect `addNotes` with the full card list — i+1 cards land in `Ray's Sentence Cards`, higher-i cards land in `Ray's Sentence Mining Deferred`. **Nothing is suspended** — Ray studies them all and decides per-card whether to mark hard/easy/suspend.
-- Tags every card with `claude-sentence-mining`, `auto-mined:YYYY-MM-DD`, `source:<source-id>`, and an `i1`/`i2`/`i3` level tag so you can filter by context cleanliness later.
+- Tags every card with `claude-sentence-mining`, `auto-mined:YYYY-MM-DD`, `source:<source-id>`, an `i1`/`i2`/`i3` level tag, and a `speaker:A`/`speaker:B`/… tag (skipped if diarization unavailable). The card's sentence field is prefixed with `<b>A:</b> ` so it's visually clear who's talking.
 - Prints the resulting note IDs.
 
 If any addNote fails (usually a late-detected duplicate), `push.py` reports which and skips it without aborting the batch.
