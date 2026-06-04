@@ -181,10 +181,11 @@ This:
 - **Tags** every card:
   - `claude-sentence-mining` (video) OR `claude-sentence-bank` (bank) — the permanent kind tag
   - `auto-mined:YYYY-MM-DD` — the date
-  - `source:<source-id>` — the specific run
   - `i1` / `i2` / `i?` — the i+ level (bank mode is always `i?`)
   - `speaker:A` / `speaker:B` — video mode, when diarization is available
   - `bank:<bank-id>` — bank mode, when sourced from a specific bank
+
+  Per-run `source:<source-id>` tags are NOT added — Ray asked these be removed in June 2026 because they polluted the tag tree without adding study value. The `source_url` and `source_id` still live in the draft JSON for debugging.
 - Sentence field is prefixed with `<b>A:</b> ` for video diarized cards so it's clear who's talking
 - Nothing is suspended — Ray studies them all and decides per-card
 

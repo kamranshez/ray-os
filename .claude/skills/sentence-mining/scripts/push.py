@@ -42,7 +42,7 @@ PERMANENT_TAG_VIDEO = "claude-sentence-mining"
 PERMANENT_TAG_BANK = "claude-sentence-bank"
 
 
-def build_note(candidate, source_url, date_tag, source_tag, permanent_tag):
+def build_note(candidate, source_url, date_tag, permanent_tag):
     speaker = candidate.get("speaker")
     speaker_tag = f"speaker:{speaker}" if speaker else None
     # Prepend a small speaker prefix to the sentence so the card shows who's
@@ -51,7 +51,7 @@ def build_note(candidate, source_url, date_tag, source_tag, permanent_tag):
     if speaker:
         sentence_text = f"<b>{speaker}:</b> {sentence_text}"
 
-    tags = [permanent_tag, date_tag, source_tag, candidate.get("i_level", "")]
+    tags = [permanent_tag, date_tag, candidate.get("i_level", "")]
     if speaker_tag:
         tags.append(speaker_tag)
     bank_id = candidate.get("bank_id")
@@ -95,7 +95,6 @@ def main():
         data = json.load(f)
 
     date_tag = f"auto-mined:{dt.date.today().isoformat()}"
-    source_tag = f"source:{data['source_id']}"
     permanent_tag = PERMANENT_TAG_BANK if data.get("source") == "bank-search" else PERMANENT_TAG_VIDEO
 
     # Make sure both decks exist (createDeck is idempotent).
@@ -104,7 +103,7 @@ def main():
         anki_request("createDeck", deck=d)
 
     notes = [
-        build_note(c, data.get("source_url", ""), date_tag, source_tag, permanent_tag)
+        build_note(c, data.get("source_url", ""), date_tag, permanent_tag)
         for c in data["candidates"]
     ]
 
