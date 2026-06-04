@@ -23,7 +23,8 @@ ANKI_MEDIA = os.path.expanduser(
 
 GEMINI_MODEL = "gemini-3.1-flash-tts-preview"
 GEMINI_VOICE = "Puck"
-TTS_CONCURRENCY = 5
+# Model has a 10 RPM cap on free tier — keep concurrency low and add small spacing.
+TTS_CONCURRENCY = 2
 
 
 def clip_audio(video_path, start_ms, end_ms, out_path):
@@ -52,7 +53,7 @@ def grab_screenshot(video_path, start_ms, end_ms, out_path):
             "-ss", f"{middle_s:.3f}",
             "-i", video_path,
             "-vframes", "1",
-            "-vf", "scale='min(720,iw)':-2",
+            "-vf", "scale='min(640,iw)':-2",
             "-q:v", "3",
             out_path,
         ],
@@ -64,21 +65,33 @@ async def gemini_tts(text, out_path, semaphore):
     """Generate Japanese explanation audio with Gemini 3.1 Flash TTS. Writes mp3."""
     from google import genai
     from google.genai import types
+    from google.genai import errors as genai_errors
 
     client = genai.Client()
     async with semaphore:
-        resp = await client.aio.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=text,
-            config=types.GenerateContentConfig(
-                response_modalities=["AUDIO"],
-                speech_config=types.SpeechConfig(
-                    voice_config=types.VoiceConfig(
-                        prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=GEMINI_VOICE)
-                    )
-                ),
-            ),
-        )
+        # Retry up to 5 times on 429 (free tier is 10 RPM, easy to bump into).
+        for attempt in range(5):
+            try:
+                resp = await client.aio.models.generate_content(
+                    model=GEMINI_MODEL,
+                    contents=text,
+                    config=types.GenerateContentConfig(
+                        response_modalities=["AUDIO"],
+                        speech_config=types.SpeechConfig(
+                            voice_config=types.VoiceConfig(
+                                prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=GEMINI_VOICE)
+                            )
+                        ),
+                    ),
+                )
+                break
+            except genai_errors.ClientError as e:
+                if getattr(e, "code", None) == 429 and attempt < 4:
+                    # Use server-suggested retry delay if available, else exp backoff.
+                    delay = 10 * (attempt + 1)
+                    await asyncio.sleep(delay)
+                    continue
+                raise
     pcm = resp.candidates[0].content.parts[0].inline_data.data
 
     # Gemini returns raw 24kHz s16le mono PCM. Wrap as WAV, then transcode to mp3
