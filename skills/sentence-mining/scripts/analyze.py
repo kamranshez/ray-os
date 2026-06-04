@@ -119,6 +119,73 @@ def load_morph_intervals():
     return intervals
 
 
+KANJI_RE = re.compile(r"[一-鿿々]+")
+
+
+def extract_kanji_stem(lemma):
+    """Return the leading kanji run of a lemma, or '' if the lemma starts with kana.
+
+    Used for soft-dedup: 支払う and 支払い both yield '支払'; 見る and 見 both yield '見'.
+    Lemmas with no leading kanji (pure kana words, loanwords) are excluded from this
+    check — they fall back to exact-lemma matching.
+    """
+    m = KANJI_RE.match(lemma)
+    return m.group(0) if m else ""
+
+
+def load_mature_kanji_stems(intervals):
+    """Set of kanji stems for which SOME mature lemma exists.
+
+    Why this matters: AnkiMorphs treats 支払う (verb) and 支払い (noun) as separate
+    lemmas. If Ray has matured the noun, he obviously knows the verb — but the
+    bare interval check misses that. Anything sharing a leading kanji run with a
+    mature morph is treated as known.
+    """
+    stems = set()
+    for lemma, interval in intervals.items():
+        if interval >= KNOWN_INTERVAL_THRESHOLD:
+            stem = extract_kanji_stem(lemma)
+            if stem:
+                stems.add(stem)
+    return stems
+
+
+# JMDict integration — lazy-loaded. The dict is ~100MB but jamdict opens it as
+# SQLite so memory cost is small and lookups are sub-millisecond.
+_jam = None
+
+
+def _jamdict():
+    global _jam
+    if _jam is None:
+        from jamdict import Jamdict
+        _jam = Jamdict()
+    return _jam
+
+
+def jmdict_alt_forms(lemma):
+    """All writings (kanji + kana) that share a JMDict entry with `lemma`.
+
+    Why: AnkiMorphs may have matured a different writing of the same word.
+    すべて vs 全て, ご飯 vs 御飯, 私 vs わたし — different lemmas in AnkiMorphs, same
+    word in the dictionary. If any alternate form is mature, skip the candidate.
+
+    Note: doesn't bridge verb↔noun pairs like 支払う↔支払い (those are separate
+    JMDict entries with no xref). The kanji-stem fallback handles those.
+    """
+    try:
+        result = _jamdict().lookup(lemma)
+    except Exception:
+        return set()
+    forms = set()
+    for entry in result.entries:
+        for k in entry.kanji_forms:
+            forms.add(k.text)
+        for k in entry.kana_forms:
+            forms.add(k.text)
+    return forms
+
+
 def load_jpdb_priority():
     """Return dict[lemma] = rank (line number, lower = more frequent). Missing → rank=∞."""
     priority = {}
@@ -172,6 +239,7 @@ def main():
         transcript = json.load(f)
 
     intervals = load_morph_intervals()
+    mature_stems = load_mature_kanji_stems(intervals)
     priority = load_jpdb_priority()
     existing = existing_wordforms_in_deck()
 
@@ -184,14 +252,31 @@ def main():
         for surface, lemma, reading, pos in content:
             if not is_card_worthy(lemma):
                 continue
-            if intervals.get(lemma, 0) < KNOWN_INTERVAL_THRESHOLD:
-                unknown.append({
-                    "surface": surface,
-                    "lemma": lemma,
-                    "reading_kata": reading,
-                    "reading_hira": kata_to_hira(reading),
-                    "pos": pos,
-                })
+
+            # Layer 1: this exact lemma is mature in AnkiMorphs.
+            if intervals.get(lemma, 0) >= KNOWN_INTERVAL_THRESHOLD:
+                continue
+
+            # Layer 2: a JMDict entry-equivalent form is mature. Catches alternate
+            # writings of the same word — すべて vs 全て, ご飯 vs 御飯, etc.
+            alt_forms = jmdict_alt_forms(lemma)
+            if any(intervals.get(f, 0) >= KNOWN_INTERVAL_THRESHOLD for f in alt_forms):
+                continue
+
+            # Layer 3: same kanji stem as some mature lemma. Catches verb↔noun
+            # derivations JMDict treats as separate entries (支払う ↔ 支払い,
+            # 取る ↔ 取り). Kana-only lemmas skip this layer.
+            stem = extract_kanji_stem(lemma)
+            if stem and stem in mature_stems:
+                continue
+
+            unknown.append({
+                "surface": surface,
+                "lemma": lemma,
+                "reading_kata": reading,
+                "reading_hira": kata_to_hira(reading),
+                "pos": pos,
+            })
         annotated_sentences.append({
             "idx": idx,
             "text": sent["text"],

@@ -47,7 +47,10 @@ Real environment variables override `.env`, so a key already in the shell still 
 Also required:
 - Anki running with AnkiConnect (port 8765) — verify with `curl -s http://localhost:8765 -d '{"action":"version","version":6}'`
 - `yt-dlp`, `ffmpeg`, `mecab` on PATH (all present on Ray's machine)
-- `python3` with stdlib + the `google-genai` package (`pip install google-genai`)
+- Python packages: `google-genai` (TTS) and `jamdict` + `jamdict-data` (JMDict-aware dedup). Install with:
+  ```bash
+  pip3 install --break-system-packages google-genai jamdict jamdict-data
+  ```
 
 If a key is missing, the script will exit with a clear message pointing at `.env`. Don't fall back to alternatives without asking.
 
@@ -64,13 +67,53 @@ For local files, skip — note the path.
 
 Record the resulting file path. Everything below assumes you know `VIDEO_PATH` and `SOURCE_ID` (e.g. `instagram-DZHudfuRmdJ`).
 
-## Step 2: Transcribe
+## Step 2: Transcribe (raw)
 
 ```bash
 python3 <skill-dir>/scripts/transcribe.py "$VIDEO_PATH" > ~/Downloads/sentence-mining/$SOURCE_ID.transcript.json
 ```
 
-Output is sentence-segmented with word-level timing (see `references/transcript-schema.md`).
+Output now contains only `full_text` and a flat `words` array with word-level timings. **Sentence splitting is intentionally NOT done here** — see Step 2.5 below.
+
+Why: AssemblyAI's Japanese sentence segmenter is unreliable for casual/fast speech, and earlier rule-based splitters chopped at character/duration caps regardless of meaning, producing mid-clause cards. You (Claude) do this with full context instead.
+
+## Step 2.5: Correct + split (YOU do this, inline — no script)
+
+Read the raw transcript. You have:
+- `full_text`: the entire transcribed string (may contain mistranscriptions)
+- `words`: every spoken word with `start_ms` / `end_ms`
+
+Your job is to produce a `sentences` array where each sentence is a card-worthy chunk: roughly **3–10 seconds** of audio, **20–50 Japanese characters**, ending at a natural meaning boundary (sentence-final particle, clause break, topic shift, or hard punctuation).
+
+**Correction pass first.** Walk through `full_text`. For each suspicious sequence — anything that doesn't read as natural Japanese — figure out what was likely actually said given the surrounding context, and substitute. Common patterns:
+- Phonetically similar mistakes (`線理眼` → `千里眼`, `特度` → `得度`)
+- Wrong kanji homophones picked when the topic is clear (`公開` ↔ `後悔`)
+- Numbers transcribed weirdly (`いっこ` written as `1個` is fine; `1` floating alone is a transcription bug)
+
+Don't over-correct — if something is ambiguous, leave it. The point is to fix obvious errors, not rewrite the speaker's words.
+
+**Then split.** Use the corrected text plus the word-level timings to decide chunk boundaries. Each chunk needs:
+- `text`: the corrected sentence (one self-contained thought, no run-ons)
+- `start_ms`: from the first word in the chunk
+- `end_ms`: from the last word
+- `words`: the slice of the input `words` array spanning the chunk (timing must be monotonic; don't reorder)
+
+When you correct text, the `text` field reflects the correction but the `words` array preserves original timings — ffmpeg slices audio off `start_ms`/`end_ms`, so the correction is purely textual.
+
+Write the result back to the same file:
+
+```python
+import json
+path = "~/Downloads/sentence-mining/<SOURCE_ID>.transcript.json"
+data = json.load(open(path))
+data["sentences"] = [
+    {"text": "...", "start_ms": ..., "end_ms": ..., "words": [...]},
+    ...
+]
+json.dump(data, open(path, "w"), ensure_ascii=False, indent=2)
+```
+
+Before moving on, print a short summary of the splits in chat (duration + char count + first 50 chars of text per chunk) so Ray can spot any obvious mistakes before we tokenize.
 
 ## Step 3: Analyze — tokenize, diff, dedupe, rank
 
@@ -84,9 +127,12 @@ python3 <skill-dir>/scripts/analyze.py \
 
 This single script does everything deterministic:
 - Tokenizes each sentence with mecab
-- Looks up each lemma in Ray's AnkiMorphs DB; classifies as known (interval ≥ 21), learning (1–20), or unknown (not in DB / interval 0)
+- Three-layer dedup for "Ray already knows this word":
+  1. **Exact AnkiMorphs interval** — lemma's `highest_lemma_learning_interval ≥ 21` → known
+  2. **JMDict entry equality** — any alternate writing in the same JMDict entry is mature (catches すべて↔全て, ご飯↔御飯, わたし↔私)
+  3. **Kanji-stem match** — any mature lemma shares the leading kanji run (catches 支払う↔支払い, 取る↔取り — JMDict treats these as separate entries but Ray clearly knows both)
 - For each unknown lemma, finds the **best sentence** (i+1 preferred; falls back i+2, i+3…)
-- Queries AnkiConnect for existing `wordForm:<lemma>` in `Ray's Sentence Cards`; drops dupes
+- Also queries AnkiConnect for existing `wordForm:<lemma>` in `Ray's Sentence Cards` or `Ray's Sentence Mining Deferred`; drops dupes
 - Ranks remaining unknowns by JPDB lemma priority (lower line number in `ja-JPDBv2.2-lemma-priority.csv` = more frequent = higher priority)
 - Caps output at 50 candidates
 

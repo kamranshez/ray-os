@@ -1,10 +1,33 @@
-# Transcript JSON schema (output of `transcribe.py`)
+# Transcript JSON schema
+
+The file goes through two stages:
+
+## Stage A: raw output from `transcribe.py`
 
 ```json
 {
   "transcript_id": "abc123...",
   "language": "ja",
   "audio_duration_ms": 17400,
+  "full_text": "あのね、あなたに必要なのは気迫なの。それさえあれば...",
+  "words": [
+    {"text": "あのね", "start_ms": 1234, "end_ms": 1750},
+    {"text": "、",     "start_ms": 1750, "end_ms": 1800},
+    {"text": "あなたに", "start_ms": 1800, "end_ms": 2200},
+    ...
+  ]
+}
+```
+
+Flat word stream with timings, no sentence segmentation. AssemblyAI's own sentence breaks are unreliable for casual/fast Japanese speech, so we don't ship them.
+
+## Stage B: after Claude's correction + splitting (Step 2.5 of SKILL.md)
+
+The same file gains a `sentences` array:
+
+```json
+{
+  ...same fields as Stage A...,
   "sentences": [
     {
       "text": "あのね、あなたに必要なのは気迫なの。",
@@ -12,8 +35,6 @@
       "end_ms": 4567,
       "words": [
         {"text": "あのね", "start_ms": 1234, "end_ms": 1750},
-        {"text": "、",     "start_ms": 1750, "end_ms": 1800},
-        {"text": "あなたに", "start_ms": 1800, "end_ms": 2200},
         ...
       ]
     },
@@ -22,10 +43,11 @@
 }
 ```
 
-AssemblyAI's `/transcript/<id>/sentences` endpoint returns sentence-segmented output natively for Japanese, with start/end times in milliseconds and a `words` array per sentence. We pass it through with minor renaming.
+The `text` field reflects any corrections Claude made (e.g. 線理眼 → 千里眼). The `words` array preserves AssemblyAI's original timing so ffmpeg can still slice the right audio segment — the correction is purely textual.
+
+`analyze.py` reads from `sentences`, so step 2.5 must complete before it.
 
 ## Quality notes
 
-- AssemblyAI's Japanese sentence segmentation is decent but not perfect. It sometimes splits on partial particles or merges two short utterances.
-- Word-level timing is per AssemblyAI's token, not per mecab token. The mapping back to mecab tokens in `analyze.py` is heuristic (substring match) — good enough to pick a screenshot frame, but don't trust it for sub-character precision.
-- For music-heavy videos, expect 10-30% transcription noise. The `analyze.py` script doesn't try to clean this; bad input → fewer i+1 candidates.
+- AssemblyAI's word-level timing is per its tokenization, not per mecab token. The mapping back to mecab tokens in `analyze.py` is heuristic (substring match) — good enough to pick a screenshot frame, but don't trust it for sub-character precision.
+- Music-heavy videos can produce 10–30% transcription errors. Claude's correction step catches the obvious ones (phonetic confusions, wrong homophones) but won't fix systemic garbage — for those, surface the issue to Ray rather than churning out bad cards.
