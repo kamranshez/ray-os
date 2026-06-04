@@ -34,7 +34,7 @@ Same model in every box. Same prompt in every box. The four steps together are d
 
 The rest of this video is each of those four steps in detail, plus why it works, plus what it generalises to beyond security.
 
-![[images/different-orderings/overview/excalidraw_1.png]]
+![[images/coverage-through-stochastic-starting-points/overview/excalidraw_1.png]]
 
 ---
 
@@ -56,7 +56,7 @@ And here is Anthropic describing the same step:
 
 Two people, independently, both running this in production, reached the same recipe.
 
-![[images/different-orderings/step-1-rank/excalidraw_1.png]]
+![[images/coverage-through-stochastic-starting-points/step-1-rank/excalidraw_1.png]]
 
 ---
 
@@ -80,7 +80,7 @@ The starting file is a seed. The agent reads it first. It builds its initial men
 
 You aren't asking 100 different questions. You're asking the same question from 100 different doors.
 
-![[images/different-orderings/step-2-many-starts/excalidraw_1.png]]
+![[images/coverage-through-stochastic-starting-points/step-2-many-starts/excalidraw_1.png]]
 
 ---
 
@@ -94,7 +94,7 @@ Running the same agent 100 times on the same project gets you 100 slightly-diffe
 
 This is also why the parallelism is free in wall-clock time. Each agent has its own clean context. They don't talk to each other. You fan them out, wait, fan them back in.
 
-![[images/different-orderings/step-3-different-doors/excalidraw_1.png]]
+![[images/coverage-through-stochastic-starting-points/step-3-different-doors/excalidraw_1.png]]
 
 ---
 
@@ -113,7 +113,7 @@ This is the step that earns the 100% true-positive rate. Carlini ran the full pi
 
 Where you can also run a real oracle, do. For C and C++ codebases, that means compiling with AddressSanitizer and running the candidate input. The crash is either real or it isn't. The model doesn't get a vote.
 
-![[images/different-orderings/step-4-verify/excalidraw_1.png]]
+![[images/coverage-through-stochastic-starting-points/step-4-verify/excalidraw_1.png]]
 
 ---
 
@@ -131,7 +131,7 @@ That is a recovery claim, not a cold-discovery claim. The models were pointed at
 
 The ranker, the parallel fan-out, the perturbed starting files, the verifier. None of those four pieces is the model. All four of them can be assembled in an afternoon. You could write the scripts in fifteen minutes.
 
-![[images/different-orderings/scaffold-is-moat/excalidraw_1.png]]
+![[images/coverage-through-stochastic-starting-points/scaffold-is-moat/excalidraw_1.png]]
 
 ---
 

@@ -6,7 +6,7 @@ Most agent failures aren't execution failures. The agent clicks the wrong button
 
 Plan-and-Act fixes this by splitting the agent into two roles: a **Planner** that thinks strategically and an **Executor** that does the grunt work. The Planner never touches a button. The Executor never decides strategy. They communicate through a narrow interface — short task specs, not raw tool output.
 
-![[high-level-strategy-low-level-details.png]]
+![[delegating-detail-work-to-subagents.png]]
 
 ---
 
