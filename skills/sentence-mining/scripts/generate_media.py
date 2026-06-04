@@ -22,7 +22,7 @@ ANKI_MEDIA = os.path.expanduser(
 )
 
 GEMINI_MODEL = "gemini-3.1-flash-tts-preview"
-GEMINI_VOICE = "Kore"
+GEMINI_VOICE = "Puck"
 TTS_CONCURRENCY = 5
 
 
