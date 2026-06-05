@@ -4,7 +4,10 @@
 Input: a candidates JSON file where each candidate already has an `explanation` field
        filled in by Claude.
 Output: a draft.json with `sentenceAudio`, `picture`, and `explanationAudio` filenames
-        added to each candidate. Media is written into Anki's collection.media folder.
+        added to each candidate.
+
+All media is written to a tempdir first and then registered through AnkiConnect's
+`storeMediaFile`. See _anki.py for why we don't write directly into collection.media.
 """
 import argparse
 import asyncio
@@ -12,14 +15,13 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import wave
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _env import load_skill_env
-
-ANKI_MEDIA = os.path.expanduser(
-    "~/Library/Application Support/Anki2/User 1/collection.media"
-)
+from _anki import store_media
 
 GEMINI_MODEL = "gemini-3.1-flash-tts-preview"
 GEMINI_VOICE = "Puck"
@@ -110,24 +112,29 @@ async def gemini_tts(text, out_path, semaphore):
     os.remove(wav_path)
 
 
-async def process_one(video_path, source_id, idx, candidate, semaphore):
+async def process_one(video_path, source_id, idx, candidate, workdir, semaphore):
     sent_audio = f"sm_{source_id}_{idx:03d}.mp3"
     screenshot = f"sm_{source_id}_{idx:03d}.jpg"
     explain_audio = f"sm_explain_{source_id}_{idx:03d}.mp3"
 
-    sent_path = os.path.join(ANKI_MEDIA, sent_audio)
-    shot_path = os.path.join(ANKI_MEDIA, screenshot)
-    exp_path = os.path.join(ANKI_MEDIA, explain_audio)
+    sent_local = os.path.join(workdir, sent_audio)
+    shot_local = os.path.join(workdir, screenshot)
+    exp_local = os.path.join(workdir, explain_audio)
 
     # ffmpeg work is CPU/IO bound; run in default executor.
     loop = asyncio.get_event_loop()
     await asyncio.gather(
         loop.run_in_executor(None, clip_audio, video_path,
-                             candidate["sentence_start_ms"], candidate["sentence_end_ms"], sent_path),
+                             candidate["sentence_start_ms"], candidate["sentence_end_ms"], sent_local),
         loop.run_in_executor(None, grab_screenshot, video_path,
-                             candidate["sentence_start_ms"], candidate["sentence_end_ms"], shot_path),
-        gemini_tts(candidate["explanation"], exp_path, semaphore),
+                             candidate["sentence_start_ms"], candidate["sentence_end_ms"], shot_local),
+        gemini_tts(candidate["explanation"], exp_local, semaphore),
     )
+
+    # Register all three through AnkiConnect so add-on hooks see them as real adds.
+    store_media(sent_local, sent_audio)
+    store_media(shot_local, screenshot)
+    store_media(exp_local, explain_audio)
 
     candidate["sentenceAudio_file"] = sent_audio
     candidate["picture_file"] = screenshot
@@ -147,12 +154,13 @@ async def main_async(args):
         data = json.load(f)
 
     sem = asyncio.Semaphore(TTS_CONCURRENCY)
-    tasks = [
-        process_one(args.video, args.source_id, i, c, sem)
-        for i, c in enumerate(data["candidates"])
-        if c.get("explanation", "").strip()
-    ]
-    processed = await asyncio.gather(*tasks)
+    with tempfile.TemporaryDirectory(prefix="sm_video_media_") as tmp:
+        tasks = [
+            process_one(args.video, args.source_id, i, c, tmp, sem)
+            for i, c in enumerate(data["candidates"])
+            if c.get("explanation", "").strip()
+        ]
+        processed = await asyncio.gather(*tasks)
 
     data["candidates"] = processed
     print(json.dumps(data, ensure_ascii=False, indent=2))

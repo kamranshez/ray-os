@@ -3,13 +3,16 @@
 
 For each candidate already paired with a bank source (has `existing_audio` /
 `existing_image` paths from search_banks.py):
-  - Copies the bank's audio file into Anki's collection.media (renamed to a
-    stable `sm_bank_<bank-id>_<noteid>.<ext>` filename).
-  - Copies the bank's image file similarly. Missing image is fine — we leave
+  - Registers the bank's audio file in Anki's media (renamed to a stable
+    `sm_bank_<bank-id>_<noteid>.<ext>` filename).
+  - Registers the bank's image similarly. Missing image is fine — we leave
     `picture_file` empty.
   - If the bank has NO audio, synthesizes sentence audio with Gemini TTS.
   - Always runs Gemini TTS on the candidate's `explanation` field for the
     explanation audio.
+
+All writes go through AnkiConnect's `storeMediaFile` rather than directly into
+`collection.media`. See _anki.py for why.
 
 Output: a draft.json shaped exactly like generate_media.py's output, so push.py
 works unchanged.
@@ -22,18 +25,15 @@ import asyncio
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
+import tempfile
 import wave
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _env import load_skill_env  # noqa: E402
-
-ANKI_MEDIA = Path(os.path.expanduser(
-    "~/Library/Application Support/Anki2/User 1/collection.media"
-))
+from _anki import store_media  # noqa: E402
 
 GEMINI_MODEL = "gemini-3.1-flash-tts-preview"
 GEMINI_VOICE = "Puck"
@@ -42,14 +42,6 @@ TTS_CONCURRENCY = 2
 
 def _slug(s: str) -> str:
     return re.sub(r"[^a-zA-Z0-9_-]+", "_", s).strip("_") or "x"
-
-
-def _copy_media(src: Path, target_filename: str) -> str:
-    ANKI_MEDIA.mkdir(parents=True, exist_ok=True)
-    dst = ANKI_MEDIA / target_filename
-    if not dst.exists():
-        shutil.copy2(src, dst)
-    return target_filename
 
 
 async def gemini_tts(text: str, out_path: Path, semaphore: asyncio.Semaphore) -> None:
@@ -97,36 +89,40 @@ async def gemini_tts(text: str, out_path: Path, semaphore: asyncio.Semaphore) ->
     wav_path.unlink()
 
 
-async def process_one(idx: int, candidate: dict, sem: asyncio.Semaphore) -> dict:
+async def process_one(idx: int, candidate: dict, workdir: Path, sem: asyncio.Semaphore) -> dict:
     bank = _slug(candidate.get("bank_id", "bank"))
     note_id = candidate.get("note_id", idx)
     base = f"sm_bank_{bank}_{note_id}"
 
-    # Sentence audio: copy from bank if present, else synthesize.
+    # Sentence audio: register from bank if present, else synthesize then register.
     sent_audio_field = ""
     src_audio = candidate.get("existing_audio", "")
     if src_audio and Path(src_audio).exists():
         ext = Path(src_audio).suffix.lower() or ".mp3"
         target = f"{base}_sentence{ext}"
-        _copy_media(Path(src_audio), target)
+        store_media(src_audio, target)
         sent_audio_field = target
     else:
         target = f"{base}_sentence_tts.mp3"
-        await gemini_tts(candidate["sentence"], ANKI_MEDIA / target, sem)
+        local = workdir / target
+        await gemini_tts(candidate["sentence"], local, sem)
+        store_media(local, target)
         sent_audio_field = target
 
-    # Image: copy from bank if present.
+    # Image: register from bank if present.
     pic_field = ""
     src_img = candidate.get("existing_image", "")
     if src_img and Path(src_img).exists():
         ext = Path(src_img).suffix.lower() or ".jpg"
         target_img = f"{base}_image{ext}"
-        _copy_media(Path(src_img), target_img)
+        store_media(src_img, target_img)
         pic_field = target_img
 
     # Explanation TTS — always.
     exp_target = f"sm_explain_bank_{bank}_{note_id}.mp3"
-    await gemini_tts(candidate["explanation"], ANKI_MEDIA / exp_target, sem)
+    exp_local = workdir / exp_target
+    await gemini_tts(candidate["explanation"], exp_local, sem)
+    store_media(exp_local, exp_target)
 
     candidate["sentenceAudio_file"] = sent_audio_field
     candidate["picture_file"] = pic_field
@@ -147,8 +143,10 @@ async def main_async(args):
         print(f"Skipping {skipped} candidate(s) with empty explanation", file=sys.stderr)
 
     sem = asyncio.Semaphore(TTS_CONCURRENCY)
-    tasks = [process_one(i, c, sem) for i, c in enumerate(keep)]
-    processed = await asyncio.gather(*tasks)
+    with tempfile.TemporaryDirectory(prefix="sm_bank_media_") as tmp:
+        workdir = Path(tmp)
+        tasks = [process_one(i, c, workdir, sem) for i, c in enumerate(keep)]
+        processed = await asyncio.gather(*tasks)
 
     data["candidates"] = processed
     out = json.dumps(data, ensure_ascii=False, indent=2)
