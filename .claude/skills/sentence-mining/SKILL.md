@@ -129,31 +129,33 @@ Both write `sentenceAudio_file`, `picture_file`, `explanationAudio_file` (the la
 
 See [references/video-mode.md](references/video-mode.md) §"Step 5" or [references/bank-mode.md](references/bank-mode.md) §"Step 5" for the script invocation.
 
-## Step 6 — Show Ray the draft and wait for approval
+## Step 6 — Push to Anki (auto), then summarize
 
-Print a concise summary. Example (video mode):
+**Default behavior: push immediately after Step 5 succeeds.** No approval gate. Ray confirmed in June 2026 that the curation + explanation pass in Steps 3.5 + 4 has been reliable enough that asking "say push to commit" was just adding friction. Anki's own review queue is the real gate — bad cards get suspended or deleted there. Push first; show the result.
+
+Skip auto-push only if Ray explicitly said "draft only" / "don't push" / "let me review first" in the originating message. In that case, fall through to the legacy approval flow at the bottom of this section.
+
+Go to Step 7, then print the summary in this shape (video mode):
 
 ```
-Mined 17 candidate cards from <SOURCE_ID>:
+Pushed 17 cards from <SOURCE_ID> to Anki ✓
 
-  → "Ray's Sentence Cards" (i+1, one unknown — cleanest context): 12
+  → "Ray's Sentence Cards" (i+1): 12
     1. 気迫 (きはく) — "彼は気迫のこもった目で..." [JPDB rank 4823]
-    2. 寡黙 (かもく) — "彼女は寡黙な少女だった" [JPDB rank 8901]
     ...
 
-  → "Ray's Sentence Mining Deferred" (i+2 / i+3 / i+N): 5
-    13. 揶揄う (からかう) — "..." [unknown_count=2, JPDB rank 12044]
+  → "Ray's Sentence Mining Deferred" (i+2/i+3): 5
+    13. 揶揄う (からかう) — "..." [JPDB rank 12044]
     ...
 
-Skipped: 4 dupes, 2 already known.
+Skipped during curation: <N> (ads / mecab fragments / transcription errors).
 Draft: ~/Downloads/sentence-mining/<source>.draft.json
-Media staged in Anki collection.media/. Say 'push' to commit, or tell me which to drop.
 ```
 
 Example (bank mode):
 
 ```
-Mined 2 bank cards (word list: 同期, 西暦, 和暦):
+Pushed 2 bank cards (word list: 同期, 西暦, 和暦) ✓
 
   1. 同期 [tokyo_ghoul_season_1] 🔊🖼
      "同期では二人 二人共 聡明で強い意思を持った女性でした"
@@ -163,11 +165,15 @@ Mined 2 bank cards (word list: 同期, 西暦, 和暦):
   Misses: 和暦 — no hit across N indexed banks.
 ```
 
-Wait for Ray's explicit approval. He may:
-- Say "push" — go to Step 7
+If `push.py` reports any `failed`, list them with the reason from the response so Ray knows what didn't make it in.
+
+### Legacy approval flow (only when Ray says "draft only" / "don't push")
+
+Print the same summary but with "Mined N candidate cards" and a "Say 'push' to commit, or tell me which to drop" line. Then wait. He may:
+- Say "push" — run Step 7
 - Say "drop 3, 7, 11" — remove those, ask again
 - Say "regenerate explanation for 5" — redo, regen TTS for that one
-- Say "try a different sentence for X" — look at the runner-up bank hits and re-stage
+- Say "try a different sentence for X" — look at runner-up bank hits and re-stage
 - Say "no" — leave draft.json on disk; he can come back to it
 
 ## Step 7 — Push to Anki (shared)
