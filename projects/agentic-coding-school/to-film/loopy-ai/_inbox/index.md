@@ -27,8 +27,11 @@ Three families of loop sit under this:
 
 ## Spine candidates
 
-- [[autonomy-ladder]] — Aakash Gupta's "6 levels of autonomous Claude Code" (skip-permissions -> context mgmt -> subagents -> Ralph -> AutoResearch -> VPS/OpenClaw 24/7). Strongest progression for the class arc.
-- [[codex-goal-vs-ralph]] — the "pre-decomposable vs unfolding work" decision tree. Reuse as the conceptual core.
+- [[autonomy-ladder]] — Aakash Gupta's "6 levels of autonomous Claude Code" (skip-permissions -> context mgmt -> subagents -> Ralph -> AutoResearch -> VPS/OpenClaw 24/7). Strongest *difficulty* progression for the class arc.
+- [[loop-stack]] — the L0 to L7 *scope* taxonomy (inference, harness, builder/verifier, task lifecycle, worker, discovery, governance, strategic). Opens the class by giving people vocabulary to point at things precisely. Pairs with the autonomy ladder rather than competing.
+- [[codex-goal-vs-ralph]] — the "pre-decomposable vs unfolding work" decision tree. Reuse as the conceptual core inside L3.
+- [[loop-design-as-craft]] — closing argument: taste relocates from single judgments into rubrics. Use as the class outro.
+- [[loop-examples]] — concrete L2 to L6 loops from Ray's own stack. Each major class segment can lean on one of these as the worked example.
 
 ## What's in this inbox
 
@@ -40,16 +43,36 @@ Three families of loop sit under this:
 
 ## Candidate class outline
 
-On-ramp (Aakash levels 1-3): skip permissions, context management (/clear, /compact), subagents for parallel context.
+Open with [[loop-stack]] so the audience has a shared vocabulary. Then walk up the stack, slotting in the Aakash difficulty rungs as they become relevant.
 
-Core loops:
+**Setup (orient the audience)**
+- "What counts as a loop?" — the L0 to L7 stack. Reframes the rest of the class as a tour up the stack rather than a list of tricks.
+
+**On-ramp (Aakash levels 1-3, all sitting at L1)**
+- Skip permissions, context management (/clear, /compact), subagents for parallel context.
+
+**L2 / L3 — single-task loops**
+- Closing the Loop / Verification loops (steipete's /review loop, Playwright write-test-fix, cursor's quality-review skill)
 - Ralph Loops
 - /goal (anatomy + the state machine)
 - Writing Effective Goals (Avi Chawla's 9-section template; Weinbach's "anchor on a theoretical max" tip; Ray's WatchLLM goal as the worked example)
-- Closing the Loop / Verification loops (steipete's /review loop, Playwright write-test-fix, cursor's quality-review skill)
-- Autoresearch (eval-driven mutation)
-- Missions
+- Autoresearch (eval-driven mutation, optimising the prompt itself)
+- Worked examples from [[loop-examples]]: self-tuning PR review, on-call triage pre-empter
 
-Going long (Aakash levels 5-6): overnight runs + guardrails (Bootoshi), VPS/tmux/OpenClaw 24/7, Slack as agent transport.
+**L4 — continuous workers**
+- Stop hooks, queues, "the worker that picks up its own work"
+- Worked example: sentence-mining auto-feeder
 
-Cross-cutting: "give agents problems, not tasks" (Intercom), scratchpadding to survive context resets, workflows that reset the context window between phases.
+**L5 — discovery loops**
+- Boris's "couple hundred Claudes" pattern: agents that produce problems, not solutions
+- Worked examples: YouTube outlier scout, content idea factory, thumbnail A/B reactor
+
+**L6 — governance**
+- Token budgets across a fleet, kill switches, action-log review as the new code review
+- Worked example: fleet health monitor, loop discoverer
+- "Going long": overnight runs + guardrails (Bootoshi), VPS/tmux/OpenClaw 24/7, Slack as agent transport
+
+**L7 — closing argument**
+- [[loop-design-as-craft]]: where taste went. Old taste in single judgments, new taste in rubrics. The terminal role is "loop curator for X."
+
+Cross-cutting: "give agents problems, not tasks" (Intercom), scratchpadding to survive context resets, workflows that reset the context window between phases, Missions.
