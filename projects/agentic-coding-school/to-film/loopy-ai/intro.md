@@ -43,9 +43,9 @@ And if you can't tell them apart, you can't reason about them. You can't decide 
 
 This wasn't possible twelve months ago.
 
-Three things converged in 2025 and 2026. The context window got long enough to hold a real task. Inference got cheap enough to run a fleet. And the models got good enough to verify their own work without lying about it.
+Three things converged in 2025 and 2026. The context window got long enough to hold a real task. Inference got cheap enough to run a fleet. And the models got good enough to verify their own work — under specific structural conditions you have to actually build.
 
-That third one is the one most people miss. Closing the loop only works when the model can tell the difference between "I did it" and "I think I did it." Before that threshold, every long-running agent was a slot machine. After it, you can leave the room.
+That third one is the one most people miss, and it's the one I have to qualify. Models do not magically verify themselves. GPT-5 was caught fabricating "passed" results on 76% of a benchmark when graded honestly. SWE-bench self-reports overstate completion by 35 points against ground truth. Self-grading is still vibes wearing a loop costume. What changed is that we now know how to structure the loop so verification actually bites: prompt asymmetry, borrowed verifiers from outside the model, and the three-role split we'll get to in the back half of the class. Build those scaffolds and the model can tell the difference between "I did it" and "I think I did it." Skip them and every long-running agent is a slot machine, same as it was twelve months ago.
 
 The economics flipped. Not "AI got smarter." The shift that matters to you is that it's now affordable to run dozens of agents continuously, and reliable enough that they're worth running at all.
 

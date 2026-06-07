@@ -16,6 +16,28 @@ L1 is the model deciding "I think I'm done." L2 is something *other than the mod
 
 This is the first loop most students should actually build. Everything in The Climb sits on top of it.
 
+## What a verifier actually is
+
+> A **verifier** is a non-builder process that takes the work artifact as input and returns a structured pass/fail (or score against a threshold) that the builder cannot rephrase its way past.
+
+Three properties have to all hold. **Non-builder**: it can't be the same model call that produced the artifact. **Structured output**: a number, a boolean, a typed report — not prose the builder gets to interpret. **Rephrase-immune**: the verifier judges the artifact, not the builder's description of the artifact.
+
+If any one of those fails, you have a self-graded loop wearing L2 clothes.
+
+This is the load-bearing definition for the rest of the class. Every later segment — borrowed verifiers, the adversarial reviewer, ACE — points back at it.
+
+## Mapping back to the five primitives
+
+In [[strip-the-model-out]] we built a loop with five primitives: trigger, work, check, terminate, state. L2 doesn't replace that taxonomy; it specialises it.
+
+- **builder** = the work primitive, now with a model in it
+- **work artifact** = the output of the work primitive (file, diff, draft)
+- **verifier** = the check primitive, made non-trivial
+- **exit condition** = the terminate primitive, expressed as "verifier returns pass"
+- **trigger** and **state** are inherited from L1 and don't change shape at L2
+
+Two consequences. First: the four-part anatomy is the five-primitive loop with the model dropped into one slot. Second: anything you do at L3 and above doesn't add new primitives — it just changes which slot owns what.
+
 ## Key beats
 
 - The four-part anatomy: builder, work artifact, verifier, exit condition.

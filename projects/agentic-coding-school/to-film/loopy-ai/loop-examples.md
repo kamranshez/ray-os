@@ -1,9 +1,13 @@
 ---
-tags: [loopy-ai, class, examples]
+tags: [loopy-ai, class, examples, reference]
 aliases: [Loop Examples, Loop Patterns In The Wild]
 date: 2026-06-07
-status: draft
+status: reference
+role: reference
+not_a_lesson: true
 ---
+
+> **Role:** reference / demo-source. Not a teaching beat. Do not film as a standalone segment. The examples below get sprinkled into other lessons (sentence-mining into l4-workers, YouTube outlier scout into l5-discovery, fleet health monitor into governance-primitives) — they don't justify a slot of their own.
 
 ## Why this note exists
 

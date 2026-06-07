@@ -12,6 +12,16 @@ Stub — Karpathy-style eval-driven autonomous loop. Run a skill, score against 
 
 Local skill version lives at `~/.claude/skills/autoresearch/`. This is the segment where the loop optimises the *prompt*, not just the work.
 
+## What an eval suite actually is
+
+Before we mutate anything, define the artifact this segment leans on.
+
+> An **eval suite** is a fixed set of inputs plus a borrowed verifier per input, run end-to-end against any candidate prompt, returning one structured score per case and an aggregate pass/fail for the run.
+
+Three properties: **fixed inputs** (so you compare runs apples-to-apples), **borrowed verifier per case** (from [[borrowed-verifiers]] — no self-grading), and **aggregate gate** (binary "did the candidate beat the incumbent" — see next beat for why binary).
+
+This is the artifact you write before the prompt. The autoresearch loop mutates the prompt; the eval suite never moves. If the eval suite moves, you're not running an experiment, you're drifting.
+
 ## Key beats
 
 - The eval-first mindset: write the evals before the prompt.

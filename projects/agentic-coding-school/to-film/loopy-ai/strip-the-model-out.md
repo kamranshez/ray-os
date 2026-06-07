@@ -16,6 +16,20 @@ New students conflate "loop" with "LLM." The fastest way to fix that is to build
 
 Most failed loop builders skipped this step. So when something breaks they can't tell if it was the model or the loop. This segment buys that diagnostic skill cheaply.
 
+## Why exactly five primitives
+
+Not borrowed from control theory or OODA — those have different commitments. Five is the minimum set where each primitive answers a question the loop cannot avoid:
+
+- **Trigger** — when does the loop start? (cron, file change, queue item, manual)
+- **Work** — what runs in one iteration?
+- **Check** — did this iteration succeed?
+- **Terminate** — should the loop keep going?
+- **State** — what survives between iterations?
+
+Strip any one and the loop breaks in a named way. No trigger: the loop never starts, or starts at the wrong cadence. No work: nothing happens. No check: you can't tell if the work worked. No terminate: it runs forever. No state: every iteration starts from scratch and the loop can't learn or resume.
+
+When something goes wrong, this is the diagnostic surface: name the primitive that misbehaved. That's faster than blaming "the agent."
+
 ## Key beats
 
 - The five primitives of any loop: **trigger** (what fires it), **work** (what runs), **check** (what tells you it's done), **terminate** (when to stop), **state** (what survives between runs).

@@ -71,6 +71,14 @@ For code review at the structural level: SonarQube, Codacy, Codex review, Claude
 
 These are noisier than deterministic verifiers. The score moves around. But they encode judgment that would take you a week to build from scratch, and they encode it consistently across runs.
 
+**Why scored verifiers with models inside them still count as external.** Lighthouse has model-tuned weighting. SonarQube and React Doctor lean on classifiers. Aren't we right back at self-grading?
+
+No, and the test is sharp: **did the verifier observe something the builder didn't get to author?** Lighthouse runs the page in a headless browser and measures actual LCP, CLS, render times. axe-core traverses the actual DOM. React Doctor watches actual component re-renders. The model parts aggregate real signals into a number; they don't invent the signals. The grading is grounded in runtime observation the builder can't phrase its way past.
+
+A pure static-prompt model scorer — "rate this code 1-10" — fails this test. The model sees only what the builder wrote. There's no second observation. That's self-grading even if you swap to a different model.
+
+The rule: a scored verifier is safe to borrow when it touches reality. A scored verifier that only re-reads the artifact is not.
+
 ### Real-world verifiers
 
 These are the ones that take time but cannot be faked. The world tells you whether you were right.
