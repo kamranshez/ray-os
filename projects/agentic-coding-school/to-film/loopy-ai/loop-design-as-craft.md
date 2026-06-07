@@ -1,7 +1,7 @@
 ---
 duration: "10-14 min"
 batch: 5
-order: 1
+order: 2
 batch_name: "Closing"
 class: "loopy-ai"
 chapter: "Where Taste Went"

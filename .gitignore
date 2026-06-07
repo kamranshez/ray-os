@@ -6,6 +6,9 @@
 # Video transcriber outputs (generated transcript files)
 .claude/skills/video-transcriber/outputs/
 
+# Temporary git worktrees from subagents
+.claude/worktrees/
+
 # macOS finder metadata
 .DS_Store
 

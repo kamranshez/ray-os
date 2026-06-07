@@ -32,6 +32,7 @@ Three families of loop sit under this:
 - [[codex-goal-vs-ralph]] — the "pre-decomposable vs unfolding work" decision tree. Reuse as the conceptual core inside L3.
 - [[loop-design-as-craft]] — closing argument: taste relocates from single judgments into rubrics. Use as the class outro.
 - [[loop-examples]] — concrete L2 to L6 loops from Ray's own stack. Each major class segment can lean on one of these as the worked example.
+- [[borrowed-verifiers]] — the unlock for any L2 / L3 loop: stop self-grading, hunt for an external oracle (React Doctor, Lighthouse, axe, Ahrefs, codex review, real CTR). Pairs with [[../automation/auto-research-for-non-technical-work]] which is the L4 / L5 version with experiment tables. Wire into CI so every commit is one iteration.
 
 ## What's in this inbox
 
@@ -41,38 +42,47 @@ Three families of loop sit under this:
 - [[sources-notes]] — what the Apple Notes actually contained across both passes
 - [[workshop-migration]] — the existing workshop Day 9 stubs and assets to pull into this class
 
-## Candidate class outline
+## Class outline (Structure D, locked 2026-06-07)
 
-Open with [[loop-stack]] so the audience has a shared vocabulary. Then walk up the stack, slotting in the Aakash difficulty rungs as they become relevant.
+Restructured around two claims. One: idea #6 from the loop bank — teach verification and governance *before* the climb, not after. Two: each high-signal idea deserves its own segment, not a paragraph inside another script.
 
-**Setup (orient the audience)**
-- "What counts as a loop?" — the L0 to L7 stack. Reframes the rest of the class as a tour up the stack rather than a list of tricks.
+Two acts. The Climb teaches you to *build* loops. Compounding Loops teaches you to *improve* loops. Mission Command then teaches you to *run a fleet of them.*
 
-**On-ramp (Aakash levels 1-3, all sitting at L1)**
-- Skip permissions, context management (/clear, /compact), subagents for parallel context.
+**Chapter 1 — Setup**
+1. [[../intro]] — Boris's "I write loops," the vocabulary trap
+2. [[../loop-stack]] — L0 to L7 (the map, not the syllabus)
+3. [[../strip-the-model-out]] — build a fully deterministic loop with cron + bash + a static rubric. No model. Hands-on opener so students separate loop-design from model-behaviour. (Idea #6.)
 
-**L2 / L3 — single-task loops**
-- Closing the Loop / Verification loops (steipete's /review loop, Playwright write-test-fix, cursor's quality-review skill)
-- Ralph Loops
-- /goal (anatomy + the state machine)
-- Writing Effective Goals (Avi Chawla's 9-section template; Weinbach's "anchor on a theoretical max" tip; Ray's WatchLLM goal as the worked example)
-- Autoresearch (eval-driven mutation, optimising the prompt itself)
-- Worked examples from [[loop-examples]]: self-tuning PR review, on-call triage pre-empter
+**Chapter 2 — Foundations** (verification and governance, before the climb)
+4. [[../closing-the-loop]] — the L2 pattern. Builder, verifier, exit condition.
+5. [[../borrowed-verifiers]] — external oracles. Three categories, the hunt, wiring it in, CI on every commit.
+6. [[../adversarial-reviewer-skill]] — pair every creator skill with an attacker skill. The L2 building block of a Reflector. (Idea #2.)
+7. [[../governance-primitives]] — token budgets, kill switches, action-log review, retirement rules. L6 fundamentals taught now so everything above can hang guardrails on them.
+8. [[../architecting-the-loop]] — the interface layer. What tools the agent needs (perceive, act, check, remember, stop) before the prompt is even written. Voice-agent worked example. (New, from 2026-06-07 conversation.)
 
-**L4 — continuous workers**
-- Stop hooks, queues, "the worker that picks up its own work"
-- Worked example: sentence-mining auto-feeder
+**Chapter 3 — The Climb** (with verifier + governance + interface already in hand)
+9. [[../l1-essentials]] — skip permissions, context management, subagents. The on-ramp, compressed.
+10. [[../ralph-loops]] — discipline pattern, fresh windows, PRD-driven.
+11. [[../goal]] — runtime owns the state machine.
+12. [[../writing-effective-goals]] — Avi's 9-section, Weinbach's theoretical-max anchor, WatchLLM example.
+13. [[../autoresearch]] — eval-driven mutation, optimising the prompt itself.
+14. [[../l4-workers]] — Stop hooks, queues, sentence-mining as worked example.
+15. [[../l5-discovery]] — Boris's 200 Claudes, YouTube outlier scout, anomaly detection.
 
-**L5 — discovery loops**
-- Boris's "couple hundred Claudes" pattern: agents that produce problems, not solutions
-- Worked examples: YouTube outlier scout, content idea factory, thumbnail A/B reactor
+**Chapter 4 — Compounding Loops** (the second act)
+16. [[../ace-three-role-split]] — Stanford ACE. Generator does, Reflector reviews, Curator updates the playbook. Taste files survive model swaps. (Idea #1.)
+17. [[../bug-triage-loop]] — Rippling's pipeline. The highest-leverage loop because it compounds on every other loop. L4 + L5 + L2 composed. (Idea #3.)
+18. [[../echo-chamber]] — the named failure mode of compounding loops. Exogenous signal injection and rubric drift detection as the two antidotes. (Idea #5.)
+19. Also reference: [[../automation/auto-research-for-non-technical-work]] as the operator-grade L4/L5 version of borrowed-verifiers with experiment tables.
 
-**L6 — governance**
-- Token budgets across a fleet, kill switches, action-log review as the new code review
-- Worked example: fleet health monitor, loop discoverer
-- "Going long": overnight runs + guardrails (Bootoshi), VPS/tmux/OpenClaw 24/7, Slack as agent transport
-
-**L7 — closing argument**
-- [[loop-design-as-craft]]: where taste went. Old taste in single judgments, new taste in rubrics. The terminal role is "loop curator for X."
+**Chapter 5 — Closing**
+20. [[../mission-command]] — Auftragstaktik as the L7 operating model. Intent docs, not prompts. (Idea #4.)
+21. [[../loop-design-as-craft]] — where taste went. Old taste in single judgments, new taste in rubrics. The terminal role is "loop curator for X."
 
 Cross-cutting: "give agents problems, not tasks" (Intercom), scratchpadding to survive context resets, workflows that reset the context window between phases, Missions.
+
+### Status
+
+- Written: intro, loop-stack, borrowed-verifiers, loop-design-as-craft (4 of 21)
+- Stubbed: everything else (17 of 21)
+- Filming order: not yet decided. Suggested writing order for full scripts: strip-the-model-out → adversarial-reviewer-skill → governance-primitives → architecting-the-loop → closing-the-loop → ace-three-role-split → bug-triage-loop → echo-chamber → mission-command. Then the remaining Climb segments fill in.
