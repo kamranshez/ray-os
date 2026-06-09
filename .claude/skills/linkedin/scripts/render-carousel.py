@@ -228,7 +228,7 @@ def render(spec_path: Path, out_dir: Path | None) -> Path:
     if not profile_path.exists():
         raise SystemExit(
             f"profile image missing: {profile_path}\n"
-            f"run: uv run {SKILL_DIR}/scripts/prep_profile.py"
+            f"run: uv run {SKILL_DIR}/scripts/prep-carousel-profile.py"
         )
 
     slides = spec.get("slides", [])

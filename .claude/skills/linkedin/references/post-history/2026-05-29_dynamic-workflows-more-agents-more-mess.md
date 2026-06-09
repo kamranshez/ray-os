@@ -5,13 +5,13 @@ triggers:
   primary: belief disruption
   secondary: aspiration
 media: text only
-status: posted
+status: deleted
 engagement:
   reactions: 0
   comments: 1
   reposts: 0
   impressions: 5
-  last_checked: 2026-05-29
+  last_checked: 2026-06-09
 url: https://www.linkedin.com/feed/update/urn:li:ugcPost:7465858574301237249/
 notes: >
   Post 1 of the Dynamic Workflows batch (10 variations generated 2026-05-29
@@ -19,6 +19,10 @@ notes: >
   named "Dynamic Workflows". Captured ~18 min after publishing (1 comment is
   Ray's own YouTube-link comment). Deliberately avoided reusing the "100
   subagents" hook from the 2026-05-22 workflow-tool post.
+  2026-06-09: Post no longer accessible at URL ("Post not found / This post
+  was deleted or removed") and not visible in activity feed — marked as deleted.
+  Also noticed the 2026-05-22 workflow-tool post is now at 16 reactions /
+  3 comments / 911 impressions (up from 760 on 2026-05-29).
 ---
 
 "More agents" used to mean "more mess."

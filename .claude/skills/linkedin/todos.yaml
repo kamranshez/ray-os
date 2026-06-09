@@ -23,8 +23,23 @@
   description: >
     "More agents used to mean more mess" (belief disruption + aspiration)
     went live 2026-05-29. Captured at 5 impressions ~18 min after posting.
-    Pull updated reactions, comments, reposts, impressions and update the
-    `engagement` block + last_checked.
+    2026-06-09: Post URL returns "Post not found / removed" and it is no
+    longer visible in the activity feed — post was deleted. Marked status
+    as deleted in the post-history file. No further engagement to track.
   due: 2026-06-01
-  status: pending
+  status: done
   related_post: references/post-history/2026-05-29_dynamic-workflows-more-agents-more-mess.md
+
+- task: Check engagement on "Anthropic engineers write loops" post
+  description: >
+    "Most people open Claude Code and start typing prompts. Anthropic's
+    engineers open Claude Code and start writing loops." (belief disruption
+    + status signaling, full Boris Cherny quote) went live 2026-06-09.
+    Written using the "Most people X / Anthropic engineers Y" viral hook
+    formula identified from the 15-post viral-examples sweep in
+    references/viral-examples/2026-06/ (Jahanzaib Ahmed pattern).
+    Pull reactions, comments, reposts, impressions and update the
+    engagement block + last_checked.
+  due: 2026-06-12
+  status: pending
+  related_post: references/post-history/2026-06-09_anthropic-engineers-write-loops.md

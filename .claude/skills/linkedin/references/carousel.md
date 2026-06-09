@@ -1,11 +1,17 @@
----
-name: linkedin-carousel
-description: Generate LinkedIn carousel images for Ray Amjad in the Nate Herk / Twitter-card aesthetic — bold black headlines, light gray subtitles, profile chip with verified check, page counter, blue accent, final follow-CTA card. Renders square or 4:5 PNGs ready to upload as a multi-image LinkedIn post. Use this skill whenever the user wants to "make a linkedin carousel", "linkedin carousel about X", "/linkedin-carousel", "carousel for linkedin", "turn this into a linkedin carousel", "swipeable linkedin post", "linkedin slides", or asks to convert a video / X article / explainer / list into a multi-slide LinkedIn graphic. Also trigger when the user shares content (a script, transcript, blog post) and explicitly says they want it on LinkedIn as a carousel rather than as a text post.
----
+# Carousel Posts
 
-# LinkedIn Carousel Generator
+For when the user wants a multi-slide LinkedIn carousel instead of a text-only post. Same niche-applied insight, packaged as a swipeable PNG deck (Nate Herk / X-card aesthetic). Carousels in Ray's niche skew heavily toward higher reactions and reposts than text posts (see `viral-examples/2026-06/` — Anthropic carousel: 2,523 reactions, Charly's Zero Trust: 491/82, Nate's 5-tier: 257/20).
 
-Turn a topic, script, or article into a multi-slide LinkedIn carousel of PNG images styled like a Nate Herk / X-card swipe deck.
+## Before generating: still apply the 8 format patterns
+
+Carousels do NOT exempt you from the writing rules in `viral-playbook.md`:
+
+- The cover slide IS the hook — same rules as a text post hook (lead with contrast, not a feature; quantify, kill qualifiers)
+- The content slides ARE the body — one idea per slide, arrows over bullets, no qualifiers
+- The final content slide should be the twist (tactical → emotional) or the decision rule
+- The CTA slide is the ask, not the conclusion
+
+Also still run the **earned-authority quiz** before drafting the deck. The cover line lands harder when it's backed by something Ray has personally done — not a generic claim. (See `write-post.md` step "Quiz Ray on earned authority".)
 
 ## Style at a glance
 
@@ -14,7 +20,7 @@ Turn a topic, script, or article into a multi-slide LinkedIn carousel of PNG ima
 - Cover slide: huge headline, page counter top-right, profile chip + blue accent line under headline, "Swipe →" bottom-right
 - Content slides: profile chip top-left, page counter top-right, big headline + lighter subtitle, lots of whitespace
 - CTA slide: centered avatar, name + handle + verified check, "Follow for more…" headline + subtitle, black pill follow button
-- Default size 1080×1350 (4:5 portrait, matches the reference look). 1080×1080 also supported for true square.
+- Default size 1080×1350 (4:5 portrait). 1080×1080 also supported for true square.
 
 ## Process — always in this order
 
@@ -57,7 +63,7 @@ Optional fields: `name` (default "Ray Amjad"), `handle` (default "@rayamjad"), `
 ### Step 3: Render
 
 ```bash
-uv run /Users/ray/Desktop/ray-os/.claude/skills/linkedin-carousel/scripts/render.py /tmp/linkedin-carousel-<slug>/spec.json
+uv run /Users/ray/Desktop/ray-os/.claude/skills/linkedin/scripts/render-carousel.py /tmp/linkedin-carousel-<slug>/spec.json
 ```
 
 Outputs `slide-1.png … slide-N.png` in `/tmp/linkedin-carousel-<slug>/`. First run installs Playwright's chromium (one-time, ~150MB).
@@ -66,23 +72,27 @@ Outputs `slide-1.png … slide-N.png` in `/tmp/linkedin-carousel-<slug>/`. First
 
 Read at least the cover and one content slide back to confirm they rendered correctly, then tell the user the directory and slide count. They drag-drop into LinkedIn's carousel post UI.
 
+### Step 5: Log to post-history
+
+Same as for text posts — write a YAML-frontmatter file to `references/post-history/YYYY-MM-DD_slug.md` with `media: carousel (N slides)` and queue an engagement-check todo for 3 days out.
+
 ## Profile picture
 
 The avatar at `assets/profile.png` is pre-cropped from `~/Library/Mobile Documents/com~apple~CloudDocs/Profile Pictures/6 Large.jpeg`. To regenerate (e.g. new headshot):
 
 ```bash
-uv run /Users/ray/Desktop/ray-os/.claude/skills/linkedin-carousel/scripts/prep_profile.py
-# or: uv run scripts/prep_profile.py --source /path/to/new.jpg
+uv run /Users/ray/Desktop/ray-os/.claude/skills/linkedin/scripts/prep-carousel-profile.py
+# or: uv run scripts/prep-carousel-profile.py --source /path/to/new.jpg
 ```
 
 ## Writing good slides
 
-- **Cover headline**: 6–12 words, declarative claim or surprise. Same energy as a YouTube title.
+- **Cover headline**: 6–12 words, declarative claim or surprise. Same energy as a YouTube title. Apply pattern 1 (lead with contrast) from `viral-playbook.md`.
 - **Content headline**: one idea per slide. If you wrote a list, each item is one slide.
-- **Content subtitle**: 1–2 sentences. Concrete, not abstract. The headline says *what*, the subtitle says *why* or *how*.
+- **Content subtitle**: 1–2 sentences. Concrete, not abstract. The headline says *what*, the subtitle says *why* or *how*. Numbers over qualifiers (pattern 5).
 - **No em or en dashes** in any text — use commas, periods, or sentence breaks instead. (Ray's house style.)
 - **Don't repeat the headline in the subtitle**. They should complement, not echo.
-- Last content slide should pivot to a payoff/insight; the CTA slide is the ask, not the conclusion.
+- Last content slide should pivot to a payoff/insight (pattern 4 — twist ending); the CTA slide is the ask, not the conclusion.
 
 ## Length guide
 
@@ -97,7 +107,7 @@ When in doubt: cover + 5 content + CTA = 7 slides. That's the default.
 
 ## Troubleshooting
 
-- **`profile image missing`** — run `prep_profile.py` (see above). The avatar is not committed-required; regenerate locally.
+- **`profile image missing`** — run `prep-carousel-profile.py` (see above). The avatar is not committed-required; regenerate locally.
 - **Text overflowing the slide** — shorten the headline. The CSS does not auto-shrink. Aim for ≤ 60 chars on cover, ≤ 50 on content.
 - **Fonts look different from the reference** — first run pulls Inter from Google Fonts. If offline, fonts fall back to system sans; rerender once online.
 - **Wrong slide ratio** — set `"size": [1080, 1080]` for square. Default is 1080×1350 because the reference visual examples are 4:5; LinkedIn supports both.
