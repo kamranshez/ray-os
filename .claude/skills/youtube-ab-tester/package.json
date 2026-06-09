@@ -1,5 +1,5 @@
 {
-  "name": "youtube-thumbnail-generator",
+  "name": "youtube-ab-tester",
   "version": "1.0.0",
   "scripts": {
     "generate": "npx ts-node scripts/generate.ts"

@@ -1,6 +1,6 @@
 #!/usr/bin/env npx ts-node
 /**
- * Generate YouTube thumbnails using Gemini Nano Banana 2.
+ * Generate YouTube thumbnails using gemini-3.1-flash-image-preview at 1K.
  * Loads face reference images automatically for consistent likeness.
  * Supports additional reference images (competitor thumbnails, style refs).
  */
@@ -129,7 +129,7 @@ async function generateSingleThumbnail(
         responseModalities: ["TEXT", "IMAGE"],
         imageConfig: {
           aspectRatio: "16:9",
-          imageSize: "2K",
+          imageSize: "1K",
         },
       } as any,
     });
