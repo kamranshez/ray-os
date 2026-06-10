@@ -1,0 +1,222 @@
+[
+  {
+    "id": "041",
+    "prop_type": "3d_object",
+    "prop_position": "center",
+    "bg_style": "other",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#ff6a1f", "#ffffff"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Prison cell with glowing orange Claude icon behind bars, handwritten 'Opus 4.7' arrow callout"
+  },
+  {
+    "id": "042",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#4dc3ff", "#ffffff"],
+    "glow_type": "none",
+    "notes": "Laptop shows mini Nate clone with app icons, 'AI' in cyan pill + 'Clone' lead text"
+  },
+  {
+    "id": "043",
+    "prop_type": "3d_object",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#ff6a1f", "#f4e9c9"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Manila folder with Claude app icon and '/routines' label, face right"
+  },
+  {
+    "id": "044",
+    "prop_type": "collage_split",
+    "prop_position": "split_panels",
+    "bg_style": "gradient_radial",
+    "text_style": "all_caps_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#1a8cff", "#ff8a3d"],
+    "glow_type": "none",
+    "notes": "Before/after split panels: blue '1 HOUR' pixel agent vs orange '1 HOUR' stacked paperwork"
+  },
+  {
+    "id": "045",
+    "prop_type": "3d_object",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#ff6a1f", "#f4e9c9"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Manila folder with Claude icon and '/superpowers' label, face right (same template as 043)"
+  },
+  {
+    "id": "046",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#ff6a1f", "#6c63ff"],
+    "glow_type": "cyan_rim",
+    "notes": "Laptop shows exploded watch parts, Claude + purple app icon combo floating above"
+  },
+  {
+    "id": "047",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#ff6a1f", "#22c55e"],
+    "glow_type": "warm_orange_rim",
+    "notes": "X $100 Opus vs check $1 Advisor, two Claude icon variants side by side"
+  },
+  {
+    "id": "048",
+    "prop_type": "chart_diagram",
+    "prop_position": "left",
+    "bg_style": "pure_white",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#ff8a3d", "#ef4444"],
+    "glow_type": "none",
+    "notes": "Investing chart with Buy/Sell pills overlay, $10,000 callout, face right"
+  },
+  {
+    "id": "049",
+    "prop_type": "terminal_window",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#ff6a1f", "#5dd4d4"],
+    "glow_type": "cyan_rim",
+    "notes": "Pixel-art terminal window 'CLOUD AGENT TEAM' diagram with cyan glow, face right"
+  },
+  {
+    "id": "050",
+    "prop_type": "3d_object",
+    "prop_position": "center",
+    "bg_style": "other",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#ff6a1f", "#ffffff"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Same prison cell template as 041, 'It's finally here' + 'Mythos' arrow callout"
+  },
+  {
+    "id": "051",
+    "prop_type": "3d_object",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#ff6a1f", "#f4e9c9"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Manila folder with Claude icon and '/ultraplan' label, face right (folder template)"
+  },
+  {
+    "id": "052",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#ff6a1f", "#8b5cf6"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude + Obsidian icons with '+' connector, 'Knows everything.' with chalk underline"
+  },
+  {
+    "id": "053",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#ff6a1f", "#f5efe6"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude + Alpaca/Ollama icons with '+', 'Takes 5 mins.' chalk underline (same template as 052)"
+  },
+  {
+    "id": "054",
+    "prop_type": "pure_text",
+    "prop_position": "fullscreen",
+    "bg_style": "other",
+    "text_style": "hand_drawn",
+    "face_position": "right",
+    "accent_colors": ["#ff6a1f", "#000000"],
+    "glow_type": "none",
+    "notes": "Whiteboard with handwritten 'GOODBYE LIMITS!' numbered list of 8 Claude tips, face right"
+  },
+  {
+    "id": "055",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#ff6a1f", "#ff8a3d"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude + ASCII robot 'buddy' icons with '+', '/buddy is here.' chalk underline"
+  },
+  {
+    "id": "056",
+    "prop_type": "logo_icon",
+    "prop_position": "right",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#ff6a1f", "#ffffff"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Magnifying glass over Claude icon revealing code underneath, 'The truth' with chalk underline"
+  },
+  {
+    "id": "057",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#ff6a1f", "#7a8cff"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude + PowerShell icons with '+', 'This is godmode.' chalk underline (same template as 052/053)"
+  },
+  {
+    "id": "058",
+    "prop_type": "collage_split",
+    "prop_position": "center",
+    "bg_style": "gradient_radial",
+    "text_style": "all_caps_pill",
+    "face_position": "center",
+    "accent_colors": ["#ff6a1f", "#22d3ee"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Five chat-input bubble props arrayed around face, 'SELL THESE FOR $3K' bottom banner"
+  },
+  {
+    "id": "059",
+    "prop_type": "collage_split",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_pill",
+    "face_position": "none",
+    "accent_colors": ["#ef4444", "#22c55e"],
+    "glow_type": "none",
+    "notes": "Old (red Bugcrowd icon) vs New (Claude + paperclip icons) with red/green pills + arrow"
+  },
+  {
+    "id": "060",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#22d3ee", "#ffffff"],
+    "glow_type": "none",
+    "notes": "Laptop shows Gemini video-chat UI with stock-photo person, cyan 'Actually' pill in title"
+  }
+]

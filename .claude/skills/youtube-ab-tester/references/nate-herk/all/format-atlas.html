@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Nate Herk Format Atlas — 100 thumbs</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #181b22; --border: #262a33;
+    --text: #e6e8ee; --muted: #8b93a3; --accent: #9DE2EE; --warm: #FFB07A;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+         background: var(--bg); color: var(--text); padding: 32px; max-width: 1600px; margin-inline: auto; }
+  h1 { margin: 0 0 4px; font-size: 26px; letter-spacing: -0.01em; }
+  .lead { color: var(--muted); margin: 0 0 28px; font-size: 14px; }
+  .lead b { color: var(--accent); }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+          padding: 22px; margin-bottom: 22px; }
+  .card header { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; margin-bottom: 6px; }
+  .card h2 { margin: 0; font-size: 19px; }
+  .meta { display: flex; gap: 8px; }
+  .pill { font-size: 12px; padding: 3px 10px; border: 1px solid var(--border);
+          border-radius: 999px; color: var(--muted); }
+  .pill b { color: var(--text); }
+  .sub { color: var(--muted); font-size: 13px; margin: 4px 0 18px; }
+  .grid6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 18px; }
+  @media (max-width: 1300px) { .grid6 { grid-template-columns: repeat(3, 1fr); } }
+  .tile { position: relative; border: 1px solid var(--border); border-radius: 8px;
+          overflow: hidden; background: #000; aspect-ratio: 16/9; text-decoration: none; color: inherit;
+          display: block; }
+  .tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .vtag { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.75);
+          color: var(--warm); font-size: 11px; padding: 2px 7px; border-radius: 4px;
+          font-family: ui-monospace, monospace; font-weight: 600; }
+  .ttitle { position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+            color: #fff; font-size: 10px; padding: 14px 6px 4px; line-height: 1.3; }
+  .boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .box { background: #11141a; border: 1px solid var(--border); border-radius: 8px;
+         padding: 12px 14px; font-size: 13px; color: var(--muted); }
+  .box h3 { margin: 0 0 6px; font-size: 12px; letter-spacing: 0.05em;
+            text-transform: uppercase; color: var(--accent); }
+  .box p { margin: 0; line-height: 1.45; color: var(--text); }
+  .topnote { background: #1c2027; border: 1px solid var(--warm); border-radius: 10px;
+             padding: 16px 18px; margin-bottom: 24px; }
+  .topnote h3 { margin: 0 0 6px; color: var(--warm); font-size: 14px; }
+  .topnote p { margin: 0; color: var(--text); font-size: 13px; line-height: 1.5; }
+</style></head>
+<body>
+<h1>Nate Herk Format Atlas</h1>
+<p class="lead">Clustered from <b>100 most recent thumbnails</b> @NateHerk.
+Sorted by <b>avg views per format</b> (highest first). Hover/click a tile to open the video on YouTube.</p>
+
+<div class="topnote">
+  <h3>⚡ The headline finding</h3>
+  <p>Nate's <b>most-USED</b> format (F1 Laptop+Face, 24 thumbs) is NOT his highest-CTR.
+  <b>Pure text (F7, 264k avg)</b> and <b>Logo-icon solo (F4b, 181k avg)</b> outperform it by 1.5-2x on average views.
+  His brain treats laptop-face as the safe default; his BIG videos lean on bigger, simpler signatures.</p>
+</div>
+
+
+    <section class="card">
+      <header>
+        <h2>F7 — Pure Text</h2>
+        <div class="meta">
+          <span class="pill"><b>5</b> thumbs</span>
+          <span class="pill"><b>264k</b> avg views</span>
+          <span class="pill">max <b>712k</b></span>
+        </div>
+      </header>
+      <p class="sub">Giant headline dominates the canvas. No prop. Sometimes a small icon or person tucked in.</p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="069.jpg" />
+          <span class="vtag">712k</span>
+          <div class="ttitle">Build & Sell with Claude Code (10+ Hour Course)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="054.jpg" />
+          <span class="vtag">244k</span>
+          <div class="ttitle">18 Claude Code Token Hacks in 18 Minutes</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="009.jpg" />
+          <span class="vtag">162k</span>
+          <div class="ttitle">Opus 4.8 Just Dropped. Here's How To Actually Use It.</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="014.jpg" />
+          <span class="vtag">136k</span>
+          <div class="ttitle">What Karpathy Joining Anthropic Actually Means For Claude</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="003.jpg" />
+          <span class="vtag">66k</span>
+          <div class="ttitle">AGI is Here. Anthropic Just Proved It.</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p>Massive bold mixed-case headline filling 60-80% of canvas. Cyan pill highlight on the punch word. Dark or solid color background. Optional: small Claude logo or icon in corner. Face may be tucked small or absent.</p></div>
+        <div class="box"><h3>Suits</h3><p>Numbered list videos, course/big-promise videos, statement-of-thesis videos</p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F1b_laptop_other</h2>
+        <div class="meta">
+          <span class="pill"><b>3</b> thumbs</span>
+          <span class="pill"><b>202k</b> avg views</span>
+          <span class="pill">max <b>365k</b></span>
+        </div>
+      </header>
+      <p class="sub"></p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="098.jpg" />
+          <span class="vtag">365k</span>
+          <div class="ttitle">Master 95% of Claude Code in 36 Mins (as a beginner)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="095.jpg" />
+          <span class="vtag">132k</span>
+          <div class="ttitle">Set Up Clawdbot on a VPS in Minutes (no mac mini)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="070.jpg" />
+          <span class="vtag">110k</span>
+          <div class="ttitle">Google's New Model + Claude Code Just Changed RAG Forever</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p></p></div>
+        <div class="box"><h3>Suits</h3><p></p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F4b — Logo/Icon Solo (no face)</h2>
+        <div class="meta">
+          <span class="pill"><b>14</b> thumbs</span>
+          <span class="pill"><b>182k</b> avg views</span>
+          <span class="pill">max <b>580k</b></span>
+        </div>
+      </header>
+      <p class="sub">Big brand logo or app icon as hero, dark background, chalk-underlined mixed-case text.</p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="052.jpg" />
+          <span class="vtag">580k</span>
+          <div class="ttitle">Andrej Karpathy Just 10x’d Everyone’s Claude Code</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="053.jpg" />
+          <span class="vtag">394k</span>
+          <div class="ttitle">Ollama + Claude Code = 99% CHEAPER</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="067.jpg" />
+          <span class="vtag">276k</span>
+          <div class="ttitle">Stop Learning n8n in 2026...Learn THIS Instead</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="096.jpg" />
+          <span class="vtag">234k</span>
+          <div class="ttitle">Agentic Workflows Just Changed AI Automation Forever! (Claude Code)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="072.jpg" />
+          <span class="vtag">201k</span>
+          <div class="ttitle">Google’s New Tool Just 10x’d Claude Code</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="063.jpg" />
+          <span class="vtag">156k</span>
+          <div class="ttitle">Claude Code Just Dropped Memory 2.0</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p>Single glowing logo or app-icon centered or slightly off-center. Dark black background. Mixed-case headline with hand-drawn underline/circle/X on the punch word. Often pairs Claude logo with another brand (Codex, Ollama, etc.).</p></div>
+        <div class="box"><h3>Suits</h3><p>Tool comparisons, new-feature announcements, 'X vs Y' framings</p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F9_other</h2>
+        <div class="meta">
+          <span class="pill"><b>3</b> thumbs</span>
+          <span class="pill"><b>179k</b> avg views</span>
+          <span class="pill">max <b>461k</b></span>
+        </div>
+      </header>
+      <p class="sub"></p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="086.jpg" />
+          <span class="vtag">461k</span>
+          <div class="ttitle">Building Beautiful Websites with Claude Code Is Too Easy</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="088.jpg" />
+          <span class="vtag">39k</span>
+          <div class="ttitle">How a College Student Made $500k with Cold Email (Exact Framework)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="091.jpg" />
+          <span class="vtag">38k</span>
+          <div class="ttitle">How to Sign Your First AI Automation Client in 7 days (With Proof)</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p></p></div>
+        <div class="box"><h3>Suits</h3><p></p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F6 — Collage / Split-Panel</h2>
+        <div class="meta">
+          <span class="pill"><b>10</b> thumbs</span>
+          <span class="pill"><b>177k</b> avg views</span>
+          <span class="pill">max <b>313k</b></span>
+        </div>
+      </header>
+      <p class="sub">2-4 panel split: before/after, timeline (1950/2020/NOW), or X-vs-Y.</p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="031.jpg" />
+          <span class="vtag">313k</span>
+          <div class="ttitle">32 Tricks to Level Up Claude Code in 16 Mins</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="094.jpg" />
+          <span class="vtag">250k</span>
+          <div class="ttitle">100 Hours Testing Clawdbot vs Claude Code (honest results)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="059.jpg" />
+          <span class="vtag">239k</span>
+          <div class="ttitle">Claude Code + Paperclip Just Destroyed OpenClaw</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="058.jpg" />
+          <span class="vtag">215k</span>
+          <div class="ttitle">I’ve Built 500 AI Workflows, This is What Businesses Want in 2026</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="019.jpg" />
+          <span class="vtag">192k</span>
+          <div class="ttitle">Every Level of Claude Explained in 21 Minutes</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="044.jpg" />
+          <span class="vtag">177k</span>
+          <div class="ttitle">100 Hours Testing Claude Code vs Antigravity (honest results)</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p>Image divided into 2-4 vertical or horizontal panels, each showing a distinct era/state/option. Bold sans-serif label on each panel. Title across top or bottom.</p></div>
+        <div class="box"><h3>Suits</h3><p>Paradigm-shift videos (Stage 1→2→3 fits perfectly), comparisons, before/after</p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F2 — Terminal Window</h2>
+        <div class="meta">
+          <span class="pill"><b>7</b> thumbs</span>
+          <span class="pill"><b>134k</b> avg views</span>
+          <span class="pill">max <b>223k</b></span>
+        </div>
+      </header>
+      <p class="sub">Mac-style terminal with traffic-light dots, monospaced text inside, often rainbow letters.</p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="084.jpg" />
+          <span class="vtag">223k</span>
+          <div class="ttitle">From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="049.jpg" />
+          <span class="vtag">170k</span>
+          <div class="ttitle">I Tested Claude's New Managed Agents... What You Need To Know</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="090.jpg" />
+          <span class="vtag">154k</span>
+          <div class="ttitle">How I’d Teach a 10 Year Old to Build Agentic Workflows (Claude Code)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="073.jpg" />
+          <span class="vtag">133k</span>
+          <div class="ttitle">How to Build $10,000 Agentic Workflows (Claude Code Tutorial)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="075.jpg" />
+          <span class="vtag">128k</span>
+          <div class="ttitle">Claude Code 2.0 Is Finally Here</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="007.jpg" />
+          <span class="vtag">80k</span>
+          <div class="ttitle">Claude Code Dynamic Workflows Clearly Explained</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p>Rounded macOS terminal window with three traffic-light dots (red/yellow/green). Rainbow-gradient monospace command name as hero text (/loop, /workflows). Warm gray background, soft cyan/orange rim glow, face right ~38% pointing in.</p></div>
+        <div class="box"><h3>Suits</h3><p>Named-token videos (/loop, /workflows, /goal), command/feature announcements</p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F3 — 3D Object Hero</h2>
+        <div class="meta">
+          <span class="pill"><b>21</b> thumbs</span>
+          <span class="pill"><b>127k</b> avg views</span>
+          <span class="pill">max <b>347k</b></span>
+        </div>
+      </header>
+      <p class="sub">Physical object rendered 3D — padlock with chain, vinyl, app icon, robot. Glow behind.</p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="038.jpg" />
+          <span class="vtag">347k</span>
+          <div class="ttitle">Claude Just Destroyed Every Video Editing Tool</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="028.jpg" />
+          <span class="vtag">336k</span>
+          <div class="ttitle">I Tried 100+ Claude Code Skills. These 6 Are The Best</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="077.jpg" />
+          <span class="vtag">225k</span>
+          <div class="ttitle">Claude Code Skills Just Got Even Better</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="050.jpg" />
+          <span class="vtag">207k</span>
+          <div class="ttitle">Claude’s New AI Just Changed the Internet Forever</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="081.jpg" />
+          <span class="vtag">193k</span>
+          <div class="ttitle">Master 95% of Claude Code Skills in 28 Minutes</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="039.jpg" />
+          <span class="vtag">159k</span>
+          <div class="ttitle">Claude Design Just Became Unstoppable</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p>Single hero 3D object (chained padlock, vinyl record, robot, glowing app icon). Object centered or left ~50%. Warm or dark background with bold rim glow behind object. Bold mixed-case headline above. Face right ~38% optional.</p></div>
+        <div class="box"><h3>Suits</h3><p>Concept videos that benefit from a metaphor object (lock=secured, robot=agent, vinyl=loop)</p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F1 — Laptop + Face + Warm Room</h2>
+        <div class="meta">
+          <span class="pill"><b>24</b> thumbs</span>
+          <span class="pill"><b>123k</b> avg views</span>
+          <span class="pill">max <b>499k</b></span>
+        </div>
+      </header>
+      <p class="sub">Nate's most-USED template. Laptop on left showing diagram/UI, face on right pointing.</p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="040.jpg" />
+          <span class="vtag">499k</span>
+          <div class="ttitle">I Turned Claude Into a 24/7 Trader</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="029.jpg" />
+          <span class="vtag">263k</span>
+          <div class="ttitle">Build & Sell Claude Code Operating Systems (2+ Hour Course)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="034.jpg" />
+          <span class="vtag">243k</span>
+          <div class="ttitle">Claude Video Editing Just Became Unrecognizable</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="021.jpg" />
+          <span class="vtag">240k</span>
+          <div class="ttitle">Hermes Agent: Zero to Personal AI Assistant (1 Hour Course)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="079.jpg" />
+          <span class="vtag">220k</span>
+          <div class="ttitle">The NEW Nano Banana 2 + Claude Code = $10k Websites</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="078.jpg" />
+          <span class="vtag">174k</span>
+          <div class="ttitle">Turn Claude Code Into Your Executive Assistant in 27 Mins</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p>Laptop angled front-on in left ~50%, screen showing a visualization or UI. Warm gray room background with soft blur. Face on right ~38% pointing at the screen. Mixed-case headline + cyan pill across top.</p></div>
+        <div class="box"><h3>Suits</h3><p>Most-used by Nate but middle-tier on CTR. Good fallback if other formats don't fit topic.</p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F5 — Chart / Diagram</h2>
+        <div class="meta">
+          <span class="pill"><b>8</b> thumbs</span>
+          <span class="pill"><b>67k</b> avg views</span>
+          <span class="pill">max <b>224k</b></span>
+        </div>
+      </header>
+      <p class="sub">Flowchart, knowledge graph, or network without device housing.</p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="066.jpg" />
+          <span class="vtag">224k</span>
+          <div class="ttitle">How to Build Claude Agent Teams Better Than 99% of People</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="016.jpg" />
+          <span class="vtag">75k</span>
+          <div class="ttitle">The AI Career Opportunity Nobody is Talking About in 2026</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="012.jpg" />
+          <span class="vtag">60k</span>
+          <div class="ttitle">The AI Offer You Can Sell Tomorrow Morning</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="092.jpg" />
+          <span class="vtag">60k</span>
+          <div class="ttitle">Is n8n Dead?</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="099.jpg" />
+          <span class="vtag">45k</span>
+          <div class="ttitle">I Built an AI System That Automates My Proposals (n8n + Gamma)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="097.jpg" />
+          <span class="vtag">38k</span>
+          <div class="ttitle">I Will Never Fix Another n8n Workflow (Claude Code)</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p>Free-floating chart or graph dominates canvas. Often in warm room. Face optional.</p></div>
+        <div class="box"><h3>Suits</h3><p>Workflow / architecture explainer videos. Lower CTR — use sparingly.</p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F8 — Phone Screen</h2>
+        <div class="meta">
+          <span class="pill"><b>3</b> thumbs</span>
+          <span class="pill"><b>62k</b> avg views</span>
+          <span class="pill">max <b>99k</b></span>
+        </div>
+      </header>
+      <p class="sub">Phone mockup (often multiple phones) showing app.</p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="082.jpg" />
+          <span class="vtag">99k</span>
+          <div class="ttitle">Claude Code Just Added What Everyone Wanted (Remote Control)</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="061.jpg" />
+          <span class="vtag">44k</span>
+          <div class="ttitle">Claude Code + iMessage is Finally Here.</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="065.jpg" />
+          <span class="vtag">44k</span>
+          <div class="ttitle">This $100M AI App Just Changed Software Forever</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p>Phone(s) angled toward camera. Often dark or gradient bg.</p></div>
+        <div class="box"><h3>Suits</h3><p>Mobile-features, remote-control videos. Niche.</p></div>
+      </div>
+    </section>
+    <section class="card">
+      <header>
+        <h2>F4_logo_icon_pair</h2>
+        <div class="meta">
+          <span class="pill"><b>2</b> thumbs</span>
+          <span class="pill"><b>42k</b> avg views</span>
+          <span class="pill">max <b>50k</b></span>
+        </div>
+      </header>
+      <p class="sub"></p>
+      <div class="grid6">
+        <a href="" target="_blank" class="tile">
+          <img src="023.jpg" />
+          <span class="vtag">50k</span>
+          <div class="ttitle">Overwhelmed By AI? Just Copy My Tech Stack</div>
+        </a>
+        <a href="" target="_blank" class="tile">
+          <img src="015.jpg" />
+          <span class="vtag">34k</span>
+          <div class="ttitle">How to Use Your Claude Code Projects in Codex in 5 Mins</div>
+        </a></div>
+      <div class="boxes">
+        <div class="box"><h3>Template</h3><p></p></div>
+        <div class="box"><h3>Suits</h3><p></p></div>
+      </div>
+    </section>
+
+</body></html>

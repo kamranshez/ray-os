@@ -1,0 +1,222 @@
+[
+  {
+    "id": "021",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#7FD8F5", "#F4A23B"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Laptop shows HERMES-AGENT terminal with caduceus icon; face points at screen"
+  },
+  {
+    "id": "022",
+    "prop_type": "3d_object",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "minimal_corner",
+    "face_position": "right",
+    "accent_colors": ["#EC7A5C", "#E8DDB6"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Manila folder with Claude icon labeled /print-press"
+  },
+  {
+    "id": "023",
+    "prop_type": "logo_icon",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#7FD8F5", "#A6F23B"],
+    "glow_type": "colored_rim",
+    "notes": "Three app icons in row (ElevenLabs, Claude, Granola) with green+blue glows"
+  },
+  {
+    "id": "024",
+    "prop_type": "3d_object",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "right",
+    "accent_colors": ["#EC7A5C", "#E8DDB6"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Same folder template as 022 but labeled '2x Usage'"
+  },
+  {
+    "id": "025",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#7FD8F5", "#6B7FE8"],
+    "glow_type": "none",
+    "notes": "Laptop shows Codex app icon on blue wallpaper; face points at it"
+  },
+  {
+    "id": "026",
+    "prop_type": "laptop_screen",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#EC7A5C", "#C6F542"],
+    "glow_type": "colored_rim",
+    "notes": "Claude + Higgsfield icons above laptop showing 3-panel product shots"
+  },
+  {
+    "id": "027",
+    "prop_type": "laptop_screen",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#EC7A5C", "#1FAFE0"],
+    "glow_type": "colored_rim",
+    "notes": "Claude + ElevenLabs icons above laptop showing voice assistant UI"
+  },
+  {
+    "id": "028",
+    "prop_type": "3d_object",
+    "prop_position": "split_panels",
+    "bg_style": "gradient_radial",
+    "text_style": "all_caps_no_pill",
+    "face_position": "center",
+    "accent_colors": ["#F58A2B", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Six 3D agent emoji blocks flanking face on orange radial bg, 'JUST COPY ME'"
+  },
+  {
+    "id": "029",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#7FD8F5", "#EC7A5C"],
+    "glow_type": "none",
+    "notes": "Laptop shows Helios AI OS dashboard; face points at screen"
+  },
+  {
+    "id": "030",
+    "prop_type": "laptop_screen",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#EC7A5C", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "White 'Claude Design' pill banner above laptop showing 3 phone mockups"
+  },
+  {
+    "id": "031",
+    "prop_type": "collage_split",
+    "prop_position": "split_panels",
+    "bg_style": "other",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#F5B5A8", "#EC7A5C"],
+    "glow_type": "colored_rim",
+    "notes": "3-panel Beginner/Advanced/Pro Claude icon progression with rainbow glow on Pro"
+  },
+  {
+    "id": "032",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#EC7A5C", "#2B6FC4"],
+    "glow_type": "colored_rim",
+    "notes": "Claude + theater masks icons above laptop showing blue 'No API Download Here' button"
+  },
+  {
+    "id": "033",
+    "prop_type": "collage_split",
+    "prop_position": "split_panels",
+    "bg_style": "other",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#EC7A5C", "#D85B2F"],
+    "glow_type": "none",
+    "notes": "Old (Claude, dark blue) vs New (ChatGPT, orange cluttered desk) split comparison"
+  },
+  {
+    "id": "034",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#EC7A5C", "#3EC97F"],
+    "glow_type": "colored_rim",
+    "notes": "Claude + CapCut(?) icons above laptop showing video editing timeline"
+  },
+  {
+    "id": "035",
+    "prop_type": "3d_object",
+    "prop_position": "center",
+    "bg_style": "other",
+    "text_style": "no_text",
+    "face_position": "none",
+    "accent_colors": ["#F5C24A", "#8E8E8E"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Cinematic crowned ChatGPT stone with cracked Gemini and Grok icons; apocalyptic desert"
+  },
+  {
+    "id": "036",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#EC7A5C", "#F5F5F5"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude + palette icons above laptop showing 3D surfing character render"
+  },
+  {
+    "id": "037",
+    "prop_type": "collage_split",
+    "prop_position": "split_panels",
+    "bg_style": "pure_white",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#EC7A5C", "#F58A2B"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Pixel-art Them/You meme comparison with orange Claude mascot; orange border glow"
+  },
+  {
+    "id": "038",
+    "prop_type": "3d_object",
+    "prop_position": "center",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#EC7A5C", "#F5C24A"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Crowned Claude icon centered with cracked DaVinci and After Effects icons flanking"
+  },
+  {
+    "id": "039",
+    "prop_type": "3d_object",
+    "prop_position": "center",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#EC7A5C", "#F5C24A"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Same 'It's over' template as 038 with different cracked competitor icons"
+  },
+  {
+    "id": "040",
+    "prop_type": "laptop_screen",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "right",
+    "accent_colors": ["#EC7A5C", "#F58A2B"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Laptop shows stock chart with orange line; '$10,000' headline + Claude icon in corner"
+  }
+]

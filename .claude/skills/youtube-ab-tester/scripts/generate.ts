@@ -1,6 +1,6 @@
 #!/usr/bin/env npx ts-node
 /**
- * Generate YouTube thumbnails using gemini-3.1-flash-image-preview at 1K.
+ * Generate YouTube thumbnails using gemini-3-pro-image-preview at 2K.
  * Loads face reference images automatically for consistent likeness.
  * Supports additional reference images (competitor thumbnails, style refs).
  */
@@ -9,7 +9,8 @@ import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
 import * as path from "path";
 
-const MODEL_NAME = "gemini-3.1-flash-image-preview";
+const DEFAULT_MODEL = "gemini-3.1-flash-image-preview";
+const DEFAULT_IMAGE_SIZE = "1K";
 
 const DEFAULT_SYSTEM_PROMPT = `Generate a high-quality YouTube thumbnail image.
 
@@ -77,13 +78,16 @@ function loadFaceReferences(overridePath?: string): { data: string; mimeType: st
     console.log(`  Face: ${path.basename(overridePath)} (override)`);
     return [loadImageAsBase64(overridePath)];
   }
-  const goToFace = path.join(FACE_DIR, "go-to-face.jpg");
-  if (!fs.existsSync(goToFace)) {
-    console.warn(`Warning: ${goToFace} not found.`);
-    return [];
+  const candidates = ["go-to-face.png", "go-to-face.jpg"];
+  for (const filename of candidates) {
+    const candidatePath = path.join(FACE_DIR, filename);
+    if (fs.existsSync(candidatePath)) {
+      console.log(`  Face: ${filename}`);
+      return [loadImageAsBase64(candidatePath)];
+    }
   }
-  console.log(`  Face: go-to-face.jpg`);
-  return [loadImageAsBase64(goToFace)];
+  console.warn(`Warning: no face reference found in ${FACE_DIR} (looked for ${candidates.join(", ")}).`);
+  return [];
 }
 
 function findNextAvailableIndex(outputDir: string): number {
@@ -105,7 +109,9 @@ async function generateSingleThumbnail(
   prompt: string,
   faceRefs: { data: string; mimeType: string }[],
   extraRefs: { data: string; mimeType: string }[],
-  index: number
+  index: number,
+  modelName: string,
+  imageSize: string
 ): Promise<{ index: number; image?: Buffer; error?: string }> {
   try {
     const parts: Array<
@@ -123,13 +129,13 @@ async function generateSingleThumbnail(
     }
 
     const response = await genai.models.generateContent({
-      model: MODEL_NAME,
+      model: modelName,
       contents: [{ role: "user", parts }],
       config: {
         responseModalities: ["TEXT", "IMAGE"],
         imageConfig: {
           aspectRatio: "16:9",
-          imageSize: "1K",
+          imageSize: imageSize,
         },
       } as any,
     });
@@ -173,6 +179,9 @@ async function main() {
   let thumbnailText = "";
   let cloneSrc = "";
   let outputName = "";
+  let modelName = DEFAULT_MODEL;
+  let imageSize = DEFAULT_IMAGE_SIZE;
+  let faceOverride = "";
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -196,6 +205,12 @@ async function main() {
       cloneSrc = args[++i];
     } else if (arg === "--name") {
       outputName = args[++i];
+    } else if (arg === "--model") {
+      modelName = args[++i];
+    } else if (arg === "--image-size") {
+      imageSize = args[++i];
+    } else if (arg === "--face") {
+      faceOverride = args[++i];
     } else if (!arg.startsWith("-")) {
       prompt = arg;
     }
@@ -233,7 +248,7 @@ async function main() {
   }
 
   // Load face references
-  const faceRefs = noFace ? [] : loadFaceReferences();
+  const faceRefs = noFace ? [] : loadFaceReferences(faceOverride || undefined);
 
   // Load extra references (competitor thumbnails etc.)
   const extraRefs: { data: string; mimeType: string }[] = [];
@@ -277,7 +292,7 @@ async function main() {
   }
 
   console.log(`\nGenerating ${count} thumbnail(s)...`);
-  console.log(`Model: ${MODEL_NAME} (Nano Banana 2)`);
+  console.log(`Model: ${modelName} at ${imageSize}`);
   console.log(`Face refs: ${faceRefs.length}, Extra refs: ${extraRefs.length}`);
   console.log(`Timeout: ${timeout}s per image`);
 
@@ -286,7 +301,7 @@ async function main() {
   // Generate images in parallel
   const promises = Array.from({ length: count }, (_, i) =>
     Promise.race([
-      generateSingleThumbnail(genai, fullPrompt, faceRefs, extraRefs, i),
+      generateSingleThumbnail(genai, fullPrompt, faceRefs, extraRefs, i, modelName, imageSize),
       new Promise<{ index: number; error: string }>((resolve) =>
         setTimeout(
           () => resolve({ index: i, error: `Timeout after ${timeout}s` }),

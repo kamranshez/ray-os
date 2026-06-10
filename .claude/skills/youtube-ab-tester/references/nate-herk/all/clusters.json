@@ -1,0 +1,3095 @@
+{
+  "all_tagged": [
+    {
+      "id": "001",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#5BD3E5",
+        "#F47B4A"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Laptop showing orange agent tree diagram; Nate points at it",
+      "title": "How to Build Claude Subagents Better Than 99% of People",
+      "views_raw": "14k views",
+      "views": 14000,
+      "url": "",
+      "age": "11 hours ago"
+    },
+    {
+      "id": "002",
+      "prop_type": "3d_object",
+      "prop_position": "right",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#FF6A1F",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Glowing orange Claude app icon wrapped in chains and padlock",
+      "title": "Is Claude Mythos Coming?",
+      "views_raw": "34k views",
+      "views": 34000,
+      "url": "",
+      "age": "2 days ago"
+    },
+    {
+      "id": "003",
+      "prop_type": "pure_text",
+      "prop_position": "left",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#F47B4A",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Mike Krieger holding white flag, 'We must stop.' with Claude star as O",
+      "title": "AGI is Here. Anthropic Just Proved It.",
+      "views_raw": "66k views",
+      "views": 66000,
+      "url": "",
+      "age": "3 days ago"
+    },
+    {
+      "id": "004",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#5BD3E5",
+        "#FFFFFF"
+      ],
+      "glow_type": "none",
+      "notes": "Laptop showing dense knowledge-graph node cloud; Nate points",
+      "title": "The Skill That 10x\u2019d My Claude Code Projects",
+      "views_raw": "91k views",
+      "views": 91000,
+      "url": "",
+      "age": "4 days ago"
+    },
+    {
+      "id": "005",
+      "prop_type": "collage_split",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#F47B4A",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "6 vertical card panels of feature icons behind Nate, 'Just Use These'",
+      "title": "The Only 12 Claude Code Features You Actually Need",
+      "views_raw": "76k views",
+      "views": 76000,
+      "url": "",
+      "age": "5 days ago"
+    },
+    {
+      "id": "006",
+      "prop_type": "collage_split",
+      "prop_position": "split_panels",
+      "bg_style": "other",
+      "text_style": "all_caps_no_pill",
+      "face_position": "multiple",
+      "accent_colors": [
+        "#3FA37A",
+        "#E97A36"
+      ],
+      "glow_type": "none",
+      "notes": "Three-panel timeline 1950/2020/NOW with portraits of Turing, Altman, Krieger",
+      "title": "100 Years of Artificial Intelligence Explained",
+      "views_raw": "10k views",
+      "views": 10000,
+      "url": "",
+      "age": "6 days ago"
+    },
+    {
+      "id": "007",
+      "prop_type": "terminal_window",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#FF6A1F",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Mac terminal showing rainbow 'workflows' + Opus 4.8; no headline text",
+      "title": "Claude Code Dynamic Workflows Clearly Explained",
+      "views_raw": "80k views",
+      "views": 80000,
+      "url": "",
+      "age": "9 days ago"
+    },
+    {
+      "id": "008",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#5BD3E5",
+        "#F47B4A"
+      ],
+      "glow_type": "none",
+      "notes": "Laptop with AI Operating System dashboard, Claude star icon inset",
+      "title": "I Turned Claude Opus 4.8 Into My Entire AI Operating System",
+      "views_raw": "137k views",
+      "views": 137000,
+      "url": "",
+      "age": "10 days ago"
+    },
+    {
+      "id": "009",
+      "prop_type": "pure_text",
+      "prop_position": "left",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "multiple",
+      "accent_colors": [
+        "#F47B4A",
+        "#FFFFFF"
+      ],
+      "glow_type": "none",
+      "notes": "Two laughing devs + giant 'Opus 4.8' with star replacing the dot",
+      "title": "Opus 4.8 Just Dropped. Here's How To Actually Use It.",
+      "views_raw": "162k views",
+      "views": 162000,
+      "url": "",
+      "age": "11 days ago"
+    },
+    {
+      "id": "010",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "gradient_radial",
+      "text_style": "all_caps_no_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#F47B4A",
+        "#2BBF8A"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude vs OpenAI Codex icons flanking Nate, 'WHICH IS BETTER?'",
+      "title": "100 Hours Testing Claude Code vs ChatGPT Codex (honest results)",
+      "views_raw": "76k views",
+      "views": 76000,
+      "url": "",
+      "age": "13 days ago"
+    },
+    {
+      "id": "011",
+      "prop_type": "chart_diagram",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "all_caps_no_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#3B6BD3",
+        "#22A06B"
+      ],
+      "glow_type": "none",
+      "notes": "Hand-drawn whiteboard 6-step path to $100M exit",
+      "title": "The Playbook for a $100M AI Agency",
+      "views_raw": "32k views",
+      "views": 32000,
+      "url": "",
+      "age": "2 weeks ago"
+    },
+    {
+      "id": "012",
+      "prop_type": "chart_diagram",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#FF3B30",
+        "#22A06B"
+      ],
+      "glow_type": "none",
+      "notes": "Whiteboard with 4 crossed-out business models, 'AI OS' circled green",
+      "title": "The AI Offer You Can Sell Tomorrow Morning",
+      "views_raw": "60k views",
+      "views": 60000,
+      "url": "",
+      "age": "2 weeks ago"
+    },
+    {
+      "id": "013",
+      "prop_type": "terminal_window",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#F47B4A",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude window showing 'Tokens Saved 93,000,000' stat card",
+      "title": "Give Me 10 Mins and I'll Save You Millions of Claude Tokens",
+      "views_raw": "53k views",
+      "views": 53000,
+      "url": "",
+      "age": "2 weeks ago"
+    },
+    {
+      "id": "014",
+      "prop_type": "pure_text",
+      "prop_position": "right",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "left",
+      "accent_colors": [
+        "#F47B4A",
+        "#FFFFFF"
+      ],
+      "glow_type": "none",
+      "notes": "Two devs cropped left, 'Holy Sh*t' with star replacing the i",
+      "title": "What Karpathy Joining Anthropic Actually Means For Claude",
+      "views_raw": "136k views",
+      "views": 136000,
+      "url": "",
+      "age": "2 weeks ago"
+    },
+    {
+      "id": "015",
+      "prop_type": "logo_icon",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#5BD3E5",
+        "#F47B4A"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude icon and Warp icon with swap arrows, 'Just Use Both'",
+      "title": "How to Use Your Claude Code Projects in Codex in 5 Mins",
+      "views_raw": "34k views",
+      "views": 34000,
+      "url": "",
+      "age": "3 weeks ago"
+    },
+    {
+      "id": "016",
+      "prop_type": "chart_diagram",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#FFD60A",
+        "#FF3B30"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Whiteboard with crossed-out 'AI Agency' and forked road with yellow ???",
+      "title": "The AI Career Opportunity Nobody is Talking About in 2026",
+      "views_raw": "75k views",
+      "views": 75000,
+      "url": "",
+      "age": "3 weeks ago"
+    },
+    {
+      "id": "017",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#5BD3E5",
+        "#F47B4A"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Laptop showing 3D laptop/cloud/server triad with orange Claude stars",
+      "title": "How to Deploy Your Claude Automations (3 Methods)",
+      "views_raw": "42k views",
+      "views": 42000,
+      "url": "",
+      "age": "3 weeks ago"
+    },
+    {
+      "id": "018",
+      "prop_type": "3d_object",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#1DA1F2",
+        "#F47B4A"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Two mock tweet cards stacked (Sam Altman + Claude Devs); Nate points",
+      "title": "Anthropic Just Dethroned OpenAI. Here's What Happens Next.",
+      "views_raw": "90k views",
+      "views": 90000,
+      "url": "",
+      "age": "3 weeks ago"
+    },
+    {
+      "id": "019",
+      "prop_type": "collage_split",
+      "prop_position": "split_panels",
+      "bg_style": "gradient_radial",
+      "text_style": "all_caps_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#F47B4A",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Beginner/Intermediate/Advanced three-panel with pixel-font bottom bar",
+      "title": "Every Level of Claude Explained in 21 Minutes",
+      "views_raw": "192k views",
+      "views": 192000,
+      "url": "",
+      "age": "3 weeks ago"
+    },
+    {
+      "id": "020",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#5BD3E5",
+        "#F47B4A"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Laptop showing Claude Code multi-agent dashboard UI; Nate points",
+      "title": "Claude Code Just Got an Agent Dashboard",
+      "views_raw": "113k views",
+      "views": 113000,
+      "url": "",
+      "age": "4 weeks ago"
+    },
+    {
+      "id": "021",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#7FD8F5",
+        "#F4A23B"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Laptop shows HERMES-AGENT terminal with caduceus icon; face points at screen",
+      "title": "Hermes Agent: Zero to Personal AI Assistant (1 Hour Course)",
+      "views_raw": "240k views",
+      "views": 240000,
+      "url": "",
+      "age": "4 weeks ago"
+    },
+    {
+      "id": "022",
+      "prop_type": "3d_object",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "minimal_corner",
+      "face_position": "right",
+      "accent_colors": [
+        "#EC7A5C",
+        "#E8DDB6"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Manila folder with Claude icon labeled /print-press",
+      "title": "This is The Most Powerful Tool to Give to Claude Code",
+      "views_raw": "101k views",
+      "views": 101000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "023",
+      "prop_type": "logo_icon",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#7FD8F5",
+        "#A6F23B"
+      ],
+      "glow_type": "colored_rim",
+      "notes": "Three app icons in row (ElevenLabs, Claude, Granola) with green+blue glows",
+      "title": "Overwhelmed By AI? Just Copy My Tech Stack",
+      "views_raw": "50k views",
+      "views": 50000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "024",
+      "prop_type": "3d_object",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#EC7A5C",
+        "#E8DDB6"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Same folder template as 022 but labeled '2x Usage'",
+      "title": "Claude Just Solved Session Limits",
+      "views_raw": "105k views",
+      "views": 105000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "025",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#7FD8F5",
+        "#6B7FE8"
+      ],
+      "glow_type": "none",
+      "notes": "Laptop shows Codex app icon on blue wallpaper; face points at it",
+      "title": "Master 97% of Codex in 1 Hour (full course)",
+      "views_raw": "109k views",
+      "views": 109000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "026",
+      "prop_type": "laptop_screen",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#EC7A5C",
+        "#C6F542"
+      ],
+      "glow_type": "colored_rim",
+      "notes": "Claude + Higgsfield icons above laptop showing 3-panel product shots",
+      "title": "Higgsfield Just Turned Claude Into a Creative Agency",
+      "views_raw": "87k views",
+      "views": 87000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "027",
+      "prop_type": "laptop_screen",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#EC7A5C",
+        "#1FAFE0"
+      ],
+      "glow_type": "colored_rim",
+      "notes": "Claude + ElevenLabs icons above laptop showing voice assistant UI",
+      "title": "Building Realistic Voice Agents Has Never Been Easier",
+      "views_raw": "34k views",
+      "views": 34000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "028",
+      "prop_type": "3d_object",
+      "prop_position": "split_panels",
+      "bg_style": "gradient_radial",
+      "text_style": "all_caps_no_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#F58A2B",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Six 3D agent emoji blocks flanking face on orange radial bg, 'JUST COPY ME'",
+      "title": "I Tried 100+ Claude Code Skills. These 6 Are The Best",
+      "views_raw": "336k views",
+      "views": 336000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "029",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#7FD8F5",
+        "#EC7A5C"
+      ],
+      "glow_type": "none",
+      "notes": "Laptop shows Helios AI OS dashboard; face points at screen",
+      "title": "Build & Sell Claude Code Operating Systems (2+ Hour Course)",
+      "views_raw": "263k views",
+      "views": 263000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "030",
+      "prop_type": "laptop_screen",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#EC7A5C",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "White 'Claude Design' pill banner above laptop showing 3 phone mockups",
+      "title": "Claude Design 2 HOUR COURSE (Beginner to Pro)",
+      "views_raw": "107k views",
+      "views": 107000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "031",
+      "prop_type": "collage_split",
+      "prop_position": "split_panels",
+      "bg_style": "other",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#F5B5A8",
+        "#EC7A5C"
+      ],
+      "glow_type": "colored_rim",
+      "notes": "3-panel Beginner/Advanced/Pro Claude icon progression with rainbow glow on Pro",
+      "title": "32 Tricks to Level Up Claude Code in 16 Mins",
+      "views_raw": "313k views",
+      "views": 313000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "032",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#EC7A5C",
+        "#2B6FC4"
+      ],
+      "glow_type": "colored_rim",
+      "notes": "Claude + theater masks icons above laptop showing blue 'No API Download Here' button",
+      "title": "Claude Code + Playwright Automates Literally Anything",
+      "views_raw": "115k views",
+      "views": 115000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "033",
+      "prop_type": "collage_split",
+      "prop_position": "split_panels",
+      "bg_style": "other",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#EC7A5C",
+        "#D85B2F"
+      ],
+      "glow_type": "none",
+      "notes": "Old (Claude, dark blue) vs New (ChatGPT, orange cluttered desk) split comparison",
+      "title": "I Tested GPT 5.5 vs Opus 4.7: What You Need to Know",
+      "views_raw": "161k views",
+      "views": 161000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "034",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#EC7A5C",
+        "#3EC97F"
+      ],
+      "glow_type": "colored_rim",
+      "notes": "Claude + CapCut(?) icons above laptop showing video editing timeline",
+      "title": "Claude Video Editing Just Became Unrecognizable",
+      "views_raw": "243k views",
+      "views": 243000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "035",
+      "prop_type": "3d_object",
+      "prop_position": "center",
+      "bg_style": "other",
+      "text_style": "no_text",
+      "face_position": "none",
+      "accent_colors": [
+        "#F5C24A",
+        "#8E8E8E"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Cinematic crowned ChatGPT stone with cracked Gemini and Grok icons; apocalyptic desert",
+      "title": "OpenAI Image 2 is Nuts. Here are 10 Ways to Use it.",
+      "views_raw": "42k views",
+      "views": 42000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "036",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#EC7A5C",
+        "#F5F5F5"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude + palette icons above laptop showing 3D surfing character render",
+      "title": "Claude Design Builds Beautiful 3D Websites Instantly (full tutorial)",
+      "views_raw": "83k views",
+      "views": 83000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "037",
+      "prop_type": "collage_split",
+      "prop_position": "split_panels",
+      "bg_style": "pure_white",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#EC7A5C",
+        "#F58A2B"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Pixel-art Them/You meme comparison with orange Claude mascot; orange border glow",
+      "title": "How to Never Hit Your Claude Session Limit Again",
+      "views_raw": "136k views",
+      "views": 136000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "038",
+      "prop_type": "3d_object",
+      "prop_position": "center",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#EC7A5C",
+        "#F5C24A"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Crowned Claude icon centered with cracked DaVinci and After Effects icons flanking",
+      "title": "Claude Just Destroyed Every Video Editing Tool",
+      "views_raw": "347k views",
+      "views": 347000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "039",
+      "prop_type": "3d_object",
+      "prop_position": "center",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#EC7A5C",
+        "#F5C24A"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Same 'It's over' template as 038 with different cracked competitor icons",
+      "title": "Claude Design Just Became Unstoppable",
+      "views_raw": "159k views",
+      "views": 159000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "040",
+      "prop_type": "laptop_screen",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#EC7A5C",
+        "#F58A2B"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Laptop shows stock chart with orange line; '$10,000' headline + Claude icon in corner",
+      "title": "I Turned Claude Into a 24/7 Trader",
+      "views_raw": "499k views",
+      "views": 499000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "041",
+      "prop_type": "3d_object",
+      "prop_position": "center",
+      "bg_style": "other",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#ff6a1f",
+        "#ffffff"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Prison cell with glowing orange Claude icon behind bars, handwritten 'Opus 4.7' arrow callout",
+      "title": "Claude Opus 4.7 Just Dropped... Or Did It Really?",
+      "views_raw": "87k views",
+      "views": 87000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "042",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#4dc3ff",
+        "#ffffff"
+      ],
+      "glow_type": "none",
+      "notes": "Laptop shows mini Nate clone with app icons, 'AI' in cyan pill + 'Clone' lead text",
+      "title": "Claude + HeyGen Just Changed Content Creation Forever",
+      "views_raw": "64k views",
+      "views": 64000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "043",
+      "prop_type": "3d_object",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#ff6a1f",
+        "#f4e9c9"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Manila folder with Claude app icon and '/routines' label, face right",
+      "title": "How to Build 24/7 Claude Agents. Easy.",
+      "views_raw": "65k views",
+      "views": 65000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "044",
+      "prop_type": "collage_split",
+      "prop_position": "split_panels",
+      "bg_style": "gradient_radial",
+      "text_style": "all_caps_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#1a8cff",
+        "#ff8a3d"
+      ],
+      "glow_type": "none",
+      "notes": "Before/after split panels: blue '1 HOUR' pixel agent vs orange '1 HOUR' stacked paperwork",
+      "title": "100 Hours Testing Claude Code vs Antigravity (honest results)",
+      "views_raw": "177k views",
+      "views": 177000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "045",
+      "prop_type": "3d_object",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#ff6a1f",
+        "#f4e9c9"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Manila folder with Claude icon and '/superpowers' label, face right (same template as 043)",
+      "title": "This One Plugin Just 10x\u2019d Claude Code",
+      "views_raw": "146k views",
+      "views": 146000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "046",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#ff6a1f",
+        "#6c63ff"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Laptop shows exploded watch parts, Claude + purple app icon combo floating above",
+      "title": "Seedance 2.0 + Claude Code Creates $10k Websites in Minutes",
+      "views_raw": "88k views",
+      "views": 88000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "047",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#ff6a1f",
+        "#22c55e"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "X $100 Opus vs check $1 Advisor, two Claude icon variants side by side",
+      "title": "Claude Just Told Us to Stop Using Their Best Model",
+      "views_raw": "123k views",
+      "views": 123000,
+      "url": "",
+      "age": "1 month ago"
+    },
+    {
+      "id": "048",
+      "prop_type": "chart_diagram",
+      "prop_position": "left",
+      "bg_style": "pure_white",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#ff8a3d",
+        "#ef4444"
+      ],
+      "glow_type": "none",
+      "notes": "Investing chart with Buy/Sell pills overlay, $10,000 callout, face right",
+      "title": "I Gave OpenClaw $10,000 to Trade Stocks",
+      "views_raw": "Nate Herk | AI Automation and Samin Yasar",
+      "views": 0,
+      "url": "",
+      "age": "214k views"
+    },
+    {
+      "id": "049",
+      "prop_type": "terminal_window",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#ff6a1f",
+        "#5dd4d4"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Pixel-art terminal window 'CLOUD AGENT TEAM' diagram with cyan glow, face right",
+      "title": "I Tested Claude's New Managed Agents... What You Need To Know",
+      "views_raw": "170k views",
+      "views": 170000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "050",
+      "prop_type": "3d_object",
+      "prop_position": "center",
+      "bg_style": "other",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#ff6a1f",
+        "#ffffff"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Same prison cell template as 041, 'It's finally here' + 'Mythos' arrow callout",
+      "title": "Claude\u2019s New AI Just Changed the Internet Forever",
+      "views_raw": "207k views",
+      "views": 207000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "051",
+      "prop_type": "3d_object",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#ff6a1f",
+        "#f4e9c9"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Manila folder with Claude icon and '/ultraplan' label, face right (folder template)",
+      "title": "Planning In Claude Code Just Got a Huge Upgrade",
+      "views_raw": "64k views",
+      "views": 64000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "052",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#ff6a1f",
+        "#8b5cf6"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude + Obsidian icons with '+' connector, 'Knows everything.' with chalk underline",
+      "title": "Andrej Karpathy Just 10x\u2019d Everyone\u2019s Claude Code",
+      "views_raw": "580k views",
+      "views": 580000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "053",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#ff6a1f",
+        "#f5efe6"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude + Alpaca/Ollama icons with '+', 'Takes 5 mins.' chalk underline (same template as 052)",
+      "title": "Ollama + Claude Code = 99% CHEAPER",
+      "views_raw": "394k views",
+      "views": 394000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "054",
+      "prop_type": "pure_text",
+      "prop_position": "fullscreen",
+      "bg_style": "other",
+      "text_style": "hand_drawn",
+      "face_position": "right",
+      "accent_colors": [
+        "#ff6a1f",
+        "#000000"
+      ],
+      "glow_type": "none",
+      "notes": "Whiteboard with handwritten 'GOODBYE LIMITS!' numbered list of 8 Claude tips, face right",
+      "title": "18 Claude Code Token Hacks in 18 Minutes",
+      "views_raw": "244k views",
+      "views": 244000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "055",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#ff6a1f",
+        "#ff8a3d"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude + ASCII robot 'buddy' icons with '+', '/buddy is here.' chalk underline",
+      "title": "Claude Code Just Gave Everyone Virtual Pets (April Fools?)",
+      "views_raw": "25k views",
+      "views": 25000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "056",
+      "prop_type": "logo_icon",
+      "prop_position": "right",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#ff6a1f",
+        "#ffffff"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Magnifying glass over Claude icon revealing code underneath, 'The truth' with chalk underline",
+      "title": "Claude Code Source Code Just Leaked\u2026 8 Things You Must Do",
+      "views_raw": "129k views",
+      "views": 129000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "057",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#ff6a1f",
+        "#7a8cff"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude + PowerShell icons with '+', 'This is godmode.' chalk underline (same template as 052/053)",
+      "title": "Codex Just 10x\u2019d Claude Code Projects",
+      "views_raw": "120k views",
+      "views": 120000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "058",
+      "prop_type": "collage_split",
+      "prop_position": "center",
+      "bg_style": "gradient_radial",
+      "text_style": "all_caps_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#ff6a1f",
+        "#22d3ee"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Five chat-input bubble props arrayed around face, 'SELL THESE FOR $3K' bottom banner",
+      "title": "I\u2019ve Built 500 AI Workflows, This is What Businesses Want in 2026",
+      "views_raw": "215k views",
+      "views": 215000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "059",
+      "prop_type": "collage_split",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#ef4444",
+        "#22c55e"
+      ],
+      "glow_type": "none",
+      "notes": "Old (red Bugcrowd icon) vs New (Claude + paperclip icons) with red/green pills + arrow",
+      "title": "Claude Code + Paperclip Just Destroyed OpenClaw",
+      "views_raw": "239k views",
+      "views": 239000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "060",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#22d3ee",
+        "#ffffff"
+      ],
+      "glow_type": "none",
+      "notes": "Laptop shows Gemini video-chat UI with stock-photo person, cyan 'Actually' pill in title",
+      "title": "Gemini 3.1 Flash Live Just Changed Voice Agents Forever",
+      "views_raw": "70k views",
+      "views": 70000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "061",
+      "prop_type": "phone_screen",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#E8704C",
+        "#3B82F6"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "iPhone iMessage with Claude Code + two glowing app icons (Claude, Messages) on left",
+      "title": "Claude Code + iMessage is Finally Here.",
+      "views_raw": "44k views",
+      "views": 44000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "062",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#E8704C",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Old vs New Claude icon comparison with arrow between, warm glow on right",
+      "title": "STOP Using Bypass Permissions, Use This New Feature Instead",
+      "views_raw": "95k views",
+      "views": 95000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "063",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#E8704C",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude + brain icon combo with 'It knows everything' headline and chalk underline",
+      "title": "Claude Code Just Dropped Memory 2.0",
+      "views_raw": "156k views",
+      "views": 156000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "064",
+      "prop_type": "3d_object",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#E8704C",
+        "#000000"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Manila folder labeled /computer holding Claude icon, smiling face right",
+      "title": "Claude Code Just Got Another Huge Upgrade",
+      "views_raw": "134k views",
+      "views": 134000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "065",
+      "prop_type": "phone_screen",
+      "prop_position": "center",
+      "bg_style": "dark_blue",
+      "text_style": "all_caps_no_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#FFFFFF",
+        "#FF3B30"
+      ],
+      "glow_type": "none",
+      "notes": "Hand-held iPhone showing Cal AI app with red arrow + 'BUILT IN 1 WEEK' caption",
+      "title": "This $100M AI App Just Changed Software Forever",
+      "views_raw": "44k views",
+      "views": 44000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "066",
+      "prop_type": "chart_diagram",
+      "prop_position": "fullscreen",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#E8704C",
+        "#FFFFFF"
+      ],
+      "glow_type": "none",
+      "notes": "Pixel-art creatures: sad single vs trio network, 'It feels unfair' with chalk underline",
+      "title": "How to Build Claude Agent Teams Better Than 99% of People",
+      "views_raw": "224k views",
+      "views": 224000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "067",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "all_caps_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#FF3B30",
+        "#34C759"
+      ],
+      "glow_type": "none",
+      "notes": "Shushing face center, OLD red pill + NEW? green pill, n8n/HL vs Claude/Gemini icons",
+      "title": "Stop Learning n8n in 2026...Learn THIS Instead",
+      "views_raw": "276k views",
+      "views": 276000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "068",
+      "prop_type": "laptop_screen",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#E8704C",
+        "#000000"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Laptop with 9 social media app icon grid, Claude + manatee icons floating top",
+      "title": "Generate Content for 9 Socials on Autopilot with Claude Code",
+      "views_raw": "45k views",
+      "views": 45000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "069",
+      "prop_type": "pure_text",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "hand_drawn",
+      "face_position": "right",
+      "accent_colors": [
+        "#E8704C",
+        "#000000"
+      ],
+      "glow_type": "none",
+      "notes": "Whiteboard handwritten 8-item 'FULL COURSE' list with Claude icon, face right",
+      "title": "Build & Sell with Claude Code (10+ Hour Course)",
+      "views_raw": "712k views",
+      "views": 712000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "070",
+      "prop_type": "laptop_screen",
+      "prop_position": "center",
+      "bg_style": "dark_black",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#22D3EE",
+        "#A855F7"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Dark monitor showing video/image/audio icons flowing into Gemini logo via neon arrows",
+      "title": "Google's New Model + Claude Code Just Changed RAG Forever",
+      "views_raw": "110k views",
+      "views": 110000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "071",
+      "prop_type": "laptop_screen",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#E8704C",
+        "#FFD60A"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Laptop showing Tetris 'NEW HIGH SCORE' screen with Claude + theater masks icons top",
+      "title": "I Taught Claude Code to Play Tetris... It Broke the World Record",
+      "views_raw": "9.2k views",
+      "views": 9200,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "072",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#E8704C",
+        "#4285F4"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude + Google Jules icons with 'God mode.' chalk-underlined headline",
+      "title": "Google\u2019s New Tool Just 10x\u2019d Claude Code",
+      "views_raw": "201k views",
+      "views": 201000,
+      "url": "",
+      "age": "2 months ago"
+    },
+    {
+      "id": "073",
+      "prop_type": "terminal_window",
+      "prop_position": "right",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_pill",
+      "face_position": "left",
+      "accent_colors": [
+        "#E8704C",
+        "#22D3EE"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude prompt box 'build a $10k workflow', BORING + IT WORKS cyan pill",
+      "title": "How to Build $10,000 Agentic Workflows (Claude Code Tutorial)",
+      "views_raw": "133k views",
+      "views": 133000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "074",
+      "prop_type": "3d_object",
+      "prop_position": "right",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "left",
+      "accent_colors": [
+        "#E8704C",
+        "#000000"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Manila folder with Claude icon + '/loop' label, face pointing at folder",
+      "title": "This New Claude Code Feature is a Game Changer",
+      "views_raw": "65k views",
+      "views": 65000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "075",
+      "prop_type": "terminal_window",
+      "prop_position": "right",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "left",
+      "accent_colors": [
+        "#E8704C",
+        "#22D3EE"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude prompt 'Schedule a task' with 'Game Over' cyan pill on Over",
+      "title": "Claude Code 2.0 Is Finally Here",
+      "views_raw": "128k views",
+      "views": 128000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "076",
+      "prop_type": "laptop_screen",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#22D3EE",
+        "#FFFFFF"
+      ],
+      "glow_type": "none",
+      "notes": "Dashboard UI 99.8% success, '24/7 Agents' with cyan pill on 24/7",
+      "title": "Cursor Automations Clearly Explained (worth learning?)",
+      "views_raw": "20k views",
+      "views": 20000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "077",
+      "prop_type": "3d_object",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#E8704C",
+        "#FFFFFF"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Skills 1.0 vs Skills 2.0 folders with arrow, 'They're here.' chalk underline",
+      "title": "Claude Code Skills Just Got Even Better",
+      "views_raw": "225k views",
+      "views": 225000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "078",
+      "prop_type": "laptop_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#E8704C",
+        "#22D3EE"
+      ],
+      "glow_type": "none",
+      "notes": "Laptop showing ME->agents tree of pixel creatures, 'My New Hire' cyan pill on Hire",
+      "title": "Turn Claude Code Into Your Executive Assistant in 27 Mins",
+      "views_raw": "174k views",
+      "views": 174000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "079",
+      "prop_type": "laptop_screen",
+      "prop_position": "center",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "right",
+      "accent_colors": [
+        "#E8704C",
+        "#FFD60A"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Laptop with Apple Watch exploded view, Nano Banana + Claude icons floating top",
+      "title": "The NEW Nano Banana 2 + Claude Code = $10k Websites",
+      "views_raw": "220k views",
+      "views": 220000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "080",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "pure_white",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#4285F4",
+        "#FFD60A"
+      ],
+      "glow_type": "colored_rim",
+      "notes": "Claude Artifacts + Nano Banana icons with rainbow glow, 'Perfect text every time.'",
+      "title": "The NEW Nano Banana 2 + Antigravity Destroys Every AI Image Tool",
+      "views_raw": "103k views",
+      "views": 103000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "081",
+      "prop_type": "3d_object",
+      "prop_position": "right",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_pill",
+      "face_position": "left",
+      "accent_colors": [
+        "#7FE8E0",
+        "#F4A582"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude Code prompt box mock with orange Claude icon and cyan pill on 'ANYTHING'",
+      "title": "Master 95% of Claude Code Skills in 28 Minutes",
+      "views_raw": "193k views",
+      "views": 193000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "082",
+      "prop_type": "phone_screen",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#F4A582",
+        "#E74C3C"
+      ],
+      "glow_type": "none",
+      "notes": "Phone in hand showing Claude Code with dead-bot emoji in corner, pointing pose",
+      "title": "Claude Code Just Added What Everyone Wanted (Remote Control)",
+      "views_raw": "99k views",
+      "views": 99000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "083",
+      "prop_type": "laptop_screen",
+      "prop_position": "right",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "left",
+      "accent_colors": [
+        "#F4A582",
+        "#FFFFFF"
+      ],
+      "glow_type": "none",
+      "notes": "iMac displaying Crossy Road style game with pixel creatures, shocked expression",
+      "title": "I Can Actually Watch My AI Agents Work Now",
+      "views_raw": "93k views",
+      "views": 93000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "084",
+      "prop_type": "terminal_window",
+      "prop_position": "left",
+      "bg_style": "warm_gray_room",
+      "text_style": "all_caps_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#7FE8E0",
+        "#F4A582"
+      ],
+      "glow_type": "none",
+      "notes": "Python code in terminal window with cyan title pill, orange Claude icon overlay",
+      "title": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code)",
+      "views_raw": "223k views",
+      "views": 223000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "085",
+      "prop_type": "3d_object",
+      "prop_position": "split_panels",
+      "bg_style": "warm_gray_room",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#F4A582",
+        "#7FE94A"
+      ],
+      "glow_type": "colored_rim",
+      "notes": "Orange Claude vs green n8n 3D app icons held in hands, glow behind each",
+      "title": "The EASIEST Way to Host Your Claude Code Agents",
+      "views_raw": "51k views",
+      "views": 51000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "086",
+      "prop_type": "other",
+      "prop_position": "center",
+      "bg_style": "pure_white",
+      "text_style": "hand_drawn",
+      "face_position": "right",
+      "accent_colors": [
+        "#F4A582",
+        "#000000"
+      ],
+      "glow_type": "none",
+      "notes": "Whiteboard with handwritten numbered list, finger pointing at it",
+      "title": "Building Beautiful Websites with Claude Code Is Too Easy",
+      "views_raw": "461k views",
+      "views": 461000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "087",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "all_caps_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#7FE8E0",
+        "#E1306C"
+      ],
+      "glow_type": "none",
+      "notes": "Multiple brand app logos (Instagram/Facebook/Gmail/LinkedIn) flanking face, cyan pill",
+      "title": "How to Sign AI Workflow Clients (With 0 Followers)",
+      "views_raw": "29k views",
+      "views": 29000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "088",
+      "prop_type": "other",
+      "prop_position": "right",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_pill",
+      "face_position": "left",
+      "accent_colors": [
+        "#4FB3F9",
+        "#FFFFFF"
+      ],
+      "glow_type": "none",
+      "notes": "Gmail subject line mockup with blue paint-stroke pill, shush pose, blue arrow",
+      "title": "How a College Student Made $500k with Cold Email (Exact Framework)",
+      "views_raw": "39k views",
+      "views": 39000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "089",
+      "prop_type": "3d_object",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#F4A582",
+        "#FFFFFF"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Two white app icon tiles (orange Claude pixel + Firecrawl flame) flanking face, cyan rim glow",
+      "title": "Turn Any Website Into LLM Ready Data INSTANTLY",
+      "views_raw": "51k views",
+      "views": 51000,
+      "url": "",
+      "age": "3 months ago"
+    },
+    {
+      "id": "090",
+      "prop_type": "terminal_window",
+      "prop_position": "right",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_pill",
+      "face_position": "left",
+      "accent_colors": [
+        "#7FE8E0",
+        "#F4A582"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Claude Code prompt box mock with cyan 'MADE EASY' pill, orange Claude icon",
+      "title": "How I\u2019d Teach a 10 Year Old to Build Agentic Workflows (Claude Code)",
+      "views_raw": "154k views",
+      "views": 154000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "091",
+      "prop_type": "other",
+      "prop_position": "left",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_pill",
+      "face_position": "right",
+      "accent_colors": [
+        "#7FE8E0",
+        "#F4A582"
+      ],
+      "glow_type": "none",
+      "notes": "iOS-style notification banner showing payment received, cyan pill on '7 DAYS'",
+      "title": "How to Sign Your First AI Automation Client in 7 days (With Proof)",
+      "views_raw": "38k views",
+      "views": 38000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "092",
+      "prop_type": "chart_diagram",
+      "prop_position": "fullscreen",
+      "bg_style": "dark_blue",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#FF2D55",
+        "#FFFFFF"
+      ],
+      "glow_type": "colored_rim",
+      "notes": "Red glowing stock-chart crashing line with n8n logo, no face, arrow to dot",
+      "title": "Is n8n Dead?",
+      "views_raw": "60k views",
+      "views": 60000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "093",
+      "prop_type": "3d_object",
+      "prop_position": "split_panels",
+      "bg_style": "warm_gray_room",
+      "text_style": "no_text",
+      "face_position": "center",
+      "accent_colors": [
+        "#E74C3C",
+        "#7FE8E0"
+      ],
+      "glow_type": "warm_orange_rim",
+      "notes": "Army of red Clawdbot 3D robots flanking face, shush pose, warm rim light",
+      "title": "I Turned Clawdbot Into the Ultimate Personal Assistant",
+      "views_raw": "83k views",
+      "views": 83000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "094",
+      "prop_type": "collage_split",
+      "prop_position": "split_panels",
+      "bg_style": "other",
+      "text_style": "all_caps_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#F4A582",
+        "#E74C3C"
+      ],
+      "glow_type": "none",
+      "notes": "Left/right split: tidy blue scene vs chaotic orange scene, both labeled '1 HOUR'",
+      "title": "100 Hours Testing Clawdbot vs Claude Code (honest results)",
+      "views_raw": "250k views",
+      "views": 250000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "095",
+      "prop_type": "laptop_screen",
+      "prop_position": "right",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "left",
+      "accent_colors": [
+        "#E74C3C",
+        "#FFFFFF"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Laptop showing Clawdbot landing page, cyan glow behind text, curved arrow",
+      "title": "Set Up Clawdbot on a VPS in Minutes (no mac mini)",
+      "views_raw": "132k views",
+      "views": 132000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "096",
+      "prop_type": "logo_icon",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "all_caps_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#E74C3C",
+        "#7FE94A"
+      ],
+      "glow_type": "none",
+      "notes": "OLD red pill + n8n icon vs NEW green pill + Claude icon, comparison layout",
+      "title": "Agentic Workflows Just Changed AI Automation Forever! (Claude Code)",
+      "views_raw": "234k views",
+      "views": 234000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "097",
+      "prop_type": "chart_diagram",
+      "prop_position": "fullscreen",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "none",
+      "accent_colors": [
+        "#4FB3F9",
+        "#FFFFFF"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Side-by-side n8n workflow diagrams (red/error vs clean) with arrow, Old vs New caps",
+      "title": "I Will Never Fix Another n8n Workflow (Claude Code)",
+      "views_raw": "38k views",
+      "views": 38000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "098",
+      "prop_type": "laptop_screen",
+      "prop_position": "right",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "left",
+      "accent_colors": [
+        "#4FB3F9",
+        "#F4A582"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Laptop showing Claude Code splash, cyan glow on title, curved white arrow",
+      "title": "Master 95% of Claude Code in 36 Mins (as a beginner)",
+      "views_raw": "365k views",
+      "views": 365000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "099",
+      "prop_type": "chart_diagram",
+      "prop_position": "fullscreen",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#4FB3F9",
+        "#FFFFFF"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "n8n workflow chain + Gamma deck preview behind face, n8n+G logo callout",
+      "title": "I Built an AI System That Automates My Proposals (n8n + Gamma)",
+      "views_raw": "45k views",
+      "views": 45000,
+      "url": "",
+      "age": "4 months ago"
+    },
+    {
+      "id": "100",
+      "prop_type": "3d_object",
+      "prop_position": "split_panels",
+      "bg_style": "dark_black",
+      "text_style": "mixed_case_no_pill",
+      "face_position": "center",
+      "accent_colors": [
+        "#F4A582",
+        "#E91E63"
+      ],
+      "glow_type": "cyan_rim",
+      "notes": "Pink n8n icon tile + orange Claude pixel tile flanking face, cyan glow on title",
+      "title": "Build ANYTHING with Claude Code & n8n (Beginner's Guide)",
+      "views_raw": "88k views",
+      "views": 88000,
+      "url": "",
+      "age": "4 months ago"
+    }
+  ],
+  "meta_formats": {
+    "F1_laptop_face_warmroom": [
+      "001",
+      "004",
+      "008",
+      "017",
+      "020",
+      "021",
+      "025",
+      "026",
+      "027",
+      "029",
+      "030",
+      "032",
+      "034",
+      "036",
+      "040",
+      "042",
+      "046",
+      "060",
+      "068",
+      "071",
+      "076",
+      "078",
+      "079",
+      "083"
+    ],
+    "F3_3d_object": [
+      "002",
+      "018",
+      "022",
+      "024",
+      "028",
+      "035",
+      "038",
+      "039",
+      "041",
+      "043",
+      "045",
+      "050",
+      "051",
+      "064",
+      "074",
+      "077",
+      "081",
+      "085",
+      "089",
+      "093",
+      "100"
+    ],
+    "F4b_logo_icon_solo": [
+      "010",
+      "047",
+      "052",
+      "053",
+      "055",
+      "056",
+      "057",
+      "062",
+      "063",
+      "067",
+      "072",
+      "080",
+      "087",
+      "096"
+    ],
+    "F6_collage": [
+      "005",
+      "006",
+      "019",
+      "031",
+      "033",
+      "037",
+      "044",
+      "058",
+      "059",
+      "094"
+    ],
+    "F5_chart": [
+      "011",
+      "012",
+      "016",
+      "048",
+      "066",
+      "092",
+      "097",
+      "099"
+    ],
+    "F2_terminal": [
+      "007",
+      "013",
+      "049",
+      "073",
+      "075",
+      "084",
+      "090"
+    ],
+    "F7_pure_text": [
+      "003",
+      "009",
+      "014",
+      "054",
+      "069"
+    ],
+    "F8_phone": [
+      "061",
+      "065",
+      "082"
+    ],
+    "F1b_laptop_other": [
+      "070",
+      "095",
+      "098"
+    ],
+    "F9_other": [
+      "086",
+      "088",
+      "091"
+    ],
+    "F4_logo_icon_pair": [
+      "015",
+      "023"
+    ]
+  },
+  "meta_format_stats": {
+    "F1_laptop_face_warmroom": {
+      "count": 24,
+      "avg_views": 123341,
+      "max_views": 499000,
+      "top_examples": [
+        {
+          "id": "040",
+          "prop_type": "laptop_screen",
+          "prop_position": "center",
+          "bg_style": "warm_gray_room",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#EC7A5C",
+            "#F58A2B"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Laptop shows stock chart with orange line; '$10,000' headline + Claude icon in corner",
+          "title": "I Turned Claude Into a 24/7 Trader",
+          "views_raw": "499k views",
+          "views": 499000,
+          "url": "",
+          "age": "1 month ago"
+        },
+        {
+          "id": "029",
+          "prop_type": "laptop_screen",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "mixed_case_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#7FD8F5",
+            "#EC7A5C"
+          ],
+          "glow_type": "none",
+          "notes": "Laptop shows Helios AI OS dashboard; face points at screen",
+          "title": "Build & Sell Claude Code Operating Systems (2+ Hour Course)",
+          "views_raw": "263k views",
+          "views": 263000,
+          "url": "",
+          "age": "1 month ago"
+        },
+        {
+          "id": "034",
+          "prop_type": "laptop_screen",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "no_text",
+          "face_position": "right",
+          "accent_colors": [
+            "#EC7A5C",
+            "#3EC97F"
+          ],
+          "glow_type": "colored_rim",
+          "notes": "Claude + CapCut(?) icons above laptop showing video editing timeline",
+          "title": "Claude Video Editing Just Became Unrecognizable",
+          "views_raw": "243k views",
+          "views": 243000,
+          "url": "",
+          "age": "1 month ago"
+        },
+        {
+          "id": "021",
+          "prop_type": "laptop_screen",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "mixed_case_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#7FD8F5",
+            "#F4A23B"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Laptop shows HERMES-AGENT terminal with caduceus icon; face points at screen",
+          "title": "Hermes Agent: Zero to Personal AI Assistant (1 Hour Course)",
+          "views_raw": "240k views",
+          "views": 240000,
+          "url": "",
+          "age": "4 weeks ago"
+        },
+        {
+          "id": "079",
+          "prop_type": "laptop_screen",
+          "prop_position": "center",
+          "bg_style": "warm_gray_room",
+          "text_style": "no_text",
+          "face_position": "right",
+          "accent_colors": [
+            "#E8704C",
+            "#FFD60A"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Laptop with Apple Watch exploded view, Nano Banana + Claude icons floating top",
+          "title": "The NEW Nano Banana 2 + Claude Code = $10k Websites",
+          "views_raw": "220k views",
+          "views": 220000,
+          "url": "",
+          "age": "3 months ago"
+        },
+        {
+          "id": "078",
+          "prop_type": "laptop_screen",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "mixed_case_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#E8704C",
+            "#22D3EE"
+          ],
+          "glow_type": "none",
+          "notes": "Laptop showing ME->agents tree of pixel creatures, 'My New Hire' cyan pill on Hire",
+          "title": "Turn Claude Code Into Your Executive Assistant in 27 Mins",
+          "views_raw": "174k views",
+          "views": 174000,
+          "url": "",
+          "age": "3 months ago"
+        }
+      ]
+    },
+    "F3_3d_object": {
+      "count": 21,
+      "avg_views": 127285,
+      "max_views": 347000,
+      "top_examples": [
+        {
+          "id": "038",
+          "prop_type": "3d_object",
+          "prop_position": "center",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#EC7A5C",
+            "#F5C24A"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Crowned Claude icon centered with cracked DaVinci and After Effects icons flanking",
+          "title": "Claude Just Destroyed Every Video Editing Tool",
+          "views_raw": "347k views",
+          "views": 347000,
+          "url": "",
+          "age": "1 month ago"
+        },
+        {
+          "id": "028",
+          "prop_type": "3d_object",
+          "prop_position": "split_panels",
+          "bg_style": "gradient_radial",
+          "text_style": "all_caps_no_pill",
+          "face_position": "center",
+          "accent_colors": [
+            "#F58A2B",
+            "#FFFFFF"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Six 3D agent emoji blocks flanking face on orange radial bg, 'JUST COPY ME'",
+          "title": "I Tried 100+ Claude Code Skills. These 6 Are The Best",
+          "views_raw": "336k views",
+          "views": 336000,
+          "url": "",
+          "age": "1 month ago"
+        },
+        {
+          "id": "077",
+          "prop_type": "3d_object",
+          "prop_position": "split_panels",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#E8704C",
+            "#FFFFFF"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Skills 1.0 vs Skills 2.0 folders with arrow, 'They're here.' chalk underline",
+          "title": "Claude Code Skills Just Got Even Better",
+          "views_raw": "225k views",
+          "views": 225000,
+          "url": "",
+          "age": "3 months ago"
+        },
+        {
+          "id": "050",
+          "prop_type": "3d_object",
+          "prop_position": "center",
+          "bg_style": "other",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#ff6a1f",
+            "#ffffff"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Same prison cell template as 041, 'It's finally here' + 'Mythos' arrow callout",
+          "title": "Claude\u2019s New AI Just Changed the Internet Forever",
+          "views_raw": "207k views",
+          "views": 207000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "081",
+          "prop_type": "3d_object",
+          "prop_position": "right",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_pill",
+          "face_position": "left",
+          "accent_colors": [
+            "#7FE8E0",
+            "#F4A582"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Claude Code prompt box mock with orange Claude icon and cyan pill on 'ANYTHING'",
+          "title": "Master 95% of Claude Code Skills in 28 Minutes",
+          "views_raw": "193k views",
+          "views": 193000,
+          "url": "",
+          "age": "3 months ago"
+        },
+        {
+          "id": "039",
+          "prop_type": "3d_object",
+          "prop_position": "center",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#EC7A5C",
+            "#F5C24A"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Same 'It's over' template as 038 with different cracked competitor icons",
+          "title": "Claude Design Just Became Unstoppable",
+          "views_raw": "159k views",
+          "views": 159000,
+          "url": "",
+          "age": "1 month ago"
+        }
+      ]
+    },
+    "F4b_logo_icon_solo": {
+      "count": 14,
+      "avg_views": 181500,
+      "max_views": 580000,
+      "top_examples": [
+        {
+          "id": "052",
+          "prop_type": "logo_icon",
+          "prop_position": "split_panels",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#ff6a1f",
+            "#8b5cf6"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Claude + Obsidian icons with '+' connector, 'Knows everything.' with chalk underline",
+          "title": "Andrej Karpathy Just 10x\u2019d Everyone\u2019s Claude Code",
+          "views_raw": "580k views",
+          "views": 580000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "053",
+          "prop_type": "logo_icon",
+          "prop_position": "split_panels",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#ff6a1f",
+            "#f5efe6"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Claude + Alpaca/Ollama icons with '+', 'Takes 5 mins.' chalk underline (same template as 052)",
+          "title": "Ollama + Claude Code = 99% CHEAPER",
+          "views_raw": "394k views",
+          "views": 394000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "067",
+          "prop_type": "logo_icon",
+          "prop_position": "split_panels",
+          "bg_style": "dark_black",
+          "text_style": "all_caps_pill",
+          "face_position": "center",
+          "accent_colors": [
+            "#FF3B30",
+            "#34C759"
+          ],
+          "glow_type": "none",
+          "notes": "Shushing face center, OLD red pill + NEW? green pill, n8n/HL vs Claude/Gemini icons",
+          "title": "Stop Learning n8n in 2026...Learn THIS Instead",
+          "views_raw": "276k views",
+          "views": 276000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "096",
+          "prop_type": "logo_icon",
+          "prop_position": "split_panels",
+          "bg_style": "dark_black",
+          "text_style": "all_caps_pill",
+          "face_position": "center",
+          "accent_colors": [
+            "#E74C3C",
+            "#7FE94A"
+          ],
+          "glow_type": "none",
+          "notes": "OLD red pill + n8n icon vs NEW green pill + Claude icon, comparison layout",
+          "title": "Agentic Workflows Just Changed AI Automation Forever! (Claude Code)",
+          "views_raw": "234k views",
+          "views": 234000,
+          "url": "",
+          "age": "4 months ago"
+        },
+        {
+          "id": "072",
+          "prop_type": "logo_icon",
+          "prop_position": "split_panels",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#E8704C",
+            "#4285F4"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Claude + Google Jules icons with 'God mode.' chalk-underlined headline",
+          "title": "Google\u2019s New Tool Just 10x\u2019d Claude Code",
+          "views_raw": "201k views",
+          "views": 201000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "063",
+          "prop_type": "logo_icon",
+          "prop_position": "split_panels",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#E8704C",
+            "#FFFFFF"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Claude + brain icon combo with 'It knows everything' headline and chalk underline",
+          "title": "Claude Code Just Dropped Memory 2.0",
+          "views_raw": "156k views",
+          "views": 156000,
+          "url": "",
+          "age": "2 months ago"
+        }
+      ]
+    },
+    "F6_collage": {
+      "count": 10,
+      "avg_views": 176900,
+      "max_views": 313000,
+      "top_examples": [
+        {
+          "id": "031",
+          "prop_type": "collage_split",
+          "prop_position": "split_panels",
+          "bg_style": "other",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#F5B5A8",
+            "#EC7A5C"
+          ],
+          "glow_type": "colored_rim",
+          "notes": "3-panel Beginner/Advanced/Pro Claude icon progression with rainbow glow on Pro",
+          "title": "32 Tricks to Level Up Claude Code in 16 Mins",
+          "views_raw": "313k views",
+          "views": 313000,
+          "url": "",
+          "age": "1 month ago"
+        },
+        {
+          "id": "094",
+          "prop_type": "collage_split",
+          "prop_position": "split_panels",
+          "bg_style": "other",
+          "text_style": "all_caps_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#F4A582",
+            "#E74C3C"
+          ],
+          "glow_type": "none",
+          "notes": "Left/right split: tidy blue scene vs chaotic orange scene, both labeled '1 HOUR'",
+          "title": "100 Hours Testing Clawdbot vs Claude Code (honest results)",
+          "views_raw": "250k views",
+          "views": 250000,
+          "url": "",
+          "age": "4 months ago"
+        },
+        {
+          "id": "059",
+          "prop_type": "collage_split",
+          "prop_position": "split_panels",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#ef4444",
+            "#22c55e"
+          ],
+          "glow_type": "none",
+          "notes": "Old (red Bugcrowd icon) vs New (Claude + paperclip icons) with red/green pills + arrow",
+          "title": "Claude Code + Paperclip Just Destroyed OpenClaw",
+          "views_raw": "239k views",
+          "views": 239000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "058",
+          "prop_type": "collage_split",
+          "prop_position": "center",
+          "bg_style": "gradient_radial",
+          "text_style": "all_caps_pill",
+          "face_position": "center",
+          "accent_colors": [
+            "#ff6a1f",
+            "#22d3ee"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Five chat-input bubble props arrayed around face, 'SELL THESE FOR $3K' bottom banner",
+          "title": "I\u2019ve Built 500 AI Workflows, This is What Businesses Want in 2026",
+          "views_raw": "215k views",
+          "views": 215000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "019",
+          "prop_type": "collage_split",
+          "prop_position": "split_panels",
+          "bg_style": "gradient_radial",
+          "text_style": "all_caps_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#F47B4A",
+            "#FFFFFF"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Beginner/Intermediate/Advanced three-panel with pixel-font bottom bar",
+          "title": "Every Level of Claude Explained in 21 Minutes",
+          "views_raw": "192k views",
+          "views": 192000,
+          "url": "",
+          "age": "3 weeks ago"
+        },
+        {
+          "id": "044",
+          "prop_type": "collage_split",
+          "prop_position": "split_panels",
+          "bg_style": "gradient_radial",
+          "text_style": "all_caps_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#1a8cff",
+            "#ff8a3d"
+          ],
+          "glow_type": "none",
+          "notes": "Before/after split panels: blue '1 HOUR' pixel agent vs orange '1 HOUR' stacked paperwork",
+          "title": "100 Hours Testing Claude Code vs Antigravity (honest results)",
+          "views_raw": "177k views",
+          "views": 177000,
+          "url": "",
+          "age": "1 month ago"
+        }
+      ]
+    },
+    "F5_chart": {
+      "count": 8,
+      "avg_views": 66750,
+      "max_views": 224000,
+      "top_examples": [
+        {
+          "id": "066",
+          "prop_type": "chart_diagram",
+          "prop_position": "fullscreen",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#E8704C",
+            "#FFFFFF"
+          ],
+          "glow_type": "none",
+          "notes": "Pixel-art creatures: sad single vs trio network, 'It feels unfair' with chalk underline",
+          "title": "How to Build Claude Agent Teams Better Than 99% of People",
+          "views_raw": "224k views",
+          "views": 224000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "016",
+          "prop_type": "chart_diagram",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "no_text",
+          "face_position": "right",
+          "accent_colors": [
+            "#FFD60A",
+            "#FF3B30"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Whiteboard with crossed-out 'AI Agency' and forked road with yellow ???",
+          "title": "The AI Career Opportunity Nobody is Talking About in 2026",
+          "views_raw": "75k views",
+          "views": 75000,
+          "url": "",
+          "age": "3 weeks ago"
+        },
+        {
+          "id": "012",
+          "prop_type": "chart_diagram",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "no_text",
+          "face_position": "right",
+          "accent_colors": [
+            "#FF3B30",
+            "#22A06B"
+          ],
+          "glow_type": "none",
+          "notes": "Whiteboard with 4 crossed-out business models, 'AI OS' circled green",
+          "title": "The AI Offer You Can Sell Tomorrow Morning",
+          "views_raw": "60k views",
+          "views": 60000,
+          "url": "",
+          "age": "2 weeks ago"
+        },
+        {
+          "id": "092",
+          "prop_type": "chart_diagram",
+          "prop_position": "fullscreen",
+          "bg_style": "dark_blue",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#FF2D55",
+            "#FFFFFF"
+          ],
+          "glow_type": "colored_rim",
+          "notes": "Red glowing stock-chart crashing line with n8n logo, no face, arrow to dot",
+          "title": "Is n8n Dead?",
+          "views_raw": "60k views",
+          "views": 60000,
+          "url": "",
+          "age": "4 months ago"
+        },
+        {
+          "id": "099",
+          "prop_type": "chart_diagram",
+          "prop_position": "fullscreen",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "center",
+          "accent_colors": [
+            "#4FB3F9",
+            "#FFFFFF"
+          ],
+          "glow_type": "cyan_rim",
+          "notes": "n8n workflow chain + Gamma deck preview behind face, n8n+G logo callout",
+          "title": "I Built an AI System That Automates My Proposals (n8n + Gamma)",
+          "views_raw": "45k views",
+          "views": 45000,
+          "url": "",
+          "age": "4 months ago"
+        },
+        {
+          "id": "097",
+          "prop_type": "chart_diagram",
+          "prop_position": "fullscreen",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "none",
+          "accent_colors": [
+            "#4FB3F9",
+            "#FFFFFF"
+          ],
+          "glow_type": "cyan_rim",
+          "notes": "Side-by-side n8n workflow diagrams (red/error vs clean) with arrow, Old vs New caps",
+          "title": "I Will Never Fix Another n8n Workflow (Claude Code)",
+          "views_raw": "38k views",
+          "views": 38000,
+          "url": "",
+          "age": "4 months ago"
+        }
+      ]
+    },
+    "F2_terminal": {
+      "count": 7,
+      "avg_views": 134428,
+      "max_views": 223000,
+      "top_examples": [
+        {
+          "id": "084",
+          "prop_type": "terminal_window",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "all_caps_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#7FE8E0",
+            "#F4A582"
+          ],
+          "glow_type": "none",
+          "notes": "Python code in terminal window with cyan title pill, orange Claude icon overlay",
+          "title": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code)",
+          "views_raw": "223k views",
+          "views": 223000,
+          "url": "",
+          "age": "3 months ago"
+        },
+        {
+          "id": "049",
+          "prop_type": "terminal_window",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "no_text",
+          "face_position": "right",
+          "accent_colors": [
+            "#ff6a1f",
+            "#5dd4d4"
+          ],
+          "glow_type": "cyan_rim",
+          "notes": "Pixel-art terminal window 'CLOUD AGENT TEAM' diagram with cyan glow, face right",
+          "title": "I Tested Claude's New Managed Agents... What You Need To Know",
+          "views_raw": "170k views",
+          "views": 170000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "090",
+          "prop_type": "terminal_window",
+          "prop_position": "right",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_pill",
+          "face_position": "left",
+          "accent_colors": [
+            "#7FE8E0",
+            "#F4A582"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Claude Code prompt box mock with cyan 'MADE EASY' pill, orange Claude icon",
+          "title": "How I\u2019d Teach a 10 Year Old to Build Agentic Workflows (Claude Code)",
+          "views_raw": "154k views",
+          "views": 154000,
+          "url": "",
+          "age": "4 months ago"
+        },
+        {
+          "id": "073",
+          "prop_type": "terminal_window",
+          "prop_position": "right",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_pill",
+          "face_position": "left",
+          "accent_colors": [
+            "#E8704C",
+            "#22D3EE"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Claude prompt box 'build a $10k workflow', BORING + IT WORKS cyan pill",
+          "title": "How to Build $10,000 Agentic Workflows (Claude Code Tutorial)",
+          "views_raw": "133k views",
+          "views": 133000,
+          "url": "",
+          "age": "3 months ago"
+        },
+        {
+          "id": "075",
+          "prop_type": "terminal_window",
+          "prop_position": "right",
+          "bg_style": "warm_gray_room",
+          "text_style": "mixed_case_pill",
+          "face_position": "left",
+          "accent_colors": [
+            "#E8704C",
+            "#22D3EE"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Claude prompt 'Schedule a task' with 'Game Over' cyan pill on Over",
+          "title": "Claude Code 2.0 Is Finally Here",
+          "views_raw": "128k views",
+          "views": 128000,
+          "url": "",
+          "age": "3 months ago"
+        },
+        {
+          "id": "007",
+          "prop_type": "terminal_window",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "no_text",
+          "face_position": "right",
+          "accent_colors": [
+            "#FF6A1F",
+            "#FFFFFF"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Mac terminal showing rainbow 'workflows' + Opus 4.8; no headline text",
+          "title": "Claude Code Dynamic Workflows Clearly Explained",
+          "views_raw": "80k views",
+          "views": 80000,
+          "url": "",
+          "age": "9 days ago"
+        }
+      ]
+    },
+    "F7_pure_text": {
+      "count": 5,
+      "avg_views": 264000,
+      "max_views": 712000,
+      "top_examples": [
+        {
+          "id": "069",
+          "prop_type": "pure_text",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "hand_drawn",
+          "face_position": "right",
+          "accent_colors": [
+            "#E8704C",
+            "#000000"
+          ],
+          "glow_type": "none",
+          "notes": "Whiteboard handwritten 8-item 'FULL COURSE' list with Claude icon, face right",
+          "title": "Build & Sell with Claude Code (10+ Hour Course)",
+          "views_raw": "712k views",
+          "views": 712000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "054",
+          "prop_type": "pure_text",
+          "prop_position": "fullscreen",
+          "bg_style": "other",
+          "text_style": "hand_drawn",
+          "face_position": "right",
+          "accent_colors": [
+            "#ff6a1f",
+            "#000000"
+          ],
+          "glow_type": "none",
+          "notes": "Whiteboard with handwritten 'GOODBYE LIMITS!' numbered list of 8 Claude tips, face right",
+          "title": "18 Claude Code Token Hacks in 18 Minutes",
+          "views_raw": "244k views",
+          "views": 244000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "009",
+          "prop_type": "pure_text",
+          "prop_position": "left",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "multiple",
+          "accent_colors": [
+            "#F47B4A",
+            "#FFFFFF"
+          ],
+          "glow_type": "none",
+          "notes": "Two laughing devs + giant 'Opus 4.8' with star replacing the dot",
+          "title": "Opus 4.8 Just Dropped. Here's How To Actually Use It.",
+          "views_raw": "162k views",
+          "views": 162000,
+          "url": "",
+          "age": "11 days ago"
+        },
+        {
+          "id": "014",
+          "prop_type": "pure_text",
+          "prop_position": "right",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "left",
+          "accent_colors": [
+            "#F47B4A",
+            "#FFFFFF"
+          ],
+          "glow_type": "none",
+          "notes": "Two devs cropped left, 'Holy Sh*t' with star replacing the i",
+          "title": "What Karpathy Joining Anthropic Actually Means For Claude",
+          "views_raw": "136k views",
+          "views": 136000,
+          "url": "",
+          "age": "2 weeks ago"
+        },
+        {
+          "id": "003",
+          "prop_type": "pure_text",
+          "prop_position": "left",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#F47B4A",
+            "#FFFFFF"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Mike Krieger holding white flag, 'We must stop.' with Claude star as O",
+          "title": "AGI is Here. Anthropic Just Proved It.",
+          "views_raw": "66k views",
+          "views": 66000,
+          "url": "",
+          "age": "3 days ago"
+        }
+      ]
+    },
+    "F8_phone": {
+      "count": 3,
+      "avg_views": 62333,
+      "max_views": 99000,
+      "top_examples": [
+        {
+          "id": "082",
+          "prop_type": "phone_screen",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "center",
+          "accent_colors": [
+            "#F4A582",
+            "#E74C3C"
+          ],
+          "glow_type": "none",
+          "notes": "Phone in hand showing Claude Code with dead-bot emoji in corner, pointing pose",
+          "title": "Claude Code Just Added What Everyone Wanted (Remote Control)",
+          "views_raw": "99k views",
+          "views": 99000,
+          "url": "",
+          "age": "3 months ago"
+        },
+        {
+          "id": "061",
+          "prop_type": "phone_screen",
+          "prop_position": "center",
+          "bg_style": "warm_gray_room",
+          "text_style": "no_text",
+          "face_position": "right",
+          "accent_colors": [
+            "#E8704C",
+            "#3B82F6"
+          ],
+          "glow_type": "cyan_rim",
+          "notes": "iPhone iMessage with Claude Code + two glowing app icons (Claude, Messages) on left",
+          "title": "Claude Code + iMessage is Finally Here.",
+          "views_raw": "44k views",
+          "views": 44000,
+          "url": "",
+          "age": "2 months ago"
+        },
+        {
+          "id": "065",
+          "prop_type": "phone_screen",
+          "prop_position": "center",
+          "bg_style": "dark_blue",
+          "text_style": "all_caps_no_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#FFFFFF",
+            "#FF3B30"
+          ],
+          "glow_type": "none",
+          "notes": "Hand-held iPhone showing Cal AI app with red arrow + 'BUILT IN 1 WEEK' caption",
+          "title": "This $100M AI App Just Changed Software Forever",
+          "views_raw": "44k views",
+          "views": 44000,
+          "url": "",
+          "age": "2 months ago"
+        }
+      ]
+    },
+    "F1b_laptop_other": {
+      "count": 3,
+      "avg_views": 202333,
+      "max_views": 365000,
+      "top_examples": [
+        {
+          "id": "098",
+          "prop_type": "laptop_screen",
+          "prop_position": "right",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "left",
+          "accent_colors": [
+            "#4FB3F9",
+            "#F4A582"
+          ],
+          "glow_type": "cyan_rim",
+          "notes": "Laptop showing Claude Code splash, cyan glow on title, curved white arrow",
+          "title": "Master 95% of Claude Code in 36 Mins (as a beginner)",
+          "views_raw": "365k views",
+          "views": 365000,
+          "url": "",
+          "age": "4 months ago"
+        },
+        {
+          "id": "095",
+          "prop_type": "laptop_screen",
+          "prop_position": "right",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_no_pill",
+          "face_position": "left",
+          "accent_colors": [
+            "#E74C3C",
+            "#FFFFFF"
+          ],
+          "glow_type": "cyan_rim",
+          "notes": "Laptop showing Clawdbot landing page, cyan glow behind text, curved arrow",
+          "title": "Set Up Clawdbot on a VPS in Minutes (no mac mini)",
+          "views_raw": "132k views",
+          "views": 132000,
+          "url": "",
+          "age": "4 months ago"
+        },
+        {
+          "id": "070",
+          "prop_type": "laptop_screen",
+          "prop_position": "center",
+          "bg_style": "dark_black",
+          "text_style": "no_text",
+          "face_position": "right",
+          "accent_colors": [
+            "#22D3EE",
+            "#A855F7"
+          ],
+          "glow_type": "cyan_rim",
+          "notes": "Dark monitor showing video/image/audio icons flowing into Gemini logo via neon arrows",
+          "title": "Google's New Model + Claude Code Just Changed RAG Forever",
+          "views_raw": "110k views",
+          "views": 110000,
+          "url": "",
+          "age": "2 months ago"
+        }
+      ]
+    },
+    "F9_other": {
+      "count": 3,
+      "avg_views": 179333,
+      "max_views": 461000,
+      "top_examples": [
+        {
+          "id": "086",
+          "prop_type": "other",
+          "prop_position": "center",
+          "bg_style": "pure_white",
+          "text_style": "hand_drawn",
+          "face_position": "right",
+          "accent_colors": [
+            "#F4A582",
+            "#000000"
+          ],
+          "glow_type": "none",
+          "notes": "Whiteboard with handwritten numbered list, finger pointing at it",
+          "title": "Building Beautiful Websites with Claude Code Is Too Easy",
+          "views_raw": "461k views",
+          "views": 461000,
+          "url": "",
+          "age": "3 months ago"
+        },
+        {
+          "id": "088",
+          "prop_type": "other",
+          "prop_position": "right",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_pill",
+          "face_position": "left",
+          "accent_colors": [
+            "#4FB3F9",
+            "#FFFFFF"
+          ],
+          "glow_type": "none",
+          "notes": "Gmail subject line mockup with blue paint-stroke pill, shush pose, blue arrow",
+          "title": "How a College Student Made $500k with Cold Email (Exact Framework)",
+          "views_raw": "39k views",
+          "views": 39000,
+          "url": "",
+          "age": "3 months ago"
+        },
+        {
+          "id": "091",
+          "prop_type": "other",
+          "prop_position": "left",
+          "bg_style": "dark_black",
+          "text_style": "mixed_case_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#7FE8E0",
+            "#F4A582"
+          ],
+          "glow_type": "none",
+          "notes": "iOS-style notification banner showing payment received, cyan pill on '7 DAYS'",
+          "title": "How to Sign Your First AI Automation Client in 7 days (With Proof)",
+          "views_raw": "38k views",
+          "views": 38000,
+          "url": "",
+          "age": "4 months ago"
+        }
+      ]
+    },
+    "F4_logo_icon_pair": {
+      "count": 2,
+      "avg_views": 42000,
+      "max_views": 50000,
+      "top_examples": [
+        {
+          "id": "023",
+          "prop_type": "logo_icon",
+          "prop_position": "center",
+          "bg_style": "warm_gray_room",
+          "text_style": "mixed_case_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#7FD8F5",
+            "#A6F23B"
+          ],
+          "glow_type": "colored_rim",
+          "notes": "Three app icons in row (ElevenLabs, Claude, Granola) with green+blue glows",
+          "title": "Overwhelmed By AI? Just Copy My Tech Stack",
+          "views_raw": "50k views",
+          "views": 50000,
+          "url": "",
+          "age": "1 month ago"
+        },
+        {
+          "id": "015",
+          "prop_type": "logo_icon",
+          "prop_position": "left",
+          "bg_style": "warm_gray_room",
+          "text_style": "mixed_case_pill",
+          "face_position": "right",
+          "accent_colors": [
+            "#5BD3E5",
+            "#F47B4A"
+          ],
+          "glow_type": "warm_orange_rim",
+          "notes": "Claude icon and Warp icon with swap arrows, 'Just Use Both'",
+          "title": "How to Use Your Claude Code Projects in Codex in 5 Mins",
+          "views_raw": "34k views",
+          "views": 34000,
+          "url": "",
+          "age": "3 weeks ago"
+        }
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 ---
 name: youtube-ab-tester
-description: End-to-end YouTube A/B testing for Ray's channel (@RAmjad) — title generation via subagent, thumbnail image generation via `gemini-3.1-flash-image-preview` at 1K, results recording, and the underlying scripts/golden references all live here. Use whenever the user wants to brainstorm titles, generate thumbnails (text or images), record A/B test results, analyze title/thumbnail performance, or asks things like "suggest titles", "what titles should I test", "make a thumbnail", "thumbnail variations", "5 thumbnails for this video", "Matt style", "Nate style", "record these results", "what's working", or "update the A/B test results". Also trigger when the user shares a screenshot of YouTube A/B test results and wants analysis or recording. Do NOT use for competitor title research (use youtube-title-researcher instead) or video scripting (use youtube-scriptwriter instead).
+description: End-to-end YouTube A/B testing for Ray's channel (@RAmjad) — title generation via subagent, thumbnail image generation via `gemini-3-pro-image-preview` at 1K, results recording, and the underlying scripts/golden references all live here. Use whenever the user wants to brainstorm titles, generate thumbnails (text or images), record A/B test results, analyze title/thumbnail performance, or asks things like "suggest titles", "what titles should I test", "make a thumbnail", "thumbnail variations", "5 thumbnails for this video", "Matt style", "Nate style", "record these results", "what's working", or "update the A/B test results". Also trigger when the user shares a screenshot of YouTube A/B test results and wants analysis or recording. Do NOT use for competitor title research (use youtube-title-researcher instead) or video scripting (use youtube-scriptwriter instead).
 ---
 
 ## What This Skill Does
@@ -30,7 +30,7 @@ youtube-ab-tester/
 ├── SKILL.md                  ← this file
 ├── .env                      ← GEMINI_API_KEY lives here
 ├── package.json, tsconfig.json, node_modules/
-├── scripts/generate.ts       ← image generation (gemini-3.1-flash-image-preview at 1K)
+├── scripts/generate.ts       ← image generation (gemini-3-pro-image-preview at 1K)
 ├── app.py, compare.html      ← Streamlit lab for browsing thumbnails
 ├── feedback.json             ← global feedback rules + per-thumbnail comments
 ├── golden-references/        ← image references for Matt and Nate styles
@@ -216,8 +216,17 @@ Don't use clone mode when the user wants different composition, expression, or l
 - Shure SM7B podcast microphone rising from the bottom-right foreground (when composition has room)
 
 **Face reference:**
-- Hardcoded to `references/rays-face/go-to-face.jpg` — always used, always alone
-- Script automatically loads it; no isolation step needed
+- Default: `references/rays-face/go-to-face.png` — transparent-background head-and-shoulders. Resolution: `gemini-3-pro-image-preview`-friendly, no extraction step required.
+- Fallback: `references/rays-face/go-to-face.jpg` (legacy, opaque). The script auto-prefers the PNG if both exist.
+- Always used, always alone. Script loads it automatically; no isolation step needed.
+
+**Face composition (Nate-style):**
+- The transparent background lets the generator place Ray's head ANYWHERE in the frame — exploit this.
+- Default position: **bottom-right or right-of-center**, with the subject of the thumbnail (folder, terminal, diagram, slash command) occupying the **left two-thirds** of the canvas. This mirrors Nate Herk's winning compositions (v16 dream-folder 34.9%, v17 leak-folder 35.5%).
+- Face should be **3/4-frontal or slightly turned toward the subject** so the eyeline directs the viewer to the visual element.
+- Crop tightly: head + shoulders only. No empty headroom above the hair.
+- The transparent PNG means the model can match face lighting/edges to any background — black, white, gradient, terminal-screen blue, folder-icon yellow. Specify the background explicitly in the prompt.
+- When the composition needs the subject centered (rare — usually announcement/news only), use a smaller face inset in the bottom-right corner instead of dropping the face entirely.
 
 **Generation mechanics:**
 - `-n 1` per run (never `-n 2`)
@@ -286,7 +295,7 @@ Three pages: Dashboard (all videos), Review (shortlist per video), Results (A/B 
 
 ### Image generation settings
 
-- **Model**: `gemini-3.1-flash-image-preview` (set via `MODEL_NAME` in scripts/generate.ts)
+- **Model**: `gemini-3-pro-image-preview` (set via `MODEL_NAME` in scripts/generate.ts)
 - **Resolution**: 1K (set via `imageSize: "1K"` in scripts/generate.ts)
 - **Aspect ratio**: 16:9 (YouTube standard)
 - **Timeout**: 240s per image (`-t 240`)

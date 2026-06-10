@@ -1,0 +1,222 @@
+[
+  {
+    "id": "001",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#5BD3E5", "#F47B4A"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Laptop showing orange agent tree diagram; Nate points at it"
+  },
+  {
+    "id": "002",
+    "prop_type": "3d_object",
+    "prop_position": "right",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#FF6A1F", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Glowing orange Claude app icon wrapped in chains and padlock"
+  },
+  {
+    "id": "003",
+    "prop_type": "pure_text",
+    "prop_position": "left",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "right",
+    "accent_colors": ["#F47B4A", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Mike Krieger holding white flag, 'We must stop.' with Claude star as O"
+  },
+  {
+    "id": "004",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#5BD3E5", "#FFFFFF"],
+    "glow_type": "none",
+    "notes": "Laptop showing dense knowledge-graph node cloud; Nate points"
+  },
+  {
+    "id": "005",
+    "prop_type": "collage_split",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "center",
+    "accent_colors": ["#F47B4A", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "6 vertical card panels of feature icons behind Nate, 'Just Use These'"
+  },
+  {
+    "id": "006",
+    "prop_type": "collage_split",
+    "prop_position": "split_panels",
+    "bg_style": "other",
+    "text_style": "all_caps_no_pill",
+    "face_position": "multiple",
+    "accent_colors": ["#3FA37A", "#E97A36"],
+    "glow_type": "none",
+    "notes": "Three-panel timeline 1950/2020/NOW with portraits of Turing, Altman, Krieger"
+  },
+  {
+    "id": "007",
+    "prop_type": "terminal_window",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#FF6A1F", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Mac terminal showing rainbow 'workflows' + Opus 4.8; no headline text"
+  },
+  {
+    "id": "008",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#5BD3E5", "#F47B4A"],
+    "glow_type": "none",
+    "notes": "Laptop with AI Operating System dashboard, Claude star icon inset"
+  },
+  {
+    "id": "009",
+    "prop_type": "pure_text",
+    "prop_position": "left",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "multiple",
+    "accent_colors": ["#F47B4A", "#FFFFFF"],
+    "glow_type": "none",
+    "notes": "Two laughing devs + giant 'Opus 4.8' with star replacing the dot"
+  },
+  {
+    "id": "010",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "gradient_radial",
+    "text_style": "all_caps_no_pill",
+    "face_position": "center",
+    "accent_colors": ["#F47B4A", "#2BBF8A"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude vs OpenAI Codex icons flanking Nate, 'WHICH IS BETTER?'"
+  },
+  {
+    "id": "011",
+    "prop_type": "chart_diagram",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "all_caps_no_pill",
+    "face_position": "right",
+    "accent_colors": ["#3B6BD3", "#22A06B"],
+    "glow_type": "none",
+    "notes": "Hand-drawn whiteboard 6-step path to $100M exit"
+  },
+  {
+    "id": "012",
+    "prop_type": "chart_diagram",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#FF3B30", "#22A06B"],
+    "glow_type": "none",
+    "notes": "Whiteboard with 4 crossed-out business models, 'AI OS' circled green"
+  },
+  {
+    "id": "013",
+    "prop_type": "terminal_window",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#F47B4A", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude window showing 'Tokens Saved 93,000,000' stat card"
+  },
+  {
+    "id": "014",
+    "prop_type": "pure_text",
+    "prop_position": "right",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "left",
+    "accent_colors": ["#F47B4A", "#FFFFFF"],
+    "glow_type": "none",
+    "notes": "Two devs cropped left, 'Holy Sh*t' with star replacing the i"
+  },
+  {
+    "id": "015",
+    "prop_type": "logo_icon",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#5BD3E5", "#F47B4A"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude icon and Warp icon with swap arrows, 'Just Use Both'"
+  },
+  {
+    "id": "016",
+    "prop_type": "chart_diagram",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#FFD60A", "#FF3B30"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Whiteboard with crossed-out 'AI Agency' and forked road with yellow ???"
+  },
+  {
+    "id": "017",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#5BD3E5", "#F47B4A"],
+    "glow_type": "cyan_rim",
+    "notes": "Laptop showing 3D laptop/cloud/server triad with orange Claude stars"
+  },
+  {
+    "id": "018",
+    "prop_type": "3d_object",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "right",
+    "accent_colors": ["#1DA1F2", "#F47B4A"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Two mock tweet cards stacked (Sam Altman + Claude Devs); Nate points"
+  },
+  {
+    "id": "019",
+    "prop_type": "collage_split",
+    "prop_position": "split_panels",
+    "bg_style": "gradient_radial",
+    "text_style": "all_caps_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#F47B4A", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Beginner/Intermediate/Advanced three-panel with pixel-font bottom bar"
+  },
+  {
+    "id": "020",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#5BD3E5", "#F47B4A"],
+    "glow_type": "cyan_rim",
+    "notes": "Laptop showing Claude Code multi-agent dashboard UI; Nate points"
+  }
+]

@@ -1,0 +1,222 @@
+[
+  {
+    "id": "061",
+    "prop_type": "phone_screen",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#E8704C", "#3B82F6"],
+    "glow_type": "cyan_rim",
+    "notes": "iPhone iMessage with Claude Code + two glowing app icons (Claude, Messages) on left"
+  },
+  {
+    "id": "062",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#E8704C", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Old vs New Claude icon comparison with arrow between, warm glow on right"
+  },
+  {
+    "id": "063",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#E8704C", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude + brain icon combo with 'It knows everything' headline and chalk underline"
+  },
+  {
+    "id": "064",
+    "prop_type": "3d_object",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#E8704C", "#000000"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Manila folder labeled /computer holding Claude icon, smiling face right"
+  },
+  {
+    "id": "065",
+    "prop_type": "phone_screen",
+    "prop_position": "center",
+    "bg_style": "dark_blue",
+    "text_style": "all_caps_no_pill",
+    "face_position": "right",
+    "accent_colors": ["#FFFFFF", "#FF3B30"],
+    "glow_type": "none",
+    "notes": "Hand-held iPhone showing Cal AI app with red arrow + 'BUILT IN 1 WEEK' caption"
+  },
+  {
+    "id": "066",
+    "prop_type": "chart_diagram",
+    "prop_position": "fullscreen",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#E8704C", "#FFFFFF"],
+    "glow_type": "none",
+    "notes": "Pixel-art creatures: sad single vs trio network, 'It feels unfair' with chalk underline"
+  },
+  {
+    "id": "067",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "all_caps_pill",
+    "face_position": "center",
+    "accent_colors": ["#FF3B30", "#34C759"],
+    "glow_type": "none",
+    "notes": "Shushing face center, OLD red pill + NEW? green pill, n8n/HL vs Claude/Gemini icons"
+  },
+  {
+    "id": "068",
+    "prop_type": "laptop_screen",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#E8704C", "#000000"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Laptop with 9 social media app icon grid, Claude + manatee icons floating top"
+  },
+  {
+    "id": "069",
+    "prop_type": "pure_text",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "hand_drawn",
+    "face_position": "right",
+    "accent_colors": ["#E8704C", "#000000"],
+    "glow_type": "none",
+    "notes": "Whiteboard handwritten 8-item 'FULL COURSE' list with Claude icon, face right"
+  },
+  {
+    "id": "070",
+    "prop_type": "laptop_screen",
+    "prop_position": "center",
+    "bg_style": "dark_black",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#22D3EE", "#A855F7"],
+    "glow_type": "cyan_rim",
+    "notes": "Dark monitor showing video/image/audio icons flowing into Gemini logo via neon arrows"
+  },
+  {
+    "id": "071",
+    "prop_type": "laptop_screen",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#E8704C", "#FFD60A"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Laptop showing Tetris 'NEW HIGH SCORE' screen with Claude + theater masks icons top"
+  },
+  {
+    "id": "072",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#E8704C", "#4285F4"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude + Google Jules icons with 'God mode.' chalk-underlined headline"
+  },
+  {
+    "id": "073",
+    "prop_type": "terminal_window",
+    "prop_position": "right",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_pill",
+    "face_position": "left",
+    "accent_colors": ["#E8704C", "#22D3EE"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude prompt box 'build a $10k workflow', BORING + IT WORKS cyan pill"
+  },
+  {
+    "id": "074",
+    "prop_type": "3d_object",
+    "prop_position": "right",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "left",
+    "accent_colors": ["#E8704C", "#000000"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Manila folder with Claude icon + '/loop' label, face pointing at folder"
+  },
+  {
+    "id": "075",
+    "prop_type": "terminal_window",
+    "prop_position": "right",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "left",
+    "accent_colors": ["#E8704C", "#22D3EE"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude prompt 'Schedule a task' with 'Game Over' cyan pill on Over"
+  },
+  {
+    "id": "076",
+    "prop_type": "laptop_screen",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#22D3EE", "#FFFFFF"],
+    "glow_type": "none",
+    "notes": "Dashboard UI 99.8% success, '24/7 Agents' with cyan pill on 24/7"
+  },
+  {
+    "id": "077",
+    "prop_type": "3d_object",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#E8704C", "#FFFFFF"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Skills 1.0 vs Skills 2.0 folders with arrow, 'They're here.' chalk underline"
+  },
+  {
+    "id": "078",
+    "prop_type": "laptop_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#E8704C", "#22D3EE"],
+    "glow_type": "none",
+    "notes": "Laptop showing ME->agents tree of pixel creatures, 'My New Hire' cyan pill on Hire"
+  },
+  {
+    "id": "079",
+    "prop_type": "laptop_screen",
+    "prop_position": "center",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "right",
+    "accent_colors": ["#E8704C", "#FFD60A"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Laptop with Apple Watch exploded view, Nano Banana + Claude icons floating top"
+  },
+  {
+    "id": "080",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "pure_white",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#4285F4", "#FFD60A"],
+    "glow_type": "colored_rim",
+    "notes": "Claude Artifacts + Nano Banana icons with rainbow glow, 'Perfect text every time.'"
+  }
+]

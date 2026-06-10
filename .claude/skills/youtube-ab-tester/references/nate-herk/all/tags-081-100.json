@@ -1,0 +1,222 @@
+[
+  {
+    "id": "081",
+    "prop_type": "3d_object",
+    "prop_position": "right",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_pill",
+    "face_position": "left",
+    "accent_colors": ["#7FE8E0", "#F4A582"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude Code prompt box mock with orange Claude icon and cyan pill on 'ANYTHING'"
+  },
+  {
+    "id": "082",
+    "prop_type": "phone_screen",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "center",
+    "accent_colors": ["#F4A582", "#E74C3C"],
+    "glow_type": "none",
+    "notes": "Phone in hand showing Claude Code with dead-bot emoji in corner, pointing pose"
+  },
+  {
+    "id": "083",
+    "prop_type": "laptop_screen",
+    "prop_position": "right",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "left",
+    "accent_colors": ["#F4A582", "#FFFFFF"],
+    "glow_type": "none",
+    "notes": "iMac displaying Crossy Road style game with pixel creatures, shocked expression"
+  },
+  {
+    "id": "084",
+    "prop_type": "terminal_window",
+    "prop_position": "left",
+    "bg_style": "warm_gray_room",
+    "text_style": "all_caps_pill",
+    "face_position": "right",
+    "accent_colors": ["#7FE8E0", "#F4A582"],
+    "glow_type": "none",
+    "notes": "Python code in terminal window with cyan title pill, orange Claude icon overlay"
+  },
+  {
+    "id": "085",
+    "prop_type": "3d_object",
+    "prop_position": "split_panels",
+    "bg_style": "warm_gray_room",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "center",
+    "accent_colors": ["#F4A582", "#7FE94A"],
+    "glow_type": "colored_rim",
+    "notes": "Orange Claude vs green n8n 3D app icons held in hands, glow behind each"
+  },
+  {
+    "id": "086",
+    "prop_type": "other",
+    "prop_position": "center",
+    "bg_style": "pure_white",
+    "text_style": "hand_drawn",
+    "face_position": "right",
+    "accent_colors": ["#F4A582", "#000000"],
+    "glow_type": "none",
+    "notes": "Whiteboard with handwritten numbered list, finger pointing at it"
+  },
+  {
+    "id": "087",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "all_caps_pill",
+    "face_position": "center",
+    "accent_colors": ["#7FE8E0", "#E1306C"],
+    "glow_type": "none",
+    "notes": "Multiple brand app logos (Instagram/Facebook/Gmail/LinkedIn) flanking face, cyan pill"
+  },
+  {
+    "id": "088",
+    "prop_type": "other",
+    "prop_position": "right",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_pill",
+    "face_position": "left",
+    "accent_colors": ["#4FB3F9", "#FFFFFF"],
+    "glow_type": "none",
+    "notes": "Gmail subject line mockup with blue paint-stroke pill, shush pose, blue arrow"
+  },
+  {
+    "id": "089",
+    "prop_type": "3d_object",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "center",
+    "accent_colors": ["#F4A582", "#FFFFFF"],
+    "glow_type": "cyan_rim",
+    "notes": "Two white app icon tiles (orange Claude pixel + Firecrawl flame) flanking face, cyan rim glow"
+  },
+  {
+    "id": "090",
+    "prop_type": "terminal_window",
+    "prop_position": "right",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_pill",
+    "face_position": "left",
+    "accent_colors": ["#7FE8E0", "#F4A582"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Claude Code prompt box mock with cyan 'MADE EASY' pill, orange Claude icon"
+  },
+  {
+    "id": "091",
+    "prop_type": "other",
+    "prop_position": "left",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_pill",
+    "face_position": "right",
+    "accent_colors": ["#7FE8E0", "#F4A582"],
+    "glow_type": "none",
+    "notes": "iOS-style notification banner showing payment received, cyan pill on '7 DAYS'"
+  },
+  {
+    "id": "092",
+    "prop_type": "chart_diagram",
+    "prop_position": "fullscreen",
+    "bg_style": "dark_blue",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#FF2D55", "#FFFFFF"],
+    "glow_type": "colored_rim",
+    "notes": "Red glowing stock-chart crashing line with n8n logo, no face, arrow to dot"
+  },
+  {
+    "id": "093",
+    "prop_type": "3d_object",
+    "prop_position": "split_panels",
+    "bg_style": "warm_gray_room",
+    "text_style": "no_text",
+    "face_position": "center",
+    "accent_colors": ["#E74C3C", "#7FE8E0"],
+    "glow_type": "warm_orange_rim",
+    "notes": "Army of red Clawdbot 3D robots flanking face, shush pose, warm rim light"
+  },
+  {
+    "id": "094",
+    "prop_type": "collage_split",
+    "prop_position": "split_panels",
+    "bg_style": "other",
+    "text_style": "all_caps_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#F4A582", "#E74C3C"],
+    "glow_type": "none",
+    "notes": "Left/right split: tidy blue scene vs chaotic orange scene, both labeled '1 HOUR'"
+  },
+  {
+    "id": "095",
+    "prop_type": "laptop_screen",
+    "prop_position": "right",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "left",
+    "accent_colors": ["#E74C3C", "#FFFFFF"],
+    "glow_type": "cyan_rim",
+    "notes": "Laptop showing Clawdbot landing page, cyan glow behind text, curved arrow"
+  },
+  {
+    "id": "096",
+    "prop_type": "logo_icon",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "all_caps_pill",
+    "face_position": "center",
+    "accent_colors": ["#E74C3C", "#7FE94A"],
+    "glow_type": "none",
+    "notes": "OLD red pill + n8n icon vs NEW green pill + Claude icon, comparison layout"
+  },
+  {
+    "id": "097",
+    "prop_type": "chart_diagram",
+    "prop_position": "fullscreen",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "none",
+    "accent_colors": ["#4FB3F9", "#FFFFFF"],
+    "glow_type": "cyan_rim",
+    "notes": "Side-by-side n8n workflow diagrams (red/error vs clean) with arrow, Old vs New caps"
+  },
+  {
+    "id": "098",
+    "prop_type": "laptop_screen",
+    "prop_position": "right",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "left",
+    "accent_colors": ["#4FB3F9", "#F4A582"],
+    "glow_type": "cyan_rim",
+    "notes": "Laptop showing Claude Code splash, cyan glow on title, curved white arrow"
+  },
+  {
+    "id": "099",
+    "prop_type": "chart_diagram",
+    "prop_position": "fullscreen",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "center",
+    "accent_colors": ["#4FB3F9", "#FFFFFF"],
+    "glow_type": "cyan_rim",
+    "notes": "n8n workflow chain + Gamma deck preview behind face, n8n+G logo callout"
+  },
+  {
+    "id": "100",
+    "prop_type": "3d_object",
+    "prop_position": "split_panels",
+    "bg_style": "dark_black",
+    "text_style": "mixed_case_no_pill",
+    "face_position": "center",
+    "accent_colors": ["#F4A582", "#E91E63"],
+    "glow_type": "cyan_rim",
+    "notes": "Pink n8n icon tile + orange Claude pixel tile flanking face, cyan glow on title"
+  }
+]
