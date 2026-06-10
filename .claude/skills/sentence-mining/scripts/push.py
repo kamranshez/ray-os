@@ -41,7 +41,7 @@ PERMANENT_TAG_VIDEO = "claude-sentence-mining"
 PERMANENT_TAG_BANK = "claude-sentence-bank"
 
 
-def build_note(candidate, source_url, permanent_tag):
+def build_note(candidate, source_url, permanent_tag, source_id=None):
     speaker = candidate.get("speaker")
     # Prepend a small speaker prefix to the sentence so the card shows who's
     # talking. Skip if no diarization data — keep older drafts working.
@@ -57,6 +57,8 @@ def build_note(candidate, source_url, permanent_tag):
     i_level = candidate.get("i_level", "").strip()
     if i_level:
         tags.append(i_level)
+    if source_id:
+        tags.append(f"source:{source_id}")
 
     sentence_audio_file = candidate.get("sentenceAudio_file", "")
     picture_file = candidate.get("picture_file", "")
@@ -101,7 +103,7 @@ def main():
         anki_request("createDeck", deck=d)
 
     notes = [
-        build_note(c, data.get("source_url", ""), permanent_tag)
+        build_note(c, data.get("source_url", ""), permanent_tag, data.get("source_id"))
         for c in data["candidates"]
     ]
 
