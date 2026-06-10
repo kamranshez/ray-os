@@ -1,0 +1,98 @@
+<!doctype html><html class="dark" lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Navigating The Discord — AI Coding for Real Engineers</title>
+<link rel="stylesheet" href="../../css/0u4-av8wgl9~-.css">
+<link rel="stylesheet" href="../../css/0u7iqnrb4o4a..css">
+
+<style id="portal-shell">
+:root{color-scheme:dark}
+html.dark,html{background:#0b0b0d}
+#pbody{margin:0;background:#0b0b0d;color:#e7e7ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;display:flex;min-height:100vh}
+#psidebar{position:fixed;top:0;left:0;width:300px;height:100vh;overflow-y:auto;background:#111114;border-right:1px solid #232329;padding:18px 14px 60px;box-sizing:border-box;z-index:10}
+#psidebar .home{display:block;font-weight:700;color:#fff;text-decoration:none;font-size:15px;margin:0 6px 14px}
+#psidebar .home span{color:#f5a524}
+#psidebar h3{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7a7a83;margin:16px 6px 4px}
+#psidebar a.wk{display:block;color:#cdcdd4;text-decoration:none;font-weight:600;font-size:13.5px;padding:4px 6px;border-radius:6px}
+#psidebar a.wk:hover{background:#1c1c22}
+#psidebar ol{list-style:none;margin:2px 0 8px;padding:0}
+#psidebar ol li a{display:block;color:#9a9aa2;text-decoration:none;font-size:13px;padding:3px 6px 3px 16px;border-radius:6px;line-height:1.3}
+#psidebar ol li a:hover{background:#1c1c22;color:#e7e7ea}
+#psidebar ol li a.active{background:#2a230f;color:#f5a524;font-weight:600}
+#pmain{margin-left:300px;flex:1;min-width:0;display:flex;justify-content:center;padding:0 28px 80px}
+#pcontent{width:100%;max-width:760px;padding-top:34px}
+#pcrumb{font-size:12.5px;color:#7a7a83;margin-bottom:6px}
+#pcrumb a{color:#f5a524;text-decoration:none}
+#pcontent>h1.ptitle{font-size:32px;line-height:1.15;margin:2px 0 22px;color:#fff}
+/* ---- content normalization (wins over the site's prose CSS via #id specificity) ---- */
+#pcontent article{max-width:none!important;color:#d4d4db;font-size:16px;line-height:1.65}
+#pcontent article>*:first-child{margin-top:0}
+#pcontent p{margin:0 0 1.05em;line-height:1.65}
+#pcontent h1,#pcontent h2,#pcontent h3,#pcontent h4{color:#fff;font-weight:650;line-height:1.25;margin:1.7em 0 .55em}
+#pcontent h2{font-size:1.55em;padding-bottom:.25em;border-bottom:1px solid #232329}
+#pcontent h3{font-size:1.25em}
+#pcontent h4{font-size:1.08em}
+#pcontent ul,#pcontent ol{margin:0 0 1.05em;padding-left:1.5em}
+#pcontent li{margin:.3em 0;line-height:1.6}
+#pcontent li>ul,#pcontent li>ol{margin:.3em 0}
+#pcontent a{color:#f5a524;text-decoration:underline;text-underline-offset:2px}
+#pcontent h1 a,#pcontent h2 a,#pcontent h3 a,#pcontent h4 a{color:inherit;text-decoration:none}
+#pcontent strong{color:#fff;font-weight:650}
+#pcontent hr{border:0;border-top:1px solid #232329;margin:2em 0}
+#pcontent blockquote{margin:1.1em 0;padding:.2em 0 .2em 1em;border-left:3px solid #3a3a42;color:#a9a9b2}
+#pcontent blockquote p{margin:.3em 0}
+/* tables */
+#pcontent table{border-collapse:collapse;width:auto;max-width:100%;margin:1.2em 0;font-size:14.5px;display:block;overflow-x:auto}
+#pcontent th,#pcontent td{border:1px solid #2c2c33;padding:8px 14px;text-align:left;vertical-align:top}
+#pcontent th{background:#17171b;color:#fff;font-weight:600}
+#pcontent tr:nth-child(even) td{background:#101013}
+/* inline code */
+#pcontent code{background:#1c1c22;border:1px solid #26262d;border-radius:5px;padding:.1em .35em;font-size:.88em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+/* real code blocks (keep site highlighting; just frame them) */
+#pcontent pre{overflow-x:auto;border-radius:8px;font-size:13.5px;line-height:1.5;padding:14px 16px;margin:1.1em 0;background:#141418;border:1px solid #26262d}
+#pcontent pre code{background:none;border:0;padding:0;font-size:inherit}
+#pcontent img{max-width:100%;height:auto;border-radius:8px;border:1px solid #232329;margin:16px 0;display:block}
+#pnav{display:flex;justify-content:space-between;gap:14px;margin-top:48px;border-top:1px solid #232329;padding-top:20px}
+#pnav a{flex:1;text-decoration:none;color:#cdcdd4;background:#141418;border:1px solid #232329;border-radius:10px;padding:12px 16px;font-size:13px}
+#pnav a:hover{border-color:#f5a524;color:#fff}
+#pnav a.next{text-align:right}
+#pnav a .lbl{display:block;color:#7a7a83;font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+@media(max-width:900px){#psidebar{display:none}#pmain{margin-left:0}}
+</style>
+</head><body id="pbody">
+<nav id="psidebar"><a class="home" href="../index.html"><span>◆</span> AI Coding for Real Engineers</a><a class="wk" href="../before-start/index.html">Before We Start</a><ol><li><a href="../before-start/where-we-re-going.html">Where We&#x27;re Going</a></li><li><a class="active" href="../before-start/discord.html">Navigating The Discord</a></li><li><a href="../before-start/repo-setup.html">Repo Setup</a></li><li><a href="../before-start/database-migrations.html">Database Migrations</a></li><li><a href="../before-start/claude-setup.html">Setting Up Claude For The Course</a></li><li><a href="../before-start/take-this-course.html">How To Take This Course</a></li><li><a href="../before-start/office-hours.html">Office Hours</a></li><li><a href="../before-start/cohort-003-004-changelog.html">Appendix: Cohort 003 → Cohort 004 Changelog</a></li></ol><a class="wk" href="../claude-code/index.html">Getting To Know Claude Code</a><ol><li><a href="../claude-code/intro.html">Intro</a></li><li><a href="../claude-code/claude-code-session.html">Managing Your Claude Code Session</a></li><li><a href="../claude-code/terminal-prompting.html">Prompting In The Terminal</a></li><li><a href="../claude-code/claude-ide.html">Claude And Your IDE</a></li><li><a href="../claude-code/time-travel.html">Going Forwards And Backwards In Time</a></li><li><a href="../claude-code/bash-commands.html">Running Bash Commands</a></li><li><a href="../claude-code/permissions.html">Permissions</a></li></ol><a class="wk" href="../fundamentals/index.html">Day 1 — Fundamentals</a><ol><li><a href="../fundamentals/llm-constraints.html">The Constraints Of LLMs</a></li><li><a href="../fundamentals/subagents.html">What Are Subagents</a></li><li><a href="../fundamentals/codebase-exploration.html">Codebase Exploration</a></li><li><a href="../fundamentals/build-feature.html">Build A Feature</a></li><li><a href="../fundamentals/non-determinism.html">Non Determinism</a></li><li><a href="../fundamentals/status-line-context.html">Showing Context In The Status Line</a></li><li><a href="../fundamentals/plan-mode-sucks.html">Why Plan Mode Sucks</a></li><li><a href="../fundamentals/grill-execute-clear.html">The Grill Execute Clear Loop</a></li><li><a href="../fundamentals/compaction.html">Compaction</a></li><li><a href="../fundamentals/handoffs.html">Handing Off</a></li></ol><a class="wk" href="../steering/index.html">Day 2 — Steering</a><ol><li><a href="../steering/agents-md.html">What Is An Agents MD File</a></li><li><a href="../steering/steering-with-agents-md.html">Steering An Agent With The Agents MD File</a></li><li><a href="../steering/progressive-disclosure.html">Progressive Disclosure</a></li><li><a href="../steering/agent-skills.html">What Are Agent Skills</a></li><li><a href="../steering/skills-steering.html">Using Skills For Steering</a></li><li><a href="../steering/automatic-memory.html">Automatic Memory</a></li></ol><a class="wk" href="../planning/index.html">Day 3 — Planning</a><ol><li><a href="../planning/massive-tasks.html">How To Tackle Massive Tasks</a></li><li><a href="../planning/write-prds.html">Write Great PRDs With This Skill</a></li><li><a href="../planning/multi-phase-plans.html">Split Features Across Multiple Context Windows With Multi Phase Plans</a></li><li><a href="../planning/tracer-bullets.html">What Are Tracer Bullets</a></li><li><a href="../planning/tracer-bullet-plans.html">Use Tracer Bullets In Our Multi Phase Plan</a></li><li><a href="../planning/execute-plan.html">Executing Our Multi Phase Plan</a></li><li><a href="../planning/ask-user-question.html">Ask User Question</a></li></ol><a class="wk" href="../feedback-loops/index.html">Day 4 — Feedback Loops</a><ol><li><a href="../feedback-loops/code-is-cheap.html">Is Code Cheap</a></li><li><a href="../feedback-loops/feedback-loop-skills.html">Steering Agents To Use Feedback Loops With Skills</a></li><li><a href="../feedback-loops/do-work-skill.html">Building A Do Work Skill</a></li><li><a href="../feedback-loops/using-do-work-skill.html">Using Our Do Work Skill</a></li><li><a href="../feedback-loops/pre-commit-formatting.html">Fixing Agents Broken Formatting With Pre Commit</a></li><li><a href="../feedback-loops/red-green-refactor.html">What Is Red Green Refactor</a></li><li><a href="../feedback-loops/red-green-refactor-loop.html">Red Green Refactor</a></li></ol><a class="wk" href="../afk-agents/index.html">Day 5 — AFK Agents</a><ol><li><a href="../afk-agents/afk-agents.html">What Is An AFK Agent</a></li><li><a href="../afk-agents/sandcastle.html">Sandcastle</a></li><li><a href="../afk-agents/hitl-agents.html">Trying HITL Agents</a></li><li><a href="../afk-agents/sandboxing.html">Sandboxing</a></li><li><a href="../afk-agents/trying-afk-agents.html">Setting Up And Trying AFK Agents</a></li><li><a href="../afk-agents/backlogs-for-afk.html">Using Backlogs To Queue Tasks For AFK Agents</a></li><li><a href="../afk-agents/github-issues-setup.html">Setting Up Our Repo For GitHub Issues</a></li><li><a href="../afk-agents/agents-backlog.html">Hooking Up Agents To Your Backlog</a></li><li><a href="../afk-agents/github-prd-plan-skills.html">Updating Our PRD And Plan Skill To Use GitHub</a></li></ol><a class="wk" href="../hitl-patterns/index.html">Day 6 — Human In The Loop Patterns</a><ol><li><a href="../hitl-patterns/hitl-afk-tasks.html">HITL And AFK Tasks</a></li><li><a href="../hitl-patterns/dont-plan-kanban.html">Dont Plan Kanban</a></li><li><a href="../hitl-patterns/kanban-skill.html">Using The Kanban Skill</a></li><li><a href="../hitl-patterns/research.html">Research</a></li><li><a href="../hitl-patterns/trying-research.html">Trying Out Research</a></li><li><a href="../hitl-patterns/prototyping.html">Prototyping</a></li><li><a href="../hitl-patterns/ui-prototyping.html">Trying Out UI Prototyping</a></li><li><a href="../hitl-patterns/prototype-skill.html">The Prototype Skill</a></li><li><a href="../hitl-patterns/ai-friendly-codebases.html">Designing Codebases Ai Loves</a></li><li><a href="../hitl-patterns/improve-architecture-skill.html">The Improve Codebase Architecture Skill</a></li><li><a href="../hitl-patterns/module-aware-planning.html">Adding Module Awareness To Our Planprd Skill</a></li><li><a href="../hitl-patterns/final-workflow.html">The Final Workflow</a></li><li><a href="../hitl-patterns/appendix-greenfield-projects.html">Appendix: Greenfield Projects</a></li><li><a href="../hitl-patterns/appendix-grill-with-docs-lrk9q.html">Appendix: /grill-with-docs</a></li></ol><a class="wk" href="../ai-sdk-v6-crash-course/index.html">AI SDK v6 Crash Course</a></nav>
+<main id="pmain"><div id="pcontent">
+<div id="pcrumb"><a href="../index.html">Home</a> &nbsp;/&nbsp; <a href="index.html">Before We Start</a></div>
+<h1 class="ptitle">Navigating The Discord</h1>
+<article class="prose dark:prose-invert ch-content">
+<p>One of the most useful resources you will have during the cohort will be the <a href="https://aihero.dev/discord" rel="noopener noreferrer" target="_blank">Discord server</a>.</p>
+<p>The Discord server is a place where you can get your questions answered, have discussions, and talk about stuff that's out of scope for the cohort or stuff you've discovered while going through the course material.</p>
+<h2 id="community-channels"><a href="#community-channels">Community Channels</a></h2>
+<p>Inside the Discord server, there are a bunch of channels that aren't related to the course. Anyone who's part of the community can access these:</p>
+<ul>
+<li><code>#general</code> - general chat</li>
+<li><code>#ai-hero</code> - stuff specific to AI Hero</li>
+<li><code>#evalite</code> - one of the prominent open source repositories</li>
+<li><code>#sandcastle</code> - another open source repository</li>
+<li><code>#skills</code> - the skills repository</li>
+<li><code>#showcase</code> - for people to showcase whatever they want</li>
+<li><code>#random</code> - for random stuff</li>
+</ul>
+<p>These channels are available to everyone, even if you haven't bought a course.</p>
+<h2 id="cohort-channels"><a href="#cohort-channels">Cohort Channels</a></h2>
+<p>Once you have your cohort role, you'll see the <code>#ai-coding-cohort</code> category with exclusive channels for cohort members.</p>
+<p>If you have the <code>Cohort 004</code> role in Discord, you can see these channels. Previous cohort members with the <code>Cohort 003</code> role can also access all of these channels, including the Cohort 004 specific ones.</p>
+<div><div><div><div><table><thead><tr><th>Channel</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#ai-coding-cohort-general</code></td><td>For anyone who's taken the AI coding cohort. General announcements and course-related chat.</td></tr><tr><td><code>#ai-coding-cohort-random</code></td><td>Out of scope and off-topic stuff for cohort members.</td></tr><tr><td><code>#cohort-004-questions</code></td><td><strong>The most important channel.</strong> Ask questions about specific things inside the course. Open up a thread inside this channel to get your question answered about setup or anything else you need help with.</td></tr><tr><td><code>#cohort-004-office-hours-questions</code></td><td>Questions you want answered specifically during office hours. The best questions or most popular ones will be floated to the top.</td></tr></tbody></table></div></div><div/></div></div>
+<h2 id="how-to-get-help"><a href="#how-to-get-help">How to Get Help</a></h2>
+<p>If you have any questions regarding setup or anything you need answers to, open up a thread inside the <code>#cohort-004-questions</code> channel.</p>
+<p>During office hours, I will be answering your questions. I'll be looking at the <code>#cohort-004-office-hours-questions</code> channel to see what people want to discuss.</p>
+<h2 id="heroes-and-participation"><a href="#heroes-and-participation">Heroes and Participation</a></h2>
+<p>Throughout the duration of the cohort, I'm going to be sitting in the Discord server answering your questions.</p>
+<p>I'm also going to be nominating heroes. Heroes are people who are really helpful, post interesting tips, or generally show up inside the cohort and answer folks' questions.</p>
+<p>If you see any heroes in the Discord, feel free to thank them for their generosity and treat them with the respect they deserve.</p>
+<h2 id="troubleshooting-access"><a href="#troubleshooting-access">Troubleshooting Access</a></h2>
+<p>If you have any issues and can't see the channels, click the link below, which will take you to an interactive setup where you can recover the role that you've purchased.</p>
+<p>Hopefully that all makes sense. Feel free to ask in the Discord if you have any queries!</p>
+</article>
+<div id="pnav"><a class="prev" href="../before-start/where-we-re-going.html"><span class="lbl">← Previous</span>Where We&#x27;re Going</a><a class="next" href="../before-start/repo-setup.html"><span class="lbl">Next →</span>Repo Setup</a></div>
+</div></main>
+</body></html>

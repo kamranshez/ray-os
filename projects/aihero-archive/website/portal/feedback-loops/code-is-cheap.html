@@ -1,0 +1,125 @@
+<!doctype html><html class="dark" lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Is Code Cheap — AI Coding for Real Engineers</title>
+<link rel="stylesheet" href="../../css/0u4-av8wgl9~-.css">
+<link rel="stylesheet" href="../../css/0u7iqnrb4o4a..css">
+
+<style id="portal-shell">
+:root{color-scheme:dark}
+html.dark,html{background:#0b0b0d}
+#pbody{margin:0;background:#0b0b0d;color:#e7e7ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;display:flex;min-height:100vh}
+#psidebar{position:fixed;top:0;left:0;width:300px;height:100vh;overflow-y:auto;background:#111114;border-right:1px solid #232329;padding:18px 14px 60px;box-sizing:border-box;z-index:10}
+#psidebar .home{display:block;font-weight:700;color:#fff;text-decoration:none;font-size:15px;margin:0 6px 14px}
+#psidebar .home span{color:#f5a524}
+#psidebar h3{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7a7a83;margin:16px 6px 4px}
+#psidebar a.wk{display:block;color:#cdcdd4;text-decoration:none;font-weight:600;font-size:13.5px;padding:4px 6px;border-radius:6px}
+#psidebar a.wk:hover{background:#1c1c22}
+#psidebar ol{list-style:none;margin:2px 0 8px;padding:0}
+#psidebar ol li a{display:block;color:#9a9aa2;text-decoration:none;font-size:13px;padding:3px 6px 3px 16px;border-radius:6px;line-height:1.3}
+#psidebar ol li a:hover{background:#1c1c22;color:#e7e7ea}
+#psidebar ol li a.active{background:#2a230f;color:#f5a524;font-weight:600}
+#pmain{margin-left:300px;flex:1;min-width:0;display:flex;justify-content:center;padding:0 28px 80px}
+#pcontent{width:100%;max-width:760px;padding-top:34px}
+#pcrumb{font-size:12.5px;color:#7a7a83;margin-bottom:6px}
+#pcrumb a{color:#f5a524;text-decoration:none}
+#pcontent>h1.ptitle{font-size:32px;line-height:1.15;margin:2px 0 22px;color:#fff}
+/* ---- content normalization (wins over the site's prose CSS via #id specificity) ---- */
+#pcontent article{max-width:none!important;color:#d4d4db;font-size:16px;line-height:1.65}
+#pcontent article>*:first-child{margin-top:0}
+#pcontent p{margin:0 0 1.05em;line-height:1.65}
+#pcontent h1,#pcontent h2,#pcontent h3,#pcontent h4{color:#fff;font-weight:650;line-height:1.25;margin:1.7em 0 .55em}
+#pcontent h2{font-size:1.55em;padding-bottom:.25em;border-bottom:1px solid #232329}
+#pcontent h3{font-size:1.25em}
+#pcontent h4{font-size:1.08em}
+#pcontent ul,#pcontent ol{margin:0 0 1.05em;padding-left:1.5em}
+#pcontent li{margin:.3em 0;line-height:1.6}
+#pcontent li>ul,#pcontent li>ol{margin:.3em 0}
+#pcontent a{color:#f5a524;text-decoration:underline;text-underline-offset:2px}
+#pcontent h1 a,#pcontent h2 a,#pcontent h3 a,#pcontent h4 a{color:inherit;text-decoration:none}
+#pcontent strong{color:#fff;font-weight:650}
+#pcontent hr{border:0;border-top:1px solid #232329;margin:2em 0}
+#pcontent blockquote{margin:1.1em 0;padding:.2em 0 .2em 1em;border-left:3px solid #3a3a42;color:#a9a9b2}
+#pcontent blockquote p{margin:.3em 0}
+/* tables */
+#pcontent table{border-collapse:collapse;width:auto;max-width:100%;margin:1.2em 0;font-size:14.5px;display:block;overflow-x:auto}
+#pcontent th,#pcontent td{border:1px solid #2c2c33;padding:8px 14px;text-align:left;vertical-align:top}
+#pcontent th{background:#17171b;color:#fff;font-weight:600}
+#pcontent tr:nth-child(even) td{background:#101013}
+/* inline code */
+#pcontent code{background:#1c1c22;border:1px solid #26262d;border-radius:5px;padding:.1em .35em;font-size:.88em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+/* real code blocks (keep site highlighting; just frame them) */
+#pcontent pre{overflow-x:auto;border-radius:8px;font-size:13.5px;line-height:1.5;padding:14px 16px;margin:1.1em 0;background:#141418;border:1px solid #26262d}
+#pcontent pre code{background:none;border:0;padding:0;font-size:inherit}
+#pcontent img{max-width:100%;height:auto;border-radius:8px;border:1px solid #232329;margin:16px 0;display:block}
+#pnav{display:flex;justify-content:space-between;gap:14px;margin-top:48px;border-top:1px solid #232329;padding-top:20px}
+#pnav a{flex:1;text-decoration:none;color:#cdcdd4;background:#141418;border:1px solid #232329;border-radius:10px;padding:12px 16px;font-size:13px}
+#pnav a:hover{border-color:#f5a524;color:#fff}
+#pnav a.next{text-align:right}
+#pnav a .lbl{display:block;color:#7a7a83;font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+@media(max-width:900px){#psidebar{display:none}#pmain{margin-left:0}}
+</style>
+</head><body id="pbody">
+<nav id="psidebar"><a class="home" href="../index.html"><span>◆</span> AI Coding for Real Engineers</a><a class="wk" href="../before-start/index.html">Before We Start</a><ol><li><a href="../before-start/where-we-re-going.html">Where We&#x27;re Going</a></li><li><a href="../before-start/discord.html">Navigating The Discord</a></li><li><a href="../before-start/repo-setup.html">Repo Setup</a></li><li><a href="../before-start/database-migrations.html">Database Migrations</a></li><li><a href="../before-start/claude-setup.html">Setting Up Claude For The Course</a></li><li><a href="../before-start/take-this-course.html">How To Take This Course</a></li><li><a href="../before-start/office-hours.html">Office Hours</a></li><li><a href="../before-start/cohort-003-004-changelog.html">Appendix: Cohort 003 → Cohort 004 Changelog</a></li></ol><a class="wk" href="../claude-code/index.html">Getting To Know Claude Code</a><ol><li><a href="../claude-code/intro.html">Intro</a></li><li><a href="../claude-code/claude-code-session.html">Managing Your Claude Code Session</a></li><li><a href="../claude-code/terminal-prompting.html">Prompting In The Terminal</a></li><li><a href="../claude-code/claude-ide.html">Claude And Your IDE</a></li><li><a href="../claude-code/time-travel.html">Going Forwards And Backwards In Time</a></li><li><a href="../claude-code/bash-commands.html">Running Bash Commands</a></li><li><a href="../claude-code/permissions.html">Permissions</a></li></ol><a class="wk" href="../fundamentals/index.html">Day 1 — Fundamentals</a><ol><li><a href="../fundamentals/llm-constraints.html">The Constraints Of LLMs</a></li><li><a href="../fundamentals/subagents.html">What Are Subagents</a></li><li><a href="../fundamentals/codebase-exploration.html">Codebase Exploration</a></li><li><a href="../fundamentals/build-feature.html">Build A Feature</a></li><li><a href="../fundamentals/non-determinism.html">Non Determinism</a></li><li><a href="../fundamentals/status-line-context.html">Showing Context In The Status Line</a></li><li><a href="../fundamentals/plan-mode-sucks.html">Why Plan Mode Sucks</a></li><li><a href="../fundamentals/grill-execute-clear.html">The Grill Execute Clear Loop</a></li><li><a href="../fundamentals/compaction.html">Compaction</a></li><li><a href="../fundamentals/handoffs.html">Handing Off</a></li></ol><a class="wk" href="../steering/index.html">Day 2 — Steering</a><ol><li><a href="../steering/agents-md.html">What Is An Agents MD File</a></li><li><a href="../steering/steering-with-agents-md.html">Steering An Agent With The Agents MD File</a></li><li><a href="../steering/progressive-disclosure.html">Progressive Disclosure</a></li><li><a href="../steering/agent-skills.html">What Are Agent Skills</a></li><li><a href="../steering/skills-steering.html">Using Skills For Steering</a></li><li><a href="../steering/automatic-memory.html">Automatic Memory</a></li></ol><a class="wk" href="../planning/index.html">Day 3 — Planning</a><ol><li><a href="../planning/massive-tasks.html">How To Tackle Massive Tasks</a></li><li><a href="../planning/write-prds.html">Write Great PRDs With This Skill</a></li><li><a href="../planning/multi-phase-plans.html">Split Features Across Multiple Context Windows With Multi Phase Plans</a></li><li><a href="../planning/tracer-bullets.html">What Are Tracer Bullets</a></li><li><a href="../planning/tracer-bullet-plans.html">Use Tracer Bullets In Our Multi Phase Plan</a></li><li><a href="../planning/execute-plan.html">Executing Our Multi Phase Plan</a></li><li><a href="../planning/ask-user-question.html">Ask User Question</a></li></ol><a class="wk" href="../feedback-loops/index.html">Day 4 — Feedback Loops</a><ol><li><a class="active" href="../feedback-loops/code-is-cheap.html">Is Code Cheap</a></li><li><a href="../feedback-loops/feedback-loop-skills.html">Steering Agents To Use Feedback Loops With Skills</a></li><li><a href="../feedback-loops/do-work-skill.html">Building A Do Work Skill</a></li><li><a href="../feedback-loops/using-do-work-skill.html">Using Our Do Work Skill</a></li><li><a href="../feedback-loops/pre-commit-formatting.html">Fixing Agents Broken Formatting With Pre Commit</a></li><li><a href="../feedback-loops/red-green-refactor.html">What Is Red Green Refactor</a></li><li><a href="../feedback-loops/red-green-refactor-loop.html">Red Green Refactor</a></li></ol><a class="wk" href="../afk-agents/index.html">Day 5 — AFK Agents</a><ol><li><a href="../afk-agents/afk-agents.html">What Is An AFK Agent</a></li><li><a href="../afk-agents/sandcastle.html">Sandcastle</a></li><li><a href="../afk-agents/hitl-agents.html">Trying HITL Agents</a></li><li><a href="../afk-agents/sandboxing.html">Sandboxing</a></li><li><a href="../afk-agents/trying-afk-agents.html">Setting Up And Trying AFK Agents</a></li><li><a href="../afk-agents/backlogs-for-afk.html">Using Backlogs To Queue Tasks For AFK Agents</a></li><li><a href="../afk-agents/github-issues-setup.html">Setting Up Our Repo For GitHub Issues</a></li><li><a href="../afk-agents/agents-backlog.html">Hooking Up Agents To Your Backlog</a></li><li><a href="../afk-agents/github-prd-plan-skills.html">Updating Our PRD And Plan Skill To Use GitHub</a></li></ol><a class="wk" href="../hitl-patterns/index.html">Day 6 — Human In The Loop Patterns</a><ol><li><a href="../hitl-patterns/hitl-afk-tasks.html">HITL And AFK Tasks</a></li><li><a href="../hitl-patterns/dont-plan-kanban.html">Dont Plan Kanban</a></li><li><a href="../hitl-patterns/kanban-skill.html">Using The Kanban Skill</a></li><li><a href="../hitl-patterns/research.html">Research</a></li><li><a href="../hitl-patterns/trying-research.html">Trying Out Research</a></li><li><a href="../hitl-patterns/prototyping.html">Prototyping</a></li><li><a href="../hitl-patterns/ui-prototyping.html">Trying Out UI Prototyping</a></li><li><a href="../hitl-patterns/prototype-skill.html">The Prototype Skill</a></li><li><a href="../hitl-patterns/ai-friendly-codebases.html">Designing Codebases Ai Loves</a></li><li><a href="../hitl-patterns/improve-architecture-skill.html">The Improve Codebase Architecture Skill</a></li><li><a href="../hitl-patterns/module-aware-planning.html">Adding Module Awareness To Our Planprd Skill</a></li><li><a href="../hitl-patterns/final-workflow.html">The Final Workflow</a></li><li><a href="../hitl-patterns/appendix-greenfield-projects.html">Appendix: Greenfield Projects</a></li><li><a href="../hitl-patterns/appendix-grill-with-docs-lrk9q.html">Appendix: /grill-with-docs</a></li></ol><a class="wk" href="../ai-sdk-v6-crash-course/index.html">AI SDK v6 Crash Course</a></nav>
+<main id="pmain"><div id="pcontent">
+<div id="pcrumb"><a href="../index.html">Home</a> &nbsp;/&nbsp; <a href="index.html">Day 4 — Feedback Loops</a></div>
+<h1 class="ptitle">Is Code Cheap</h1>
+<article class="prose dark:prose-invert ch-content">
+<p>There's a lot of people out there who are saying that the AI age is a new paradigm for software development. They argue that we need to chuck out all of our assumptions about how code works and what good code bases look like.</p>
+<p>The reasoning goes like this: agents are fundamentally different from people, from human developers. They need entirely different guardrails and entirely different setups. In other words, the old rules are for boomers, and now we need to find new ways of building software.</p>
+<h2 id="the-code-is-cheap-thesis"><a href="#the-code-is-cheap-thesis">The "Code is Cheap" Thesis</a></h2>
+<p>Much of this thinking comes down to a single mantra: <strong>code is cheap</strong>.</p>
+<p>When you have an AI agent that can basically churn out tons of code, the production of code becomes so much cheaper. So the argument goes that we don't need to worry that much about bugs anymore, because the AI will just be able to blast through code and create code faster than we've ever been able to see before.</p>
+<p>The conclusion people draw: software quality matters less because you can just always churn your way out of software quality issues. If you have a bad code base, the AI would just be able to fix it by blasting out more code.</p>
+<h2 id="why-this-is-wrong"><a href="#why-this-is-wrong">Why This Is Wrong</a></h2>
+<p>I think this is incorrect.</p>
+<p>I think that software quality matters <strong>more</strong> now, and that AI agents are <strong>more sensitive</strong> than humans to software quality. This massively affects how we should design our code bases and systems to take advantage of AI best.</p>
+<p>But first, let me start off by defining what I mean by software quality.</p>
+<p><strong>Is the code base easy to change?</strong></p>
+<p>This definition comes from <em>The Philosophy of Software Design</em> by John Ousterhout. John makes the argument that if a codebase is easier to change, then we can think of it as a better codebase.</p>
+<p><span><img alt="Holding up The Philosophy of Software Design by John Ousterhout" loading="lazy" decoding="async" data-nimg="fill" sizes="(max-width: 768px) 100vw, 734px" src="../../assets/images/5fd1e8463bf61969.jpg"/></span></p>
+<p>In other words:</p>
+<ul>
+<li>Is related information grouped together in the code base?</li>
+<li>How likely is it that a change you make to the code base will have unintended consequences that ripple outwards?</li>
+<li>What are the feedback loops like in the code base? If you make a change in one place and you accidentally cause a bug somewhere else, how likely are you to find out before you ship to production?</li>
+</ul>
+<h2 id="software-entropy"><a href="#software-entropy">Software Entropy</a></h2>
+<p>In a perfect world, we would always have perfect code bases. Our code bases would never be hard to change. They would always be well-designed and really easy to change with great feedback loops that we would always be able to catch bugs with.</p>
+<p>But the truth is that most times, most people are touching a code base, they are making it worse, not better.</p>
+<p>If you thoughtlessly make a change in a codebase to fix a bug or build a new feature, and you're not thinking about continually improving the code base or keeping it in this easy-to-change mode, then you are probably making that code base worse, not better.</p>
+<p>This concept comes from <em>The Pragmatic Programmer</em> and is called <strong>software entropy</strong>.</p>
+<p>We can think of this kind of like a kludge meter where it just slowly rises with every single commit.</p>
+<p><span><img alt="Diagram showing the kludge meter rising and then being interrupted by a refactoring commit" loading="lazy" decoding="async" data-nimg="fill" sizes="(max-width: 768px) 100vw, 734px" src="../../assets/images/54e70bb9bd28404b.jpg"/></span></p>
+<p>For anyone who's worked on any reasonable size of code base, this will ring true. Software developers don't work in a vacuum. There are pressures on you, there are time constraints, there are times when you just need to ship something immediately and you don't really care about the long-term consequences.</p>
+<p>Or there are times where you're just having a bad day and you just need to get your work done. On those days, you're probably going to be having a negative effect on the quality of your code base, even though you're shipping features.</p>
+<p>You can intervene and do refactors and redesigns that help stop the kludge. These might introduce a new part of the test suite or refactor the code to make it easier to change:</p>
+<p><span><img alt="Showing a commit that reduces the kludge meter" loading="lazy" decoding="async" data-nimg="fill" sizes="(max-width: 768px) 100vw, 734px" src="../../assets/images/52111fb9ccf37666.jpg"/></span></p>
+<p>But every commit that is not this thoughtful will eventually be increasing your software entropy again.</p>
+<h2 id="ai-and-software-entropy"><a href="#ai-and-software-entropy">AI and Software Entropy</a></h2>
+<p>In the AI age, AI massively increases the amount of commits you can do.</p>
+<p>But currently, it does not do a great job at the entropy-saving commits. Figuring out a better software design to prevent software entropy is one of the hardest tasks a software engineer can do. It's harder than building new features. It's harder than fixing bugs.</p>
+<p>And so it makes sense that AI is not very good at this yet. In its current state, <strong>AI is a software entropy accelerator</strong>.</p>
+<h2 id="how-ai-agents-learn-from-your-codebase"><a href="#how-ai-agents-learn-from-your-codebase">How AI Agents Learn From Your Codebase</a></h2>
+<p>This is especially true when you think of the three things that go into any AI coding session:</p>
+<ul>
+<li>The initial prompt (the thing that you're trying to get the agent to do)</li>
+<li>Any steering mechanisms you're using (like skills or CLAUDE.md)</li>
+<li><strong>Your code base</strong> (the biggest one, the most important one)</li>
+</ul>
+<p>Agents are much more likely to copy your codebase than any steering that you do because the codebase is the source of truth. If there are bad patterns in your code base, even if you're explicitly warning about them in your steering, it will tend to copy the code base by default.</p>
+<p>This means that AI is maybe even more susceptible to kludge than human developers, because it will just blindly copy whatever's in your codebase without applying its own taste to it.</p>
+<h2 id="the-statelessness-problem"><a href="#the-statelessness-problem">The Statelessness Problem</a></h2>
+<p>An AI in a bad code base will have access to way fewer feedback loops, and so it won't know when it's writing bad code.</p>
+<p>Humans, because they can develop memory about a bad codebase, can kind of survive it and work around it. And because they can understand what weird patterns a codebase has, they can produce fewer bugs and higher quality features within a bad codebase.</p>
+<p>But AI, remember, is stateless. So again, it is more susceptible to a bad codebase than a human is.</p>
+<p>It's a tale as old as time: you put garbage in, you're going to get garbage out.</p>
+<h2 id="the-reality-of-code-quality-in-the-ai-age"><a href="#the-reality-of-code-quality-in-the-ai-age">The Reality of Code Quality in the AI Age</a></h2>
+<p>So in my opinion, because software entropy is a fact of life, and because AI is just not really capable at the moment of creating these beautiful code-base saving commits, and because it's so unusually sensitive to code base quality, then I don't think we can say that code is cheap.</p>
+<p>Cheap code will just accelerate you to the point where you've maxed out your kludge meter where the code base is complete garbage and impossible for an AI to change.</p>
+<p>I know that you have worked in code bases like that. I have worked in code bases like that. And the only way you can get around it is by banging your head against the wall repeatedly until you're able to make the change or able to function within that code base.</p>
+<p>AI, because it has no memory, has no chance.</p>
+<p>In this section, we're going to talk about increasing the quality of your code through feedback loops, which are the essential way to prevent AI from increasing your software entropy.</p>
+</article>
+<div id="pnav"><a class="prev" href="../planning/ask-user-question.html"><span class="lbl">← Previous</span>Ask User Question</a><a class="next" href="../feedback-loops/feedback-loop-skills.html"><span class="lbl">Next →</span>Steering Agents To Use Feedback Loops With Skills</a></div>
+</div></main>
+</body></html>
