@@ -33,13 +33,20 @@
 - task: Check engagement on "Anthropic engineers write loops" post
   description: >
     "Most people open Claude Code and start typing prompts. Anthropic's
-    engineers open Claude Code and start writing loops." (belief disruption
-    + status signaling, full Boris Cherny quote) went live 2026-06-09.
-    Written using the "Most people X / Anthropic engineers Y" viral hook
-    formula identified from the 15-post viral-examples sweep in
-    references/viral-examples/2026-06/ (Jahanzaib Ahmed pattern).
-    Pull reactions, comments, reposts, impressions and update the
-    engagement block + last_checked.
+    engineers open Claude Code and start writing loops." went live 2026-06-09.
+    Checked 2026-06-11: 13 reactions, 0 comments, 0 reposts, 771 impressions.
+    Engagement block updated in post-history file.
   due: 2026-06-12
-  status: pending
+  status: done
   related_post: references/post-history/2026-06-09_anthropic-engineers-write-loops.md
+
+- task: Check engagement on nested subagents post
+  description: >
+    "Most people use subagents to protect their main context. The leverage is
+    letting subagents protect their own." (status signaling + aspiration,
+    contrast hook) went live 2026-06-11. Checked 10 min after posting:
+    0 reactions, 0 comments, 0 reposts, 8 impressions.
+    Pull full engagement in 3 days and update the post-history file.
+  due: 2026-06-14
+  status: pending
+  related_post: references/post-history/2026-06-11_nested-subagents-context-signal.md
