@@ -22,6 +22,11 @@ Until both are true, do not stop and do not return a summary.
 # Scope
 - Watchlist: last 10 videos per channel, filter to last 7 days, flag anything >= 3x channel median.
 - Keyword discovery: 20 results per keyword, filter to last 48h, dedupe against watchlist.
+- Auto-add (Step 3a/3b in SKILL.md): for each newly-discovered channel not already on the
+  watchlist, evaluate the `auto_add` bars (min_subscribers, min_outliers, on-niche). Channels
+  that clear ALL bars get appended to watchlist.yaml automatically; near-misses go to
+  auto_add_rejected. List any auto-adds in the report AND the Slack summary. This mutates
+  watchlist.yaml in the repo -- that's expected, no approval gate.
 - Title-pattern analysis across all flagged videos.
 
 # Output
