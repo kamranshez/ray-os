@@ -1,7 +1,7 @@
 ---
 duration: "12-16 min"
 batch: 3
-order: 9
+order: 10
 batch_name: "The Climb"
 class: "loopy-ai"
 chapter: "L5 Discovery Loops"
