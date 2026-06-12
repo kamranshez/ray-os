@@ -1,5 +1,7 @@
 # Outlier Thumbnail Analysis Framework
 
+> ⚠️ **GENERIC framework, NOT Ray-specific channel data.** This is a general theory of outlier thumbnails. Where it conflicts with Ray's own A/B results (`results/_master-summary.md`, `results/_anti-patterns.md`) or the SKILL.md subject rules, **the channel data wins.** Known conflicts: this doc says "mouth open / exaggerated emotions outperform" — but V23 found subtly-impressed *closed-mouth* won (40.3% vs open-mouth 31.2%), and the subject rules forbid shock/surprise/exaggeration. Treat the sections below as design vocabulary to draw from, not channel truth.
+
 ## What Makes a Thumbnail an "Outlier"
 
 An outlier thumbnail gets 3-10x the typical view count for its channel size. These thumbnails share common patterns worth studying and emulating.

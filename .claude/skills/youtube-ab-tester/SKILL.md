@@ -49,12 +49,14 @@ youtube-ab-tester/
 
 The reference data is the source of truth — re-derive recommendations from actual test results each time, not from baked-in formulas.
 
-- `references/results/YYYY-MM/` — Per-video A/B test results organized by year-month folders. Each file is `YYYY-MM-DD-slug.md`. **Read the most recent 4-6 video files (glob the latest month folder) for current patterns.**
-- `references/results/_master-summary.md` — Winning formula rankings and key rules
-- `references/results/_anti-patterns.md` — Documented failures to never repeat
+- **`references/results/_overview.md` — START HERE.** The routing map: which doc owns which question, the read-order map, and the authoritative video index (# → date → file, including the V27/V30 numbering note). Open this first whenever you're unsure where a fact lives.
+- `references/results/_master-summary.md` — Winning patterns, formula rankings, key rules, division of labor, test mechanics, diagnosis logic. Opens with a Durable Insights TL;DR.
+- `references/results/_anti-patterns.md` — The avoidance rules (never-do + downgraded). Single source of truth for what NOT to do.
 - `references/results/_tests-still-worth-running.md` — Untested hypotheses worth exploring
-- `references/results/_overview.md` — Document overview
+- `references/results/YYYY-MM/` — Per-video A/B test results, `YYYY-MM-DD-slug.md`. **Read the most recent 4-6 video files (glob the latest month folder) for current patterns.**
 - `references/thumbnails/v{N}-{slug}/tested/` — winning thumbnails by video, browse to see what worked
+
+**This file (SKILL.md) holds operating procedure only.** Patterns and rules live in the `results/` docs above — SKILL.md points to them and must not restate them (a restated rule drifts out of sync on the next edit).
 
 ## Recency Weighting
 
@@ -64,9 +66,7 @@ Audience preferences drift over time. When patterns from older videos conflict w
 - **5-9 videos ago:** High weight — verify against recent results
 - **10+ videos ago:** Reduced weight — foundational anti-patterns are durable, but specific scores drift
 
-**Durable patterns** (structural): parentheticals, multiple features in title, pipe format, "Stop X" accusatory, "Explained" framing.
-
-**Trend-sensitive patterns** (re-evaluate when newer data contradicts): verb rankings, whether "Anthropic" authority is required, optimal title length, which curiosity frames resonate.
+**Durable** (structural, survive across videos) vs **trend-sensitive** (re-evaluate when newer data contradicts): the classification and the full evidence live in `_anti-patterns.md` (durable never-dos + the Downgraded judgment-calls section) and `_master-summary.md` § Key Rules. Don't restate them here — read those. Rule of thumb: structural anti-patterns (mechanism-description titles, pipe format, "Stop X", "Explained", multiple features) are durable; verb rankings, whether "Anthropic" is required, title length, and which curiosity frames resonate are trend-sensitive.
 
 ---
 
@@ -103,7 +103,7 @@ Transcript: <inline OR path to file>
 - Frame diversity: at least 3 genuinely different framing categories.
 - Title + thumbnail must be COMPLEMENTARY, not redundant. Title says WHY/WHO, thumbnail says WHAT.
 - Format-ceiling warning: thesis/paradigm/leak/pillar videos historically pull ~17K vs ~45K for single-feature. Pillar exception: 5x masterclass CTR.
-- Anti-patterns: parentheticals, "Explained" framing, "Stop X" accusatory, pipe format, multiple features in title, FOMO/guilt, faceless thumbnails (V13), vague time refs, year labels, feature-framing thumbnails over personal.
+- Anti-patterns: apply the FULL `_anti-patterns.md` table (required reading #2 above) — it is the single source of truth and includes the Downgraded/weak-negative section. Do not work from memory. Worst offenders to never ship (quick safety net): literal mechanism-description titles, "Stop X" accusatory, "Explained" framing, pipe format, multiple features in title, secrecy words ("Secret"/"Hidden"), topic-mismatched verbatim reuse.
 
 # Output format
 
@@ -182,7 +182,7 @@ cd .claude/skills/youtube-ab-tester && npx ts-node scripts/generate.ts "<prompt>
 - `-o, --output` — Output directory
 - `-t, --timeout` — Timeout per image in seconds (always use 240)
 - `-r, --reference` — Single golden reference image (use ONE per generation — multiple wash styles into a generic average)
-- `--no-face` — Skip face references (the default V13 anti-pattern; ONLY use when explicitly requested as a deliberate test)
+- `--no-face` — Skip face references (faceless is composition-dependent, not banned — faceless won V20 thumb R1 and V17 R2; use for deliberate faceless test arms)
 - `--text` — Text with stronger spelling emphasis
 - `--name` — Output filename without `.png` extension; saves as `<output>/<name>.png`
 - `--clone` — Clone mode: pass an existing thumbnail to recreate with different text. Requires `--text`.
@@ -241,7 +241,7 @@ Don't use clone mode when the user wants different composition, expression, or l
 - Metaphor illustrations (cameras, bells, zzz clouds, cartoons) — failed in testing
 - Giant single-word typography as the only element — failed in testing
 - Crossed-out / X-marked commands — Ray rejected these
-- Faceless thumbnails (V13 anti-pattern) — ONLY override when Ray explicitly requests it as a test
+- Defaulting to faceless without a reason — face remains the default, but a strong faceless concept is a legitimate test arm (faceless won V20 thumb R1 at 38.5% auto-declared and V17 R2; lost V13/V22/V25)
 
 ### Golden references (current set)
 
@@ -364,6 +364,10 @@ When results are flat across title variants:
 - All titles share the same frame → the frame is the problem, test different frames
 - Titles use diverse frames but all score ~0-2% spread → thumbnail is the ceiling, switch to thumbnail testing
 - A proven winner formula suddenly scores ~33% → something external is capping it (thumbnail mismatch, audience fatigue, topic ceiling)
+- Control decay is routine — don't lock after one round, and don't read a small control drop as a problem.
+- Within-test share ≠ video success — if YouTube's early-warning fires, the topic/format is the ceiling and more title rounds won't fix it.
+
+(Evidence/citations for control decay and share≠success live in `_master-summary.md` § Test Mechanics — this is the operational shortcut.)
 
 ### When to Recommend What
 
