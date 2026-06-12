@@ -39,3 +39,34 @@ keywords:
 
 # Outlier threshold (multiplier of channel median views)
 min_multiplier: 3
+
+# Auto-add: during keyword discovery, when a NEW channel (not already in
+# channels: above) clears ALL of the bars below, the scout appends it to
+# channels: automatically with an "# auto-added YYYY-MM-DD" comment, and
+# announces it in the report + the Slack/Telegram summary. No approval gate --
+# remove unwanted adds with `/youtube-outlier-scout remove @handle`.
+auto_add:
+  enabled: true
+  min_subscribers: 5000      # channel size floor (yt-dlp channel_follower_count)
+  min_outliers: 2            # recent videos that must be outliers (>= min_multiplier x channel median)
+  # On-niche: at least one of these terms (case-insensitive) must appear across
+  # the channel's recent video titles. Keeps off-topic viral channels out.
+  niche_terms:
+    - AI
+    - agent
+    - claude
+    - cursor
+    - codex
+    - coding
+    - LLM
+    - automation
+    - RAG
+    - vibe
+    - MCP
+    - n8n
+    - prompt
+    - workflow
+
+# Channels the scout evaluated for auto-add but rejected, with the date + reason.
+# Prevents re-evaluating the same near-miss every run. Managed by the scout.
+auto_add_rejected: []

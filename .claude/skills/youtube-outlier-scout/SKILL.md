@@ -174,7 +174,7 @@ awk -F'|' -v yesterday="$YESTERDAY" '$5 >= yesterday'
 3. Deduplicate across keywords (same video can match multiple terms)
 4. For videos with high raw views (>10k in first 48h), note them as discoveries
 
-### Step 3 -- Cross-Reference Discoveries
+### Step 3 -- Cross-Reference Discoveries + Auto-Add New Channels
 
 For keyword discoveries that look promising (high views, recent):
 - Check if the channel is already on the watchlist (skip if so -- already covered)
@@ -190,6 +190,63 @@ yt-dlp --flat-playlist --playlist-end 10 --print "%(id)s" \
   "https://www.youtube.com/watch?v={}" 2>/dev/null' | \
   sort -n | awk '{a[NR]=$1} END {print a[int(NR/2)+1]}'
 ```
+
+#### Step 3a -- Auto-Add Evaluation
+
+Read the `auto_add` block from `watchlist.yaml`. If `auto_add.enabled` is `false`,
+skip this sub-step entirely.
+
+For every channel surfaced by keyword discovery that is **not already in
+`channels:`** and **not in `auto_add_rejected:`**, evaluate it against ALL of the
+auto-add bars. The cleanest way is one pull that returns title, view count, and
+subscriber count for the channel's last 10 videos:
+
+```bash
+# Returns: title|viewCount|subscriberCount  (last 10 videos of the candidate)
+yt-dlp --flat-playlist --playlist-end 10 --print "%(id)s" \
+  "https://www.youtube.com/@NewChannel/videos" 2>/dev/null | \
+  xargs -P 10 -I {} sh -c \
+  'yt-dlp --no-download --print "%(title)s|%(view_count)s|%(channel_follower_count)s" \
+  "https://www.youtube.com/watch?v={}" 2>/dev/null'
+```
+
+From that one pull, compute the three bars (a candidate must clear **all three**):
+
+1. **Min subscriber floor** -- `channel_follower_count >= auto_add.min_subscribers`.
+   (The follower count is identical on every row; read it from any row.)
+2. **Repeat outliers** -- compute the channel's median view count from the 10 rows,
+   then count how many of those videos are `>= min_multiplier x median`. Require
+   `count >= auto_add.min_outliers`. One lucky breakout is not enough.
+3. **On-niche topic** -- at least one term from `auto_add.niche_terms` appears
+   (case-insensitive) somewhere across the candidate's recent titles.
+
+Use the channel handle as the dedupe key. If the same candidate shows up under
+multiple keywords, evaluate it once.
+
+#### Step 3b -- Apply the Decision
+
+- **Clears all three bars ->** Edit `watchlist.yaml`: append the handle to
+  `channels:` with a trailing comment `# auto-added YYYY-MM-DD: <subs>, <N> outliers`.
+  Record it for the report's "Channels Auto-Added This Run" section.
+- **Fails one or more bars ->** Append an entry to `auto_add_rejected:` so the same
+  near-miss is not re-evaluated every day:
+  ```yaml
+  auto_add_rejected:
+    - handle: "@SomeChannel"
+      date: "YYYY-MM-DD"
+      reason: "only 12k views median, 1 outlier (needs 2)"
+  ```
+
+Keep the `auto_add_rejected:` list pruned to the last ~60 days so it does not grow
+without bound -- a channel that was too small months ago may qualify later.
+
+**Notes:**
+- Never auto-add a handle that is already in `channels:`.
+- If a candidate's channel page is private/deleted or the pull returns no rows,
+  skip it silently (do not add to rejected -- it was never evaluable).
+- Auto-add mutates `watchlist.yaml`, so the very next run already monitors the new
+  channel. Its baseline median lands in `baselines.yaml` on the next refresh; until
+  then the daily scan uses the quick 10-video median computed here.
 
 ### Step 4 -- Analyze Title Patterns
 
@@ -229,6 +286,7 @@ channels-scanned: N
 keywords-searched: N
 recent-outliers-found: N
 discoveries-found: N
+channels-auto-added: N
 ---
 
 ## Outlier Scout Report -- YYYY-MM-DD
@@ -256,10 +314,18 @@ Videos from tracked channels published in the last 7 days hitting 3x+ their medi
 1. [formula with example]
 2. [formula with example]
 
+### Channels Auto-Added This Run
+
+Channels that cleared the auto-add bars and were appended to the watchlist:
+- @handle -- X subs, N outliers, on-niche ("term") -- now monitored from tomorrow
+
+(Omit this section if none were added. Remove any with `/youtube-outlier-scout remove @handle`.)
+
 ### Channels to Watch
 
-New or small channels with breakout videos:
-- @handle -- "Video Title" (Nx their usual, X views)
+New or small channels with breakout videos that did NOT clear the auto-add bars
+(too small, single breakout, or off-niche) -- worth a human eyeball:
+- @handle -- "Video Title" (Nx their usual, X views) -- missed bar: <which one>
 
 ### Actionable Ideas for Ray
 
@@ -292,6 +358,9 @@ The Telegram message should be concise (Ray reads on his phone) and include:
 - Top 5 trending videos (last 48h) with view counts
 - Top title formulas with multipliers
 - Top 5 biggest outliers with multipliers
+- **Any channels auto-added this run** -- list each `@handle` with its one-line
+  reason (subs + outlier count), e.g. "Added @SomeChannel: 80k subs, 3 outliers.
+  Remove with /youtube-outlier-scout remove @SomeChannel". Omit if none were added.
 - One line: "Full report saved to ray-os"
 
 Keep it under ~1500 characters. No markdown formatting (plain text only for Telegram).
