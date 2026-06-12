@@ -1,7 +1,7 @@
 ---
 duration: "14-18 min"
 batch: 3
-order: 5
+order: 6
 batch_name: "The Climb"
 class: "loopy-ai"
 chapter: "Autoresearch"
