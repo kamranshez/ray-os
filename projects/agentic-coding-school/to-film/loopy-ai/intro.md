@@ -13,6 +13,10 @@ Most people hear that and assume he means a cron job. Or a while loop. Or one of
 
 He doesn't mean any of those things. He means something bigger. And almost nobody is doing it yet.
 
+Once you learn to see them, loops are everywhere. A developer's inner loop is write, run, read the error, fix, run again. Project management is a loop: plan the sprint, ship it, review what happened, plan the next one. A CEO runs a loop measured in weeks instead of seconds, set the bet, watch the numbers, correct course, repeat. Zoom out far enough and an entire startup is one big loop wrapped around a stack of smaller ones, all the way down to a single keystroke.
+
+The shape never changes. Decide what matters, do it, check it, go again. What changes is two things: how long one turn of the loop takes, and who, or what, is the one closing it. For most of history the answer to that second question was always a human. That is the part coming loose. The moment a loop can close itself, the person who used to sit inside it gets to step up a level and start writing the loop instead of being it. That move, repeated at every altitude, is the whole story of this class.
+
 This class is the map for that territory.
 
 Source: Boris Cherny on Acquired Unplugged, June 2026.
