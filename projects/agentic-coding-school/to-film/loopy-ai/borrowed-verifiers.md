@@ -75,7 +75,7 @@ These are noisier than deterministic verifiers. The score moves around. But they
 
 No, and the test is sharp: **did the verifier observe something the builder didn't get to author?** Lighthouse runs the page in a headless browser and measures actual LCP, CLS, render times. axe-core traverses the actual DOM. React Doctor watches actual component re-renders. The model parts aggregate real signals into a number; they don't invent the signals. The grading is grounded in runtime observation the builder can't phrase its way past.
 
-A pure static-prompt model scorer — "rate this code 1-10" — fails this test. The model sees only what the builder wrote. There's no second observation. That's self-grading even if you swap to a different model.
+A pure static-prompt model scorer — "rate this code 1-10" — fails this test. The model sees only what the builder wrote. There's no second observation. That's self-grading even if you swap to a different model, or run the score in a fresh subagent. A clean context window helps with one thing: the checker hasn't already committed to "this is done," so it stops defending what it just wrote. But a fresh window does not manufacture a second observation. With nothing new to look at, it drifts to "looks fine" for the same reason the first context did. Fresh eyes are necessary for an honest grade. They are not sufficient for a real one.
 
 The rule: a scored verifier is safe to borrow when it touches reality. A scored verifier that only re-reads the artifact is not.
 

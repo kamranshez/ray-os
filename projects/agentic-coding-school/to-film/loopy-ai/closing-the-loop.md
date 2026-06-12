@@ -45,6 +45,7 @@ Two consequences. First: the four-part anatomy is the five-primitive loop with t
 - Playwright write-test-fix. Generate a test, run it, watch it fail, fix the implementation, re-run. Exits when test goes green.
 - Cursor's quality-review skill. Same shape, different artifact.
 - One agent or two? Same model can play both roles, switching prompts. Or two agents in series. The L2 shape doesn't care, but the failure mode is the same: don't let the *checker* be a re-statement of the *builder*.
+- Why a separate subagent helps, and where it stops. In the builder's own context the model has already said "done" and now reads its own work as something to defend. A fresh window hasn't committed to anything, so it can actually look. That makes "non-builder" partly a *context* property, not just a *prompt* one. But fresh context only buys honesty, not rigour. The checker still needs a reason to disagree: a borrowed verifier that observed something, or an asymmetric prompt told to refute. Clean context plus no reason to push back still rubber-stamps. See [[borrowed-verifiers]] for the grounded version, [[adversarial-reviewer-skill]] for the prompted version.
 - This is the pattern that [[borrowed-verifiers]] then makes concrete by sourcing the verifier from outside the model.
 - This is the pattern that [[adversarial-reviewer-skill]] then sharpens by making the checker asymmetric.
 

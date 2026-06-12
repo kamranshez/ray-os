@@ -31,6 +31,8 @@ This is the L2 building block that the rest of the class needs. ACE (segment 4.1
 
 You don't need a different model. You need a different *prompt*. The attacker prompt is heavily weighted toward refusal. Same weights. Asymmetric instructions. That's the trick.
 
+Two levers, though, not one. The prompt is the bigger lever: same weights, instructions weighted toward refusal. The context is the quieter one. Run the attacker as a separate subagent, not a follow-up turn in the same thread. In one context the model has already written "here is the PRD" and now reads its own work as something to defend; a fresh window reads it as something to break. This is why subjective work (a PRD, a plan, copy) leans harder on this pattern than code does: code has borrowed verifiers that touch reality, so the verifier already has a reason to disagree. Prose has no compiler, so the only independent grade you can get is a fresh context pointed at refutation. Use both levers: the asymmetric prompt for the reason to disagree, the fresh context so nothing is already committed.
+
 ## Sources / refs
 
 - Loop Bank idea #2 (adversarial reviewer skill pattern)

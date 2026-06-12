@@ -20,7 +20,7 @@ Three things you actually need to know.
 
 - **Skip permissions on the trusted path.** `--dangerously-skip-permissions` is the unlock for everything above L1. Without it, your loops stop every five seconds asking for confirmation. With it, you have to actually trust your loop. Aakash Gupta level 1.
 - **Context management.** `/clear` between unrelated tasks. `/compact` when the same task drags on. Scratchpadding to survive resets. Subagent calls to keep tool noise out of your main thread. Aakash level 2 and 3.
-- **Subagents as parallel context.** A subagent is a fresh window with its own context budget. Use them for "go and find" and "go and grade" tasks. Their tool output stays out of your main thread.
+- **Subagents as parallel context.** A subagent is a fresh window with its own context budget. Use them for "go and find" and "go and grade" tasks. Their tool output stays out of your main thread. The "go and grade" case is doing more than saving tokens. A subagent grades in a window that never watched the work get made, so it hasn't already committed to "this is done." That clean context is the seed of the verifier in [[closing-the-loop]] and the attacker in [[adversarial-reviewer-skill]]. As both of those segments stress, though, a fresh window only grades honestly if it also has a reason to disagree.
 - The "main thread is precious" rule. Anything that produces a lot of tool output should go in a subagent.
 
 ## What this segment is *not*
