@@ -10,6 +10,8 @@ status: stub
 
 Stub — when you hand a loop a big backlog, don't hand it an order. Give it the whole set, the goal, and the hard constraints, then let it pick the next most important ticket each pass. Pre-specifying the dependency chain is waterfall in a hoodie.
 
+> **The one-line rule:** Prompt the loop to pick the next most important ticket instead of pre-specifying elaborate dependency graphs.
+
 ## Thesis
 
 The instinct, once the model has generated forty tickets for you, is to sequence them. Ticket 1, then 2, then 3. Draw the dependency arrows. Lock the order.
