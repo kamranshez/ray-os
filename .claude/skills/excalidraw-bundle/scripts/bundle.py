@@ -37,6 +37,24 @@ WIKILINK_RE = re.compile(r"!\[\[([^\]|]+?)(?:\|[^\]]*)?\]\]")
 MD_IMG_RE = re.compile(r"!\[[^\]]*\]\(([^)]+)\)")
 HEADING_RE = re.compile(r"^##\s+(.+?)\s*$")
 
+# Vault-root flat images folder. Filename-only embeds (`![[name.png]]`) resolve
+# here when they don't exist relative to the markdown file's directory.
+VAULT_IMAGES = Path("/Users/ray/Desktop/ray-os/images")
+
+
+def resolve_embed(rel: str, md_dir: Path) -> Path:
+    """Resolve an embed path: absolute as-is, else relative to the md dir,
+    else fall back to the vault-root images/ folder by basename."""
+    if Path(rel).is_absolute():
+        return Path(rel)
+    local = (md_dir / rel).resolve()
+    if local.exists():
+        return local
+    vault = (VAULT_IMAGES / Path(rel).name).resolve()
+    if vault.exists():
+        return vault
+    return local
+
 
 def rand_id(n=21):
     return "".join(secrets.choice(ALPHABET) for _ in range(n))
@@ -60,14 +78,14 @@ def collect_from_markdown(md_path: Path):
             continue
         for m in WIKILINK_RE.finditer(raw):
             rel = m.group(1).strip()
-            resolved = (md_dir / rel).resolve() if not Path(rel).is_absolute() else Path(rel)
+            resolved = resolve_embed(rel, md_dir)
             if resolved in seen:
                 continue
             seen.add(resolved)
             out.append((current_title, resolved))
         for m in MD_IMG_RE.finditer(raw):
             rel = m.group(1).strip()
-            resolved = (md_dir / rel).resolve() if not Path(rel).is_absolute() else Path(rel)
+            resolved = resolve_embed(rel, md_dir)
             if resolved in seen:
                 continue
             seen.add(resolved)
@@ -86,96 +104,90 @@ def collect_from_dir(root: Path):
     return out
 
 
-def build_doc(panels, img_w=1200, img_h=675, gap_x=200, title_height=50, title_gap=80):
+def group_into_columns(panels):
+    """Group panels into columns by placeholder base slug.
+
+    Each placeholder produces several variation PNGs named `<base>-<N>.png`.
+    Columns are ordered by first appearance in the document; within a column
+    variations are ordered by their trailing number. Returns a list of
+    (title, [path, path, ...]) in column (video) order.
+    """
+    cols = []
+    index = {}
+    for title, path in panels:
+        base = re.sub(r"-\d+$", "", Path(path).stem)
+        key = (title, base)
+        if key not in index:
+            index[key] = len(cols)
+            cols.append((title, base, []))
+        cols[index[key]][2].append(path)
+
+    def vnum(p):
+        m = re.search(r"-(\d+)$", Path(p).stem)
+        return int(m.group(1)) if m else 0
+
+    return [(title, sorted(paths, key=vnum)) for title, base, paths in cols]
+
+
+def build_doc(panels, img_w=1200, img_h=675, gap_x=200, gap_y=120, title_height=50, title_gap=80):
     elements = []
     files = {}
-    for i, (title, png_path) in enumerate(panels):
-        png_path = Path(png_path)
-        if not png_path.exists():
-            print(f"warn: missing {png_path}, skipping", file=sys.stderr)
-            continue
-        raw = png_path.read_bytes()
-        file_id = hashlib.sha384(raw).hexdigest()
-        if file_id not in files:
-            files[file_id] = {
-                "mimeType": "image/png",
-                "id": file_id,
-                "dataURL": "data:image/png;base64," + base64.b64encode(raw).decode("ascii"),
-                "created": 1775543163208,
-            }
+    columns = group_into_columns(panels)
+    elem_i = 0
 
-        x = i * (img_w + gap_x)
-        y = title_height + title_gap
+    for col, (title, paths) in enumerate(columns):
+        x = col * (img_w + gap_x)
+        top = 0
 
-        elements.append({
-            "id": rand_id(),
-            "type": "text",
-            "x": x,
-            "y": 0,
-            "width": img_w,
-            "height": title_height,
-            "angle": 0,
-            "strokeColor": "#1e1e1e",
-            "backgroundColor": "transparent",
-            "fillStyle": "solid",
-            "strokeWidth": 2,
-            "strokeStyle": "solid",
-            "roughness": 1,
-            "opacity": 100,
-            "groupIds": [],
-            "frameId": None,
-            "index": f"a{2 * i}",
-            "roundness": None,
-            "seed": secrets.randbelow(2**31),
-            "version": 1,
-            "versionNonce": secrets.randbelow(2**31),
-            "isDeleted": False,
-            "boundElements": [],
-            "updated": 1775543163208,
-            "link": None,
-            "locked": False,
-            "text": title,
-            "fontSize": 36,
-            "fontFamily": 5,
-            "textAlign": "center",
-            "verticalAlign": "top",
-            "containerId": None,
-            "originalText": title,
-            "autoResize": True,
-            "lineHeight": 1.25,
-        })
-        elements.append({
-            "id": rand_id(),
-            "type": "image",
-            "x": x,
-            "y": y,
-            "width": img_w,
-            "height": img_h,
-            "angle": 0,
-            "strokeColor": "transparent",
-            "backgroundColor": "#ffffff",
-            "fillStyle": "solid",
-            "strokeWidth": 4,
-            "strokeStyle": "solid",
-            "roughness": 1,
-            "opacity": 100,
-            "groupIds": [],
-            "frameId": None,
-            "index": f"a{2 * i + 1}",
-            "roundness": None,
-            "seed": secrets.randbelow(2**31),
-            "version": 1,
-            "versionNonce": secrets.randbelow(2**31),
-            "isDeleted": False,
-            "boundElements": [],
-            "updated": 1775543163208,
-            "link": None,
-            "locked": False,
-            "status": "saved",
-            "fileId": file_id,
-            "scale": [1, 1],
-            "crop": None,
-        })
+        for row, png_path in enumerate(paths):
+            png_path = Path(png_path)
+            if not png_path.exists():
+                print(f"warn: missing {png_path}, skipping", file=sys.stderr)
+                continue
+            raw = png_path.read_bytes()
+            file_id = hashlib.sha384(raw).hexdigest()
+            if file_id not in files:
+                files[file_id] = {
+                    "mimeType": "image/png",
+                    "id": file_id,
+                    "dataURL": "data:image/png;base64," + base64.b64encode(raw).decode("ascii"),
+                    "created": 1775543163208,
+                }
+
+            y = top + row * (img_h + gap_y)
+            elements.append({
+                "id": rand_id(),
+                "type": "image",
+                "x": x,
+                "y": y,
+                "width": img_w,
+                "height": img_h,
+                "angle": 0,
+                "strokeColor": "transparent",
+                "backgroundColor": "transparent",
+                "fillStyle": "solid",
+                "strokeWidth": 4,
+                "strokeStyle": "solid",
+                "roughness": 1,
+                "opacity": 100,
+                "groupIds": [],
+                "frameId": None,
+                "index": f"a{elem_i}",
+                "roundness": None,
+                "seed": secrets.randbelow(2**31),
+                "version": 1,
+                "versionNonce": secrets.randbelow(2**31),
+                "isDeleted": False,
+                "boundElements": [],
+                "updated": 1775543163208,
+                "link": None,
+                "locked": False,
+                "status": "saved",
+                "fileId": file_id,
+                "scale": [1, 1],
+                "crop": None,
+            })
+            elem_i += 1
 
     return {
         "type": "excalidraw",
