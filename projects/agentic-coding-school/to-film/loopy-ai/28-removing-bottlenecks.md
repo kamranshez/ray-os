@@ -84,6 +84,21 @@ The transcript is the borrowed verifier on your own habits. You can't grade your
 
 ---
 
+## Don't hand-build your tools either
+
+There is a second bottleneck hiding inside the first, and it's the one you feel last. It isn't the work the loops do. It's the work of building the loops. The prompts. The skills. The verifiers. Right now you write those by hand, and you treat each one as a thing you craft once and keep.
+
+Cramer's other line lands here. "Anything that can be automated, should be automated," he wrote, and then the part that bites: "don't hand write prompts and skills. Build a process that gives you repeatability, even if it's non deterministic, because as the technology advances so will your implementations."
+Source: https://x.com/zeeg/status/2045706645108609230
+
+Read that twice. A hand-written skill is frozen at the moment you wrote it. The model underneath it gets better every few months, and your prompt doesn't move with it. So you become the bottleneck on your own tooling, re-tuning by hand, always a step behind the capability you're already paying for.
+
+The fix is the eval-driven loop from the autoresearch segment. You don't author the skill, you author the process that authors the skill. A spec, an eval suite, and a loop that rewrites the SKILL.md and keeps the change when the score goes up. It's the same delete, script, loop ladder, turned on your tools instead of your tasks. When the next model ships, you don't rewrite forty skills by hand. You rerun the loop.
+
+That's the deepest cut. Removing yourself from the doing is the obvious half. Removing yourself from the building is the half that keeps paying off long after you've stopped looking at it.
+
+---
+
 ## Removing yourself is a ratchet, not a switch
 
 You do not empty your hands in one weekend. You do it the way you built trust with the autonomy dial: one notch at a time, and only up when the evidence earns it.
