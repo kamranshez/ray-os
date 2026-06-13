@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inbox Sweep</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="topbar">
+        <div>
+          <p class="eyebrow">Codex filesystem inbox</p>
+          <h1>Inbox Sweep</h1>
+        </div>
+        <div class="stats" aria-live="polite">
+          <span><strong id="active-count">0</strong> active</span>
+          <span><strong id="queued-count">0</strong> queued</span>
+          <span><strong id="cleared-count">0</strong> cleared</span>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="rail" aria-label="Inbox cards">
+          <div class="rail-header">
+            <span>Cards</span>
+            <button id="show-all" type="button">All</button>
+          </div>
+          <div id="card-list" class="card-list"></div>
+        </aside>
+
+        <section class="card-stage" aria-live="polite">
+          <article id="active-card" class="message-card"></article>
+        </section>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
