@@ -117,6 +117,7 @@ kanban-plugin: board
 - [ ] [[knowing-which-skills-to-combine]] #skills
 - [ ] [[deterministic-pathway-replacing-certain-tools]] #claude-code
 - [ ] [[specs-are-the-new-product]] #spec-driven-development
+- [ ] [[just-in-time-specs]] #spec-driven-development
 - [ ] [[tdd-stops-the-cheating-agent]] #spec-driven-development
 
 
