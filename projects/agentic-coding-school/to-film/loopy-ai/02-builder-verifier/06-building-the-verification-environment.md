@@ -8,8 +8,6 @@ chapter: "Builder and Verifier"
 aliases: [building-the-verification-environment, architecting-the-loop]
 ---
 
-> NOTE — fold in the concrete angle from the L2 chapter discussion: (1) **runtime choice** — the Claude Code terminal can't do computer use, so when the check needs a GUI you move to the Claude Desktop app or the Codex app; match the runtime to what the verifier must observe. (2) **the sensing rig** — wiring mic + speaker (or a virtual audio device) so an agent can verify a dictation app (Hyperwhisper-style): play a known clip → capture the transcript → diff against ground truth. The existing "perceive + act before you prompt" framing is the abstract version of exactly this.
-
 Before you write the prompt, you write the interface.
 
 Most loops that fail don't fail because the model is bad. They fail because the agent can't see the result of its own action, or can't act in the place the work actually lives. The model could be perfect and the loop still wouldn't close.
@@ -113,6 +111,43 @@ Once you've seen it on the voice agent, you see it everywhere. Same five slots, 
 Every one is the same shape. Five interfaces, all of them concrete tools, none of them living at the prompt level. The reason coding agents arrived first is not that code is special. It's that the IDE and the terminal already handed the model a full body. In every other domain, you have to assemble the body yourself. That assembly is the work this segment is about.
 
 This is also why I keep a running list of the bodies I've already built. Call it a loop bank. Every time I wire up a new interface, the cable goes in the bank, and the next agent that needs to read an inbox or emit audio inherits it instead of starting from a brain in a jar.
+
+---
+
+## Pick the runtime, not just the prompt
+
+There's one interface decision that hides above all the others, and it's the one people skip first. Before you pick the cables, you pick the *system the agent runs in*.
+
+The Claude Code terminal is a fantastic body for code. File system, shell, test runner, browser preview, all wired for you. But it cannot do computer use. It can't drive a GUI. It can't see a desktop window or click a button inside a graphical app. If your verifier needs to *watch* a graphical app behave, the terminal is the wrong runtime, and no prompt fixes that.
+
+So you move. When the check needs eyes on a screen and hands on a window, you run the loop somewhere that has them: the Claude Desktop app, or the Codex app. You match the runtime to what the verifier has to perceive and act on.
+
+This is the exact same decision as everything else in this segment, just one level up. Perceive and act come before the prompt. The runtime is the first thing that either grants those abilities or denies them. Choose it the way you'd choose any other cable: by asking what the loop has to see and touch.
+
+[IMAGE: dark canvas, split panel. Left: a terminal window labelled "Claude Code" with a thick line blocking it from reaching a graphical app window, caption "blind to the GUI". Right: a "Claude Desktop / Codex" window with eyes and a cursor hand reaching into the same graphical app, caption "can see and click". A divider down the middle.]
+![[loopy-architecting-the-loop-runtime-cli-vs-gui.png]]
+
+---
+
+## The sensing rig: verifying a dictation app
+
+Here's the most physical version of "perceive and act before you prompt" I can give you.
+
+Say you want to verify a dictation app. Something Hyperwhisper-style: you talk, it transcribes. How does an agent check that it works, with nobody in the chair? Not by reading the app's source. By using it the way a human would, end to end.
+
+That means the agent needs ears and a voice wired to real hardware, or to a virtual audio device standing in for hardware. Once it has those, the verifier is a loop you can draw in one line:
+
+1. Play a *known* audio clip out of a speaker. You already have the ground-truth text for that clip.
+2. Let the dictation app listen and transcribe it.
+3. Capture the transcript the app produces.
+4. Diff that transcript against the known ground-truth text.
+
+That diff is the verifier. A clean match passes. A drift fails, and the score is the distance between the two. There's no self-grading here and no rubric to argue with. Reality hands you the signal, the way a borrowed verifier should.
+
+And notice the order. That loop only exists because you wired the mic and the speaker first. Pull the speaker and there's no clip to transcribe. Pull the capture and there's no transcript to diff. The body comes before the check, and the check comes before the prompt. Same rule, all the way down.
+
+[IMAGE: dark canvas, a closed loop drawn as a ring of stages. Known clip -> speaker (sound waves) -> dictation app (listening) -> transcript text -> diff against ground-truth text -> pass/fail back to start. Label the speaker and mic as the wired-in hardware, caption "the body makes the verifier possible".]
+![[loopy-architecting-the-loop-dictation-sensing-rig.png]]
 
 ---
 
