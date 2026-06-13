@@ -1,5 +1,5 @@
 ---
-name: class-script-writer
+name: class-scriptwriter
 description: Turn a raw idea, source tweet, video transcript, feature announcement, or rough outline into a polished video script for Ray's Agentic Coding School classes. Use this skill whenever the user says "write a class script", "turn this into a class video", "script this for the [business/claude-code/prompt-engineering/skills/context-engineering/techniques/claude-chat/claude-cowork/correction] class", "draft an agentic coding school video", or whenever the user is staging content in `/Users/ray/Desktop/ray-os/projects/agentic-coding-school/to-film/` and wants it written up. Default to this skill for any new file destined for the `to-film/` tree, even if the user does not name it explicitly. Produces an essay-style markdown script with the correct frontmatter, horizontal rules between sections, inline image embed placeholders, and a Demo section, written in Ray's direct second-person voice.
 ---
 
