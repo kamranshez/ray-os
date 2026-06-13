@@ -29,7 +29,11 @@ And that context is fully under your control. It's a file. You can rewrite it. A
 So "self-improving" doesn't have to mean "the model changes." It can mean "the playbook the model reads keeps getting better, run after run, from the loop's own experience." Frozen model, evolving context. That's the entire trick, and it's been hiding in plain sight in everything we've built.
 
 [IMAGE: dark canvas, split panel. Left: a brain icon labeled "weights" wrapped in a thick padlock, with "frozen / expensive / GPUs" underneath. Right: a document icon labeled "playbook" with an edit-pencil cycling around it, "rewritable / cheap / a file" underneath. A big equals-ish bridge showing both routes lead to "gets better over time"]
-![[images/ace-three-role-split/frozen-model-evolving-context.png]]
+![[loopy-ace-three-role-split-frozen-model-evolving-context-1.png]]
+![[loopy-ace-three-role-split-frozen-model-evolving-context-2.png]]
+![[loopy-ace-three-role-split-frozen-model-evolving-context-3.png]]
+![[loopy-ace-three-role-split-frozen-model-evolving-context-4.png]]
+![[loopy-ace-three-role-split-frozen-model-evolving-context-5.png]]
 
 ---
 
@@ -53,7 +57,11 @@ That's the moment I want to land on camera. Not "here is a new technique." It's 
 **The Curator updates the playbook.** It takes the Reflector's lessons and writes them into the file the Generator reads before its next attempt. It's the role that captures the lesson, not the lesson itself. And it is a write role, which matters more than it sounds, and we'll come back to why.
 
 [IMAGE: dark canvas, three boxes in a triangle. Top: "Generator — does the work". Bottom-right: "Reflector — names what went wrong". Bottom-left: "Curator — writes the playbook". In the dead center, a document labeled "PLAYBOOK". Arrows: Generator reads the playbook, Reflector reads the Generator's attempt, Curator writes the playbook, and a big loop-back arrow from Curator round to the Generator's next run]
-![[images/ace-three-role-split/three-role-triangle.png]]
+![[loopy-ace-three-role-split-three-role-triangle-1.png]]
+![[loopy-ace-three-role-split-three-role-triangle-2.png]]
+![[loopy-ace-three-role-split-three-role-triangle-3.png]]
+![[loopy-ace-three-role-split-three-role-triangle-4.png]]
+![[loopy-ace-three-role-split-three-role-triangle-5.png]]
 
 The loop reads: Generator works against the playbook. Reflector inspects the result and extracts lessons. Curator merges those lessons into the playbook. Generator runs again, now reading a slightly better playbook. Repeat.
 
@@ -107,7 +115,11 @@ Don't quote the bare headline number to a skeptical learner. Quote the compariso
 That reframes the whole idea of prompt engineering. It was never a one-shot writing task where you craft the perfect prompt and walk away. It's a Curator role. A loop that keeps editing the playbook against real feedback. You're not the prompt author. You're the thing that hired the Curator.
 
 [IMAGE: dark canvas, a horizontal timeline. A "playbook.md" file glides along it, unchanged, while the model underneath it swaps from "Sonnet 4.6" to "Sonnet 5.0" to "next year's model". Caption arrow: "the asset rides on top of the model, not inside it"]
-![[images/ace-three-role-split/playbook-survives-model-swaps.png]]
+![[loopy-ace-three-role-split-playbook-survives-model-swaps-1.png]]
+![[loopy-ace-three-role-split-playbook-survives-model-swaps-2.png]]
+![[loopy-ace-three-role-split-playbook-survives-model-swaps-3.png]]
+![[loopy-ace-three-role-split-playbook-survives-model-swaps-4.png]]
+![[loopy-ace-three-role-split-playbook-survives-model-swaps-5.png]]
 
 ---
 

@@ -29,7 +29,11 @@ Source: https://x.com/jarrodwatts/status/2052372045829382430
 So when people say "Ralph is autonomous," remember what we said back in the loop stack segment. It isn't. It's L3. The model is not deciding what to do. You decided what to do when you wrote the PRD. The loop is just executing your decisions in a windowed way.
 
 [IMAGE: dark canvas, on the left one big context window overflowing and degrading near the bottom; on the right a row of small fresh context windows each reading from and writing to a shared "files on disk" box underneath]
-![[images/ralph-loops/why-fresh-context.png]]
+![[loopy-ralph-loops-why-fresh-context-1.png]]
+![[loopy-ralph-loops-why-fresh-context-2.png]]
+![[loopy-ralph-loops-why-fresh-context-3.png]]
+![[loopy-ralph-loops-why-fresh-context-4.png]]
+![[loopy-ralph-loops-why-fresh-context-5.png]]
 
 ---
 
@@ -53,7 +57,11 @@ Every iteration is the same three moves. Read the files. Do one unit of work. Wr
 This is the state primitive from the strip-the-model-out segment, made physical. Back there, state was "what survives between runs." In Ralph, what survives between runs is literally a folder. And it connects straight to the previous segment: the HTML artifact with its embedded JSON state block was one shape of this. Ralph is the same idea in plain files instead of one rendered page.
 
 [IMAGE: dark canvas, three labeled files prd.json, progress.txt, agents.md in the center; an arrow loop around them labeled read - work - write, with a small "fresh window" icon being born and dying on each pass]
-![[images/ralph-loops/state-on-disk.png]]
+![[loopy-ralph-loops-state-on-disk-1.png]]
+![[loopy-ralph-loops-state-on-disk-2.png]]
+![[loopy-ralph-loops-state-on-disk-3.png]]
+![[loopy-ralph-loops-state-on-disk-4.png]]
+![[loopy-ralph-loops-state-on-disk-5.png]]
 
 ---
 
@@ -154,7 +162,11 @@ Source: https://x.com/jarrodwatts/status/2052372045829382430
 **No guardrails.** The loop runs to completion and produces something that compiles and is wrong, because nothing external ever told it what good means. This is just self-grading wearing a Ralph costume. Borrow a verifier. Put it in the standards. Make the loop close against the world.
 
 [IMAGE: dark canvas, four failure cards in a row labeled PRD drift, brittle outer loop, unclear exit, no guardrails, each with a small icon, and a caption underneath reading "all four are file problems, not model problems"]
-![[images/ralph-loops/four-failures.png]]
+![[loopy-ralph-loops-four-failures-1.png]]
+![[loopy-ralph-loops-four-failures-2.png]]
+![[loopy-ralph-loops-four-failures-3.png]]
+![[loopy-ralph-loops-four-failures-4.png]]
+![[loopy-ralph-loops-four-failures-5.png]]
 
 ---
 

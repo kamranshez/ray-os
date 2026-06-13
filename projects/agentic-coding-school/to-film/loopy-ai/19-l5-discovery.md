@@ -32,7 +32,11 @@ That is the line. If the human supplied the question, it is search. If the loop 
 
 [IMAGE: dark canvas, split panel. Left side labeled "Search": a human icon with a question mark feeding into an agent box, one answer coming out. Right side labeled "Discovery": no human question, many live input streams feeding an agent box, and the agent emitting its own question mark]
 
-![[images/l5-discovery/search-vs-discovery.png]]
+![[loopy-l5-discovery-search-vs-discovery-1.png]]
+![[loopy-l5-discovery-search-vs-discovery-2.png]]
+![[loopy-l5-discovery-search-vs-discovery-3.png]]
+![[loopy-l5-discovery-search-vs-discovery-4.png]]
+![[loopy-l5-discovery-search-vs-discovery-5.png]]
 
 ---
 
@@ -60,7 +64,11 @@ That sentence is two loops composed. The discovery loop found the thing worth do
 
 [IMAGE: dark canvas, two stacked boxes. Top box labeled "L5 discovery" emitting a ticket arrow downward into a bottom box labeled "L4 worker", which emits a finished PR with a screenshot icon. A sleeping human icon to the side, waking to a single yes/no choice]
 
-![[images/l5-discovery/l5-feeds-l4.png]]
+![[loopy-l5-discovery-l5-feeds-l4-1.png]]
+![[loopy-l5-discovery-l5-feeds-l4-2.png]]
+![[loopy-l5-discovery-l5-feeds-l4-3.png]]
+![[loopy-l5-discovery-l5-feeds-l4-4.png]]
+![[loopy-l5-discovery-l5-feeds-l4-5.png]]
 
 ---
 
@@ -84,7 +92,11 @@ The terminate is per-run: scan complete, shortlist posted, sleep until the next 
 
 [IMAGE: dark canvas, a triager funnel. Many labeled input arrows on the left (GitHub issues, Twitter, Slack, Stripe, support inbox) converging into a central box labeled "triager: scan + judge + rank". One arrow leaving the right edge labeled "things worth doing"]
 
-![[images/l5-discovery/triager-funnel.png]]
+![[loopy-l5-discovery-triager-funnel-1.png]]
+![[loopy-l5-discovery-triager-funnel-2.png]]
+![[loopy-l5-discovery-triager-funnel-3.png]]
+![[loopy-l5-discovery-triager-funnel-4.png]]
+![[loopy-l5-discovery-triager-funnel-5.png]]
 
 ---
 

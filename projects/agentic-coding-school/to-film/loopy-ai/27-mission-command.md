@@ -31,7 +31,11 @@ Mission command won. It won because of two facts about the world that have not c
 Read those two facts again with a fleet of loops in mind. The world moves faster than your prompt edits. And the loop, running at 2am against live data you've never seen, is closer to the work than you are. Every reason mission command beat detailed orders in 1870 is a reason intent docs beat prompt-babysitting now.
 
 [IMAGE: dark canvas, a commander on a hill pointing at a single objective on the horizon, and below, three squads taking three visibly different routes toward the same point]
-![[images/mission-command/commander-intent-three-routes.png]]
+![[loopy-mission-command-commander-intent-three-routes-1.png]]
+![[loopy-mission-command-commander-intent-three-routes-2.png]]
+![[loopy-mission-command-commander-intent-three-routes-3.png]]
+![[loopy-mission-command-commander-intent-three-routes-4.png]]
+![[loopy-mission-command-commander-intent-three-routes-5.png]]
 
 ---
 
@@ -46,7 +50,11 @@ The diagnostic is one sentence. If your loops can't operate for a month without 
 This isn't a tooling problem. You already have the tooling. You met the autonomy dial, the per-action policy for how much a loop may do. You met governance-primitives, the budgets and kill switches and log reviews that bound the fleet. You met Slack-as-command-center, the surface they all report into. What you don't have yet is the document those mechanisms point at. The dial encodes which actions need you. Governance encodes the brakes. But dial and governance both assume there's a definition of good to enforce against. The intent doc is that definition. Without it, governance is comparing the loop's output to nothing.
 
 [IMAGE: dark canvas, a sprawling prompt on the left titled "40 rules, one per incident" with tangled arrows, versus a short clean panel on the right titled "intent: what good looks like, tradeoff order, kill criteria"]
-![[images/mission-command/prompt-scar-tissue-vs-intent.png]]
+![[loopy-mission-command-prompt-scar-tissue-vs-intent-1.png]]
+![[loopy-mission-command-prompt-scar-tissue-vs-intent-2.png]]
+![[loopy-mission-command-prompt-scar-tissue-vs-intent-3.png]]
+![[loopy-mission-command-prompt-scar-tissue-vs-intent-4.png]]
+![[loopy-mission-command-prompt-scar-tissue-vs-intent-5.png]]
 
 ---
 

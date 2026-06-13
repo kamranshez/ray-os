@@ -1,11 +1,11 @@
 ---
-duration: "14-18 min"
+duration: 14-18 min
 batch: 1
 order: 2
-batch_name: "Setup"
-class: "loopy-ai"
-chapter: "The Loop Stack"
-aliases: [loop-stack]
+batch_name:
+class:
+chapter:
+aliases:
 ---
 
 There are eight levels of loop. Most people only know two of them. That's why every conversation about AI agents is so confused.
@@ -89,6 +89,14 @@ The thing that makes L2 different from L1 is the *verifier*. L1 is the model dec
 
 This is the closing the loop pattern. We have a whole segment on it later. For now, just see it: L2 is one artifact, converging to a quality bar, with an external check in the loop.
 
+[IMAGE: a build -> test -> on-fail-fix -> test-again loop around a single artifact, with an external verifier check gating the loop exit, the artifact converging to a quality bar]
+
+![[loopy-loop-stack-l2-builder-verifier-1.png]]
+![[loopy-loop-stack-l2-builder-verifier-2.png]]
+![[loopy-loop-stack-l2-builder-verifier-3.png]]
+![[loopy-loop-stack-l2-builder-verifier-4.png]]
+![[loopy-loop-stack-l2-builder-verifier-5.png]]
+
 ---
 
 ## L3. Task lifecycle
@@ -130,6 +138,14 @@ Watch a target word list for sentence mining. For each word, find natural exampl
 The boundary is: a worker processes a known stream of work without being told each time.
 
 Most people have never built one of these. The difference between L3 and L4 is small in code, big in mindset. L3 is "I asked Claude to do a thing." L4 is "I built a thing that asks Claude over and over."
+
+[IMAGE: a queue of work items feeding a worker agent that runs a full L3 lifecycle on each item, reports, then pulls the next from the queue; labeled pick from queue -> run L3 -> report -> repeat]
+
+![[loopy-loop-stack-l4-worker-1.png]]
+![[loopy-loop-stack-l4-worker-2.png]]
+![[loopy-loop-stack-l4-worker-3.png]]
+![[loopy-loop-stack-l4-worker-4.png]]
+![[loopy-loop-stack-l4-worker-5.png]]
 
 ---
 

@@ -31,7 +31,11 @@ Here's the pattern. Someone wants an agent that handles their phone calls. So th
 The prompt was never the problem. The agent had no speaker, no microphone, no call transport. It could generate the words a caller would say. It could not place a call, hear a reply, or make a sound. They gave it a brain and no body, then wondered why it couldn't talk.
 
 [IMAGE: dark canvas, a glowing brain floating alone with no limbs, a phone ringing across a gap it cannot reach, caption "perfect prompt, no body"]
-![[images/architecting-the-loop/brain-no-body.png]]
+![[loopy-architecting-the-loop-brain-no-body-1.png]]
+![[loopy-architecting-the-loop-brain-no-body-2.png]]
+![[loopy-architecting-the-loop-brain-no-body-3.png]]
+![[loopy-architecting-the-loop-brain-no-body-4.png]]
+![[loopy-architecting-the-loop-brain-no-body-5.png]]
 
 This is the most common failure in the whole stack, and it has nothing to do with prompting. The model can't close a loop it can't reach into.
 
@@ -68,7 +72,11 @@ Five interfaces. Pull any one of them out and the loop will not close, no matter
 Give it only a microphone and a model and you have built a transcriber, not a caller. It can hear and think and it can say nothing. Give it only a speaker and a model and you have built a robot that talks over people, deaf to every reply. The loop closes only when all five are wired: it listens, transcribes, decides, speaks, and listens again. Every turn closes when the speech goes out and the next transcription comes back.
 
 [IMAGE: dark canvas, a single agent box in the center with five labelled cables coming out of it, perceive / act / check / remember / stop, each cable plugged into a real device]
-![[images/architecting-the-loop/five-cables.png]]
+![[loopy-architecting-the-loop-five-cables-1.png]]
+![[loopy-architecting-the-loop-five-cables-2.png]]
+![[loopy-architecting-the-loop-five-cables-3.png]]
+![[loopy-architecting-the-loop-five-cables-4.png]]
+![[loopy-architecting-the-loop-five-cables-5.png]]
 
 That diagram is the whole segment. One agent in the middle. Five cables. Every loop you ever build is that picture with different labels on the cables.
 

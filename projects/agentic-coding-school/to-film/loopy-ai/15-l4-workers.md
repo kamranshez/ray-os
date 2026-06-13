@@ -29,7 +29,11 @@ So the scope is different by orders of magnitude. A cron job greps a log. A work
 The other thing people get wrong: they think L4 needs new machinery. It doesn't. We built every primitive you need in the earlier segments. L4 is not a new kind of loop. It's the L3 you already know, with a queue bolted onto the front and a report bolted onto the back. That's it.
 
 [IMAGE: dark canvas, a queue of stacked task cards on the left feeding into a single worker box in the middle, the worker box exploded to show a nested L3-L2-L1 stack inside it, finished items stacking on the right, a Slack message bubble appearing in the corner]
-![[images/l4-workers/queue-worker-report.png]]
+![[loopy-l4-workers-queue-worker-report-1.png]]
+![[loopy-l4-workers-queue-worker-report-2.png]]
+![[loopy-l4-workers-queue-worker-report-3.png]]
+![[loopy-l4-workers-queue-worker-report-4.png]]
+![[loopy-l4-workers-queue-worker-report-5.png]]
 
 ---
 
@@ -81,7 +85,11 @@ Let me make this concrete with three workers that are running in the wild right 
 Three domains. Code, infrastructure, language learning. Same five parts every time. Once you see the anatomy, you stop seeing "a coding agent" and "a study tool" as different things. They're the same machine pointed at different queues.
 
 [IMAGE: dark canvas, three worker boxes side by side labeled Linear, Dependabot, Sentence-mining, each with the same five-part skeleton drawn inside (trigger, pick, process, report, retry), different queue icons feeding each one, a faint dotted outline around all three showing they share one shape]
-![[images/l4-workers/three-workers-one-shape.png]]
+![[loopy-l4-workers-three-workers-one-shape-1.png]]
+![[loopy-l4-workers-three-workers-one-shape-2.png]]
+![[loopy-l4-workers-three-workers-one-shape-3.png]]
+![[loopy-l4-workers-three-workers-one-shape-4.png]]
+![[loopy-l4-workers-three-workers-one-shape-5.png]]
 
 ---
 

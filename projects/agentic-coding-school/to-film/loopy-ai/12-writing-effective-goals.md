@@ -32,7 +32,11 @@ This is the same shape we keep meeting. In the strip-the-model-out segment, a lo
 You already know the parts. Writing an effective goal is just filling each slot so the judge can't be fooled and the worker can't wander.
 
 [IMAGE: dark canvas, left side a short chat bubble labeled "task: do my ticket", right side a structured document with labeled sections GOAL / CONSTRAINTS / DONE WHEN, an arrow between them labeled "the upgrade you have to make"]
-![[images/writing-effective-goals/task-vs-goal.png]]
+![[loopy-writing-effective-goals-task-vs-goal-1.png]]
+![[loopy-writing-effective-goals-task-vs-goal-2.png]]
+![[loopy-writing-effective-goals-task-vs-goal-3.png]]
+![[loopy-writing-effective-goals-task-vs-goal-4.png]]
+![[loopy-writing-effective-goals-task-vs-goal-5.png]]
 
 ---
 
@@ -55,7 +59,11 @@ Then the now-specific goal breaks down into milestones and tasks. You don't hand
 That interview output _is_ the raw material for the goal file. Run it first, then fill the slots below with the answers.
 
 [IMAGE: dark canvas, left a fuzzy cloud labeled "what you think you want", an /interview arrow with "20-50 questions" pointing right into a sharp structured goal file, below it a branching tree where unanswered questions become wrong branches the agent picks, pruned branches faded out]
-![[images/writing-effective-goals/interview-prunes-ambiguity.png]]
+![[loopy-writing-effective-goals-interview-prunes-ambiguity-1.png]]
+![[loopy-writing-effective-goals-interview-prunes-ambiguity-2.png]]
+![[loopy-writing-effective-goals-interview-prunes-ambiguity-3.png]]
+![[loopy-writing-effective-goals-interview-prunes-ambiguity-4.png]]
+![[loopy-writing-effective-goals-interview-prunes-ambiguity-5.png]]
 
 ---
 
@@ -85,7 +93,11 @@ Nine sections sounds like a lot. It isn't. Most are one line. Here's the whole t
 The ninth slot is the **turn cap** itself, which lives in how you invoke goal mode, not in the prose. Budget is a first-class part of the goal, not an afterthought, because budget exhaustion is not completion. We established that in the last segment and it's worth carving into the wall here too.
 
 [IMAGE: dark canvas, a single-page goal file with nine labeled rows GOAL CONTEXT CONSTRAINTS PRIORITY PLAN "DONE WHEN" VERIFY OUTPUT, plus a small budget gauge in the corner, each row one short handwritten line]
-![[images/writing-effective-goals/nine-sections.png]]
+![[loopy-writing-effective-goals-nine-sections-1.png]]
+![[loopy-writing-effective-goals-nine-sections-2.png]]
+![[loopy-writing-effective-goals-nine-sections-3.png]]
+![[loopy-writing-effective-goals-nine-sections-4.png]]
+![[loopy-writing-effective-goals-nine-sections-5.png]]
 
 ---
 
@@ -119,7 +131,11 @@ Three failure modes, and each one maps cleanly to a slot you got lazy on.
 Notice the pattern. Every rot is a slot you left soft. A goal is only as strong as its weakest section, and the weak one is always the one you couldn't be bothered to make concrete.
 
 [IMAGE: dark canvas, three failing goal cards in a row, each crossed out, labeled "defers to the model", "no kill switch", "no tradeoff order", each with a small arrow pointing to the template slot that fixes it]
-![[images/writing-effective-goals/three-failure-modes.png]]
+![[loopy-writing-effective-goals-three-failure-modes-1.png]]
+![[loopy-writing-effective-goals-three-failure-modes-2.png]]
+![[loopy-writing-effective-goals-three-failure-modes-3.png]]
+![[loopy-writing-effective-goals-three-failure-modes-4.png]]
+![[loopy-writing-effective-goals-three-failure-modes-5.png]]
 
 ---
 

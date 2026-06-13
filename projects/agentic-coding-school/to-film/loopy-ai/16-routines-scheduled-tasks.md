@@ -29,7 +29,12 @@ Some work has a clean event you can hook. A PR opens. A ticket gets labeled. A t
 But a huge amount of valuable work has no event at all. Nobody fires a signal when your dependencies drift out of date. Nothing pings you when a competitor ships a feature overnight. There is no webhook for "the backlog has gone stale" or "yesterday's metrics are worth a look." The trigger for that work is just: it's morning again.
 
 [IMAGE: dark canvas, two columns. Left column "reactive" with an event icon (PR opens, test goes red) firing a loop. Right column "periodic" with a clock face firing the same loop shape. Caption: same loop, different trigger.]
-![[images/routines-scheduled-tasks/reactive-vs-periodic.png]]
+![[loopy-routines-scheduled-tasks-reactive-vs-periodic-1.png]]
+![[loopy-routines-scheduled-tasks-reactive-vs-periodic-2.png]]
+![[loopy-routines-scheduled-tasks-reactive-vs-periodic-3.png]]
+![[loopy-routines-scheduled-tasks-reactive-vs-periodic-4.png]]
+![[loopy-routines-scheduled-tasks-reactive-vs-periodic-5.png]]
+![[loopy-routines-scheduled-tasks-reactive-vs-periodic-6.png]]
 
 The mistake is thinking the clock is a downgrade from the event. It isn't. It's a different sensor. Some loops perceive an event. Some loops perceive the passage of time. Both are legitimate triggers, and the trigger primitive we named back in strip-the-model-out doesn't care which one you use.
 
@@ -70,7 +75,11 @@ A routine is a saved Claude Code configuration: a prompt, one or more repositori
 Source: https://code.claude.com/docs/en/routines
 
 [IMAGE: dark canvas, a spectrum from left to right. Far left "in-session /loop" (lives in the conversation, dies in 7 days), middle "Desktop scheduled task" (local machine, only while awake), far right "cloud routine" (Anthropic infra, runs with laptop closed). One axis: durability.]
-![[images/routines-scheduled-tasks/scheduling-spectrum.png]]
+![[loopy-routines-scheduled-tasks-scheduling-spectrum-1.png]]
+![[loopy-routines-scheduled-tasks-scheduling-spectrum-2.png]]
+![[loopy-routines-scheduled-tasks-scheduling-spectrum-3.png]]
+![[loopy-routines-scheduled-tasks-scheduling-spectrum-4.png]]
+![[loopy-routines-scheduled-tasks-scheduling-spectrum-5.png]]
 
 A routine takes one or more triggers. The schedule trigger is the one we care about here: hourly, daily, weekdays, or weekly presets, with a one-hour minimum interval. Anything more frequent gets rejected, which is the platform quietly enforcing the same rule we've been preaching. If you think you need a loop firing every thirty seconds, you've misdesigned the loop. Times are entered in your local zone and converted automatically, so a "9am" routine fires at 9am wall-clock no matter where the cloud box lives. For a custom interval, you pick the closest preset and then `/schedule update` to drop in a raw cron expression.
 
@@ -125,7 +134,11 @@ Source: https://code.claude.com/docs/en/routines
 That last one is the self-grading failure relocated to the dashboard. The status light is the loop grading its own infrastructure, not its own work. A green light with no borrowed verifier behind it is exactly the lie we've been hunting since the closing-the-loop segment, except now it's a single reassuring dot you'll glance at and trust. Don't. The verifier still has to live inside the prompt, and the proof of work still has to land in the transcript.
 
 [IMAGE: dark canvas, a green checkmark labeled "infrastructure ran" sitting on top, and underneath it a separate red/green gate labeled "did the work actually pass?" with an arrow showing they are two different questions. Caption: green status is not a verifier.]
-![[images/routines-scheduled-tasks/green-is-not-done.png]]
+![[loopy-routines-scheduled-tasks-green-is-not-done-1.png]]
+![[loopy-routines-scheduled-tasks-green-is-not-done-2.png]]
+![[loopy-routines-scheduled-tasks-green-is-not-done-3.png]]
+![[loopy-routines-scheduled-tasks-green-is-not-done-4.png]]
+![[loopy-routines-scheduled-tasks-green-is-not-done-5.png]]
 
 ---
 

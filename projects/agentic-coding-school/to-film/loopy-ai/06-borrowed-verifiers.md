@@ -28,7 +28,11 @@ The model is not lying on purpose. It just doesn't have a way to check itself ag
 
 [IMAGE: a closed loop with the same head feeding back into itself, labeled "vibes". Next to it, an open loop reaching out to an external box labeled "the world", with the result flowing back in]
 
-![[images/borrowed-verifiers/self-vs-borrowed.png]]
+![[loopy-borrowed-verifiers-self-vs-borrowed-1.png]]
+![[loopy-borrowed-verifiers-self-vs-borrowed-2.png]]
+![[loopy-borrowed-verifiers-self-vs-borrowed-3.png]]
+![[loopy-borrowed-verifiers-self-vs-borrowed-4.png]]
+![[loopy-borrowed-verifiers-self-vs-borrowed-5.png]]
 
 A real verifier is *outside the model*. It returns a number, a pass/fail, or a structured score that the model cannot influence by changing how it phrases the answer.
 
@@ -102,7 +106,11 @@ That last shape is covered in detail in [[auto-research-for-non-technical-work]]
 
 [IMAGE: three stacked boxes labeled Deterministic, Scored, Real-world. Each one has a speed label on the left, a noise label on the right. Arrows show the relative tradeoff]
 
-![[images/borrowed-verifiers/three-categories.png]]
+![[loopy-borrowed-verifiers-three-categories-1.png]]
+![[loopy-borrowed-verifiers-three-categories-2.png]]
+![[loopy-borrowed-verifiers-three-categories-3.png]]
+![[loopy-borrowed-verifiers-three-categories-4.png]]
+![[loopy-borrowed-verifiers-three-categories-5.png]]
 
 ---
 
@@ -186,7 +194,11 @@ Three things matter in this setup.
 
 [IMAGE: a flowchart, agent writes code, borrowed verifier produces a structured report, report flows back into agent's next iteration with the parts that failed highlighted]
 
-![[images/borrowed-verifiers/wiring.png]]
+![[loopy-borrowed-verifiers-wiring-1.png]]
+![[loopy-borrowed-verifiers-wiring-2.png]]
+![[loopy-borrowed-verifiers-wiring-3.png]]
+![[loopy-borrowed-verifiers-wiring-4.png]]
+![[loopy-borrowed-verifiers-wiring-5.png]]
 
 ---
 

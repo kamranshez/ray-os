@@ -31,7 +31,11 @@ You rubber-stamp. You approve everything because reading it properly would take 
 Or you freeze. You don't trust the output, you can't verify it fast enough, so you stop the loops and go back to doing it yourself. Which means the whole stack you built is now decorative.
 
 [IMAGE: dark canvas, ten cluttered terminal windows on the left all dumping walls of text toward a single small human head on the right, the human visibly overwhelmed, one red diff labeled "DROP TABLE" buried in the pile]
-![[images/keeping-you-in-the-loop/ten-terminals-overwhelm.png]]
+![[loopy-keeping-you-in-the-loop-ten-terminals-overwhelm-1.png]]
+![[loopy-keeping-you-in-the-loop-ten-terminals-overwhelm-2.png]]
+![[loopy-keeping-you-in-the-loop-ten-terminals-overwhelm-3.png]]
+![[loopy-keeping-you-in-the-loop-ten-terminals-overwhelm-4.png]]
+![[loopy-keeping-you-in-the-loop-ten-terminals-overwhelm-5.png]]
 
 The instinct, when this happens, is to think you have too many loops. You don't. You have a bad pipe.
 
@@ -62,7 +66,11 @@ Most people's loops surface neither cleanly. The work is scattered across sessio
 Separating the two is the move. Artifacts go in a tray you visit on a cadence. Decisions reach out and tap you on the shoulder. Different channel, different urgency, different format.
 
 [IMAGE: dark canvas, a fan of many loops on the left all funnelling into one narrow pipe, the human standing at the narrow end, and on the right two clearly labelled trays splitting off the pipe, an "Artifacts" tray marked batched and an "Decisions" tray marked interrupt]
-![[images/keeping-you-in-the-loop/pipe-two-trays.png]]
+![[loopy-keeping-you-in-the-loop-pipe-two-trays-1.png]]
+![[loopy-keeping-you-in-the-loop-pipe-two-trays-2.png]]
+![[loopy-keeping-you-in-the-loop-pipe-two-trays-3.png]]
+![[loopy-keeping-you-in-the-loop-pipe-two-trays-4.png]]
+![[loopy-keeping-you-in-the-loop-pipe-two-trays-5.png]]
 
 This split sounds obvious once you say it. Almost nobody does it. They build one firehose and point it at themselves.
 
@@ -85,7 +93,11 @@ Six design calls. None of them is about a notification tool. They're about what 
 **Never let a loop close its own ticket.** The human owns the final close. Not because the loop got the work wrong, but because closing is how you stay current with your own system. If the loop opens and closes its own tickets, you wake up one day with a system that runs itself and that you no longer understand. The close is your checkpoint. It's the antidote to the rubber-stamp.
 
 [IMAGE: dark canvas, a phone showing a single Slack message that reads "Decision: ship A or B? A faster, loses property X. Recommend A." with two buttons Approve and Deny, contrasted against a faded greyed-out wall of raw diff behind it]
-![[images/keeping-you-in-the-loop/decision-not-transcript.png]]
+![[loopy-keeping-you-in-the-loop-decision-not-transcript-1.png]]
+![[loopy-keeping-you-in-the-loop-decision-not-transcript-2.png]]
+![[loopy-keeping-you-in-the-loop-decision-not-transcript-3.png]]
+![[loopy-keeping-you-in-the-loop-decision-not-transcript-4.png]]
+![[loopy-keeping-you-in-the-loop-decision-not-transcript-5.png]]
 
 That's the menu. Pick a channel, batch artifacts, surface decisions framed, let the dial pick tiers, format for a human, and keep the close in your hands.
 

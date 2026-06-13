@@ -34,7 +34,11 @@ Most loops get you a better artifact. This loop gets you a better factory.
 
 [IMAGE: dark canvas, two loops side by side. Left loop labeled "fixes the artifact" circling a single document icon. Right loop labeled "fixes the factory" circling a machine that itself stamps out documents, with a small upward arrow showing the improvement flowing back into the machine]
 
-![[images/bug-triage-loop/fixes-the-factory.png]]
+![[loopy-bug-triage-loop-fixes-the-factory-1.png]]
+![[loopy-bug-triage-loop-fixes-the-factory-2.png]]
+![[loopy-bug-triage-loop-fixes-the-factory-3.png]]
+![[loopy-bug-triage-loop-fixes-the-factory-4.png]]
+![[loopy-bug-triage-loop-fixes-the-factory-5.png]]
 
 ---
 
@@ -70,7 +74,11 @@ Let me name each stage by the level it operates at, because the whole point of t
 
 [IMAGE: dark canvas, hexagonal flow. Trace store at the top. Triager (L5) and worker (L4) down the left side. Eval suite (L2) and human review on the right. A PR merging at the bottom center. Each node tagged with its L-level]
 
-![[images/bug-triage-loop/five-stage-pipeline.png]]
+![[loopy-bug-triage-loop-five-stage-pipeline-1.png]]
+![[loopy-bug-triage-loop-five-stage-pipeline-2.png]]
+![[loopy-bug-triage-loop-five-stage-pipeline-3.png]]
+![[loopy-bug-triage-loop-five-stage-pipeline-4.png]]
+![[loopy-bug-triage-loop-five-stage-pipeline-5.png]]
 
 Rippling actually run this against a layered eval system. Offline mocks on every commit, three to four hundred integration queries against a live sandbox post-merge, about ten deploy-blocking critical scenarios, and continuous scheduled evals against production multiple times a day. The loop fixes the failures the bottom catches before the top ever blocks a deploy.
 
@@ -94,7 +102,11 @@ If you don't have an eval suite, that is the first thing to build. Not the loop 
 
 [IMAGE: dark canvas, a layered stack labeled "eval suite" growing taller over time, each new layer labeled with a past bug. A small swappable "fixer" box plugs into the side with a dotted "replaceable" arrow, while the eval stack is anchored with a "this is the asset" label]
 
-![[images/bug-triage-loop/eval-suite-is-the-moat.png]]
+![[loopy-bug-triage-loop-eval-suite-is-the-moat-1.png]]
+![[loopy-bug-triage-loop-eval-suite-is-the-moat-2.png]]
+![[loopy-bug-triage-loop-eval-suite-is-the-moat-3.png]]
+![[loopy-bug-triage-loop-eval-suite-is-the-moat-4.png]]
+![[loopy-bug-triage-loop-eval-suite-is-the-moat-5.png]]
 
 ---
 

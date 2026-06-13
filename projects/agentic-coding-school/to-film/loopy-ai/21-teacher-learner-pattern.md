@@ -31,7 +31,11 @@ Those are different failures. A syllabus can be completely correct and completel
 The thing you actually need is not a skeptic. It's a stranger.
 
 [IMAGE: dark canvas, left side a single big head labeled "one context, all the material" producing a syllabus with a green check but a confused student underneath; right side two heads, one labeled "teacher (full material)" and one labeled "learner (no material)", producing a syllabus a student can actually read]
-![[images/teacher-learner-pattern/one-context-vs-split.png]]
+![[loopy-teacher-learner-pattern-one-context-vs-split-1.png]]
+![[loopy-teacher-learner-pattern-one-context-vs-split-2.png]]
+![[loopy-teacher-learner-pattern-one-context-vs-split-3.png]]
+![[loopy-teacher-learner-pattern-one-context-vs-split-4.png]]
+![[loopy-teacher-learner-pattern-one-context-vs-split-5.png]]
 
 Every "review my plan" prompt fails for the same reason this does. You ask the reviewer to check your work, and you hand it all the context you have. Of course it understands the plan. It's reading the plan with your eyes. The whole value of a real reviewer is the context they're missing. Strip that out and you've just built a mirror.
 
@@ -72,7 +76,11 @@ Same family, multi-agent role split. Different engine. One runs on attitude. Thi
 That's why this earns its own segment instead of being a footnote on the attacker. You cannot manufacture this asymmetry with a sharper prompt to a single agent. You can tell one Claude "now pretend you don't know what a context window is," but it does know, and the knowledge bleeds through. It will flag the obvious omissions and sail straight past the ones that only trip someone who genuinely lacks the concept. The ignorance has to be structural. The learner has to be a separate agent that was never handed the material in the first place.
 
 [IMAGE: dark canvas, two side-by-side loops. Left labeled "attacker pair": two heads same docs, arrows labeled "build" and "refute". Right labeled "teacher / learner": two heads, one holding a stack of docs, one holding nothing, arrows labeled "explain" and "where did I get lost?"]
-![[images/teacher-learner-pattern/attacker-vs-teacher-learner.png]]
+![[loopy-teacher-learner-pattern-attacker-vs-teacher-learner-1.png]]
+![[loopy-teacher-learner-pattern-attacker-vs-teacher-learner-2.png]]
+![[loopy-teacher-learner-pattern-attacker-vs-teacher-learner-3.png]]
+![[loopy-teacher-learner-pattern-attacker-vs-teacher-learner-4.png]]
+![[loopy-teacher-learner-pattern-attacker-vs-teacher-learner-5.png]]
 
 ---
 

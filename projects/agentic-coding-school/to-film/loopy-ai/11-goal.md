@@ -35,7 +35,11 @@ This is the same shape Anthropic shipped first-party. The same shape OpenAI ship
 Source: https://x.com/gdb/status/2056430780809892252
 
 [IMAGE: dark canvas, two boxes side by side. A big box labeled "worker (Opus)" doing work, feeding a transcript into a small box labeled "judge (Haiku)". The judge has two arrows out: "met -> return to you" and "not met -> start another turn", with the not-met arrow looping back into the worker carrying a "reason" tag]
-![[images/goal/worker-judge-loop.png]]
+![[loopy-goal-worker-judge-loop-1.png]]
+![[loopy-goal-worker-judge-loop-2.png]]
+![[loopy-goal-worker-judge-loop-3.png]]
+![[loopy-goal-worker-judge-loop-4.png]]
+![[loopy-goal-worker-judge-loop-5.png]]
 
 ---
 
@@ -60,7 +64,11 @@ That's the shift. In Ralph, the outer loop is your script and the model can tech
 This is why the segment exists as its own thing. Goal mode is not "Ralph but easier." It's the moment the L3 outer loop stops being something you hand-build and becomes something the platform guarantees.
 
 [IMAGE: dark canvas, a small state machine diagram. Four nodes: active, paused, budget-limited, complete. Arrows between them. The "active" node has a self-loop labeled "auto-continue (hidden message)". Only the transition into "complete" is gated by a box labeled "completion audit"]
-![[images/goal/state-machine.png]]
+![[loopy-goal-state-machine-1.png]]
+![[loopy-goal-state-machine-2.png]]
+![[loopy-goal-state-machine-3.png]]
+![[loopy-goal-state-machine-4.png]]
+![[loopy-goal-state-machine-5.png]]
 
 ---
 

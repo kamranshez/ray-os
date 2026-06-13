@@ -27,7 +27,11 @@ The deeper problem is the autonomy dial. Back in that segment we set four notche
 Slack is that channel. It is the pipe the autonomy dial assumed existed.
 
 [IMAGE: dark canvas, left side a cramped terminal with five overlapping panes and a tiny laptop, an X over it; right side a single clean Slack channel on a phone with three loops posting threads into it, a check mark over it]
-![[images/slack-as-your-command-center/terminal-vs-slack.png]]
+![[loopy-slack-as-your-command-center-terminal-vs-slack-1.png]]
+![[loopy-slack-as-your-command-center-terminal-vs-slack-2.png]]
+![[loopy-slack-as-your-command-center-terminal-vs-slack-3.png]]
+![[loopy-slack-as-your-command-center-terminal-vs-slack-4.png]]
+![[loopy-slack-as-your-command-center-terminal-vs-slack-5.png]]
 
 ---
 
@@ -66,7 +70,11 @@ Source: https://github.com/sethbrasile/claude-slack-channel
 Report, approve, steer. That is the command center.
 
 [IMAGE: dark canvas, a single Slack thread shown three ways stacked vertically, top labeled REPORT showing a milestone message, middle labeled APPROVE showing an Approve/Deny button pair, bottom labeled STEER showing a user reply feeding back into the loop]
-![[images/slack-as-your-command-center/report-approve-steer.png]]
+![[loopy-slack-as-your-command-center-report-approve-steer-1.png]]
+![[loopy-slack-as-your-command-center-report-approve-steer-2.png]]
+![[loopy-slack-as-your-command-center-report-approve-steer-3.png]]
+![[loopy-slack-as-your-command-center-report-approve-steer-4.png]]
+![[loopy-slack-as-your-command-center-report-approve-steer-5.png]]
 
 ---
 

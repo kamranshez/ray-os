@@ -27,7 +27,11 @@ And one morning the loop has sent the email. Or force-pushed the branch. Or clos
 Here's the trap. Those two failures are not opposite ends of one mistake. They're the *same* mistake. You set autonomy per loop, as one global setting, so every action the loop ever takes is forced to share one notch. The setting that's right for "format this file" is catastrophically wrong for "email the client," and you only get to pick one.
 
 [IMAGE: dark canvas, a single slider set to one global position, with two very different action cards ("reformat file" and "send email to client") both yanked onto the same notch, one clearly too loose, one clearly too tight]
-![[images/the-autonomy-dial/global-dial-trap.png]]
+![[loopy-the-autonomy-dial-global-dial-trap-1.png]]
+![[loopy-the-autonomy-dial-global-dial-trap-2.png]]
+![[loopy-the-autonomy-dial-global-dial-trap-3.png]]
+![[loopy-the-autonomy-dial-global-dial-trap-4.png]]
+![[loopy-the-autonomy-dial-global-dial-trap-5.png]]
 
 The brake we built in [[governance-primitives]] can stop a loop. But it never told you *which actions* the loop should stop itself for. That's this segment.
 
@@ -58,7 +62,12 @@ The dial isn't autonomy versus not. It's four positions. Name them on camera.
 **Notch 4, never without me.** Irreversible *and* public or costly. It drafts and it waits. Sending email. A production migration. A public post. Spending real money. Closing its own ticket.
 
 [IMAGE: dark canvas, a rotary dial with four labelled notches (silent, log, surface, never), an action card being routed into one of them]
-![[images/the-autonomy-dial/four-notches.png]]
+![[loopy-the-autonomy-dial-four-notches-1.png]]
+![[loopy-the-autonomy-dial-four-notches-2.png]]
+![[loopy-the-autonomy-dial-four-notches-3.png]]
+![[loopy-the-autonomy-dial-four-notches-4.png]]
+![[loopy-the-autonomy-dial-four-notches-5.png]]
+![[loopy-the-autonomy-dial-four-notches-6.png]]
 
 Notice notch 2 is the load-bearing one. Without it you only have two real states, and trust never gets built because you can't watch the loop be right about reversible things over time. The log is where you accumulate the evidence that lets you eventually demote actions toward silent.
 

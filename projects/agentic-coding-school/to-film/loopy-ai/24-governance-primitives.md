@@ -45,7 +45,11 @@ Two loops doing completely different work, one mining sentence cards and one mer
 The boundary is the governance, full stop. And it matters because the four primitives are scoped to the fleet, not to "every loop running on your machine." If you never draw the boundary, you can't enforce any of them. A budget with no defined scope is a number with nothing to cap.
 
 [IMAGE: dark canvas, two dashed rectangles each labeled "fleet". The left fleet contains two unlike loop icons (a card and a merge arrow) wired to a single shared budget bar, kill file, and log folder. The right fleet contains two similar loops each wired to its own separate budget, kill file, and log. A caption reads "the boundary is the shared governance, not the topic".]
-![[images/governance-primitives/fleet-boundary.png]]
+![[loopy-governance-primitives-fleet-boundary-1.png]]
+![[loopy-governance-primitives-fleet-boundary-2.png]]
+![[loopy-governance-primitives-fleet-boundary-3.png]]
+![[loopy-governance-primitives-fleet-boundary-4.png]]
+![[loopy-governance-primitives-fleet-boundary-5.png]]
 
 ---
 
@@ -76,7 +80,11 @@ The model will lie about its remaining budget. Not maliciously. It simply doesn'
 The runtime will not lie, because the runtime counts tokens it actually emitted. So the budget has to be enforced one level down from the model, in the loop that wraps the model. This is the same lesson as goal mode moving the exit condition out of the transcript and into a Stop hook. Anything the model can talk its way past is not a control. It's a suggestion.
 
 [IMAGE: dark canvas. Top path: a prompt bubble saying "budget: $5, stop when you hit it" feeding a model that emits a thought bubble "I've got plenty left" while a meter behind it reads $41, crossed out with a red X. Bottom path: the same model wrapped in a runtime box that holds a real token counter wired to a hard STOP gate, marked with a green check. Caption: "the model can't count its own spend".]
-![[images/governance-primitives/budget-in-runtime.png]]
+![[loopy-governance-primitives-budget-in-runtime-1.png]]
+![[loopy-governance-primitives-budget-in-runtime-2.png]]
+![[loopy-governance-primitives-budget-in-runtime-3.png]]
+![[loopy-governance-primitives-budget-in-runtime-4.png]]
+![[loopy-governance-primitives-budget-in-runtime-5.png]]
 
 ---
 

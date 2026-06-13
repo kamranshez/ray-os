@@ -23,7 +23,12 @@ Mission command thinned the decisions coming up. Keeping you in the loop built t
 So look at where the work actually piles up. It is never the agents. We said this back at the worker loops: the bottleneck is you keeping up, not agent count. Adding a second loop when you can't clear the first one just floods you faster.
 
 [IMAGE: dark canvas, many loops on the left all funneling arrows into a single narrow human figure on the right, work visibly stacking up at the neck of the funnel]
-![[images/removing-bottlenecks/human-as-funnel.png]]
+![[loopy-removing-bottlenecks-human-as-funnel-1.png]]
+![[loopy-removing-bottlenecks-human-as-funnel-2.png]]
+![[loopy-removing-bottlenecks-human-as-funnel-3.png]]
+![[loopy-removing-bottlenecks-human-as-funnel-4.png]]
+![[loopy-removing-bottlenecks-human-as-funnel-5.png]]
+![[loopy-removing-bottlenecks-human-as-funnel-6.png]]
 
 The question stops being "how do I do this faster" and becomes "why am I in this step at all." Every place you touch the work is a candidate for removal. Some of those touches are real judgment that only you can supply. Most of them are not. They are habit, or a missing actuator, or a decision you've already made a hundred times and could write down once.
 
@@ -47,7 +52,11 @@ So "automate everything" is the wrong target because it automates the wrong laye
 The right target is narrower and it has a shape.
 
 [IMAGE: dark canvas, a bottleneck funnel split into three colored bands labeled DELETE, SCRIPT, LOOP, with a small fourth band at the bottom labeled KEEP]
-![[images/removing-bottlenecks/four-band-funnel.png]]
+![[loopy-removing-bottlenecks-four-band-funnel-1.png]]
+![[loopy-removing-bottlenecks-four-band-funnel-2.png]]
+![[loopy-removing-bottlenecks-four-band-funnel-3.png]]
+![[loopy-removing-bottlenecks-four-band-funnel-4.png]]
+![[loopy-removing-bottlenecks-four-band-funnel-5.png]]
 
 ---
 
@@ -80,7 +89,11 @@ Each cluster is a bottleneck with its fate already half-decided. Forty identical
 The transcript is the borrowed verifier on your own habits. You can't grade your own busyness by vibe any more than a model can grade its own code. But the log doesn't flatter you. It just shows where your hands keep landing.
 
 [IMAGE: dark canvas, a stack of transcript and log files on the left feeding a triager agent in the middle, which outputs a ranked list on the right where each row is tagged delete, script, or loop]
-![[images/removing-bottlenecks/transcript-miner.png]]
+![[loopy-removing-bottlenecks-transcript-miner-1.png]]
+![[loopy-removing-bottlenecks-transcript-miner-2.png]]
+![[loopy-removing-bottlenecks-transcript-miner-3.png]]
+![[loopy-removing-bottlenecks-transcript-miner-4.png]]
+![[loopy-removing-bottlenecks-transcript-miner-5.png]]
 
 ---
 

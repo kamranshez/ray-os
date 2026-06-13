@@ -30,7 +30,11 @@ You already know why that fails. The model is eager to please you. Ask it whethe
 Source: https://x.com/systematicls/status/2028814227004395561
 
 [IMAGE: dark canvas, a single head looking at a sheet of paper labeled "PRD" that it just wrote, a speech bubble saying "looks good to me", the whole thing circled and crossed out, labeled "vibes"]
-![[images/adversarial-reviewer-skill/self-review-vibes.png]]
+![[loopy-adversarial-reviewer-skill-self-review-vibes-1.png]]
+![[loopy-adversarial-reviewer-skill-self-review-vibes-2.png]]
+![[loopy-adversarial-reviewer-skill-self-review-vibes-3.png]]
+![[loopy-adversarial-reviewer-skill-self-review-vibes-4.png]]
+![[loopy-adversarial-reviewer-skill-self-review-vibes-5.png]]
 
 ---
 
@@ -47,7 +51,11 @@ Same weights. Asymmetric instructions. That asymmetry is the entire mechanism. Y
 This is the same idea we met with borrowed verifiers, generalised. A borrowed verifier gets its reason to disagree from reality, from a runtime observation the builder couldn't author. When there's no reality to borrow from, you manufacture the reason to disagree inside the prompt instead. You weight the instructions hard toward refusal.
 
 [IMAGE: dark canvas, two identical heads facing each other, same colour and shape, one labeled "build", one labeled "refute", a single document passing from one to the other]
-![[images/adversarial-reviewer-skill/build-vs-refute-heads.png]]
+![[loopy-adversarial-reviewer-skill-build-vs-refute-heads-1.png]]
+![[loopy-adversarial-reviewer-skill-build-vs-refute-heads-2.png]]
+![[loopy-adversarial-reviewer-skill-build-vs-refute-heads-3.png]]
+![[loopy-adversarial-reviewer-skill-build-vs-refute-heads-4.png]]
+![[loopy-adversarial-reviewer-skill-build-vs-refute-heads-5.png]]
 
 ---
 
@@ -84,7 +92,11 @@ Three concrete versions of the pair.
 **Copy writer and AI-slop hunter.** The writer drafts. The attacker's only job is to cut the model's own tells, the "in today's fast-paced world," the tricolon, the em dash, the throat-clearing. The thing that wrote the slop is the worst judge of it. A fresh context told to hunt slop is brutal at it.
 
 [IMAGE: dark canvas, three horizontal pairs stacked vertically, each pair a "creator" box and an "attacker" box with an arrow between, labeled PRD / miracle steps, code / scope drift, copy / slop tells]
-![[images/adversarial-reviewer-skill/three-creator-attacker-pairs.png]]
+![[loopy-adversarial-reviewer-skill-three-creator-attacker-pairs-1.png]]
+![[loopy-adversarial-reviewer-skill-three-creator-attacker-pairs-2.png]]
+![[loopy-adversarial-reviewer-skill-three-creator-attacker-pairs-3.png]]
+![[loopy-adversarial-reviewer-skill-three-creator-attacker-pairs-4.png]]
+![[loopy-adversarial-reviewer-skill-three-creator-attacker-pairs-5.png]]
 
 ---
 

@@ -27,7 +27,11 @@ That is self-grading wearing a new costume. You met it back in the closing-the-l
 The fix is the same fix it has always been in this class. Put a verifier outside yourself, and let the loop decide what survives.
 
 [IMAGE: dark canvas, left side a person hand-editing a SKILL.md with a thought bubble "looks better?", right side a closed loop where a prompt feeds runs feed an eval suite feeds a keep/discard gate that feeds back to the prompt]
-![[images/autoresearch/hand-edit-vs-loop.png]]
+![[loopy-autoresearch-hand-edit-vs-loop-1.png]]
+![[loopy-autoresearch-hand-edit-vs-loop-2.png]]
+![[loopy-autoresearch-hand-edit-vs-loop-3.png]]
+![[loopy-autoresearch-hand-edit-vs-loop-4.png]]
+![[loopy-autoresearch-hand-edit-vs-loop-5.png]]
 
 ---
 
@@ -64,7 +68,11 @@ So every eval is a yes-or-no question with a specific pass condition and a speci
 Your max score is simply the number of evals times the number of runs. Four evals, five runs, max score of twenty. That number never changes for the life of the experiment, which is exactly why a fixed binary suite lets you compare run three against run thirty honestly.
 
 [IMAGE: dark canvas, top row a wobbly 1-to-7 scale with the same output scoring 5 then 6 then 4 across three runs labeled "noise", bottom row a clean PASS/FAIL stamp giving the same answer three times labeled "signal"]
-![[images/autoresearch/binary-vs-scored-evals.png]]
+![[loopy-autoresearch-binary-vs-scored-evals-1.png]]
+![[loopy-autoresearch-binary-vs-scored-evals-2.png]]
+![[loopy-autoresearch-binary-vs-scored-evals-3.png]]
+![[loopy-autoresearch-binary-vs-scored-evals-4.png]]
+![[loopy-autoresearch-binary-vs-scored-evals-5.png]]
 
 ---
 

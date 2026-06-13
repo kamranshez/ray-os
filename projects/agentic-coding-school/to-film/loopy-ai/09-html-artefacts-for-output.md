@@ -27,7 +27,11 @@ That is not verification. That is rubber-stamping with extra steps.
 The output is in the wrong shape for the thing you need to do with it, which is *judge it*. Text forces you to hold the entire structure in your head at once. A decision buried in paragraph nine looks exactly like a sentence of throat-clearing in paragraph two. You can't see the shape of the work, so you can't see where it went wrong.
 
 [IMAGE: dark canvas, left side a cramped wall of chat text with a tiny "approve" button, right side a clean browser window with tabs, panels, and a highlighted decision point, an arrow labeled "same work, judgeable shape" pointing right]
-![[images/html-artefacts-for-output/text-vs-artifact.png]]
+![[loopy-html-artefacts-for-output-text-vs-artifact-1.png]]
+![[loopy-html-artefacts-for-output-text-vs-artifact-2.png]]
+![[loopy-html-artefacts-for-output-text-vs-artifact-3.png]]
+![[loopy-html-artefacts-for-output-text-vs-artifact-4.png]]
+![[loopy-html-artefacts-for-output-text-vs-artifact-5.png]]
 
 And it gets worse at the next level. When this loop runs unattended, the chat scrolls away. There is no durable thing left over. The work happened and then evaporated into a transcript nobody will ever open again.
 
@@ -56,7 +60,11 @@ And it's the *runtime* the loop reads. This is the part people miss. The artifac
 Output, spec, runtime. One file. That's why this is a workflow primitive and not a formatting tip.
 
 [IMAGE: dark canvas, a single HTML file icon in the center with three labeled arrows radiating out, "OUTPUT you read", "SPEC you correct", "RUNTIME the loop reads back", three roles one file]
-![[images/html-artefacts-for-output/three-roles-one-file.png]]
+![[loopy-html-artefacts-for-output-three-roles-one-file-1.png]]
+![[loopy-html-artefacts-for-output-three-roles-one-file-2.png]]
+![[loopy-html-artefacts-for-output-three-roles-one-file-3.png]]
+![[loopy-html-artefacts-for-output-three-roles-one-file-4.png]]
+![[loopy-html-artefacts-for-output-three-roles-one-file-5.png]]
 
 ---
 

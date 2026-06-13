@@ -29,7 +29,11 @@ Because the check was the same model call that produced the artifact. The agent 
 In [[strip-the-model-out]] we built loops with no model in them at all, and we named the failure mode for a check that doesn't actually check: it's the difference between a loop that converges and a loop that just stops. L2 is where that failure mode shows up the most, because the model is so fluent at telling you it's done.
 
 [IMAGE: dark canvas, a single agent head drawing a loop arrow that points right back into its own mouth, labeled "self-grade", with a small caption "the work happened, the loop didn't"]
-![[images/closing-the-loop/half-built-loop.png]]
+![[loopy-closing-the-loop-half-built-loop-1.png]]
+![[loopy-closing-the-loop-half-built-loop-2.png]]
+![[loopy-closing-the-loop-half-built-loop-3.png]]
+![[loopy-closing-the-loop-half-built-loop-4.png]]
+![[loopy-closing-the-loop-half-built-loop-5.png]]
 
 So before we build anything, we need a hard definition of the one part people keep getting wrong.
 
@@ -68,7 +72,11 @@ The exit condition. The single rule that ends the loop, expressed as "verifier r
 Builder produces artifact. Verifier grades artifact. On fail, the artifact and the verifier's complaints go back to the builder, and it produces again. On pass, the loop exits. That's the entire shape.
 
 [IMAGE: dark canvas, four labeled boxes, builder to work-artifact to verifier, a "fail" arrow looping back from verifier to builder, a "pass" arrow exiting the loop to the right]
-![[images/closing-the-loop/four-part-anatomy.png]]
+![[loopy-closing-the-loop-four-part-anatomy-1.png]]
+![[loopy-closing-the-loop-four-part-anatomy-2.png]]
+![[loopy-closing-the-loop-four-part-anatomy-3.png]]
+![[loopy-closing-the-loop-four-part-anatomy-4.png]]
+![[loopy-closing-the-loop-four-part-anatomy-5.png]]
 
 Now notice something. We already built this shape, twice, in [[strip-the-model-out]], with no model anywhere in it.
 
@@ -105,7 +113,11 @@ That makes "non-builder" partly a context property, not just a prompt property. 
 But fresh eyes only buy you honesty. They do not buy you rigour. A clean context that has nothing concrete to push back with will still drift to "looks fine," for the same reason the original context did. It needs a reason to disagree. Either it observed something the builder didn't get to author, which is the [[borrowed-verifiers]] move, or it was told to refute rather than confirm, which is the paired-attacker move in [[adversarial-reviewer-skill]]. Clean context plus no reason to push back still rubber-stamps. Hold onto that. It's the whole bridge into the next two segments.
 
 [IMAGE: dark canvas, two side-by-side panels. Left: one head labeled "builder context", a thought bubble "I already said done", arrow to a rubber stamp reading FINE. Right: a separate fresh head labeled "non-builder", with two inputs feeding it, "observed signal" and "told to refute", arrow to a real PASS/FAIL gate]
-![[images/closing-the-loop/fresh-eyes-not-enough.png]]
+![[loopy-closing-the-loop-fresh-eyes-not-enough-1.png]]
+![[loopy-closing-the-loop-fresh-eyes-not-enough-2.png]]
+![[loopy-closing-the-loop-fresh-eyes-not-enough-3.png]]
+![[loopy-closing-the-loop-fresh-eyes-not-enough-4.png]]
+![[loopy-closing-the-loop-fresh-eyes-not-enough-5.png]]
 
 ---
 

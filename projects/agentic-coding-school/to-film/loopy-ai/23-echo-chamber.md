@@ -31,7 +31,11 @@ A system like that has a name in dynamics. It converges to a fixed point. Run it
 It is silent because there's no error. No test fails. No verifier throws. The loop is doing exactly what you built it to do. It's optimising toward a target, and the target turned out to be its own reflection.
 
 [IMAGE: dark canvas, a spiral tightening inward toward a single bright dot at the center, each loop of the spiral drawn closer to the last, labeled "every output, more like the average"]
-![[images/echo-chamber/fixed-point-spiral.png]]
+![[loopy-echo-chamber-fixed-point-spiral-1.png]]
+![[loopy-echo-chamber-fixed-point-spiral-2.png]]
+![[loopy-echo-chamber-fixed-point-spiral-3.png]]
+![[loopy-echo-chamber-fixed-point-spiral-4.png]]
+![[loopy-echo-chamber-fixed-point-spiral-5.png]]
 
 ---
 
@@ -62,7 +66,11 @@ For a code generation loop, the exogenous stage is verification. The eval suite 
 For a sales outreach loop, the exogenous stage is the response data. Reply rates come from real prospects, not from a simulated grader scoring your emails against your own examples. The borrowed verifier we met in the closing-the-loop segment had to touch reality. Same rule, raised to the level of the whole pipeline.
 
 [IMAGE: dark canvas, the same tightening spiral as before, but now a single bold arrow labeled "world" pierces the spiral from outside and pushes one of its loops back outward, breaking the convergence at exactly one point]
-![[images/echo-chamber/world-arrow-piercing.png]]
+![[loopy-echo-chamber-world-arrow-piercing-1.png]]
+![[loopy-echo-chamber-world-arrow-piercing-2.png]]
+![[loopy-echo-chamber-world-arrow-piercing-3.png]]
+![[loopy-echo-chamber-world-arrow-piercing-4.png]]
+![[loopy-echo-chamber-world-arrow-piercing-5.png]]
 
 Why exactly one? Because the constraints push in opposite directions. None, and the loop converges to slop, it has nothing real to anchor on. But inject fresh exogenous signal at every stage and the loop loses coherence, it never settles enough to compound, you've just rebuilt a random idea generator with extra steps. One exogenous stage is the sweet spot. It anchors the whole pipeline to reality at a single point while letting every other stage compound off that anchor.
 

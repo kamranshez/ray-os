@@ -31,7 +31,11 @@ You just rebuilt a Gantt chart. You froze a plan at the moment of *least* knowle
 A numbered, arrowed ticket list is a plan made before the work. That's the tell. You're not being organised. You're being premature.
 
 [IMAGE: dark canvas, split frame. Left side a Gantt chart with a big red X struck through it. Right side a loose stack of backlog cards, a curved loop arrow reaching in to pull the top card, then curving back to a label that reads "pick again"]
-![[images/dont-pre-sequence-the-backlog/gantt-vs-backlog.png]]
+![[loopy-dont-pre-sequence-the-backlog-gantt-vs-backlog-1.png]]
+![[loopy-dont-pre-sequence-the-backlog-gantt-vs-backlog-2.png]]
+![[loopy-dont-pre-sequence-the-backlog-gantt-vs-backlog-3.png]]
+![[loopy-dont-pre-sequence-the-backlog-gantt-vs-backlog-4.png]]
+![[loopy-dont-pre-sequence-the-backlog-gantt-vs-backlog-5.png]]
 
 ---
 
@@ -60,7 +64,11 @@ And here is the part that should make you relax: the AI finds the physics on its
 You don't need to pre-encode what the model can detect by reading. Hand it the set, hand it the real constraints, and let it work out the dependencies on the fly from what's actually been done.
 
 [IMAGE: dark canvas, two columns. Left column "physics" with a few solid locked arrows (schema then client), labeled "write these down". Right column "guesses" with a tangle of faded dotted arrows over a pile of tickets, labeled "let the loop decide"]
-![[images/dont-pre-sequence-the-backlog/physics-vs-guesses.png]]
+![[loopy-dont-pre-sequence-the-backlog-physics-vs-guesses-1.png]]
+![[loopy-dont-pre-sequence-the-backlog-physics-vs-guesses-2.png]]
+![[loopy-dont-pre-sequence-the-backlog-physics-vs-guesses-3.png]]
+![[loopy-dont-pre-sequence-the-backlog-physics-vs-guesses-4.png]]
+![[loopy-dont-pre-sequence-the-backlog-physics-vs-guesses-5.png]]
 
 ---
 
@@ -123,7 +131,11 @@ That skip is the entire point. One loop executed a stale plan. The other read th
 6. Optional second run, for the parallelism beat. Let the single Version B loop run while you try to review its output in real time. Show yourself falling behind. The loop is not the bottleneck. You are. Make that concrete *before* anyone in the comments asks "why not run ten of these at once."
 
 [IMAGE: dark canvas, two terminals side by side. Left terminal labeled "pre-sequenced" showing an agent building a ticket with a tombstone icon marked "already obsolete". Right terminal labeled "re-picked" showing the same ticket crossed out with a "skipped, obsoleted" note and the loop moving to the next card]
-![[images/dont-pre-sequence-the-backlog/demo-a-vs-b.png]]
+![[loopy-dont-pre-sequence-the-backlog-demo-a-vs-b-1.png]]
+![[loopy-dont-pre-sequence-the-backlog-demo-a-vs-b-2.png]]
+![[loopy-dont-pre-sequence-the-backlog-demo-a-vs-b-3.png]]
+![[loopy-dont-pre-sequence-the-backlog-demo-a-vs-b-4.png]]
+![[loopy-dont-pre-sequence-the-backlog-demo-a-vs-b-5.png]]
 
 ---
 
