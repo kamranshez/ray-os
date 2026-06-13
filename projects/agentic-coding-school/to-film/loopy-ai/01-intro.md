@@ -40,7 +40,11 @@ And if you can't tell them apart, you can't reason about them. You can't decide 
 
 [IMAGE: three speech bubbles from three different engineers, each saying "I built a loop", each bubble pointing at a different diagram below it]
 
-![[images/intro/three-engineers.png]]
+![[loopy-intro-three-engineers-1.png]]
+![[loopy-intro-three-engineers-2.png]]
+![[loopy-intro-three-engineers-3.png]]
+![[loopy-intro-three-engineers-4.png]]
+![[loopy-intro-three-engineers-5.png]]
 
 ---
 
@@ -62,7 +66,11 @@ There are eight levels of loop. They nest. Each one wraps the one below it.
 
 [IMAGE: vertical stack diagram, L0 at the bottom, L7 at the top, each level a labeled box, the boxes nested inside each other matryoshka-style]
 
-![[images/intro/loop-stack.png]]
+![[loopy-intro-loop-stack-1.png]]
+![[loopy-intro-loop-stack-2.png]]
+![[loopy-intro-loop-stack-3.png]]
+![[loopy-intro-loop-stack-4.png]]
+![[loopy-intro-loop-stack-5.png]]
 
 At the bottom is the model generating tokens. You don't touch that. Level zero.
 
@@ -104,7 +112,11 @@ Almost nobody listening to this is operating at level four or above. That's not 
 
 [VISUAL: cut to screen reveal, desktop with 10 to 15 Claude windows open, each doing something different, hold for 4 seconds in silence before voiceover resumes]
 
-![[images/intro/desktop-fleet.png]]
+![[loopy-intro-desktop-fleet-1.png]]
+![[loopy-intro-desktop-fleet-2.png]]
+![[loopy-intro-desktop-fleet-3.png]]
+![[loopy-intro-desktop-fleet-4.png]]
+![[loopy-intro-desktop-fleet-5.png]]
 
 This is what working looks like for me now.
 

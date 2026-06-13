@@ -20,7 +20,11 @@ Stick with me on this one. The rest of the class won't make sense without it.
 
 [IMAGE: vertical stack diagram, eight levels labeled L0 to L7, each one nested inside the one above, with the model at the bottom and the human at the top]
 
-![[images/loop-stack/the-stack.png]]
+![[loopy-loop-stack-the-stack-1.png]]
+![[loopy-loop-stack-the-stack-2.png]]
+![[loopy-loop-stack-the-stack-3.png]]
+![[loopy-loop-stack-the-stack-4.png]]
+![[loopy-loop-stack-the-stack-5.png]]
 
 From the bottom:
 
@@ -57,7 +61,11 @@ The boundary is sharp. One coherent task. One context window. One conversation.
 
 [IMAGE: a single rectangle labeled "context window" with arrows cycling inside it labeled think, tool, observe]
 
-![[images/loop-stack/l1-harness.png]]
+![[loopy-loop-stack-l1-harness-1.png]]
+![[loopy-loop-stack-l1-harness-2.png]]
+![[loopy-loop-stack-l1-harness-3.png]]
+![[loopy-loop-stack-l1-harness-4.png]]
+![[loopy-loop-stack-l1-harness-5.png]]
 
 If you've used Claude Code, you have built L1 loops. You probably didn't call them that. The harness handles it for you.
 
@@ -95,7 +103,11 @@ This is where goal mode lives too. Set an objective. The runtime keeps the loop 
 
 [IMAGE: a flowchart, spec -> plan -> build -> review -> push -> verify, with the build box exploded out into a smaller L1/L2 stack]
 
-![[images/loop-stack/l3-lifecycle.png]]
+![[loopy-loop-stack-l3-lifecycle-1.png]]
+![[loopy-loop-stack-l3-lifecycle-2.png]]
+![[loopy-loop-stack-l3-lifecycle-3.png]]
+![[loopy-loop-stack-l3-lifecycle-4.png]]
+![[loopy-loop-stack-l3-lifecycle-5.png]]
 
 L3 is the unit of "I shipped one thing." Most people who say "I've used Claude for a real task" are working at L3, even if they don't have the vocabulary for it.
 
@@ -137,7 +149,11 @@ An anomaly detector watching Stripe revenue. It doesn't fix the anomaly. It surf
 
 [IMAGE: a diagram with many input streams flowing into a triager agent, which outputs a small filtered list of "things worth doing"]
 
-![[images/loop-stack/l5-discovery.png]]
+![[loopy-loop-stack-l5-discovery-1.png]]
+![[loopy-loop-stack-l5-discovery-2.png]]
+![[loopy-loop-stack-l5-discovery-3.png]]
+![[loopy-loop-stack-l5-discovery-4.png]]
+![[loopy-loop-stack-l5-discovery-5.png]]
 
 L5 produces problems, not solutions. It feeds L4.
 
@@ -173,7 +189,11 @@ L7 is the bottleneck now. Not the model. Not the harness. Not the prompts. The p
 
 [IMAGE: russian doll diagram, L7 wrapping L6 wrapping L5 etc all the way down to L0]
 
-![[images/loop-stack/nesting.png]]
+![[loopy-loop-stack-nesting-1.png]]
+![[loopy-loop-stack-nesting-2.png]]
+![[loopy-loop-stack-nesting-3.png]]
+![[loopy-loop-stack-nesting-4.png]]
+![[loopy-loop-stack-nesting-5.png]]
 
 ```
 L7 (you, deciding)
