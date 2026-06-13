@@ -1,1 +1,0 @@
-Generating them on demand. They're surfaces for making rich decisions.

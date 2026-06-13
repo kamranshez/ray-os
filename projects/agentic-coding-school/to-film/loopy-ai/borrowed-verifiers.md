@@ -97,7 +97,7 @@ These are the slowest verifiers. They might take a day or a week to read. But th
 
 A serious L4 or L5 loop uses all three. Deterministic verifiers for safety. Scored verifiers for fast iteration. Real-world verifiers for ground truth. Cross referenced in the same experiment table.
 
-That last shape is covered in detail in [[../automation/auto-research-for-non-technical-work]]. Read it after this segment.
+That last shape is covered in detail in [[auto-research-for-non-technical-work]]. Read it after this segment.
 
 [IMAGE: three stacked boxes labeled Deterministic, Scored, Real-world. Each one has a speed label on the left, a noise label on the right. Arrows show the relative tradeoff]
 
@@ -213,7 +213,7 @@ The L4 and L5 version is the same idea, but with memory.
 
 Instead of looping until the score passes once, you log every iteration to an experiment table. Each row is: what you changed, what the verifier said, did it ship, what was the real-world outcome. The agent reads the table before proposing the next change.
 
-That is the full auto research pattern. It is covered in detail in [[../automation/auto-research-for-non-technical-work]], applied to YouTube titles, cold email, landing pages, and newsletters.
+That is the full auto research pattern. It is covered in detail in [[auto-research-for-non-technical-work]], applied to YouTube titles, cold email, landing pages, and newsletters.
 
 The connection: borrowed verifiers are the *grader* that makes auto research possible. Without a real grader, the table is just opinions. With one, the table is a compounding learning system.
 

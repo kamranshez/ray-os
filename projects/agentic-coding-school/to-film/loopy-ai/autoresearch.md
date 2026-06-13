@@ -28,7 +28,7 @@ This is the artifact you write before the prompt. The autoresearch loop mutates 
 - Binary evals beat scored evals for mutation gating. "Did it improve" is the question, not "by how much."
 - The mutation engine: how to propose prompt changes that don't drift the policy.
 - Connection to [[ace-three-role-split]]: autoresearch is an ACE variant where the Curator's job is to mutate the Generator's prompt and keep what wins.
-- Connection to [[../automation/auto-research-for-non-technical-work]]: the operator-grade version with experiment tables and real-world graders.
+- Connection to [[auto-research-for-non-technical-work]]: the operator-grade version with experiment tables and real-world graders.
 
 ## Sources / refs
 
