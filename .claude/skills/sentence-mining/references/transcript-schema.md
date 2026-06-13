@@ -50,5 +50,5 @@ The `text` field reflects any corrections Claude made (e.g. 線理眼 → 千里
 
 ## Quality notes
 
-- AssemblyAI's word-level timing is per its tokenization, not per mecab token. The mapping back to mecab tokens in `analyze.py` is heuristic (substring match) — good enough to pick a screenshot frame, but don't trust it for sub-character precision.
+- AssemblyAI's word-level timing is per its tokenization, not per SudachiPy token. The mapping back to SudachiPy tokens in `analyze.py` is heuristic (substring match) — good enough to pick a screenshot frame, but don't trust it for sub-character precision.
 - Music-heavy videos can produce 10–30% transcription errors. Claude's correction step catches the obvious ones (phonetic confusions, wrong homophones) but won't fix systemic garbage — for those, surface the issue to Ray rather than churning out bad cards.

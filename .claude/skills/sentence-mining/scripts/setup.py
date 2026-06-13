@@ -70,12 +70,12 @@ def probe(url):
         out["ankiconnect"]["error"] = str(e)
 
     # CLI tools
-    for tool in ("yt-dlp", "ffmpeg", "mecab"):
+    for tool in ("yt-dlp", "ffmpeg"):
         out["tools"][tool] = bool(shutil.which(tool))
 
-    # Python packages
+    # Python packages (SudachiPy replaces the mecab binary; sudachidict_core is the dict)
     import importlib.util
-    for pkg in ("google.genai", "jamdict", "jamdict_data"):
+    for pkg in ("google.genai", "sudachipy", "sudachidict_core"):
         out["python_packages"][pkg] = importlib.util.find_spec(pkg) is not None
 
     # API keys (env or .env via _env)

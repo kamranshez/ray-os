@@ -46,7 +46,7 @@ DEFAULTS: dict = {
     },
     # Self-contained re-implementation of AnkiMorphs' "known morphs" idea: each
     # source is an Anki search + the note field to mine. We tokenize that field
-    # with mecab and record each lemma's highest card interval; lemma is "known"
+    # with SudachiPy and record each lemma's highest card interval; lemma is "known"
     # once that interval >= interval_threshold (AnkiMorphs' default is 21 days).
     "known_words": {
         "interval_threshold": 21,

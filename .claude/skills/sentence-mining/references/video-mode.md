@@ -1,6 +1,6 @@
 # Video Mode
 
-Source: a **video URL** (Instagram reel, YouTube video/Short, TikTok, Twitter/X video) or a **local video file path**. The flow downloads (if URL), transcribes via AssemblyAI, splits into sentence chunks, runs mecab + the built-in known-word diff (see [known-words.md](known-words.md)) to find i+1 sentences (one unknown word), and produces draft cards.
+Source: a **video URL** (Instagram reel, YouTube video/Short, TikTok, Twitter/X video) or a **local video file path**. The flow downloads (if URL), transcribes via AssemblyAI, splits into sentence chunks, runs SudachiPy + the built-in known-word diff (see [known-words.md](known-words.md)) to find i+1 sentences (one unknown word), and produces draft cards.
 
 When this mode triggers:
 - Ray pastes any of the URL types above
@@ -74,7 +74,7 @@ python3 <skill-dir>/scripts/analyze.py \
     > ~/Downloads/sentence-mining/$SOURCE_ID.candidates.json
 ```
 
-**Batch mode (preferred when mining ≥2 videos)** — share one mecab + jamdict + AnkiConnect load across all of them. Write `manifest.json`:
+**Batch mode (preferred when mining ≥2 videos)** — share one SudachiPy + AnkiConnect load across all of them. Write `manifest.json`:
 
 ```json
 [
@@ -89,15 +89,14 @@ python3 <skill-dir>/scripts/analyze.py \
     --output-dir ~/Downloads/sentence-mining/
 ```
 
-The batch form writes one `<source-id>.candidates.json` per entry. Same analysis per video, but jamdict (~100MB) opens once instead of N times, the known-word set is scanned once and shared, and the AnkiConnect dedup query runs once instead of N — that query was the source of the parallel-run timeout we hit before.
+The batch form writes one `<source-id>.candidates.json` per entry. Same analysis per video, but the SudachiPy tokenizer loads once instead of N times, the known-word set is scanned once and shared, and the AnkiConnect dedup query runs once instead of N — that query was the source of the parallel-run timeout we hit before.
 
 **What analyze.py does:**
 - Loads the **known-word set** once from `config.known_words.sources` (cached; see [known-words.md](known-words.md))
-- Tokenizes each sentence with mecab
-- Three-layer dedup for "learner already knows this word":
-  1. **Highest card interval ≥ threshold** — lemma's highest interval across the configured known-source cards ≥ `interval_threshold` (default 21) → known
-  2. **JMDict entry equality** — any alternate writing in the same JMDict entry is mature (catches すべて↔全て, ご飯↔御飯, わたし↔私)
-  3. **Kanji-stem match** — any mature lemma shares the leading kanji run (catches 支払う↔支払い, 取る↔取り — JMDict treats them as separate entries but the learner clearly knows both)
+- Tokenizes each sentence with SudachiPy (SplitMode C)
+- Two-layer dedup for "learner already knows this word" (both built once from the known sources):
+  1. **Highest card interval ≥ threshold** — the token's `dictionary_form()` has a highest interval across the configured known-source cards ≥ `interval_threshold` (default 21) → known
+  2. **Normalized-form match** — the token's `normalized_form()` (SudachiPy's canonical spelling) hits the known set, catching orthographic variants the surface lemma misses (すべて↔全て, ご飯↔御飯, 邂逅↔かいこう, 籠る↔籠もる) — this replaced the old jamdict/kanji-stem lookups
 - For each unknown lemma, finds the **best sentence** (i+1 preferred; falls back i+2, i+3…)
 - Queries AnkiConnect for the existing target-word field across the configured mining decks (`config.decks`); drops dupes
 - Ranks remaining unknowns by JPDB lemma priority if `config.jpdb_priority_csv` is set (lower line = more frequent = higher priority); otherwise keeps source order
@@ -135,5 +134,5 @@ TTS concurrency is capped at 2 with 429 backoff — Gemini's free-tier limit is 
 ## Gotchas specific to video mode
 
 - **AssemblyAI Japanese quality varies wildly.** Music-heavy reels with overlaid voice may give garbage. If a transcript has obvious errors (broken sentences, kana-only output where kanji should be), surface this to Ray before generating cards — bad sentences mean bad cards.
-- **Mecab segmentation isn't perfect.** Compound words may split or fuse in odd ways. Because the known-set and the candidates use the *same* mecab, segmentation is at least self-consistent — but still spot-check the target-word field for weirdness in the draft summary.
+- **Segmentation isn't perfect.** SudachiPy SplitMode C keeps most compounds whole, but words can still split or fuse in odd ways. Because the known-set and the candidates use the *same* tokenizer, segmentation is at least self-consistent — but still spot-check the target-word field for weirdness in the draft summary.
 - **Diarization is not always clean for backchannels.** "うん" / "そうだね" interjections may flip speaker labels mid-sentence. Use judgment in Step 2.5 to consolidate.

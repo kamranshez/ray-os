@@ -1,6 +1,6 @@
 ---
 name: sentence-mining
-description: Build Japanese sentence-mining cards for Anki in two modes, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + mecab + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → search across your locally-indexed subs2srs .apkg banks for natural example sentences, reusing the bank's original audio + screenshot when available. Both modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL or (b) a list of Japanese words — don't ask, start drafting. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
+description: Build Japanese sentence-mining cards for Anki in two modes, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + SudachiPy + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → search across your locally-indexed subs2srs .apkg banks for natural example sentences, reusing the bank's original audio + screenshot when available. Both modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL or (b) a list of Japanese words — don't ask, start drafting. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
 ---
 
 # Sentence Mining
@@ -18,7 +18,7 @@ Two ways in:
 │   VIDEO MODE         │                       │   BANK MODE             │
 │   yt-dlp →           │                       │   search bank indexes   │
 │   AssemblyAI →       │                       │   for each word →       │
-│   mecab + i+1 diff   │                       │   pick best sentence    │
+│   SudachiPy + i+1    │                       │   pick best sentence    │
 └──────────┬───────────┘                       └────────────┬────────────┘
            │                                                │
            └──────────────┬─────────────────────────────────┘
@@ -64,15 +64,16 @@ is hardcoded. Two git-ignored files hold all the per-user state:
 
 **The only hard dependencies besides those two files:**
 - Anki running with **AnkiConnect** (default port 8765) — verify with `curl -s http://localhost:8765 -d '{"action":"version","version":6}'`
-- `yt-dlp`, `ffmpeg`, `mecab` on PATH
-- Python: `pip3 install --break-system-packages google-genai jamdict jamdict-data`
+- `yt-dlp`, `ffmpeg` on PATH
+- Python: `pip3 install --break-system-packages google-genai sudachipy sudachidict_core`
+  (SudachiPy is the Japanese tokenizer — pure pip, no `brew install mecab` needed)
 
 **AnkiMorphs is NOT required.** The i+1 known-word diff is re-implemented inside
-the skill: it reads the cards in the decks/note-types you name at setup, mecab-
-tokenizes the configured field, and treats a lemma as "known" once its highest
-card interval ≥ threshold (default 21 days) — the same idea AnkiMorphs uses, but
-computed live through AnkiConnect with the same tokenizer the miner uses. See
-[references/known-words.md](references/known-words.md).
+the skill: it reads the cards in the decks/note-types you name at setup,
+SudachiPy-tokenizes the configured field, and treats a lemma as "known" once its
+highest card interval ≥ threshold (default 21 days) — the same idea AnkiMorphs
+uses, but computed live through AnkiConnect with the same tokenizer the miner uses.
+See [references/known-words.md](references/known-words.md).
 
 For **bank mode**, the banks must be indexed first — setup offers to do this, or
 see [references/bank-mode.md](references/bank-mode.md) §"One-time setup".
@@ -103,7 +104,7 @@ Read it. Zero candidates? Tell Ray why (all words known, all dupes, no hits acro
 Walk the candidate list and drop entries that aren't worth a card. **Filter aggressively** — a Ray-quality card teaches a generalizable word he'll hit again, not a one-off label from this specific source. Drop:
 
 - **Pop-culture proper nouns** — anime/manga/game titles, character names, song titles, group/idol names. Real-world brands or places (`スターバックスコーヒー`, `富士山`, `東京`) are fine; pop-culture-specific titles are not.
-- **mecab fragments** — lemmas that are clearly mid-word cuts (`ざいって` from "うざいって", `けんぽ` from "じゃんけんぽい"). Tell: starts with a particle, ends mid-syllable, no JMDict entry. (Video mode only — bank mode doesn't tokenize.)
+- **Tokenizer fragments** — lemmas that are clearly mid-word cuts (`ざいって` from "うざいって", `けんぽ` from "じゃんけんぽい"). Tell: starts with a particle, ends mid-syllable, no dictionary entry. Rarer now that SudachiPy SplitMode C keeps compounds whole, but still spot-check. (Video mode only — bank mode doesn't tokenize.)
 - **Transcription garbage** — nonsense given the sentence's clear topic, especially when JPDB rank is `1000000000` (no entry). Don't try to rescue a contaminated sentence; drop the candidate. (Video mode only.)
 - **Trail-off / partial sentences** — sentence ends mid-clause or starts with a connecting particle; the audio clip will sound broken.
 - **Subs2srs concatenated frames** — bank-mode sentences like `(line1)   (line2)`: keep only the chunk containing the target word.
@@ -164,7 +165,7 @@ Pushed 17 cards from <SOURCE_ID> to Anki ✓
     13. 揶揄う (からかう) — "..." [JPDB rank 12044]
     ...
 
-Skipped during curation: <N> (ads / mecab fragments / transcription errors).
+Skipped during curation: <N> (ads / tokenizer fragments / transcription errors).
 Draft: ~/Downloads/sentence-mining/<source>.draft.json
 ```
 
@@ -233,7 +234,7 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 | `setup.py`              | setup | probe Anki (note types/fields/decks), tools, keys; validate `config.json` |
 | `_config.py`            | all   | load `config.json` (merged over defaults) — single source of truth |
 | `transcribe.py`         | video | AssemblyAI Universal-3 Pro JP transcription with diarization |
-| `analyze.py`            | video | mecab tokenize + built-in known-word diff (cached) + JPDB rank |
+| `analyze.py`            | video | SudachiPy tokenize + built-in known-word diff (cached) + JPDB rank |
 | `generate_media.py`     | video | ffmpeg clip + screenshot + Gemini TTS explanation            |
 | `extract_bank.py`       | bank  | parse `.apkg` → local index JSON + media dir                 |
 | `search_banks.py`       | bank  | word-list → top-N sentence candidates across indexed banks   |

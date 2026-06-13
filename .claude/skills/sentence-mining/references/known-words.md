@@ -26,7 +26,8 @@ For every source (`analyze.py` → `load_known_intervals`):
 1. `findCards(query)` — `query` is any Anki search (deck, note type, tag…).
 2. `cardsInfo` in chunks of 500 → for each card, read the `field` value and the
    card's `interval`.
-3. Strip HTML and `漢字[furigana]` annotations, then **mecab-tokenize** the field.
+3. Strip HTML and `漢字[furigana]` annotations, then tokenize the field with
+   **SudachiPy** (SplitMode C).
 4. For each content lemma, record its **highest** card interval across all cards
    (this is exactly AnkiMorphs' `highest_lemma_learning_interval`).
 
@@ -35,25 +36,39 @@ New/learning cards report interval ≤ 0 (or seconds), so they fall below the
 threshold and stay "unknown" — i.e. learning words still count as mineable, which
 matches the original behaviour.
 
-### Why this is at least as good as the old AnkiMorphs read
+### Why SudachiPy (and why same-tokenizer matters)
 
-The miner tokenizes the *mined* sentences with the same `mecab_tokenize`. Now the
-*known* set is built with the **same tokenizer**, so a lemma the learner knows is
-spelled identically in both places. The old setup mixed AnkiMorphs' bundled mecab
-(for the known DB) with system mecab (for candidates), which could disagree on a
-lemma and leak a known word through as a false "unknown". Same-tokenizer removes
-that class of error.
+The miner tokenizes the *mined* sentences with the same `tokenize()`. The *known*
+set is built with the **same tokenizer**, so a lemma the learner knows is spelled
+identically in both places — no cross-tokenizer leakage where a known word slips
+through as a false "unknown".
+
+SudachiPy (SplitMode C) was chosen over mecab+ipadic and fugashi+unidic after a
+head-to-head benchmark on Ray's 12.7k known-word cards (see the migration note
+below). It wins on every axis that matters here: ~180× faster (in-process, no
+subprocess spawn per sentence — the known-set tokenize dropped from ~60s to ~1s),
+correct on hard conjugations where ipadic fails (`籠もって` → ipadic gives `籠`/`もつ`,
+Sudachi gives `籠もる`), and SplitMode C keeps meaningful compounds whole
+(`警察官`, `被写体`, `美少女` as single vocab words instead of `警察`+`官`), which
+both improves card quality and gives the lowest single-kanji-fragment rate.
 
 Beyond the raw interval check, `analyze.py` also treats a lemma as known if:
-- any JMDict **alternate form** (kanji/kana variant) is known — so knowing 籠る
-  marks こもる known; and
+- a spelling **variant** is known — done via SudachiPy's `normalized_form()`, which
+  collapses orthographic variants to one canonical form, so knowing 籠る marks
+  こもる known (both normalize to 籠もる). This is built into the tokenizer and
+  replaced the old jamdict alt-form lookup (dropping the `jamdict`/`jamdict-data`
+  dependency); and
 - its leading **kanji stem** appears among mature kanji stems — catches inflected
   or compound forms.
 
-(Sanity check on Ray's collection during the migration: the new set agreed with
-the old `ankimorphs.db` on ~85% of known lemmas — Jaccard 0.78, 7178 vs 7624
-known — with the remainder explained by mecab-dictionary lemmatization differences
-and stale note types AnkiMorphs had recorded.)
+(Migration benchmark on Ray's collection: each tokenizer's recomputed known-set
+vs the old `ankimorphs.db` gold scored Jaccard 0.78 (ipadic) / 0.64 (unidic) /
+0.61 (Sudachi). ipadic "wins" agreement only because the gold was *itself* built
+with ipadic — it measures dictionary-sameness, not correctness. Since the skill
+now recomputes the known-set self-consistently and a friend starts with no
+`ankimorphs.db` at all, forward-looking accuracy/speed/compound-handling were the
+deciding factors, all of which favor Sudachi. Expect a one-time ~24% shift in the
+known-set the first time you switch — it self-corrects as you review.)
 
 ## Choosing sources (what AnkiMorphs called "note filters")
 
@@ -76,8 +91,9 @@ words as known); lowering it mines less.
 
 ## Caching
 
-Scanning a large collection (10k+ sentence cards) takes ~100s because every
-sentence is tokenized. The result is cached at `<work_dir>/.known_cache.json`,
+Scanning a large collection (10k+ sentence cards) takes ~30s on a cold run — now
+dominated by the AnkiConnect pull of card data, not tokenization (SudachiPy chews
+through the whole set in ~1s). The result is cached at `<work_dir>/.known_cache.json`,
 keyed on the exact `sources` list (so editing config auto-invalidates) and the
 threshold, with a TTL of `cache_hours`. Force a rescan with
 `analyze.py --refresh-known`. In manifest (multi-video) mode the known set is

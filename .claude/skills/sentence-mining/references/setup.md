@@ -17,8 +17,9 @@ python3 <skill-dir>/scripts/setup.py --probe
 ```
 
 This prints JSON with: AnkiConnect reachability + version; every note type and its
-field names; the deck list; which CLI tools (`yt-dlp`, `ffmpeg`, `mecab`) and
-Python packages are present; which API keys are set; and the current config if any.
+field names; the deck list; which CLI tools (`yt-dlp`, `ffmpeg`) and Python
+packages (`google.genai`, `sudachipy`, `sudachidict_core`) are present; which API
+keys are set; and the current config if any.
 
 If AnkiConnect is unreachable, tell the user to open Anki (and install the
 AnkiConnect add-on, code `2055492159`) and stop. If tools/packages/keys are

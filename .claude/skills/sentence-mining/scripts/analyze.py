@@ -4,7 +4,7 @@
 Input: AssemblyAI transcript JSON (from transcribe.py, post Step 2.5 splitting).
 Output: candidate cards JSON per source.
 
-Single-call mode lets multiple videos share one mecab + jamdict + AnkiConnect load.
+Single-call mode lets multiple videos share one SudachiPy + AnkiConnect load.
 
 Single-file (stdout):
     analyze.py --transcript T.json --source-id ID --source-url URL > cands.json
@@ -18,7 +18,6 @@ import argparse
 import json
 import os
 import re
-import subprocess
 import sys
 import time
 import urllib.error
@@ -29,8 +28,10 @@ from _config import load_config, deck_main, deck_deferred
 
 CAP = 50
 
-CONTENT_POS_PREFIXES = ("名詞", "動詞", "形容詞", "副詞", "連体詞", "感動詞", "形状詞")
-SKIP_POS_PREFIXES = ("助詞", "助動詞", "補助記号", "記号", "接尾辞", "接頭辞", "代名詞", "フィラー")
+# SudachiPy top-level POS categories (part_of_speech()[0]). na-adjectives are 名詞
+# in Sudachi (no 形状詞 category — that's UniDic), so they're caught by 名詞.
+CONTENT_POS_PREFIXES = ("名詞", "動詞", "形容詞", "副詞", "連体詞", "感動詞")
+SKIP_POS_PREFIXES = ("助詞", "助動詞", "補助記号", "記号", "空白", "接尾辞", "接頭辞", "代名詞", "フィラー")
 
 PURE_DIGITS = re.compile(r"^[0-9０-９]+$")
 PURE_ASCII = re.compile(r"^[A-Za-z]+$")
@@ -59,28 +60,50 @@ def strip_html(s):
 
 
 def strip_furigana(s):
-    # Anki furigana lives as `漢字[かんじ]`; drop the reading so mecab sees clean text.
+    # Anki furigana lives as `漢字[かんじ]`; drop the reading so the tokenizer sees clean text.
     return FURIGANA_RE.sub(r"\1", s)
 
 
-def mecab_tokenize(text):
-    p = subprocess.run(
-        ["mecab"], input=text, capture_output=True, text=True, check=True
-    )
-    tokens = []
-    for line in p.stdout.splitlines():
-        if line == "EOS" or not line.strip() or "\t" not in line:
-            continue
-        surface, features = line.split("\t", 1)
-        parts = features.split(",")
-        pos = parts[0] if parts else ""
-        if len(parts) >= 7 and parts[6] not in ("*", ""):
-            lemma = parts[6]
-        else:
-            lemma = surface
-        reading = parts[7] if len(parts) >= 8 and parts[7] != "*" else ""
-        tokens.append((surface, lemma, reading, pos))
-    return tokens
+_sudachi_tokenizer = None
+_sudachi_split = None
+
+
+def _sudachi():
+    """Lazily build a single SudachiPy tokenizer (SplitMode C) shared across calls."""
+    global _sudachi_tokenizer, _sudachi_split
+    if _sudachi_tokenizer is None:
+        from sudachipy import dictionary, tokenizer
+        _sudachi_tokenizer = dictionary.Dictionary(dict="core").create()
+        _sudachi_split = tokenizer.Tokenizer.SplitMode.C  # longest units — best for vocab
+    return _sudachi_tokenizer, _sudachi_split
+
+
+def tokenize(text):
+    """Tokenize with SudachiPy (SplitMode C — keeps meaningful compounds whole, e.g.
+    警察官/被写体 as single words rather than 警察+官).
+
+    Returns (surface, lemma, normalized, reading, pos) per token:
+      lemma      = dictionary_form()   (走った→走る; keeps surface orthography, kana stays kana)
+      normalized = normalized_form()   (collapses spelling variants: こもる/籠る→籠もる)
+      reading    = reading_form()      (katakana)
+      pos        = part_of_speech()[0] (top-level category, e.g. 名詞/動詞)
+
+    The normalized form drives variant-aware known-word matching, replacing the
+    old jamdict alt-form lookup. Using one in-process tokenizer for both the
+    known-set and the mined sentences keeps lemmas aligned (no cross-tokenizer
+    false unknowns) and is ~180x faster than spawning mecab per sentence.
+    """
+    tok, mode = _sudachi()
+    out = []
+    for m in tok.tokenize(text, mode):
+        out.append((
+            m.surface(),
+            m.dictionary_form(),
+            m.normalized_form(),
+            m.reading_form(),
+            m.part_of_speech()[0],
+        ))
+    return out
 
 
 def is_content_word(pos):
@@ -114,16 +137,22 @@ def load_known_intervals(sources):
     """Self-contained re-implementation of AnkiMorphs' known-lemma map.
 
     For each configured source (an Anki search + a note field), pull the cards,
-    read the field, mecab-tokenize it, and record every content lemma's HIGHEST
-    card interval — exactly the `highest_lemma_learning_interval` idea AnkiMorphs
-    stores, but computed live through AnkiConnect so the skill needs no AnkiMorphs
-    install and no ankimorphs.db. Using the same mecab tokenizer here and on the
-    mined sentences guarantees lemmas line up (no cross-tokenizer false unknowns).
+    read the field, tokenize it (SudachiPy), and record every content lemma's
+    HIGHEST card interval — exactly the `highest_lemma_learning_interval` idea
+    AnkiMorphs stores, but computed live through AnkiConnect so the skill needs no
+    AnkiMorphs install and no ankimorphs.db. Using the same tokenizer here and on
+    the mined sentences guarantees lemmas line up (no cross-tokenizer false
+    unknowns).
 
-    Returns {lemma: highest_interval_in_days}. New/learning cards report interval
-    <= 0 (or seconds), so they naturally fall below the >= 21 known threshold.
+    Returns (intervals, norm_intervals):
+      intervals       {dictionary_form: highest_interval_in_days}
+      norm_intervals  {normalized_form: highest_interval_in_days}
+    The second map powers variant-aware known matching (こもる counts as known if
+    籠る is known, since both normalize to 籠もる) — replacing the jamdict hack.
+    New/learning cards report interval <= 0, so they fall below the known threshold.
     """
     intervals = {}
+    norm_intervals = {}
     for src in sources or []:
         query = (src.get("query") or "").strip()
         field = (src.get("field") or "").strip()
@@ -145,18 +174,20 @@ def load_known_intervals(sources):
                 text = strip_html(strip_furigana(fobj.get("value", "")))
                 if not text:
                     continue
-                for surface, lemma, reading, pos in mecab_tokenize(text):
+                for surface, lemma, normalized, reading, pos in tokenize(text):
                     if not is_content_word(pos) or not is_card_worthy(lemma):
                         continue
                     if ivl > intervals.get(lemma, -(10**9)):
                         intervals[lemma] = ivl
+                    if normalized and ivl > norm_intervals.get(normalized, -(10**9)):
+                        norm_intervals[normalized] = ivl
         if not seen_field:
             print(
                 f"  WARNING: field {field!r} not found on cards for {query!r} "
                 f"(check field name in config.known_words)",
                 file=sys.stderr,
             )
-    return intervals
+    return intervals, norm_intervals
 
 
 def _sources_key(sources):
@@ -173,6 +204,8 @@ def get_known_intervals(cfg, force_refresh=False):
     keyed on the exact sources list (so editing config auto-invalidates) and the
     threshold. TTL is config.known_words.cache_hours (default 6; 0 disables).
     Pass --refresh-known to force a rescan after a big review session.
+
+    Returns (intervals, norm_intervals) — see load_known_intervals.
     """
     kw = cfg["known_words"]
     sources = kw.get("sources", [])
@@ -188,14 +221,15 @@ def get_known_intervals(cfg, force_refresh=False):
             age_h = (time.time() - cached.get("ts", 0)) / 3600
             if (cached.get("sources_key") == key
                     and cached.get("threshold") == KNOWN_INTERVAL_THRESHOLD
+                    and "norm_intervals" in cached  # skip pre-Sudachi cache shape
                     and age_h < cache_hours):
                 print(f"  known-set: cache hit ({age_h:.1f}h old, "
                       f"{len(cached['intervals'])} lemmas)", file=sys.stderr)
-                return cached["intervals"]
+                return cached["intervals"], cached["norm_intervals"]
         except Exception:  # noqa: BLE001 — corrupt cache → just rescan
             pass
 
-    intervals = load_known_intervals(sources)
+    intervals, norm_intervals = load_known_intervals(sources)
     if cache_hours:
         try:
             os.makedirs(work_dir, exist_ok=True)
@@ -205,10 +239,11 @@ def get_known_intervals(cfg, force_refresh=False):
                     "threshold": KNOWN_INTERVAL_THRESHOLD,
                     "ts": time.time(),
                     "intervals": intervals,
+                    "norm_intervals": norm_intervals,
                 }, f, ensure_ascii=False)
         except Exception:  # noqa: BLE001
             pass
-    return intervals
+    return intervals, norm_intervals
 
 
 def load_mature_kanji_stems(intervals):
@@ -219,31 +254,6 @@ def load_mature_kanji_stems(intervals):
             if stem:
                 stems.add(stem)
     return stems
-
-
-_jam = None
-
-
-def _jamdict():
-    global _jam
-    if _jam is None:
-        from jamdict import Jamdict
-        _jam = Jamdict()
-    return _jam
-
-
-def jmdict_alt_forms(lemma):
-    try:
-        result = _jamdict().lookup(lemma)
-    except Exception:
-        return set()
-    forms = set()
-    for entry in result.entries:
-        for k in entry.kanji_forms:
-            forms.add(k.text)
-        for k in entry.kana_forms:
-            forms.add(k.text)
-    return forms
 
 
 def load_jpdb_priority(path):
@@ -321,19 +331,20 @@ def _dominant_speaker(sent):
     return max(counts.items(), key=lambda kv: kv[1])[0]
 
 
-def analyze_one(transcript, source_id, source_url, intervals, mature_stems, priority, existing):
+def analyze_one(transcript, source_id, source_url, intervals, norm_intervals, mature_stems, priority, existing):
     annotated_sentences = []
     for idx, sent in enumerate(transcript["sentences"]):
-        tokens = mecab_tokenize(sent["text"])
-        content = [(s, l, r, p) for (s, l, r, p) in tokens if is_content_word(p)]
+        tokens = tokenize(sent["text"])
+        content = [(s, l, n, r, p) for (s, l, n, r, p) in tokens if is_content_word(p)]
         unknown = []
-        for surface, lemma, reading, pos in content:
+        for surface, lemma, normalized, reading, pos in content:
             if not is_card_worthy(lemma):
                 continue
             if intervals.get(lemma, 0) >= KNOWN_INTERVAL_THRESHOLD:
                 continue
-            alt_forms = jmdict_alt_forms(lemma)
-            if any(intervals.get(f, 0) >= KNOWN_INTERVAL_THRESHOLD for f in alt_forms):
+            # Variant-aware: known if any spelling variant (same normalized form)
+            # is known — e.g. candidate こもる is skipped when 籠る is known.
+            if normalized and norm_intervals.get(normalized, 0) >= KNOWN_INTERVAL_THRESHOLD:
                 continue
             stem = extract_kanji_stem(lemma)
             if stem and stem in mature_stems:
@@ -448,7 +459,7 @@ def main():
     )
 
     # Load shared state once.
-    intervals = get_known_intervals(cfg, force_refresh=args.refresh_known)
+    intervals, norm_intervals = get_known_intervals(cfg, force_refresh=args.refresh_known)
     print(f"  known lemmas (interval >= {KNOWN_INTERVAL_THRESHOLD}): "
           f"{sum(1 for v in intervals.values() if v >= KNOWN_INTERVAL_THRESHOLD)} "
           f"of {len(intervals)} seen", file=sys.stderr)
@@ -468,7 +479,7 @@ def main():
                 transcript = json.load(tf)
             out = analyze_one(
                 transcript, e["source_id"], e.get("source_url", ""),
-                intervals, mature_stems, priority, existing,
+                intervals, norm_intervals, mature_stems, priority, existing,
             )
             out_path = os.path.join(args.output_dir, f"{e['source_id']}.candidates.json")
             with open(out_path, "w", encoding="utf-8") as of:
@@ -485,7 +496,7 @@ def main():
             transcript = json.load(f)
         out = analyze_one(
             transcript, args.source_id, args.source_url,
-            intervals, mature_stems, priority, existing,
+            intervals, norm_intervals, mature_stems, priority, existing,
         )
         print(json.dumps(out, ensure_ascii=False, indent=2))
 

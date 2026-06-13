@@ -77,7 +77,7 @@ The script also records `bank_meaning` (English translation if the bank ships on
 
 ### Known limitation: literal substring matching
 
-Current search is substring-only. `言う` won't match a sentence with `言って`. To handle inflected forms, mecab-tokenize the bank sentences at index time and store per-note lemma sets, then match lemma-to-lemma. Not done yet.
+Current search is substring-only. `言う` won't match a sentence with `言って`. To handle inflected forms, tokenize the bank sentences with SudachiPy at index time and store per-note lemma sets, then match lemma-to-lemma. Not done yet.
 
 ## Step 3: Curate — pick which hits become cards
 
@@ -137,6 +137,6 @@ Bank cards always land in `config.decks.main` (no Deferred routing — see Step 
 
 ## Gotchas specific to bank mode
 
-- **Substring match misses inflections.** Already mentioned; a real fix needs mecab at index time.
+- **Substring match misses inflections.** Already mentioned; a real fix needs SudachiPy tokenization at index time.
 - **No known-check yet.** The learner might already know a word they sent; bank mode pushes a card anyway. The known-set machinery now exists (`config.known_words`, reused from video mode) — wiring it into `search_banks.py` is the obvious next step.
 - **`Migaku Japanese` Audio field is often empty even though the notetype declares it.** The detector says the bank "has audio" structurally, but resolution at media-gen time falls back to TTS. This is the right behavior — the structural signal is still useful for ranking — but Ray may be surprised that a "Migaku" bank produces synthesized audio.
