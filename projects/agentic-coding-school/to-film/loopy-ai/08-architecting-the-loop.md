@@ -6,68 +6,144 @@ batch_name: "L2 Foundations"
 class: "loopy-ai"
 chapter: "Architecting The Loop"
 aliases: [architecting-the-loop]
-status: stub
 ---
 
-Stub for the loop-architecture segment. What tools, sensors, and actuators the agent needs in order to actually close *this particular* loop.
+Before you write the prompt, you write the interface.
 
-Working title. Alternatives: "Giving Your Agent A Body" / "Wiring The Agent Into The World" / "Sensors And Actuators."
+Most loops that fail don't fail because the model is bad. They fail because the agent can't see the result of its own action, or can't act in the place the work actually lives. The model could be perfect and the loop still wouldn't close.
 
-## Thesis
+So there's a step that comes before the prompt. It's the architecture step. You decide what the agent can perceive and what the agent can act on, before you write a single word telling it what to do. Almost nobody does this on purpose. They jump straight to the prompt, the loop stalls, and they blame the model.
 
-A loop only closes if the agent can *act on* and *perceive* the thing it's supposed to be working on. Most failed loops aren't failing because the model is bad. They're failing because the model can't see the result of its action, or can't act in the modality the task lives in.
+This segment is that missing step.
 
-Before you write the prompt, write the *interface*. What tools does this loop need? What does the agent need to see, hear, send, store, query, in order to close the goal on its own?
+---
 
-This is the architecture step. It comes before the prompt step. Most people skip it and wonder why their loops stall.
+## The mistake everyone makes
 
-## The worked example
+You've spent the last few segments learning to close the loop. A builder does the work, a verifier checks it, the loop only exits when the check passes. You learned to borrow the verifier instead of letting the model grade itself, and you learned to pair every creator with an attacker when no borrowed verifier exists.
 
-Voice calling agent. You want an agent that can pretend to be you on a call, or pretend to be a different agent talking to a human, and adjust mid-conversation. What does it actually need?
+All of that is about the *check* slot. It assumes the agent can already do the work and already see the result.
 
-- **Speaker.** Output audio. Not "produce a string the user will read." Actually emit sound to a device.
-- **Phone or call transport.** Make the call, hold the call, end the call. SIP, Twilio, whatever the substrate is.
-- **Microphone.** Hear the other side.
-- **Transcription.** Convert what it hears into text the model can reason about.
-- **A loop.** Listen, transcribe, decide, speak, listen again. Every turn closes when the speech is sent and the next transcription comes back.
+That assumption is where loops quietly die.
 
-Without any one of those five, the loop doesn't close. The model could be perfect and the agent still won't work. Giving the agent only a microphone and a model gets you a transcriber, not a caller.
+Here's the pattern. Someone wants an agent that handles their phone calls. So they write a beautiful prompt. "You are a warm, professional assistant. You speak naturally. You handle objections gracefully." They run it. Nothing happens, or they get a wall of text where a conversation should be.
+
+The prompt was never the problem. The agent had no speaker, no microphone, no call transport. It could generate the words a caller would say. It could not place a call, hear a reply, or make a sound. They gave it a brain and no body, then wondered why it couldn't talk.
+
+[IMAGE: dark canvas, a glowing brain floating alone with no limbs, a phone ringing across a gap it cannot reach, caption "perfect prompt, no body"]
+![[images/architecting-the-loop/brain-no-body.png]]
+
+This is the most common failure in the whole stack, and it has nothing to do with prompting. The model can't close a loop it can't reach into.
+
+---
+
+## The core insight: write the interface first
+
+A loop only closes if the agent can act on, and perceive, the exact thing it is supposed to be working on.
+
+So before you write the prompt, you write the interface. You answer one question: what does this agent need to be able to *do* and *see* in order to close this goal on its own, with nobody in the chair?
+
+Notice this is the same five primitives you've had since the strip-the-model-out segment, looked at from the outside. Back then we cared about whether each slot existed: trigger, work, check, terminate, state. Now we care about something more physical. For each slot, what concrete tool does the agent reach for? A primitive is a hole in the loop. An interface is the actual cable you plug into that hole.
+
+The prompt is the easy part. You can always rewrite a prompt. What you cannot do is prompt your way past a missing speaker. If the agent has no way to emit sound, no sentence you write will make sound come out.
+
+Architecture is upstream of prompting. Get the body right and a mediocre prompt still closes the loop. Get the body wrong and the best prompt in the world stalls forever.
+
+---
+
+## The worked example: a voice calling agent
+
+Let's build the body of one agent so you can see what "write the interface first" actually means. The hardest one. A voice agent that can get on a phone call and hold a real conversation, adjusting mid-sentence.
+
+Forget the prompt entirely for a moment. What does this thing need just to exist?
+
+- **A speaker.** It has to emit audio to a device. Not "produce a string the human reads off the screen." Actually make sound. This is an actuator.
+- **Call transport.** It has to place the call, hold the line, and hang up. SIP, Twilio, whatever the substrate is. Another actuator.
+- **A microphone.** It has to hear the other side. This is a sensor.
+- **Transcription.** It has to turn what it hears into text it can reason over. The sensor feeds raw audio; transcription makes it legible to the model.
+- **Conversation history.** It has to remember what was said two turns ago so it doesn't repeat itself or lose the thread. This is the state slot.
+
+Five interfaces. Pull any one of them out and the loop will not close, no matter how good the model is.
+
+Give it only a microphone and a model and you have built a transcriber, not a caller. It can hear and think and it can say nothing. Give it only a speaker and a model and you have built a robot that talks over people, deaf to every reply. The loop closes only when all five are wired: it listens, transcribes, decides, speaks, and listens again. Every turn closes when the speech goes out and the next transcription comes back.
+
+[IMAGE: dark canvas, a single agent box in the center with five labelled cables coming out of it, perceive / act / check / remember / stop, each cable plugged into a real device]
+![[images/architecting-the-loop/five-cables.png]]
+
+That diagram is the whole segment. One agent in the middle. Five cables. Every loop you ever build is that picture with different labels on the cables.
+
+---
 
 ## The architecture-first checklist
 
-For any loop you want to build, write this down before you write the prompt:
+For any loop you want to build, write these five lines down before you write the prompt. Not in your head. On the page.
 
-1. **What does the loop need to perceive?** (Inputs: files, transcripts, screenshots, API responses, queue items, sensor readings.)
-2. **What does the loop need to act on?** (Outputs: shell commands, file writes, API calls, messages sent, audio emitted, hardware triggered.)
-3. **What does the loop need to *check*?** (Verifier: an external grader, a test suite, a borrowed verifier — covered in segment 2.2.)
-4. **What state does the loop need to remember between turns?** (Scratchpads, playbook files, queue position, conversation history.)
-5. **What does the loop need to be able to *stop on*?** (Termination signal: a passing check, a budget exhaustion, a kill switch.)
+1. **What does the loop need to perceive?** The inputs. Files, transcripts, screenshots, API responses, queue items, the other person's voice. This is the sensor list.
+2. **What does the loop need to act on?** The outputs. Shell commands, file writes, API calls, messages sent, audio emitted, a PR opened. This is the actuator list.
+3. **What does the loop need to check?** The verifier. An external grader, a test suite, the borrowed verifier we met in the closing-the-loop segment. This is where the last few videos plug in.
+4. **What does the loop need to remember between turns?** The state. Scratchpads, a playbook file, queue position, conversation history.
+5. **What does the loop need to be able to stop on?** The termination signal. A passing check, an exhausted budget, a kill switch.
 
-Five interfaces. If any one is missing, the loop has a hole. The model will paper over the hole with confidence. The hole stays.
+Five interfaces. If any one is missing, the loop has a hole. And here is the part that costs people weeks: the model will paper over the hole with confidence. Ask it to do the thing and it will narrate the thing convincingly. It will say it placed the call. It will report that the email went out. The hole stays. The work never happened. A loop with a missing actuator doesn't error. It hallucinates success.
 
-## Worked examples across domains
+So you find the holes on paper, before the prompt, when finding them is free.
 
-- **Voice agent.** Speaker, phone, microphone, transcription, conversation history.
-- **YouTube ops agent.** YouTube Data API, analytics API, video file upload, thumbnail upload, comment read, comment reply.
-- **Coding agent.** File system, terminal, browser preview, test runner, linter.
-- **Sentence-mining agent.** Source corpus access, dictionary API, TTS engine, Anki Connect, target word list.
-- **Sales outreach agent.** Lead list, email send, inbox read, CRM write, deliverability checker.
+---
 
-Each one is the same pattern. Five interfaces, all of them concrete tools, none of them prompt-level.
+## Same pattern, every domain
 
-## What this segment is *not*
+Once you've seen it on the voice agent, you see it everywhere. Same five slots, different cables.
 
-Not a tour of every MCP server. Not a checklist of brand-name tools. The point is that the *architecture decision* of what interfaces the loop needs is upstream of the prompt, and most people never make that decision explicitly.
+- **Voice agent.** Speaker, call transport, microphone, transcription, conversation history.
+- **YouTube ops agent.** Data API, analytics API, video upload, thumbnail upload, comment read, comment reply. It perceives through analytics, acts through the upload and comment endpoints.
+- **Coding agent.** File system, terminal, browser preview, test runner, linter. This is the one Claude Code wires for you, which is exactly why coding felt solved while everything else felt hard.
+- **Sentence-mining agent.** Source corpus access, dictionary API, a text-to-speech engine, Anki Connect, the target word list as state.
+- **Sales outreach agent.** Lead list, email send, inbox read, CRM write, a deliverability checker as the verifier.
 
-## Sources / refs
+Every one is the same shape. Five interfaces, all of them concrete tools, none of them living at the prompt level. The reason coding agents arrived first is not that code is special. It's that the IDE and the terminal already handed the model a full body. In every other domain, you have to assemble the body yourself. That assembly is the work this segment is about.
 
-- Loop Bank idea (added 2026-06-07 from the conversation)
-- Pairs with [[closing-the-loop]] (verifier-in-the-loop) and [[borrowed-verifiers]] (where the check comes from).
-- Sets up [[l4-workers]] and [[l5-discovery]] (every worker and discovery loop is an architecture decision before it is a prompt).
-- Connects to [[mission-command]] (the intent doc tells you *what* good looks like; the architecture tells you *whether the loop can even reach it*).
+This is also why I keep a running list of the bodies I've already built. Call it a loop bank. Every time I wire up a new interface, the cable goes in the bank, and the next agent that needs to read an inbox or emit audio inherits it instead of starting from a brain in a jar.
 
-## TODO
+---
 
-- Demo: stand up the voice agent on screen. Speaker plays audio, phone places a call, transcription pipes back, the agent reasons, the loop closes. Three minutes of footage. The point is to watch a loop *actually close* because the interfaces were wired right.
-- Image: a single agent box in the middle, five labelled cables coming out of it — perceive, act, check, remember, stop.
-- Decide final segment name (see working title alternatives at top).
+## What this segment is not
+
+This is not a tour of every MCP server. It is not a ranked list of brand-name tools you should go install.
+
+The tools change every month. The decision does not. The decision is: what does this loop need to perceive, act on, check, remember, and stop on. That question is upstream of whichever tool is fashionable this week, and it is the question nobody writes down.
+
+Get in the habit of writing the five lines first. The prompt gets easier every time you do, because by the time you reach the prompt, the agent already has a body that can close the loop.
+
+---
+
+## Demo
+
+Let's stand up the voice agent on screen and watch a loop close because the interfaces were wired right.
+
+1. **Show the five lines first.** On screen, the checklist for this agent. Perceive: microphone plus transcription. Act: speaker plus call transport. Check: did the caller's intent get resolved. Remember: conversation history. Stop: caller hangs up or goal met. Architecture before prompt, written down.
+
+2. **Wire the actuators.** Connect the call transport, Twilio in this case, and the speaker. Place a test call from the agent to my own phone. My phone rings. That's the actuator firing, before any conversation logic exists.
+
+3. **Wire the sensors.** Plug in the microphone feed and the transcription. I say a sentence into my phone. On screen, the transcript appears in the agent's context a beat later. The agent can now perceive.
+
+4. **Close the loop.** Now, and only now, add a four-line prompt. The agent listens, transcribes, decides, speaks. I ask it a question on the call. It answers out loud, in real time. I interrupt with a follow-up. It adjusts mid-conversation because conversation history is in the state slot.
+
+5. **Pull one cable.** Disconnect transcription. Run it again. The agent can still hear and still speak, but it has gone deaf to meaning. It talks over me. Same prompt, same model, broken loop. Plug transcription back in, and the conversation returns.
+
+Total footage: about three minutes. The whole point is in step five. Nothing changed about the model or the prompt. One missing interface was the difference between a caller and a noise machine.
+
+---
+
+## Key Insight
+
+> A loop that can't act in the world and can't perceive the result is a brain in a jar. Write the interface before you write the prompt. The model will paper over a missing cable with confidence, and the work will never happen.
+
+---
+
+## Where we go next
+
+You now know the step that comes before the prompt. Five interfaces, written down, before a word of instruction.
+
+Everything from here up the stack is an architecture decision before it is a prompt. Every worker loop and every discovery loop you build later starts with the same five lines. The next segment narrows in on one specific cable, the output cable, and asks what the agent should actually hand you when the loop closes.
+
+See you in the next one.
