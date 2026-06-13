@@ -129,7 +129,7 @@ Per candidate:
 
 Anki media folder: `/Users/ray/Library/Application Support/Anki2/User 1/collection.media/`
 
-TTS concurrency is capped at 2 with 429 backoff — Gemini's free-tier limit is 10 RPM. If you still hit rate limits, drop concurrency to 1 or serialize.
+**Concurrency + inline push (default).** Cards run through a pool of 3 workers (TTS capped at 3 with 429 backoff — Gemini's free-tier limit is 10 RPM). By default each card is inserted into Anki the instant its own media is ready, so cards stream in one by one while the next batch is still generating (completion order is not input order — that's expected). Per-card insert results print to stderr; the full draft JSON still goes to stdout. Pass `--no-push` to only stage the draft and push later with `push.py` (draft-only flow). If you hit rate limits, lower `TTS_CONCURRENCY` in the script. The push path reuses `push.py`'s note builder, so tags/field-mapping/dedup (`allowDuplicate: False`) are identical to the batch path — re-running on already-mined words just reports them as duplicates rather than creating doubles.
 
 ## Gotchas specific to video mode
 

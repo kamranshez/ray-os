@@ -6,7 +6,10 @@ Stdout: JSON with {sentences: [{text, start_ms, end_ms, words: [{text, start_ms,
 """
 import json
 import os
+import shutil
+import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 import urllib.error
@@ -25,6 +28,32 @@ def _req(method, path, headers, data=None):
         return json.loads(r.read())
 
 
+def _extract_audio(video_path):
+    """Transcode to mono 16kHz WAV in a temp file so we upload ~audio-only bytes
+    instead of the whole video container. AssemblyAI strips video server-side
+    anyway, so shipping the full file just wastes upload time (a 14-min 1080p mp4
+    is ~150MB; its 16kHz mono audio is ~25MB). WAV (PCM s16le) is the most
+    universally accepted ASR input and needs no decode step server-side. Returns
+    (audio_path, is_temp); falls back to the original file if ffmpeg is missing or
+    the transcode fails."""
+    if shutil.which("ffmpeg") is None:
+        print("ffmpeg not found; uploading the full file (slower).", file=sys.stderr)
+        return video_path, False
+    fd, audio_path = tempfile.mkstemp(suffix=".wav", prefix="sm_audio_")
+    os.close(fd)
+    try:
+        subprocess.run(
+            ["ffmpeg", "-y", "-i", video_path, "-vn", "-ac", "1", "-ar", "16000",
+             "-c:a", "pcm_s16le", audio_path],
+            check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+        return audio_path, True
+    except (subprocess.CalledProcessError, OSError) as e:
+        os.path.exists(audio_path) and os.remove(audio_path)
+        print(f"audio extraction failed ({e}); uploading the full file.", file=sys.stderr)
+        return video_path, False
+
+
 def main(video_path):
     load_skill_env()
     key = os.environ.get("ASSEMBLYAI_API_KEY")
@@ -36,8 +65,13 @@ def main(video_path):
 
     headers = {"authorization": key}
 
-    with open(video_path, "rb") as f:
-        upload = _req("POST", "/upload", headers, data=f.read())
+    audio_path, is_temp = _extract_audio(video_path)
+    try:
+        with open(audio_path, "rb") as f:
+            upload = _req("POST", "/upload", headers, data=f.read())
+    finally:
+        if is_temp:
+            os.path.exists(audio_path) and os.remove(audio_path)
     audio_url = upload["upload_url"]
 
     # `speech_models` (plural) is the current AssemblyAI parameter. The list is a

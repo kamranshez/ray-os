@@ -144,11 +144,13 @@ Different script per mode — both write the same `draft.json` shape so Step 7 (
 
 Both write `sentenceAudio_file`, `picture_file`, `explanationAudio_file` (the latter two may be empty strings for bank cards where the bank shipped no image). Media lands in `/Users/ray/Library/Application Support/Anki2/User 1/collection.media/`.
 
+Cards are processed by a pool of 3 concurrent workers (ffmpeg clip + screenshot + Gemini TTS per card, staying under Gemini's 10 RPM free-tier cap). **Video mode pushes inline by default:** `generate_media.py` inserts each card into Anki the moment its own media finishes — three generations in flight, cards streaming in one by one as they complete (out of order is normal). This folds Steps 5–7 into one command. Pass `--no-push` to only write the draft for a separate `push.py` run (the legacy two-step / draft-only flow, still used by bank mode).
+
 See [references/video-mode.md](references/video-mode.md) §"Step 5" or [references/bank-mode.md](references/bank-mode.md) §"Step 5" for the script invocation.
 
 ## Step 6 — Push to Anki (auto), then summarize
 
-**Default behavior: push immediately after Step 5 succeeds.** No approval gate. Ray confirmed in June 2026 that the curation + explanation pass in Steps 3.5 + 4 has been reliable enough that asking "say push to commit" was just adding friction. Anki's own review queue is the real gate — bad cards get suspended or deleted there. Push first; show the result.
+**Default behavior: push immediately after Step 5 succeeds.** No approval gate. Ray confirmed in June 2026 that the curation + explanation pass in Steps 3.5 + 4 has been reliable enough that asking "say push to commit" was just adding friction. Anki's own review queue is the real gate — bad cards get suspended or deleted there. Push first; show the result. For video mode this is automatic — Step 5 generates and inserts in one pass (pass `--no-push` only when Ray says "draft only"); bank mode still calls `push.py` afterward.
 
 Skip auto-push only if Ray explicitly said "draft only" / "don't push" / "let me review first" in the originating message. In that case, fall through to the legacy approval flow at the bottom of this section.
 
@@ -235,7 +237,7 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 | `_config.py`            | all   | load `config.json` (merged over defaults) — single source of truth |
 | `transcribe.py`         | video | AssemblyAI Universal-3 Pro JP transcription with diarization |
 | `analyze.py`            | video | SudachiPy tokenize + built-in known-word diff (cached) + JPDB rank |
-| `generate_media.py`     | video | ffmpeg clip + screenshot + Gemini TTS explanation            |
+| `generate_media.py`     | video | ffmpeg clip + screenshot + Gemini TTS (3 parallel); `--push` inserts each card as it finishes |
 | `extract_bank.py`       | bank  | parse `.apkg` → local index JSON + media dir                 |
 | `search_banks.py`       | bank  | word-list → top-N sentence candidates across indexed banks   |
 | `generate_media_bank.py`| bank  | copy bank media (or TTS fallback) + Gemini TTS explanation   |
