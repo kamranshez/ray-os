@@ -37,7 +37,7 @@ from _anki import store_media  # noqa: E402
 
 GEMINI_MODEL = "gemini-3.1-flash-tts-preview"
 GEMINI_VOICE = "Puck"
-TTS_CONCURRENCY = 2
+TTS_CONCURRENCY = int(os.environ.get("SM_TTS_CONCURRENCY", "2"))
 
 
 def _slug(s: str) -> str:
@@ -68,6 +68,15 @@ async def gemini_tts(text: str, out_path: Path, semaphore: asyncio.Semaphore) ->
                         ),
                     ),
                 )
+                # Empty/blocked responses come back with no candidate audio — treat
+                # as retryable rather than crashing the whole asyncio.gather.
+                cand = (resp.candidates or [None])[0]
+                parts = getattr(getattr(cand, "content", None), "parts", None)
+                if not parts or getattr(getattr(parts[0], "inline_data", None), "data", None) is None:
+                    if attempt < 4:
+                        await asyncio.sleep(3 * (attempt + 1))
+                        continue
+                    raise RuntimeError("Gemini TTS returned no audio after retries")
                 break
             except genai_errors.ClientError as e:
                 if getattr(e, "code", None) == 429 and attempt < 4:
@@ -105,9 +114,12 @@ async def process_one(idx: int, candidate: dict, workdir: Path, sem: asyncio.Sem
     else:
         target = f"{base}_sentence_tts.mp3"
         local = workdir / target
-        await gemini_tts(candidate["sentence"], local, sem)
-        store_media(local, target)
-        sent_audio_field = target
+        try:
+            await gemini_tts(candidate["sentence"], local, sem)
+            store_media(local, target)
+            sent_audio_field = target
+        except Exception as e:
+            print(f"  sentence TTS failed for {candidate.get('lemma')!r}: {e}", file=sys.stderr)
 
     # Image: register from bank if present.
     pic_field = ""
@@ -121,8 +133,12 @@ async def process_one(idx: int, candidate: dict, workdir: Path, sem: asyncio.Sem
     # Explanation TTS — always.
     exp_target = f"sm_explain_bank_{bank}_{note_id}.mp3"
     exp_local = workdir / exp_target
-    await gemini_tts(candidate["explanation"], exp_local, sem)
-    store_media(exp_local, exp_target)
+    try:
+        await gemini_tts(candidate["explanation"], exp_local, sem)
+        store_media(exp_local, exp_target)
+    except Exception as e:
+        print(f"  explanation TTS failed for {candidate.get('lemma')!r}: {e}", file=sys.stderr)
+        exp_target = ""
 
     candidate["sentenceAudio_file"] = sent_audio_field
     candidate["picture_file"] = pic_field

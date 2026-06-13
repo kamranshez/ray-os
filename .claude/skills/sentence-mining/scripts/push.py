@@ -7,10 +7,15 @@ duplicate shouldn't stop the other 19 cards from landing.
 import argparse
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
 import urllib.request
+
+# Katakana incl. long-vowel ー and middle dot ・ — used to detect loanwords whose
+# reading is just the word itself.
+ALL_KATAKANA = re.compile(r"^[゠-ヿ]+$")
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _config import load_config
@@ -71,9 +76,16 @@ def build_note(candidate, source_url, permanent_tag, source_id=None):
     # names. Only roles that are mapped (non-empty in config.field_map) get
     # written — so any note type with at least `word` + `sentence` works, and we
     # never send a field name the model doesn't have (AnkiConnect would error).
+    # For all-katakana loanwords (アバウト, アメリカーノ…) the reading is just the
+    # word itself, so mirror it rather than leaving the field blank.
+    word = candidate["lemma"]
+    reading = candidate.get("reading", "")
+    if ALL_KATAKANA.match(word):
+        reading = word
+
     role_values = {
-        "word": candidate["lemma"],
-        "reading": candidate.get("reading", ""),
+        "word": word,
+        "reading": reading,
         "sentence": sentence_text,
         "sentence_audio": f"[sound:{sentence_audio_file}]" if sentence_audio_file else "",
         "picture": f'<img src="{picture_file}">' if picture_file else "",
