@@ -1,10 +1,11 @@
 ---
 duration: "10-14 min"
-batch: 2
-order: 3
-batch_name: "Foundations"
+batch: 3
+order: 7
+batch_name: "L2 Foundations"
 class: "loopy-ai"
 chapter: "Pair Every Creator With An Attacker"
+aliases: [adversarial-reviewer-skill]
 status: stub
 ---
 

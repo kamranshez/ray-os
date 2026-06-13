@@ -1,10 +1,11 @@
 ---
 duration: "12-16 min"
-batch: 3
-order: 2
-batch_name: "The Climb"
+batch: 4
+order: 10
+batch_name: "L3 Task Lifecycle"
 class: "loopy-ai"
 chapter: "Ralph Loops"
+aliases: [ralph-loops]
 status: stub
 ---
 

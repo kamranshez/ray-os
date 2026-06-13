@@ -1,10 +1,11 @@
 ---
 duration: "10-14 min"
-batch: 5
-order: 2
-batch_name: "Closing"
+batch: 8
+order: 26
+batch_name: "L7 Closing"
 class: "loopy-ai"
 chapter: "Keeping You In The Loop"
+aliases: [keeping-you-in-the-loop]
 status: stub
 ---
 

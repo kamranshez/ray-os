@@ -1,10 +1,11 @@
 ---
 duration: "10-14 min"
-batch: 5
-order: 1
-batch_name: "Closing"
+batch: 8
+order: 27
+batch_name: "L7 Closing"
 class: "loopy-ai"
 chapter: "Mission Command"
+aliases: [mission-command]
 status: stub
 ---
 

@@ -1,10 +1,11 @@
 ---
 duration: "14-18 min"
-batch: 2
-order: 2
-batch_name: "Foundations"
+batch: 3
+order: 6
+batch_name: "L2 Foundations"
 class: "loopy-ai"
 chapter: "Borrowed Verifiers"
+aliases: [borrowed-verifiers]
 ---
 
 Every closing the loop pattern needs a verifier. The agent does the work, the verifier checks the work, the loop only exits when the check passes.

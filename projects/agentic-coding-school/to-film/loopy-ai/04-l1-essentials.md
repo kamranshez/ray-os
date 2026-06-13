@@ -1,10 +1,11 @@
 ---
 duration: "10-14 min"
-batch: 3
-order: 1
-batch_name: "The Climb"
+batch: 2
+order: 4
+batch_name: "L1 On-Ramp"
 class: "loopy-ai"
 chapter: "L1 Essentials"
+aliases: [l1-essentials]
 status: stub
 ---
 

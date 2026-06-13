@@ -5,6 +5,7 @@ order: 1
 batch_name: "Setup"
 class: "loopy-ai"
 chapter: "Intro"
+aliases: [intro]
 ---
 
 The guy who built Claude Code uninstalled his IDE six months ago. He hasn't opened one since. His job, in his own words, is to write loops.
@@ -138,14 +139,6 @@ It is not a tour of every prompt trick. Prompts are the easy part. The whole the
 It is not a hype reel. Loops burn tokens. They make mistakes at scale. They create failure modes you have never had to think about before. We're going to be honest about all of that as we go.
 
 What it is. A walk up the stack. One worked example at each level. Ending with you having built something that runs when you're not watching it.
-
----
-
-## Demo
-
-Open Claude Code in one terminal. In a second terminal, start the YouTube outlier scout we'll build in the level five segment. Show it ticking through its watchlist. Surface one real outlier video it found this morning. Open the surfaced video in a browser. Show the metrics. Close the browser.
-
-Total demo length: 90 seconds. The point is not to explain how the scout works yet. The point is to plant "this is a real thing that already runs on my machine" before any theory.
 
 ---
 

@@ -5,6 +5,7 @@ order: 2
 batch_name: "Setup"
 class: "loopy-ai"
 chapter: "The Loop Stack"
+aliases: [loop-stack]
 ---
 
 There are eight levels of loop. Most people only know two of them. That's why every conversation about AI agents is so confused.

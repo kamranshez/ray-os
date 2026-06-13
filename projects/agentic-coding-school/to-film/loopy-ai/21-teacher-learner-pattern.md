@@ -1,6 +1,11 @@
 ---
-class: "multi-agent-orchestration"
-chapter: "Patterns"
+duration: "10-14 min"
+batch: 6
+order: 21
+batch_name: "Compounding Loops"
+class: "loopy-ai"
+chapter: "The Teacher Learner Pattern"
+aliases: [teacher-learner-pattern]
 status: stub
 ---
 

@@ -1,10 +1,11 @@
 ---
 duration: "12-16 min"
-batch: 4
-order: 3
+batch: 6
+order: 23
 batch_name: "Compounding Loops"
 class: "loopy-ai"
 chapter: "Echo Chamber Failure Mode"
+aliases: [echo-chamber]
 status: stub
 ---
 

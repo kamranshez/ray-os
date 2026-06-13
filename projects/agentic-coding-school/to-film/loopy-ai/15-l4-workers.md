@@ -1,10 +1,11 @@
 ---
 duration: "12-16 min"
-batch: 3
-order: 9
-batch_name: "The Climb"
+batch: 5
+order: 15
+batch_name: "L4 and L5 The Climb"
 class: "loopy-ai"
 chapter: "L4 Worker Loops"
+aliases: [l4-workers]
 status: stub
 ---
 

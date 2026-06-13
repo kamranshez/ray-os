@@ -1,10 +1,11 @@
 ---
 duration: "10-14 min"
-batch: 3
-order: 5
-batch_name: "The Climb"
+batch: 4
+order: 13
+batch_name: "L3 Task Lifecycle"
 class: "loopy-ai"
 chapter: "Don't Pre-Sequence The Backlog"
+aliases: [dont-pre-sequence-the-backlog]
 status: stub
 ---
 

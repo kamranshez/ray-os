@@ -1,10 +1,11 @@
 ---
 duration: "12-16 min"
-batch: 3
-order: 7
-batch_name: "The Climb"
+batch: 7
+order: 24
+batch_name: "L6 Governance"
 class: "loopy-ai"
 chapter: "Governance Primitives"
+aliases: [governance-primitives]
 status: stub
 ---
 

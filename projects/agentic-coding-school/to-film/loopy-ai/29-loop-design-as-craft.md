@@ -1,10 +1,11 @@
 ---
 duration: "10-14 min"
-batch: 5
-order: 3
-batch_name: "Closing"
+batch: 8
+order: 29
+batch_name: "L7 Closing"
 class: "loopy-ai"
 chapter: "Where Taste Went"
+aliases: [loop-design-as-craft]
 ---
 
 Boris said product taste is the alpha today, but it's going to go away too.

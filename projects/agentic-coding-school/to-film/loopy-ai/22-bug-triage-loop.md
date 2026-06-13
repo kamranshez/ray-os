@@ -1,10 +1,11 @@
 ---
 duration: "14-18 min"
-batch: 4
-order: 2
+batch: 6
+order: 22
 batch_name: "Compounding Loops"
 class: "loopy-ai"
 chapter: "The Bug Triage Loop"
+aliases: [bug-triage-loop]
 status: stub
 ---
 

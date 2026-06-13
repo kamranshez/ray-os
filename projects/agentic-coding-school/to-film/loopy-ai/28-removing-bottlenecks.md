@@ -1,3 +1,14 @@
+---
+duration: "8-12 min"
+batch: 8
+order: 28
+batch_name: "L7 Closing"
+class: "loopy-ai"
+chapter: "Removing Bottlenecks"
+aliases: [removing-bottlenecks]
+status: stub
+---
+
 * Get it to analyse previous transcripts
 
 ## Automate anything and everything

@@ -5,6 +5,7 @@ order: 3
 batch_name: "Setup"
 class: "loopy-ai"
 chapter: "Strip The Model Out"
+aliases: [strip-the-model-out]
 status: stub
 ---
 

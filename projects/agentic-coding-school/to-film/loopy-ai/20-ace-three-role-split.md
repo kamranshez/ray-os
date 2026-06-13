@@ -1,10 +1,11 @@
 ---
 duration: "14-18 min"
-batch: 4
-order: 1
+batch: 6
+order: 20
 batch_name: "Compounding Loops"
 class: "loopy-ai"
 chapter: "The Three Role Split (ACE)"
+aliases: [ace-three-role-split]
 status: stub
 ---
 

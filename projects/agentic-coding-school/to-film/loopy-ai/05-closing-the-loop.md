@@ -1,10 +1,11 @@
 ---
 duration: "12-16 min"
-batch: 2
-order: 1
-batch_name: "Foundations"
+batch: 3
+order: 5
+batch_name: "L2 Foundations"
 class: "loopy-ai"
 chapter: "Closing The Loop"
+aliases: [closing-the-loop]
 status: stub
 ---
 

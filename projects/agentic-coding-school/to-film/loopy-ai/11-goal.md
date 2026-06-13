@@ -1,10 +1,11 @@
 ---
 duration: "12-16 min"
-batch: 3
-order: 3
-batch_name: "The Climb"
+batch: 4
+order: 11
+batch_name: "L3 Task Lifecycle"
 class: "loopy-ai"
 chapter: "/goal Mode"
+aliases: [goal]
 status: stub
 ---
 

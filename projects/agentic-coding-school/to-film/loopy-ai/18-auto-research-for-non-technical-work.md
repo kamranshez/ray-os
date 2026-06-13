@@ -1,6 +1,11 @@
 ---
-class: "automation"
-chapter: "Advanced"
+duration: "14-18 min"
+batch: 5
+order: 18
+batch_name: "L4 and L5 The Climb"
+class: "loopy-ai"
+chapter: "Auto Research For Non-Technical Work"
+aliases: [auto-research-for-non-technical-work]
 status: to-film
 ---
 
