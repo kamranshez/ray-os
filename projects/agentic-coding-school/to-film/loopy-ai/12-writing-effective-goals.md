@@ -36,6 +36,29 @@ You already know the parts. Writing an effective goal is just filling each slot 
 
 ---
 
+## Interview the goal out of yourself first
+
+Here's the part everyone skips. You can't write a tight goal off the top of your head, because the ambiguity isn't in the worker. It's in you.
+
+Jarrod Watts put it in two words: "Ambiguity compounds."
+Source: https://x.com/jarrodwatts/status/2052372045829382430
+
+Every decision you leave unmade is a branch the autonomous loop picks for you. And it picks blind, usually away from what you had in your head. One unclarified choice at turn three sends the whole run down a fork you never wanted, and you don't find out until turn forty. The ambiguity didn't stay small. It compounded.
+
+So you remove it up front, before any loop runs. Watts does it with a setup phase, an `/interview` step that fires twenty to fifty clarifying questions at you before a single autonomous turn.
+Source: https://x.com/jarrodwatts/status/2052372045829382430
+
+Read what that flips. The interview forces _you_, not the worker, to decide what you actually want. The agent surfaces assumptions and decisions you hadn't even considered were decisions, the ones you'd otherwise have discovered as bugs three runs later. You answer them now, while it's cheap, instead of letting the worker coin-flip them later while no one's watching.
+
+Then the now-specific goal breaks down into milestones and tasks. You don't hand the loop a fog. You hand it a goal you were interrogated into making concrete.
+
+That interview output _is_ the raw material for the goal file. Run it first, then fill the slots below with the answers.
+
+[IMAGE: dark canvas, left a fuzzy cloud labeled "what you think you want", an /interview arrow with "20-50 questions" pointing right into a sharp structured goal file, below it a branching tree where unanswered questions become wrong branches the agent picks, pruned branches faded out]
+![[images/writing-effective-goals/interview-prunes-ambiguity.png]]
+
+---
+
 ## The nine sections
 
 There's a template circulating that nails the anatomy. Avi Chawla's nine-section goal file.

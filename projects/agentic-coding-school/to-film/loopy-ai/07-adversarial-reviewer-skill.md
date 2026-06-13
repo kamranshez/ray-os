@@ -101,6 +101,27 @@ The framing underneath all of it: the model's first output is a first draft. The
 
 ---
 
+## Aim the sycophancy, don't fight it
+
+Step back at the eagerness to please for a second, because there's a sharper reframe hiding in it.
+
+We've been treating the model's urge to agree as a bug to suppress. It isn't. It's a force you can aim. Set the creator and the attacker opposing incentives and the same sycophancy that made self-review useless becomes the engine that makes adversarial review work.
+
+sysls lays out the cleanest version of this as a three-agent scoring scheme.
+Source: https://x.com/systematicls/status/2028814227004395561
+
+The **bug-finder** is rewarded for finds: +1 for a low-impact bug, +5 for moderate, +10 for critical. Because it wants to please, it eagerly returns the *superset* of every possible bug, including ones it half-invents. You let it over-report on purpose.
+
+The **adversarial agent** is paid to knock those bugs down. For every bug it can disprove it earns that bug's score, but it loses *twice* the score when it's wrong. So it attacks hard but with caution, and what survives is the *subset* of bugs that are probably real.
+
+The **referee** adjudicates the two. You tell it, as a deliberate lie, that the human holds the ground truth: +1 when it scores correctly, -1 when it doesn't. Then you spot-check a few yourself. sysls calls the result "frighteningly high fidelity, nearly flawless."
+
+Notice the shape. The +10/-2x asymmetry is the scoring-scheme version of the same asymmetric prompt you've been writing all along. You're not begging the model to be honest. You're making honesty the higher-scoring move.
+
+One detail that cuts against your instinct. When you spin up the bug-finder, don't prompt it "find me a bug." That makes the model engineer a bug to please you, the same failure as self-review wearing a different hat. Use a neutral prompt: "follow the logic of each component and report all findings." Let the incentive structure, not the prompt, decide what counts as a bug.
+
+---
+
 ## Demo
 
 Two skills, side by side, and one planted flaw.

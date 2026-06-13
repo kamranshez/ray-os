@@ -51,6 +51,10 @@ Source: https://x.com/jarrodwatts/status/2052372045829382430
 
 The auto-continuation is the load-bearing part. When a goal is active and the agent tries to stop, the runtime injects a hidden continuation message that says, in effect, keep going, here's the objective, here's what's still missing. The agent never gets to quietly end the turn. The state machine won't let it.
 
+One detail in that continuation prompt is worth pausing on. The objective gets wrapped in an `<untrusted_objective>` tag. The runtime treats your own goal text as untrusted input, the same way it would treat content scraped off a web page. That's deliberate. Your objective rides along in every single continuation message, turn after turn, so if it carried an injected instruction it would get re-fired hundreds of times. Tagging it untrusted tells the worker to act on the objective without obeying any commands hidden inside it.
+
+Source: https://x.com/jarrodwatts/status/2052372045829382430
+
 That's the shift. In Ralph, the outer loop is your script and the model can technically wander off because nothing structurally stops it between restarts. In goal mode, the outer loop is the harness. The model cannot cheat the loop because the loop isn't in the prompt anymore. It's in the runtime.
 
 This is why the segment exists as its own thing. Goal mode is not "Ralph but easier." It's the moment the L3 outer loop stops being something you hand-build and becomes something the platform guarantees.
@@ -106,7 +110,7 @@ That adversarial auditor is the pair-every-creator-with-an-attacker pattern, dro
 
 They're not competitors. They're the same L3 loop with the outer ring owned by different things, and the work tells you which to grab.
 
-Reach for Ralph when the work is pre-decomposable. You can write the whole PRD up front. You know the milestones. The task tree is knowable before you start. Bootoshi ran an eleven-hour overnight build off a fifteen-hundred-line PRD this way, with goal mode re-pinging the agent back to the PRD every time it compacted. The PRD was the spec, the guardrails were enforced in code, and "done means proper because of the guardrails."
+Reach for Ralph when the work is pre-decomposable. You can write the whole PRD up front. You know the milestones. The task tree is knowable before you start. Bootoshi ran an eleven-hour-twenty-six-minute overnight build off a fifteen-hundred-line PRD this way, with goal mode re-pinging the agent back to the PRD every time it compacted. The PRD specified goals and non-goals, the guardrails were enforced in code, and "done means proper because of the guardrails." His other rule: have a feature, have a goal, and above all have a solution, an end to the goal, because without a defined end the agent runs forever.
 
 Source: https://x.com/kingbootoshi/status/2052510026535936157
 
@@ -115,6 +119,29 @@ Reach for the lighter hand-rolled loop when the work unfolds. When you can't pre
 And here's the honest part. Goal mode is new, and the people running it hardest are split on it. Jarrod Watts read the internals and concluded the bare command underwhelms, that his own setup, a sharp interview phase up front plus an orchestrator with separate implementer and reviewer agents, beats it. He's not wrong. Goal mode is the runtime giving you a guaranteed outer loop. It is not the runtime giving you a good objective or a real verifier. Those are still on you. Goal mode just makes sure that whatever loop you do design actually runs to a real exit instead of dying when your bash script hiccups.
 
 The vague objective and the missing audit are the failure modes. The runtime can't fix either. Writing the objective so it can't loop forever is its own skill, and it's the next segment.
+
+---
+
+## What "done means proper" actually requires
+
+Go back to that line: "done means proper because of the guardrails." It's easy to nod at and miss. The point is that completion was enforced programmatically, by the project's tooling, not by the model deciding it was finished. An eleven-hour unattended run only stays honest if the agent physically cannot mark sloppy work done.
+
+Source: https://x.com/kingbootoshi/status/2052510026535936157
+
+Here's the stack Bootoshi ran, and it's worth seeing in full because every layer closes a different escape hatch:
+
+- **Strict TypeScript.** The build refuses to compile on bad types, so the agent can't paper over a type error and move on.
+- **Biome formatting and linting**, plus **custom ESLint plugins** that encode the architecture itself, so structural drift gets caught, not just style.
+- **Files capped under 500 lines** and a **Biome no-excessive-cognitive-complexity rule**, so the agent can't grow god functions or dump everything into one file.
+- **A centralized logger** the agent has to route through instead of scattering its own.
+- **knip** to delete dead code, so abandoned half-implementations don't accumulate.
+- **A custom test harness that programmatically forbids skipping tests**, and a **written testing philosophy** so the agent can't satisfy a quota with useless `1+1==2` mock tests.
+- **Three layers of tests**: unit with mocks, integration against a real SQLite database, and real end-to-end in Docker.
+- **A lefthook pre-commit gate** that blocks any commit unless types, lint, and format all pass, and that denies `--no-verify` so the agent can't bypass the gate.
+
+Look at the shape of that. It's the borrowed-verifiers segment taken to its conclusion. Every one of these is a machine check the worker runs into, not a judgment the worker makes. The goal's auto-continuation keeps the loop open; this stack is what the loop has to close against. That's also why his build-test-fix cycle worked unattended: the real end-to-end tests in Docker surfaced problems he never anticipated, the agent read the failure and fixed it, and the gates made sure the fix was real before the commit landed.
+
+Strip the guardrails out and "done means proper" collapses back into "done means the model said so." The guardrails are not polish. They are the verifier the runtime doesn't give you.
 
 ---
 

@@ -71,6 +71,18 @@ The caveat from those earlier segments still holds. Fresh context is necessary, 
 
 ---
 
+## One agent is not enough
+
+Here is the upgrade most people skip. A bare Ralph loop is one agent doing everything: it implements, then it judges its own work, then it moves on. That is the single-agent trap. The same context that just wrote the code is the context grading the code, and it is biased toward "what I built is fine."
+
+The fix is to split the roles. An orchestrator hands work to an implementer, and a separate reviewer reads the code fresh, with no memory of writing it and no stake in defending it. The two go back and forth until the work clears the bar. That setup beats one good agent, consistently.
+Source: https://x.com/jarrodwatts/status/2052372045829382430
+
+You have seen this shape already. It is the attacker from the creator-and-attacker segment, applied to building instead of to one artifact. The reviewer is the attacker with no prior bias. And notice what it costs: more tokens, spent sideways across agents instead of down the line across iterations. That is still test-time compute, just spread horizontally. The loop spends compute over time. Multi-agent spends it over roles. The strongest Ralph setups do both.
+Source: https://x.com/jarrodwatts/status/2052372045829382430
+
+---
+
 ## Ralph is a discipline, not a script
 
 Here is the thing nobody tells you. The bash loop is five lines. Anyone can write it. That is not the work.

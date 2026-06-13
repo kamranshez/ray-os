@@ -46,7 +46,10 @@ It's the *output* you read. A browser mockup, a flow diagram, a comparison table
 It's the *spec* you correct. This is the prototypes-as-specs idea, and it's worth stealing. David K from the XState team put it as "the spec should fall out of the prototype, not the other way around. One prototype is worth a hundred spec drafts."
 Source: https://x.com/DavidKPiano/status/2052448434142269741
 
-You don't write a paragraph describing the onboarding flow and hope the agent builds the right thing. You let the agent render the onboarding flow as a clickable artifact, you click through it, and the places where you wince *are* the spec. Correcting a rendered thing is faster and more honest than authoring an abstract description of a thing that doesn't exist yet.
+That's the inversion to internalize. The whole category of spec-driven tools runs the arrow the wrong way: write the spec, then generate the thing. Flip it. Generate the thing, then read the spec back off it. Matt Pocock, who triggered that thread, found the same edge: the more he replaced plans with prototypes, the better the outputs got, and low-fidelity prototypes beat walls of spec.
+Source: https://x.com/mattpocockuk
+
+You don't write a paragraph describing the onboarding flow and hope the agent builds the right thing. You let the agent render the onboarding flow as a clickable artifact, you click through it, and the places where you wince *are* the spec. The HTML artifact is the prototype. The spec is whatever survives your corrections to it. Correcting a rendered thing is faster and more honest than authoring an abstract description of a thing that doesn't exist yet.
 
 And it's the *runtime* the loop reads. This is the part people miss. The artifact isn't a dead screenshot. It's a live file on disk the loop writes to on every iteration and reads back on the next. The dashboard for a worker loop. The experiment table for a research loop. The plan a long-running agent updates as it goes. The artifact is where the loop's state becomes something you can both see.
 
