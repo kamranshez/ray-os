@@ -13,16 +13,16 @@ This is the gap you can close with two tools stacked together. NotebookLM as the
 
 [IMAGE: dark chalkboard, two panels labeled "Knowledge" (NotebookLM, Podcasts, Articles, Research) vs "Your Life" (Calendar, Reminders, Morning routine, Experiments), jagged red lightning bolt between them labeled "context fragmentation", caption "You learn something. You never act on it."]
 
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_1.png]]
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_2.png]]
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_3.png]]
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_4.png]]
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_5.png]]
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_6.png]]
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_7.png]]
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_8.png]]
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_9.png]]
-![[images/notebooklm-intake-claude-code-action/the-problem/excalidraw_10.png]]
+![[learning-problem-context-fragmentation-gap.png]]
+![[knowledge-life-gap-robot-learning-failure.png]]
+![[learning-fragmentation-knowledge-life-disconnect.png]]
+![[robot-context-gap-knowledge-life-sides.png]]
+![[knowledge-action-gap-learning-conversion.png]]
+![[knowledge-versus-life-context-fragmentation.png]]
+![[knowledge-action-gap-context-disconnect.png]]
+![[learning-behavior-change-disconnect.png]]
+![[context-fragmentation-learning-statistics.png]]
+![[ninety-percent-learning-context-split.png]]
 
 ---
 
@@ -78,16 +78,16 @@ Out of that interview comes three experiments. Not twenty. Three. The highest le
 
 [IMAGE: NotebookLM node connects to a Claude Code terminal box in the middle, which fans out to three stacked cards: a calendar card "Focus blocks 8:00-12:00", a green check card "4hrs daily, 2 weeks", and a question card "How many focus hrs?". A curved arrow underneath labeled "review: did it work?" loops back to Claude Code.]
 
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_1.png]]
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_2.png]]
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_3.png]]
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_4.png]]
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_5.png]]
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_6.png]]
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_7.png]]
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_8.png]]
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_9.png]]
-![[images/notebooklm-intake-claude-code-action/research-plus-execution/excalidraw_10.png]]
+![[notebooklm-claude-code-research-execution-flow.png]]
+![[research-execution-notebooklm-episodes-claude-code.png]]
+![[notebooklm-knowledge-source-claude-integration.png]]
+![[research-execution-context-flow-loop.png]]
+![[three-node-workflow-notebook-claude-focus.png]]
+![[podcast-to-focus-blocks-workflow-loop.png]]
+![[podcast-knowledge-claude-focus-blocks.png]]
+![[left-middle-right-podcast-claude-focus.png]]
+![[podcast-episodes-claude-focus-timeline.png]]
+![[notebooklm-claude-context-loop-podcast-docs.png]]
 
 ---
 

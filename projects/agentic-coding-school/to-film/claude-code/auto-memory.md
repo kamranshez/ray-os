@@ -14,7 +14,7 @@ Auto memory is on by default. To toggle it, open `/memory` in a session and use 
 
 You can also disable it via environment variable by setting `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`.
 
-![[images/enable-disable/excalidraw_2.png]]
+![[directory-structure-git-worktrees-configuration.png]]
 ## Storage location
 
 Each project gets its own memory directory at `~/.claude/projects/<project>/memory/`. The `<project>` path is derived from the git repository, so all worktrees and subdirectories within the same repo share one auto memory directory. Outside a git repo, the project root is used instead.
@@ -42,10 +42,10 @@ The directory contains a `MEMORY.md` entrypoint and optional topic files:
 `MEMORY.md` acts as an index of the memory directory. Claude reads and writes files in this directory throughout your session, using `MEMORY.md` to keep track of what's stored where. Auto memory is machine-local — all worktrees and subdirectories within the same git repository share one auto memory directory, but files are not shared across machines or cloud environments.
 
 [[images/storage-location/excalidraw_1.png]]
-![[images/storage-location/excalidraw_2.png]]
-![[images/storage-location/excalidraw_3.png]]
-![[images/storage-location/excalidraw_4.png]]
-![[images/storage-location/excalidraw_5.png]]
+![[session-history-directory-storage-structure.png]]
+![[memory-organization-session-history-index.png]]
+![[claude-memory-default-vs-custom-config.png]]
+![[claude-memory-storage-structure-scope.png]]
 
 ## How it works
 
@@ -67,11 +67,11 @@ Claude reads and writes memory files during your session. When you see "Writing 
 
 All auto memory files are plain markdown you can edit or delete at any time. Run `/memory` to browse and open memory files from within a session.
 
-![[images/audit-and-edit/excalidraw_1.png]]
-![[images/audit-and-edit/excalidraw_2.png]]
-![[images/audit-and-edit/excalidraw_3.png]]
-![[images/audit-and-edit/excalidraw_4.png]]
-![[images/audit-and-edit/excalidraw_5.png]]
+![[memory-files-before-after-organization.png]]
+![[memory-files-markdown-editable-management.png]]
+![[memory-organization-before-after-workflow.png]]
+![[memory-management-filing-workflow.png]]
+![[auto-memory-toggle-disable-methods.png]]
 
 ## View and edit with `/memory`
 
@@ -79,8 +79,8 @@ The `/memory` command lists all CLAUDE.md and rules files loaded in your current
 
 When you ask Claude to remember something — like "always use pnpm, not npm" or "remember that the API tests require a local Redis instance" — Claude saves it to auto memory. To add instructions to CLAUDE.md instead, ask Claude directly (e.g. "add this to CLAUDE.md") or edit the file yourself via `/memory`.
 
-![[images/view-and-edit/excalidraw_1.png]]
-![[images/view-and-edit/excalidraw_2.png]]
-![[images/view-and-edit/excalidraw_3.png]]
-![[images/view-and-edit/excalidraw_4.png]]
-![[images/view-and-edit/excalidraw_5.png]]
+![[memory-system-command-interface.png]]
+![[memory-command-configuration-workflow.png]]
+![[memory-instruction-management-paths.png]]
+![[memory-command-auto-memory-adding.png]]
+![[memory-system-learning-feedback.png]]

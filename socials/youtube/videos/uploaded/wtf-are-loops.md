@@ -34,13 +34,13 @@ Now he doesn't prompt at all. He writes the loops that prompt Claude. A couple h
 
 Most people watching this are somewhere between stage one and stage two. That's fine. The point of this video, and the class, is the bridge from there to stage three.
 
-![[images/wtf-are-loops/three-stages/excalidraw_1.png]]
-![[images/wtf-are-loops/three-stages/excalidraw_2.png]]
-![[images/wtf-are-loops/three-stages/excalidraw_3.png]]
-![[images/wtf-are-loops/three-stages/excalidraw_4.png]]
-![[images/wtf-are-loops/three-stages/excalidraw_5.png]]
-![[images/wtf-are-loops/three-stages/excalidraw_6.png]]
-![[images/wtf-are-loops/three-stages/excalidraw_7.png]]
+![[three-stages-claude-code-overview.png]]
+![[three-stages-ladder-manual-parallel-autonomous.png]]
+![[three-stages-path-automation-manual-to-loops.png]]
+![[three-stages-bridging-gap-stage-three.png]]
+![[three-stages-evolution-coding-claude-code.png]]
+![[three-stages-adoption-hand-written-autonomous.png]]
+![[three-stages-hand-written-to-autonomous-bridge.png]]
 
 ---
 
@@ -62,13 +62,13 @@ Different commands. Different vocabularies. Same idea underneath. Something fire
 
 Until now you've probably seen each of these come up independently. They sit in different tweets, different docs, different blog posts, and nobody bothers to point out that they're the same shape. They are. Whichever family fires your loop, the rest of this video applies.
 
-![[images/wtf-are-loops/where-weve-seen-this/excalidraw_1.png]]
-![[images/wtf-are-loops/where-weve-seen-this/excalidraw_2.png]]
-![[images/wtf-are-loops/where-weve-seen-this/excalidraw_3.png]]
-![[images/wtf-are-loops/where-weve-seen-this/excalidraw_4.png]]
-![[images/wtf-are-loops/where-weve-seen-this/excalidraw_5.png]]
-![[images/wtf-are-loops/where-weve-seen-this/excalidraw_6.png]]
-![[images/wtf-are-loops/where-weve-seen-this/excalidraw_7.png]]
+![[unifying-concept-agentic-loops.png]]
+![[unified-loop-pattern-overview.png]]
+![[loops-stripped-down-four-types.png]]
+![[agentic-loops-separate-examples.png]]
+![[naming-loops-same-underlying-shape.png]]
+![[loop-forms-different-vocabularies.png]]
+![[ai-agent-loops-core-process.png]]
 
 ---
 
@@ -90,13 +90,13 @@ At stage three, you design the loop and the loop runs without you. You also desi
 
 There are a lot of angles you can take on this idea. This video takes one of them. Loops as disposable units of work, with surfaces you interact through, that you compose into bigger loops.
 
-![[images/wtf-are-loops/disposable-unit-of-work/excalidraw_1.png]]
-![[images/wtf-are-loops/disposable-unit-of-work/excalidraw_2.png]]
-![[images/wtf-are-loops/disposable-unit-of-work/excalidraw_3.png]]
-![[images/wtf-are-loops/disposable-unit-of-work/excalidraw_4.png]]
-![[images/wtf-are-loops/disposable-unit-of-work/excalidraw_5.png]]
-![[images/wtf-are-loops/disposable-unit-of-work/excalidraw_6.png]]
-![[images/wtf-are-loops/disposable-unit-of-work/excalidraw_7.png]]
+![[loop-evolution-manual-to-automated.png]]
+![[loop-stages-manual-vs-automated-work.png]]
+![[human-in-loop-to-automated-progression.png]]
+![[manual-loop-vs-agent-driven-loop.png]]
+![[loop-automation-stages-three-progression.png]]
+![[disposable-units-manual-to-autonomous-evolution.png]]
+![[loop-portfolio-composition-multiple-stages.png]]
 
 ---
 
@@ -120,13 +120,13 @@ This is the move most people skip. They jump straight to *can I get an agent to 
 
 I'll have a separate video on this, so stay subscribed.
 
-![[images/wtf-are-loops/what-makes-up-a-loop/excalidraw_1.png]]
-![[images/wtf-are-loops/what-makes-up-a-loop/excalidraw_2.png]]
-![[images/wtf-are-loops/what-makes-up-a-loop/excalidraw_3.png]]
-![[images/wtf-are-loops/what-makes-up-a-loop/excalidraw_4.png]]
-![[images/wtf-are-loops/what-makes-up-a-loop/excalidraw_5.png]]
-![[images/wtf-are-loops/what-makes-up-a-loop/excalidraw_6.png]]
-![[images/wtf-are-loops/what-makes-up-a-loop/excalidraw_7.png]]
+![[loop-components-codesign-finished-structure.png]]
+![[loop-design-codesign-before-execution.png]]
+![[loop-codesign-iteration-vs-skipping-ahead.png]]
+![[loop-codesign-iteration-agent-feedback-loop.png]]
+![[co-design-process-loop-diagram.png]]
+![[co-creation-key-agent-loop.png]]
+![[co-design-agent-six-things-settled.png]]
 
 ---
 
@@ -148,13 +148,13 @@ That's depth two. The agent that watches the agent.
 
 ![[images/wtf-are-loops/inner-outer-loops.png]]
 
-![[images/wtf-are-loops/outer-loops/excalidraw_1.png]]
-![[images/wtf-are-loops/outer-loops/excalidraw_2.png]]
-![[images/wtf-are-loops/outer-loops/excalidraw_3.png]]
-![[images/wtf-are-loops/outer-loops/excalidraw_4.png]]
-![[images/wtf-are-loops/outer-loops/excalidraw_5.png]]
-![[images/wtf-are-loops/outer-loops/excalidraw_6.png]]
-![[images/wtf-are-loops/outer-loops/excalidraw_7.png]]
+![[outer-loops-agent-watches-agent.png]]
+![[outer-loops-scheduled-competitor-monitor.png]]
+![[outer-loops-triggering-same-inner.png]]
+![[outer-loops-two-loops-one-inner.png]]
+![[outer-loops-scheduled-competitor-architecture.png]]
+![[outer-loops-depth-two-trigger-change.png]]
+![[outer-loops-agent-watching-agent.png]]
 
 ---
 
@@ -184,13 +184,13 @@ The file system is the loop's notebook. Slack is the loop's conversation with yo
 
 Which one you pick depends on how long the loop has to wait between turns. If it can take its next turn in a second, files. If it has to wait hours or days for a signal, Slack.
 
-![[images/wtf-are-loops/memories-for-loops/excalidraw_1.png]]
-![[images/wtf-are-loops/memories-for-loops/excalidraw_2.png]]
-![[images/wtf-are-loops/memories-for-loops/excalidraw_3.png]]
-![[images/wtf-are-loops/memories-for-loops/excalidraw_4.png]]
-![[images/wtf-are-loops/memories-for-loops/excalidraw_5.png]]
-![[images/wtf-are-loops/memories-for-loops/excalidraw_6.png]]
-![[images/wtf-are-loops/memories-for-loops/excalidraw_7.png]]
+![[memories-for-loops-filesystem-slack-thread.png]]
+![[memories-for-loops-file-vs-slack.png]]
+![[memories-state-surface-concept.png]]
+![[memories-files-vs-slack-feedback.png]]
+![[memories-notebook-conversation-choice.png]]
+![[memories-wait-time-memory-selection.png]]
+![[memories-terminal-vs-slack-comparison.png]]
 
 ---
 
@@ -220,13 +220,13 @@ Slack is both the surface and the memory. The whole channel is the loop's record
 
 This shape generalises. Same skeleton for ad campaigns, for SEO, for content, for outbound, for product analytics. Inner loop does the work. Outer loop checks whether the work mattered. Slack is the surface between you and both.
 
-![[images/wtf-are-loops/email-loop/excalidraw_1.png]]
-![[images/wtf-are-loops/email-loop/excalidraw_2.png]]
-![[images/wtf-are-loops/email-loop/excalidraw_3.png]]
-![[images/wtf-are-loops/email-loop/excalidraw_4.png]]
-![[images/wtf-are-loops/email-loop/excalidraw_5.png]]
-![[images/wtf-are-loops/email-loop/excalidraw_6.png]]
-![[images/wtf-are-loops/email-loop/excalidraw_7.png]]
+![[email-loop-writer-analyst-slack-integration.png]]
+![[email-loop-detailed-inner-outer-surface.png]]
+![[email-loop-variations-writer-analyst-slack.png]]
+![[email-loop-worked-example-framework.png]]
+![[email-loop-worked-example-two-detailed.png]]
+![[email-loop-ab-testing-inner-outer.png]]
+![[email-loop-optimizing-cold-emails.png]]
 
 ---
 
@@ -246,13 +246,13 @@ Wherever possible, the reviewer shouldn't even be looking at the model's word. I
 
 That is what stops the slop.
 
-![[images/wtf-are-loops/entropy/excalidraw_1.png]]
-![[images/wtf-are-loops/entropy/excalidraw_2.png]]
-![[images/wtf-are-loops/entropy/excalidraw_3.png]]
-![[images/wtf-are-loops/entropy/excalidraw_4.png]]
-![[images/wtf-are-loops/entropy/excalidraw_5.png]]
-![[images/wtf-are-loops/entropy/excalidraw_6.png]]
-![[images/wtf-are-loops/entropy/excalidraw_7.png]]
+![[entropy-trap-loops-slop-accumulation.png]]
+![[entropy-trap-vs-fix-comparison.png]]
+![[entropy-decay-loop-adversarial-review.png]]
+![[entropy-unchecked-loops-mud-ball.png]]
+![[entropy-trap-compounding-slop-decay.png]]
+![[entropy-trap-vs-fix-side-by-side.png]]
+![[entropy-pattern-repeats-garbage-scale.png]]
 
 ---
 
@@ -280,13 +280,13 @@ Loops compound while you sleep. Prompts don't.
 
 That is the whole pitch.
 
-![[images/wtf-are-loops/why-this-matters/excalidraw_1.png]]
-![[images/wtf-are-loops/why-this-matters/excalidraw_2.png]]
-![[images/wtf-are-loops/why-this-matters/excalidraw_3.png]]
-![[images/wtf-are-loops/why-this-matters/excalidraw_4.png]]
-![[images/wtf-are-loops/why-this-matters/excalidraw_5.png]]
-![[images/wtf-are-loops/why-this-matters/excalidraw_6.png]]
-![[images/wtf-are-loops/why-this-matters/excalidraw_7.png]]
+![[software-abstraction-evolution-stack.png]]
+![[pattern-moving-up-abstraction-stack.png]]
+![[software-abstraction-evolution-leap.png]]
+![[leverage-punch-cards-to-loops-timeline.png]]
+![[programming-abstraction-evolution-llm.png]]
+![[software-abstraction-leverage-history.png]]
+![[software-leverage-evolution-loops-compound.png]]
 
 ---
 

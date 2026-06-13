@@ -46,12 +46,12 @@ Obsidian must already be running; the first invocation launches it. CLI ships in
 
 <important if="you are adding, embedding, or moving images in notes">
 
-Images are co-located with the note that uses them. There is no vault-root `images/` dump.
+All images live in a single vault-root `images/` folder. There are no co-located per-note `images/` folders.
 
-- **Location**: each note's images live in an `images/` folder next to that note: `<note-dir>/images/`. When a note moves, its `images/` folder moves with it, so embeds never break.
-- **Grouping**: a multi-image lesson groups its files in a named subfolder, `<note-dir>/images/<note-slug>/<note-slug>-N.png` (e.g. `images/worktrees/worktrees-2.png`). A one-off image can sit directly in `<note-dir>/images/<descriptive-name>.png`.
-- **Naming**: kebab-case and descriptive. Rename screenshots on import. Never keep tool-default names like `CleanShot 2026-05-17 at 16.09.13@2x.png`.
-- **Embeds**: prefer filename-only wikilinks, `![[descriptive-name.png]]`, when the filename is unique across the vault. Use a path-qualified embed, `![[images/<group>/<file>.png]]`, when filenames could collide.
+- **Location**: every image goes directly in the vault-root `images/` folder: `images/<descriptive-name>.png`. No subfolders.
+- **Naming**: kebab-case and descriptive of the image's *content*, and globally unique across the whole folder (the flat layout means a generic name like `excalidraw_1.png` or `1.jpg` will collide). Rename screenshots on import; never keep tool-default names like `CleanShot 2026-05-17 at 16.09.13@2x.png`. If a name would collide, extend it with more content detail (or a `-2` suffix as a last resort).
+- **Embeds**: use filename-only wikilinks, `![[descriptive-name.png]]`. Because every image is unique and in one folder, filename-only links resolve regardless of where the note lives, so notes can move freely without breaking embeds. Obsidian image sizing is preserved as `![[descriptive-name.png|400]]`.
+- **No orphans**: only keep images that a note actually references. Unreferenced images are deleted.
 - **LFS**: all image types (`*.png`, `*.jpg`, `*.jpeg`, `*.gif`, `*.webp`, `*.svg`) are tracked via Git LFS.
 </important>
 

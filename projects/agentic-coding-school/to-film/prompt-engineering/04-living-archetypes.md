@@ -16,7 +16,7 @@ A living archetype feeds on its own run history. Every time you:
 
 These signals accumulate. After 50 runs, Product-You isn't the same Product-You you started with. It's been shaped by 50 rounds of your feedback — just like a real employee after their first quarter.
 
-![[images/static-vs-living/excalidraw_1.png]]
+![[static-vs-living-archetype-comparison.png]]
 ### The Correction Problem
 
 Not all corrections are equal. There's a critical distinction:
@@ -45,7 +45,7 @@ Real teams do this unconsciously over months. Your archetype team does it in 20-
 - Round 10: Engineer-You says "the data model will block the feature we're planning for next month." Product-You agrees to fix it.
 - Round 20: Engineer-You preemptively flags data model issues in terms of downstream product impact. Product-You rarely disagrees. The tension has become productive by default.
 
-![[images/archetype-modeling-each-other/excalidraw_1.png]]
+![[engineer-product-archetype-alignment-over-time.png]]
 ### When to Reset vs. Accumulate
 
 Living archetypes have a shelf life. Your taste six months ago isn't your taste today — you've shipped things, seen results, changed your mind. An archetype that accumulated 200 runs of outdated judgment is worse than a fresh one built from your current thinking.
@@ -100,7 +100,7 @@ Mitigations:
 - **Adversarial archetype** — keep one subagent whose job is to argue against the team consensus. Feed it contrarian perspectives, failed companies that did what you're doing, reasons your approach is wrong.
 - **Fresh-eyes reset** — every quarter, rebuild one archetype from scratch. Lose the accumulated dynamics. See if the fresh version spots something the seasoned one stopped noticing.
 
-![[images/calcified-thinking/excalidraw_6.png]]
+![[calcified-thinking-echo-chamber-fresh-eyes-reset.png]]
 ### Demo
 
 1. Show an archetype team with 20+ runs of accumulated history

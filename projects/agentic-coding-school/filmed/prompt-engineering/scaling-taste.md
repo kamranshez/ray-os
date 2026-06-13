@@ -89,7 +89,7 @@ The loop:
 
 This is why the "just show up and talk" workflow works. You dictate for 10 minutes. Claude repurposes into email, LinkedIn, podcast script. You glance at each, make small corrections. Those corrections are data. Tomorrow's outputs are marginally better. Over 90 days, the gap between Claude's output and your actual voice narrows continuously.
 
-![[images/taste-feedback-loop/excalidraw_2.png]]
+![[taste-feedback-loop-five-step-process.png]]
 ### Demo
 
 1. Show a Claude skill built from real writing samples and past decisions
@@ -116,4 +116,4 @@ Your main Claude instance becomes the orchestrator. It doesn't try to be all of 
 
 This is how you go from one person making one decision at a time to your taste applied across ten domains simultaneously — with a quick glance to fill the last 5% on each.
 
-![[images/orchestrator-delegation/excalidraw_7.png]]
+![[claude-orchestrator-delegating-to-archetype-subagents.png]]

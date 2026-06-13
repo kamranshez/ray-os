@@ -12,7 +12,7 @@ That is the important distinction. For non-technical work, the bottleneck is not
 
 That is what auto research gives you. Not just generation. A loop.
 
-![[projects/agentic-coding-school/to-film/loopy-ai/images/auto-research-non-technical/loop-vs-pile/excalidraw_3.png]]
+![[auto-research-generation-feedback-loop.png]]
 
 ## The core shift
 
@@ -44,7 +44,7 @@ For landing pages, it might be Instapage, Webflow, or Google Analytics.
 
 The specific tool does not matter. What matters is that the data is updating in real time and the agent can read it.
 
-![[projects/agentic-coding-school/to-film/loopy-ai/images/auto-research-non-technical/live-feedback/excalidraw_1.png]]
+![[live-feedback-source-agent-data.png]]
 
 ### 2) An experiment table
 
@@ -69,7 +69,7 @@ This table is not just a log. It is the centre of the system. The hypothesis, th
 
 That is what makes the system compound. The agent is not starting from scratch each morning. It is reading what it tried last week and building on it.
 
-![[projects/agentic-coding-school/to-film/loopy-ai/images/auto-research-non-technical/experiment-row/excalidraw_2.png]]
+![[experiment-table-system-memory-compounding.png]]
 
 ### 3) A small experiment surface
 
@@ -83,7 +83,7 @@ If the agent changes five things at once, you do not have an experiment. You hav
 
 This also keeps the API surface small. The agent does not need access to your whole business. It needs three or four specific actions: read analytics for a video, update the title, revert the title. That is enough.
 
-![[projects/agentic-coding-school/to-film/loopy-ai/images/auto-research-non-technical/experiment-surface/excalidraw_1.png]]
+![[narrow-surface-clean-signal-api.png]]
 ### 4) Constraints and guardrails
 
 This is what most people skip when they get excited about auto research. And it is the part that actually makes it safe to run.
@@ -111,7 +111,7 @@ For cold email:
 
 The agent should not have a blank cheque. It should have a research budget. That budget might be 10% of cold email volume, or 10% of eligible YouTube videos, or one landing page variant. The budget is what makes learning affordable. Most failures should be small, cheap, and informative.
 
-![[projects/agentic-coding-school/to-film/loopy-ai/images/auto-research-non-technical/sandbox/excalidraw_1.png]]
+![[guardrails-budget-constraints-sandbox.png]]
 ### 5) An optimisation metric
 
 This is the number the agent is trying to improve. And this is another place people get it wrong.
@@ -122,7 +122,7 @@ For cold email, optimising for open rate pushes you toward clickbait subject lin
 
 The metric defines the behaviour. If you choose the wrong metric, the agent will get very good at the wrong thing.
 
-![[projects/agentic-coding-school/to-film/loopy-ai/images/auto-research-non-technical/optimisation-metric/excalidraw_2.png]]
+![[metric-guides-agent-behavior-compass.png]]
 ---
 
 ## What the agent actually does each day
@@ -177,7 +177,7 @@ This is where the system starts to feel like an actual operator. Not because it 
 
 That is most of optimisation. Humans are just inconsistent at it.
 
-![[projects/agentic-coding-school/to-film/loopy-ai/images/auto-research-non-technical/slack-report/excalidraw_7.png]]
+![[slack-experiment-results-summary-report.png]]
 
 ---
 
@@ -229,7 +229,7 @@ That is what makes it compound. One experiment does not matter. Ten experiments 
 
 For non-technical work, that might be the highest-leverage version of auto research. Not "AI runs my marketing." It is AI running controlled experiments against live feedback, storing the results, and getting a little less wrong every day.
 
-![[projects/agentic-coding-school/to-film/loopy-ai/images/auto-research-non-technical/compounding/excalidraw_1.png]]
+![[tight-loops-memory-competitive-advantage.png]]
 
 ---
 ## Connection to existing content

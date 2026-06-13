@@ -29,11 +29,11 @@ Some people who had great craft taste will be bad at rubric taste. Because rubri
 
 [IMAGE: split panel. Left side a single person at a desk making one decision. Right side the same person, but their judgment encoded as a rubric on a screen that's running across hundreds of items in parallel]
 
-![[images/loop-design-as-craft/old-vs-new-taste/excalidraw_1.png]]
-![[images/loop-design-as-craft/old-vs-new-taste/excalidraw_2.png]]
-![[images/loop-design-as-craft/old-vs-new-taste/excalidraw_3.png]]
-![[images/loop-design-as-craft/old-vs-new-taste/excalidraw_4.png]]
-![[images/loop-design-as-craft/old-vs-new-taste/excalidraw_5.png]]
+![[taste-judgment-to-rubric-evolution.png]]
+![[rubric-taste-operational-parallel-evals.png]]
+![[craft-taste-intuition-repeatable-standard.png]]
+![[rubric-taste-scales-decisions-per-case.png]]
+![[taste-skill-shift-intuition-to-rules.png]]
 
 ---
 
@@ -71,11 +71,11 @@ Was the winner winning because of contrast? Or because the topic itself was hot?
 
 [IMAGE: three side by side panels, each showing old taste on top and new taste below, with the same person in both]
 
-![[images/loop-design-as-craft/three-pairs/excalidraw_1.png]]
-![[images/loop-design-as-craft/three-pairs/excalidraw_2.png]]
-![[images/loop-design-as-craft/three-pairs/excalidraw_3.png]]
-![[images/loop-design-as-craft/three-pairs/excalidraw_4.png]]
-![[images/loop-design-as-craft/three-pairs/excalidraw_5.png]]
+![[anki-cards-thumbnail-review-taste-shift.png]]
+![[three-pairs-showing-taste-evolution-detailed.png]]
+![[anki-thumbnail-code-review-selection-feedback.png]]
+![[craft-to-policy-choice-to-lesson-rules-to-system.png]]
+![[three-pairs-yellow-shirt-taste-shift-summary.png]]
 
 ---
 
@@ -131,11 +131,11 @@ If you can't bring yourself to read the action log, you don't trust the loop. An
 
 [IMAGE: three drill cards stacked vertically, each with a title and a one line outcome]
 
-![[images/loop-design-as-craft/three-drills/excalidraw_1.png]]
-![[images/loop-design-as-craft/three-drills/excalidraw_2.png]]
-![[images/loop-design-as-craft/three-drills/excalidraw_3.png]]
-![[images/loop-design-as-craft/three-drills/excalidraw_4.png]]
-![[images/loop-design-as-craft/three-drills/excalidraw_5.png]]
+![[three-taste-drills-overview-flow.png]]
+![[three-drills-practice-sequence-summary.png]]
+![[drills-reverse-order-sequence-flow.png]]
+![[three-drills-articulate-false-negative-read.png]]
+![[three-practice-drills-rubric-negative-loop.png]]
 
 ---
 
