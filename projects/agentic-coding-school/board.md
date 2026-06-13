@@ -40,7 +40,7 @@ kanban-plugin: board
 - [ ] [[mcp-json]] #claude-code
 - [ ] [[code-execution-with-mcp]] #claude-code
 - [ ] [[designing-slides]] #claude-code
-- [ ] [[forked-subagents]] #claude-code
+- [ ] [[projects/agentic-coding-school/to-film/techniques/forked-subagents]] #claude-code
 - [ ] [[forked-subagents-for-ephemeral-context]] #claude-code
 - [ ] [[main-session-as-orchestrator]] #claude-code
 - [ ] [[running-claude-in-a-dev-box]] #claude-code
