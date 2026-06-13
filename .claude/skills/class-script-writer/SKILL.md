@@ -83,7 +83,7 @@ Skim both before writing. Match whichever matches the user's topic best.
 Every script has these, in this order. Section names can flex to fit the topic.
 
 1. **A cold-open section with a one-sentence thesis.** No fluff intro. State what this video is about in the first paragraph.
-2. **The problem.** What is broken today, or what everyone is doing wrong. One image placeholder usually lands here.
+2. **The problem.** What is broken today, or what everyone is doing wrong. Often a good spot for an image, but only if the problem has a shape (see the placement test under Images).
 3. **The core insight or solution.** The single idea the video exists to deliver.
 4. **Supporting sections.** Two to four of them. How it works, why it works, where it came from, what the layers are. Use `---` between each.
 5. **Demo.** A concrete, numbered walkthrough of what the camera will show. Not vague. Specific tools, specific outputs.
@@ -105,13 +105,27 @@ Use Obsidian embed syntax. The images directory is keyed on the slug.
 ![[images/<slug>/<name>.png]]
 ```
 
-Place two to four image embeds through the script, typically one after the problem section, one after the core insight, and one or two in the supporting sections. Describe what each image should show inline in square brackets above the embed so the excalidraw-gen skill can pick them up later:
+Describe what each image should show inline in square brackets above the embed so the excalidraw-gen skill can pick it up later. The description must name the *relationship being drawn*, not just the topic:
 
 ```markdown
 [IMAGE: dark chalkboard, two panels labeled Knowledge and Your Life, lightning bolt between them]
 
 ![[images/notebooklm-intake/the-problem.png]]
 ```
+
+### Where to place a placeholder
+
+Do not place images on a quota. Run every candidate beat through this pipeline, in order:
+
+1. **Gate, the shape test.** A beat is only eligible for an image if the idea has a *shape*: nesting, flow, direction, partition, cycle, substitution, or convergence. Ask "does this sentence lose anything if it stays as words on the page?" If the answer is no, do not draw it. This kills decoration at the source. "The model was trained on more data" has no shape. "Eight loop levels nest inside each other" does.
+2. **Rank, the argument test.** Among the eligible beats, the must-draws are the ones carrying a load-bearing claim, a "therefore" the video would collapse without. Draw these first. If you could keep only three images, these are them.
+3. **Tie-break, the pacing test.** If the gate-plus-rank pass leaves a stretch longer than about ninety seconds of unbroken narration with no visual, promote the strongest eligible-but-undrawn diagram in that gap. If two diagrams compete for the same beat, push the lower-stakes one to the next visual-less stretch.
+
+Treat "this feels like a lot to follow" (cognitive load) as a secondary hint only. It is a liar at the moment of writing: everything feels heavy while you are explaining it, so writers who place by load over-place.
+
+### How many
+
+Roughly one diagram per major section. Hard ceiling around six to eight per script. The hand-drawn style earns its impact from being a little scarce. The moment the viewer expects a picture for every point, each picture becomes wallpaper.
 
 ---
 
