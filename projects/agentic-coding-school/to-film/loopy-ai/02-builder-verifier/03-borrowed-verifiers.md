@@ -1,10 +1,10 @@
 ---
 duration: "14-18 min"
-batch: 3
-order: 6
-batch_name: "L2 Foundations"
+batch: 2
+order: 3
+batch_name: "Builder and Verifier"
 class: "loopy-ai"
-chapter: "Borrowed Verifiers"
+chapter: "Builder and Verifier"
 aliases: [borrowed-verifiers]
 ---
 

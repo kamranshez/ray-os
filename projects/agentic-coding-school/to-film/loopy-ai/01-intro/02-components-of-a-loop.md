@@ -4,7 +4,7 @@ batch: 1
 order: 2
 batch_name: Setup
 class: loopy-ai
-chapter: Anatomy of a Loop
+chapter: Intro
 aliases: [components-of-a-loop, anatomy-of-a-loop]
 ---
 ## The five components

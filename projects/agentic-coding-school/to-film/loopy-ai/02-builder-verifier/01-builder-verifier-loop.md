@@ -1,14 +1,14 @@
 ---
 duration: 14-18 min
-batch: 1
-order: 3
-batch_name: Setup
+batch: 2
+order: 1
+batch_name: Builder and Verifier
 class: loopy-ai
-chapter: L2 Builder and Verifier
+chapter: Builder and Verifier
 aliases: [builder-verifier-loop]
 ---
 
-> STUB — to write next. This is L2, the first level on the climb, taught *through* the five components from the previous segment.
+> ✅ RECORDED — transcript pending. This is L2, the first level on the climb, taught *through* the five components from the previous segment. Covered on camera: the pattern + separate-context verifier, what-to-verify-against menu (tests / rubric score / guidelines / user flows / plan), the GPT Image 2 slides example, the tic-tac-toe left-vs-right demo, multi-round adversarial review, severity caps, and the 19h / 300-user-flow run.
 
 ## Kernel (from the old stack walkthrough)
 

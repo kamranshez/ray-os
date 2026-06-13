@@ -1,12 +1,14 @@
 ---
 duration: "12-16 min"
-batch: 3
-order: 8
-batch_name: "L2 Foundations"
+batch: 2
+order: 6
+batch_name: "Builder and Verifier"
 class: "loopy-ai"
-chapter: "Architecting The Loop"
-aliases: [architecting-the-loop]
+chapter: "Builder and Verifier"
+aliases: [building-the-verification-environment, architecting-the-loop]
 ---
+
+> NOTE — fold in the concrete angle from the L2 chapter discussion: (1) **runtime choice** — the Claude Code terminal can't do computer use, so when the check needs a GUI you move to the Claude Desktop app or the Codex app; match the runtime to what the verifier must observe. (2) **the sensing rig** — wiring mic + speaker (or a virtual audio device) so an agent can verify a dictation app (Hyperwhisper-style): play a known clip → capture the transcript → diff against ground truth. The existing "perceive + act before you prompt" framing is the abstract version of exactly this.
 
 Before you write the prompt, you write the interface.
 

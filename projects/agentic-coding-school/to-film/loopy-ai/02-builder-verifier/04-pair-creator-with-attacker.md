@@ -1,10 +1,10 @@
 ---
 duration: "10-14 min"
-batch: 3
-order: 7
-batch_name: "L2 Foundations"
+batch: 2
+order: 4
+batch_name: "Builder and Verifier"
 class: "loopy-ai"
-chapter: "Pair Every Creator With An Attacker"
+chapter: "Builder and Verifier"
 aliases: [adversarial-reviewer-skill]
 ---
 
