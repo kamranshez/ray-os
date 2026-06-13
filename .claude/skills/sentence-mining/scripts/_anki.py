@@ -14,17 +14,28 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-ANKICONNECT = "http://localhost:8765"
+try:
+    from _config import load_config
+except ImportError:  # when imported as a package
+    from ._config import load_config
+
+
+def _connect_url() -> str:
+    cfg = load_config(required=False)
+    if cfg and cfg.get("anki_connect_url"):
+        return cfg["anki_connect_url"]
+    return "http://localhost:8765"
 
 
 def anki_request(action: str, **params):
     """Call AnkiConnect. Retries up to 3 times with backoff on transient errors."""
     body = json.dumps({"action": action, "version": 6, "params": params}).encode()
+    url = _connect_url()
     last_exc = None
     for attempt in range(3):
         try:
             req = urllib.request.Request(
-                ANKICONNECT,
+                url,
                 data=body,
                 headers={"Content-Type": "application/json"},
             )

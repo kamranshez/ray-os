@@ -6,13 +6,18 @@ duplicate shouldn't stop the other 19 cards from landing.
 """
 import argparse
 import json
+import os
 import sys
 import time
 import urllib.error
 import urllib.request
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _config import load_config
+
 ANKICONNECT = "http://localhost:8765"
-MODEL = "Ray's Sentence Mining"
+MODEL = ""
+FIELD_MAP = {}
 
 
 def anki_request(action, **params):
@@ -57,31 +62,35 @@ def build_note(candidate, source_url, permanent_tag, source_id=None):
     i_level = candidate.get("i_level", "").strip()
     if i_level:
         tags.append(i_level)
-    if source_id:
-        tags.append(f"source:{source_id}")
 
     sentence_audio_file = candidate.get("sentenceAudio_file", "")
     picture_file = candidate.get("picture_file", "")
     explanation_audio_file = candidate.get("explanationAudio_file", "")
 
+    # Map the skill's internal field roles onto the user's actual note-type field
+    # names. Only roles that are mapped (non-empty in config.field_map) get
+    # written — so any note type with at least `word` + `sentence` works, and we
+    # never send a field name the model doesn't have (AnkiConnect would error).
+    role_values = {
+        "word": candidate["lemma"],
+        "reading": candidate.get("reading", ""),
+        "sentence": sentence_text,
+        "sentence_audio": f"[sound:{sentence_audio_file}]" if sentence_audio_file else "",
+        "picture": f'<img src="{picture_file}">' if picture_file else "",
+        "explanation": candidate.get("explanation", ""),
+        "explanation_audio": f"[sound:{explanation_audio_file}]" if explanation_audio_file else "",
+        "source_url": source_url,
+    }
+    fields = {}
+    for role, value in role_values.items():
+        field_name = FIELD_MAP.get(role)
+        if field_name:
+            fields[field_name] = value
+
     return {
         "deckName": candidate["deck"],
         "modelName": MODEL,
-        "fields": {
-            "wordForm": candidate["lemma"],
-            "reading": candidate.get("reading", ""),
-            "sentence": sentence_text,
-            "sentenceAudio": f"[sound:{sentence_audio_file}]" if sentence_audio_file else "",
-            "picture": f'<img src="{picture_file}">' if picture_file else "",
-            "explanation": candidate.get("explanation", ""),
-            "explanationAudio": f"[sound:{explanation_audio_file}]" if explanation_audio_file else "",
-            "definition": "",
-            "wordAudio": "",
-            "pitchAccent": "",
-            "frequency_yomitan": "",
-            "frequency_addon": "",
-            "source_url": source_url,
-        },
+        "fields": fields,
         "tags": tags,
         "options": {"allowDuplicate": False},
     }
@@ -91,6 +100,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--draft", required=True)
     args = ap.parse_args()
+
+    global ANKICONNECT, MODEL, FIELD_MAP
+    cfg = load_config()
+    ANKICONNECT = cfg["anki_connect_url"]
+    MODEL = cfg["note_type"]
+    FIELD_MAP = cfg["field_map"]
+    if not MODEL:
+        sys.exit("config.note_type is empty — run `/sentence-mining setup`.")
+    if not FIELD_MAP.get("word") or not FIELD_MAP.get("sentence"):
+        sys.exit("config.field_map needs at least `word` and `sentence` — run setup.")
 
     with open(args.draft, encoding="utf-8") as f:
         data = json.load(f)

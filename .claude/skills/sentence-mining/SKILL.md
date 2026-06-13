@@ -1,6 +1,6 @@
 ---
 name: sentence-mining
-description: Build Japanese sentence-mining cards for Ray's Anki deck in two modes. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + mecab + AnkiMorphs i+1 diff produces draft cards. (2) Bank mode — give a list of target words → search across Ray's locally-indexed subs2srs .apkg banks (Tokyo Ghoul, Harry Potter, LOGH, etc.) for natural example sentences, reusing the bank's original audio + screenshot when available. Both modes stage drafts for Ray's approval before pushing via AnkiConnect. Use proactively whenever input is (a) a Japanese-language video URL or (b) a list of Japanese words — don't ask if Ray wants cards, start drafting. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", `/sentence-mining`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
+description: Build Japanese sentence-mining cards for Anki in two modes, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + mecab + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → search across your locally-indexed subs2srs .apkg banks for natural example sentences, reusing the bank's original audio + screenshot when available. Both modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL or (b) a list of Japanese words — don't ask, start drafting. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
 ---
 
 # Sentence Mining
@@ -34,35 +34,51 @@ Two ways in:
 
 | Input                                                    | Mode    | Reference                          |
 |----------------------------------------------------------|---------|------------------------------------|
+| `setup` / "set up sentence mining" / no `config.json` yet  | setup   | [references/setup.md](references/setup.md)           |
 | URL (instagram, youtube, tiktok, twitter) or local video | video   | [references/video-mode.md](references/video-mode.md) |
 | Plain list of Japanese words                             | bank    | [references/bank-mode.md](references/bank-mode.md)   |
 | Both (URL + words)                                       | ask Ray | —                                   |
 
 The mode-specific reference walks through Steps 1–3 (and the mode-specific bits of Step 5). Then come back here for the shared post-processing.
 
+**Before anything else, check setup.** If `<skill-dir>/config.json` does not exist, the skill is unconfigured — route to **setup mode** ([references/setup.md](references/setup.md)) first, then continue with the user's actual request. Setup is also how a friend imports this skill into their own Anki: it interviews them for their note type, fields, decks, known-word sources, and sentence banks, then writes their own `config.json` (git-ignored, never shared).
+
 ## Inputs and required env
 
-API keys live in `<skill-dir>/.env` (git-ignored). First-time setup:
+The skill is designed to be **shareable**: nothing about a specific person's Anki
+is hardcoded. Two git-ignored files hold all the per-user state:
 
-```bash
-cp <skill-dir>/.env.example <skill-dir>/.env
-# Then edit and paste the keys.
-```
+- **`<skill-dir>/config.json`** — note type, field mapping, deck names, known-word
+  sources, sentence-bank locations. Written by `/sentence-mining setup`. See
+  `config.example.json` for the shape. Read by every script through `_config.py`.
+- **`<skill-dir>/.env`** — API keys only:
 
-Required keys:
-- `ASSEMBLYAI_API_KEY` — video mode only
-- `GEMINI_API_KEY` (Google AI Studio works) — both modes (explanation TTS + sentence TTS fallback)
+  ```bash
+  cp <skill-dir>/.env.example <skill-dir>/.env   # then paste the keys
+  ```
 
-Real environment variables override `.env`, so a key already in the shell still wins.
+  Required keys: `ASSEMBLYAI_API_KEY` (video mode only) and `GEMINI_API_KEY`
+  (both modes — explanation TTS + sentence TTS fallback). Real env vars override
+  `.env`. If a key is missing, the script exits pointing at `.env` — don't fall
+  back to alternatives without asking.
 
-Also required:
-- Anki running with **AnkiConnect** (port 8765) — verify with `curl -s http://localhost:8765 -d '{"action":"version","version":6}'`
-- `yt-dlp`, `ffmpeg`, `mecab` on PATH (all present on Ray's machine)
+**The only hard dependencies besides those two files:**
+- Anki running with **AnkiConnect** (default port 8765) — verify with `curl -s http://localhost:8765 -d '{"action":"version","version":6}'`
+- `yt-dlp`, `ffmpeg`, `mecab` on PATH
 - Python: `pip3 install --break-system-packages google-genai jamdict jamdict-data`
 
-If a key is missing, the script exits with a clear message pointing at `.env`. Don't fall back to alternatives without asking.
+**AnkiMorphs is NOT required.** The i+1 known-word diff is re-implemented inside
+the skill: it reads the cards in the decks/note-types you name at setup, mecab-
+tokenizes the configured field, and treats a lemma as "known" once its highest
+card interval ≥ threshold (default 21 days) — the same idea AnkiMorphs uses, but
+computed live through AnkiConnect with the same tokenizer the miner uses. See
+[references/known-words.md](references/known-words.md).
 
-For **bank mode**, the banks must be indexed first — see [references/bank-mode.md](references/bank-mode.md) §"One-time setup".
+For **bank mode**, the banks must be indexed first — setup offers to do this, or
+see [references/bank-mode.md](references/bank-mode.md) §"One-time setup".
+
+If `config.json` is missing when a script runs, it exits telling the user to run
+`/sentence-mining setup`.
 
 ## Steps 1–3 (mode-specific)
 
@@ -74,7 +90,7 @@ Follow the reference for the mode you routed into. By the end of those steps you
   "source_id": "...",
   "source_url": "...",     // optional, video only
   "candidates": [
-    { "lemma": "...", "sentence": "...", "deck": "Ray's Sentence Cards", "i_level": "i1" | "i?", ... },
+    { "lemma": "...", "sentence": "...", "deck": "<config.decks.main>", "i_level": "i1" | "i?", ... },
     ...
   ]
 }
@@ -200,12 +216,13 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 
 ## Reference files
 
+- [references/setup.md](references/setup.md) — the `/sentence-mining setup` interview that writes `config.json`
+- [references/known-words.md](references/known-words.md) — the built-in i+1 known-word diff (replaces AnkiMorphs); how "known" is computed and configured
 - [references/video-mode.md](references/video-mode.md) — Steps 1–3 and Step 5 for video-URL input
 - [references/bank-mode.md](references/bank-mode.md) — Steps 1–3 and Step 5 for word-list input + one-time bank indexing setup
 - [references/apkg-schema.md](references/apkg-schema.md) — `.apkg` ZIP/SQLite layout and field separators
 - [references/bank-formats.md](references/bank-formats.md) — field-role detection heuristics + known notetypes
-- [references/note-type.md](references/note-type.md) — the 13 fields of `Ray's Sentence Mining` and which we populate
-- [references/ankimorphs-db.md](references/ankimorphs-db.md) — schema of `ankimorphs.db`, why interval ≥ 21 means "known"
+- [references/note-type.md](references/note-type.md) — note-type fields and how `config.field_map` maps onto them
 - [references/transcript-schema.md](references/transcript-schema.md) — shape of AssemblyAI's response
 - [references/explanation-prompt.md](references/explanation-prompt.md) — verbatim prompt from Ray's addon
 
@@ -213,18 +230,22 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 
 | script                  | mode  | purpose                                                      |
 |-------------------------|-------|--------------------------------------------------------------|
+| `setup.py`              | setup | probe Anki (note types/fields/decks), tools, keys; validate `config.json` |
+| `_config.py`            | all   | load `config.json` (merged over defaults) — single source of truth |
 | `transcribe.py`         | video | AssemblyAI Universal-3 Pro JP transcription with diarization |
-| `analyze.py`            | video | mecab tokenize + AnkiMorphs diff + JPDB rank                 |
+| `analyze.py`            | video | mecab tokenize + built-in known-word diff (cached) + JPDB rank |
 | `generate_media.py`     | video | ffmpeg clip + screenshot + Gemini TTS explanation            |
 | `extract_bank.py`       | bank  | parse `.apkg` → local index JSON + media dir                 |
 | `search_banks.py`       | bank  | word-list → top-N sentence candidates across indexed banks   |
 | `generate_media_bank.py`| bank  | copy bank media (or TTS fallback) + Gemini TTS explanation   |
-| `push.py`               | both  | AnkiConnect addNotes; tags driven off `source` in draft      |
+| `push.py`               | both  | AnkiConnect addNotes onto `config.note_type` via `config.field_map` |
 | `_env.py`               | both  | loads `.env` into `os.environ`                               |
+| `_anki.py`              | both  | AnkiConnect helper + `storeMediaFile` (URL from config)     |
 
 ## Gotchas (universal)
 
 - **AnkiConnect must be running.** If `curl http://localhost:8765` fails, Anki is closed or the addon is disabled. Tell Ray rather than retrying.
 - **Don't push cards with empty explanation.** If Step 4 failed for a card (you got confused, refused, etc.), drop it from the draft rather than pushing a hollow one.
 - **Gemini TTS preview model rate-limits.** Free tier is 10 RPM. `generate_media.py` and `generate_media_bank.py` both cap concurrency at 2 with exponential 429 backoff. If you still hit limits, drop to 1 or serialize.
-- **`allowDuplicate: False` in push.py** means re-pushing the same `wordForm` is silently rejected. To check ahead of time: query `wordForm:<lemma> deck:"Ray's Sentence Cards"` against AnkiConnect during curation.
+- **`allowDuplicate: False` in push.py** means re-pushing the same word is silently rejected. To check ahead of time: query `<word-field>:<lemma> deck:"<main-deck>"` (from `config.field_map.word` / `config.decks.main`) against AnkiConnect during curation. `analyze.py` already pre-dedupes against the configured mining decks.
+- **Known-word scan is cached.** The first mine of the day scans every configured known-source deck (~100s for a large collection); subsequent runs reuse the cache for `config.known_words.cache_hours` (default 6). After a big review session, pass `analyze.py --refresh-known` (or just wait out the TTL) so freshly-matured words drop out of mining.

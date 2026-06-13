@@ -1,6 +1,6 @@
 # Video Mode
 
-Source: a **video URL** (Instagram reel, YouTube video/Short, TikTok, Twitter/X video) or a **local video file path**. The flow downloads (if URL), transcribes via AssemblyAI, splits into sentence chunks, runs mecab + AnkiMorphs diff to find i+1 sentences (one unknown word), and produces draft cards.
+Source: a **video URL** (Instagram reel, YouTube video/Short, TikTok, Twitter/X video) or a **local video file path**. The flow downloads (if URL), transcribes via AssemblyAI, splits into sentence chunks, runs mecab + the built-in known-word diff (see [known-words.md](known-words.md)) to find i+1 sentences (one unknown word), and produces draft cards.
 
 When this mode triggers:
 - Ray pastes any of the URL types above
@@ -89,24 +89,25 @@ python3 <skill-dir>/scripts/analyze.py \
     --output-dir ~/Downloads/sentence-mining/
 ```
 
-The batch form writes one `<source-id>.candidates.json` per entry. Same analysis per video, but jamdict (~100MB) opens once instead of N times, and the AnkiConnect dedup query runs once instead of N — that query was the source of the parallel-run timeout we hit before.
+The batch form writes one `<source-id>.candidates.json` per entry. Same analysis per video, but jamdict (~100MB) opens once instead of N times, the known-word set is scanned once and shared, and the AnkiConnect dedup query runs once instead of N — that query was the source of the parallel-run timeout we hit before.
 
 **What analyze.py does:**
+- Loads the **known-word set** once from `config.known_words.sources` (cached; see [known-words.md](known-words.md))
 - Tokenizes each sentence with mecab
-- Three-layer dedup for "Ray already knows this word":
-  1. **Exact AnkiMorphs interval** — lemma's `highest_lemma_learning_interval ≥ 21` → known
+- Three-layer dedup for "learner already knows this word":
+  1. **Highest card interval ≥ threshold** — lemma's highest interval across the configured known-source cards ≥ `interval_threshold` (default 21) → known
   2. **JMDict entry equality** — any alternate writing in the same JMDict entry is mature (catches すべて↔全て, ご飯↔御飯, わたし↔私)
-  3. **Kanji-stem match** — any mature lemma shares the leading kanji run (catches 支払う↔支払い, 取る↔取り — JMDict treats them as separate entries but Ray clearly knows both)
+  3. **Kanji-stem match** — any mature lemma shares the leading kanji run (catches 支払う↔支払い, 取る↔取り — JMDict treats them as separate entries but the learner clearly knows both)
 - For each unknown lemma, finds the **best sentence** (i+1 preferred; falls back i+2, i+3…)
-- Queries AnkiConnect for existing `wordForm:<lemma>` in `Ray's Sentence Cards` or `Ray's Sentence Mining Deferred`; drops dupes
-- Ranks remaining unknowns by JPDB lemma priority (lower line number in `ja-JPDBv2.2-lemma-priority.csv` = more frequent = higher priority)
+- Queries AnkiConnect for the existing target-word field across the configured mining decks (`config.decks`); drops dupes
+- Ranks remaining unknowns by JPDB lemma priority if `config.jpdb_priority_csv` is set (lower line = more frequent = higher priority); otherwise keeps source order
 - Caps output at 50 candidates
 
 Output: candidate cards with `lemma`, `reading`, `sentence`, `sentence_start_ms`, `sentence_end_ms`, `target_word_start_ms`, `unknown_count_in_sentence`, `jpdb_rank`, `deck`, `i_level` (`i1`, `i2`, `i3`, …), and `speaker`.
 
-**Deck routing:**
-- **i+1 cards** (one unknown — cleanest context) → `Ray's Sentence Cards` (enter normal daily review)
-- **i+2 and higher** → `Ray's Sentence Mining Deferred` (top-level sibling deck, NOT a subdeck — kept separate so Ray can sweep messy ones out later, but cards stay unsuspended)
+**Deck routing** (deck names come from `config.decks`):
+- **i+1 cards** (one unknown — cleanest context) → `decks.main` (enter normal daily review)
+- **i+2 and higher** → `decks.deferred` (a top-level sibling deck, kept separate so messy ones can be swept later, but cards stay unsuspended). Falls back to `decks.main` if no deferred deck is configured.
 
 Both decks are checked for duplicates before adding.
 
@@ -134,5 +135,5 @@ TTS concurrency is capped at 2 with 429 backoff — Gemini's free-tier limit is 
 ## Gotchas specific to video mode
 
 - **AssemblyAI Japanese quality varies wildly.** Music-heavy reels with overlaid voice may give garbage. If a transcript has obvious errors (broken sentences, kana-only output where kanji should be), surface this to Ray before generating cards — bad sentences mean bad cards.
-- **Mecab segmentation isn't perfect.** Compound words may split or fuse differently than AnkiMorphs DB expects. Trust the diff but spot-check the `wordForm` field for weirdness in the draft summary.
+- **Mecab segmentation isn't perfect.** Compound words may split or fuse in odd ways. Because the known-set and the candidates use the *same* mecab, segmentation is at least self-consistent — but still spot-check the target-word field for weirdness in the draft summary.
 - **Diarization is not always clean for backchannels.** "うん" / "そうだね" interjections may flip speaker labels mid-sentence. Use judgment in Step 2.5 to consolidate.

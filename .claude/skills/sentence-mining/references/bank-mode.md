@@ -23,16 +23,16 @@ Cards built this way are tagged `claude-sentence-bank` (vs. `claude-sentence-min
 
 ## One-time setup: indexing banks
 
-Banks live in `~/Library/CloudStorage/.../subs2srs/{Imported,Not Yet Imported}/` on Drive. **Don't copy the `.apkg` files locally** — the Imported folder alone is ~76 GB. Instead, extract them in place into local JSON indexes:
+Banks are the `.apkg` files in `config.banks.source_dir` (set at setup). Extract them into local JSON indexes:
 
 ```bash
-python3 <skill-dir>/scripts/extract_bank.py \
-    "/Users/ray/Library/CloudStorage/GoogleDrive-the.rehman.amjad@gmail.com/My Drive/Projects/Japanese/Anki/subs2srs/Imported/"
-# Or point at a single file:
+# No args → indexes every .apkg in config.banks.source_dir into config.banks.index_dir:
+python3 <skill-dir>/scripts/extract_bank.py
+# Or point at a single file / a different directory:
 python3 <skill-dir>/scripts/extract_bank.py "/path/to/specific.apkg"
 ```
 
-Output lands in `~/Downloads/sentence-mining/banks/index/`:
+Output lands in `config.banks.index_dir` (default `~/Downloads/sentence-mining/banks/index/`):
 - `<bank-id>.notes.json` — searchable index (1 record per note: sentence, audio refs, image refs, meaning)
 - `<bank-id>.media/` — extracted audio+image with original filenames
 
@@ -85,10 +85,10 @@ Inline, look at the top hits per word and pick. Heuristic:
 
 - **Prefer the one with audio + image** even if the sentence is slightly less elegant. A card with native audio + screenshot is a vastly better study artifact than a text-only one.
 - **Clean obvious noise.** If the sentence is `(line1) (line2)` (subs2srs concatenated two subtitle frames), drop the chunk that doesn't contain the target word.
-- **Drop dupes vs. Ray's existing cards.** Query AnkiConnect for `wordForm:<lemma> (deck:"Ray's Sentence Cards" OR deck:"Ray's Sentence Mining Deferred")` and skip any word that already has a card. **This step is currently a manual check** — automate it in `search_banks.py` next.
+- **Drop dupes vs. existing cards.** Query AnkiConnect for `<word-field>:<lemma>` across the configured mining decks (`config.field_map.word`, `config.decks`) and skip any word that already has a card. **This step is currently a manual check** — automate it in `search_banks.py` next.
 - **For zero-hit words**, tell Ray and ask. He may want to (a) index more banks, (b) accept a synthetic Claude-written example sentence with Gemini TTS, or (c) skip.
 
-For each kept candidate, set `deck` to `Ray's Sentence Cards`. (Bank mode doesn't use the `Deferred` deck — these aren't i+2+ by definition since they're hand-selected.)
+For each kept candidate, set `deck` to `config.decks.main`. (Bank mode doesn't use the `deferred` deck — these aren't i+2+ by definition since they're hand-selected.)
 
 ## Step 4: Generate explanations
 
@@ -131,13 +131,12 @@ Always list misses explicitly so Ray can choose to add more banks or accept synt
 
 ## Step 7: Push
 
-Same `push.py` as video mode — the script detects `source == "bank-search"` in the draft and applies the `claude-sentence-bank` permanent tag (vs. `claude-sentence-mining`). Cards also get `bank:<bank-id>` and `auto-mined:YYYY-MM-DD` tags.
+Same `push.py` as video mode — the script detects `source == "bank-search"` in the draft and applies the `claude-sentence-bank` permanent tag (vs. `claude-sentence-mining`), plus the `i?` level tag. Per-run context (`bank_id`, `source`) stays in the draft JSON only; it is not promoted to Anki tags.
 
-Bank cards always land in `Ray's Sentence Cards` (no Deferred routing — see Step 3).
+Bank cards always land in `config.decks.main` (no Deferred routing — see Step 3).
 
 ## Gotchas specific to bank mode
 
 - **Substring match misses inflections.** Already mentioned; a real fix needs mecab at index time.
-- **No AnkiMorphs known-check.** Ray might already know a word he sent; bank mode pushes a card anyway. Pre-flight check is on the TODO list.
-- **Tag pollution from `bank:<bank-id>`.** If a bank-id has Japanese characters they'll be in the tag (`bank:くまクマ熊ベアー_1-300`). Anki handles this but tag autocomplete may behave oddly.
+- **No known-check yet.** The learner might already know a word they sent; bank mode pushes a card anyway. The known-set machinery now exists (`config.known_words`, reused from video mode) — wiring it into `search_banks.py` is the obvious next step.
 - **`Migaku Japanese` Audio field is often empty even though the notetype declares it.** The detector says the bank "has audio" structurally, but resolution at media-gen time falls back to TTS. This is the right behavior — the structural signal is still useful for ranking — but Ray may be surprised that a "Migaku" bank produces synthesized audio.

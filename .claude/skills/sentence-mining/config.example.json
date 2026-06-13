@@ -1,0 +1,37 @@
+{
+  "anki_connect_url": "http://localhost:8765",
+
+  "note_type": "Japanese Sentence Mining",
+  "field_map": {
+    "word": "wordForm",
+    "reading": "reading",
+    "sentence": "sentence",
+    "sentence_audio": "sentenceAudio",
+    "picture": "picture",
+    "explanation": "explanation",
+    "explanation_audio": "explanationAudio",
+    "source_url": "source_url"
+  },
+
+  "decks": {
+    "main": "Sentence Cards",
+    "deferred": "Sentence Mining Deferred"
+  },
+
+  "known_words": {
+    "interval_threshold": 21,
+    "sources": [
+      { "query": "deck:\"Sentence Cards\"", "field": "sentence" },
+      { "query": "note:\"Core 2k/6k\"", "field": "Vocabulary-Kanji" }
+    ]
+  },
+
+  "jpdb_priority_csv": "",
+
+  "banks": {
+    "source_dir": "~/Documents/sentence-banks",
+    "index_dir": "~/Downloads/sentence-mining/banks/index"
+  },
+
+  "work_dir": "~/Downloads/sentence-mining"
+}

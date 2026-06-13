@@ -18,26 +18,15 @@ import argparse
 import json
 import os
 import re
-import sqlite3
 import subprocess
 import sys
 import time
 import urllib.error
 import urllib.request
 
-ANKIMORPHS_DB = os.path.expanduser(
-    "~/Library/Application Support/Anki2/User 1/ankimorphs.db"
-)
-JPDB_CSV = os.path.expanduser(
-    "~/Library/Application Support/Anki2/User 1/priority-files/ja-JPDBv2.2-lemma-priority.csv"
-)
-ANKICONNECT = "http://localhost:8765"
-MAIN_DECK = "Ray's Sentence Cards"
-DEFERRED_DECK = "Ray's Sentence Mining Deferred"
-DEDUPE_DECKS_QUERY = f'(deck:"{MAIN_DECK}" OR deck:"{DEFERRED_DECK}")'
-ANKI_NOTE_FIELD = "wordForm"
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _config import load_config, deck_main, deck_deferred
 
-KNOWN_INTERVAL_THRESHOLD = 21
 CAP = 50
 
 CONTENT_POS_PREFIXES = ("名詞", "動詞", "形容詞", "副詞", "連体詞", "感動詞", "形状詞")
@@ -50,6 +39,28 @@ SINGLE_KANA = re.compile(r"^[぀-ゟ゠-ヿー]$")
 KANA_ONLY_SHORT = re.compile(r"^[぀-ゟ゠-ヿー]{1,2}$")
 HAS_KANJI = re.compile(r"[一-鿿]")
 KANJI_RE = re.compile(r"[一-鿿々]+")
+
+HTML_TAG_RE = re.compile(r"<[^>]+>")
+FURIGANA_RE = re.compile(r"([一-龯々]+)\[([ぁ-ゖァ-ヺー]+)\]")
+
+# Runtime config — populated by main() from config.json so the rest of the
+# module reads plain module globals (no threading config through every call).
+ANKICONNECT = "http://localhost:8765"
+MAIN_DECK = ""
+DEFERRED_DECK = ""
+DEDUPE_DECKS_QUERY = ""
+ANKI_NOTE_FIELD = "wordForm"
+KNOWN_INTERVAL_THRESHOLD = 21
+
+
+def strip_html(s):
+    s = HTML_TAG_RE.sub("", s.replace("<br>", "\n").replace("<br/>", "\n"))
+    return s.replace("　", " ").replace("\xa0", " ").strip()
+
+
+def strip_furigana(s):
+    # Anki furigana lives as `漢字[かんじ]`; drop the reading so mecab sees clean text.
+    return FURIGANA_RE.sub(r"\1", s)
 
 
 def mecab_tokenize(text):
@@ -99,14 +110,104 @@ def extract_kanji_stem(lemma):
     return m.group(0) if m else ""
 
 
-def load_morph_intervals():
-    con = sqlite3.connect(ANKIMORPHS_DB)
-    cur = con.cursor()
-    cur.execute(
-        "SELECT lemma, MAX(highest_lemma_learning_interval) FROM Morphs GROUP BY lemma"
-    )
-    intervals = {row[0]: (row[1] or 0) for row in cur.fetchall()}
-    con.close()
+def load_known_intervals(sources):
+    """Self-contained re-implementation of AnkiMorphs' known-lemma map.
+
+    For each configured source (an Anki search + a note field), pull the cards,
+    read the field, mecab-tokenize it, and record every content lemma's HIGHEST
+    card interval — exactly the `highest_lemma_learning_interval` idea AnkiMorphs
+    stores, but computed live through AnkiConnect so the skill needs no AnkiMorphs
+    install and no ankimorphs.db. Using the same mecab tokenizer here and on the
+    mined sentences guarantees lemmas line up (no cross-tokenizer false unknowns).
+
+    Returns {lemma: highest_interval_in_days}. New/learning cards report interval
+    <= 0 (or seconds), so they naturally fall below the >= 21 known threshold.
+    """
+    intervals = {}
+    for src in sources or []:
+        query = (src.get("query") or "").strip()
+        field = (src.get("field") or "").strip()
+        if not query or not field:
+            continue
+        card_ids = anki_request("findCards", query=query)
+        if not card_ids:
+            print(f"  known-source matched 0 cards: {query!r}", file=sys.stderr)
+            continue
+        seen_field = False
+        for i in range(0, len(card_ids), 500):
+            chunk = anki_request("cardsInfo", cards=card_ids[i : i + 500])
+            for c in chunk:
+                ivl = c.get("interval", 0) or 0
+                fobj = c.get("fields", {}).get(field)
+                if fobj is None:
+                    continue
+                seen_field = True
+                text = strip_html(strip_furigana(fobj.get("value", "")))
+                if not text:
+                    continue
+                for surface, lemma, reading, pos in mecab_tokenize(text):
+                    if not is_content_word(pos) or not is_card_worthy(lemma):
+                        continue
+                    if ivl > intervals.get(lemma, -(10**9)):
+                        intervals[lemma] = ivl
+        if not seen_field:
+            print(
+                f"  WARNING: field {field!r} not found on cards for {query!r} "
+                f"(check field name in config.known_words)",
+                file=sys.stderr,
+            )
+    return intervals
+
+
+def _sources_key(sources):
+    import hashlib
+    blob = json.dumps(sources, ensure_ascii=False, sort_keys=True)
+    return hashlib.sha1(blob.encode("utf-8")).hexdigest()
+
+
+def get_known_intervals(cfg, force_refresh=False):
+    """load_known_intervals with an optional on-disk cache.
+
+    Scanning ~13k cards + tokenizing takes ~100s, so re-running it for every
+    single-video mine is wasteful. Cache the lemma->interval map under work_dir,
+    keyed on the exact sources list (so editing config auto-invalidates) and the
+    threshold. TTL is config.known_words.cache_hours (default 6; 0 disables).
+    Pass --refresh-known to force a rescan after a big review session.
+    """
+    kw = cfg["known_words"]
+    sources = kw.get("sources", [])
+    cache_hours = kw.get("cache_hours", 6)
+    work_dir = os.path.expanduser(cfg.get("work_dir") or "~/Downloads/sentence-mining")
+    cache_path = os.path.join(work_dir, ".known_cache.json")
+    key = _sources_key(sources)
+
+    if not force_refresh and cache_hours and os.path.exists(cache_path):
+        try:
+            with open(cache_path, encoding="utf-8") as f:
+                cached = json.load(f)
+            age_h = (time.time() - cached.get("ts", 0)) / 3600
+            if (cached.get("sources_key") == key
+                    and cached.get("threshold") == KNOWN_INTERVAL_THRESHOLD
+                    and age_h < cache_hours):
+                print(f"  known-set: cache hit ({age_h:.1f}h old, "
+                      f"{len(cached['intervals'])} lemmas)", file=sys.stderr)
+                return cached["intervals"]
+        except Exception:  # noqa: BLE001 — corrupt cache → just rescan
+            pass
+
+    intervals = load_known_intervals(sources)
+    if cache_hours:
+        try:
+            os.makedirs(work_dir, exist_ok=True)
+            with open(cache_path, "w", encoding="utf-8") as f:
+                json.dump({
+                    "sources_key": key,
+                    "threshold": KNOWN_INTERVAL_THRESHOLD,
+                    "ts": time.time(),
+                    "intervals": intervals,
+                }, f, ensure_ascii=False)
+        except Exception:  # noqa: BLE001
+            pass
     return intervals
 
 
@@ -145,9 +246,16 @@ def jmdict_alt_forms(lemma):
     return forms
 
 
-def load_jpdb_priority():
+def load_jpdb_priority(path):
+    """Optional frequency ranking. Missing/empty path → empty map (ranking then
+    falls back to source order, which is fine)."""
     priority = {}
-    with open(JPDB_CSV, encoding="utf-8") as f:
+    if not path or not os.path.exists(path):
+        if path:
+            print(f"  JPDB priority CSV not found at {path} — ranking by source order.",
+                  file=sys.stderr)
+        return priority
+    with open(path, encoding="utf-8") as f:
         for i, line in enumerate(f):
             if i == 0:
                 continue
@@ -182,6 +290,8 @@ def anki_request(action, **params):
 
 
 def existing_wordforms_in_deck():
+    if not DEDUPE_DECKS_QUERY:  # no decks configured — skip dedupe rather than match all
+        return set()
     note_ids = anki_request("findNotes", query=DEDUPE_DECKS_QUERY)
     if not note_ids:
         return set()
@@ -315,15 +425,35 @@ def main():
     ap.add_argument("--source-url", default="")
     ap.add_argument("--manifest", help="JSON array of {transcript, source_id, source_url}.")
     ap.add_argument("--output-dir", help="Directory to write per-source candidate JSON when --manifest is used.")
+    ap.add_argument("--refresh-known", action="store_true",
+                    help="Force a rescan of the known-word set, ignoring the cache.")
     args = ap.parse_args()
 
     if not args.manifest and not args.transcript:
         ap.error("either --transcript or --manifest is required")
 
+    # Pull per-user setup and publish it to the module globals the helpers read.
+    global ANKICONNECT, MAIN_DECK, DEFERRED_DECK, DEDUPE_DECKS_QUERY
+    global ANKI_NOTE_FIELD, KNOWN_INTERVAL_THRESHOLD
+    cfg = load_config()
+    ANKICONNECT = cfg["anki_connect_url"]
+    MAIN_DECK = deck_main(cfg)
+    DEFERRED_DECK = deck_deferred(cfg)
+    ANKI_NOTE_FIELD = cfg["field_map"].get("word") or "wordForm"
+    KNOWN_INTERVAL_THRESHOLD = cfg["known_words"].get("interval_threshold", 21)
+    dedupe_decks = sorted({MAIN_DECK, DEFERRED_DECK} - {""})
+    DEDUPE_DECKS_QUERY = (
+        "(" + " OR ".join(f'deck:"{d}"' for d in dedupe_decks) + ")"
+        if dedupe_decks else ""
+    )
+
     # Load shared state once.
-    intervals = load_morph_intervals()
+    intervals = get_known_intervals(cfg, force_refresh=args.refresh_known)
+    print(f"  known lemmas (interval >= {KNOWN_INTERVAL_THRESHOLD}): "
+          f"{sum(1 for v in intervals.values() if v >= KNOWN_INTERVAL_THRESHOLD)} "
+          f"of {len(intervals)} seen", file=sys.stderr)
     mature_stems = load_mature_kanji_stems(intervals)
-    priority = load_jpdb_priority()
+    priority = load_jpdb_priority(cfg.get("jpdb_priority_csv"))
     existing = existing_wordforms_in_deck()
 
     if args.manifest:

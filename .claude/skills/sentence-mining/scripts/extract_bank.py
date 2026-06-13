@@ -301,10 +301,31 @@ def extract_bank(apkg_path: Path, out_dir: Path, sample_size: int = 30) -> dict:
 
 
 def main():
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from _config import load_config
+
+    cfg = load_config(required=False) or {}
+    banks_cfg = cfg.get("banks", {}) if cfg else {}
+    default_out = banks_cfg.get("index_dir") or str(
+        Path.home() / "Downloads/sentence-mining/banks/index"
+    )
+    default_src = banks_cfg.get("source_dir") or ""
+
     ap = argparse.ArgumentParser()
-    ap.add_argument("apkg", help=".apkg file or directory of .apkg files")
-    ap.add_argument("--out-dir", default=str(Path.home() / "Downloads/sentence-mining/banks/index"))
+    ap.add_argument(
+        "apkg",
+        nargs="?",
+        default=default_src,
+        help=".apkg file or directory of .apkg files (defaults to config.banks.source_dir)",
+    )
+    ap.add_argument("--out-dir", default=default_out)
     args = ap.parse_args()
+
+    if not args.apkg:
+        sys.exit(
+            "No .apkg path given and config.banks.source_dir is empty.\n"
+            "Pass a path or set it via `/sentence-mining setup`."
+        )
 
     apkg_arg = Path(args.apkg).expanduser()
     out_dir = Path(args.out_dir).expanduser()

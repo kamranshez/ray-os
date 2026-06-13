@@ -26,7 +26,7 @@ Output JSON: same shape as analyze.py's candidates list, so downstream pipeline 
         "reading": "",
         "sentence": "...",
         "i_level": "i1" | "in" | "i?",
-        "deck": "Ray's Sentence Cards",
+        "deck": "<config.decks.main>",
         "wordForm": "同期",
         "existing_audio":  "<abs path to extracted media>",
         "existing_image":  "<abs path or empty>",
@@ -46,11 +46,17 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 from pathlib import Path
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _config import load_config, deck_main
+
 DEFAULT_INDEX = Path.home() / "Downloads/sentence-mining/banks/index"
+# Set from config in main(); the deck new bank cards land in.
+MAIN_DECK = ""
 
 # Sentence-length sweet spot for review cards.
 LEN_SWEET = (15, 50)
@@ -121,7 +127,7 @@ def search_word(word: str, banks: list[dict], top: int) -> list[dict]:
             "reading": note.get("reading", ""),
             "sentence": note["sentence"],
             "i_level": "i?",                        # bank mode skips morph diff
-            "deck": "Ray's Sentence Cards",
+            "deck": MAIN_DECK,
             "existing_audio": audio_path,
             "existing_image": image_path,
             "bank_id": bank["bank_id"],
@@ -139,10 +145,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--words", help="Comma-separated target words")
     ap.add_argument("--words-file", help="File with one word per line")
-    ap.add_argument("--index-dir", default=str(DEFAULT_INDEX))
+    ap.add_argument("--index-dir", default=None,
+                    help="Override config.banks.index_dir")
     ap.add_argument("--top-per-word", type=int, default=3)
     ap.add_argument("--output", help="Write candidates JSON here", default=None)
     args = ap.parse_args()
+
+    global MAIN_DECK
+    cfg = load_config()
+    MAIN_DECK = deck_main(cfg)
+    index_dir = args.index_dir or cfg["banks"].get("index_dir") or str(DEFAULT_INDEX)
 
     words: list[str] = []
     if args.words:
@@ -160,7 +172,7 @@ def main():
     if not words:
         sys.exit("No words. Pass --words 'a,b,c' or --words-file path")
 
-    banks = load_indexes(Path(args.index_dir).expanduser())
+    banks = load_indexes(Path(index_dir).expanduser())
 
     bank_summary = ", ".join(f"{b['bank_id']}({len(b['notes'])})" for b in banks)
     print(f"Loaded {len(banks)} banks: {bank_summary}", file=sys.stderr)
