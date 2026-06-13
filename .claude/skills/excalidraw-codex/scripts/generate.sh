@@ -30,6 +30,7 @@ PROMPT=""
 OUT_DIR=""
 COUNT=5
 ASPECT="16:9"
+BASENAME="excalidraw"
 USE_DEFAULT_REFS=1
 REFS=()
 
@@ -39,6 +40,7 @@ while [[ $# -gt 0 ]]; do
     -o|--output) OUT_DIR="$2"; shift 2 ;;
     -n|--count)  COUNT="$2";  shift 2 ;;
     -a|--aspect) ASPECT="$2"; shift 2 ;;
+    -x|--name)   BASENAME="$2"; shift 2 ;;
     -r|--ref)    REFS+=("$2"); shift 2 ;;
     --default-refs) USE_DEFAULT_REFS=1; shift ;;
     --no-default-refs) USE_DEFAULT_REFS=0; shift ;;
@@ -77,10 +79,11 @@ hand-drawn excalidraw aesthetic — do NOT reuse their subject matter, diagrams,
 labels, or composition. Your image's subject is defined entirely by the Image
 content section below."
 else
-  STYLE_BLOCK="Excalidraw hand-drawn aesthetic: sketchy black outlines on a pure
-white background, slight imperfect lines, handwritten-style labels, soft accent
-colors only. When people or avatars are needed, draw a small cute light-blue
-robot character (round head, antenna, simple smiling face, two short arms)."
+  STYLE_BLOCK="Excalidraw hand-drawn aesthetic in DARK MODE: chalk-style off-white
+sketchy outlines on a near-black charcoal background (#0E1116), slight imperfect
+lines, handwritten-style light labels, soft glowing accent colors only. When
+people or avatars are needed, draw a small cute light-blue robot character (round
+head, antenna, glowing blue eyes, simple smiling face, two short arms)."
 fi
 
 WRAPPED_PROMPT=$(cat <<EOF
@@ -90,8 +93,8 @@ single turn to produce ${COUNT} distinct variations of the image described below
 
 ${STYLE_BLOCK}
 
-Aspect ratio: ${ASPECT}. Background: pure white #FFFFFF — no gradients, no
-textures. After all images are generated, your final message should just list
+Aspect ratio: ${ASPECT}. Background: near-black dark charcoal #0E1116 (dark mode)
+— solid, no gradients, no textures. After all images are generated, your final message should just list
 the saved file paths under \$CODEX_HOME/generated_images/<this-session>/.
 
 Image content (verbatim, do not summarize):
@@ -119,10 +122,10 @@ if [[ ! -d "$SESSION_DIR" ]]; then
   exit 1
 fi
 
-# Copy each PNG into OUT_DIR with sequential kebab-case names, no overwrite.
+# Copy each PNG into OUT_DIR as "<BASENAME>-<N>.png", no overwrite.
 next_index() {
   local i=1
-  while [[ -e "$OUT_DIR/excalidraw_${i}.png" ]]; do i=$((i+1)); done
+  while [[ -e "$OUT_DIR/${BASENAME}-${i}.png" ]]; do i=$((i+1)); done
   echo "$i"
 }
 
@@ -130,7 +133,7 @@ COPIED=0
 for src in "$SESSION_DIR"/*.png; do
   [[ -f "$src" ]] || continue
   idx=$(next_index)
-  dst="$OUT_DIR/excalidraw_${idx}.png"
+  dst="$OUT_DIR/${BASENAME}-${idx}.png"
   cp "$src" "$dst"
   echo "$dst"
   COPIED=$((COPIED+1))

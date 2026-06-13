@@ -14,7 +14,7 @@ const DEFAULT_SYSTEM_PROMPT = `Generate an Excalidraw-style explanation image ma
 
 IMPORTANT: Use the EXACT cute light blue robot character shown in the reference images for any people, avatars, or characters. Copy the robot design directly from the references - it's a friendly light blue robot with a rounded head, glowing blue eyes, and a small screen on its chest.
 
-Match the Excalidraw aesthetic from the references: white/cream background, hand-drawn sketch lines, soft color palette, annotations and labels, arrows showing flow. Use split comparison layouts when appropriate.`;
+Match the Excalidraw aesthetic from the references: DARK MODE — a near-black charcoal background (#0E1116), chalk-style off-white hand-drawn sketch lines, soft glowing accent color palette, light annotations and labels, arrows showing flow. Use split comparison layouts when appropriate.`;
 
 const SCRIPT_DIR = path.dirname(__filename);
 const SKILL_DIR = path.dirname(SCRIPT_DIR);
@@ -60,15 +60,17 @@ function getDefaultReferences(): string[] {
     .map((f) => path.join(ASSETS_DIR, f));
 }
 
-function findNextAvailableIndex(outputDir: string): number {
-  // Find the highest existing excalidraw_N.png and return N+1
+function findNextAvailableIndex(outputDir: string, basename: string): number {
+  // Find the highest existing <basename>-N.png and return N+1
   if (!fs.existsSync(outputDir)) {
     return 1;
   }
+  const escaped = basename.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const re = new RegExp(`^${escaped}-(\\d+)\\.png$`);
   const files = fs.readdirSync(outputDir);
   let maxIndex = 0;
   for (const file of files) {
-    const match = file.match(/^excalidraw_(\d+)\.png$/);
+    const match = file.match(re);
     if (match) {
       const index = parseInt(match[1], 10);
       if (index > maxIndex) {
@@ -156,6 +158,7 @@ async function main() {
   let systemPrompt = DEFAULT_SYSTEM_PROMPT;
   let aspectRatio = "16:9";
   let imageSize = "2K";
+  let basename = "excalidraw";
 
   const VALID_ASPECT_RATIOS = ["21:9", "16:9", "4:3", "3:2", "1:1", "9:16", "3:4", "2:3", "5:4", "4:5"];
 
@@ -181,6 +184,8 @@ async function main() {
       }
     } else if (arg === "--image-size") {
       imageSize = args[++i];
+    } else if (arg === "-x" || arg === "--name") {
+      basename = args[++i];
     } else if (!arg.startsWith("-")) {
       prompt = arg;
     }
@@ -227,7 +232,7 @@ async function main() {
   const fullPrompt = `${systemPrompt}\n\nContent to visualize:\n${prompt}`;
 
   // Find starting index to avoid overwrites
-  const startIndex = findNextAvailableIndex(outputDir);
+  const startIndex = findNextAvailableIndex(outputDir, basename);
   if (startIndex > 1) {
     console.log(`Found existing images, starting at index ${startIndex}`);
   }
@@ -266,7 +271,7 @@ async function main() {
   for (const result of results) {
     if ("image" in result && result.image) {
       const fileIndex = startIndex + result.index;
-      const outputPath = path.join(outputDir, `excalidraw_${fileIndex}.png`);
+      const outputPath = path.join(outputDir, `${basename}-${fileIndex}.png`);
       fs.writeFileSync(outputPath, result.image);
       console.log(`  Saved: ${outputPath}`);
       successCount++;

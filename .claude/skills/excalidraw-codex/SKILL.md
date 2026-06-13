@@ -13,6 +13,14 @@ For the **Gemini API** path (uses `gemini-3-pro-image-preview` via `GEMINI_API_K
 
 **ALWAYS pass the entire raw content verbatim as the prompt.** Never summarize, paraphrase, or condense the content. Whether it's a single section or a whole file, the full text goes into the wrapper as-is. This gives the model the richest context to produce accurate visuals. The wrapper script wraps the verbatim text with headless directives and aesthetic guidance — do not pre-wrap or rewrite it yourself.
 
+## Output Location — CRITICAL
+
+**All generated images go into the single vault-root `images/` folder — flat, no per-note subfolders.** This matches the vault's image convention (see the repo CLAUDE.md). Concretely, for this vault: `-o /Users/ray/Desktop/ray-os/images`.
+
+- Name every set with a **globally-unique kebab-case slug** via `-x <slug>` so files never collide in the flat folder. Include the class/note in the slug, e.g. `-x loopy-intro-loop-stack` → produces `loopy-intro-loop-stack-1.png … -5.png`.
+- Embeds are **filename-only** wikilinks: `![[loopy-intro-loop-stack-1.png]]` (no path). Because every name is unique and the folder is flat, these resolve from any note and survive note moves.
+- Do **not** create `images/<section>/` subfolders. The wrapper handles this automatically once you pass `-o <vault>/images -x <slug>`.
+
 ## Semantic Chunking
 
 Don't chunk solely by `## ` headings. Look for:
@@ -42,13 +50,14 @@ Use AskUserQuestion with options:
 For a single section:
 
 1. Get the section content from the user.
-2. Create a descriptive subfolder name (kebab-case from section title).
-3. Run the wrapper, passing the **entire section content verbatim** as the `-p` prompt (never summarize):
+2. Pick a globally-unique kebab-case slug (class + note + section, e.g. `loopy-intro-loop-stack`).
+3. Run the wrapper, passing the **entire section content verbatim** as the `-p` prompt (never summarize), outputting into the vault-root `images/` folder:
 
 ```bash
 .claude/skills/excalidraw-codex/scripts/generate.sh \
   -p "<entire section content verbatim>" \
-  -o "/path/to/images/<section-name>" \
+  -o "/Users/ray/Desktop/ray-os/images" \
+  -x "<unique-slug>" \
   -n 5
 ```
 
@@ -61,7 +70,8 @@ For an entire markdown file:
 1. Read the file and split into semantic chunks (see "Semantic Chunking").
 2. **Process up to 5 chunks in parallel.** The Codex CLI's `image_gen` tool serializes per-session, so to get throughput we launch separate `codex exec` calls — each its own session UUID.
 3. For each chunk, run the wrapper in a **background Bash task** (`run_in_background: true`):
-   - Output dir: `images/<chunk-slug>/`
+   - Output dir: the vault-root `images/` folder (`-o /Users/ray/Desktop/ray-os/images`)
+   - Name: `-x <unique-chunk-slug>` (class + note + chunk, so files never collide)
    - Prompt: the **entire chunk content verbatim**
 4. Wait for the whole batch, then add all embeds.
 
@@ -72,7 +82,8 @@ For an entire markdown file:
 Run this bash command (timeout 900000ms):
 /Users/ray/Desktop/ray-os/.claude/skills/excalidraw-codex/scripts/generate.sh \
   -p "<entire chunk content verbatim>" \
-  -o "/path/to/images/<chunk-slug>" \
+  -o "/Users/ray/Desktop/ray-os/images" \
+  -x "<unique-chunk-slug>" \
   -n 5
 ```
 
@@ -84,6 +95,7 @@ generate.sh -p "<verbatim prompt>" -o /abs/out/dir [options]
 
 **Options:**
 - `-n, --count` — Number of variations per call (default 5). Codex produces N images in a single session.
+- `-x, --name <slug>` — Basename for saved files (default `excalidraw`). Output is `<slug>-1.png`, `<slug>-2.png`, … Always pass a globally-unique slug so files don't collide in the flat vault-root `images/` folder.
 - `-a, --aspect` — Aspect ratio hint embedded in the prompt (default `16:9`). Codex doesn't expose ratio flags directly; the wrapper inlines this into the directive.
 - `-r, --ref <file>` — Add an extra reference image. Repeatable. The wrapper auto-attaches every `reference*.png` from `assets/` unless `--no-default-refs` is passed.
 - `--no-default-refs` — Skip the bundled `assets/reference*.png` images (use only `-r` files, or none).
@@ -93,11 +105,11 @@ generate.sh -p "<verbatim prompt>" -o /abs/out/dir [options]
 - Auto-attaches `assets/reference1.png` … `reference4.png` so the model copies the pencil-textured robot and sketchy aesthetic. The wrapper text explicitly tells codex the refs are **STYLE EXAMPLES ONLY** — do not reuse their subject matter, labels, or composition. This prevents the prior failure mode where codex pattern-matched the refs' diagrams (MCP/agent boxes) and ignored the actual prompt content.
 - Prompt is passed via stdin (codex's `-i` flag is variadic and would otherwise eat a positional prompt as another image path).
 - Prompt is wrapped with: "Do not load skills, do not read files, do not copy outputs — call `image_gen` N times in this single turn and list the saved paths." This is necessary because, left alone, the Codex agent auto-loads `~/.codex/skills/imagegen` and burns ~150k tokens reading skill markdown and copying outputs around.
-- Pure white background and excalidraw aesthetic directives are inlined in the wrapper prompt.
+- Near-black dark-charcoal (#0E1116) background and excalidraw aesthetic directives are inlined in the wrapper prompt.
 
 **Where the images land:**
 - Codex writes each PNG to `~/.codex/generated_images/<thread_id>/ig_<hash>.png` first.
-- The wrapper reads the `thread_id` from the first JSONL event, then copies every PNG from that session dir into your `-o` directory as `excalidraw_1.png`, `excalidraw_2.png`, … (auto-incremented; no overwrites).
+- The wrapper reads the `thread_id` from the first JSONL event, then copies every PNG from that session dir into your `-o` directory as `<slug>-1.png`, `<slug>-2.png`, … (where `<slug>` is the `-x` value; auto-incremented; no overwrites).
 
 ## X Article Thumbnails
 
@@ -106,7 +118,8 @@ For X/Twitter article cover images use `-a 21:9`:
 ```bash
 .claude/skills/excalidraw-codex/scripts/generate.sh \
   -p "<thumbnail prompt with bold 3-5 word text>" \
-  -o "/path/to/images/<slug>" \
+  -o "/Users/ray/Desktop/ray-os/images" \
+  -x "<unique-slug>" \
   -n 5 -a 21:9
 ```
 
@@ -116,21 +129,21 @@ For vibrant brand-colored thumbnails (not the white-background look), the defaul
 
 After generation completes, add **all N images** to the markdown file under the relevant section. The user picks their favorite(s) later.
 
-**Embed format (Obsidian):**
+**Embed format (Obsidian) — filename-only, no path:**
 ```markdown
-![[images/section-name/excalidraw_1.png]]
-![[images/section-name/excalidraw_2.png]]
-![[images/section-name/excalidraw_3.png]]
-![[images/section-name/excalidraw_4.png]]
-![[images/section-name/excalidraw_5.png]]
+![[<slug>-1.png]]
+![[<slug>-2.png]]
+![[<slug>-3.png]]
+![[<slug>-4.png]]
+![[<slug>-5.png]]
 ```
 
 Place embeds at the end of each section, before the next `---` or `##` heading.
 
 ## Important Notes
 
-- **No overwrites:** wrapper increments `excalidraw_N.png` to the next free number.
-- **Subfolders:** always use a descriptive subfolder per section (`images/core-insight/`, `images/kitchen-sink/`).
+- **No overwrites:** wrapper increments `<slug>-N.png` to the next free number.
+- **Flat vault-root folder:** all images land directly in the vault-root `images/` folder — never per-note subfolders. Uniqueness comes from the `-x` slug, not from a folder path.
 - **Embed every variation:** drop all N into the markdown so the user can pick.
 - **Timeout:** allow 15 minutes per call (use `timeout: 900000` on Bash invocations).
 - **Aspect ratio is advisory only on this path.** Codex's `image_gen` tool decides the final dimensions — output tends to land near 16:9 (~1672×941). If you need pixel-exact ratios, prefer [[excalidraw-gemini]] which has true `-a` control.
@@ -142,4 +155,4 @@ Place embeds at the end of each section, before the next `---` or `##` heading.
 
 ## Bundled Assets
 
-The `assets/` folder contains reference images (reference1-4.png) that define the excalidraw style. The wrapper attaches them automatically on every call.
+The `assets/` folder contains reference images (reference1-4.png) that define the excalidraw style — these are now **dark-mode** examples (extracted from the Loops deck). The wrapper attaches them automatically on every call. All 8 source dark images live in `assets/dark-source/`; the previous white-background refs are preserved in `assets/white-backup/`.
