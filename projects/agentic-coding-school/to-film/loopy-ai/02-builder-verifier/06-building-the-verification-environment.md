@@ -125,7 +125,11 @@ So you move. When the check needs eyes on a screen and hands on a window, you ru
 This is the exact same decision as everything else in this segment, just one level up. Perceive and act come before the prompt. The runtime is the first thing that either grants those abilities or denies them. Choose it the way you'd choose any other cable: by asking what the loop has to see and touch.
 
 [IMAGE: dark canvas, split panel. Left: a terminal window labelled "Claude Code" with a thick line blocking it from reaching a graphical app window, caption "blind to the GUI". Right: a "Claude Desktop / Codex" window with eyes and a cursor hand reaching into the same graphical app, caption "can see and click". A divider down the middle.]
-![[loopy-architecting-the-loop-runtime-cli-vs-gui.png]]
+![[loopy-building-the-verification-environment-runtime-cli-vs-gui-1.png]]
+![[loopy-building-the-verification-environment-runtime-cli-vs-gui-2.png]]
+![[loopy-building-the-verification-environment-runtime-cli-vs-gui-3.png]]
+![[loopy-building-the-verification-environment-runtime-cli-vs-gui-4.png]]
+![[loopy-building-the-verification-environment-runtime-cli-vs-gui-5.png]]
 
 ---
 
@@ -147,7 +151,11 @@ That diff is the verifier. A clean match passes. A drift fails, and the score is
 And notice the order. That loop only exists because you wired the mic and the speaker first. Pull the speaker and there's no clip to transcribe. Pull the capture and there's no transcript to diff. The body comes before the check, and the check comes before the prompt. Same rule, all the way down.
 
 [IMAGE: dark canvas, a closed loop drawn as a ring of stages. Known clip -> speaker (sound waves) -> dictation app (listening) -> transcript text -> diff against ground-truth text -> pass/fail back to start. Label the speaker and mic as the wired-in hardware, caption "the body makes the verifier possible".]
-![[loopy-architecting-the-loop-dictation-sensing-rig.png]]
+![[loopy-building-the-verification-environment-dictation-sensing-rig-1.png]]
+![[loopy-building-the-verification-environment-dictation-sensing-rig-2.png]]
+![[loopy-building-the-verification-environment-dictation-sensing-rig-3.png]]
+![[loopy-building-the-verification-environment-dictation-sensing-rig-4.png]]
+![[loopy-building-the-verification-environment-dictation-sensing-rig-5.png]]
 
 ---
 

@@ -28,7 +28,11 @@ This is what I mean by a *soft artifact*. The work product is correct or incorre
 
 [IMAGE: dark canvas, hand-drawn. Two panels side by side. LEFT panel labeled "TEXT", a code block with a bold green checkmark and a little terminal line reading "exit 0" beneath it. RIGHT panel labeled "IMAGE", a framed picture with a large hand-drawn question mark over it and a crossed-out terminal reading "exit ???" beneath it. A thin divider down the middle. Caption underneath: "the diff comes free on the left. on the right you build it."]
 
-![[loopy-verifying-what-you-cant-diff-text-has-diff-image-has-none.png]]
+![[loopy-verifying-what-you-cant-diff-text-has-diff-image-has-none-1.png]]
+![[loopy-verifying-what-you-cant-diff-text-has-diff-image-has-none-2.png]]
+![[loopy-verifying-what-you-cant-diff-text-has-diff-image-has-none-3.png]]
+![[loopy-verifying-what-you-cant-diff-text-has-diff-image-has-none-4.png]]
+![[loopy-verifying-what-you-cant-diff-text-has-diff-image-has-none-5.png]]
 
 And without a check, you don't have a loop. You have a generator. You press the button, you get an output, you accept it because you're tired of pressing the button. That's not L2. That's a slot machine.
 
@@ -67,7 +71,11 @@ This is the single most important habit for soft artifacts. **Your taste feels h
 
 [IMAGE: dark canvas, hand-drawn. On the left, a small file icon titled "rubric.md" with four short checklist lines visible: "dark canvas?", "hand-drawn stroke?", "caption legible?", "one concept?". A bold equals sign in the middle. On the right, the classic test-suite shape: a stack of green and red dots beside lines labeled "test_1 ... test_4". Caption underneath: "four lines of taste = a test suite for a thing with no tests."]
 
-![[loopy-verifying-what-you-cant-diff-rubric-is-the-verifier.png]]
+![[loopy-verifying-what-you-cant-diff-rubric-is-the-verifier-1.png]]
+![[loopy-verifying-what-you-cant-diff-rubric-is-the-verifier-2.png]]
+![[loopy-verifying-what-you-cant-diff-rubric-is-the-verifier-3.png]]
+![[loopy-verifying-what-you-cant-diff-rubric-is-the-verifier-4.png]]
+![[loopy-verifying-what-you-cant-diff-rubric-is-the-verifier-5.png]]
 
 ---
 
@@ -85,7 +93,11 @@ And notice what the judge gives you that your own eyeballs didn't: a *written* r
 
 [IMAGE: dark canvas, hand-drawn. A ring loop. Top node "GENERATE (prompt → image)". Arrow clockwise to right node "JUDGE vs rubric". From JUDGE, two arrows: a short one going down-and-out to a box "score ≥ bar → SHIP" with an exit door, and a longer one curving back to the top labeled "below bar → critique". The return arrow is annotated with a small sticky note "white bg / caption clipped" being carried back into GENERATE. Caption underneath: "the critique is the state the next generation reads."]
 
-![[loopy-verifying-what-you-cant-diff-vision-judge-loop.png]]
+![[loopy-verifying-what-you-cant-diff-vision-judge-loop-1.png]]
+![[loopy-verifying-what-you-cant-diff-vision-judge-loop-2.png]]
+![[loopy-verifying-what-you-cant-diff-vision-judge-loop-3.png]]
+![[loopy-verifying-what-you-cant-diff-vision-judge-loop-4.png]]
+![[loopy-verifying-what-you-cant-diff-vision-judge-loop-5.png]]
 
 ---
 
@@ -101,7 +113,11 @@ This is the closest a soft artifact ever gets to a real diff. You're not compari
 
 [IMAGE: dark canvas, hand-drawn. Three boxes in a row. LEFT "PROMPT (builder writes)" → arrow → MIDDLE "generated image". Below MIDDLE, a separate framed "REFERENCE" image. A double-headed compare bracket linking generated and reference, labeled "gap: strokes too thin, color too hot". A feedback arrow curving from the gap label all the way back to the PROMPT box. Caption underneath: "compare to a target, feed the gap back, regenerate."]
 
-![[loopy-verifying-what-you-cant-diff-builder-prompt-compare-reference.png]]
+![[loopy-verifying-what-you-cant-diff-builder-prompt-compare-reference-1.png]]
+![[loopy-verifying-what-you-cant-diff-builder-prompt-compare-reference-2.png]]
+![[loopy-verifying-what-you-cant-diff-builder-prompt-compare-reference-3.png]]
+![[loopy-verifying-what-you-cant-diff-builder-prompt-compare-reference-4.png]]
+![[loopy-verifying-what-you-cant-diff-builder-prompt-compare-reference-5.png]]
 
 ---
 

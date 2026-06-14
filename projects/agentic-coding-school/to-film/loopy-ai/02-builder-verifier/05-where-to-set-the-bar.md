@@ -26,7 +26,11 @@ So an adversarial loop with no calibrated bar does one of two things. It runs fo
 
 [IMAGE: dark canvas, hand-drawn. A loop arrow circling between a box labeled "BUILD" and a box labeled "ATTACK". On the right, a tall stack of sticky notes spilling endlessly downward labeled "findings", each one smaller and fainter than the last, fading into the dark. No exit arrow anywhere. Caption underneath: "no bar, no exit".]
 
-![[images/where-to-set-the-bar/no-bar-no-exit.png]]
+![[loopy-where-to-set-the-bar-no-bar-no-exit-1.png]]
+![[loopy-where-to-set-the-bar-no-bar-no-exit-2.png]]
+![[loopy-where-to-set-the-bar-no-bar-no-exit-3.png]]
+![[loopy-where-to-set-the-bar-no-bar-no-exit-4.png]]
+![[loopy-where-to-set-the-bar-no-bar-no-exit-5.png]]
 
 ---
 
@@ -56,7 +60,11 @@ Use them together. Threshold for quality, cap for safety, whichever trips first 
 
 [IMAGE: dark canvas, hand-drawn. Two gates side by side feeding into one exit door. Left gate labeled "SEVERITY THRESHOLD — no med/high left", a small funnel below it dropping "low" findings into a tray labeled "logged, not gated". Right gate labeled "ROUND CAP — max 3". A bold arrow from "whichever trips first" pointing through the single exit door labeled "SHIP". Caption: "quality gate + safety gate".]
 
-![[images/where-to-set-the-bar/two-gates.png]]
+![[loopy-where-to-set-the-bar-two-gates-1.png]]
+![[loopy-where-to-set-the-bar-two-gates-2.png]]
+![[loopy-where-to-set-the-bar-two-gates-3.png]]
+![[loopy-where-to-set-the-bar-two-gates-4.png]]
+![[loopy-where-to-set-the-bar-two-gates-5.png]]
 
 ---
 
@@ -80,7 +88,11 @@ An explicit Terminate is the whole difference between a loop that converges and 
 
 [IMAGE: dark canvas, hand-drawn. The five-component spine as five linked boxes left to right: Trigger, Work, Check, Terminate, State. The "Terminate" box is circled in a bright accent stroke and pulled forward, with two inputs feeding it: a thermometer icon labeled "severity threshold" and a counter icon labeled "round cap", joined by a small "OR" symbol. Caption: "Terminate, made explicit".]
 
-![[images/where-to-set-the-bar/terminate-component.png]]
+![[loopy-where-to-set-the-bar-terminate-component-1.png]]
+![[loopy-where-to-set-the-bar-terminate-component-2.png]]
+![[loopy-where-to-set-the-bar-terminate-component-3.png]]
+![[loopy-where-to-set-the-bar-terminate-component-4.png]]
+![[loopy-where-to-set-the-bar-terminate-component-5.png]]
 
 ---
 

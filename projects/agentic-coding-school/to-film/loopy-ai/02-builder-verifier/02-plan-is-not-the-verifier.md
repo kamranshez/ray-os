@@ -30,7 +30,11 @@ The build learns. The plan doesn't. By the time the loop is halfway done, the pl
 
 [IMAGE: dark canvas, hand-drawn. A staircase climbing left to right, each step labeled with something the build discovered: "lib won't do it", "schema wrong", "extra edge case", "renamed the flow". A small figure climbing the steps upward labeled "BUILD". Down at the bottom of the stairs, a heavy anchor labeled "PLAN" with a taut rope pulling the climbing figure backward toward step one. Caption underneath, sketch font: "the plan only knows step one"]
 
-![[plan-is-not-the-verifier-stale-anchor.png]]
+![[loopy-plan-is-not-the-verifier-stale-anchor-1.png]]
+![[loopy-plan-is-not-the-verifier-stale-anchor-2.png]]
+![[loopy-plan-is-not-the-verifier-stale-anchor-3.png]]
+![[loopy-plan-is-not-the-verifier-stale-anchor-4.png]]
+![[loopy-plan-is-not-the-verifier-stale-anchor-5.png]]
 
 ---
 
@@ -66,7 +70,11 @@ So the move isn't "ignore the plan." It's separate the two. Keep the intent, bec
 
 [IMAGE: dark canvas, hand-drawn. A single document outline down the middle, splitting into two columns. Left column, drawn solid and bright, headed "INTENT (durable)" with items: "what the user needs", "hard constraints", "budget / deadline". Right column, drawn faint and dashed like it's dissolving, headed "IMPLEMENTATION (disposable)" with items: "use library X", "one table", "these 3 steps". A bold check mark pointing at the left column, a small "let it flex" note by the right. Caption: "verify the what, not the how"]
 
-![[plan-is-not-the-verifier-durable-vs-disposable.png]]
+![[loopy-plan-is-not-the-verifier-durable-vs-disposable-1.png]]
+![[loopy-plan-is-not-the-verifier-durable-vs-disposable-2.png]]
+![[loopy-plan-is-not-the-verifier-durable-vs-disposable-3.png]]
+![[loopy-plan-is-not-the-verifier-durable-vs-disposable-4.png]]
+![[loopy-plan-is-not-the-verifier-durable-vs-disposable-5.png]]
 
 ---
 
@@ -106,7 +114,11 @@ The fix is the same shape every time. Check points outward, at a signal the buil
 
 [IMAGE: dark canvas, hand-drawn. The five components in a row: TRIGGER, WORK, CHECK, TERMINATE, STATE. The STATE box has a small "plan, frozen at step one" label and a little ice/snowflake mark on it. A red arrow loops from CHECK back to STATE with an x over it. A green arrow runs from CHECK outward to a box off to the right labeled "CONSTRAINTS / USER FLOWS / REALITY". Caption: "Check points out, not back at frozen state"]
 
-![[plan-is-not-the-verifier-check-points-out.png]]
+![[loopy-plan-is-not-the-verifier-check-points-out-1.png]]
+![[loopy-plan-is-not-the-verifier-check-points-out-2.png]]
+![[loopy-plan-is-not-the-verifier-check-points-out-3.png]]
+![[loopy-plan-is-not-the-verifier-check-points-out-4.png]]
+![[loopy-plan-is-not-the-verifier-check-points-out-5.png]]
 
 ---
 
