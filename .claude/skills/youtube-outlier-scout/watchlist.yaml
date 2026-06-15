@@ -25,6 +25,7 @@ channels:
   - "@nateherk"
   - "@rileybrownai"
   - "@dylandavisAI"
+  - "@danny_why"  # auto-added 2026-06-15: 173k subs, 2 outliers (Claude Code/AI + faceless-YouTube niche)
 
 # Keywords for niche discovery (yt-dlp ytsearch)
 # Each keyword gets 20 results, filtered to last 24 hours
@@ -69,4 +70,19 @@ auto_add:
 
 # Channels the scout evaluated for auto-add but rejected, with the date + reason.
 # Prevents re-evaluating the same near-miss every run. Managed by the scout.
-auto_add_rejected: []
+auto_add_rejected:
+  - handle: "@OpenAI"
+    date: "2026-06-15"
+    reason: "official corporate channel (1.97M subs); clears bars mechanically but view variance makes outlier detection meaningless -- not a niche creator"
+  - handle: "@JulianGoldieSEO"
+    date: "2026-06-15"
+    reason: "400k subs, only 1 outlier in last 10 (needs 2)"
+  - handle: "@TechwithLucy"
+    date: "2026-06-15"
+    reason: "272k subs, 0 outliers in last 10 (needs 2)"
+  - handle: "@aivtuber2866"
+    date: "2026-06-15"
+    reason: "90k subs, 0 outliers in last 10 (needs 2); Japanese-language AI channel"
+  - handle: "@bridgemindai"
+    date: "2026-06-15"
+    reason: "85.8k subs, 0 outliers in last 10 (needs 2)"

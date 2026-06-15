@@ -2,73 +2,77 @@
 # Refresh with: /youtube-outlier-scout refresh-baselines
 # Note: medians computed over the last ~60 uploads per channel (recent-window
 # method) -- representative of current channel performance for outlier detection.
-last_refreshed: "2026-05-22"
+last_refreshed: "2026-06-15"
 
 channels:
   "@Chase-H-AI":
-    median: 40848
+    median: 34617
     video_count: 60
   "@RobShocks":
-    median: 17199
+    median: 17565
     video_count: 60
   "@mattpocockuk":
-    median: 55665
+    median: 60756
     video_count: 59
   "@MattPocockAI":
-    median: 3168
+    median: 3975
     video_count: 2
   "@intheworldofai":
-    median: 26178
+    median: 33228
     video_count: 60
   "@ColeMedin":
-    median: 26454
-    video_count: 60
+    median: 25144
+    video_count: 41
   "@nicksaraev":
-    median: 42157
+    median: 45527
     video_count: 60
   "@aarondfrancis":
-    median: 11741
+    median: 10133
     video_count: 60
   "@AgenticNolan":
-    median: 95
-    video_count: 49
+    median: 81
+    video_count: 59
   "@aiDotEngineer":
-    median: 8168
+    median: 5604
     video_count: 60
     note: "conference channel -- batches of talk uploads, wide view variance"
   "@BenAI92":
-    median: 22629
-    video_count: 59
+    median: 22651
+    video_count: 60
   "@briancasel":
-    median: 9856
-    video_count: 58
+    median: 9919
+    video_count: 59
   "@DavidOndrej":
-    median: 41022
+    median: 43249
     video_count: 60
   "@DevelopersDigest":
-    median: 13286
+    median: 10275
     video_count: 60
   "@Itssssss_Jack":
-    median: 50629
+    median: 45770
     video_count: 60
   "@jacobdietle":
-    median: 328
+    median: 334
     video_count: 18
   "@leonvanzyl":
-    median: 11271
-    video_count: 56
+    median: 11690
+    video_count: 60
   "@MarcinTeodoru":
-    median: 5182
-    video_count: 59
+    median: 4656
+    video_count: 60
   "@MetalSole":
-    median: 9621
-    video_count: 59
+    median: 9751
+    video_count: 60
   "@nateherk":
-    median: 107269
-    video_count: 50
+    median: 105096
+    video_count: 60
   "@rileybrownai":
-    median: 34727
+    median: 46271
     video_count: 59
   "@dylandavisAI":
-    median: 7769
+    median: 7118
     video_count: 60
+  "@danny_why":
+    median: 31791
+    video_count: 10
+    note: "auto-added 2026-06-15; median from 10-video quick pull, refine on next full refresh"
