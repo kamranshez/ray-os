@@ -1,13 +1,12 @@
 ---
 duration: "12-16 min"
 batch: 2
-order: 6
+order: 7
 batch_name: "Builder and Verifier"
 class: "loopy-ai"
 chapter: "Builder and Verifier"
 aliases: [building-the-verification-environment, architecting-the-loop]
 ---
-
 Before you write the prompt, you write the interface.
 
 Most loops that fail don't fail because the model is bad. They fail because the agent can't see the result of its own action, or can't act in the place the work actually lives. The model could be perfect and the loop still wouldn't close.

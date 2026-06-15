@@ -28,13 +28,7 @@ But here's the part people miss. The moment the builder starts working, the plan
 
 The build learns. The plan doesn't. By the time the loop is halfway done, the plan is the oldest, dumbest artifact in the room.
 
-[IMAGE: dark canvas, hand-drawn. A staircase climbing left to right, each step labeled with something the build discovered: "lib won't do it", "schema wrong", "extra edge case", "renamed the flow". A small figure climbing the steps upward labeled "BUILD". Down at the bottom of the stairs, a heavy anchor labeled "PLAN" with a taut rope pulling the climbing figure backward toward step one. Caption underneath, sketch font: "the plan only knows step one"]
-
-![[loopy-plan-is-not-the-verifier-stale-anchor-1.png]]
 ![[loopy-plan-is-not-the-verifier-stale-anchor-2.png]]
-![[loopy-plan-is-not-the-verifier-stale-anchor-3.png]]
-![[loopy-plan-is-not-the-verifier-stale-anchor-4.png]]
-![[loopy-plan-is-not-the-verifier-stale-anchor-5.png]]
 
 ---
 
@@ -101,43 +95,6 @@ So write the plan loose. Nail the intent: what the user needs, the constraints, 
 And if you want a record of what got built, the direction flips. The plan doesn't judge the build. The build updates the plan. When the loop discovers the real schema, it writes that back into the plan, so the document tracks reality instead of fighting it. The plan becomes a living log of what you learned, not a frozen contract you're in breach of.
 
 ---
-
-## Name it on the five components
-
-Map it onto the spine from the start of this chapter. Trigger, Work, Check, Terminate, State.
-
-This is a **Check** failure, and now you can say exactly what's wrong with it. The check got wired to **State**, specifically to the stalest piece of state in the whole loop.
-
-The plan is state. It's context the loop carried forward from iteration zero. And it's the one piece of state that never gets refreshed, because while the build updates everything around it, the original plan just sits there frozen at its most ignorant. Point your Check at it and you're grading today's work against the loop's first-draft memory of itself.
-
-The fix is the same shape every time. Check points outward, at a signal the build did not author and can't rewrite: a constraint, a user flow, reality. Never back at the frozen plan.
-
-[IMAGE: dark canvas, hand-drawn. The five components in a row: TRIGGER, WORK, CHECK, TERMINATE, STATE. The STATE box has a small "plan, frozen at step one" label and a little ice/snowflake mark on it. A red arrow loops from CHECK back to STATE with an x over it. A green arrow runs from CHECK outward to a box off to the right labeled "CONSTRAINTS / USER FLOWS / REALITY". Caption: "Check points out, not back at frozen state"]
-
-![[loopy-plan-is-not-the-verifier-check-points-out-1.png]]
-![[loopy-plan-is-not-the-verifier-check-points-out-2.png]]
-![[loopy-plan-is-not-the-verifier-check-points-out-3.png]]
-![[loopy-plan-is-not-the-verifier-check-points-out-4.png]]
-![[loopy-plan-is-not-the-verifier-check-points-out-5.png]]
-
----
-
-## Demo
-
-I'll make it concrete and let you watch the trap spring.
-
-1. Give an agent a small feature and a loose plan: "let users save notes, must persist across logins." The plan also carries one throwaway implementation guess, "store notes as a single JSON blob per user."
-2. Let it build. Partway through, the agent discovers the JSON-blob idea makes "find a note" painful, so it switches to a proper notes table. Good call. It diverged from the plan and the build got better.
-3. Now run the wrong verifier. Point a reviewer at the build and tell it to confirm the build matches the plan. Watch it flag the divergence as a defect: "spec says single JSON blob, implementation uses a table, reverting." It tears out the better design to satisfy the dumber plan.
-4. Reset. Run the right verifier instead. Don't mention the plan's implementation. Just walk the user flow: create a note, log out, log back in, the note is still there, search finds it. It passes. The thing the user actually needed works.
-5. Put the two runs side by side. Same build, same model. One verifier destroyed the best decision in the project. The other only ever asked whether the user got what they came for.
-
----
-
 ## Key Insight
 
 > Your plan is the most ignorant document in the project, because you wrote it before you did the work. Verify against the constraints and the user flow, never against the plan, or you'll revert everything the build taught you.
-
----
-
-Last video handed you the loop. This video tells you the one place you must never anchor the check: your own first guess. Aim it at what's durable, intent, flows, reality, and let the build outgrow the plan. Next we take the strongest model-based check and weaponize it, by pairing the creator with an attacker whose only job is to break the work.

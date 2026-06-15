@@ -7,9 +7,6 @@ class: loopy-ai
 chapter: Builder and Verifier
 aliases: [builder-verifier-loop]
 ---
-
-> ✅ RECORDED — transcript pending. This is L2, the first level on the climb, taught *through* the five components from the previous segment. Covered on camera: the pattern + separate-context verifier, what-to-verify-against menu (tests / rubric score / guidelines / user flows / plan), the GPT Image 2 slides example, the tic-tac-toe left-vs-right demo, multi-round adversarial review, severity caps, and the 19h / 300-user-flow run.
-
 ## Kernel (from the old stack walkthrough)
 
 Build. Test. On fail, fix. Test again. Loop until the bar is met.
@@ -28,12 +25,7 @@ The thing that makes L2 different from L1 is the *verifier*. L1 is the model dec
 
 [IMAGE: a build -> test -> on-fail-fix -> test-again loop around a single artifact, with an external verifier check gating the loop exit, the artifact converging to a quality bar]
 
-![[loopy-loop-stack-l2-builder-verifier-1.png]]
-![[loopy-loop-stack-l2-builder-verifier-2.png]]
-![[loopy-loop-stack-l2-builder-verifier-3.png]]
 ![[loopy-loop-stack-l2-builder-verifier-4.png]]
-![[loopy-loop-stack-l2-builder-verifier-5.png]]
-
 ## Map onto the five components (the spine for this segment)
 
 - **Trigger** — a manual run, or the previous artifact landing.

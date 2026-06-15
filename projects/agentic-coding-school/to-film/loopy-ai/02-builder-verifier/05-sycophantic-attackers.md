@@ -1,13 +1,12 @@
 ---
 duration: "10-14 min"
 batch: 2
-order: 4
+order: 5
 batch_name: "Builder and Verifier"
 class: "loopy-ai"
 chapter: "Builder and Verifier"
 aliases: [adversarial-reviewer-skill]
 ---
-
 Every skill that creates something needs a sibling skill whose only job is to attack what it made.
 
 Same model. Opposite prompt. One is told to build. The other is told that its job is rigour, not agreement. You run them in series, surface only the disagreements, and fix upstream.
@@ -27,14 +26,8 @@ So what do you do when reality won't grade the work for you?
 The naive answer is the one everybody reaches for first. Agent writes a PRD. Same agent reviews the PRD. Says "looks good." Ship it.
 
 You already know why that fails. The model is eager to please you. Ask it whether the thing it just wrote is good, and the most fluent next token is "yes." It's not lying. It just has no reason to disagree with itself.
-Source: https://x.com/systematicls/status/2028814227004395561
 
-[IMAGE: dark canvas, a single head looking at a sheet of paper labeled "PRD" that it just wrote, a speech bubble saying "looks good to me", the whole thing circled and crossed out, labeled "vibes"]
-![[loopy-adversarial-reviewer-skill-self-review-vibes-1.png]]
-![[loopy-adversarial-reviewer-skill-self-review-vibes-2.png]]
-![[loopy-adversarial-reviewer-skill-self-review-vibes-3.png]]
-![[loopy-adversarial-reviewer-skill-self-review-vibes-4.png]]
-![[loopy-adversarial-reviewer-skill-self-review-vibes-5.png]]
+Source: https://x.com/systematicls/status/2028814227004395561
 
 ---
 

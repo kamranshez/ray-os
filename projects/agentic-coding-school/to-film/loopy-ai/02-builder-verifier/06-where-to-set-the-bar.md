@@ -1,7 +1,7 @@
 ---
 duration: 8-12 min
 batch: 2
-order: 5
+order: 6
 batch_name: Builder and Verifier
 class: loopy-ai
 chapter: Builder and Verifier
@@ -26,11 +26,7 @@ So an adversarial loop with no calibrated bar does one of two things. It runs fo
 
 [IMAGE: dark canvas, hand-drawn. A loop arrow circling between a box labeled "BUILD" and a box labeled "ATTACK". On the right, a tall stack of sticky notes spilling endlessly downward labeled "findings", each one smaller and fainter than the last, fading into the dark. No exit arrow anywhere. Caption underneath: "no bar, no exit".]
 
-![[loopy-where-to-set-the-bar-no-bar-no-exit-1.png]]
-![[loopy-where-to-set-the-bar-no-bar-no-exit-2.png]]
 ![[loopy-where-to-set-the-bar-no-bar-no-exit-3.png]]
-![[loopy-where-to-set-the-bar-no-bar-no-exit-4.png]]
-![[loopy-where-to-set-the-bar-no-bar-no-exit-5.png]]
 
 ---
 
@@ -93,25 +89,3 @@ An explicit Terminate is the whole difference between a loop that converges and 
 ![[loopy-where-to-set-the-bar-terminate-component-3.png]]
 ![[loopy-where-to-set-the-bar-terminate-component-4.png]]
 ![[loopy-where-to-set-the-bar-terminate-component-5.png]]
-
----
-
-## Demo
-
-I'll run the exact same adversarial review loop twice, on one artifact, so you can watch the bar do its work.
-
-1. Start with one PRD that has a single real problem buried in it, plus a lot of surface that's fine. The kind of doc the attacker from the last video would chew on.
-2. Run one: uncapped. The reviewer prompt just says "find what's wrong, then we'll fix and re-review." Watch round one catch the real issue. Watch round two get thinner. Watch rounds three, four, five spiral into naming nits, hypothetical edge cases, and "consider adding." Show the token counter climbing while the finding quality falls off a cliff. The loop has no reason to ever stop.
-3. Reset to the same starting PRD.
-4. Run two: capped. Same reviewer, but now the prompt carries the severity scale and the Terminate condition reads "iterate until no medium or high severity issues remain, maximum 3 rounds." Round one catches the real issue and rates it high. We fix it. Round two returns only low severity findings, which get logged to the bottom of the doc, not acted on. Threshold met. Loop exits on round two, before the cap, clean.
-5. Put the two transcripts side by side. Same model, same artifact, same attacker. One spirals, one ships. The only difference is the bar.
-
----
-
-## Key Insight
-
-> Ask a model to find a flaw and it always will. The bar isn't "is it perfect," it's "is anything left that actually matters."
-
----
-
-That's the chapter. You can build a verifier, borrow one, or manufacture one with an attacker, and now you can tell any of them when to stop. A loop with a calibrated Terminate is a loop that ships. Everything after this is the same machine, pointed at bigger and bigger jobs.
