@@ -1,7 +1,7 @@
 export const meta = {
-  name: 'idea-bank',
+  name: 'idea-foundry',
   description: 'Mine 60-150 fresh ideas on a topic via ~20 parallel agents (Exa web search + x-search + pure reasoning), synthesize, render to a self-contained HTML idea bank with selectable cards and a floating copy button.',
-  whenToUse: 'When the user wants to brainstorm widely on a topic, project, class, video, product, or any idea-mining task and curate the results later. The idea-bank skill is the front door; this workflow is the engine.',
+  whenToUse: 'When the user wants to brainstorm widely on a topic, project, class, video, product, or any idea-mining task and curate the results later. The idea-foundry skill is the front door; this workflow is the engine.',
   phases: [
     { title: 'Generate' },
     { title: 'Synthesize' },
@@ -11,7 +11,7 @@ export const meta = {
 
 const cfg = args || {}
 const TOPIC = cfg.topic || 'agentic coding'
-const SLUG = cfg.slug || 'idea-bank'
+const SLUG = cfg.slug || 'idea-foundry'
 const PURPOSE = cfg.purpose || `Ray wants to mine fresh ideas about ${TOPIC}.`
 const CONTEXT_BLOCK = cfg.context || PURPOSE
 const ALREADY_COVERED = cfg.alreadyCovered || 'No exclusions provided.'

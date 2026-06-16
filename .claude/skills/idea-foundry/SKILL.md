@@ -1,5 +1,5 @@
 ---
-name: idea-bank
+name: idea-foundry
 description: >-
   Mine 60 to 150 fresh ideas on any topic, concept, project, video, class, or
   research question by fanning out ~20 parallel agents across web search
@@ -27,11 +27,11 @@ description: >-
   warn the user up front and confirm before launching.
 ---
 
-# Idea Bank
+# Idea Foundry
 
 Heavy multi-angle brainstorm. Twenty parallel agents hit a topic from three source types, then one synthesis agent dedups + ranks + polishes, then one render agent writes a curated HTML idea bank Ray can browse, filter, select from, and paste back.
 
-The engine is the `idea-bank` workflow at `~/.claude/workflows/idea-bank.js`. This skill is the front door: it gathers the arguments, warns about cost, and invokes the workflow.
+The engine is the `idea-foundry` workflow at `~/.claude/workflows/idea-foundry.js`. This skill is the front door: it gathers the arguments, warns about cost, and invokes the workflow.
 
 ## When NOT to use
 
@@ -74,7 +74,7 @@ Optional (skip if no signal):
 
 ```
 Workflow({
-  name: 'idea-bank',
+  name: 'idea-foundry',
   args: {
     topic: '<topic>',
     slug: '<slug>',
