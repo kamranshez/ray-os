@@ -5,30 +5,35 @@ description: Build and maintain Japanese sentence-mining cards for Anki, fully s
 
 # Sentence Mining
 
-Two ways in:
+**Three modes** (plus a one-time `setup`). Two of them *create* new cards and share one
+post-processing pipeline; the third *fixes existing* cards in place.
 
 ```
-┌────────────────────────┐                  ┌──────────────────────────────┐
-│   Video URL or file    │                  │   List of target words       │
-│   "mine this reel"     │                  │   "make a card for 同期"     │
-└──────────┬─────────────┘                  └─────────────┬────────────────┘
-           │                                              │
-           ▼                                              ▼
-┌──────────────────────┐                       ┌─────────────────────────┐
-│   VIDEO MODE         │                       │   BANK MODE             │
-│   yt-dlp →           │                       │   search bank indexes   │
-│   AssemblyAI →       │                       │   for each word →       │
-│   SudachiPy + i+1    │                       │   pick best sentence    │
-└──────────┬───────────┘                       └────────────┬────────────┘
-           │                                                │
-           └──────────────┬─────────────────────────────────┘
-                          ▼
-              ┌─────────────────────────┐
-              │   Shared post-process   │
-              │   curate → explain →    │
-              │   media → draft → push  │
-              └─────────────────────────┘
+        ── CREATE NEW CARDS ──                      ── FIX EXISTING CARDS ──
+┌────────────────────┐  ┌─────────────────────┐    ┌──────────────────────────┐
+│  Video URL / file  │  │  List of words      │    │  flag:1 / "fix" / a word │
+│  "mine this reel"  │  │  "card for 同期"    │    │  "better sentence for X" │
+└─────────┬──────────┘  └──────────┬──────────┘    └────────────┬─────────────┘
+          ▼                        ▼                             ▼
+   ┌─────────────┐         ┌──────────────┐           ┌───────────────────────┐
+   │ VIDEO MODE  │         │  BANK MODE   │           │     REPLACE MODE      │
+   │ yt-dlp →    │         │ search local │           │ IK → Nadeshiko → bank │
+   │ AssemblyAI →│         │ .apkg banks  │           │ re-ranked by your i+1 │
+   │ i+1 diff    │         │              │           │                       │
+   └──────┬──────┘         └──────┬───────┘           └───────────┬───────────┘
+          └───────────┬───────────┘                               ▼
+                      ▼                              ┌───────────────────────────┐
+       ┌─────────────────────────┐                  │  edit card IN PLACE:       │
+       │  Shared post-process    │                  │  archive old → new + media │
+       │  curate → explain →     │                  │  → rehab → reflag / retire │
+       │  media → draft → push   │                  └───────────────────────────┘
+       └─────────────────────────┘
 ```
+
+Video and bank mode share the **Steps 1–8** below: the mode reference covers the
+mode-specific Steps 1–3 (and the Step 5 specifics), then you come back here for the
+shared post-processing. Replace mode runs its own pipeline end-to-end — see
+[references/replace-mode.md](references/replace-mode.md).
 
 **Route the request.** Look at what Ray gave you:
 
@@ -46,13 +51,11 @@ incomprehensible) — that's **replace mode**, not bank mode. Bank/video mode *c
 new cards; replace mode *edits existing* ones in place and archives the old sentence.
 
 **Canonical sentence-source order (policy):** when finding an example sentence for a
-word, always try **Immersion Kit → Nadeshiko → local sentence bank**, in that order,
-keeping the first hit that's usable at Ray's i+1. This applies to BOTH correcting cards
-(replace mode, fully implemented) and creating new cards. Bank/video mode currently
-source locally/from the video; migrating their new-card path onto this same order is the
-intended direction. See [references/replace-mode.md](references/replace-mode.md).
-
-The mode-specific reference walks through Steps 1–3 (and the mode-specific bits of Step 5). Then come back here for the shared post-processing.
+word, try **Immersion Kit → Nadeshiko → local sentence bank** in that order, keeping the
+first hit usable at Ray's i+1. This is **fully implemented in replace mode**. The
+new-card modes don't use it yet — video mode takes sentences from the video, bank mode
+from local banks; moving them onto this same order is the intended next step (not done
+yet). See [references/replace-mode.md](references/replace-mode.md).
 
 **Before anything else, check setup.** If `<skill-dir>/config.json` does not exist, the skill is unconfigured — route to **setup mode** ([references/setup.md](references/setup.md)) first, then continue with the user's actual request. Setup is also how a friend imports this skill into their own Anki: it interviews them for their note type, fields, decks, known-word sources, and sentence banks, then writes their own `config.json` (git-ignored, never shared).
 
@@ -161,7 +164,7 @@ Cards are processed by a pool of 3 concurrent workers (ffmpeg clip + screenshot 
 
 See [references/video-mode.md](references/video-mode.md) §"Step 5" or [references/bank-mode.md](references/bank-mode.md) §"Step 5" for the script invocation.
 
-## Step 6 — Push to Anki (auto), then summarize
+## Step 6 — Push & summarize
 
 **Default behavior: push immediately after Step 5 succeeds.** No approval gate. Ray confirmed in June 2026 that the curation + explanation pass in Steps 3.5 + 4 has been reliable enough that asking "say push to commit" was just adding friction. Anki's own review queue is the real gate — bad cards get suspended or deleted there. Push first; show the result. For video mode this is automatic — Step 5 generates and inserts in one pass (pass `--no-push` only when Ray says "draft only"); bank mode still calls `push.py` afterward.
 
@@ -208,7 +211,7 @@ Print the same summary but with "Mined N candidate cards" and a "Say 'push' to c
 - Say "try a different sentence for X" — look at runner-up bank hits and re-stage
 - Say "no" — leave draft.json on disk; he can come back to it
 
-## Step 7 — Push to Anki (shared)
+## Step 7 — What `push.py` does (tags, formatting, dedup)
 
 ```bash
 python3 <skill-dir>/scripts/push.py --draft ~/Downloads/sentence-mining/<source>.draft.json
@@ -251,12 +254,12 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 | `_config.py`            | all   | load `config.json` (merged over defaults) — single source of truth |
 | `transcribe.py`         | video | AssemblyAI Universal-3 Pro JP transcription with diarization |
 | `analyze.py`            | video | SudachiPy tokenize + built-in known-word diff (cached) + JPDB rank |
-| `generate_media.py`     | video | ffmpeg clip + screenshot + Gemini TTS (3 parallel); `--push` inserts each card as it finishes |
+| `generate_media.py`     | video | ffmpeg clip + screenshot + Gemini TTS (3 parallel); pushes each card inline as it finishes (`--no-push` = stage draft only) |
 | `extract_bank.py`       | bank  | parse `.apkg` → local index JSON + media dir                 |
 | `search_banks.py`       | bank  | word-list → top-N sentence candidates across indexed banks   |
 | `generate_media_bank.py`| bank  | copy bank media (or TTS fallback) + Gemini TTS explanation   |
 | `replace_search.py`     | replace | resolve target cards (flag / note-ids / words) → search Immersion Kit → Nadeshiko → local bank → filter + re-rank by your i+1 → replace-draft JSON |
-| `replace_apply.py`      | replace | stage media (URL or local) + TTS explanation (best-effort), archive old sentence to `previous_versions`, overwrite fields, retag i-level, rehabilitate (de-leech/unsuspend/reset-to-due), keep flag. `--rehab-flag N` rehabilitates a batch with no field changes |
+| `replace_apply.py`      | replace | stage media (URL or local) + TTS explanation (best-effort), archive old sentence to `previous_versions`, overwrite fields, retag i-level, rehabilitate (de-leech/unsuspend/reset-to-due), promote flag:1→`--done-flag` (3). Retires unfixable misses (`not-worth-learning` + suspend + clear flag; `--keep-misses` to skip). `--rehab-flag N` rehabilitates a batch with no field changes |
 | `push.py`               | both  | AnkiConnect addNotes onto `config.note_type` via `config.field_map` |
 | `_env.py`               | both  | loads `.env` into `os.environ`                               |
 | `_anki.py`              | both  | AnkiConnect helper + `storeMediaFile` (URL from config)     |
@@ -265,6 +268,6 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 
 - **AnkiConnect must be running.** If `curl http://localhost:8765` fails, Anki is closed or the addon is disabled. Tell Ray rather than retrying.
 - **Don't push cards with empty explanation.** If Step 4 failed for a card (you got confused, refused, etc.), drop it from the draft rather than pushing a hollow one.
-- **Gemini TTS preview model rate-limits.** Free tier is 10 RPM. `generate_media.py` and `generate_media_bank.py` both cap concurrency at 2 with exponential 429 backoff. If you still hit limits, drop to 1 or serialize.
+- **Gemini TTS preview model rate-limits.** Free tier is 10 RPM. `generate_media.py` (video) caps TTS concurrency at 3, `generate_media_bank.py` (bank) at 2 (override with `SM_TTS_CONCURRENCY`); both back off exponentially on 429. If you still hit limits, lower the cap or serialize.
 - **`allowDuplicate: False` in push.py** means re-pushing the same word is silently rejected. To check ahead of time: query `<word-field>:<lemma> deck:"<main-deck>"` (from `config.field_map.word` / `config.decks.main`) against AnkiConnect during curation. `analyze.py` already pre-dedupes against the configured mining decks.
 - **Known-word scan is cached.** The first mine of the day scans every configured known-source deck (~100s for a large collection); subsequent runs reuse the cache for `config.known_words.cache_hours` (default 6). After a big review session, pass `analyze.py --refresh-known` (or just wait out the TTL) so freshly-matured words drop out of mining.

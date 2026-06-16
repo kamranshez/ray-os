@@ -380,7 +380,9 @@ def main():
         picks = best_for_word(word, known, old_sentence=note["old_sentence"],
                               top=args.top, nadeshiko_key=nadeshiko_key, banks=banks)
         if not picks:
-            misses.append(word)
+            # Carry the note_id so replace_apply can retire the card (no usable
+            # replacement in any corpus → tag not-worth-learning + suspend).
+            misses.append({"word": word, "note_id": note["note_id"]})
             print(f"  ✗ {word} — no usable replacement (IK + fallback)", file=sys.stderr)
             continue
         best = picks[0]
@@ -413,7 +415,7 @@ def main():
     print(f"\nWrote {len(out)} proposals ({len(misses)} misses) to {args.output}",
           file=sys.stderr)
     if misses:
-        print(f"  misses: {', '.join(misses)}", file=sys.stderr)
+        print(f"  misses: {', '.join(m['word'] for m in misses)}", file=sys.stderr)
 
 
 if __name__ == "__main__":

@@ -87,9 +87,11 @@ python3 <skill-dir>/scripts/replace_search.py \
   like 攻撃抑制 for 抑制), not glued to adjacent kanji, not a name (紅葉くん), not a
   mis-teaching idiom (聞いて呆れる), has BOTH image and sound, length 10–45 chars.
 - Ranks by (fewest other-unknowns, bare-token, closest to ~22 chars). Keeps runner-ups.
-- Words with no usable hit go to `misses` (left untouched). Abstract/financial/archaic
-  words (称える, 奉る, 咥える, 証券) are the usual misses — anime corpora just don't carry
-  a clean simple sentence for them; that's expected, report them.
+- Words with no usable hit go to `misses` (each carries its `note_id`). Abstract/
+  financial/archaic words (称える, 奉る, 咥える, 証券) are the usual misses — anime corpora
+  just don't carry a clean simple sentence for them; that's expected, report them.
+  These are **retired** at apply time (see Step 4): an unfixable card isn't worth Ray's
+  review time, so it's tagged `not-worth-learning`, suspended, and dropped off flag:1.
 
 Read `replace.json`. **Curate (Step 1.5):** spot-check the top pick per word the same way
 Step 3.5 does for mining. The filters catch most junk, but you still judge: is the target
@@ -140,11 +142,16 @@ Per card this:
   flag:3 while genuine misses stay on flag:1 (still-to-fix). Ray eyeballs flag:3 then
   clears it himself. `--done-flag 0` leaves the flag. The `claude-sentence-*` tag is kept.
 
+It also **retires the unfixable misses**: every word in `misses` (no usable replacement
+in IK / Nadeshiko / bank) is tagged `not-worth-learning`, suspended, and cleared off
+flag:1 — so it leaves the fix queue and `replace_search --flag 1` stops re-picking it
+every run. Pass `--keep-misses` to leave them on flag:1 for a later manual pass instead.
+
 Re-running the same draft is safe: an **idempotency guard** skips any card whose live
 sentence already equals the draft's new one (no double-archiving). Media download + TTS
 run concurrently; Anki writes are serialized.
 
-Then summarize: replaced N, misses M (still on flag:1), draft path.
+Then summarize: replaced N, retired M (not-worth-learning + suspended), draft path.
 
 ### Rehabilitate a whole flagged batch (no field changes)
 

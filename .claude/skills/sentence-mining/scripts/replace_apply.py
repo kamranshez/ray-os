@@ -10,7 +10,11 @@ For each entry (with `explanation` filled by Claude):
     recoverable and the old media never becomes "unused"
   - overwrite sentence / sentence_audio / picture / explanation / explanation_audio
   - retag the i-level (i1/i2/… reflecting how many other words are new for Ray)
-  - LEAVE THE FLAG ALONE — Ray uses the flag as his post-update review queue
+  - rehabilitate the card (de-leech, unsuspend, reset scheduling so it's due)
+  - promote the input flag:1 to --done-flag (default 3 = "redone, review me")
+
+Unfixable misses (no usable replacement in any corpus) are retired instead: tagged
+`not-worth-learning`, suspended, and cleared off flag:1 (--keep-misses to skip).
 
 `--dry-run` prints the old→new table and touches nothing (no downloads, no TTS,
 no Anki writes) — use it for the review gate / summary.
@@ -42,6 +46,7 @@ def _norm(s):
     return re.sub(r"[\s　。、！？…\.\!\?]+", "", analyze.strip_html(s))
 
 I_TAGS = " ".join(f"i{n}" for n in range(0, 10)) + " i?"  # i0..i9 + i? — clear all, add one
+RETIRE_TAG = "not-worth-learning"  # disposition for unfixable misses
 
 
 def _ext(url, default):
@@ -111,6 +116,38 @@ def set_flag(nid, flag):
                      newValues=[flag], warning_check=True)
 
 
+def _miss_items(misses, fm):
+    """Normalize the draft's `misses` to [(word, note_id)]. New drafts carry
+    {word, note_id}; older drafts stored bare words — resolve those by the word field."""
+    items = []
+    for m in misses:
+        if isinstance(m, dict):
+            items.append((m.get("word", ""), m.get("note_id")))
+        else:  # legacy: bare word string — look its card up
+            hits = anki_request("findNotes", query=f'"{fm["word"]}:{m}" {deck_clause(load_config())}')
+            items.append((m, hits[0] if hits else None))
+    return items
+
+
+def retire_note(nid):
+    """An unfixable miss (no usable replacement in IK / Nadeshiko / bank) is retired:
+    tag it `not-worth-learning`, suspend its cards, and clear the input flag so it
+    leaves the fix queue and stops being re-picked by `replace_search --flag`."""
+    if not nid:
+        return []
+    cards = anki_request("findCards", query=f"nid:{nid}")
+    anki_request("addTags", notes=[nid], tags=RETIRE_TAG)
+    if cards:
+        try:
+            anki_request("suspend", cards=cards)
+        except Exception:  # noqa: BLE001
+            pass
+        for c in cards:
+            anki_request("setSpecificValueOfCard", card=c, keys=["flags"],
+                         newValues=[0], warning_check=True)
+    return cards
+
+
 def rehabilitate(nid):
     """A struggled-with card getting a fresh sentence should be re-learned cleanly:
     drop the leech tag, unsuspend (leeches are often auto-suspended), and reset the
@@ -160,7 +197,9 @@ def print_table(entries, misses):
         print(f"{e['word']:<10} {e['i_level']:<4}  {analyze.strip_html(e['old_sentence'])[:32]}")
         print(f"{'':<16}→ {e['new_sentence']}   « {e.get('translation','')[:40]} » [{e.get('title','')}]")
     if misses:
-        print(f"\nMISSES (left untouched, still flagged): {', '.join(misses)}")
+        words = [m["word"] if isinstance(m, dict) else m for m in misses]
+        print(f"\nMISSES (unfixable → will be tagged '{RETIRE_TAG}' + suspended): "
+              f"{', '.join(words)}")
 
 
 def deck_clause(cfg):
@@ -191,7 +230,9 @@ async def main_async(args):
 
     if args.dry_run:
         print_table(ready, misses)
-        print(f"\n[dry-run] {len(ready)} card(s) would be replaced. Nothing written.")
+        retire_note_n = 0 if args.keep_misses else len(misses)
+        print(f"\n[dry-run] {len(ready)} card(s) would be replaced, "
+              f"{retire_note_n} unfixable miss(es) would be retired. Nothing written.")
         return
 
     # Idempotency guard: skip cards whose live sentence already equals the draft's new
@@ -227,8 +268,22 @@ async def main_async(args):
 
     flag_note = "left on input flag" if args.done_flag == 0 else f"moved to flag {args.done_flag}"
     print(f"\nReplaced {len(done)}/{len(ready)} cards in place ({flag_note} for your review).")
+
+    # Retire unfixable misses: tag not-worth-learning, suspend, clear the input flag so
+    # they leave the fix queue. --keep-misses leaves them on the flag for a later pass.
     if misses:
-        print(f"Misses (untouched): {', '.join(misses)}")
+        if args.keep_misses:
+            words = [m["word"] if isinstance(m, dict) else m for m in misses]
+            print(f"Misses (left on input flag): {', '.join(words)}")
+        else:
+            retired = []
+            for word, nid in _miss_items(misses, fm):
+                if retire_note(nid):
+                    retired.append(word)
+                else:
+                    print(f"  · {word} — no card found to retire", file=sys.stderr)
+            print(f"Retired {len(retired)} unfixable miss(es) "
+                  f"(tagged '{RETIRE_TAG}', suspended): {', '.join(retired)}")
 
 
 def main():
@@ -241,6 +296,9 @@ def main():
     ap.add_argument("--done-flag", type=int, default=3,
                     help="Flag to set on each redone card so it lands in a review queue "
                          "(default 3; 0 = leave the flag unchanged). Input is flag:1.")
+    ap.add_argument("--keep-misses", action="store_true",
+                    help="Leave unfixable misses on the input flag. Default retires them: "
+                         f"tag '{RETIRE_TAG}', suspend, clear the flag.")
     args = ap.parse_args()
     if not args.draft and args.rehab_flag is None:
         ap.error("pass --draft <file> (optionally --dry-run) or --rehab-flag N")
