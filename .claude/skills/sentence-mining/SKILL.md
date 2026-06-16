@@ -1,6 +1,6 @@
 ---
 name: sentence-mining
-description: Build Japanese sentence-mining cards for Anki in two modes, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + SudachiPy + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → search across your locally-indexed subs2srs .apkg banks for natural example sentences, reusing the bank's original audio + screenshot when available. Both modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL or (b) a list of Japanese words — don't ask, start drafting. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
+description: Build and maintain Japanese sentence-mining cards for Anki, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + SudachiPy + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → search across your locally-indexed subs2srs .apkg banks for natural example sentences, reusing the bank's original audio + screenshot when available. (3) Replace mode — fix existing cards whose example sentence is bad (too short, a fragment, incomprehensible): pull a better, more comprehensible sentence (Immersion Kit → Nadeshiko → local bank, re-ranked by your own i+1), edit the card in place (archiving the old sentence to a previous_versions field), and rehabilitate the card (de-leech, unsuspend, reset-to-due) so you re-learn it fresh. All modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL, (b) a list of Japanese words, or (c) a request to improve/replace sentences on existing cards. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "replace the sentence for <word>", "find a better sentence for X", "fix my flag:1 cards", "these sentences are too short/confusing", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
 ---
 
 # Sentence Mining
@@ -37,7 +37,20 @@ Two ways in:
 | `setup` / "set up sentence mining" / no `config.json` yet  | setup   | [references/setup.md](references/setup.md)           |
 | URL (instagram, youtube, tiktok, twitter) or local video | video   | [references/video-mode.md](references/video-mode.md) |
 | Plain list of Japanese words                             | bank    | [references/bank-mode.md](references/bank-mode.md)   |
+| "replace"/"swap"/"better sentence for" existing cards, or "fix my flag:1 cards" | replace | [references/replace-mode.md](references/replace-mode.md) |
 | Both (URL + words)                                       | ask Ray | —                                   |
+
+**Replace vs bank/video:** if the words/cards already exist in Anki and the ask is
+to swap in a *better* example sentence (the current one is too short, a fragment, or
+incomprehensible) — that's **replace mode**, not bank mode. Bank/video mode *create*
+new cards; replace mode *edits existing* ones in place and archives the old sentence.
+
+**Canonical sentence-source order (policy):** when finding an example sentence for a
+word, always try **Immersion Kit → Nadeshiko → local sentence bank**, in that order,
+keeping the first hit that's usable at Ray's i+1. This applies to BOTH correcting cards
+(replace mode, fully implemented) and creating new cards. Bank/video mode currently
+source locally/from the video; migrating their new-card path onto this same order is the
+intended direction. See [references/replace-mode.md](references/replace-mode.md).
 
 The mode-specific reference walks through Steps 1–3 (and the mode-specific bits of Step 5). Then come back here for the shared post-processing.
 
@@ -223,6 +236,7 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 - [references/known-words.md](references/known-words.md) — the built-in i+1 known-word diff (replaces AnkiMorphs); how "known" is computed and configured
 - [references/video-mode.md](references/video-mode.md) — Steps 1–3 and Step 5 for video-URL input
 - [references/bank-mode.md](references/bank-mode.md) — Steps 1–3 and Step 5 for word-list input + one-time bank indexing setup
+- [references/replace-mode.md](references/replace-mode.md) — fix existing cards' sentences in place via Immersion Kit, re-ranked by your i+1, archiving to `previous_versions`
 - [references/apkg-schema.md](references/apkg-schema.md) — `.apkg` ZIP/SQLite layout and field separators
 - [references/bank-formats.md](references/bank-formats.md) — field-role detection heuristics + known notetypes
 - [references/note-type.md](references/note-type.md) — note-type fields and how `config.field_map` maps onto them
@@ -241,6 +255,8 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 | `extract_bank.py`       | bank  | parse `.apkg` → local index JSON + media dir                 |
 | `search_banks.py`       | bank  | word-list → top-N sentence candidates across indexed banks   |
 | `generate_media_bank.py`| bank  | copy bank media (or TTS fallback) + Gemini TTS explanation   |
+| `replace_search.py`     | replace | resolve target cards (flag / note-ids / words) → search Immersion Kit → Nadeshiko → local bank → filter + re-rank by your i+1 → replace-draft JSON |
+| `replace_apply.py`      | replace | stage media (URL or local) + TTS explanation (best-effort), archive old sentence to `previous_versions`, overwrite fields, retag i-level, rehabilitate (de-leech/unsuspend/reset-to-due), keep flag. `--rehab-flag N` rehabilitates a batch with no field changes |
 | `push.py`               | both  | AnkiConnect addNotes onto `config.note_type` via `config.field_map` |
 | `_env.py`               | both  | loads `.env` into `os.environ`                               |
 | `_anki.py`              | both  | AnkiConnect helper + `storeMediaFile` (URL from config)     |

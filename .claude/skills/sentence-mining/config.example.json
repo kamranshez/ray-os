@@ -10,7 +10,8 @@
     "picture": "picture",
     "explanation": "explanation",
     "explanation_audio": "explanationAudio",
-    "source_url": "source_url"
+    "source_url": "source_url",
+    "previous_versions": "previous_versions"
   },
 
   "decks": {
