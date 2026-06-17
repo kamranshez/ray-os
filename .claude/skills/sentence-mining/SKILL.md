@@ -57,7 +57,9 @@ new-card modes don't use it yet — video mode takes sentences from the video, b
 from local banks; moving them onto this same order is the intended next step (not done
 yet). See [references/replace-mode.md](references/replace-mode.md).
 
-**Before anything else, check setup.** If `<skill-dir>/config.json` does not exist, the skill is unconfigured — route to **setup mode** ([references/setup.md](references/setup.md)) first, then continue with the user's actual request. Setup is also how a friend imports this skill into their own Anki: it interviews them for their note type, fields, decks, known-word sources, and sentence banks, then writes their own `config.json` (git-ignored, never shared).
+**Before anything else, ensure Anki is up** (skip for setup mode, which has no collection to hit yet). The create/fix modes all need AnkiConnect, so run `bash <skill-dir>/scripts/ensure_anki.sh` first — it launches Anki for you if it's closed and waits for it to load, instead of dying mid-pipeline on "Connection refused". Only stop and tell the user if it exits non-zero.
+
+**Then check setup.** If `<skill-dir>/config.json` does not exist, the skill is unconfigured — route to **setup mode** ([references/setup.md](references/setup.md)) first, then continue with the user's actual request. Setup is also how a friend imports this skill into their own Anki: it interviews them for their note type, fields, decks, known-word sources, and sentence banks, then writes their own `config.json` (git-ignored, never shared).
 
 ## Inputs and required env
 
@@ -79,7 +81,7 @@ is hardcoded. Two git-ignored files hold all the per-user state:
   back to alternatives without asking.
 
 **The only hard dependencies besides those two files:**
-- Anki running with **AnkiConnect** (default port 8765) — verify with `curl -s http://localhost:8765 -d '{"action":"version","version":6}'`
+- Anki running with **AnkiConnect** (default port 8765) — **don't verify by hand; run `bash <skill-dir>/scripts/ensure_anki.sh` once at the start of any mode.** It pings AnkiConnect, launches Anki (`open -a Anki`) if it's down, waits up to ~3 min for it to load, and confirms it stays up (3 pings — Anki sometimes answers once then crashes during a big-collection load on this machine). Exit 0 = good to proceed; exit 1 = surface its stderr to the user (likely a sync/database modal blocking the addon, or the addon disabled).
 - `yt-dlp`, `ffmpeg` on PATH
 - Python: `pip3 install --break-system-packages google-genai sudachipy sudachidict_core`
   (SudachiPy is the Japanese tokenizer — pure pip, no `brew install mecab` needed)
@@ -261,12 +263,13 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 | `replace_search.py`     | replace | resolve target cards (flag / note-ids / words) → search Immersion Kit → Nadeshiko → local bank → filter + re-rank by your i+1 → replace-draft JSON |
 | `replace_apply.py`      | replace | stage media (URL or local) + TTS explanation (best-effort), archive old sentence to `previous_versions`, overwrite fields, retag i-level, rehabilitate (de-leech/unsuspend/reset-to-due), promote flag:1→`--done-flag` (3). Retires unfixable misses (`not-worth-learning` + suspend + clear flag; `--keep-misses` to skip). `--rehab-flag N` rehabilitates a batch with no field changes |
 | `push.py`               | both  | AnkiConnect addNotes onto `config.note_type` via `config.field_map` |
+| `ensure_anki.sh`        | all   | ping AnkiConnect; `open -a Anki` if down; wait for load + verify stable (run first) |
 | `_env.py`               | both  | loads `.env` into `os.environ`                               |
 | `_anki.py`              | both  | AnkiConnect helper + `storeMediaFile` (URL from config)     |
 
 ## Gotchas (universal)
 
-- **AnkiConnect must be running.** If `curl http://localhost:8765` fails, Anki is closed or the addon is disabled. Tell Ray rather than retrying.
+- **AnkiConnect must be running** — but don't make Ray launch it. Run `bash <skill-dir>/scripts/ensure_anki.sh` at the start of every mode; it launches Anki if closed, waits for the collection to load, and verifies stability (Anki has crashed once mid-load right after launch on this machine, answering a single version ping before dying — the 3-ping stability check catches that). Only if it exits 1 after launching is something actually wrong (sync/database modal blocking the addon, or addon disabled) — surface that to Ray rather than retrying.
 - **Don't push cards with empty explanation.** If Step 4 failed for a card (you got confused, refused, etc.), drop it from the draft rather than pushing a hollow one.
 - **Gemini TTS preview model rate-limits.** Free tier is 10 RPM. `generate_media.py` (video) caps TTS concurrency at 3, `generate_media_bank.py` (bank) at 2 (override with `SM_TTS_CONCURRENCY`); both back off exponentially on 429. If you still hit limits, lower the cap or serialize.
 - **`allowDuplicate: False` in push.py** means re-pushing the same word is silently rejected. To check ahead of time: query `<word-field>:<lemma> deck:"<main-deck>"` (from `config.field_map.word` / `config.decks.main`) against AnkiConnect during curation. `analyze.py` already pre-dedupes against the configured mining decks.
