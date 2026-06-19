@@ -1,4 +1,5 @@
 ---
+class: "multi-agent-orchestration"
 status: "idea"
 acs: []
 mapping: workshop-original
