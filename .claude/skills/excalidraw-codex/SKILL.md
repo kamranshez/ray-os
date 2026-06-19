@@ -152,6 +152,7 @@ Place embeds at the end of each section, before the next `---` or `##` heading.
 
 - `codex` CLI on PATH (`brew install codex` or via OpenAI installer) and a completed `codex login`.
 - No API key required for this skill; the codex session reuses whatever auth Codex stores in `~/.codex/auth.json`.
+- **Pinned to codex `0.139.x`.** codex `0.140.0`+ shipped a regression ([openai/codex#28422](https://github.com/openai/codex/issues/28422)) where `image_gen` produces a valid PNG but never saves it to disk, so codex falls back to flat wireframes / hand-written PIL scripts and no real image lands. The fix is on `main` but not in `0.140`/`0.141`. Until a fixed release ships, pin with `npm install -g @openai/codex@0.139.0` (the npm global wins PATH over the Homebrew cask, so it is safe and reversible via `npm uninstall -g @openai/codex`). The wrapper warns at runtime if a known-broken version is active.
 
 ## Bundled Assets
 

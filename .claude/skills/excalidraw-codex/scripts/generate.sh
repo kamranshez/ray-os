@@ -55,6 +55,29 @@ if [[ -z "$PROMPT" || -z "$OUT_DIR" ]]; then
   exit 2
 fi
 
+# --- codex version pin -------------------------------------------------------
+# REQUIRES codex 0.139.x. codex 0.140.0+ shipped a regression (openai/codex#28422)
+# where image_gen produces a valid PNG but never persists it to disk (the new
+# persistence gate only saves when status=="completed", but 0.140+ delivers the
+# image while status=="generating"). The result is no saved file, and codex
+# falls back to flat wireframes / hand-written PIL scripts. The fix is on `main`
+# but not in 0.140/0.141. Until a fixed release ships, pin with:
+#   npm install -g @openai/codex@0.139.0
+# (the npm global takes PATH priority over the Homebrew cask, so this is safe and
+# reversible: `npm uninstall -g @openai/codex` returns to the brew version.)
+CODEX_VER="$(codex --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+case "$CODEX_VER" in
+  0.139.*) : ;;  # known-good, pinned
+  0.140.*|0.141.*)
+    echo "WARNING: codex $CODEX_VER is active. image_gen saving is BROKEN on 0.140+ (openai/codex#28422)." >&2
+    echo "         Images will not be produced correctly. Pin to the known-good version:" >&2
+    echo "           npm install -g @openai/codex@0.139.0" >&2
+    ;;
+  "") echo "WARNING: could not determine codex version; this skill is pinned to codex 0.139.x." >&2 ;;
+  *)  echo "NOTE: codex $CODEX_VER is untested with this skill (pinned/verified on 0.139.x). If images do not save, see openai/codex#28422." >&2 ;;
+esac
+# -----------------------------------------------------------------------------
+
 mkdir -p "$OUT_DIR"
 
 if [[ $USE_DEFAULT_REFS -eq 1 ]]; then
