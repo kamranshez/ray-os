@@ -1,0 +1,1 @@
+Uh you can use something like regular screenshots or like Chronicle or something like that, which automatically captures OCO on your screen on a regular basis to like identify new loops or work that you commonly do. I'd personally recommend using Codex Chronicle or something like that. 
