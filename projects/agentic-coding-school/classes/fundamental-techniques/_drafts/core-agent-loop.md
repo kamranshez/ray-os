@@ -1,5 +1,5 @@
 ---
-class: "techniques"
+class: "fundamental-techniques"
 status: "scripted"
 aliases: [core-agent-loop]
 ---

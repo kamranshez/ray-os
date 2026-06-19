@@ -1,5 +1,5 @@
 ---
-class: "techniques"
+class: "advanced-techniques"
 status: "idea"
 aliases: [forked-subagents-notes]
 ---

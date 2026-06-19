@@ -1,5 +1,5 @@
 ---
-class: "claude-code"
+class: "advanced-techniques"
 chapter: "Setup"
 status: "scripted"
 ---

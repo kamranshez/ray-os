@@ -1,5 +1,5 @@
 ---
-class: "techniques"
+class: "fundamental-techniques"
 chapter: "Fundamental Techniques"
 status: "idea"
 ---

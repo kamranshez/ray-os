@@ -1,5 +1,5 @@
 ---
-class: "techniques"
+class: "advanced-techniques"
 chapter: "Advanced Techniques"
 status: "idea"
 ---

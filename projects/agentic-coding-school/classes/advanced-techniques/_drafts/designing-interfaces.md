@@ -1,5 +1,5 @@
 ---
-class: "techniques"
+class: "advanced-techniques"
 status: "idea"
 aliases: [designing-interfaces]
 ---

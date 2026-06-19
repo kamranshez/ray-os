@@ -1,4 +1,5 @@
 ---
+class: "advanced-techniques"
 status: "scripted"
 ---
 
