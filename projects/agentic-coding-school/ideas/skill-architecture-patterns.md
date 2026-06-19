@@ -1,8 +1,8 @@
 ---
+status: "idea"
+aliases: [skill-split-vs-merge, producer-consumer-skills, shared-state-skills]
 tags: [skills, architecture, claude-code, research]
 date: 2026-04-11
-aliases: [skill-split-vs-merge, producer-consumer-skills, shared-state-skills]
-status: "idea"
 ---
 
 Working notes on how to decide when a Claude Code skill should be one skill, two skills, or three — and how skills should share state when they need to talk to each other. Started after migrating the youtube-thumbnail-generator + youtube-ab-tester pair into a clean producer-consumer loop with `feedback.json` as the bridge.

@@ -6,10 +6,12 @@ Source content for Ray's Agentic Coding School (https://www.agenticcoding.school
 
 Folders encode **placement**; stage is encoded by `status` (see below), not by which folder a file sits in.
 
-- `classes/<class-slug>/<NN-chapter>/<NN-slug>.md` — the canonical, chaptered home for each video script. This is the target structure. `classes/<class-slug>/_drafts/` holds scripts whose class is known but chapter isn't yet.
-- `to-film/<staging-class>/...` — scripted staging. Scripts are drained out of `to-film/` into `classes/`, one class at a time. Once a class is migrated, its scripts live under `classes/` only.
-- `ideas/` — the classless idea inbox: raw seeds and research, no class assigned yet.
+- `classes/<class-slug>/<NN-chapter>/<NN-slug>.md` — the canonical, chaptered home for each video script (the target structure). `classes/<class-slug>/_drafts/` holds scripts whose class is known but the chapter isn't assigned yet.
+- `ideas/` — upstream of a script. Two shapes: loose seeds/research live directly in `ideas/` (the classless inbox); `ideas/<prospective-class>/` groups drafts for a class that is being considered but is **not yet in the database** (currently `skills`, `multi-agent-orchestration`, `spec-driven-development`, `code-review`). Everything under `ideas/` is `status: "idea"`. When a prospective class is greenlit and added to the DB, its folder graduates to `classes/<class-slug>/`.
+- `corrections/` — short corrections and addenda to already-published videos, indexed by `corrections.md`. These sit **outside** the idea→scripted→filmed pipeline and carry no `status`.
 - `research/`, `vsl/` — supporting material, not class scripts.
+
+`to-film/` is retired. It used to stage "not yet filmed" scripts by folder, but stage now lives in `status`, so its contents were drained into `classes/<slug>/_drafts/` (scripts for real DB classes) and `ideas/<prospective-class>/` (classes still being considered).
 
 ## Content lifecycle: `status`
 
@@ -69,9 +71,12 @@ order: 1
 batch_name: "Setup"
 class: "loopy-ai"
 chapter: "Intro"
+status: "filmed"
 aliases: [intro]
 ---
 ```
+
+Canonical field order (keep it consistent across files): `video_id`, `duration`, `batch`, `order`, `batch_name`, `class`, `chapter`, `status`, `aliases`, then any extras (`tags`, `date`, `source`, `lesson`, …). String values are quoted; `aliases`/`tags` use the `[ ]` list form.
 
 Multi-placement script (cross-listed). Add `primary_class` and a `placements` list; `class` stays the canonical/primary class:
 

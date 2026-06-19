@@ -7,7 +7,7 @@ batch_name: "Compounding Loops"
 class: "loopy-ai"
 chapter: "Auto Research For Technical Work"
 aliases: [auto-research-for-technical-work, autoresearch-technical-example]
-status: filmed
+status: "filmed"
 ---
 
 Placeholder for the existing filmed video "Autoresearch Technical Example" (4:43 on the live site). It sits between the Autoresearch overview and the non-technical example.

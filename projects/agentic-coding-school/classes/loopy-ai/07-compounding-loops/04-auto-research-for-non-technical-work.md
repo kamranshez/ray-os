@@ -7,7 +7,7 @@ batch_name: "Compounding Loops"
 class: "loopy-ai"
 chapter: "Auto Research For Non-Technical Work"
 aliases: [auto-research-for-non-technical-work]
-status: to-film
+status: "filmed"
 ---
 
 Most people hear "auto research" and immediately think it is a coding thing. An agent opens a codebase, changes a training script, runs a benchmark, keeps the change if the number went up. That version is easy to understand because code has an obvious feedback loop. Run the test. Check the number. Keep the improvement.

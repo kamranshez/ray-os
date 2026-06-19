@@ -1,8 +1,8 @@
 ---
+status: "idea"
 tags: [agentic-coding, multi-agent, taxonomy]
 date: 2026-05-07
 source: Luke (Factory) — missions talk, https://www.youtube.com/watch?v=ow1we5PzK-o
-status: "idea"
 ---
 
 ## What this video covers
