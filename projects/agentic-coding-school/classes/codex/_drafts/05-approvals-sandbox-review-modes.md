@@ -1,5 +1,5 @@
 ---
-class: "codex-app"
+class: "codex"
 chapter: "Codex App"
 status: "scripted"
 tags: [course, script, codex, codex-app, review-modes, approvals, sandboxing]

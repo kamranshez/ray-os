@@ -1,5 +1,5 @@
 ---
-class: "business"
+class: "for-business"
 chapter: "Research & Intelligence"
 status: "scripted"
 ---

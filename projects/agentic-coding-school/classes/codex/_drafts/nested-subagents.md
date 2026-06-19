@@ -1,4 +1,5 @@
 ---
+class: "codex"
 tags: [codex, subagents, nested-agents, mental-models]
 date: 2026-05-06
 status: "scripted"

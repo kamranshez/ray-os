@@ -1,4 +1,5 @@
 ---
+class: "claude-code"
 status: "scripted"
 acs: []
 mapping: workshop-original

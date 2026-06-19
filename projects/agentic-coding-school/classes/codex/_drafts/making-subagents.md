@@ -1,5 +1,5 @@
 ---
-class: "codex-app"
+class: "codex"
 status: "idea"
 aliases: [making-subagents]
 ---

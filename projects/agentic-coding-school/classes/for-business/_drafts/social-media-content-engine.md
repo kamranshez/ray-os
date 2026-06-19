@@ -1,5 +1,5 @@
 ---
-class: "business"
+class: "for-business"
 chapter: "Content Production"
 status: "scripted"
 ---

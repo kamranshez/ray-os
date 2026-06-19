@@ -1,5 +1,5 @@
 ---
-class: "for-work"
+class: "for-business"
 chapter: "Tool Setup"
 status: "scripted"
 ---

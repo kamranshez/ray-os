@@ -1,5 +1,5 @@
 ---
-class: "business"
+class: "for-business"
 status: "idea"
 aliases: [wordpress-mcp]
 ---
