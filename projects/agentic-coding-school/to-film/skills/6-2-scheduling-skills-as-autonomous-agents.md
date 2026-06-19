@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Wire It All Together"
-status: "new"
+status: "scripted"
 ---
 
 ## Scheduling Skills as Autonomous Agents

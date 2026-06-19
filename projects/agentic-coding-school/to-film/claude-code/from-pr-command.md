@@ -1,6 +1,7 @@
 ---
 class: "claude-code"
 chapter: "Commands"
+status: "idea"
 ---
 
 # --from-pr Command

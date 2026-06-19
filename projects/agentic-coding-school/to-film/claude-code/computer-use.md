@@ -1,3 +1,9 @@
+---
+class: "claude-code"
+status: "scripted"
+aliases: [computer-use]
+---
+
 # Computer Use (Mouse / Keyboard Control)
 
 ## What This Video Covers

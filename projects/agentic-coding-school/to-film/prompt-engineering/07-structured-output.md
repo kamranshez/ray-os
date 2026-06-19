@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Core Techniques"
+status: "scripted"
 ---
 Structured output is telling the model to respond in a specific format — JSON, XML, markdown tables, YAML, CSV — rather than free-form prose. This is the bridge between "AI as chat partner" and "AI as a component in a system." The moment your output needs to be parsed by code, stored in a database, or consumed by another agent, structured output isn't optional.
 

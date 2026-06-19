@@ -1,7 +1,7 @@
 ---
 class: "codex-app"
 chapter: "Codex App"
-status: "to-film"
+status: "scripted"
 tags: [course, script, codex, codex-app, review-modes, approvals, sandboxing]
 lesson: "Approvals, Sandbox & Review Modes"
 ---

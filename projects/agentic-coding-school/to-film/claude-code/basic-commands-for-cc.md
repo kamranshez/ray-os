@@ -1,3 +1,9 @@
+---
+class: "claude-code"
+status: "scripted"
+aliases: [basic-commands-for-cc]
+---
+
 * /usage
 * /context
 * /clear

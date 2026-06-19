@@ -1,3 +1,9 @@
+---
+class: "code-review"
+status: "scripted"
+aliases: [playwright-for-tdd]
+---
+
 Pairs with [[Red-Green-Refactor]]. RGR tells you to write the failing test first — Playwright is the answer to *what kind of test*. End-to-end, behavioural, against the real running system.
 
 From Marlene's talk (Microsoft/GitHub Core AI): the whole reason DHH's 2014 critique still lands in 2026 is that AI tools make the original failure mode worse. Agents love writing self-affirming unit tests — coverage is green, behaviour is untested, nothing actually works. Playwright sidesteps that by testing the system, not the implementation.

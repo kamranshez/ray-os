@@ -1,6 +1,7 @@
 ---
 tags: [subagents, agents, mental-models, codex, claude-code]
 date: 2026-05-08
+status: "idea"
 ---
 
 Two complementary frames for thinking about nested subagent workflows. The full pattern catalog lives in `projects/agentic-coding-school/to-film/codex-app/nested-subagents.md`. This note captures the meta-frame those patterns hang off.

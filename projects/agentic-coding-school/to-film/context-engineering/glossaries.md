@@ -1,3 +1,9 @@
+---
+class: "context-engineering"
+status: "idea"
+aliases: [glossaries]
+---
+
 Combine it with the customised terminology for better prompting. 
 
 See this conversation: https://x.com/i/grok?conversation=2044769391401996491

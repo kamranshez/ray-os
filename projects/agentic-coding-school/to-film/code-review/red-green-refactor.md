@@ -1,3 +1,9 @@
+---
+class: "code-review"
+status: "scripted"
+aliases: [red-green-refactor]
+---
+
 https://simonwillison.net/guides/agentic-engineering-patterns/red-green-tdd/
 ![[red-green-refactor.png]]
 

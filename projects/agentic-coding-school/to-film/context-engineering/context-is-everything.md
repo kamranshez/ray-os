@@ -1,3 +1,9 @@
+---
+class: "context-engineering"
+status: "scripted"
+aliases: [context-is-everything]
+---
+
 - Context windows
 - Context rot
 - Setting up a status line

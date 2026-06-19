@@ -1,3 +1,9 @@
+---
+class: "multi-agent-orchestration"
+status: "scripted"
+aliases: [designing-codebases-ai-loves]
+---
+
 Sits next to [[Context Layer]]. Same goal — make the repo legible to an agent — different surface. The Context Layer is the docs-level surface (CLAUDE.md hierarchies, AGENTS.md, glossaries). Codebase shape is the code-level surface (folders, modules, interfaces). Both feed the agent's context window.
 
 ## The frame: your codebase is context

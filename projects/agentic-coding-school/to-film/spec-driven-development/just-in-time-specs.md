@@ -1,7 +1,7 @@
 ---
 class: "spec-driven-development"
 chapter: "Just-In-Time Specs"
-status: stub
+status: "scripted"
 ---
 
 Stub — the counterweight to [[specs-are-the-new-product]]. That segment says quality enters upstream, in the spec. True. This one says: don't mistake that for *spec everything up front*. Spec to the depth of your next confident step, let the spec co-evolve with the code, and push every discovery back into the repo so the next pass inherits it. Big-design-up-front is waterfall whether a human or a model writes the doc.

@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Make It Yours"
-status: "new"
+status: "scripted"
 tags: [course, script, skills]
 lesson: "3.2 Refactoring a Marketplace Skill"
 ---

@@ -1,6 +1,6 @@
 ---
 tags: [course, script, skills]
-status: draft
+status: "scripted"
 lesson: "5.2 A/B Testing Reference Files"
 ---
 

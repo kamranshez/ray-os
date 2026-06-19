@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Your First Skill"
-status: "new"
+status: "scripted"
 source: "Daniel Miessler — PAI Deep Dive (Dec 2025) + Building Your Own Unified AI Assistant"
 ---
 

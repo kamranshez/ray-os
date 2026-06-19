@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Core Techniques"
+status: "scripted"
 ---
 Iterative refinement is treating prompting as a conversation, not a one-shot attempt. The first output is a draft. Your follow-up prompts sculpt it toward what you actually want. This is how experienced prompters work — they don't write the perfect prompt, they write a good-enough prompt and then steer from the output.
 

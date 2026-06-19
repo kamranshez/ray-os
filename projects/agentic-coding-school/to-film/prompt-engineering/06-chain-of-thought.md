@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Core Techniques"
+status: "scripted"
 ---
 Chain of thought prompting is asking the model to show its reasoning before giving a final answer. It's the difference between asking someone "what's the answer?" and "walk me through how you'd figure this out." The second version consistently produces better results on anything involving logic, math, planning, or multi-step analysis.
 

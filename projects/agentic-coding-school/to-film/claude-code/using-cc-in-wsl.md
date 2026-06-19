@@ -1,6 +1,7 @@
 ---
 class: "claude-code"
 chapter: "Setup"
+status: "scripted"
 ---
 
 # Using Claude Code in WSL

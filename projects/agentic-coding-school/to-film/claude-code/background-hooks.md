@@ -1,6 +1,7 @@
 ---
 class: "claude-code"
 chapter: "Hooks"
+status: "idea"
 ---
 
 # Background Hooks

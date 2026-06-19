@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "The Blank Slate"
-status: "new"
+status: "scripted"
 tags: [course, script, skills]
 lesson: "1.1 Why Skills Change Everything"
 ---

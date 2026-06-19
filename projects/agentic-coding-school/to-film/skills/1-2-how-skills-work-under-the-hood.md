@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "The Blank Slate"
-status: "new"
+status: "scripted"
 tags: [course, script, skills]
 lesson: "1.2 How Skills Actually Work Under the Hood"
 ---

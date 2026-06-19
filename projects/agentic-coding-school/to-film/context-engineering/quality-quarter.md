@@ -1,6 +1,7 @@
 ---
 class: "context-engineering"
 chapter: "Advanced Techniques"
+status: "scripted"
 ---
 
 ## The Thesis

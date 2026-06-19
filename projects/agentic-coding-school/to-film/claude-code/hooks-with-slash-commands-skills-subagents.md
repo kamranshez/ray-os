@@ -1,6 +1,7 @@
 ---
 class: "claude-code"
 chapter: "Hooks"
+status: "idea"
 ---
 
 # Hooks with Slash Commands, Skills, Subagents

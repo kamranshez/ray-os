@@ -1,3 +1,9 @@
+---
+class: "multi-agent-orchestration"
+status: "scripted"
+aliases: [agent-teams-with-debate]
+---
+
 # Agent Teams with Debate
 
 ## What This Video Covers

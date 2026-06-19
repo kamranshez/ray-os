@@ -3,7 +3,7 @@ duration: "10-12 min"
 order: 4
 class: "codex"
 chapter: "Codex App"
-status: "to-film"
+status: "scripted"
 tags: [course, script, codex, codex-app, subagents, parallel-agents]
 lesson: "Subagents In General"
 ---

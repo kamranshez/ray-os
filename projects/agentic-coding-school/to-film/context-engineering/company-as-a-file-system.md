@@ -1,6 +1,7 @@
 ---
 class: "context-engineering"
 chapter: "Advanced Techniques"
+status: "idea"
 ---
 
 # Company as a file system

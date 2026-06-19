@@ -1,6 +1,7 @@
 ---
 class: "for-work"
 chapter: "Tool Setup"
+status: "scripted"
 ---
 
 ## Box CLI Filesystem for AI Agents

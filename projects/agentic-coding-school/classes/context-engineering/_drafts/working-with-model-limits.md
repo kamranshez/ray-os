@@ -1,5 +1,5 @@
 ---
-status: to-film
+status: "scripted"
 ---
 
 I think you should not make this video and move some things here into the Techniques class.

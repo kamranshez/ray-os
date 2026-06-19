@@ -1,6 +1,7 @@
 ---
 class: "business"
 chapter: "Marketing Automation"
+status: "idea"
 ---
 
 # LinkedIn via Claude MCP

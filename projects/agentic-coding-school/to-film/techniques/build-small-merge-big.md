@@ -1,3 +1,9 @@
+---
+class: "techniques"
+status: "scripted"
+aliases: [build-small-merge-big]
+---
+
 # Build Small, Merge Big
 
 ## What This Video Covers

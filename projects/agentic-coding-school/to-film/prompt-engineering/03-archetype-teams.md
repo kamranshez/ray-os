@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Archetype Teams"
+status: "scripted"
 ---
 In the previous video we compressed a single identity into an agent. But real work requires multiple modes of thinking — and real teams have people with different strengths arguing toward the best outcome. This video shows how to build subagent teams from your own archetypes, and then extends that to compressing entire teams and organizations.
 

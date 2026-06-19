@@ -1,6 +1,7 @@
 ---
 class: "business"
 chapter: "Skills for Business"
+status: "scripted"
 ---
 
 ## Skills as a Team Knowledge Base

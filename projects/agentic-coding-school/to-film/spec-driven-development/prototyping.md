@@ -1,3 +1,9 @@
+---
+class: "spec-driven-development"
+status: "scripted"
+aliases: [prototyping]
+---
+
 * Better at writing new code rather editing existing code.
 * Especially within the same context window.
 

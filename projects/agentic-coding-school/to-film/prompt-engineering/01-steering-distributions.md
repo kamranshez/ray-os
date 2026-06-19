@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Steering Models"
+status: "scripted"
 ---
 When you give a model a default prompt, it maps to a distribution based on the training data for that request. Ask for business ideas — you get the training-data distribution of business ideas. Ask it to debug code — it finds the most common debugging problem. The skill is steering away from these default distributions by being specific.
 

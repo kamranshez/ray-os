@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Core Techniques"
+status: "scripted"
 ---
 Sometimes the most effective prompt isn't about what to do — it's about what NOT to do. Constraints and negative instructions are how you carve away the parts of the output distribution you don't want, leaving only the region that matches your intent.
 

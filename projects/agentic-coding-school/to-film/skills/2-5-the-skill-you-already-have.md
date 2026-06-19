@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Your First Skill"
-status: "new"
+status: "scripted"
 tags: [course, script, skills]
 lesson: "2.5 The Skill You Already Have"
 ---

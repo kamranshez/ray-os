@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Build Your AI Employees"
-status: "adapt"
+status: "scripted"
 adapts: "skills-vs-subagents"
 tags: [course, script, skills]
 lesson: "4.5 Skills vs Subagents"

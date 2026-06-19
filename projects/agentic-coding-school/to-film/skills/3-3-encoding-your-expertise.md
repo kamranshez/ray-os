@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Make It Yours"
-status: "adapt"
+status: "scripted"
 adapts: "encoding-your-expertise-into-skills"
 tags: [course, script, skills]
 lesson: "3.3 Encoding Your Expertise"

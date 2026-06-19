@@ -1,6 +1,7 @@
 ---
 class: "techniques"
 chapter: "Fundamental Techniques"
+status: "scripted"
 ---
 
 # "Something deeper at play?" — Forcing a layer diagnosis before accepting a fix

@@ -1,3 +1,8 @@
+---
+status: "idea"
+aliases: [the-software-factory]
+---
+
 ## Retroactive
 
 Runs on a schedule.

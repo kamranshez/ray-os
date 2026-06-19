@@ -1,5 +1,5 @@
 ---
-status: to-film
+status: "scripted"
 ---
 
 ## How I Think

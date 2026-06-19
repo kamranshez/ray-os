@@ -1,3 +1,9 @@
+---
+class: "multi-agent-orchestration"
+status: "scripted"
+aliases: [stochastic-consensus-and-fan-out-fan-in]
+---
+
 # Stochastic Multi-Agent Consensus + Fan-Out / Fan-In
 
 ## What This Video Covers

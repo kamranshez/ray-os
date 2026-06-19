@@ -1,5 +1,5 @@
 ---
-status: stub
+status: "idea"
 acs: []
 mapping: workshop-original
 day: 7

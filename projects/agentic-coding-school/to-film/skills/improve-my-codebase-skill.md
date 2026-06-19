@@ -1,3 +1,9 @@
+---
+class: "skills"
+status: "scripted"
+aliases: [improve-my-codebase-skill]
+---
+
 Worked example for Day 6. The principle lives on Day 5 in [[Designing Codebases AI Loves]]; this stub turns it into a skill students build.
 
 ## What the skill does

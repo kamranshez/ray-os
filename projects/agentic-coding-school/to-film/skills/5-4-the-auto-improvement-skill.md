@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Quality Control"
-status: "new"
+status: "scripted"
 ---
 
 ## The Auto-Improvement Skill (Your System Tells You What to Build Next)

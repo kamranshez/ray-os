@@ -1,5 +1,5 @@
 ---
-status: idea
+status: "idea"
 ---
 
 **The pre-mortem prompt.** Before letting the model execute a plan, ask: *"assume this plan fails. What's the most likely reason?"*

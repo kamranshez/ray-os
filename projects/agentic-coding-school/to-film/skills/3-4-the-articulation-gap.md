@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Make It Yours"
-status: "new"
+status: "scripted"
 source: "Daniel Miessler — AI WILL Replace Knowledge Workers (2026-03-22)"
 ---
 

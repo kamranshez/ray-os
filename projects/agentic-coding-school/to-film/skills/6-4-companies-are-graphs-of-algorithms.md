@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Wire It All Together"
-status: "new"
+status: "scripted"
 source: "Daniel Miessler — AI WILL Replace Knowledge Workers (2026-03-22)"
 ---
 

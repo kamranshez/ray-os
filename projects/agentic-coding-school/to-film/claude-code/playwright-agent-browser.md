@@ -1,6 +1,7 @@
 ---
 class: "claude-code"
 chapter: "MCP Servers"
+status: "idea"
 ---
 
 ## Playwright & Agent Browser

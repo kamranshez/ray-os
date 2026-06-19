@@ -1,3 +1,9 @@
+---
+class: "code-review"
+status: "scripted"
+aliases: [adversarial-critics-fighting-llm-agreement-bias]
+---
+
 # Adversarial Critics: Fighting LLM Agreement Bias
 
 ## What This Video Covers

@@ -1,5 +1,5 @@
 ---
-status: filmed
+status: "scripted"
 ---
 
 In coding, closing the loop is easy — the compiler tells you if it worked. Types break, tests fail, lints complain. The feedback is structured, immediate, and automatic. You barely have to think about it.

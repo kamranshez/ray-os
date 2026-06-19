@@ -1,3 +1,9 @@
+---
+class: "multi-agent-orchestration"
+status: "scripted"
+aliases: [building-effective-agent-teams]
+---
+
 # Why Bother?
 - There’s only so much it can do, so much it can follow at the start. 
 - Thee's a defined "behaviour space" operate it and once fixed, it struggles to shift.

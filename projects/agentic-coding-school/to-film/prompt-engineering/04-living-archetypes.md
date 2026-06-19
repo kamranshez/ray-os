@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Living Archetypes"
+status: "scripted"
 ---
 In the previous video we built subagent teams from compressed archetypes of ourselves. But those archetypes were static — frozen snapshots of how you think. Real teams learn. Real teams develop dynamics. This video shows how archetypes evolve from run data, develop opinions about each other, and eventually form something that resembles an organizational culture.
 

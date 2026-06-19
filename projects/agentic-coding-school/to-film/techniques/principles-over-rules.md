@@ -1,6 +1,7 @@
 ---
 class: "techniques"
 chapter: "Fundamental Techniques"
+status: "scripted"
 ---
 
 # Principles Over Rules

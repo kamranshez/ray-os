@@ -1,6 +1,7 @@
 ---
 class: "techniques"
 chapter: "Fundamental Techniques"
+status: "idea"
 ---
 
 # LLMs have an easier time writing things

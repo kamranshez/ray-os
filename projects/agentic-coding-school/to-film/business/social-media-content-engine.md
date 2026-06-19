@@ -1,6 +1,7 @@
 ---
 class: "business"
 chapter: "Content Production"
+status: "scripted"
 ---
 
 ## Social Media Content Engine

@@ -1,5 +1,5 @@
 ---
-status: stub
+status: "scripted"
 acs: []
 mapping: workshop-original
 recording-needed: true

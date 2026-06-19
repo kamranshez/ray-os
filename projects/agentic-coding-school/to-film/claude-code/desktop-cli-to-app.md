@@ -1,6 +1,7 @@
 ---
 class: "claude-code"
 chapter: "Desktop App"
+status: "idea"
 ---
 
 # Desktop App: /desktop Command

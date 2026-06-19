@@ -1,5 +1,5 @@
 ---
-status: idea
+status: "idea"
 ---
 
 **The silence test.** Before ending a session, ask: *"is there anything I haven't asked that I should have?"*

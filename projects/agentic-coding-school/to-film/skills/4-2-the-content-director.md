@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Build Your AI Employees"
-status: "new"
+status: "scripted"
 tags: [course, script, skills]
 lesson: "4.2 The Content Director"
 ---

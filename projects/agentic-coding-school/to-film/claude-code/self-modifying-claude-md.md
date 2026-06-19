@@ -1,3 +1,9 @@
+---
+class: "claude-code"
+status: "scripted"
+aliases: [self-modifying-claude-md]
+---
+
 # Self-Modifying CLAUDE.md
 
 ## What This Video Covers

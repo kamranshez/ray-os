@@ -1,6 +1,7 @@
 ---
 class: "spec-driven-development"
 chapter: "Why Specs Became the Bottleneck"
+status: "scripted"
 ---
 
 ## The Shift Nobody Names

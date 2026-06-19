@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Quality Control"
-status: "new"
+status: "scripted"
 ---
 
 ## The Customizer Pattern

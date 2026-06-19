@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Your First Skill"
-status: "new"
+status: "scripted"
 source: "Daniel Miessler — Stop Getting Blocked: My Escalating Web Scraper Skill"
 ---
 

@@ -1,6 +1,7 @@
 ---
 class: "techniques"
 chapter: "Advanced Techniques"
+status: "scripted"
 ---
 Integrate this comment
 >For reasons which it would take a while to unpack, if is often the case that the best (or sometimes only) way to find out what programming actually needs to be done, is to program something that's not it, and then replace it. This may need to be done multiple times. Programming is only occasionally the final product, it is much more often the means of working through what it is that is actually needed. This is very difficult for the people who ask for the software, to understand, and it is quite often very difficult for the people doing the programming to understand.

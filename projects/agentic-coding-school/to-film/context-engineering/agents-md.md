@@ -1,3 +1,9 @@
+---
+class: "context-engineering"
+status: "idea"
+aliases: [agents-md]
+---
+
 * In the case of Claude Code, it's a CLAUDE.md
 * Remember conventions and preferences.
 * And constraints.

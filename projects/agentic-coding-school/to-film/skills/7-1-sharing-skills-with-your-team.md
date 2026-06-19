@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Ship It"
-status: "adapt"
+status: "scripted"
 adapts: "skills-as-team-knowledge-base"
 ---
 

@@ -1,3 +1,9 @@
+---
+class: "spec-driven-development"
+status: "scripted"
+aliases: [spec-developer]
+---
+
 The human-facing interview skill that produces a spec before any code is written.
 
 ## Models drift toward two possible truths if specs contain ambiguity

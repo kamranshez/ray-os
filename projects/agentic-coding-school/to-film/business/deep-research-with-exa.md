@@ -1,6 +1,7 @@
 ---
 class: "business"
 chapter: "Research & Intelligence"
+status: "scripted"
 ---
 
 ## Deep Research with Exa

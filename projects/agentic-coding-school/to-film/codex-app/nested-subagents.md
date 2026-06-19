@@ -1,6 +1,7 @@
 ---
 tags: [codex, subagents, nested-agents, mental-models]
 date: 2026-05-06
+status: "scripted"
 ---
 
 Mental models and patterns for using **nested subagents** in Codex, Claude Code, or any harness that supports spawning child agents. The unifying question for every pattern: *when does another layer of nesting actually pay for itself?*

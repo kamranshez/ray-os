@@ -1,6 +1,7 @@
 ---
 class: "claude-code"
 chapter: "Subagents"
+status: "scripted"
 ---
 
 ## The Mindset Shift

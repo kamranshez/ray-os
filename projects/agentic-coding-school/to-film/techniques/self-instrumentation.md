@@ -1,6 +1,7 @@
 ---
 class: "techniques"
 chapter: "Advanced Techniques"
+status: "scripted"
 ---
 
 ## The Thesis

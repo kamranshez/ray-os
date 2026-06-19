@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Core Techniques"
+status: "scripted"
 ---
 Interview-style prompting flips the dynamic: instead of you trying to anticipate what the model needs to know, you tell the model the goal and let it ask YOU the questions. This is the single most underrated technique in prompt engineering because it solves the hardest problem — you don't know what you don't know.
 

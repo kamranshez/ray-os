@@ -1,6 +1,7 @@
 ---
 class: "techniques"
 chapter: "Advanced Techniques"
+status: "idea"
 ---
 
 # Refactoring to Save on Context

@@ -1,3 +1,9 @@
+---
+class: "techniques"
+status: "scripted"
+aliases: [core-agent-loop]
+---
+
 # The Core Agent Loop (Observe → Think → Act)
 
 ## What This Video Covers

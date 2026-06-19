@@ -1,3 +1,9 @@
+---
+class: "claude-code"
+status: "scripted"
+aliases: [agent-harness-concept]
+---
+
 # Agent Harness Concept
 
 ## What This Video Covers

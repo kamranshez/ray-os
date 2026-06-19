@@ -1,3 +1,9 @@
+---
+class: "code-review"
+status: "idea"
+aliases: [adversarial-reviewers]
+---
+
 - [https://chatgpt.com/c/69e21eb9-041c-83a6-b63f-6a6dae89e569](https://chatgpt.com/c/69e21eb9-041c-83a6-b63f-6a6dae89e569)
 • • [https://x.com/poteto/status/2028645625525596349?s=12](https://x.com/poteto/status/2028645625525596349?s=12)
 

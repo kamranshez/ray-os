@@ -1,6 +1,7 @@
 ---
 class: "spec-driven-development"
 chapter: "Tests as the Contract"
+status: "scripted"
 ---
 
 ## The Cheating Agent

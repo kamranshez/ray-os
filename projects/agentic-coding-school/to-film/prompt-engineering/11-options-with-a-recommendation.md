@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Core Techniques"
+status: "scripted"
 ---
 Asking for options with a recommendation is a single move that changes how you make decisions with a model. Instead of "give me the answer," you ask for a few genuinely different answers and have the model flag the one it would pick, with its reasoning. You walk away with the menu *and* a default.
 

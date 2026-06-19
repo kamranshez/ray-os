@@ -1,6 +1,7 @@
 ---
 class: "techniques"
 chapter: "Fundamental Techniques"
+status: "idea"
 ---
 
 # Always force a constraint restatement before code

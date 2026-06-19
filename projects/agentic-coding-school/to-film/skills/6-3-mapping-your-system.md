@@ -1,6 +1,6 @@
 ---
 tags: [course, script, skills]
-status: draft
+status: "scripted"
 lesson: "6.3 Mapping Your System"
 ---
 

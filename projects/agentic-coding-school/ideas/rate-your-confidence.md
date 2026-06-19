@@ -1,5 +1,5 @@
 ---
-status: idea
+status: "idea"
 ---
 
 **Rate your confidence.** After any non-trivial answer, ask: *"rate your confidence 1-10 and explain what would have to be true for this to be wrong."*

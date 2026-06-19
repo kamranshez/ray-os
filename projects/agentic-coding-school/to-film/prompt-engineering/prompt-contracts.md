@@ -1,3 +1,9 @@
+---
+class: "prompt-engineering"
+status: "scripted"
+aliases: [prompt-contracts]
+---
+
 # Prompt Contracts
 
 ## What This Video Covers

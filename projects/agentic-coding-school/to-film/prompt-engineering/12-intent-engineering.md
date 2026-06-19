@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Aligning to Your Intent"
+status: "scripted"
 ---
 
 ## Intent Beats Instruction

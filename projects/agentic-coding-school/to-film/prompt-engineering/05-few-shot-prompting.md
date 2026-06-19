@@ -1,6 +1,7 @@
 ---
 class: "prompt-engineering"
 chapter: "Core Techniques"
+status: "scripted"
 ---
 Few-shot prompting is giving the model examples of input-output pairs so it can infer the pattern and replicate it. This is one of the most reliable techniques in prompt engineering because it bypasses the need to *describe* what you want — you *show* it instead.
 

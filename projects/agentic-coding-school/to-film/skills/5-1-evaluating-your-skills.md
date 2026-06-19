@@ -1,7 +1,7 @@
 ---
 class: "skills"
 chapter: "Quality Control"
-status: "new"
+status: "scripted"
 tags: [course, script, skills]
 lesson: "5.1 Evaluating Your Skills"
 ---

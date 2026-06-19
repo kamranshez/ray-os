@@ -1,6 +1,7 @@
 ---
 class: "business"
 chapter: "Marketing Automation"
+status: "scripted"
 ---
 
 ## Agent Mail — Let AI Agents Run Your Inbox

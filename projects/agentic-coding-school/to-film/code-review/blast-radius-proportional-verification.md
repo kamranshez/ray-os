@@ -1,3 +1,9 @@
+---
+class: "code-review"
+status: "scripted"
+aliases: [blast-radius-proportional-verification]
+---
+
 # Blast Radius: Verification Proportional to Risk
 
 ## What This Video Covers

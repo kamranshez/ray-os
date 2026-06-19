@@ -1,3 +1,9 @@
+---
+class: "context-engineering"
+status: "scripted"
+aliases: [asking-for-options]
+---
+
 # Asking models for options preserves human judgment
 
 ## The idea

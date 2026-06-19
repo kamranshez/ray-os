@@ -1,3 +1,9 @@
+---
+class: "techniques"
+status: "scripted"
+aliases: [clis-vs-mcps]
+---
+
 Use this talk too: [https://www.youtube.com/watch?v=v3Fr2JR47KA](https://www.youtube.com/watch?v=v3Fr2JR47KA) from 6 mins in (mention that they may make improvements here)
 
 Easier to chain in a CLI because you can have the output go to another thing easily without going into the context window or write it directly to a file

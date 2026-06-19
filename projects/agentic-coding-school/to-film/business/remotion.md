@@ -1,6 +1,7 @@
 ---
 class: "workflows"
 chapter: "Applications"
+status: "idea"
 ---
 
 # Remotion

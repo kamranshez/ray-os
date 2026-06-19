@@ -1,6 +1,7 @@
 ---
 class: "claude-code"
 chapter: "Advanced"
+status: "scripted"
 ---
 
 # Worktrees
