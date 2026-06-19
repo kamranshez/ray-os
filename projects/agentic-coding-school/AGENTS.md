@@ -4,9 +4,31 @@ Source content for Ray's Agentic Coding School (https://www.agenticcoding.school
 
 ## Folder layout
 
-- `classes/<class-slug>/<NN-chapter>/<NN-slug>.md` — the canonical, chaptered home for each video script. This is the target structure.
-- `to-film/<class-slug>/...` — legacy staging. Classes are being migrated out of `to-film/` into `classes/`, one class at a time. Once a class is migrated, its scripts live under `classes/` only.
-- `filmed/`, `ideas/`, `research/`, `vsl/` — supporting material, not class scripts.
+Folders encode **placement**; stage is encoded by `status` (see below), not by which folder a file sits in.
+
+- `classes/<class-slug>/<NN-chapter>/<NN-slug>.md` — the canonical, chaptered home for each video script. This is the target structure. `classes/<class-slug>/_drafts/` holds scripts whose class is known but chapter isn't yet.
+- `to-film/<staging-class>/...` — scripted staging. Scripts are drained out of `to-film/` into `classes/`, one class at a time. Once a class is migrated, its scripts live under `classes/` only.
+- `ideas/` — the classless idea inbox: raw seeds and research, no class assigned yet.
+- `research/`, `vsl/` — supporting material, not class scripts.
+
+## Content lifecycle: `status`
+
+Every non-filmed script carries a `status` frontmatter field marking its stage in the pipeline. Use [[content-pipeline]] (Dataview views) as the filter dashboard across all folders.
+
+```
+status: "idea"       seed / stub / one-liner — no real script yet (all of ideas/, plus stub scripts elsewhere)
+status: "scripted"   a real drafted script, planned to film, not yet recorded
+status: "filmed"     recorded/published — signalled by the presence of video_id
+```
+
+`video_id` present ⇒ `filmed`; filmed files don't need `status` re-touched, their stage is implied by the join key. Classification rule used when stamping `status` (deterministic, idempotent):
+
+1. has `video_id` → `filmed`.
+2. else under `ideas/` → `idea` (seeds by definition).
+3. else if the body is a **stub** (≤3 non-frontmatter lines, OR 0 `## ` headings and <10 body lines, OR a single "go through / placeholder" pointer line) → `idea`.
+4. else → `scripted`.
+
+A `status: "idea"` file is the upstream of a script; promote it to `scripted` once a real draft exists, and to `filmed` (via `video_id`) once recorded.
 
 ## The link between a script and its video: `video_id`
 
