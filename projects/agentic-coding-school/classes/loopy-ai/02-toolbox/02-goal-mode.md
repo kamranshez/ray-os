@@ -1,5 +1,9 @@
 ---
 video_id: "5VMOl8yu"
+primary_class: "codex"
+placements:
+  - { class: "codex",    chapter: "Codex App",   primary: true,  order: 37 }
+  - { class: "loopy-ai", chapter: "The Toolbox", primary: false, order: 8 }
 duration: "12-16 min"
 batch: 4
 order: 11

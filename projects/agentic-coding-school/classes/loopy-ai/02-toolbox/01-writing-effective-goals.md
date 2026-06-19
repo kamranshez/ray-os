@@ -1,11 +1,15 @@
 ---
 video_id: "H27FMVX8"
+primary_class: "loopy-ai"
 duration: "12-16 min"
 batch: 4
 order: 12
 batch_name: "The Toolbox"
 class: "loopy-ai"
 chapter: "Writing Effective Goals"
+placements:
+  - { class: "loopy-ai", chapter: "The Toolbox", primary: true,  order: 9 }
+  - { class: "codex",    chapter: "Codex App",   primary: false, order: 38 }
 aliases: [writing-effective-goals]
 ---
 
