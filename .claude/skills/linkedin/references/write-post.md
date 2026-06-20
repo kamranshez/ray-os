@@ -24,7 +24,18 @@ The goal every time is to write **10 different posts** for Ray to choose from. E
 3. **"What's the most concrete recent stat or scene you can offer?"**
    You're looking for: a specific scene Ray witnessed (e.g. "I opened my Sentry dashboard last Monday and 30 issues were already closed"), or a specific number ("4.1M tokens on one loop").
 
+4. **"When did this happen, and what did you NOT have at the time?"**
+   You're looking for: the timeline. Don't collapse past and present. If Ray's credibility comes from something years ago (e.g. "Anki got me into Cambridge"), the tool he's posting about almost certainly didn't exist then. Get this right or the post implies a false claim (drafted: "Anki + Claude Code got me into Cambridge" — but Ray graduated 4 years ago, before Claude Code existed). **An honest timeline is usually stronger authority, not weaker:** "I did all of this by hand back then, the tool didn't exist" sets up the contrast the post needs and signals depth. Always separate "what earned the credibility" from "what's new now."
+
 Weave the answers into multiple variations. At least 3 of the 10 drafts should anchor on Ray's own evidence (self-anchored), not on quotes from Boris / Anthropic / external authority (authority-anchored). Both types are valid — but Ray's self-anchored posts are his unique moat (see the "Strategic angle for Ray specifically" section in `viral-playbook.md`).
+
+## The Framing Checkpoint (do this before drafting 10)
+
+Generating 10 full drafts on the wrong frame wastes a whole cycle. Before writing them, state the **angle/spine** in one or two lines and confirm it with Ray:
+
+> "Here's the angle I'll take across all 10: [e.g. 'this is a hidden unlock almost nobody has found yet,' not 'most people are doing Anki wrong']. The true contrast is [X]. Does this framing land before I draft?"
+
+This is most important for **novel/hidden topics**, where the obvious "Most people X" framing is often a false premise (see Pattern 1's precondition in `viral-playbook.md`). One sentence of confirmation here beats three rounds of re-rendering. Skip only when the frame is obvious and uncontested.
 
 ## The Writing Process
 
@@ -56,6 +67,19 @@ Use a different primary trigger for each draft. With 6 triggers + 8 patterns, th
 ### Step 3: Write for feeling, not information
 
 Ask yourself: "What will the reader *feel* after reading this?" If the answer is "informed," rewrite it. The answer should be one of: seen, challenged, curious, aspirational, tribal, uncomfortable-in-a-good-way.
+
+### Step 3.5: Idea-led, not description-led (the dealbreaker gate)
+
+The most common failure mode for tactical / workflow / tool posts: the post just **describes what Ray does** ("I point Claude Code at my Anki deck, it makes cards, reads my history, reprioritizes"). That reads as a feature list. The reader finishes and thinks "neat," not "huh, I'd never thought of it that way."
+
+Every post must **lead with a transferable idea** — a principle, a reframe, or a non-obvious truth the reader learns *even if they never touch the tool*. The workflow is the *evidence* for the idea, not the point of the post.
+
+- ❌ Description-led: "Claude Code reads my review history and finds the cards I keep failing."
+- ✅ Idea-led: "A card you keep failing isn't a hard card. It's a missing card." (then the workflow as proof)
+- ❌ Description-led: "It can turn any lecture into 50 flashcards in two minutes."
+- ✅ Idea-led: "When creation gets free, the value moves to curation." (then the workflow as proof)
+
+Test each draft: strip out the tool entirely. Is there still an idea worth reading? If not, the post is a demo, not a take. Rewrite it around the idea.
 
 ### Step 4: Apply the format patterns
 

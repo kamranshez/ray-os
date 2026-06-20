@@ -9,11 +9,11 @@ pattern: contrast hook
 media: text only
 status: posted
 engagement:
-  reactions: 0
-  comments: 0
+  reactions: 6
+  comments: 1
   reposts: 0
-  impressions: 8
-  last_checked: 2026-06-11
+  impressions: 363
+  last_checked: 2026-06-20
 url: https://www.linkedin.com/feed/update/urn:li:activity:7470491246776610817/
 notes: >
   Post 1 from the nested-subagents batch (10 variations from transcript.txt,
@@ -22,6 +22,8 @@ notes: >
   the closing aphorism line ("Context isn't a budget you spend. It's a signal
   you protect."). Added a YouTube comment linking to the video
   https://www.youtube.com/watch?v=i4fMF1pug3w. Checked 10 min after posting.
+  2026-06-20: final check at ~9 days — 6 reactions, 1 comment (Ray's own
+  author comment with the YouTube link), 0 reposts, 363 impressions.
 ---
 
 Most people use subagents to protect their main context.

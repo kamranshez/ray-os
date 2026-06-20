@@ -46,7 +46,19 @@
     letting subagents protect their own." (status signaling + aspiration,
     contrast hook) went live 2026-06-11. Checked 10 min after posting:
     0 reactions, 0 comments, 0 reposts, 8 impressions.
-    Pull full engagement in 3 days and update the post-history file.
+    2026-06-20: final check — 6 reactions, 1 comment (Ray's own link comment),
+    0 reposts, 363 impressions. Engagement block updated in post-history file.
   due: 2026-06-14
-  status: pending
+  status: done
   related_post: references/post-history/2026-06-11_nested-subagents-context-signal.md
+
+- task: Check engagement on Anki + Claude Code 3-levels post
+  description: >
+    "Hardly anyone is using Claude Code with Anki yet. Here are the 3 levels
+    of it." (status signaling + aspiration, tier map + decision rule close)
+    went live 2026-06-21. Pull reactions, comments, reposts, impressions via
+    the linkedin skill and fill in the engagement block in the post-history
+    file. URL is a ugcPost URN.
+  due: 2026-06-24
+  status: pending
+  related_post: references/post-history/2026-06-21_anki-claude-code-3-levels.md

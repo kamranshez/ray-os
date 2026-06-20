@@ -25,6 +25,8 @@ Viral hooks state a complete reframe in line 1. They don't tease, they don't ann
 
 **The formula that works most often:** "Most people [current behavior]. [Authority / smart group] [new behavior]."
 
+**Precondition (don't skip this):** "Most people [X]" only works when X is *genuinely common*. If almost nobody is doing the thing yet (a hidden or novel approach), "Most people do X with it" is a false premise and the post collapses. For hidden unlocks, **invert the formula**: contrast a *broadly true* behavior against your rare one ("Everyone points Claude Code at their codebase. I point it at my flashcards.") and switch the trigger from belief disruption to **curiosity gap + insider/ahead-of-the-curve status** ("I still haven't seen anyone else do this"). Before writing a "Most people X" hook, ask: is X actually what most people do? If not, flip it.
+
 ## 2. Write for repostability, not just readability
 
 Reposts put the post in front of new audiences. The structures that get reposted are tier maps and decision rules — content that becomes reference material people screenshot.
