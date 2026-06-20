@@ -136,7 +136,9 @@ Per card this:
 - overwrites `sentence`, `sentence_audio`, `picture`, `explanation`, `explanation_audio`
 - retags the i-level (`i1`/`i2`/…) to reflect the NEW sentence's complexity for Ray
 - **rehabilitates** the card so the fresh sentence is re-learned cleanly: removes the
-  `leech` tag, unsuspends, and `forgetCards` to reset scheduling → the card becomes due
+  `leech` tag, unsuspends, `forgetCards` to reset scheduling → the card becomes due, and
+  zeroes the `reps`/`lapses` counters (forgetCards alone leaves them, so a card would keep
+  its lapse history and re-leech too soon)
 - **promotes the flag**: input `flag:1` ("fix these") → `--done-flag` (default `3` =
   "redone, review me"). Anki flags are mutually exclusive, so the redone set ends up on
   flag:3 while genuine misses stay on flag:1 (still-to-fix). Ray eyeballs flag:3 then

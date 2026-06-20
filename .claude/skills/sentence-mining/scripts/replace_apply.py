@@ -161,6 +161,16 @@ def rehabilitate(nid):
     except Exception:  # noqa: BLE001
         pass
     anki_request("forgetCards", cards=cards)          # reset scheduling → new → due
+    # forgetCards resets scheduling but leaves the rep/lapse COUNTERS intact, so a
+    # "rehabilitated" card keeps its lapse history and re-leeches far too soon. Zero
+    # them too so the fresh sentence really starts from scratch. setSpecificValueOfCard
+    # needs warning_check + integer values, and is per-card.
+    for cid in cards:
+        try:
+            anki_request("setSpecificValueOfCard", card=cid,
+                         keys=["reps", "lapses"], newValues=[0, 0], warning_check=True)
+        except Exception:  # noqa: BLE001 — counter reset is best-effort
+            pass
     return cards
 
 

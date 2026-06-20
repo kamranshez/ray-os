@@ -366,7 +366,11 @@ def main():
             from pathlib import Path
             banks = load_indexes(Path(idx))
             print(f"Bank fallback: {len(banks)} indexed bank(s)", file=sys.stderr)
-        except Exception as e:  # noqa: BLE001
+        except (Exception, SystemExit) as e:  # noqa: BLE001
+            # load_indexes raises SystemExit (not Exception) when the index dir
+            # exists but holds no *.notes.json — tier-3 banks are optional in
+            # replace mode, so treat that as "no banks" rather than aborting.
+            banks = None
             print(f"Bank fallback: unavailable ({e})", file=sys.stderr)
     else:
         print("Bank fallback: off (no indexed banks)", file=sys.stderr)
