@@ -1,0 +1,145 @@
+[
+  {
+    "id": "draft-19ec664b6c090a2c-1781923975604",
+    "cardId": "19ec664b6c090a2c",
+    "status": "sent",
+    "source": "composer",
+    "reply": "Hi Art,\n\nThis is very helpful.\n\nI agree that rigid spec-driven systems can get in the way, especially when the thing is only half-formed. It really helps to feel at the shape of the solution before committing to running anything.\n\nAnd that framing seems really interesting.\n\nI think for me, I just kind of imagine like different layers of loops because some people run really short, simple loops, such as a crawl job to manage their emails, and other people run more complicated loops that are like collecting feedback, handing off work-to-over loops, and building features end-to-end\n\nBest,\nRay",
+    "codexTask": "",
+    "senderName": "Art Smalley",
+    "senderEmail": "artsmalley2000@yahoo.com",
+    "subject": "Re: Spending a day with Anthropic engineers",
+    "summary": "Art appreciated the Anthropic event writeup and offered a structured way to explain loops using production-scheduling concepts: fixed time/fixed condition, fixed time/unfixed condition, fixed condition/unfixed time, and unfixed time/unfixed condition.",
+    "nextAction": "Reply with thanks and consider folding the time-vs-condition framing into the Loopy AI material.",
+    "fullEmail": "From: Art Smalley <artsmalley2000@yahoo.com>\nTo: Ray Amjad <ray@updates.agenticcoding.school>\nDate: 2026-06-14 13:49:02\nSubject: Re: Spending a day with Anthropic engineers\n\nThat is great. Glad you got to go and compare notes. Thanks for sharing the experience. That is an interesting insight that even in Anthropic engineering are pursing different workflows. Different types of work often require different paths.\n\nI can't stand BMAD or rigid spec driven systems. either The process gets in the way of building. Sometimes I need to figure out what I want while I code in an interactive process. I can't write a detailed spec for something that is only 50% clear in my head sometimes. So different workflows for different situations.\n\nLong winded comment on \"Loops\" and maybe an alternative explanation method below. In production scheduling there is this notion that you are operating on either a time and or a condition governing mechanism.\n\n1. The hardest to pull off is fixed time and fixed condition (X is done exactly on this date). This is a traditional waterfall structure that often does not work.\n\n2. Fixed time unfixed condition. I think this is what Agile / Scrum mainly does. Use a fixed time horizon and get done whatever prioritized. Then meet in X days and repeat, etc.\n\n3. Fixed condition / unfixed time is another potential way to schedule. Work until a condition is achieved. Time continues until goal or condition is attained.\n\n4. Unfixed time / unfixed condition is just zero planning and execution.\n\nLoops are either a) fixed time (Chron job for example) and and then execute specified work or b) fixed condition (/goal) etc. and run until complete, etc.\n\nMost are going to fall into this type of pattern? Or do you think about it differently? I am trying to simplify because just saying \"loop\" leaves me (and others I suspect) confused at times.\n\nArt Smalley",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Art,\n\nThank you. This is a really useful way of framing it.\n\nI think you're right that \"loop\" can be a bit too vague on its own. The time vs condition distinction makes it much clearer. I may use that in the Loopy AI material.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Thoughtful",
+        "body": "Hi Art,\n\nYeh, I think this is a cleaner explanation than just saying \"loops\" and hoping people infer the shape.\n\nThe fixed-time vs fixed-condition idea maps pretty well onto how I'm thinking about it. Some loops are basically scheduled scans, and some run until a condition is met. The stop condition / verifier is probably the bit I need to make clearer too.\n\nThanks for writing this out.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Conversational",
+        "body": "Hi Art,\n\nThis is very helpful.\n\nI agree that rigid spec-driven systems can get in the way, especially when the thing is only half-formed. I think your scheduling framing gives a nicer way to explain the difference between a loose loop and a goal-driven one.\n\nI'll sit with this a bit.\n\nBest,\n\nRay"
+      }
+    ],
+    "createdAt": "2026-06-20T02:52:55.604Z",
+    "updatedAt": "2026-06-20T02:52:55.604Z",
+    "gmailDraftId": "r8213071790793691245",
+    "gmailMessageId": "19ee2f34ca1f476a",
+    "gmailThreadId": "19ec664b6c090a2c",
+    "pushedToGmailAt": "2026-06-20T02:54:29.097Z",
+    "gmailSentMessageId": "19ee2f6c98987241",
+    "sentAt": "2026-06-20T02:58:03Z",
+    "recordedSentAt": "2026-06-20T02:59:36.418Z",
+    "gmailArchivedAt": "2026-06-20T03:18:44.963Z"
+  },
+  {
+    "id": "draft-19ec58ce9753b983-1781924562133",
+    "cardId": "19ec58ce9753b983",
+    "status": "sent",
+    "source": "composer",
+    "reply": "Hi Thompson,\n\nThat's a proper world-map life haha.\n\nYeh, I'm originally from the UK. Japan was partly a long-running fascination. I did a short exchange program here during university And it was so different from any other country that I've been to. I guess one thing that helps is that 200 years ago they had a period of national isolationism, which meant that their culture developed differently from most other countries. \n\nI always thought Japanese sounded nice and I really wanted to learn the language one day. \n\nAnd also there are so many different places to travel domestically as well. Like every prefecture basically has its own unique charm to it. I think for domestic travel it's the best country.\n\nBest,\nRay",
+    "codexTask": "",
+    "senderName": "Thompson George",
+    "senderEmail": "thompson@phoenixinks.xyz",
+    "subject": "Re: Spending a day with Anthropic engineers",
+    "summary": "Thompson asks how you ended up living in Tokyo and shares his own history of moving between Saudi, Tel Aviv, Singapore, Malaysia, Berlin, and Pune.",
+    "nextAction": "Reply personally if you want to keep the conversation warm; no operational task needed.",
+    "fullEmail": "From: Thompson George <thompson@phoenixinks.xyz>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-06-14 09:53:12\nSubject: Re: Spending a day with Anthropic engineers\n\nAbsolutely.\n\nYeah, I think I've seen you mention before that you're based in Tokyo. I'd love to hear how you ended up there.\n\nIf I'm not mistaken, I thought you were originally from the UK. What made you choose Tokyo out of all the places you could have lived and worked? Was there a particular reason, opportunity or moment that led you there?\n\nAs for me, I've moved around quite a bit too. I was raised in Saudi and spent a short time living in Tel Aviv. After that I lived in Singapore, then Malaysia, then Berlin, then back to Malaysia. These days I'm in Pune. Maybe that's why I'm always interested in hearing the stories behind how people end up where they do.\n\nOut of all the places I've lived, Malaysia was my favourite.",
+    "replySuggestions": [
+      {
+        "label": "Personal",
+        "body": "Hi Thompson,\n\nThat's a proper world-map life haha.\n\nYeh, I'm originally from the UK. Japan was partly a long-running fascination and partly just a place that fit my rhythm weirdly well once I spent more time here. Tokyo has a mix of density and calm that I really like.\n\nMalaysia being your favourite makes sense too. I've only spent a little time there, but I really liked it.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Short",
+        "body": "Hi Thompson,\n\nYeh, I'm originally from the UK.\n\nI think Japan just kept pulling me back. Tokyo especially has this strange mix of intensity and calm that works well for me. I may move around Japan a bit more, but for now it feels like a good base.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Warm",
+        "body": "Hi Thompson,\n\nThat's a fascinating path. Saudi, Tel Aviv, Singapore, Malaysia, Berlin, Pune is quite the route.\n\nFor me, Tokyo was less one big decision and more a slow realisation that I liked the texture of daily life here. It feels busy but still ordered, and that suits the way I work.\n\nBest,\n\nRay"
+      }
+    ],
+    "createdAt": "2026-06-20T03:02:42.133Z",
+    "updatedAt": "2026-06-20T03:02:42.133Z",
+    "gmailSentMessageId": "19ee2ff729147e00",
+    "gmailThreadId": "19ec527c8e197906",
+    "sentAt": "2026-06-20T03:08:09.065Z",
+    "recordedSentAt": "2026-06-20T03:08:09.065Z",
+    "gmailArchivedAt": "2026-06-20T03:11:54.139Z"
+  },
+  {
+    "id": "draft-19ec3e7a265ba920-1781924779565",
+    "cardId": "19ec3e7a265ba920",
+    "status": "sent",
+    "source": "composer",
+    "reply": "Hi Reid,\n\nThank you.\n\nMy process is actually more like I use Claude to look at my YouTube watch history, download the video, extract the sentences, and then make me sentence cards for any words that I don't know. \n\nBasically, Anki is like my source of truth for all the words I know and don't know, and then Claude basically finds missing words from things. \n\nI'm also trying to make an extension whereby I can scroll YouTube and it will automatically show me the difficulty of any video. \n\nSo it basically helps me decide what to watch and prevents me from watching things that are too easy for me and accidentally wasting my time when things are too hard for me. I can show you in person if I come to one of the events.\n\nI'll check the event link too :)\n\nBest,\nRay",
+    "codexTask": "",
+    "senderName": "R G",
+    "senderEmail": "mothra1@gmail.com",
+    "subject": "Re: Spending a day with Anthropic engineers",
+    "summary": "Reid talks about Claude Code usage, Japanese study workflows, older Japanese audio study sites, a Stripe fraud issue on Eikaiwa.fm, and invites you to a June 27 rooftop party event.",
+    "nextAction": "Reply if you want to keep the local Japan connection warm; optionally mention the Japanese-study setup and acknowledge the event.",
+    "fullEmail": "From: R G <mothra1@gmail.com>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-06-14 02:12:51\nSubject: Re: Spending a day with Anthropic engineers\n\nHI Ray,\n\nIm on the $100 claude code plan and havent even hit any limists yet.\n\nMy websites look ancient but thanks for the compliments.\n\nIm curious about your study method on Claude. I have a few ways for studying too mostly telling it to give me examples of how to use such and such word, phrase or grammar in 15 sentences from easy to difficult with varying degreses of handing the furigana display.\n\n(In 2004-2007 I made lots of Japaense audio study material content for a dedicated radio stations called japanese.fm (not operating) and the reverse content for https://www.eikaiwa.fm (operating now)\n\nClaude helped my update Eikawa.fm BUT screwed up the STRIPE install so i had thousands of dollars of fraud on that channel). I hope to uprade it more soon But - like you - im up to my ears in ideas that I can't fully commit to mixed with present obligations.\n\nALso, (don’t worry i don’t plan on bombarding you with these promos but) this is a first time roftop party event that should be good if you are in that area June 27th:\n\nhttps://www.meetup.com/国際交流パーティー横浜/events/315249360/?utm_medium=email&utm_campaign=rsvp-confirmation\n\ncatch you around sometime!\n\nReid",
+    "replySuggestions": [
+      {
+        "label": "Study method",
+        "body": "Hi Reid,\n\nYeh, that's pretty close to how I use Claude for Japanese too. I try to make it generate very specific practice rather than broad explanations.\n\nSo instead of \"teach me this grammar\", it's more like: give me 15 examples, make them gradually harder, control the furigana, and then test me on similar sentences.\n\nSorry about the Stripe issue. Payment stuff is exactly the kind of thing where I would want a very hard verifier before trusting AI-written code.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Casual",
+        "body": "Hi Reid,\n\nHaha yeh, I know the too-many-ideas problem very well.\n\nYour Japanese study approach sounds good. I use Claude in a similar way: lots of constrained examples, lots of repetition, and making it generate the exact kind of practice I need that day.\n\nThanks for the party link too. I'll check where I am around then.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Short",
+        "body": "Hi Reid,\n\nThank you. That's useful.\n\nFor Japanese, I mostly use Claude to generate targeted practice: examples, drills, and variations around the exact thing I'm trying to learn. I find that much more useful than generic explanations.\n\nI'll check the event link too :)\n\nBest,\n\nRay"
+      }
+    ],
+    "createdAt": "2026-06-20T03:06:19.565Z",
+    "updatedAt": "2026-06-20T03:06:19.565Z",
+    "gmailSentMessageId": "19ee2ff94e96ac08",
+    "gmailThreadId": "19ebf2491376f0d0",
+    "sentAt": "2026-06-20T03:08:09.065Z",
+    "recordedSentAt": "2026-06-20T03:08:09.065Z",
+    "gmailArchivedAt": "2026-06-20T03:11:54.139Z"
+  },
+  {
+    "id": "draft-19e6e76f0ad50f20-1781925514937",
+    "cardId": "19e6e76f0ad50f20",
+    "status": "sent",
+    "source": "composer",
+    "reply": "Hi David,\n\nThank you for the detailed reply.\n\nThat's awesome, good luck. Do let me know how it goes :)\n\nYou can still find the source code for the Tensor AI application; it hasn't really been updated in a couple of months, so it should still be pretty recent. \n\nhttps://www.skool.com/forward-pass-2757/example-code-for-tensor-ai\n\nAnd yeah, I don't like the platform Skool anymore, which is why I kind of moved things off there. Also, there wasn't as much demand for that kind of content compared to just learning about agentic coding tools. \n\nBest,\n\nRay",
+    "codexTask": "",
+    "senderName": "David Olutunde",
+    "senderEmail": "olutunded04@gmail.com",
+    "subject": "Re: Quick question about the class",
+    "summary": "David was in the older AI Startup School community, found it valuable, and wants to keep building a diaspora news aggregation app. He asks about archived Tensor AI material and wants more Codex-native SaaS methodology.",
+    "nextAction": "Reply with what can still be shared from archived material and acknowledge the request for end-to-end Codex SaaS examples.",
+    "fullEmail": "From: David Olutunde <olutunded04@gmail.com>\nTo: Ray Amjad <ray@updates.agenticcoding.school>\nDate: 2026-05-28 12:01:41\nSubject: Re: Quick question about the class\n\nHi Ray,\n\nSorry for the late reply, I missed your email. I was actually part of your AI Startup School community on Skool since last November, and I found it really valuable. Because of university and life commitments, I couldn’t fully take advantage of the classes at the time, but now that it’s summer break, I’m ready to dive back in and start building apps and SaaS products.\n\nOne project I want to work on is a news-aggregation app for immigrants in the diaspora to stay updater on news from their home country, similar to your Tensor AI app. I remember you shared the source code for that in the Skool community, but since the community was closed recently, I no longer have access. Would you be able to share that code with me again or grant me access to the archive?\n\nTo answer your questions:\n\n1. My biggest win so far recently from MasterClass has been using what I learned from your Codex class to build my AI rover assistant. I integrated the software with hardware like Raspberry Pi, Arduino, Pi Camera, and more and that’s been a huge milestone for me. Now I want to transition more into the software side, which is what the Masterclass focuses on.\n\n2. What I wish the class covered more is how to apply the same methodologies using Codex. Since the focus is mainly on Claude, I’m not always sure how to translate those workflows. I really like the archived SaaS-building class, but it’s also Claude-centric, and I’m not sure whether the same approach works with Codex. If you ever create Codex-friendly version, especially something like your MCP integration that would be incredibly helpful.\n\nThanks again for checking in, I appreciate the support and everything you’ve built.\n\nBest regards,\nDavid",
+    "replySuggestions": [
+      {
+        "label": "Warm",
+        "body": "Hi David,\n\nThank you for the detailed reply.\n\nThe rover assistant sounds awesome. That's a really nice milestone, especially because it combines software with actual hardware.\n\nLet me check what I can still share from the old Tensor AI material now that the Skool community is closed. And yeh, I agree that a Codex-friendly SaaS walkthrough would be useful. The older material is definitely more Claude-centric.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Practical",
+        "body": "Hi David,\n\nThanks for writing this out.\n\nFor the diaspora news app, I would probably start smaller than the full version: one country, one source type, one summarisation flow, and one daily digest. Once that works, the bigger product becomes much easier to build.\n\nI'll also check what I can still share from the old Tensor AI source.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Ask focus",
+        "body": "Hi David,\n\nThat's great progress. The AI rover assistant sounds like a very cool project.\n\nLet me check the archive situation for the old Tensor AI material. For the diaspora app, what part are you most interested in building first? Ingestion, summarisation, accounts, or the overall architecture?\n\nBest,\n\nRay"
+      }
+    ],
+    "createdAt": "2026-06-20T03:18:34.937Z",
+    "updatedAt": "2026-06-20T03:18:34.937Z",
+    "gmailSentMessageId": "19ee30b71ba1d336",
+    "gmailThreadId": "19e6e76f0ad50f20",
+    "sentAt": "2026-06-20T03:21:11.307Z",
+    "recordedSentAt": "2026-06-20T03:21:11.307Z",
+    "gmailArchivedAt": "2026-06-20T03:21:11.307Z"
+  }
+]

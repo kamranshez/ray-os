@@ -1,85 +1,266 @@
 [
   {
+    "id": "19edb8daaf76119b",
+    "threadId": "19edb8daaf76119b",
+    "senderName": "Jordan Crawford",
+    "senderEmail": "gtmontheedge+my-tools@substack.com",
+    "subject": "Why AI design looks so generic",
+    "receivedAt": "2026-06-18T16:24:16Z",
+    "status": "cleared",
+    "proposedAction": "skip",
+    "summary": "Jordan argues that AI-built design becomes generic when agents fetch only text and then fill in visual details from priors. His core rule is to capture real screenshots and computed CSS, then build from those exact values and verify the result in a real browser.",
+    "nextAction": "Probably archive or treat as FYI. If replying, send a short note that the capture-first framing is good and matches your own “ground truth beats priors” way of working.",
+    "preview": "A long paid Substack post about why AI design looks generic and how to use real browser capture, CSS extraction, and layout gates to avoid average-looking output.",
+    "fullEmail": "From: Jordan Crawford <gtmontheedge+my-tools@substack.com>\nTo: r@rayamjad.com\nDate: 2026-06-18 16:24:16 UTC\nSubject: Why AI design looks so generic\n\nA web fetch returns the words, not the pixels or the CSS. So Claude paints the rest from memory - that is the slop. The fix is one rule: capture, don't describe.\n\nJordan describes a workflow for using a real headless browser to capture screenshots plus computed CSS from strong reference pages, then building from those exact visual values instead of letting the model infer a generic pricing-page pattern. The post walks through a “Steal This Design” skill, including quick screenshots, deep CSS/token extraction, a decision page instead of a gallery, and a layout gate that catches overflow, broken images, clipped badges, buried recommendations, and weak mobile layouts.\n\nThe practical lesson: feed agents ground truth they could not have guessed, make the output commit to a recommendation, and verify the rendered page before shipping.",
+    "replySuggestions": [
+      {
+        "label": "Short acknowledgement",
+        "body": "Hi Jordan,\n\nThis is a really good framing.\n\nThe “capture, don’t describe” point feels exactly right to me. I’ve seen the same thing where the model fills in the missing visual details from priors and you end up with something that looks polished but generic.\n\nThe layout gate part is especially interesting too. That kind of real browser verification is the bit that makes the workflow feel durable rather than just a nicer prompt.\n\nBest,\nRay"
+      },
+      {
+        "label": "Connect to your work",
+        "body": "Hi Jordan,\n\nThis is useful.\n\nI think the bigger principle here is that agents need real ground truth rather than descriptions of ground truth. Screenshots, computed CSS, browser checks, real failure states, all of that gives the model something specific to work from instead of letting it average everything out.\n\nThat maps pretty closely to how I think about verifier loops too. The agent should touch the actual thing, not just reason about what the thing is supposed to be.\n\nBest,\nRay"
+      },
+      {
+        "label": "Archive/FYI note",
+        "body": "No reply needed. Archive as a useful FYI/reference on capture-first design workflows."
+      }
+    ],
+    "tags": [
+      "newsletter",
+      "design",
+      "agent-workflows",
+      "ignored-source"
+    ],
+    "updatedAt": "2026-06-20T03:36:42.619Z",
+    "syncedAt": "2026-06-20T03:32:48.292Z",
+    "ignored": true,
+    "ignoredReason": "newsletter/substack"
+  },
+  {
+    "id": "19edb191c5492916",
+    "threadId": "19ed627b832b3458",
+    "senderName": "Tomasz Banas",
+    "senderEmail": "tom@incore.com",
+    "subject": "Re: New Class Idea Submission",
+    "receivedAt": "2026-06-18T14:18:23Z",
+    "status": "cleared",
+    "summary": "Tomasz followed up on a class idea submission for covering the Nimbalyst app. You asked where he had seen it; he says it is showing up more in YouTube videos and mentions Tech With Tim as one recent place he saw it.",
+    "nextAction": "Reply with thanks, note the source, and decide whether Nimbalyst belongs in the backlog for future class research.",
+    "draftSeed": "Thanks Tomasz. That helps. I have seen Tech With Tim's channel, so I will take a look at how Nimbalyst is being positioned and see whether it is worth turning into a class example.",
+    "preview": "He says Nimbalyst is appearing more in YouTube videos and points to Tech With Tim after you asked where he came across it.",
+    "fullEmail": "From: Agentic Coding School <support@agenticcoding.school>\nTo: r@rayamjad.com\nDate: 2026-06-17 15:16:25\nSubject: New Class Idea Submission\n\nNew Class Idea Submitted\n\nFrom: tom@incore.com\n\nCould you please cover the Nimbalyst app?\n\nReply directly to this email to respond to the user.\n\nRay Amjad LTD\nLytchett House, 13 Freeland Park, Wareham Road, Poole, Dorset, BH16 6FA\n\n---\n\nFrom: Ray Amjad <r@rayamjad.com>\nTo: tom@incore.com\nDate: 2026-06-18 03:09:20\nSubject: Re: New Class Idea Submission\n\nHi,\n\nThanks for sending this over.\n\nIt's the first time I've heard of this. Where did you come across this app? :)\n\nBest,\nRay\n\n---\n\nFrom: Tomasz Banas <tom@incore.com>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-06-18 14:18:23\nSubject: Re: New Class Idea Submission\n\nHi Ray,\n\nIt shows up in YT videos more and more. I recently saw it in one of the videos from https://www.youtube.com/@TechWithTim\n\nTomasz P. Banas | CEO & Founder\nINCORE\n990 Cedar Bridge Ave, Brick, NJ 08723\nTel. 732.654.0004 | Direct. 732.654.0016\nWebsite: https://www.incore.com/\nLinkedIn: https://www.linkedin.com/in/tomaszbanas/",
+    "proposedAction": "draft",
+    "conversation": [
+      {
+        "at": "2026-06-20T00:53:27.333Z",
+        "command": "Reply with thank you and say I'll look into it after finishing up the loopy AI class.",
+        "action": "draft"
+      },
+      {
+        "at": "2026-06-20T01:05:00.000Z",
+        "command": "Created Gmail draft reply in the original thread.",
+        "action": "draft"
+      }
+    ],
+    "updatedAt": "2026-06-20T01:05:00.000Z",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Tomasz,\n\nThanks, that's useful context.\n\nI'll take a look at it after I finish up the Loopy AI class. I'll look into how Nimbalyst is being used and whether it makes sense to cover.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Ask for more",
+        "body": "Hi Tomasz,\n\nThanks, that helps.\n\nI'll take a look after I finish up the Loopy AI class. Do let me know if there's a specific part of Nimbalyst you think would be useful to cover.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Backlog",
+        "body": "Hi Tomasz,\n\nThanks. I hadn't come across it before, but if it's showing up more often then it may be worth looking into.\n\nI'll add it to the list and take a look after the Loopy AI class.\n\nBest,\n\nRay"
+      }
+    ]
+  },
+  {
+    "id": "19ec664b6c090a2c",
+    "threadId": "19ec664b6c090a2c",
+    "senderName": "Art Smalley",
+    "senderEmail": "artsmalley2000@yahoo.com",
+    "subject": "Re: Spending a day with Anthropic engineers",
+    "receivedAt": "2026-06-14T13:49:02Z",
+    "status": "cleared",
+    "summary": "Art appreciated the Anthropic event writeup and offered a structured way to explain loops using production-scheduling concepts: fixed time/fixed condition, fixed time/unfixed condition, fixed condition/unfixed time, and unfixed time/unfixed condition.",
+    "nextAction": "Reply with thanks and consider folding the time-vs-condition framing into the Loopy AI material.",
+    "draftSeed": "Thanks Art. This is a genuinely useful frame. The time versus condition split is probably a cleaner way to explain a lot of what I mean by loops, especially the distinction between scheduled scans and goal-driven runs.",
+    "preview": "Art dislikes rigid spec frameworks and suggests explaining loops as either time-governed or condition-governed mechanisms.",
+    "proposedAction": "sent",
+    "conversation": [
+      {
+        "at": "2026-06-20T02:52:55.604Z",
+        "action": "draft",
+        "command": "Saved reply draft: Hi Art,\n\nThis is very helpful.\n\nI agree that rigid spec-driven systems can get in the way, especially when the thing is only half-formed. It really helps to feel at the shape of the solution before committing to running anything.\n\nAnd that framing seems really interesting.\n\nI think for me, I just kind of imagine like different layers of loops because some people run really short, simple loops, such as a crawl job to manage their emails, and other people run more complicated loops that are like collecting feedback, handing off work-to-over loops, and building features end-to-end\n\nBest,\nRay",
+        "draftId": "draft-19ec664b6c090a2c-1781923975604"
+      },
+      {
+        "at": "2026-06-20T03:18:44.963Z",
+        "action": "cleared",
+        "command": "Removed from open list after sent Gmail reply was confirmed.",
+        "gmailMessageId": "19ee2f6c98987241"
+      }
+    ],
+    "fullEmail": "From: Art Smalley <artsmalley2000@yahoo.com>\nTo: Ray Amjad <ray@updates.agenticcoding.school>\nDate: 2026-06-14 13:49:02\nSubject: Re: Spending a day with Anthropic engineers\n\nThat is great. Glad you got to go and compare notes. Thanks for sharing the experience. That is an interesting insight that even in Anthropic engineering are pursing different workflows. Different types of work often require different paths.\n\nI can't stand BMAD or rigid spec driven systems. either The process gets in the way of building. Sometimes I need to figure out what I want while I code in an interactive process. I can't write a detailed spec for something that is only 50% clear in my head sometimes. So different workflows for different situations.\n\nLong winded comment on \"Loops\" and maybe an alternative explanation method below. In production scheduling there is this notion that you are operating on either a time and or a condition governing mechanism.\n\n1. The hardest to pull off is fixed time and fixed condition (X is done exactly on this date). This is a traditional waterfall structure that often does not work.\n\n2. Fixed time unfixed condition. I think this is what Agile / Scrum mainly does. Use a fixed time horizon and get done whatever prioritized. Then meet in X days and repeat, etc.\n\n3. Fixed condition / unfixed time is another potential way to schedule. Work until a condition is achieved. Time continues until goal or condition is attained.\n\n4. Unfixed time / unfixed condition is just zero planning and execution.\n\nLoops are either a) fixed time (Chron job for example) and and then execute specified work or b) fixed condition (/goal) etc. and run until complete, etc.\n\nMost are going to fall into this type of pattern? Or do you think about it differently? I am trying to simplify because just saying \"loop\" leaves me (and others I suspect) confused at times.\n\nArt Smalley",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Art,\n\nThank you. This is a really useful way of framing it.\n\nI think you're right that \"loop\" can be a bit too vague on its own. The time vs condition distinction makes it much clearer. I may use that in the Loopy AI material.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Thoughtful",
+        "body": "Hi Art,\n\nYeh, I think this is a cleaner explanation than just saying \"loops\" and hoping people infer the shape.\n\nThe fixed-time vs fixed-condition idea maps pretty well onto how I'm thinking about it. Some loops are basically scheduled scans, and some run until a condition is met. The stop condition / verifier is probably the bit I need to make clearer too.\n\nThanks for writing this out.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Conversational",
+        "body": "Hi Art,\n\nThis is very helpful.\n\nI agree that rigid spec-driven systems can get in the way, especially when the thing is only half-formed. I think your scheduling framing gives a nicer way to explain the difference between a loose loop and a goal-driven one.\n\nI'll sit with this a bit.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:18:44.963Z",
+    "gmailArchivedAt": "2026-06-20T03:18:44.963Z"
+  },
+  {
+    "id": "19ec58ce9753b983",
+    "threadId": "19ec527c8e197906",
+    "senderName": "Thompson George",
+    "senderEmail": "thompson@phoenixinks.xyz",
+    "subject": "Re: Spending a day with Anthropic engineers",
+    "receivedAt": "2026-06-14T09:53:12Z",
+    "status": "cleared",
+    "summary": "Thompson asks how you ended up living in Tokyo and shares his own history of moving between Saudi, Tel Aviv, Singapore, Malaysia, Berlin, and Pune.",
+    "nextAction": "Reply personally if you want to keep the conversation warm; no operational task needed.",
+    "draftSeed": "That is a proper world-map life. My Japan story is a mix of long-running fascination, wanting a different rhythm of life, and slowly realising Tokyo was one of the few places where the everyday texture felt right to me.",
+    "preview": "He is curious why you chose Tokyo and says Malaysia was his favourite place he has lived.",
+    "proposedAction": "sent",
+    "conversation": [
+      {
+        "at": "2026-06-20T03:02:42.133Z",
+        "action": "draft",
+        "command": "Saved reply draft: Hi Thompson,\n\nThat's a proper world-map life haha.\n\nYeh, I'm originally from the UK. Japan was partly a long-running fascination. I did a short exchange program here during university And it was so different from any other country that I've been to. I guess one thing that helps is that 200 years ago they had a period of national isolationism, which meant that their culture developed differently from most other countries. \n\nI always thought Japanese sounded nice and I really wanted to learn the language one day. \n\nAnd also there are so many different places to travel domestically as well. Like every prefecture basically has its own unique charm to it. I think for domestic travel it's the best country.\n\nBest,\nRay",
+        "draftId": "draft-19ec58ce9753b983-1781924562133"
+      },
+      {
+        "at": "2026-06-20T03:08:09.065Z",
+        "action": "sent",
+        "command": "Sent Gmail reply 19ee2ff729147e00",
+        "gmailMessageId": "19ee2ff729147e00"
+      }
+    ],
+    "fullEmail": "From: Thompson George <thompson@phoenixinks.xyz>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-06-14 09:53:12\nSubject: Re: Spending a day with Anthropic engineers\n\nAbsolutely.\n\nYeah, I think I've seen you mention before that you're based in Tokyo. I'd love to hear how you ended up there.\n\nIf I'm not mistaken, I thought you were originally from the UK. What made you choose Tokyo out of all the places you could have lived and worked? Was there a particular reason, opportunity or moment that led you there?\n\nAs for me, I've moved around quite a bit too. I was raised in Saudi and spent a short time living in Tel Aviv. After that I lived in Singapore, then Malaysia, then Berlin, then back to Malaysia. These days I'm in Pune. Maybe that's why I'm always interested in hearing the stories behind how people end up where they do.\n\nOut of all the places I've lived, Malaysia was my favourite.",
+    "replySuggestions": [
+      {
+        "label": "Personal",
+        "body": "Hi Thompson,\n\nThat's a proper world-map life haha.\n\nYeh, I'm originally from the UK. Japan was partly a long-running fascination and partly just a place that fit my rhythm weirdly well once I spent more time here. Tokyo has a mix of density and calm that I really like.\n\nMalaysia being your favourite makes sense too. I've only spent a little time there, but I really liked it.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Short",
+        "body": "Hi Thompson,\n\nYeh, I'm originally from the UK.\n\nI think Japan just kept pulling me back. Tokyo especially has this strange mix of intensity and calm that works well for me. I may move around Japan a bit more, but for now it feels like a good base.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Warm",
+        "body": "Hi Thompson,\n\nThat's a fascinating path. Saudi, Tel Aviv, Singapore, Malaysia, Berlin, Pune is quite the route.\n\nFor me, Tokyo was less one big decision and more a slow realisation that I liked the texture of daily life here. It feels busy but still ordered, and that suits the way I work.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:08:09.065Z",
+    "gmailArchivedAt": "2026-06-20T03:11:54.139Z"
+  },
+  {
+    "id": "19ec3e7a265ba920",
+    "threadId": "19ebf2491376f0d0",
+    "senderName": "R G",
+    "senderEmail": "mothra1@gmail.com",
+    "subject": "Re: Spending a day with Anthropic engineers",
+    "receivedAt": "2026-06-14T02:12:51Z",
+    "status": "cleared",
+    "summary": "Reid talks about Claude Code usage, Japanese study workflows, older Japanese audio study sites, a Stripe fraud issue on Eikaiwa.fm, and invites you to a June 27 rooftop party event.",
+    "nextAction": "Reply if you want to keep the local Japan connection warm; optionally mention the Japanese-study setup and acknowledge the event.",
+    "draftSeed": "Thanks Reid. The Japanese-study workflow is exactly the kind of thing Claude is surprisingly good at when the structure is explicit. I am sorry about the Stripe mess though; payment plumbing is one of those places where agent work needs a very hard verifier.",
+    "preview": "He is on the Claude Code plan, asks about your Claude-based Japanese study method, and sends a Meetup event link.",
+    "proposedAction": "sent",
+    "conversation": [
+      {
+        "at": "2026-06-20T03:06:19.565Z",
+        "action": "draft",
+        "command": "Saved reply draft: Hi Reid,\n\nThank you.\n\nMy process is actually more like I use Claude to look at my YouTube watch history, download the video, extract the sentences, and then make me sentence cards for any words that I don't know. \n\nBasically, Anki is like my source of truth for all the words I know and don't know, and then Claude basically finds missing words from things. \n\nI'm also trying to make an extension whereby I can scroll YouTube and it will automatically show me the difficulty of any video. \n\nSo it basically helps me decide what to watch and prevents me from watching things that are too easy for me and accidentally wasting my time when things are too hard for me. I can show you in person if I come to one of the events.\n\nI'll check the event link too :)\n\nBest,\nRay",
+        "draftId": "draft-19ec3e7a265ba920-1781924779565"
+      },
+      {
+        "at": "2026-06-20T03:08:09.065Z",
+        "action": "sent",
+        "command": "Sent Gmail reply 19ee2ff94e96ac08",
+        "gmailMessageId": "19ee2ff94e96ac08"
+      }
+    ],
+    "fullEmail": "From: R G <mothra1@gmail.com>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-06-14 02:12:51\nSubject: Re: Spending a day with Anthropic engineers\n\nHI Ray,\n\nIm on the $100 claude code plan and havent even hit any limists yet.\n\nMy websites look ancient but thanks for the compliments.\n\nIm curious about your study method on Claude. I have a few ways for studying too mostly telling it to give me examples of how to use such and such word, phrase or grammar in 15 sentences from easy to difficult with varying degreses of handing the furigana display.\n\n(In 2004-2007 I made lots of Japaense audio study material content for a dedicated radio stations called japanese.fm (not operating) and the reverse content for https://www.eikaiwa.fm (operating now)\n\nClaude helped my update Eikawa.fm BUT screwed up the STRIPE install so i had thousands of dollars of fraud on that channel). I hope to uprade it more soon But - like you - im up to my ears in ideas that I can't fully commit to mixed with present obligations.\n\nALso, (don’t worry i don’t plan on bombarding you with these promos but) this is a first time roftop party event that should be good if you are in that area June 27th:\n\nhttps://www.meetup.com/国際交流パーティー横浜/events/315249360/?utm_medium=email&utm_campaign=rsvp-confirmation\n\ncatch you around sometime!\n\nReid",
+    "replySuggestions": [
+      {
+        "label": "Study method",
+        "body": "Hi Reid,\n\nYeh, that's pretty close to how I use Claude for Japanese too. I try to make it generate very specific practice rather than broad explanations.\n\nSo instead of \"teach me this grammar\", it's more like: give me 15 examples, make them gradually harder, control the furigana, and then test me on similar sentences.\n\nSorry about the Stripe issue. Payment stuff is exactly the kind of thing where I would want a very hard verifier before trusting AI-written code.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Casual",
+        "body": "Hi Reid,\n\nHaha yeh, I know the too-many-ideas problem very well.\n\nYour Japanese study approach sounds good. I use Claude in a similar way: lots of constrained examples, lots of repetition, and making it generate the exact kind of practice I need that day.\n\nThanks for the party link too. I'll check where I am around then.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Short",
+        "body": "Hi Reid,\n\nThank you. That's useful.\n\nFor Japanese, I mostly use Claude to generate targeted practice: examples, drills, and variations around the exact thing I'm trying to learn. I find that much more useful than generic explanations.\n\nI'll check the event link too :)\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:08:09.065Z",
+    "gmailArchivedAt": "2026-06-20T03:11:54.139Z"
+  },
+  {
     "id": "19eb26eb0d2f89bd",
     "threadId": "19eb26eb0d2f89bd",
     "senderName": "Karthikeyan mani",
     "senderEmail": "karthikeyan484@gmail.com",
     "subject": "Re: Quick question about the class",
     "receivedAt": "2026-06-10T16:47:28Z",
-    "status": "queued",
-    "summary": "A student says the biggest win is shifting from general ChatGPT usage toward Codex, plugins, and real-world workflows.",
-    "nextAction": "Reply with encouragement and ask what app idea they want to build first; note the request for iOS and Android app examples.",
+    "status": "new",
+    "summary": "Karthik says the course helped him shift from mostly using ChatGPT toward Codex and plugins. He is still learning practical applications and would like example workflows for creating iOS and Android apps.",
+    "nextAction": "Reply warmly, acknowledge the workflow shift, and say that mobile app workflow examples are a good suggestion for future class material.",
     "draftSeed": "Thanks Karthik. That workflow shift is exactly the kind of thing I hoped the Codex material would unlock. I will think about adding more app-building examples, especially mobile-shaped ones.",
-    "preview": "They are learning Codex/plugins after watching your videos and would like example workflows for creating applications, particularly iOS and Android.",
+    "preview": "Biggest win: moving his workflow toward Codex/plugins. Request: examples for building iOS and Android apps.",
+    "fullEmail": "From: Karthikeyan mani <karthikeyan484@gmail.com>\nTo: Ray Amjad <ray@updates.agenticcoding.school>\nDate: 2026-06-10 16:47:28 UTC\nSubject: Re: Quick question about the class\n\nSubject: Workflow Transition and Application Development\n\nHi Ray,\n\nIn response to your first question, my greatest achievement has been transforming my workflow. I have an OpenAI subscription and typically rely on ChatGPT for various tasks. However, after watching your videos, I've started to shift my focus toward using Codex and exploring the available plugins. I’m still in the process of learning and finding real-world applications for these tools.\n\nFor your second question, I would love to see some example workflows for creating applications, particularly for iOS and Android platforms.\n\nThank you for providing such excellent course materials!\n\nBest regards,\n\nKarthik",
     "proposedAction": "draft",
     "conversation": [
       {
-        "at": "2026-06-12T06:54:32.000Z",
-        "command": "Draft a warm reply and keep this queued for review",
+        "at": "2026-06-20T00:00:00.000Z",
+        "command": "Seeded from current Gmail pending queue",
+        "action": "draft"
+      },
+      {
+        "at": "2026-06-20T01:08:00.000Z",
+        "command": "Created Gmail draft reply in the original thread.",
         "action": "draft"
       }
     ],
-    "updatedAt": "2026-06-12T06:54:32.000Z"
-  },
-  {
-    "id": "19ead6c1e4ce8c09",
-    "threadId": "19ead6c1e4ce8c09",
-    "senderName": "Agentic Coding School",
-    "senderEmail": "support@agenticcoding.school",
-    "subject": "Video Issue Report: Ultraplan",
-    "receivedAt": "2026-06-09T17:26:42Z",
-    "status": "new",
-    "summary": "A learner reports that the Ultraplan video says a Deep Plan prompt should be below the lesson, but they cannot find it.",
-    "nextAction": "Create a content task to check the video description/resources and either add the prompt or reply that it was intentionally omitted.",
-    "draftSeed": "Thanks for flagging this. I am going to check that lesson resource now because the video does make it sound like the prompt should be included.",
-    "preview": "At around 6:20 in the Ultraplan video, the learner heard you say the UltraPlan Deep Plan prompt would be available below, but it is not visible.",
-    "proposedAction": "task",
-    "conversation": []
-  },
-  {
-    "id": "19eb2200cb51a07c",
-    "threadId": "19eb2200cb51a07c",
-    "senderName": "Jordan Crawford",
-    "senderEmail": "gtmontheedge+my-tools@substack.com",
-    "subject": "Sort all of your customers by their influence",
-    "receivedAt": "2026-06-10T15:21:28Z",
-    "status": "new",
-    "summary": "A Substack/newsletter issue describes a referral-notability workflow for scoring customers by owner influence.",
-    "nextAction": "Skim later only if you want ideas for affiliate or customer enrichment workflows; otherwise archive as newsletter.",
-    "draftSeed": "No reply needed.",
-    "preview": "The issue outlines a multi-step enrichment pipeline using owner discovery, notability research, subagents, and deterministic scoring.",
-    "proposedAction": "archive",
-    "conversation": []
-  },
-  {
-    "id": "19e8b47b5a2d1cbe",
-    "threadId": "19e8b47b5a2d1cbe",
-    "senderName": "Agentic Coding School",
-    "senderEmail": "support@agenticcoding.school",
-    "subject": "Video Issue Report: Browser Comments",
-    "receivedAt": "2026-06-03T02:19:51Z",
-    "status": "new",
-    "summary": "A Windows learner says the right-click browser comments flow has changed: they see Annotate instead of Comment, and submissions happen immediately.",
-    "nextAction": "Open the related Codex App lesson, verify current behavior on Windows/latest app if possible, then update the lesson or add a note.",
-    "draftSeed": "Thanks, this is useful. It sounds like the UI changed under that lesson; I will verify it and add a correction if needed.",
-    "preview": "The user reports a mismatch between the lesson and current Codex behavior for right-click commenting/annotation.",
-    "proposedAction": "task",
-    "conversation": []
-  },
-  {
-    "id": "19e861153b98e7f1",
-    "threadId": "19e861153b98e7f1",
-    "senderName": "SMBC Trust Bank",
-    "senderEmail": "info@smbctb.co.jp",
-    "subject": "To Foreign Nationals Residing in Japan",
-    "receivedAt": "2026-06-02T02:02:21Z",
-    "status": "new",
-    "summary": "The bank says the registered period of stay is expired or expiring within three months and asks for updated residence-card details.",
-    "nextAction": "Handle outside email: verify directly through the bank website/app, then update residence status if the notice is legitimate.",
-    "draftSeed": "No reply; the sender says not to reply.",
-    "preview": "Important bank notice about updating Status of Residence and Period of Stay to avoid restrictions on cash card usage.",
-    "proposedAction": "task",
-    "conversation": []
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "replySuggestions": [
+      {
+        "label": "Warm and direct",
+        "body": "Hi Karthik,\n\nThank you, that’s really useful to hear.\n\nI’m glad the videos helped you start moving more of your workflow toward Codex and plugins. I think the real-world application part is exactly where it starts to click, so that makes sense.\n\nAnd yes, iOS and Android workflows are a good suggestion. I’ll keep that in mind for future examples, especially showing what changes when you move from a web app workflow to a mobile one.\n\nBest,\nRay"
+      },
+      {
+        "label": "Encourage next step",
+        "body": "Hi Karthik,\n\nThanks for the reply.\n\nThat’s a great win. Moving from just asking ChatGPT questions to having Codex actually work inside projects is a pretty big shift, so it makes sense that you’re still figuring out where it fits.\n\nMobile app examples are a good idea too. I haven’t covered that as much as web apps yet, but I can see how an iOS/Android workflow would make the patterns more concrete.\n\nBest,\nRay"
+      },
+      {
+        "label": "Ask for specifics",
+        "body": "Hi Karthik,\n\nThank you, that’s helpful.\n\nI’m glad the course has helped you shift more toward Codex and plugins. That’s probably one of the biggest unlocks, because it turns the model from something you chat with into something that can actually operate inside your workflow.\n\nFor the mobile app examples, is there a particular kind of app you’d want to see built? Like a simple utility app, a CRUD-style app, or something with native device features?\n\nBest,\nRay"
+      }
+    ],
+    "tags": [
+      "student-reply",
+      "course-feedback",
+      "mobile-apps"
+    ],
+    "syncedAt": "2026-06-20T03:32:48.292Z"
   },
   {
     "id": "19e6e76f0ad50f20",
@@ -88,28 +269,112 @@
     "senderEmail": "olutunded04@gmail.com",
     "subject": "Re: Quick question about the class",
     "receivedAt": "2026-05-28T12:01:41Z",
-    "status": "new",
-    "summary": "A student wants to build a diaspora news aggregation app, asks about old Tensor AI source access, and wants more Codex-friendly SaaS methodology.",
-    "nextAction": "Reply with guidance on archive/source availability and acknowledge the product request for Codex-native SaaS walkthroughs.",
-    "draftSeed": "Thanks David. The rover assistant sounds like a brilliant milestone. Let me check what I can still share from the archived Tensor AI material and I agree the Codex translation deserves clearer examples.",
-    "preview": "They were in AI Startup School, lost access after the community closed, and want to continue building apps during summer break.",
-    "proposedAction": "draft",
-    "conversation": []
+    "status": "cleared",
+    "summary": "David was in the older AI Startup School community, found it valuable, and wants to keep building a diaspora news aggregation app. He asks about archived Tensor AI material and wants more Codex-native SaaS methodology.",
+    "nextAction": "Reply with what can still be shared from archived material and acknowledge the request for end-to-end Codex SaaS examples.",
+    "draftSeed": "Thanks David. The diaspora news app sounds like a strong project to learn against. Let me check what I can still share from the old Tensor AI material, and I agree the Codex translation deserves clearer SaaS walkthroughs.",
+    "preview": "He missed an earlier email, gives project context, and asks for access/guidance on older material and new Codex workflows.",
+    "proposedAction": "sent",
+    "conversation": [
+      {
+        "at": "2026-06-20T03:18:34.937Z",
+        "action": "draft",
+        "command": "Saved reply draft: Hi David,\n\nThank you for the detailed reply.\n\nThat's awesome, good luck. Do let me know how it goes :)\n\nYou can still find the source code for the Tensor AI application; it hasn't really been updated in a couple of months, so it should still be pretty recent. \n\nhttps://www.skool.com/forward-pass-2757/example-code-for-tensor-ai\n\nAnd yeah, I don't like the platform Skool anymore, which is why I kind of moved things off there. Also, there wasn't as much demand for that kind of content compared to just learning about agentic coding tools. \n\nBest,\n\nRay",
+        "draftId": "draft-19e6e76f0ad50f20-1781925514937"
+      },
+      {
+        "at": "2026-06-20T03:21:11.307Z",
+        "action": "sent",
+        "command": "Sent Gmail reply 19ee30b71ba1d336 and archived source email.",
+        "gmailMessageId": "19ee30b71ba1d336"
+      }
+    ],
+    "fullEmail": "From: David Olutunde <olutunded04@gmail.com>\nTo: Ray Amjad <ray@updates.agenticcoding.school>\nDate: 2026-05-28 12:01:41\nSubject: Re: Quick question about the class\n\nHi Ray,\n\nSorry for the late reply, I missed your email. I was actually part of your AI Startup School community on Skool since last November, and I found it really valuable. Because of university and life commitments, I couldn’t fully take advantage of the classes at the time, but now that it’s summer break, I’m ready to dive back in and start building apps and SaaS products.\n\nOne project I want to work on is a news-aggregation app for immigrants in the diaspora to stay updater on news from their home country, similar to your Tensor AI app. I remember you shared the source code for that in the Skool community, but since the community was closed recently, I no longer have access. Would you be able to share that code with me again or grant me access to the archive?\n\nTo answer your questions:\n\n1. My biggest win so far recently from MasterClass has been using what I learned from your Codex class to build my AI rover assistant. I integrated the software with hardware like Raspberry Pi, Arduino, Pi Camera, and more and that’s been a huge milestone for me. Now I want to transition more into the software side, which is what the Masterclass focuses on.\n\n2. What I wish the class covered more is how to apply the same methodologies using Codex. Since the focus is mainly on Claude, I’m not always sure how to translate those workflows. I really like the archived SaaS-building class, but it’s also Claude-centric, and I’m not sure whether the same approach works with Codex. If you ever create Codex-friendly version, especially something like your MCP integration that would be incredibly helpful.\n\nThanks again for checking in, I appreciate the support and everything you’ve built.\n\nBest regards,\nDavid",
+    "replySuggestions": [
+      {
+        "label": "Warm",
+        "body": "Hi David,\n\nThank you for the detailed reply.\n\nThe rover assistant sounds awesome. That's a really nice milestone, especially because it combines software with actual hardware.\n\nLet me check what I can still share from the old Tensor AI material now that the Skool community is closed. And yeh, I agree that a Codex-friendly SaaS walkthrough would be useful. The older material is definitely more Claude-centric.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Practical",
+        "body": "Hi David,\n\nThanks for writing this out.\n\nFor the diaspora news app, I would probably start smaller than the full version: one country, one source type, one summarisation flow, and one daily digest. Once that works, the bigger product becomes much easier to build.\n\nI'll also check what I can still share from the old Tensor AI source.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Ask focus",
+        "body": "Hi David,\n\nThat's great progress. The AI rover assistant sounds like a very cool project.\n\nLet me check the archive situation for the old Tensor AI material. For the diaspora app, what part are you most interested in building first? Ingestion, summarisation, accounts, or the overall architecture?\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:21:11.307Z",
+    "gmailArchivedAt": "2026-06-20T03:21:11.307Z"
   },
   {
-    "id": "19e50c5de47e193b",
-    "threadId": "19e50c5de47e193b",
-    "senderName": "Paul Kippes",
-    "senderEmail": "ramjad@paulkippes.com",
-    "subject": "New workshop",
-    "receivedAt": "2026-05-22T17:39:42Z",
+    "id": "19e5914442c59a88",
+    "threadId": "19e5914442c59a88",
+    "senderName": "Michael Needham",
+    "senderEmail": "mike@7thdomain.com",
+    "subject": "Re: Quick question about the class",
+    "receivedAt": "2026-05-24T08:22:38Z",
     "status": "new",
-    "summary": "A lifetime member appreciates workshop access and asks whether there is a Slack or Discord space for masterclass users.",
-    "nextAction": "Reply with the current community status and clarify whether a cohort/workshop channel exists or is planned.",
-    "draftSeed": "Thanks Paul. Lifetime members will get access as described. On the community side, I am still deciding the best shape for that so it does not become noisy or unsupported.",
-    "preview": "They ask whether a Slack channel exists for Masterclass users because the workshop FAQ mentions Slack.",
+    "summary": "Mike likes your no-fuss, true-to-the-tech approach and says his wins are YouTube, HyperWhisper, and knowing the course is there. He has been time-poor, wants you to keep reviewing the best frameworks and techniques, and suggests looking at Amazon Quick Desktop as a possible corporate/API-side game changer.",
+    "nextAction": "Reply with thanks, acknowledge the time constraint, and say you’ll take a look at Amazon Quick Desktop / keep tracking frameworks and techniques.",
+    "draftSeed": "Thanks Michael. If time is the main constraint, I would bias toward the workflow lessons first and treat the deeper material as optional reference until you hit a real project need.",
+    "preview": "Positive class feedback plus a suggestion to investigate Amazon Quick Desktop as a generic harness for Codex/Claude-style workflows.",
     "proposedAction": "draft",
-    "conversation": []
+    "conversation": [],
+    "fullEmail": "From: Michael Needham <mike@7thdomain.com>\nTo: Ray Amjad <ray@updates.agenticcoding.school>\nDate: 2026-05-24 08:22:38 UTC\nSubject: Re: Quick question about the class\n\nJust love your “true to the tech no fuss” approach on your YouTube channel and diving deep on applying not just updates. I just am very time poor, so haven’t had time to dive in, though watched just about all your public YouTubes.\n\nWin: YouTube, HyperWhisper, using everyday now, knowing your course is there to hop in to for more complex topics.\n\nWish: Just keep reviewing the best frameworks and techniques.\n\nFor your interest: Check our Amazon Quick Desktop, I think as a generic harness its making a game play on Codex, Claude cowork etc and integrates on to Claude Code and with OpenAI coming to Amazon could be a game changer for the more corp end API customers. Its no code apps embedded, memory and auto knowledge graph out the box is good. Analyse the electron app under the hood and tells you much of how it’s doing it.\n\nCheers!\n\nMike",
+    "replySuggestions": [
+      {
+        "label": "Thanks and will look",
+        "body": "Hi Mike,\n\nThank you, that’s really kind of you to say.\n\nI’m glad HyperWhisper and the YouTube videos have been useful, especially if you’re time poor. That’s basically the sweet spot I’m trying to hit: useful enough that you can still get value without needing to live inside the course every day.\n\nAnd thanks for the pointer on Amazon Quick Desktop. I haven’t looked deeply at it yet, but that does sound interesting, especially if it becomes a more corporate-friendly harness around Codex/Claude-style workflows. I’ll take a look.\n\nBest,\nRay"
+      },
+      {
+        "label": "Framework-tracking angle",
+        "body": "Hi Mike,\n\nThanks, I really appreciate that.\n\nThe “true to the tech no fuss” line is basically what I’m aiming for haha. There’s so much noise around these tools that I think the valuable thing is just showing what actually works and where the rough edges are.\n\nI’ll keep tracking the frameworks and techniques. And Amazon Quick Desktop sounds worth looking into, especially if it’s trying to package this stuff in a way larger companies can actually adopt.\n\nBest,\nRay"
+      },
+      {
+        "label": "Ask for pointer",
+        "body": "Hi Mike,\n\nThank you, that’s great to hear.\n\nI’m glad the public videos and HyperWhisper have been useful. I know the time constraint problem very well, so I’m trying to make the course useful even if people dip in for the specific thing they need.\n\nAmazon Quick Desktop sounds interesting. Is there a particular demo or page you think shows the most important bit of it? I’d rather start from the strongest example than poke around randomly.\n\nBest,\nRay"
+      }
+    ],
+    "tags": [
+      "student-reply",
+      "course-feedback",
+      "tool-research"
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "syncedAt": "2026-06-20T03:32:48.292Z"
+  },
+  {
+    "id": "19e58c33456b9816",
+    "threadId": "19e5695235a5488f",
+    "senderName": "Tanvir Anowar",
+    "senderEmail": "tanvir.net.fx@gmail.com",
+    "subject": "Re: Quick question",
+    "receivedAt": "2026-05-24T06:53:56Z",
+    "status": "cleared",
+    "summary": "Tanvir says he is freelancing on contract work and the current tech market makes spending money difficult right now.",
+    "nextAction": "Reply empathetically and decide whether to offer a discount, defer, or point to free material.",
+    "draftSeed": "Thanks for being direct about that. I completely get it; the market is rough and I do not want the course to create pressure if now is not the right time.",
+    "preview": "He thanks you for the quick response and explains budget hesitation around the course.",
+    "proposedAction": "draft",
+    "conversation": [],
+    "fullEmail": "From: Tanvir Anowar <tanvir.net.fx@gmail.com>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-05-24 06:53:56\nSubject: Re: Quick question\n\nHi mate\n\nThanks for getting back to me so quickly. I am a freelancer doing contract based work right now. I hope you know the current tech market situation, so it's tricky for me now to spend money on career growth courses. YouTube is good, but it's very hard to learn through a step by step process. On the other hand, Udemy is good, but I haven't found such a course yet that I need. Please let me know if you have any questions.\n\nThanks,\nTanvir",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Tanvir,\n\nThanks for being direct about that. I completely get it; the market is rough and I do not want the course to create pressure if now is not the right time.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Warmer",
+        "body": "Hi Tanvir,\n\nThank you for writing this out.\n\nThanks for being direct about that. I completely get it; the market is rough and I do not want the course to create pressure if now is not the right time.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Ask a follow-up",
+        "body": "Hi Tanvir,\n\nThanks for sending this over.\n\nThanks for being direct about that. I completely get it; the market is rough and I do not want the course to create pressure if now is not the right time.\n\nDo let me know if there is a specific angle you think would be most useful.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
   },
   {
     "id": "19e4790829ffba8c",
@@ -118,13 +383,62 @@
     "senderEmail": "support@agenticcoding.school",
     "subject": "Video Issue Report: Mini Windows",
     "receivedAt": "2026-05-20T22:45:10Z",
-    "status": "new",
-    "summary": "A learner says the Codex mini window shown in a lesson is gone and now opens in a new window.",
-    "nextAction": "Batch this with other Codex App lesson drift reports and update the lesson note or recording references.",
-    "draftSeed": "Thanks for the heads up. That sounds like another Codex UI change; I will group it with the browser comments update and correct the lesson context.",
-    "preview": "The user reports that the mini-window behavior has changed from the recording.",
+    "status": "cleared",
+    "summary": "A learner reports that the Codex mini-window behavior shown in a Master Codex lesson has changed: the mini window is gone and now opens in a new window.",
+    "nextAction": "Create or update a content-maintenance task for Codex App lesson drift and reply once the note is fixed.",
+    "draftSeed": "Thanks for the heads up. That sounds like another Codex UI change, so I will group it with the other app-behavior updates and correct the lesson context.",
+    "preview": "Support notification from a video issue form about outdated Mini Windows lesson behavior.",
     "proposedAction": "task",
-    "conversation": []
+    "conversation": [],
+    "fullEmail": "From: Agentic Coding School <support@agenticcoding.school>\nTo: r@rayamjad.com\nDate: 2026-05-20 22:45:10\nSubject: Video Issue Report: Mini Windows\n\nVideo Issue Report\n\nFrom: roos.jason@gmail.com\n\nVideo: Mini Windows\n\nChapter: Codex App\n\nClass: Master Codex\n\nmini window is gone. Now it's open in \"new\" window\n\nReply directly to this email to respond to the user.\n\nRay Amjad LTD\nLytchett House, 13 Freeland Park, Wareham Road, Poole, Dorset, BH16 6FA",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi,\n\nThank you for flagging this.\n\nI'll take a look and check what's going on. It seems like something I should verify properly rather than guess from memory.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Apology / fix",
+        "body": "Hi,\n\nSorry about that.\n\nI'll check the relevant flow and see what's causing it. If it is something on my side, I'll get it fixed and then follow up.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "More specific",
+        "body": "Hi,\n\nThanks for the details. I have enough context to investigate this now.\n\nI'll check it and come back with the next step once I know whether this is a content issue, product issue, or account issue.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
+  },
+  {
+    "id": "19e4410c3717bc3e",
+    "threadId": "19e43f50f948feba",
+    "senderName": "Felix Eschey",
+    "senderEmail": "felix.eschey@makandra.de",
+    "subject": "Re: Quick question about the class",
+    "receivedAt": "2026-05-20T06:26:37Z",
+    "status": "cleared",
+    "summary": "Felix says he is exploring the SolveIt approach and philosophy, finds it different, and sees interesting implications for thinking with agents.",
+    "nextAction": "Reply with curiosity and ask what part of SolveIt changed his agent workflow, or save as research signal.",
+    "draftSeed": "Thanks Felix. I have only brushed against SolveIt, but I agree that the philosophy is interesting. What part of it has changed how you relate to agents most?",
+    "preview": "A thoughtful follow-up from a student experimenting with artifacts, planning, and agent workflows.",
+    "proposedAction": "draft",
+    "conversation": [],
+    "fullEmail": "From: Felix Eschey <felix.eschey@makandra.de>\nTo: Ray Amjad <ray@updates.agenticcoding.school>\nDate: 2026-05-20 06:26:37\nSubject: Re: Quick question about the class\n\nI am recently also exploring the solveit approach and philosophy. It's quite different but has some very interesting turns to the whole thinking and relating to agent in my opinion. And the platform is super nice for managing context, almost like a life artifact you can adjust as you see fit in the style of jupyter notebook. https://solve.it.com/\n\nEarlier in the thread, Felix said he has been experimenting with artifacts and a channels variation for planning and reviewing. He also described the tension between vibing and engineering software in a professional company context, and asked for your take on where to let go versus where to keep honing his own engineering abilities.",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Felix,\n\nThanks Felix. I have only brushed against SolveIt, but I agree that the philosophy is interesting. What part of it has changed how you relate to agents most?\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Warmer",
+        "body": "Hi Felix,\n\nThank you for writing this out.\n\nThanks Felix. I have only brushed against SolveIt, but I agree that the philosophy is interesting. What part of it has changed how you relate to agents most?\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Ask a follow-up",
+        "body": "Hi Felix,\n\nThanks for sending this over.\n\nThanks Felix. I have only brushed against SolveIt, but I agree that the philosophy is interesting. What part of it has changed how you relate to agents most?\n\nDo let me know if there is a specific angle you think would be most useful.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
   },
   {
     "id": "19e440dfffc37612",
@@ -133,13 +447,94 @@
     "senderEmail": "felix.eschey@makandra.de",
     "subject": "Re: The planning technique I reach for most",
     "receivedAt": "2026-05-20T06:23:35Z",
-    "status": "new",
-    "summary": "Felix shares an agentic-channels project that uses JSON artifacts, validation, and iteration, in response to your artifact planning email.",
-    "nextAction": "Reply with thanks and skim the GitHub repo later for proof-surface/artifact-planning inspiration.",
+    "status": "cleared",
+    "summary": "Felix shares a GitHub project called agentic-channels. It uses the same structured-artifact idea: the agent writes JSON, he validates it, then iterates on the artifact.",
+    "nextAction": "Reply with thanks and optionally skim the repo for artifact-planning/proof-surface inspiration.",
     "draftSeed": "Thanks Felix. This is very close to the shape I have been thinking about: structured artifacts, validation, and iteration. I will take a look.",
-    "preview": "They link github.com/OuttaSpaceTime/agentic-channels and describe an agent writing JSON that is validated and iterated on.",
+    "preview": "He links github.com/OuttaSpaceTime/agentic-channels as a related implementation.",
     "proposedAction": "draft",
-    "conversation": []
+    "conversation": [],
+    "fullEmail": "From: Felix Eschey <felix.eschey@makandra.de>\nTo: Ray Amjad <ray@updates.agenticcoding.school>\nDate: 2026-05-20 06:23:35\nSubject: Re: The planning technique I reach for most\n\nHi Ray,\n\nI've built this: https://github.com/OuttaSpaceTime/agentic-channels\n\nIt leverages on the same idea. The agent writes json, I validate json and then I iterate on the artifact.\n\nFelix",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Felix,\n\nThanks Felix. This is very close to the shape I have been thinking about: structured artifacts, validation, and iteration. I will take a look.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Warmer",
+        "body": "Hi Felix,\n\nThank you for writing this out.\n\nThanks Felix. This is very close to the shape I have been thinking about: structured artifacts, validation, and iteration. I will take a look.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Ask a follow-up",
+        "body": "Hi Felix,\n\nThanks for sending this over.\n\nThanks Felix. This is very close to the shape I have been thinking about: structured artifacts, validation, and iteration. I will take a look.\n\nDo let me know if there is a specific angle you think would be most useful.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
+  },
+  {
+    "id": "19e41dd600aadca0",
+    "threadId": "19e41dd600aadca0",
+    "senderName": "Ekaitz Hernandez",
+    "senderEmail": "ekaitz.hernandez@n26.com",
+    "subject": "Fwd: Quick question about the class",
+    "receivedAt": "2026-05-19T20:11:15Z",
+    "status": "cleared",
+    "summary": "Ekaitz replies to a course check-in forwarded by Stephan. Biggest win: staying updated on fast-moving Claude Code updates. Improvement request: short bites or recaps of past videos for continuous learning and refreshers.",
+    "nextAction": "Reply with thanks and consider adding short recap cards or a weekly catch-up path to the course/newsletter.",
+    "draftSeed": "Thanks Ekaitz. That is a useful signal. The course probably does need a lighter recap layer for people who want to keep current without rewatching everything.",
+    "preview": "He asks for small-bite recaps of older material, not only new updates.",
+    "proposedAction": "draft",
+    "conversation": [],
+    "fullEmail": "From: Ekaitz Hernandez <ekaitz.hernandez@n26.com>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-05-19 20:11:15\nSubject: Fwd: Quick question about the class\n\nHi Ray,\n\nThanks for checking in!\n\n- Biggest win: Staying updated on all the fast-moving Claude Code updates through your newsletter and new videos.\n\n- What could be better: Including \"small bites\" or short recaps of past videos (not just new ones) would be awesome for continuous learning and quick refreshers.\n\nThanks,\n\n---------- Forwarded message ---------\nFrom: Stephan Lagraulet <stephan.lagraulet@n26.com>\nDate: Tue, 19 May 2026 at 17:41\nSubject: Fwd: Quick question about the class\nTo: Ekaitz Hernandez <ekaitz.hernandez@n26.com>\n\nCan you answer Ray?",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Ekaitz,\n\nThanks Ekaitz. That is a useful signal. The course probably does need a lighter recap layer for people who want to keep current without rewatching everything.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Warmer",
+        "body": "Hi Ekaitz,\n\nThank you for writing this out.\n\nThanks Ekaitz. That is a useful signal. The course probably does need a lighter recap layer for people who want to keep current without rewatching everything.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Ask a follow-up",
+        "body": "Hi Ekaitz,\n\nThanks for sending this over.\n\nThanks Ekaitz. That is a useful signal. The course probably does need a lighter recap layer for people who want to keep current without rewatching everything.\n\nDo let me know if there is a specific angle you think would be most useful.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
+  },
+  {
+    "id": "19e3c751018cf3f0",
+    "threadId": "19e36f0b3d750bd6",
+    "senderName": "Catherine Ead",
+    "senderEmail": "caziemhuk@gmail.com",
+    "subject": "Re: The planning technique I reach for most",
+    "receivedAt": "2026-05-18T18:58:46Z",
+    "status": "cleared",
+    "summary": "Catherine says HTML artifacts have been helpful, but she needs efficiency plus clarity and simplicity. She uses Claude Code mostly for business operations and is planning a large WordPress-to-Astro/GitHub/Cloudflare migration.",
+    "nextAction": "Reply with a practical framing for using artifact planning on smaller slices of the larger migration.",
+    "draftSeed": "That makes sense. For a migration that large, I would not try to artifact-plan the whole thing at once. I would use the artifact for one slice: homepage states, content model, checkout/admin flow, or a migration dashboard.",
+    "preview": "She wants to use Claude Code for business operations and large planning without losing clarity.",
+    "proposedAction": "draft",
+    "conversation": [],
+    "fullEmail": "From: Catherine Ead <caziemhuk@gmail.com>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-05-18 18:58:46\nSubject: Re: The planning technique I reach for most\n\nYes, it's going to be a big, well-structured plan.\n\nBut, what I've found so far using Claude Code (in VS Code) is how much information it now contains. I have started using your html artifacts idea and that's been really helpful, but I'm alway looking for ways to be efficient but I need clarity and simplicity too.\n\nI do a monthly sort out with Claude!\n\nI use mine mostly for business operations rather than extensive coding.\n\nCatherine",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Catherine,\n\nThat makes sense. For a migration that large, I would not try to artifact-plan the whole thing at once. I would use the artifact for one slice: homepage states, content model, checkout/admin flow, or a migration dashboard.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Warmer",
+        "body": "Hi Catherine,\n\nThank you for writing this out.\n\nThat makes sense. For a migration that large, I would not try to artifact-plan the whole thing at once. I would use the artifact for one slice: homepage states, content model, checkout/admin flow, or a migration dashboard.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Ask a follow-up",
+        "body": "Hi Catherine,\n\nThanks for sending this over.\n\nThat makes sense. For a migration that large, I would not try to artifact-plan the whole thing at once. I would use the artifact for one slice: homepage states, content model, checkout/admin flow, or a migration dashboard.\n\nDo let me know if there is a specific angle you think would be most useful.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
   },
   {
     "id": "19e3c0cd4920984d",
@@ -148,12 +543,157 @@
     "senderEmail": "ron.bertino@gmail.com",
     "subject": "Re: Video Issue Report: Agents.MD & Memories",
     "receivedAt": "2026-05-18T17:05:18Z",
-    "status": "new",
-    "summary": "Ron confirms a Wise email and reports affiliate portal password problems after originally signing up with Google OAuth.",
-    "nextAction": "Treat as support: verify the affiliate auth/password path and follow up with a concrete next step.",
-    "draftSeed": "Thanks Ron. I have the Wise email. The password behavior sounds like a portal/account-linking issue, so I will check the auth path and come back with the next step.",
-    "preview": "He can access the affiliate dashboard, but settings changes ask for a current password he does not have because the original account used Google OAuth.",
+    "status": "cleared",
+    "summary": "Ron confirms his Wise payout email and reports an affiliate portal problem. He originally signed up with Google OAuth, later switched to local login, but the affiliate settings still ask for a password the portal does not recognize.",
+    "nextAction": "Treat as support/business-money: verify the affiliate auth path and give Ron a concrete next step for updating settings.",
+    "draftSeed": "Thanks Ron. I have the Wise email. The password behavior sounds like a portal account-linking issue, so I will check the affiliate auth path and come back with the next step.",
+    "preview": "Affiliate payout plus password/account-linking issue after Google OAuth signup.",
     "proposedAction": "task",
-    "conversation": []
+    "conversation": [],
+    "fullEmail": "From: Ron Bertino <ron.bertino@gmail.com>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-05-18 17:05:18\nSubject: Re: Video Issue Report: Agents.MD & Memories\n\nyes, my Wise email is: ron@tradingdominion.com\n\nJust an FYI....\n\nI originally signed up for your course using Google OAuth.\n\nI therefore never had to configure a username or password for your site.\n\nWhen I went to the affiliate section, I could see my dashboard. The first time I visited that affiliate site it asked if I wanted to update my Wise email, which I did.\n\nBut when I wanted to change any other settings in my affiliate portal, it asked for my current password, which I didn't have.\n\nUsing the Google password didn't work.\n\nI unlinked my Google account from your site and configured a local account, hoping this would fix the issue.\n\nI now log onto your site with a local username and password, but the affiliate system still doesn't recognize the local password and won't allow me to make any changes.\n\nI'm therefore not sure how to update the affiliate system to recognize a local password for my account.",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Ron,\n\nThank you for flagging this.\n\nI'll take a look and check what's going on. It seems like something I should verify properly rather than guess from memory.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Apology / fix",
+        "body": "Hi Ron,\n\nSorry about that.\n\nI'll check the relevant flow and see what's causing it. If it is something on my side, I'll get it fixed and then follow up.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "More specific",
+        "body": "Hi Ron,\n\nThanks for the details. I have enough context to investigate this now.\n\nI'll check it and come back with the next step once I know whether this is a content issue, product issue, or account issue.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
+  },
+  {
+    "id": "19e03a5e6f499dcf",
+    "threadId": "19e03a5e6f499dcf",
+    "senderName": "Aparajita Fishman",
+    "senderEmail": "aparajita@aparajita.com",
+    "subject": "Various topics",
+    "receivedAt": "2026-05-07T18:14:10Z",
+    "status": "cleared",
+    "summary": "Aparajita shares a Claude Code terminal tip: disabling alternate screen mode with CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN in ~/.claude/settings.json to preserve iTerm scrollback. They also point you to Matt Pocock's AI Hero material.",
+    "nextAction": "Reply with thanks and consider whether the iTerm alternate-screen tip belongs in course notes or a short update.",
+    "draftSeed": "Thanks Aparajita. That alternate-screen note is useful, especially for people who rely heavily on iTerm scrollback. I will see where it fits as a course/update note.",
+    "preview": "Tip about Claude Code fullscreen rendering/alternate screen and a pointer to aihero.dev.",
+    "proposedAction": "draft",
+    "conversation": [],
+    "fullEmail": "From: Aparajita Fishman <aparajita@aparajita.com>\nTo: Ray Amjad <r@rayamjad.com>\nDate: 2026-05-07 18:14:10\nSubject: Various topics\n\nHi,\n\nA few weeks ago I noticed that claude code was messing up the scroll back in iTerm. Didn’t know why. Yesterday’s release indirectly told me why: they had made their fullscreen rendering engine the default. You can disable their “feature” and allow iTerm to act normally by adding this to the “env” key in ~/.claude/settings.json:\n\n\"CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN\": “1\"\n\nMay want to tell your users about this if they don’t already know.\n\nDon’t know if you’ve come across Matt Pocock’s stuff, but it’s very good, some similarities with your work.\n\nhttps://www.aihero.dev/\n\n- Aparajita",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Aparajita,\n\nThanks Aparajita. That alternate-screen note is useful, especially for people who rely heavily on iTerm scrollback. I will see where it fits as a course/update note.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Warmer",
+        "body": "Hi Aparajita,\n\nThank you for writing this out.\n\nThanks Aparajita. That alternate-screen note is useful, especially for people who rely heavily on iTerm scrollback. I will see where it fits as a course/update note.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Ask a follow-up",
+        "body": "Hi Aparajita,\n\nThanks for sending this over.\n\nThanks Aparajita. That alternate-screen note is useful, especially for people who rely heavily on iTerm scrollback. I will see where it fits as a course/update note.\n\nDo let me know if there is a specific angle you think would be most useful.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
+  },
+  {
+    "id": "19dffdd7e6db25c2",
+    "threadId": "19dffdd7e6db25c2",
+    "senderName": "Steven Schardt",
+    "senderEmail": "steven_schardt@mac.com",
+    "subject": "Re: Confirm your spot on the waitlist",
+    "receivedAt": "2026-05-07T00:36:25Z",
+    "status": "cleared",
+    "summary": "Steven tried to confirm his agentengineer.pro waitlist spot but the confirmation link said it had expired even though the email was only minutes old.",
+    "nextAction": "Check the waitlist confirmation-token expiry path and reply once fixed or manually confirm him.",
+    "draftSeed": "Thanks Steven. That definitely should not expire that quickly. I will check the confirmation token behavior and make sure your spot is confirmed.",
+    "preview": "Waitlist confirmation bug report with screenshot inline.",
+    "proposedAction": "task",
+    "conversation": [],
+    "fullEmail": "From: Steven Schardt <steven_schardt@mac.com>\nTo: Ray Amjad <ray@updates.agentengineer.pro>\nDate: 2026-05-07 00:36:25\nSubject: Re: Confirm your spot on the waitlist\n\nWould love to confirm. This email was sent minutes ago … so unsure why it’s expired.\n\nSteven\n\nEarlier confirmation email included a link to confirm his spot on the agentengineer.pro waitlist.",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Steven,\n\nThank you for flagging this.\n\nI'll take a look and check what's going on. It seems like something I should verify properly rather than guess from memory.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Apology / fix",
+        "body": "Hi Steven,\n\nSorry about that.\n\nI'll check the relevant flow and see what's causing it. If it is something on my side, I'll get it fixed and then follow up.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "More specific",
+        "body": "Hi Steven,\n\nThanks for the details. I have enough context to investigate this now.\n\nI'll check it and come back with the next step once I know whether this is a content issue, product issue, or account issue.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
+  },
+  {
+    "id": "19dfe804c1d5de03",
+    "threadId": "19dfe804c1d5de03",
+    "senderName": "Joel Vixie",
+    "senderEmail": "vixijo@gmail.com",
+    "subject": "HyperWhisper Support Request",
+    "receivedAt": "2026-05-06T18:14:43Z",
+    "status": "cleared",
+    "summary": "Joel reports HyperWhisper 1.6.0 on Windows 11 throwing 'External component has thrown an exception' every time he tries to talk and transcribe using Local mode with Large V3 Turbo. A log file is attached.",
+    "nextAction": "Open a HyperWhisper support/debug task and inspect the attached log if the issue has not already been handled elsewhere.",
+    "draftSeed": "Thanks Joel. I have the Windows version, mode, model, and the log attachment. I will look into the exception path and come back if I need anything else.",
+    "preview": "Support request with an attached hyperwhisper log for a Windows local transcription exception.",
+    "proposedAction": "task",
+    "conversation": [],
+    "fullEmail": "From: Joel Vixie <vixijo@gmail.com>\nTo: support@hyperwhisper.com\nDate: 2026-05-06 18:14:43\nSubject: HyperWhisper Support Request\n\nHi,\n\nVersion:\n1.6.0\n\nIssue:\nKeep getting \"External component has thrown an exception\" each time I try to talk and the tool tries to transcribe.\n\nDetails:\nWindows 11\nMode: Local\nModel: Large V3 Turbo\n\nI've attached the log for help. Please let me know if you have any questions.\n\nBest,\nJoel",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Joel,\n\nThank you for flagging this.\n\nI'll take a look and check what's going on. It seems like something I should verify properly rather than guess from memory.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Apology / fix",
+        "body": "Hi Joel,\n\nSorry about that.\n\nI'll check the relevant flow and see what's causing it. If it is something on my side, I'll get it fixed and then follow up.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "More specific",
+        "body": "Hi Joel,\n\nThanks for the details. I have enough context to investigate this now.\n\nI'll check it and come back with the next step once I know whether this is a content issue, product issue, or account issue.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
+  },
+  {
+    "id": "19df8c5d2bb4357f",
+    "threadId": "19df8c5d2bb4357f",
+    "senderName": "Norvel M A Roosje",
+    "senderEmail": "nroosje@caribware.com",
+    "subject": "Hi Ray,",
+    "receivedAt": "2026-05-05T15:33:24Z",
+    "status": "cleared",
+    "summary": "Norvel asks whether you have considered adding a HyperWhisper feature inspired by a YouTube video and the mcp-voice-hooks GitHub project.",
+    "nextAction": "Reply with thanks and optionally create a product-ideas task for HyperWhisper voice hooks/MCP integration.",
+    "draftSeed": "Thanks Norvel. I have not looked deeply at that project yet, but the general direction is interesting. I will add it to the HyperWhisper idea pile and take a proper look.",
+    "preview": "Feature suggestion for HyperWhisper, including a YouTube link and github.com/johnmatthewtennant/mcp-voice-hooks.",
+    "proposedAction": "task",
+    "conversation": [],
+    "fullEmail": "From: Norvel M A Roosje <nroosje@caribware.com>\nTo: HyperWhisper <support@hyperwhisper.com>\nDate: 2026-05-05 15:33:24\nSubject: Hi Ray,\n\nYou are doing well today?\n\nI was wondering if you ever considered building this feature in HyperWhisper:\n\nhttps://youtu.be/GbDatJtm8_k\n\nhttps://github.com/johnmatthewtennant/mcp-voice-hooks\n\nIt would be a great next-level addition.\n\nBest Regards,\n\nNorvel Roosje\n\nNorvel M. A. Roosje B.Sc.\nCaribWare High Technologies B.V.\nCuraçao, Netherlands",
+    "replySuggestions": [
+      {
+        "label": "Short",
+        "body": "Hi Norvel,\n\nThank you for flagging this.\n\nI'll take a look and check what's going on. It seems like something I should verify properly rather than guess from memory.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "Apology / fix",
+        "body": "Hi Norvel,\n\nSorry about that.\n\nI'll check the relevant flow and see what's causing it. If it is something on my side, I'll get it fixed and then follow up.\n\nBest,\n\nRay"
+      },
+      {
+        "label": "More specific",
+        "body": "Hi Norvel,\n\nThanks for the details. I have enough context to investigate this now.\n\nI'll check it and come back with the next step once I know whether this is a content issue, product issue, or account issue.\n\nBest,\n\nRay"
+      }
+    ],
+    "updatedAt": "2026-06-20T03:32:48.292Z",
+    "clearedReason": "not present in latest live Gmail Inbox refresh"
   }
 ]

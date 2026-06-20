@@ -1,2 +1,18 @@
 
 {"at":"2026-06-12T06:54:32.001Z","type":"command","cardId":"19eb26eb0d2f89bd","command":"Draft a warm reply and keep this queued for review","action":"draft","status":"queued"}
+{"at":"2026-06-20T00:53:27.333Z","type":"command","cardId":"19edb191c5492916","command":"Reply with thank you and say I'll look into it after finishing up the loopy AI class.","action":"draft","status":"queued"}
+{"at":"2026-06-20T02:52:55.607Z","type":"draft","cardId":"19ec664b6c090a2c","draftId":"draft-19ec664b6c090a2c-1781923975604","source":"composer","hasReply":true,"hasCodexTask":false}
+{"at":"2026-06-20T02:54:36.839Z","type":"gmail_draft","cardId":"19ec664b6c090a2c","draftId":"draft-19ec664b6c090a2c-1781923975604","gmailDraftId":"r8213071790793691245","gmailMessageId":"19ee2f34ca1f476a","gmailThreadId":"19ec664b6c090a2c"}
+{"at":"2026-06-20T02:59:36.419Z","type":"sent_reply_recorded","cardId":"19ec664b6c090a2c","draftId":"draft-19ec664b6c090a2c-1781923975604","gmailMessageId":"19ee2f6c98987241","gmailThreadId":"19ec664b6c090a2c"}
+{"at":"2026-06-20T03:02:42.134Z","type":"draft","cardId":"19ec58ce9753b983","draftId":"draft-19ec58ce9753b983-1781924562133","source":"composer","hasReply":true,"hasCodexTask":false}
+{"at":"2026-06-20T03:06:19.569Z","type":"draft","cardId":"19ec3e7a265ba920","draftId":"draft-19ec3e7a265ba920-1781924779565","source":"composer","hasReply":true,"hasCodexTask":false}
+{"at":"2026-06-20T03:08:09.065Z","type":"sent_reply_recorded","cardId":"19ec58ce9753b983","draftId":"draft-19ec58ce9753b983-1781924562133","gmailMessageId":"19ee2ff729147e00","gmailThreadId":"19ec527c8e197906"}
+{"at":"2026-06-20T03:08:09.065Z","type":"sent_reply_recorded","cardId":"19ec3e7a265ba920","draftId":"draft-19ec3e7a265ba920-1781924779565","gmailMessageId":"19ee2ff94e96ac08","gmailThreadId":"19ebf2491376f0d0"}
+{"at":"2026-06-20T03:11:54.139Z","type":"gmail_archive_after_send","cardId":"19ec58ce9753b983","draftId":"draft-19ec58ce9753b983-1781924562133"}
+{"at":"2026-06-20T03:11:54.139Z","type":"gmail_archive_after_send","cardId":"19ec3e7a265ba920","draftId":"draft-19ec3e7a265ba920-1781924779565"}
+{"at":"2026-06-20T03:18:34.939Z","type":"draft","cardId":"19e6e76f0ad50f20","draftId":"draft-19e6e76f0ad50f20-1781925514937","source":"composer","hasReply":true,"hasCodexTask":false}
+{"at":"2026-06-20T03:18:44.963Z","type":"local_clear_after_sent_confirmation","cardId":"19ec664b6c090a2c","draftId":"draft-19ec664b6c090a2c-1781923975604","gmailMessageId":"19ee2f6c98987241"}
+{"at":"2026-06-20T03:21:11.307Z","type":"sent_reply_recorded","cardId":"19e6e76f0ad50f20","draftId":"draft-19e6e76f0ad50f20-1781925514937","gmailMessageId":"19ee30b71ba1d336","gmailThreadId":"19e6e76f0ad50f20"}
+{"at":"2026-06-20T03:21:11.307Z","type":"gmail_archive_after_send","cardId":"19e6e76f0ad50f20","draftId":"draft-19e6e76f0ad50f20-1781925514937","gmailMessageId":"19ee30b71ba1d336","gmailThreadId":"19e6e76f0ad50f20"}
+{"at":"2026-06-20T03:32:48.292Z","type":"gmail_refresh","activeInboxIds":["19edb8daaf76119b","19eb26eb0d2f89bd","19e5914442c59a88"],"sentStyleExamples":["19ee30b71ba1d336","19ee2ff94e96ac08","19ee2ff729147e00"],"note":"Refreshed Inbox Sweep from live Gmail inbox and updated reply style profile."}
+{"at":"2026-06-20T03:36:42.619Z","type":"reply_style_refresh","exampleCount":14,"ignoredSources":["newsletter","substack"],"note":"Added recent direct Gmail sent replies and ignored newsletter/substack sources by default."}

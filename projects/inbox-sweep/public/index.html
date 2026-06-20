@@ -26,6 +26,20 @@
             <span>Cards</span>
             <button id="show-all" type="button">All</button>
           </div>
+          <div class="filters" aria-label="Card filters">
+            <label class="search-box">
+              <span>Search</span>
+              <input id="card-search" type="search" placeholder="Sender, subject, summary" />
+            </label>
+            <div class="filter-group">
+              <span>Status</span>
+              <div id="status-filters" class="filter-row"></div>
+            </div>
+            <div class="filter-group">
+              <span>Action</span>
+              <div id="action-filters" class="filter-row"></div>
+            </div>
+          </div>
           <div id="card-list" class="card-list"></div>
         </aside>
 

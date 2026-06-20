@@ -9,6 +9,8 @@ const publicDir = join(root, "public");
 const dataDir = join(root, "data");
 const cardsPath = join(dataDir, "cards.json");
 const eventsPath = join(dataDir, "events.jsonl");
+const draftsPath = join(dataDir, "drafts.json");
+const sentRepliesPath = join(dataDir, "sent-replies.json");
 const port = Number(process.env.PORT || 4177);
 
 const mimeTypes = {
@@ -28,6 +30,10 @@ async function readJson(path, fallback) {
 
 async function writeCards(cards) {
   await writeFile(cardsPath, `${JSON.stringify(cards, null, 2)}\n`);
+}
+
+async function writeDrafts(drafts) {
+  await writeFile(draftsPath, `${JSON.stringify(drafts, null, 2)}\n`);
 }
 
 async function logEvent(event) {
@@ -61,23 +67,42 @@ function nextStatus(action) {
   return "reviewing";
 }
 
+function isIgnoredSource(card) {
+  const haystack = [
+    card.senderEmail,
+    card.senderName,
+    card.subject,
+    ...(card.tags || []),
+  ].filter(Boolean).join(" ").toLowerCase();
+
+  return /\b(newsletter|substack)\b/.test(haystack) || haystack.includes("@substack.com");
+}
+
 async function getState() {
   const cards = await readJson(cardsPath, []);
-  const active = cards.filter((card) => card.status !== "cleared").length;
+  const drafts = await readJson(draftsPath, []);
+  const sentReplies = await readJson(sentRepliesPath, []);
+  const active = cards.filter((card) => card.status !== "cleared" && !isIgnoredSource(card)).length;
   const queued = cards.filter((card) => card.status === "queued").length;
   const cleared = cards.filter((card) => card.status === "cleared").length;
+  const ignored = cards.filter(isIgnoredSource).length;
   return {
     cards,
+    drafts,
+    sentReplies,
     stats: {
       total: cards.length,
       active,
       queued,
+      drafts: drafts.length,
+      sentReplies: sentReplies.length,
       cleared,
+      ignored,
     },
     source: {
       provider: "gmail",
       scope: "in:inbox -in:spam -in:trash newer_than:30d",
-      syncedAt: "2026-06-12T15:53:00+09:00",
+      syncedAt: new Date().toISOString(),
     },
   };
 }
@@ -108,6 +133,71 @@ async function handleApi(req, res, path) {
     await writeCards(cards);
     await logEvent({ type: "command", cardId: id, command, action, status: card.status });
     return send(res, 200, { card, action });
+  }
+
+  const draftMatch = path.match(/^\/api\/cards\/([^/]+)\/draft$/);
+  if (req.method === "POST" && draftMatch) {
+    const { reply = "", codexTask = "", source = "composer" } = await readBody(req);
+    if (typeof reply !== "string" || typeof codexTask !== "string") {
+      return send(res, 400, { error: "Reply and Codex task must be text." });
+    }
+
+    const trimmedReply = reply.trim();
+    const trimmedTask = codexTask.trim();
+    if (!trimmedReply && !trimmedTask) {
+      return send(res, 400, { error: "Add a reply draft or Codex task first." });
+    }
+
+    const cards = await readJson(cardsPath, []);
+    const drafts = await readJson(draftsPath, []);
+    const id = decodeURIComponent(draftMatch[1]);
+    const card = cards.find((item) => item.id === id);
+    if (!card) return send(res, 404, { error: "Card not found." });
+
+    const at = new Date().toISOString();
+    const existing = drafts.find((item) => item.cardId === id && item.status === "draft");
+    const draft = {
+      id: existing?.id || `draft-${id}-${Date.now()}`,
+      cardId: id,
+      status: "draft",
+      source,
+      reply: trimmedReply,
+      codexTask: trimmedTask,
+      senderName: card.senderName,
+      senderEmail: card.senderEmail,
+      subject: card.subject,
+      summary: card.summary,
+      nextAction: card.nextAction,
+      fullEmail: card.fullEmail,
+      replySuggestions: card.replySuggestions || [],
+      createdAt: existing?.createdAt || at,
+      updatedAt: at,
+    };
+
+    if (existing) {
+      Object.assign(existing, draft);
+    } else {
+      drafts.push(draft);
+    }
+
+    const entry = {
+      at,
+      action: "draft",
+      command: [
+        trimmedReply && `Saved reply draft: ${trimmedReply}`,
+        trimmedTask && `Codex task: ${trimmedTask}`,
+      ].filter(Boolean).join("\n\n"),
+      draftId: draft.id,
+    };
+    card.conversation = [...(card.conversation || []), entry];
+    card.status = "queued";
+    card.proposedAction = "draft";
+    card.updatedAt = at;
+
+    await writeCards(cards);
+    await writeDrafts(drafts);
+    await logEvent({ type: "draft", cardId: id, draftId: draft.id, source, hasReply: Boolean(trimmedReply), hasCodexTask: Boolean(trimmedTask) });
+    return send(res, 200, { card, draft });
   }
 
   const statusMatch = path.match(/^\/api\/cards\/([^/]+)\/status$/);
