@@ -17,3 +17,5 @@
 .swiftpm/
 *.xcuserstate
 DerivedData/
+# Playwright MCP browser-automation artifacts (ephemeral traces/logs)
+.playwright-mcp/
