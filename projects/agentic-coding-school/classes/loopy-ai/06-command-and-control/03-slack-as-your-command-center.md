@@ -108,6 +108,19 @@ Both are useful. But pattern two is a front door for new work, closer to the L5 
 
 ---
 
+## The third leg: loops talking to loops
+
+Both of those patterns put you in the middle. There is a third that does not.
+
+Once the channel is a bus, a loop can read what another loop posted and act on it, with no human in the path. This is the part of Daniel San's setup that is easy to skip past. The overnight incident loop did not only report to him. It wrote into Slack to call a second Claude instance that had the permissions it lacked, and that second loop did the work. One agent's output became another agent's trigger.
+Source: https://x.com/dani_avila7/status/2054677536865480951
+
+That is the whole point of treating the channel as transport and not a dashboard. A read-only loop watching prod can post "auth is throwing 500s, here is the trace," and a separate fix loop that watches the same channel picks it up, writes the patch, and stops at the PR. You stayed asleep. The merge button still waited for you in the morning.
+
+But notice what just changed. The moment one loop can act on another loop's message, the trusted-input assumption from the approval section is doing a lot of quiet work. A human on an allowlist is no longer the only thing that can drive a tool call. Another loop can too, and a loop can be wrong, or be steered by something it read. We take that surface apart properly in the governance chapter, under governed deployment. For now, hold the shape: same bus, three kinds of traffic, loop to you, you to loop, and loop to loop.
+
+---
+
 ## Demo
 
 On screen: one phone, three loops.
@@ -118,11 +131,13 @@ On screen: one phone, three loops.
 
 3. Approve an action. The bug-triage worker posts in-thread: "fix ready for the auth regression, eval suite re-ran green, no new failures. Ready to open PR." Two buttons, Approve and Deny. Tap Approve. The message updates in place: "approved by Ray." The worker opens the PR. You never touched a terminal.
 
-4. Steer one. Reply in the scout's thread: "ignore anything from that channel, it is off-niche." The loop reads the reply and adjusts its next pass. Then post a brand-new top-level message: "kill the sentence-mining feeder for tonight." It abandons the old threads and treats this as a fresh command, dropping a `.fleet/KILL` poll on that one loop.
+4. Watch one loop call another. The read-only prod-watch loop posts a thread: "auth latency just crossed the threshold, here is the trace." The bug-triage worker, subscribed to the same channel, reads that thread on its next pass, reproduces the failure, and replies under it: "confirmed, patch ready, holding for approval." No human moved between those two messages. The channel carried agent to agent, and the human gate is still the Approve button on the PR.
 
-5. Show the lockdown. From a second account that is not on the allowlist, tap Approve on a pending request. Nothing happens. The verdict is rejected because only the paired primary user can approve. Read out the one line that enforces it.
+5. Steer one. Reply in the scout's thread: "ignore anything from that channel, it is off-niche." The loop reads the reply and adjusts its next pass. Then post a brand-new top-level message: "kill the sentence-mining feeder for tonight." It abandons the old threads and treats this as a fresh command, dropping a `.fleet/KILL` poll on that one loop.
 
-Total demo: four minutes. The point is that the same channel did all three jobs, report, approve, steer, for three different kinds of loop, and the laptop was shut the entire time.
+6. Show the lockdown. From a second account that is not on the allowlist, tap Approve on a pending request. Nothing happens. The verdict is rejected because only the paired primary user can approve. Read out the one line that enforces it.
+
+Total demo: five minutes. The point is that the same channel did every job, report, approve, steer, and loop to loop, for three different kinds of loop, and the laptop was shut the entire time.
 
 ---
 
