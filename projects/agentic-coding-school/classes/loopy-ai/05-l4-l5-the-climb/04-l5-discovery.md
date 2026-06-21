@@ -43,7 +43,14 @@ That is the line. If the human supplied the question, it is search. If the loop 
 
 ## The core insight: Boris's couple hundred Claudes
 
-Here is the pattern in the wild, from the person who is furthest down this road.
+Here is the pattern in the wild, from the person who is furthest down this road. He stated it plainly:
+
+> Strongly agree with all of the above. We are entering the next era of code, where the model is able to generate correct code for an increasingly large percent of tasks. Our job is to make sure the model and our systems have the right guardrails, then to run Claude Code + an advanced model + a verifier in a loop and feed it tasks (or, give the model the data it needs to generate tasks), finding and getting rid of bottlenecks along the way.
+>
+> Boris Cherny
+Source: https://x.com/bcherny/status/2067272742253232211
+
+Read the parenthetical again, because the whole level lives inside it. "Run a loop and feed it tasks" is L4, you supply the queue. "Or, give the model the data it needs to generate tasks" is L5, the loop manufactures its own queue. That one "or" is the climb from worker to discovery.
 
 Boris Cherny, who built Claude Code, said the part most people skipped past. He does not prompt Claude anymore. He writes loops, and the loops prompt Claude. And among those loops are hundreds of Claude instances that are not writing code at all. They are monitoring his Twitter feedback, his GitHub issues, and his internal Slack, generating product ideas about what to build next.
 Source: https://workos.com/blog/boris-cherny-claude-code-acquired-interview-takeaways
