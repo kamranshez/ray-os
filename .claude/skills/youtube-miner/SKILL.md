@@ -97,13 +97,16 @@ Workflow({
 
 It returns `{ report, picker, stats }`. Then:
 
-1. Write `report` to a vault note (kebab-case filename, no H1, frontmatter — see the repo's image/
-   note conventions). A good home is `projects/agentic-coding-school/ideas/<slug>/`.
-2. Save `picker` to a temp JSON and run the picker builder:
+1. Write `report` to a vault **note** (kebab-case filename, no H1, frontmatter — see the repo's
+   image/note conventions). A good home is `projects/agentic-coding-school/ideas/<slug>/`.
+2. Save `picker` to a temp JSON and run the picker builder, writing the HTML into the repo's
+   top-level **`artefacts/`** folder (the established home for standalone HTML artifacts — keep it
+   shallow and easy to find, don't bury it under `projects/`):
    ```bash
-   python3 .claude/skills/youtube-miner/scripts/build_picker.py <picker.json> <out.html>
+   python3 .claude/skills/youtube-miner/scripts/build_picker.py <picker.json> artefacts/<slug>-picker.html
    ```
-3. Open both for the user (`obsidian open path=...` for the note, `open -a "Google Chrome" <out.html>`).
+3. Open both for the user (`obsidian open path=...` for the note, `open -a "Google Chrome"
+   artefacts/<slug>-picker.html` for the picker).
 
 If the run dies or you edit the engine, resume with `Workflow({scriptPath, resumeFromRunId})` — the
 unchanged prefix of agents returns cached results.
