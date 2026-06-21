@@ -1,0 +1,24 @@
+{
+  "skill_name": "youtube-miner",
+  "notes": "The heavy end-to-end mine (eval 1) is token-expensive (it backgrounds a Workflow over a whole catalogue) so it is run manually, not in the default eval loop. Evals 2-3 are cheap and exercise the inline path and the bundled picker script.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Go through every video Theo (@t3dotgg) put out in the last year and pull out the ideas that could become Agentic Coding School videos. I want each idea traced to the original blog post or paper it came from, what his audience is asking for in the comments, and a clickable thing I can use to pick the ones I like.",
+      "expected_output": "Launches the mine-workflow.js engine with channel=@t3dotgg, a computed since date, useComments=true, the ACS goal, and a curriculum hint. Produces a ranked source-traceable report (saved to the vault) plus an HTML picker built via build_picker.py and opened in Chrome. Report includes a 'What the audience keeps asking for' section and honest coverage caveats.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Just look at the last 3 videos on @fireship and tell me any reusable content ideas, with the source each one is based on and what people in the comments keep asking for.",
+      "expected_output": "Recognizes this as the light/inline path (small N), lists the 3 recent videos via VidTempla list_videos, then for each pulls transcript + description SOURCES + top comments (list_comment_threads, order relevance) and reports ideas with original sources and audience asks. Does NOT spin up the heavy Workflow for only 3 videos.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I've got a JSON of video ideas at /tmp/my_ideas.json with sections, titles, descriptions and source links. Build me the clickable dark picker page from it so I can tick the ones I want and copy them back.",
+      "expected_output": "Runs scripts/build_picker.py on the JSON to emit a self-contained HTML picker (no hand-written HTML), where link chips open without toggling the card and the selection auto-fills a copy box. Opens it for the user.",
+      "files": []
+    }
+  ]
+}
