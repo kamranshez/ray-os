@@ -124,10 +124,12 @@ PY
 
 Read `last-report.json`.
 
+**Golden rule — every flag mentioned gets a feature description.** Ray reads this tracker to be *reminded of what each flag actually did*, not just that it moved. So for **every** entry in all three categories, you MUST include a 1–2 sentence plain-English description of the feature the flag controls: what it does, what it gates, what behavior/UI/endpoint/prompt it changes. Never report a bare transition (e.g. "`tengu_x` — wired → stripped") with no description. If you don't already know what a flag does, `grep -n 'tengu_x' $STRINGS` and read a wide window (±40 lines) around the `ct("tengu_x"` call site — look for: a `name:"/command"`, a description/help string, the function it gates, prompt text it injects, env vars, API paths — and reconstruct the feature from that. If the binary genuinely reveals nothing (e.g. the string is fully stripped), say so explicitly ("code gone this build, can't recover behavior; last known purpose: …") rather than omitting the description.
+
 - **If `first_run` is true:** this is the baseline. Do not send a long diff — send one line: "📊 Baseline captured for Claude Code v{version}: {N} flags tracked." Then stop.
-- **For each `switches` entry:** name the feature in plain English (what the flag controls). If you don't already know it, `grep -n 'tengu_x' $STRINGS` around the `ct("tengu_x"` call site to figure out what it gates. Report `feature — was {on/off} → now {on/off}` and whether the change is via GrowthBook or an env override.
-- **For each `new_flags` entry — this is the most important part:** inspect the binary to infer **what it could mean**. `grep -n 'tengu_x' $STRINGS`, read a wide window around each hit, and look for: a `name:"/command"` nearby, a description string, the function it gates, prompt text it injects, env vars. Write a 1-line "probably does X" with your confidence. Note whether it's `wired` (real code, an actual upcoming feature) or only `telemetry`/`stripped` (a name with no behavior yet).
-- **For each `dce_switches` entry:** report the transition. `wired/present → stripped` = feature code was **removed** this version. `stripped/absent → wired` = code was **newly shipped** (a feature that was just a flag name is now real). `→ removed-from-growthbook` = the flag was retired server-side.
+- **For each `switches` entry:** name the feature in plain English, then **describe what it does** (per the golden rule). Report `feature — was {on/off} → now {on/off}`, whether the change is via GrowthBook or an env override, and the description. Note whether the code is still wired (so the flip actually changes behavior) or stripped (flip is a no-op).
+- **For each `new_flags` entry:** inspect the binary to infer **what it does**. `grep -n 'tengu_x' $STRINGS`, read a wide window around each hit. Write a 1–2 sentence "probably does X" with your confidence. Note whether it's `wired` (real code, an actual upcoming feature) or only `telemetry`/`stripped` (a name with no behavior yet).
+- **For each `dce_switches` entry:** report the transition AND describe the feature that was added/removed/retired (per the golden rule). `wired/present → stripped` = feature code was **removed** this version (describe what was removed, from your prior knowledge + any residual strings). `stripped/absent → wired` = code was **newly shipped** (describe the now-real feature). `→ removed-from-growthbook` = the flag was retired server-side (note whether code remains and how it's now reachable, e.g. an env var).
 
 ## Step 4: Record locally
 
@@ -151,19 +153,31 @@ Only if there is at least one switch, new flag, or DCE change (skip the message 
 bash ~/.claude/skills/slackbot-message/scripts/send-message.sh "cc-feature-tracker" "$MESSAGE"
 ```
 
-Message format (omit any section that's empty):
+Message format (omit any section that's empty). **Every bullet must carry a feature description** — see the golden rule in Step 3. The bullet structure is: `{transition} — {what the feature does}`.
 
 ```
 🚩 *Claude Code feature tracker* — v{VERSION}{ , upgraded from vX if version changed}
 
 *🔀 GrowthBook switches*
-• {feature} (`tengu_x`) — was {OFF} → now {ON}  _(via {GrowthBook|env})_
+• {feature name} (`tengu_x`) — was {OFF} → now {ON}  _(via {GrowthBook|env})_. {1–2 sentence description of what the feature does / what it gates. Note if code is still wired vs stripped.}
 
 *🆕 New flags*
-• `tengu_y` — probably {what it does} _({wired/upcoming | telemetry-only | stripped})_
+• `tengu_y` — probably {1–2 sentence description of what it does} _({wired/upcoming | telemetry-only | stripped})_
 
 *🧱 DCE switches*
-• `tengu_z` — {newly shipped code | code removed | retired from GrowthBook} ({old}→{new})
+• `tengu_z` — {newly shipped code | code removed | retired from GrowthBook} ({old}→{new}). {1–2 sentence description of the feature that was added/removed/retired, and how it's now reachable if it still exists.}
+```
+
+Example of the expected level of detail (this is the bar — note how each bullet reminds Ray what the flag *did*):
+
+```
+*🔀 GrowthBook switches*
+• Skills health dashboard (`tengu_skills_dashboard_enabled`) — was ON → now OFF _(via GrowthBook)_. Gates the `GET /api/claude_code/skills` health fetch that surfaces per-skill good/warn/poor status. Code still wired, just gated off for your account.
+
+*🧱 DCE switches*
+• `tengu_chert_bezel` — code removed (wired → stripped). Flag string is gone from the binary entirely this build; last known purpose unrecoverable from this version.
+• `tengu_kairos_brief` — retired from GrowthBook (was wired). "Brief" concise-output mode; code remains, now reachable only via the `CLAUDE_CODE_BRIEF` env var.
+• `tengu_neapolitan` — retired from GrowthBook (was wired). A git-state gate (checks cwd/HEAD, skips on `CLAUDE_CODE_REMOTE`); code still present, just no longer server-gated.
 ```
 
 If `SLACK_BOT_TOKEN`/skill is unavailable, print the full message to stdout instead so it lands in the run log.
