@@ -33,6 +33,12 @@ The worker has a destination it reaches and then stops. The reconciliation loop 
 
 [IMAGE: dark canvas, three loop shapes in a row. Left "worker": one queue arrow in, finished-task arrow out. Middle "discovery": many stream arrows in, short-list arrow out. Right "reconciliation": a single "ideal state" target line at top, a "current state" line below it, a gap between them, and a correction arrow pulling current up toward ideal. A thermostat dial icon on the reconciliation panel]
 
+![[loopy-reconciliation-three-loop-shapes-1.png]]
+![[loopy-reconciliation-three-loop-shapes-2.png]]
+![[loopy-reconciliation-three-loop-shapes-3.png]]
+![[loopy-reconciliation-three-loop-shapes-4.png]]
+![[loopy-reconciliation-three-loop-shapes-5.png]]
+
 ---
 
 ## What everyone gets wrong: a goal is not an ideal state
@@ -74,6 +80,12 @@ That sentence is a loop. The trigger is "periodic." The work is "assess current 
 Source: https://danielmiessler.com/blog/we-are-all-building-single-digital-assistant
 
 [IMAGE: dark canvas, a horizontal bar labeled "ideal state" at the top and a wobbling line labeled "current state" below it that keeps drifting down and getting yanked back up by repeated small "correction" arrows firing on a clock. Caption strip: "the loop never finishes, because entropy never finishes"]
+
+![[loopy-reconciliation-ideal-vs-current-drift-1.png]]
+![[loopy-reconciliation-ideal-vs-current-drift-2.png]]
+![[loopy-reconciliation-ideal-vs-current-drift-3.png]]
+![[loopy-reconciliation-ideal-vs-current-drift-4.png]]
+![[loopy-reconciliation-ideal-vs-current-drift-5.png]]
 
 ---
 
@@ -124,6 +136,12 @@ The mechanism does not change across those domains. Only the verifier does. "I w
 And it composes with everything you already built. A reconciliation loop that finds a gap does not have to fix the gap itself. It can mint a task and hand it to a worker. "Main is red" becomes a fix-it ticket for the worker loop from earlier in this chapter. In fact, you can now see that a discovery loop is just a reconciliation loop with one specific ideal state: "there is no unaddressed signal in my streams." Discovery is the special case. Reconciliation is the general one. That is why this video sits at the top of the climb.
 
 [IMAGE: dark canvas, a central "ideal state" document icon labeled with five domains stacked (code, health, finance, business, relationships). Five small reconciliation loops radiate out, each reading a different real-world source (test runner, fitness API, bank, Stripe, messages) and each emitting a correction arrow back toward the central document. Caption: "one shape, five verifiers"]
+
+![[loopy-reconciliation-one-shape-five-verifiers-1.png]]
+![[loopy-reconciliation-one-shape-five-verifiers-2.png]]
+![[loopy-reconciliation-one-shape-five-verifiers-3.png]]
+![[loopy-reconciliation-one-shape-five-verifiers-4.png]]
+![[loopy-reconciliation-one-shape-five-verifiers-5.png]]
 
 ---
 
