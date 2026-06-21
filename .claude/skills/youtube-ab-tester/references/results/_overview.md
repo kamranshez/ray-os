@@ -58,5 +58,6 @@ The number below is the source of truth. Some per-video files have a stale inter
 | V29 | 2026-06-01 | `2026-06/2026-06-01-codex-director.md` | |
 | **V30** | 2026-06-09 | `2026-06/2026-06-09-wtf-are-loops.md` | ⚠️ internal header still says `## Video 27` — it is V30. Docs call it "V30-loops" |
 | V31 | 2026-06-11 | `2026-06/2026-06-11-nested-subagents.md` | |
+| V32 | 2026-06-21 | `2026-06/2026-06-21-anki-claude-code.md` | Anki + Claude Code; personal-workflow video, credential frame LOST |
 
 **Numbering collision (documented, not renamed):** both `2026-05-22-workflow-tool.md` and `2026-06-09-wtf-are-loops.md` carry a `## Video 27` internal header. The workflow-tool file is correct; the loops file is actually V30. This table is the source of truth. The reference docs disambiguate by slug ("V27-workflows" / "V30-loops"), which is why those suffixes exist. A physical renumber (header + `thumbnails/v27-wtf-are-loops/` folder + its `uploaded.json`) was deliberately deferred to avoid desync — keep using this table instead.
