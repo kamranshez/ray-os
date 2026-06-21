@@ -2,12 +2,20 @@
 name: youtube-outlier-scout
 description: |
   Daily niche scout that monitors a watchlist of YouTube channels for outlier videos
-  and searches keywords for trending content in the AI/coding niche. Use this skill
+  and searches keywords for trending content in the AI/coding niche. ALSO does deep
+  single-channel outlier-title analysis on demand: point it at any YouTube channel
+  (handle, ID, URL, or a pasted channel screenshot) to find its outlier videos (3x+
+  above channel median) and extract the title patterns worth stealing. Use this skill
   when the user says "run the scout", "outlier scout", "what's trending", "daily report",
   "check the watchlist", "any outliers today", or wants a broad view of what's
-  performing in their YouTube niche. Also trigger when the user asks to add/remove
-  channels or keywords from the watchlist.
-argument-hint: [daily|watchlist-only|keywords-only|refresh-baselines]
+  performing in their YouTube niche. Also trigger when the user wants to find outlier
+  videos on a specific channel, analyze what titles are working for another creator,
+  scout title ideas, or says things like "find outliers on this channel", "what's
+  working for [creator]", "analyze their titles", "outlier analysis", "title research",
+  "scout this channel", or provides a YouTube channel URL/handle (or a channel-page
+  screenshot with view counts) and wants to understand their best-performing content.
+  Also trigger when the user asks to add/remove channels or keywords from the watchlist.
+argument-hint: [daily|watchlist-only|keywords-only|refresh-baselines | <channel-handle-or-url> [min-multiplier]]
 allowed-tools:
   - Bash
   - Read
@@ -17,6 +25,9 @@ allowed-tools:
   - Grep
   - Agent
   - mcp__claude_ai_Exa__web_search_exa
+  - mcp__claude_ai_VidTempla__search_youtube
+  - mcp__claude_ai_VidTempla__list_channels
+  - mcp__claude_ai_VidTempla__get_channel
 ---
 
 # /youtube-outlier-scout -- Daily Niche Outlier Scout
@@ -27,11 +38,23 @@ Monitor a watchlist of YouTube channels and search niche keywords to surface
 The daily report focuses on what's happening NOW -- videos published in the last
 7 days that are already outperforming their channel's baseline.
 
+## Two Modes
+
+This skill has two operating modes:
+
+1. **Daily scout (default)** -- monitors the watchlist + keyword discovery and produces
+   the combined daily report. This is what runs on a bare `/youtube-outlier-scout` or any
+   of the scan-mode keywords below.
+2. **Single-channel deep-dive** -- when the user points the skill at ONE specific channel
+   (a `@handle`, channel ID, channel URL, or a pasted channel-page screenshot) and wants
+   that channel's outliers + title patterns. See "Single-Channel Deep-Dive Mode" below.
+   Pick this mode whenever the argument is a channel reference rather than a scan keyword.
+
 ## Arguments
 
-`/youtube-outlier-scout [mode]`
+`/youtube-outlier-scout [mode | <channel> [min-multiplier]]`
 
-- `$0` -- **mode** (optional): Which scan to run.
+- `$0` -- **mode or channel** (optional): Which scan to run, OR a channel to deep-dive.
   - `daily` (default): watchlist recent scan + keyword discovery, combined report
   - `watchlist-only`: only scan watchlist channels, skip keyword discovery
   - `keywords-only`: only run keyword discovery, skip watchlist
@@ -40,6 +63,11 @@ The daily report focuses on what's happening NOW -- videos published in the last
   - `remove <@handle>`: remove a channel from the watchlist
   - `add-keyword <term>`: add a keyword to the search list
   - `remove-keyword <term>`: remove a keyword from the search list
+  - `<channel-handle-or-url>`: run the single-channel deep-dive on that channel
+- `$1` -- **min-multiplier** (deep-dive only, optional): outlier threshold as a multiplier
+  of channel median views. Defaults to `3` (3x the median). Use `2` for broader results,
+  `5` or `10` for only mega-outliers. For channels with < 10 videos, drop to `2`
+  automatically.
 
 ## Configuration
 
@@ -100,6 +128,28 @@ yt-dlp "ytsearch20:<keyword>" --no-download \
 Returns: `videoId|title|viewCount|channelName|uploadDate(YYYYMMDD)`
 
 Filter to videos published within the last 48 hours.
+
+### Thumbnails
+
+Thumbnails for any video are available at
+`https://i.ytimg.com/vi/{VIDEO_ID}/maxresdefault.jpg`
+(fall back to `hqdefault.jpg` if maxres is unavailable).
+
+### Channel resolution (deep-dive)
+
+If the user gives a `@handle`, construct the URL directly:
+`https://www.youtube.com/@HandleName/videos`. If they give a channel ID or an ambiguous
+name, resolve it with VidTempla search (Ray's channel ID for auth:
+`UCLA7cJBnqr0nLF2bQBD9uUg`):
+
+```
+mcp__claude_ai_VidTempla__search_youtube({
+  channelId: "UCLA7cJBnqr0nLF2bQBD9uUg",
+  q: "<channel name>",
+  type: "channel",
+  maxResults: 5
+})
+```
 
 ## Process
 
@@ -255,15 +305,17 @@ Across ALL recent outliers (watchlist + discoveries), analyze:
 **Structure:**
 - Curiosity gaps ("You've been doing X wrong", "Here's What to Build Instead")
 - Power words (UNLOCK, DEPLOY, COMPLETE, KEY, BEAST)
-- Number usage ("10x", "800+", "5,000")
+- Number usage ("10x", "800+", "5,000", "8 Modules")
 - Question format vs statement format
-- Parenthetical qualifiers ("(Full Guide)", "(Step by Step)")
+- Parenthetical qualifiers ("(Full Guide)", "(Step by Step)", "(n8n)")
+- Length (character count, word count) -- is there a correlation between title length and performance?
 - Name-dropping (people, companies, tools)
 
 **Framing:**
 - Problem-first vs solution-first
 - Personal ("I did X") vs tutorial ("How to X") vs news ("X Just Changed")
-- Negative framing vs positive framing
+- Negative framing ("Will Fail", "Not Enough") vs positive ("Game-Changer", "Smarter")
+- Specificity level (vague "AI Agents" vs specific "Qwen3.5 Agent")
 
 **Cross-channel patterns:**
 - Which title formulas appear in outliers across MULTIPLE channels? (strongest signal)
@@ -365,6 +417,116 @@ The Telegram message should be concise (Ray reads on his phone) and include:
 
 Keep it under ~1500 characters. No markdown formatting (plain text only for Telegram).
 
+## Single-Channel Deep-Dive Mode
+
+When the user points the skill at ONE specific channel (a `@handle`, channel ID, channel
+URL, or a pasted channel-page screenshot) and wants that channel's outliers + title
+patterns, run this deep-dive instead of the daily scan. This is the on-demand "what's
+working for [creator]" / "analyze their titles" / "find outliers on this channel" path.
+
+### D1 -- Resolve the channel
+
+Construct `https://www.youtube.com/@HandleName/videos` from a `@handle` directly. For a
+channel ID, ambiguous name, or a pasted screenshot, extract/resolve the channel via
+VidTempla `search_youtube` (see "Channel resolution" under Data Access).
+
+### D2 -- Pull ALL videos via yt-dlp
+
+Use the two-step approach (IDs then parallel metadata) from Data Access to pull the
+channel's full catalogue, sorted by views:
+
+```bash
+yt-dlp --flat-playlist --print "%(id)s" \
+  "https://www.youtube.com/@ChannelHandle/videos" 2>/dev/null | \
+  xargs -P 10 -I {} sh -c \
+  'yt-dlp --no-download --print "%(id)s|%(title)s|%(view_count)s|%(duration)s|%(upload_date)s" \
+  "https://www.youtube.com/watch?v={}" 2>/dev/null' | \
+  sort -t'|' -k3 -rn
+```
+
+For very large channels (500+ videos) use `timeout: 300000`.
+
+### D3 -- Calculate outliers
+
+1. **Median views** (robust -- immune to outlier skew)
+2. **Mean views** (for reference)
+3. **Outlier multiplier** per video: `video_views / median_views`
+4. **Filter** to videos with multiplier >= threshold ($1, default 3x; 2x if < 10 videos)
+5. **Sort** outliers by multiplier descending
+
+```bash
+# Extract view counts and compute median
+... | cut -d'|' -f3 | sort -n | awk '{a[NR]=$1} END {print a[int(NR/2)+1]}'
+```
+
+### D4 -- Analyze title patterns
+
+Run the same title-pattern analysis as Step 4 above (structure + framing axes). Also,
+for a single channel, contrast the outlier titles against the **non-outlier** titles to
+surface what is NOT working (patterns that correlate with underperformance).
+
+### D5 -- Thumbnail quick-scan (optional)
+
+For the top 5 outliers, inspect thumbnails at
+`https://i.ytimg.com/vi/{VIDEO_ID}/maxresdefault.jpg`. Note whether title + thumbnail are
+complementary or redundant. If the user supplied a screenshot with VPH (views-per-hour)
+data, use VPH as an additional signal -- high VPH means a video is trending now, not just
+high lifetime views.
+
+### D6 -- Report
+
+Output a structured markdown report to the terminal:
+
+```markdown
+## Outlier Analysis: @ChannelName
+
+**Channel Stats:** X subscribers, Y videos analyzed
+**Median views:** Z | **Mean views:** W
+
+### Outliers (>= Nx channel median)
+
+| # | Title | Views | Multiplier | Duration | Published |
+|---|-------|-------|------------|----------|-----------|
+| 1 | ...   | ...   | ...x       | ...      | ...       |
+
+### Title Formula Patterns
+- [formula] -- used in N outliers, avg Mx multiplier
+
+### What's Working
+- [title patterns that correlate with high performance]
+
+### What's NOT Working
+- [patterns from non-outlier videos that underperform]
+
+### Actionable Title Ideas for Ray
+1. [specific title formula Ray could test, adapted to his content]
+2. [direct A/B test hypothesis based on outlier patterns]
+```
+
+### D7 -- Save report (optional)
+
+If the user wants to keep the research, save to:
+```
+/Users/ray/Desktop/ray-os/socials/youtube/analysis/outliers/<channel-handle>.md
+```
+Use a kebab-case filename (create the directory if it does not exist). Frontmatter:
+```yaml
+---
+tags: [youtube, outlier-analysis, title-research]
+date: YYYY-MM-DD
+channel: "@HandleName"
+videos-analyzed: N
+outliers-found: N
+median-views: N
+---
+```
+
+### Multi-channel deep-dive
+
+If the user supplies multiple channels, run D1-D6 sequentially for each, then add a
+comparative summary highlighting title patterns that appear across multiple channels.
+Cross-channel patterns are the strongest signals.
+
 ## Watchlist Management
 
 When the user says `add @handle` or `remove @handle`:
@@ -403,6 +565,9 @@ Same for `add-keyword` and `remove-keyword`.
 
 ## Integration with Other Skills
 
-- Use `/youtube-outlier-titles @handle` for a deep-dive on any channel from the report
+- Run this skill in single-channel deep-dive mode (`/youtube-outlier-scout @handle`) for a
+  deep-dive on any channel surfaced in the daily report
 - Feed title patterns into `/youtube-ab-tester` for A/B test hypotheses
 - Feed topic insights into `/youtube-scriptwriter` for content planning
+- Use `/youtube-title-researcher` for broader niche research beyond a single channel
+- Feed thumbnail observations into `/youtube-thumbnail-generator` for design inspiration

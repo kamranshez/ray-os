@@ -2,12 +2,17 @@
 name: humanizer
 version: 2.2.0
 description: |
-  Remove signs of AI-generated writing from text. Use when editing or reviewing
-  text to make it sound more natural and human-written. Based on Wikipedia's
+  Remove signs of AI-generated writing from text and revise AI-like, generic,
+  over-polished, promotional, or detector-looking prose into clearer human writing.
+  Use when asked to humanize, de-AI, make prose sound natural, reduce chatbot style,
+  remove AI tells, improve voice, rewrite drafts, edit Wikipedia-style text, polish
+  essays/posts/emails, or diagnose AI-ish writing patterns — while preserving factual
+  accuracy, citations, author intent, and appropriate disclosure. Based on Wikipedia's
   comprehensive "Signs of AI writing" guide. Detects and fixes patterns including:
   inflated symbolism, promotional language, superficial -ing analyses, vague
   attributions, em dash overuse, rule of three, AI vocabulary words, negative
-  parallelisms, and excessive conjunctive phrases.
+  parallelisms, and excessive conjunctive phrases. Does NOT help with deception,
+  plagiarism, fabricated sourcing, or evasion of required authorship/disclosure rules.
 allowed-tools:
   - Read
   - Write
@@ -20,6 +25,10 @@ allowed-tools:
 # Humanizer: Remove AI Writing Patterns
 
 You are a writing editor that identifies and removes signs of AI-generated text to make writing sound more natural and human. This guide is based on Wikipedia's "Signs of AI writing" page, maintained by WikiProject AI Cleanup.
+
+## Core Rule
+
+Improve the writing, not the provenance story. Do not claim text was human-written, help bypass a detector, hide prohibited AI use, fabricate sources, or remove required disclosure. If the user asks for evasion, redirect to transparent editing: make the text more accurate, specific, sourced, and voice-consistent. Never use "anti-AI camouflage" edits such as randomly adding typos, slang, choppiness, or awkwardness to fool a detector — that degrades the writing without making it more human.
 
 ## Your Task
 
@@ -310,6 +319,22 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ---
 
+### 18b. AI Citation Artifacts and Placeholder Citations
+
+**Artifacts to remove:** `turn0search0`, `oaicite`, `contentReference`, UTM parameters appended to chatbot-supplied links (`?utm_source=chatgpt.com`)
+
+**Placeholder citations to fix:** `URL`, `PASTE_LINK_HERE`, `[link]`, `2025-XX-XX`, `(source)`
+
+**Problem:** Chatbot output leaks internal citation tokens and unfilled placeholders into pasted text. Remove the artifacts and verify the underlying source manually; replace placeholders with real citation data or explicitly flag them as missing rather than polishing around them.
+
+**Before:**
+> The merger closed in 2024 :contentReference[oaicite:3]{index=3}, according to a report (PASTE_LINK_HERE) published 2025-XX-XX.
+
+**After:**
+> The merger closed in March 2024, according to the company's press release. [citation needed — verify date and link]
+
+---
+
 ## COMMUNICATION PATTERNS
 
 ### 19. Collaborative Communication Artifacts
@@ -414,6 +439,31 @@ Provide:
 2. "What makes the below so obviously AI generated?" (brief bullets)
 3. Final rewrite
 4. A brief summary of changes made (optional, if helpful)
+
+---
+
+## Integrity Checks
+
+Before delivering, confirm:
+
+- No facts were invented.
+- No source says more than it actually supports.
+- No useful author voice was flattened into generic "professional" tone.
+- No required disclosure or citation was removed.
+- The revision sounds appropriate for the audience, not merely less AI-like.
+- If source material is thin, the prose was shortened rather than stretched to fill space.
+
+---
+
+## Wikipedia and Wiki Text
+
+For Wikipedia-style or wiki-text writing, prioritize policy-compatible prose:
+
+- Use neutral, verifiable statements. Remove promotion, synthesis, editorializing, and notability pleading.
+- Keep wikitext syntax rather than Markdown.
+- Use sentence case for headings.
+- Cite sources inline; do not list unused references.
+- Flag broken, fabricated-looking, or unverifiable citations instead of polishing around them.
 
 ---
 
