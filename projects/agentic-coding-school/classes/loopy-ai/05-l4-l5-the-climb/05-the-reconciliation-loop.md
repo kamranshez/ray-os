@@ -124,6 +124,22 @@ Write your ideal state as a list under those three headers and you have just spe
 
 ---
 
+## A maintain-invariant you can paste tonight
+
+The cleanest real-world version of the maintain-invariant is Peter Steinberger's, and it is one line. He merged 859 pull requests across his repos in a single month at a 95 percent acceptance rate, and a chunk of that volume comes from one loop he leaves running on a five minute timer while he works:
+
+```
+/loop 5m make one small verified repository improvement: a flaky test, a stale comment, a missing type. One change, one commit, tests green. Never touch anything risky.
+```
+
+Read it as a thermostat, not a worker. There is no queue and no ticket waiting. The ideal state is implicit but standing: this repo always trends cleaner, never messier. Every five minutes the loop reads the current state, finds the single biggest small gap, and closes it. What to fix is the agent's call, not a hardcoded script, and that is the whole point. You declared a direction, not a task list.
+
+The constraints in the back half of that command are not decoration. "One change, one commit, tests green" is the borrowed verifier and the deadband in one breath, it keeps a standing loop from thrashing your repo on every tiny wobble. "Never touch anything risky" is the autonomy notch, it pins the loop to low-blast-radius maintains and keeps it off the never-list while you are not watching. That is the entire reconciliation discipline compressed into a sentence you can paste before you finish this video.
+
+Source: https://x.com/mvanhorn (Matt Van Horn, "WTF Is a Loop? Part 2", Jun 2026)
+
+---
+
 ## It was never about code
 
 This is the part of the chapter where the whole class breaks out of the IDE, so sit with it.
