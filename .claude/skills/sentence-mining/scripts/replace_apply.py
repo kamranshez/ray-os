@@ -72,11 +72,18 @@ async def process_one(entry, workdir: Path, sem):
     nid = entry["note_id"]
     base = f"sm_replace_{nid}"
 
-    img_ext = _ext(entry["image_url"], "jpg")
-    img_name = f"{base}_img.{img_ext}"
-    _stage(entry["image_url"], workdir / img_name)
-    store_media(workdir / img_name, img_name)
-    entry["picture_field"] = f'<img src="{img_name}">'
+    # An EMPTY picture field makes the note type's Back template re-render the
+    # sentence audio (its {{^picture}} branch), so on mobile the sentence audio
+    # autoplays on the back too. When the source ships no image, write "。" instead
+    # of leaving it blank so {{#picture}} stays truthy and the back stays silent.
+    if entry.get("image_url"):
+        img_ext = _ext(entry["image_url"], "jpg")
+        img_name = f"{base}_img.{img_ext}"
+        _stage(entry["image_url"], workdir / img_name)
+        store_media(workdir / img_name, img_name)
+        entry["picture_field"] = f'<img src="{img_name}">'
+    else:
+        entry["picture_field"] = "。"
 
     snd_ext = _ext(entry["sound_url"], "mp3")
     snd_name = f"{base}_audio.{snd_ext}"

@@ -88,7 +88,12 @@ def build_note(candidate, source_url, permanent_tag, source_id=None):
         "reading": reading,
         "sentence": sentence_text,
         "sentence_audio": f"[sound:{sentence_audio_file}]" if sentence_audio_file else "",
-        "picture": f'<img src="{picture_file}">' if picture_file else "",
+        # An EMPTY picture field makes the note type's Back template take its
+        # {{^picture}} branch, which re-renders sentence_audio and forces .audio to
+        # display — so on AnkiMobile/AnkiDroid the sentence audio autoplays on the
+        # BACK too (double audio). Any non-empty value flips {{#picture}} truthy and
+        # silences the back replay. "。" is the minimal harmless filler.
+        "picture": f'<img src="{picture_file}">' if picture_file else "。",
         "explanation": candidate.get("explanation", ""),
         "explanation_audio": f"[sound:{explanation_audio_file}]" if explanation_audio_file else "",
         "source_url": source_url,
