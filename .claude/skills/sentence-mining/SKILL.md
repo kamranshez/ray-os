@@ -262,7 +262,7 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 | `search_banks.py`       | bank  | word-list → top-N sentence candidates across indexed banks   |
 | `generate_media_bank.py`| bank  | copy bank media (or TTS fallback) + Gemini TTS explanation   |
 | `replace_search.py`     | replace | resolve target cards (flag / note-ids / words) → search Immersion Kit → Nadeshiko → local bank → filter + re-rank by your i+1 → replace-draft JSON |
-| `replace_apply.py`      | replace | stage media (URL or local) + TTS explanation (best-effort), archive old sentence to `previous_versions`, overwrite fields, retag i-level, rehabilitate (de-leech/unsuspend/reset-to-due), promote flag:1→`--done-flag` (3). Retires unfixable misses (`not-worth-learning` + suspend + clear flag; `--keep-misses` to skip). `--rehab-flag N` rehabilitates a batch with no field changes |
+| `replace_apply.py`      | replace | stage media (URL or local) + TTS explanation (best-effort), archive old sentence to `previous_versions`, overwrite fields, retag i-level, rehabilitate (de-leech/unsuspend/reset-to-due), clear flag:1 so the redone card just rejoins the study queue (`--done-flag N` to flag instead, `-1` to leave). Retires unfixable misses (`not-worth-learning` + suspend + clear flag; `--keep-misses` to skip). `--rehab-flag N` rehabilitates a batch with no field changes |
 | `push.py`               | both  | AnkiConnect addNotes onto `config.note_type` via `config.field_map` |
 | `ensure_anki.sh`        | all   | ping AnkiConnect; `open -a Anki` if down; wait for load + verify stable (run first) |
 | `_env.py`               | both  | loads `.env` into `os.environ`                               |

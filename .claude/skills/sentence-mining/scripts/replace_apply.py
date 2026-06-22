@@ -11,7 +11,8 @@ For each entry (with `explanation` filled by Claude):
   - overwrite sentence / sentence_audio / picture / explanation / explanation_audio
   - retag the i-level (i1/i2/… reflecting how many other words are new for Ray)
   - rehabilitate the card (de-leech, unsuspend, reset scheduling so it's due)
-  - promote the input flag:1 to --done-flag (default 3 = "redone, review me")
+  - clear the input flag:1 (default) so the redone card just rejoins the study
+    queue — it's already reset to due. --done-flag N flags it instead.
 
 Unfixable misses (no usable replacement in any corpus) are retired instead: tagged
 `not-worth-learning`, suspended, and cleared off flag:1 (--keep-misses to skip).
@@ -114,9 +115,10 @@ def archive_block(fm, old_snapshot, today):
 
 
 def set_flag(nid, flag):
-    """Set the card's flag (1-7; 0=none). Anki flags are mutually exclusive, so this
-    moves a card off its input flag onto the 'redone, review me' flag."""
-    if not flag:
+    """Set the card's flag: 0 = remove the flag (default — a redone card just rejoins
+    the study queue), 1-7 = a colored flag, None = leave the flag untouched. Anki flags
+    are mutually exclusive, so setting one clears whatever the card was on (e.g. flag:1)."""
+    if flag is None:
         return
     for c in anki_request("findCards", query=f"nid:{nid}"):
         anki_request("setSpecificValueOfCard", card=c, keys=["flags"],
@@ -181,7 +183,7 @@ def rehabilitate(nid):
     return cards
 
 
-def apply_entry(entry, fm, today, done_flag=3):
+def apply_entry(entry, fm, today, done_flag=0):
     nid = entry["note_id"]
     old = entry["old_fields_snapshot"]
     existing_prev = old.get(fm.get("previous_versions", ""), "")
@@ -203,7 +205,8 @@ def apply_entry(entry, fm, today, done_flag=3):
     anki_request("addTags", notes=[nid], tags=entry["i_level"])
     # Fresh sentence on a struggled-with card → de-leech + reset scheduling so it's due.
     rehabilitate(nid)
-    # Promote to the "redone, review me" flag so Ray can eyeball the new card and decide.
+    # Clear the input flag (default) so the redone card just rejoins the study queue —
+    # the reset-to-due above already queues it up next. (--done-flag N to flag instead.)
     set_flag(nid, done_flag)
 
 
@@ -279,12 +282,18 @@ async def main_async(args):
             if isinstance(r, Exception):
                 print(f"  ✗ {e['word']} — {r}", file=sys.stderr)
                 continue
-            apply_entry(e, fm, today, done_flag=args.done_flag)
+            df = None if args.done_flag < 0 else args.done_flag
+            apply_entry(e, fm, today, done_flag=df)
             done.append(e)
             print(f"  ✓ {e['word']} → {e['new_sentence'][:48]}", file=sys.stderr)
 
-    flag_note = "left on input flag" if args.done_flag == 0 else f"moved to flag {args.done_flag}"
-    print(f"\nReplaced {len(done)}/{len(ready)} cards in place ({flag_note} for your review).")
+    if args.done_flag < 0:
+        flag_note = "input flag left untouched"
+    elif args.done_flag == 0:
+        flag_note = "flag cleared, reset to due — queued up next"
+    else:
+        flag_note = f"moved to flag {args.done_flag}"
+    print(f"\nReplaced {len(done)}/{len(ready)} cards in place ({flag_note}).")
 
     # Retire unfixable misses: tag not-worth-learning, suspend, clear the input flag so
     # they leave the fix queue. --keep-misses leaves them on the flag for a later pass.
@@ -310,9 +319,11 @@ def main():
     ap.add_argument("--rehab-flag", type=int, default=None,
                     help="De-leech + unsuspend + reset-to-due every card flagged N "
                          "(no field changes). Use to rehabilitate an already-replaced batch.")
-    ap.add_argument("--done-flag", type=int, default=3,
-                    help="Flag to set on each redone card so it lands in a review queue "
-                         "(default 3; 0 = leave the flag unchanged). Input is flag:1.")
+    ap.add_argument("--done-flag", type=int, default=0,
+                    help="What to do with each redone card's flag. Default 0 = clear the "
+                         "flag so it just rejoins the study queue (it's already reset to "
+                         "due). 1-7 = set that colored flag instead. Negative = leave the "
+                         "input flag untouched. Input is flag:1.")
     ap.add_argument("--keep-misses", action="store_true",
                     help="Leave unfixable misses on the input flag. Default retires them: "
                          f"tag '{RETIRE_TAG}', suspend, clear the flag.")

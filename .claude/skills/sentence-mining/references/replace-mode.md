@@ -66,9 +66,10 @@ identical. Key from https://nadeshiko.co/user/developer (scope `READ_MEDIA`).
 ### Step 1 — find the candidates (read-only)
 
 **Flag convention:** Ray marks struggling cards with **flag:1** (input queue). Replace
-mode reads flag:1 and, after he confirms, moves each redone card to **flag:3** (output /
-review queue). Genuine misses stay on flag:1 so they remain in the "still needs fixing"
-bucket. Anki flags are mutually exclusive, so this gives two clean buckets.
+mode reads flag:1 and, after he confirms, **clears the flag** on each redone card so it
+just rejoins the study queue (it's reset to due, so it queues up next — no separate review
+bucket). Genuine misses stay on flag:1 so they remain in the "still needs fixing" bucket.
+(Override with `--done-flag N` if you ever want the redone set on a colored flag instead.)
 
 ```bash
 python3 <skill-dir>/scripts/replace_search.py \
@@ -115,8 +116,7 @@ python3 <skill-dir>/scripts/replace_apply.py --draft ~/Downloads/sentence-mining
 ```
 
 Present the table; let Ray drop/swap any (edit the draft JSON accordingly). Only proceed
-to Step 4 once he confirms. He can still do a deeper pass later via the flag:3 queue, but
-the per-run confirmation is mandatory.
+to Step 4 once he confirms — the per-run confirmation is mandatory.
 
 ### Step 4 — apply in place
 
@@ -139,10 +139,11 @@ Per card this:
   `leech` tag, unsuspends, `forgetCards` to reset scheduling → the card becomes due, and
   zeroes the `reps`/`lapses` counters (forgetCards alone leaves them, so a card would keep
   its lapse history and re-leech too soon)
-- **promotes the flag**: input `flag:1` ("fix these") → `--done-flag` (default `3` =
-  "redone, review me"). Anki flags are mutually exclusive, so the redone set ends up on
-  flag:3 while genuine misses stay on flag:1 (still-to-fix). Ray eyeballs flag:3 then
-  clears it himself. `--done-flag 0` leaves the flag. The `claude-sentence-*` tag is kept.
+- **clears the flag**: input `flag:1` ("fix these") → **no flag** (default `--done-flag 0`).
+  The card was just reset to due, so clearing the flag lets it simply rejoin the study
+  queue and come up next — no separate review bucket to babysit. Genuine misses stay on
+  flag:1 (still-to-fix). `--done-flag N` (1-7) sets a colored flag instead; `--done-flag -1`
+  leaves the input flag untouched. The `claude-sentence-*` tag is kept.
 
 It also **retires the unfixable misses**: every word in `misses` (no usable replacement
 in IK / Nadeshiko / bank) is tagged `not-worth-learning`, suspended, and cleared off
