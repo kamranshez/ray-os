@@ -2,7 +2,7 @@
 video_id: "weH2mR3O"
 duration: "10-14 min"
 batch: 8
-order: 31
+order: 32
 batch_name: "L7 Closing"
 class: "loopy-ai"
 chapter: "Where Taste Went"
