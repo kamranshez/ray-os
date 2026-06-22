@@ -115,17 +115,19 @@ Describe what each image should show inline in square brackets above the embed s
 
 ### Where to place a placeholder
 
-Do not place images on a quota. Run every candidate beat through this pipeline, in order:
+**Lean generous.** The shape gate below is what keeps you honest, so once a beat passes it, default to drawing it. In practice the common failure is too few images, not too many: an important section ends up a wall of narration with nothing to anchor it. So the disposition is "draw it unless there's a reason not to," not "withhold unless it's one of the top three."
 
-1. **Gate, the shape test.** A beat is only eligible for an image if the idea has a *shape*: nesting, flow, direction, partition, cycle, substitution, or convergence. Ask "does this sentence lose anything if it stays as words on the page?" If the answer is no, do not draw it. This kills decoration at the source. "The model was trained on more data" has no shape. "Eight loop levels nest inside each other" does.
-2. **Rank, the argument test.** Among the eligible beats, the must-draws are the ones carrying a load-bearing claim, a "therefore" the video would collapse without. Draw these first. If you could keep only three images, these are them.
-3. **Tie-break, the pacing test.** If the gate-plus-rank pass leaves a stretch longer than about ninety seconds of unbroken narration with no visual, promote the strongest eligible-but-undrawn diagram in that gap. If two diagrams compete for the same beat, push the lower-stakes one to the next visual-less stretch.
+Run every candidate beat through this pipeline, in order:
 
-Treat "this feels like a lot to follow" (cognitive load) as a secondary hint only. It is a liar at the moment of writing: everything feels heavy while you are explaining it, so writers who place by load over-place.
+1. **Gate, the shape test.** A beat is only eligible for an image if the idea has a *shape*: nesting, flow, direction, partition, cycle, substitution, or convergence. Ask "does this sentence lose anything if it stays as words on the page?" If the answer is no, do not draw it. This is the one hard filter, and it kills decoration at the source. "The model was trained on more data" has no shape. "Eight loop levels nest inside each other" does.
+2. **Draw every eligible beat.** Every beat that clears the gate gets a placeholder by default, not just the load-bearing ones. Ranking only matters as a trim step: if you blow past the ceiling, keep the beats carrying a "therefore" the video would collapse without, and drop the weakest-shaped ones first. Below the ceiling, do not withhold an eligible diagram just because another beat is more important. A section that introduces a real concept with a shape should almost never be left with zero visuals.
+3. **Pacing backstop.** If any stretch longer than about sixty seconds of unbroken narration has no visual, that gap needs a diagram, find the strongest shaped beat in it and draw it. If two diagrams compete for the same beat, keep both if they show different things, otherwise push the lower-stakes one to the next visual-less stretch.
+
+Treat "this feels like a lot to follow" (cognitive load) as a secondary hint only. It is a liar at the moment of writing: everything feels heavy while you are explaining it. But under the generous default it errs the right way, so let it nudge you toward an extra diagram, not away from one.
 
 ### How many
 
-Roughly one diagram per major section. Hard ceiling around six to eight per script. The hand-drawn style earns its impact from being a little scarce. The moment the viewer expects a picture for every point, each picture becomes wallpaper.
+At least one diagram per major section, plus any sub-beat inside a section that introduces its own shaped, load-bearing idea. A meaty section can carry two or three. Soft ceiling around ten to twelve per script: past that, start trimming the weakest-shaped beats. The hand-drawn style still wants a little breathing room, so a beat with no shape stays as words, but a real concept with a shape should get drawn rather than skipped to stay scarce.
 
 ---
 
