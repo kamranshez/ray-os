@@ -28,6 +28,17 @@ Until both are true, do not stop and do not return a summary.
   auto_add_rejected. List any auto-adds in the report AND the Slack summary. This mutates
   watchlist.yaml in the repo -- that's expected, no approval gate.
 - Title-pattern analysis across all flagged videos.
+- **Format-Gap Analysis (Step 4b in SKILL.md) -- REQUIRED, this is the headline.** For
+  every outlier compute views/sub ratio (not just channel-median multiplier) and classify
+  its format. Spotlight any small-channel-big-views case (views/sub > 5x, e.g. a 10k-sub
+  channel with 700k views) by name -- those are the strongest "they're doing something we
+  aren't" signals. Pull Ray's own recent videos (channel ID UCLA7cJBnqr0nLF2bQBD9uUg),
+  classify their formats, compute his mix, and report which winning formats he under-uses.
+  Cross-reference socials/youtube/ab-tests/results.md to tag ideas PROVEN/NEW. Package the
+  top 3-5 bangers as concrete video ideas (format + title options + thumbnail concept).
 
 # Output
-Save to .claude/skills/youtube-outlier-scout/reports/YYYY-MM-DD.md, then post a <1500-char plain-text summary to Slack #yt-outlier via the slackbot-message skill.
+Save to .claude/skills/youtube-outlier-scout/reports/YYYY-MM-DD.md, then post a <2500-char
+Slack-mrkdwn summary to #yt-outlier via the slackbot-message skill. **Lead the Slack post
+with the Format Gap section** (the bangers + what we're doing differently), then the
+trending/outlier lists and any auto-adds.
