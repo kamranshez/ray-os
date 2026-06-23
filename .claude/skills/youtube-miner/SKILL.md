@@ -15,8 +15,8 @@ description: >-
   HTML picker the user can click through to select the ideas worth pursuing. Default framing is
   "ideas that could become Agentic Coding School videos", but the goal is parameterizable for any
   channel or purpose. Do NOT use for single-video transcript lookups (just fetch the transcript),
-  for competitor TITLE research (use youtube-title-researcher), or for outlier/trend scouting
-  across many channels (use youtube-outlier-scout).
+  for competitor TITLE research or outlier/trend scouting across many channels (both now
+  live in youtube-outlier-scout).
 ---
 
 # YouTube Miner
