@@ -14,6 +14,12 @@ description: |
   working for [creator]", "analyze their titles", "outlier analysis", "title research",
   "scout this channel", or provides a YouTube channel URL/handle (or a channel-page
   screenshot with view counts) and wants to understand their best-performing content.
+  ALSO does competitor TITLE research and FORMAT-GAP analysis (this skill absorbed the
+  old youtube-title-researcher): trigger on "research youtube titles", "what titles are
+  working", "competitor title research", "title ideas for my next video", "competitive
+  title analysis", or any request to compare how outlier videos differ from Ray's own
+  channel ("what are we doing differently", "why did their small channel beat us", "what
+  formats are we missing", "format gap", "compare these outliers to my videos").
   Also trigger when the user asks to add/remove channels or keywords from the watchlist.
 argument-hint: [daily|watchlist-only|keywords-only|refresh-baselines | <channel-handle-or-url> [min-multiplier]]
 allowed-tools:
@@ -322,6 +328,45 @@ Across ALL recent outliers (watchlist + discoveries), analyze:
 - Which topics are trending this week vs. evergreen?
 - Any new channels emerging in the niche?
 
+### Step 4b -- Format-Gap Analysis (outliers vs Ray's own channel)
+
+This is the highest-value section of the report. Title patterns tell Ray how to word a
+video; **format** tells him what kind of video to make. The job here is to answer one
+question: **"what are the outliers doing that Ray's channel is NOT?"**
+
+Read `references/title-analysis-framework.md` for the full views/sub benchmarks, title
+pattern categories, and the **Format Categories** taxonomy. Then:
+
+1. **Classify each outlier's format** into the taxonomy (news / test-battle /
+   review-verdict / build-demo / tutorial / transformation / list / reaction). Note
+   for each whether it is evergreen vs perishable and whether it pulls beyond the
+   creator's sub base (use the **views/sub ratio**, not just channel-median multiplier).
+
+2. **Spotlight the small-channel-big-views cases.** Any outlier where views >> the
+   channel's subscriber count (views/sub > 5x, e.g. a 10k-sub channel with 700k views)
+   gets called out by name. Subscriber base cannot explain these -- only packaging and
+   format can -- so they are the strongest "they're doing something we're not" signal.
+
+3. **Build Ray's current format distribution.** Pull Ray's own recent videos (channel ID
+   `UCLA7cJBnqr0nLF2bQBD9uUg`) with views, classify each into the same taxonomy, and
+   compute his mix (e.g. "news 70%, tutorial 15%, review 10%, test 0%"). Note his view
+   norms per format -- his news median vs his non-news outliers (the 331k Anki how-to and
+   54k Replit review are non-news).
+
+4. **Compute the gap.** Cross-tabulate: which formats are winning for OTHERS (high
+   views/sub among the outliers) but are RARE or ABSENT in Ray's own output? Those are
+   the underexploited formats. A format that others win with AND Ray never makes is the
+   top recommendation.
+
+5. **Cross-reference Ray's A/B history** (per-test files under
+   `.claude/skills/youtube-ab-tester/references/results/YYYY-MM/`) to tag recommended
+   title/format patterns as PROVEN, NEW, or UNDERPERFORMING for him. If no matching
+   result file exists, label the idea UNVERIFIED rather than blocking.
+
+6. **Package the bangers.** For the top 3-5 outliers (prioritise the high views/sub
+   small-channel cases), write a concrete adaptation for Ray: the format, a one-line
+   "why it worked", 2-3 title options (numbered, not a table), and a thumbnail concept.
+
 ### Step 5 -- Generate Report
 
 Output to terminal AND save to file.
@@ -379,6 +424,25 @@ New or small channels with breakout videos that did NOT clear the auto-add bars
 (too small, single breakout, or off-niche) -- worth a human eyeball:
 - @handle -- "Video Title" (Nx their usual, X views) -- missed bar: <which one>
 
+### Format Gap -- Outliers vs Our Channel
+
+The "what are they doing that we're not" section.
+
+**Biggest outliers this period (by views/sub):**
+1. **"Title"** -- Channel (X subs, Y views = Zx views/sub) -- format: [format]
+   - Why it worked: [one line]
+   - We don't make this format / we make it Q% of the time
+
+**Our current format mix:** news A%, tutorial B%, review C%, test/battle D%, ...
+(vs the outliers, where [format] is overrepresented)
+
+**Formats winning for others that we under-use:**
+- **[format]** -- N outliers use it, we publish it ~X%. [why it travels beyond subs]
+
+**Packaged ideas (top bangers adapted for us):**
+1. [format] -- "[title option]" / "[title option 2]" -- thumbnail: [concept] -- [PROVEN/NEW/UNDERPERFORMING per our A/B history]
+2. ...
+
 ### Actionable Ideas for Ray
 
 Title + topic ideas based on this week's outlier patterns:
@@ -396,26 +460,30 @@ Save to this skill's reports directory:
 
 Use today's date. If a report already exists for today, append `-v2`, `-v3`, etc.
 
-### Step 7 -- Send Telegram Summary
+### Step 7 -- Send Slack Summary
 
-After saving the report, send a condensed summary to Ray on Telegram using the
-telegram-message skill's send script:
+After saving the report, post a condensed summary to Ray's `#yt-outlier` Slack channel
+using the slackbot-message skill's send script:
 
 ```bash
-bash ~/.claude/skills/telegram-message/scripts/send-message.sh "<summary>"
+bash ~/.claude/skills/slackbot-message/scripts/send-message.sh "yt-outlier" "<summary>"
 ```
 
-The Telegram message should be concise (Ray reads on his phone) and include:
+The Slack message should be concise (Ray reads on his phone) and include, in priority order:
 - Report date and channels/keywords scanned
-- Top 5 trending videos (last 48h) with view counts
-- Top title formulas with multipliers
-- Top 5 biggest outliers with multipliers
+- **Format Gap (lead with this).** The 3-5 biggest outliers by views/sub, especially
+  any small-channel-big-views cases ("10k subs, 700k views = 55x -- they're doing X, we
+  don't"). For each: the format and one line on the gap vs our channel.
+- Our current format mix in one line (e.g. "us: news 70% / tutorial 15% / test 0%")
+- Top 1-2 packaged ideas (format + a title option), tagged PROVEN/NEW per our A/B history
+- Top 5 biggest channel-median outliers with multipliers
 - **Any channels auto-added this run** -- list each `@handle` with its one-line
   reason (subs + outlier count), e.g. "Added @SomeChannel: 80k subs, 3 outliers.
   Remove with /youtube-outlier-scout remove @SomeChannel". Omit if none were added.
 - One line: "Full report saved to ray-os"
 
-Keep it under ~1500 characters. No markdown formatting (plain text only for Telegram).
+Keep it under ~2500 characters. Slack mrkdwn is supported (`*bold*`, `_italic_`,
+`<url|text>`). Lead with the format gap -- it is the most actionable part.
 
 ## Single-Channel Deep-Dive Mode
 
@@ -567,7 +635,9 @@ Same for `add-keyword` and `remove-keyword`.
 
 - Run this skill in single-channel deep-dive mode (`/youtube-outlier-scout @handle`) for a
   deep-dive on any channel surfaced in the daily report
-- Feed title patterns into `/youtube-ab-tester` for A/B test hypotheses
+- Feed title patterns + packaged format ideas into `/youtube-ab-tester` for A/B test hypotheses
 - Feed topic insights into `/youtube-scriptwriter` for content planning
-- Use `/youtube-title-researcher` for broader niche research beyond a single channel
+- Competitor title research lives HERE now (the old `youtube-title-researcher` was merged
+  in -- see `references/title-analysis-framework.md` for the views/sub benchmarks and
+  title/format taxonomies)
 - Feed thumbnail observations into `/youtube-thumbnail-generator` for design inspiration
