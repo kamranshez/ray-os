@@ -1,5 +1,5 @@
 ---
-name: video-transcriber
+name: transcribe-youtube-video
 description: "Transcribe MP4 videos into corrected plain-text transcripts for YouTube upload. Two-step pipeline: (1) AssemblyAI speech-to-text, (2) Gemini visual correction using the actual video. Use this skill whenever the user wants to transcribe a video, generate subtitles or captions, create a YouTube transcript, convert speech to text from a recording, or mentions AssemblyAI/Gemini transcription. Also trigger when the user has an MP4 and wants text output from it, even if they don't say 'transcribe' explicitly."
 ---
 
