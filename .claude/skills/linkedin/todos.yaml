@@ -8,57 +8,17 @@
 #   due: YYYY-MM-DD or TBD
 #   status: pending | in_progress | blocked | done
 #   related_post: (optional) path to draft in references/post-history/
+#
+# Keep this list lean: remove entries once they're done rather than letting
+# completed items accumulate.
 
-- task: Check engagement on workflow-tool post
+- task: Check engagement on Fable 5 "aim before you spend" post
   description: >
-    Workflow tool post (curiosity gap + aspiration) went live 2026-05-22.
-    Pull reactions, comments, reposts, impressions via the linkedin skill
-    and fill in the `engagement` block in the post-history file.
-    Checked 2026-05-29: 16 reactions, 3 comments, 0 reposts, 760 impressions.
-  due: 2026-05-25
-  status: done
-  related_post: references/post-history/2026-05-22_workflow-tool.md
-
-- task: Check engagement on Dynamic Workflows post (Post 1)
-  description: >
-    "More agents used to mean more mess" (belief disruption + aspiration)
-    went live 2026-05-29. Captured at 5 impressions ~18 min after posting.
-    2026-06-09: Post URL returns "Post not found / removed" and it is no
-    longer visible in the activity feed — post was deleted. Marked status
-    as deleted in the post-history file. No further engagement to track.
-  due: 2026-06-01
-  status: done
-  related_post: references/post-history/2026-05-29_dynamic-workflows-more-agents-more-mess.md
-
-- task: Check engagement on "Anthropic engineers write loops" post
-  description: >
-    "Most people open Claude Code and start typing prompts. Anthropic's
-    engineers open Claude Code and start writing loops." went live 2026-06-09.
-    Checked 2026-06-11: 13 reactions, 0 comments, 0 reposts, 771 impressions.
-    Engagement block updated in post-history file.
-  due: 2026-06-12
-  status: done
-  related_post: references/post-history/2026-06-09_anthropic-engineers-write-loops.md
-
-- task: Check engagement on nested subagents post
-  description: >
-    "Most people use subagents to protect their main context. The leverage is
-    letting subagents protect their own." (status signaling + aspiration,
-    contrast hook) went live 2026-06-11. Checked 10 min after posting:
-    0 reactions, 0 comments, 0 reposts, 8 impressions.
-    2026-06-20: final check — 6 reactions, 1 comment (Ray's own link comment),
-    0 reposts, 363 impressions. Engagement block updated in post-history file.
-  due: 2026-06-14
-  status: done
-  related_post: references/post-history/2026-06-11_nested-subagents-context-signal.md
-
-- task: Check engagement on Anki + Claude Code 3-levels post
-  description: >
-    "Hardly anyone is using Claude Code with Anki yet. Here are the 3 levels
-    of it." (status signaling + aspiration, tier map + decision rule close)
-    went live 2026-06-21. Pull reactions, comments, reposts, impressions via
-    the linkedin skill and fill in the engagement block in the post-history
-    file. URL is a ugcPost URN.
-  due: 2026-06-24
+    Fable 5 / "aim before you spend" post (Post 1 from the Fable Return batch:
+    contrast hook + sweep-score-discard recipe, productive discomfort + aspiration).
+    Ray posted it himself 2026-06-25 with images + the video link in a comment.
+    First check at ~22 min: 3 reactions, 1 comment, 0 reposts, 41 impressions.
+    Status flipped to posted, URL recorded. Re-check at +3 days for fuller numbers.
+  due: 2026-06-28
   status: pending
-  related_post: references/post-history/2026-06-21_anki-claude-code-3-levels.md
+  related_post: references/post-history/2026-06-25_fable-5-aim-before-you-spend.md

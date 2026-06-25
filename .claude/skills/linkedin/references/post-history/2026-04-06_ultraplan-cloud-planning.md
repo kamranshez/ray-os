@@ -10,8 +10,8 @@ engagement:
   reactions: 11
   comments: 1
   reposts: 1
-  impressions: 737
-  last_checked: 2026-05-22
+  impressions: 759
+  last_checked: 2026-06-25
 url: https://www.linkedin.com/feed/update/urn:li:activity:7446751274181771264/
 video: UNhA17l6CWw
 notes: Post 1 chosen from Ultraplan batch. Introduces Ultraplan as a feature, teases hidden planners for video click. First comment links to video.

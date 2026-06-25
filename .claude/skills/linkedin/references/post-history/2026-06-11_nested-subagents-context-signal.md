@@ -12,8 +12,8 @@ engagement:
   reactions: 6
   comments: 1
   reposts: 0
-  impressions: 363
-  last_checked: 2026-06-20
+  impressions: 467
+  last_checked: 2026-06-25
 url: https://www.linkedin.com/feed/update/urn:li:activity:7470491246776610817/
 notes: >
   Post 1 from the nested-subagents batch (10 variations from transcript.txt,

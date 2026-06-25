@@ -5,14 +5,14 @@ triggers:
   primary: status signaling
   secondary: aspiration
 pattern: tier map + decision rule close
-media: text only
+media: video
 status: posted
 engagement:
-  reactions: null
-  comments: null
-  reposts: null
-  impressions: null
-  last_checked: null
+  reactions: 14
+  comments: 2
+  reposts: 0
+  impressions: 1456
+  last_checked: 2026-06-25
 url: https://www.linkedin.com/feed/update/urn:li:ugcPost:7474129290876502016/
 notes: >
   From the Anki + Claude Code batch (source: /Users/ray/Downloads/Anki + Claude Code.txt).
@@ -25,7 +25,12 @@ notes: >
   with doing." Closes with a 3-line decision rule and "Level 3 is where it gets unfair."
   Posted as a ugcPost URN. Earlier batch iterations moved from feature-description
   drafts to idea-led drafts to a Cambridge-origin angle; Ray ultimately picked this
-  tier map.
+  tier map. Went out as a video post (not text-only): Ray attached the talking-head
+  video and added an author comment linking the full YouTube video
+  (https://www.youtube.com/watch?v=1sMHcJMxYqo, 84 impressions on that comment).
+  2026-06-25 check (4 days live): 14 reactions, 2 comments (1 is Ray's own YouTube-link
+  comment, 1 a genuine "this is too cracked" reply from Don Graham), 0 reposts,
+  1,454 impressions.
 ---
 
 Hardly anyone is using Claude Code with Anki yet. Here are the 3 levels of it.
