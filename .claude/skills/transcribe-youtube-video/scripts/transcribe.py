@@ -1,13 +1,24 @@
 #!/usr/bin/env python3
 """
-Step 1: Transcribe an MP4 video using AssemblyAI.
+Transcribe an audio or video file with AssemblyAI -> plain .txt + .srt.
 
-Usage: python transcribe.py <video.mp4>
-Output: <video-name>-raw.txt in the current working directory
+The input is always re-encoded to a small mono 64k MP3 before upload, so a
+multi-hundred-MB WAV/MP4 becomes a few MB on the wire.
+
+Usage:
+  python transcribe.py <input.(wav|mp3|mp4|mov|...)> [--out /path/basename] [--keyterms keyterms.txt]
+
+Outputs:
+  <basename>.txt   plain transcript (YouTube auto-syncs it to timing)
+  <basename>.srt   timestamped subtitles
+
+If --out is omitted, outputs go to this skill's outputs/<input-stem>.
+If --keyterms is omitted, only the built-in base terms are boosted.
 """
 
 import sys
 import os
+import argparse
 import subprocess
 import tempfile
 import time
@@ -16,136 +27,124 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
-# Load .env from the skill directory (one level up from scripts/)
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
-ASSEMBLYAI_BASE_URL = "https://api.assemblyai.com/v2"
+BASE_URL = "https://api.assemblyai.com/v2"
+
+# Always-on key terms. Per-video terms (from extract_keyterms.py) are added on top.
+BASE_KEYTERMS = ["Claude Code", "Anthropic", "Claude"]
 
 
-def extract_audio(video_path: str, output_path: str) -> str:
-    """Extract mono MP3 audio from video using FFmpeg."""
-    print(f"Extracting audio from {video_path}...")
+def to_mp3(src: str, dst: str) -> str:
+    """Re-encode any audio/video to mono 64k MP3 to minimize the upload."""
+    print(f"Encoding {src} -> mono 64k MP3...")
     subprocess.run(
-        [
-            "ffmpeg", "-y", "-i", video_path,
-            "-vn", "-acodec", "libmp3lame",
-            "-ar", "44100", "-ac", "1", "-b:a", "64k",
-            output_path,
-        ],
-        check=True,
-        capture_output=True,
+        ["ffmpeg", "-y", "-i", src,
+         "-vn", "-acodec", "libmp3lame", "-ar", "44100", "-ac", "1", "-b:a", "64k",
+         dst],
+        check=True, capture_output=True,
     )
-    size_mb = os.path.getsize(output_path) / (1024 * 1024)
-    print(f"Audio extracted ({size_mb:.1f} MB): {output_path}")
-    return output_path
+    src_mb = os.path.getsize(src) / 1024 / 1024
+    dst_mb = os.path.getsize(dst) / 1024 / 1024
+    print(f"MP3 ready: {dst_mb:.1f} MB (from {src_mb:.0f} MB source)")
+    return dst
 
 
-def upload_to_assemblyai(audio_path: str, api_key: str) -> str:
-    """Upload audio file to AssemblyAI and return the upload URL."""
-    size_mb = os.path.getsize(audio_path) / (1024 * 1024)
-    print(f"Uploading audio to AssemblyAI ({size_mb:.1f} MB)...")
-    with open(audio_path, "rb") as f:
-        response = requests.post(
-            f"{ASSEMBLYAI_BASE_URL}/upload",
-            headers={"authorization": api_key},
-            data=f,
-        )
-    response.raise_for_status()
-    upload_url = response.json()["upload_url"]
-    print(f"Upload complete.")
-    return upload_url
+def upload(audio: str, api_key: str) -> str:
+    print(f"Uploading audio ({os.path.getsize(audio)/1024/1024:.1f} MB)...")
+    with open(audio, "rb") as f:
+        r = requests.post(f"{BASE_URL}/upload", headers={"authorization": api_key}, data=f)
+    r.raise_for_status()
+    print("Upload complete.")
+    return r.json()["upload_url"]
 
 
-def transcribe(upload_url: str, api_key: str) -> str:
-    """Create a transcription job, poll until complete, return plain text."""
-    print("Creating transcription job...")
-    headers = {"authorization": api_key, "content-type": "application/json"}
-    response = requests.post(
-        f"{ASSEMBLYAI_BASE_URL}/transcript",
-        headers=headers,
+def transcribe(upload_url: str, api_key: str, keyterms: list[str]) -> tuple[str, str]:
+    """Returns (transcript_id, plain_text)."""
+    print(f"Creating transcript job ({len(keyterms)} key terms)...")
+    r = requests.post(
+        f"{BASE_URL}/transcript",
+        headers={"authorization": api_key, "content-type": "application/json"},
         json={
             "audio_url": upload_url,
             "speech_models": ["universal-3-pro"],
             "language_detection": True,
-            "keyterms_prompt": [
-                "Claude Code",
-                "Anthropic",
-                "Claude",
-            ],
+            "keyterms_prompt": keyterms,
         },
     )
-    if not response.ok:
-        print(f"Error {response.status_code}: {response.text}")
-        response.raise_for_status()
-    transcript_id = response.json()["id"]
-    print(f"Transcript ID: {transcript_id}")
+    if not r.ok:
+        print(f"Error {r.status_code}: {r.text}")
+        r.raise_for_status()
+    tid = r.json()["id"]
+    print(f"Transcript ID: {tid}")
 
-    print("Waiting for transcription to complete...")
     while True:
-        result = requests.get(
-            f"{ASSEMBLYAI_BASE_URL}/transcript/{transcript_id}",
-            headers={"authorization": api_key},
-        ).json()
-
-        status = result["status"]
-        if status == "completed":
-            duration_min = result.get("audio_duration", 0) / 60
-            confidence = result.get("confidence", 0) * 100
-            word_count = len(result.get("words", []))
-            print(
-                f"Transcription complete! "
-                f"Duration: {duration_min:.1f} min, "
-                f"Confidence: {confidence:.1f}%, "
-                f"Words: {word_count}"
-            )
-            return result["text"]
-        elif status == "error":
-            raise RuntimeError(
-                f"Transcription failed: {result.get('error', 'Unknown error')}"
-            )
-
-        print(f"  Status: {status}...")
+        res = requests.get(f"{BASE_URL}/transcript/{tid}", headers={"authorization": api_key}).json()
+        st = res["status"]
+        if st == "completed":
+            print(f"Done! {res.get('audio_duration',0)/60:.1f} min, "
+                  f"confidence {res.get('confidence',0)*100:.1f}%, "
+                  f"{len(res.get('words',[]))} words")
+            return tid, res["text"]
+        if st == "error":
+            raise RuntimeError(res.get("error", "unknown error"))
+        print(f"  {st}...")
         time.sleep(3)
 
 
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: python transcribe.py <video.mp4>")
-        sys.exit(1)
+def fetch_srt(tid: str, api_key: str) -> str:
+    r = requests.get(f"{BASE_URL}/transcript/{tid}/srt", headers={"authorization": api_key})
+    r.raise_for_status()
+    return r.text
 
-    video_path = sys.argv[1]
-    if not os.path.exists(video_path):
-        print(f"Error: File not found: {video_path}")
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("input")
+    ap.add_argument("--out", help="output basename (no extension)")
+    ap.add_argument("--keyterms", help="newline-delimited key terms file")
+    args = ap.parse_args()
+
+    if not os.path.exists(args.input):
+        print(f"Error: file not found: {args.input}")
         sys.exit(1)
 
     api_key = os.environ.get("ASSEMBLYAI_API_KEY")
     if not api_key:
-        print("Error: ASSEMBLYAI_API_KEY not set. Add it to the .env file.")
+        print("Error: ASSEMBLYAI_API_KEY not set in .env")
         sys.exit(1)
 
-    # Extract audio to a temp file
-    tmp_audio = tempfile.NamedTemporaryFile(suffix=".mp3", delete=False)
-    tmp_audio.close()
+    keyterms = list(BASE_KEYTERMS)
+    if args.keyterms:
+        extra = [l.strip() for l in open(args.keyterms) if l.strip()]
+        # de-dupe, preserve order, base terms first
+        seen = {k.lower() for k in keyterms}
+        for k in extra:
+            if k.lower() not in seen:
+                keyterms.append(k); seen.add(k.lower())
 
+    if args.out:
+        out_base = args.out
+    else:
+        out_dir = Path(__file__).resolve().parent.parent / "outputs"
+        out_dir.mkdir(exist_ok=True)
+        out_base = str(out_dir / Path(args.input).stem)
+
+    tmp = tempfile.NamedTemporaryFile(suffix=".mp3", delete=False)
+    tmp.close()
     try:
-        extract_audio(video_path, tmp_audio.name)
-        upload_url = upload_to_assemblyai(tmp_audio.name, api_key)
-        transcript_text = transcribe(upload_url, api_key)
+        to_mp3(args.input, tmp.name)
+        upload_url = upload(tmp.name, api_key)
+        tid, text = transcribe(upload_url, api_key, keyterms)
+        srt = fetch_srt(tid, api_key)
     finally:
-        os.unlink(tmp_audio.name)
+        os.unlink(tmp.name)
 
-    # Save raw transcript to skill outputs folder
-    skill_dir = Path(__file__).resolve().parent.parent
-    outputs_dir = skill_dir / "outputs"
-    outputs_dir.mkdir(exist_ok=True)
-
-    video_stem = Path(video_path).stem
-    output_path = outputs_dir / f"{video_stem}-raw.txt"
-    with open(output_path, "w") as f:
-        f.write(transcript_text)
-
-    print(f"\nRaw transcript saved to: {output_path}")
-    print(f"Next step: python correct.py {video_path} {output_path}")
+    Path(out_base).parent.mkdir(parents=True, exist_ok=True)
+    Path(f"{out_base}.txt").write_text(text)
+    Path(f"{out_base}.srt").write_text(srt)
+    print(f"\nSaved {out_base}.txt")
+    print(f"Saved {out_base}.srt")
 
 
 if __name__ == "__main__":
