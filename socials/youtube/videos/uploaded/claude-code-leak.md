@@ -6,8 +6,14 @@ duration: "16:37"
 views: 17270
 likes: 531
 comments: 0
-status: uploaded
+status: private
 fetched: 2026-04-09
+revenue: 5780
+revenue-lift: 3775
+revenue-utm: 534
+revenue-sessions: 30
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 ## PROACTIVE MODE — Claude That Works While You Don't

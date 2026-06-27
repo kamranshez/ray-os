@@ -3,11 +3,17 @@ youtube-id: DqjBbAr3oTo
 youtube-title: "Anthropic Just Dropped the Feature Nobody Knew They Needed"
 published: 2026-03-11
 duration: "7:57"
-views: 39199
-likes: 1001
-comments: 88
+views: 39573
+likes: 1003
+comments: 90
 status: uploaded
-fetched: 2026-04-09
+fetched: 2026-06-27
+revenue: 8914
+revenue-lift: 6909
+revenue-utm: 372
+revenue-sessions: 57
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 Claude just dropped a feature I didn't even realise I wanted.

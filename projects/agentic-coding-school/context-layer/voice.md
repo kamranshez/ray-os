@@ -26,4 +26,4 @@ Every output (landing copy, VSL, ads, emails) must follow these. The "why" is in
 - The 19-hour / ~300-flow run with Boris's "Nice" is **Ray's own demo** ("what loop engineering makes possible"), NOT a student result. Label it as such.
 - The 5-10x figure is **"students report shipping several times more,"** not a measured guarantee. Do not state "ship 5-10x, period" as a typical outcome.
 - **Anonymize the 60-seat customer (MCG Health)** as "a 60-engineer healthcare-tech org" until they consent to be named.
-- Always-current means the classes you bought stay updated, not that new classes are free.
+- Always-current means the classes you bought stay updated. As of 2026-06-27, all-access also includes brand-new classes as they ship, so "buy once, get everything, including what's coming" is now true and may be said plainly.

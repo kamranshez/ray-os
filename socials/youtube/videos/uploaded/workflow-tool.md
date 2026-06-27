@@ -1,7 +1,21 @@
 ---
 tags: [youtube, script, claude-code]
-status: draft
 date: 2026-05-22
+youtube-id: c0gVowvMR-g
+youtube-title: "Anthropic Just Dropped the Update Everyone's Obsessed With: Dynamic Workflows"
+published: 2026-05-22
+duration: "15:10"
+views: 45355
+likes: 996
+comments: 133
+status: uploaded
+fetched: 2026-06-27
+revenue: 1250
+revenue-lift: 0
+revenue-utm: 866
+revenue-sessions: 10
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 ## Video Plan: "The Orchestration Tax" (Claude Code Workflow Tool)

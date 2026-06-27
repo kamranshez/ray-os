@@ -1,7 +1,21 @@
 ---
 tags: [youtube, script, claude-code, codex]
-status: draft
 date: 2026-05-04
+youtube-id: p88mkfPkOZc
+youtube-title: "The Codex Feature That's Going Viral Right Now"
+published: 2026-05-04
+duration: "10:18"
+views: 28295
+likes: 698
+comments: 95
+status: uploaded
+fetched: 2026-06-27
+revenue: 2520
+revenue-lift: 516
+revenue-utm: 849
+revenue-sessions: 12
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 # Codex /goal vs Ralph

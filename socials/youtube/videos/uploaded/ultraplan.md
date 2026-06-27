@@ -5,16 +5,22 @@ tags:
   - claude-code
   - planning
   - ultraplan
-status: uploaded
 date: 2026-04-05
 youtube-id: UNhA17l6CWw
 youtube-title: "Anthropic Just Dropped Ultra Plan for Claude Code"
 published: 2026-04-06
-duration: "7:53"
-views: 32954
-likes: 714
-comments: 72
-fetched: 2026-04-09
+duration: "7:52"
+views: 35351
+likes: 737
+comments: 75
+status: uploaded
+fetched: 2026-06-27
+revenue: 2779
+revenue-lift: 774
+revenue-utm: 357
+revenue-sessions: 12
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 ## Video Plan: "Claude Code's New Planning Feature Has a Secret"

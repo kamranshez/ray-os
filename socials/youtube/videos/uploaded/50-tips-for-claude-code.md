@@ -2,12 +2,18 @@
 youtube-id: AzmnaoVP8sk
 youtube-title: "The Top 0.01% User's Guide to Claude Code"
 published: 2026-03-02
-duration: "41:31"
-views: 20179
-likes: 638
+duration: "41:30"
+views: 22023
+likes: 669
 comments: 80
 status: uploaded
-fetched: 2026-04-09
+fetched: 2026-06-27
+revenue: 4437
+revenue-lift: 2432
+revenue-utm: 2753
+revenue-sessions: 31
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 ## Mindset

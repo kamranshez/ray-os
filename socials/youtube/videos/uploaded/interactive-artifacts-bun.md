@@ -1,7 +1,22 @@
 ---
 date: 2026-04-09
-status: scripting
+youtube-id: ASAaKhK1B5w
+youtube-title: "Even Anthropic Engineers Use This Claude Code Workflow"
+published: 2026-04-15
+duration: "12:30"
+views: 11365
+likes: 366
+comments: 48
+status: uploaded
+fetched: 2026-06-27
+revenue: 12986
+revenue-lift: 10981
+revenue-utm: 6721
+revenue-sessions: 59
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
+
 ![[three-layers-of-interactive-artifacts.png]]
 
 > **Example artifact:** `agentic-coding-school/tasks/cc-curriculum-reorder.html`. Content-flow reorder of all 132 Claude Code course videos, built from 10 parallel transcript-dependency subagents. Used as the "this scales" callback inside the rapid fire montage.

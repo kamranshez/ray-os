@@ -1,7 +1,21 @@
 ---
 tags: [youtube, script, claude-code]
-status: talking-points
 date: 2026-06-20
+youtube-id: 1sMHcJMxYqo
+youtube-title: "This Claude Code Setup Changed My Life (Seriously…)"
+published: 2026-06-20
+duration: "13:47"
+views: 8525
+likes: 316
+comments: 45
+status: uploaded
+fetched: 2026-06-27
+revenue: 1667
+revenue-lift: 0
+revenue-utm: 794
+revenue-sessions: 4
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 # Claude Code + Anki — Talking Points

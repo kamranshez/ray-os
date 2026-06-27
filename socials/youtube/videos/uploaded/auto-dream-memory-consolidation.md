@@ -4,16 +4,22 @@ tags:
   - script
   - claude-code
   - memory
-status: uploaded
 date: 2026-03-24
 youtube-id: OnQ4BGN8B-s
 youtube-title: "Anthropic Just Dropped the Feature Nobody Knew They Needed"
 published: 2026-03-24
 duration: "7:30"
-views: 97093
-likes: 2386
-comments: 176
-fetched: 2026-04-09
+views: 100214
+likes: 2418
+comments: 170
+status: uploaded
+fetched: 2026-06-27
+revenue: 5953
+revenue-lift: 3948
+revenue-utm: 2088
+revenue-sessions: 38
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 ## Video Plan: "Your AI Agent Dreams While You Sleep"

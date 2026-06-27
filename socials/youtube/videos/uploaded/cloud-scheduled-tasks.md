@@ -1,15 +1,22 @@
 ---
 date: 2026-03-21
-status: uploaded
 youtube-id: pOsGxVKYd3s
 youtube-title: "Anthropic Just Revealed Where Coding Is Heading"
 published: 2026-03-21
 duration: "12:20"
-views: 19272
-likes: 512
-comments: 0
-fetched: 2026-04-09
+views: 19377
+likes: 511
+comments: 65
+status: uploaded
+fetched: 2026-06-27
+revenue: 3150
+revenue-lift: 1146
+revenue-utm: 0
+revenue-sessions: 34
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
+
 Based on proven formulas ("Dropped" verb dominance, insider framing at 49.4%, single-hook rule):
 
 | Variant | Title | Rationale |

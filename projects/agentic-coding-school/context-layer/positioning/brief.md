@@ -42,7 +42,7 @@ Hero subhead (software engineer, multiplied):
 
 ## Always-current (DECIDED: supporting pillar + objection-killer, scoped)
 - **Role:** NOT the main reason to buy. It's the answer to "won't this be outdated in a month?" Place it as a trust pillar, not the hero promise.
-- **Scope (important honesty):** "always-current" means **the classes you bought keep getting updated and never go stale**, updated many times a week, the day Anthropic ships. It does NOT mean brand-new classes are free, those are separate products. So the claim is "buy this, it never rots," which is true for every buyer with no upsell.
+- **Scope (updated 2026-06-27):** "always-current" means **the classes you bought keep getting updated and never go stale**, updated many times a week, the day Anthropic ships. As of the 2026-06-27 monetization decision it is now strictly bigger: all-access also **includes brand-new classes** as they ship (the old "new classes are separate products" carve-out is retired). So the honest claim is now "buy once, it never rots, and you get what's coming too."
 - **Framing vs competitors:** "Most courses are static and months out of date. This one is updated almost every day." This is the structural thing fixed-cohort competitors ($599 IndyDevDan, $995 aihero) cannot match.
 
 ## Proof (DECIDED: honest-framed)
@@ -52,11 +52,11 @@ Hero subhead (software engineer, multiplied):
 - **Scale proof:** 3,151 students; an anonymized ~60-seat healthcare-tech rollout.
 - **Honesty caveats:** Loopy AI still partly in production; content is Claude-centric; the 19hr run is Ray's. Don't overclaim.
 
-## Offer & pricing (DECIDED: one all-access pass, no expansion tier)
-- **Individual = one clean all-access pass** to everything in the school today: keep the existing **monthly / yearly / lifetime**. Every tier includes all current classes, kept current forever.
+## Offer & pricing (DECIDED: one growing all-access pass, no expansion tier)
+- **Individual = one clean all-access pass** to everything in the school: keep the existing **monthly / yearly / lifetime**. Every tier includes the whole catalog, current and future, kept current forever.
 - **DROP the +$150–200 "expansion / Agentic Horizon" tier.** Its rationale was "updates are the upgrade," which is dead now that updates are free with the class. No invented upsell.
-- **Future classes = separate products**, not bundled into lifetime/sub (consistent with existing pricing policy).
-- **Price:** $397-ish current anchor → ~$500 once elite content (Loopy AI etc.) fully shipped. Raise trigger still open (see open-decisions).
+- **Future classes = INCLUDED** (decided 2026-06-27, reversing the earlier "separate products" policy). Buy once, get every future class too. Copy may say "buy once, get everything, including what's coming."
+- **Price = a launch ladder.** ~$397 current lifetime anchor, ratcheting up one step per brand-new-class launch, each with a ~2-week sale at the old price framed as a price step-up. See `pricing.md` and `decisions/2026-06-27-monetization-and-launch-cadence.md`.
 - **Team = a B2B lane** (see below), billed by seats / invoice. A Team Stripe product already exists.
 
 ## Team lane (DECIDED: visible band, secondary, NOT a dual-path hero)

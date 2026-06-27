@@ -1,7 +1,21 @@
 ---
-status: draft
 date: 2026-04-22
 source: claude-code-binary-dig
+youtube-id: _QGgk9F9CSM
+youtube-title: "Anthropic Just Dropped the Biggest Subagent Upgrade Yet"
+published: 2026-04-23
+duration: "11:13"
+views: 24694
+likes: 602
+comments: 61
+status: uploaded
+fetched: 2026-06-27
+revenue: 24772
+revenue-lift: 22767
+revenue-utm: 7270
+revenue-sessions: 106
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 ## Working Title Options

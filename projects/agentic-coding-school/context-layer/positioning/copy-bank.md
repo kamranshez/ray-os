@@ -146,7 +146,7 @@ Differentiation vs filmed-once cohort courses. Calm, no naming competitors.
 
 ## 10. Always-current (the objection-killer)
 
-Answers "won't this be outdated in a month?" Scoped honestly: the classes you bought stay updated, not "new classes free."
+Answers "won't this be outdated in a month?" Scope (updated 2026-06-27): the classes you bought stay updated, AND new classes are now included in all-access (the "not new classes free" carve-out is retired). The "buy once and stay current" lines below are all still valid; you may now also say "and you get new classes as they ship."
 
 **Heading options:**
 - **A:** "It won't go stale"
@@ -215,7 +215,7 @@ Sits near pricing or in the FAQ. Filters the truly-unready without gating senior
 
 These aren't copy choices, they're business calls that I'll wire once you decide:
 - **PPP discount** at $397: keep the auto-discount banner for international visitors, or hold the premium line? (Affects whether a PPP banner renders, not the body copy.)
-- **Price raise** $397 -> ~$500: when? Until then all pricing copy stays at the current anchor.
+- **Price raise** (DECIDED 2026-06-27): the anchor is now a launch ladder, ratcheting up one step per brand-new-class launch, each with a ~2-week sale at the old price framed as a step-up ("price goes up when the new class lands"). Pricing copy stays at the current anchor between launches. See `decisions/2026-06-27-monetization-and-launch-cadence.md`.
 - **Name the 60-seat customer** (MCG Health) or stay anonymized? Every option above says "a 60-engineer healthcare-tech org" by default. If they consent, I swap in the name for a stronger logo/proof beat.
 
 ---

@@ -4,11 +4,12 @@ The durable knowledge an agent should read **before producing anything** for Age
 
 ## What's here
 - **`positioning/brief.md`** — THE source of truth. The "Agent Engineer" reposition: the universal villain, the "engineer loops" lead, the identity, the audience, the offer, the team lane, the proof, the always-current pillar. Start here.
-- **`positioning/open-decisions.md`** — what's still unconfirmed (PPP, price-raise timing, naming the 60-seat customer) versus what's locked.
+- **`positioning/open-decisions.md`** — what's still unconfirmed (PPP, naming the 60-seat customer) versus what's locked. (Price-raise timing closed 2026-06-27: it's a per-launch ladder.)
 - **`audience/`** — the 6-source market research the positioning is built on (synthesis + newsletter survey, buyer DB, enrichment, testimonials, course content, competitors/pricing, YouTube). `audience/00-personas.md` is the synthesis + decision trail. Append new data here, don't redo it.
-- **`pricing.md`** — price points, tiers, refund terms, and pricing policies (e.g. future classes are separate products).
+- **`pricing.md`** — price points, tiers, refund terms, and pricing policies (e.g. all-access includes future classes; the price ladders up per launch).
 - **`promotion.md`** — how the classes get promoted (channels, launch playbook).
 - **`voice.md`** — tone and copy rules every output must follow (no em/en dashes, calm and respectful, the locked lines).
+- **`decisions/`** — dated decision records (date-prefixed `YYYY-MM-DD-*.md`). The why-we-chose-this trail behind the durable docs above. Latest: `2026-06-27-monetization-and-launch-cadence.md` (one growing all-access pass that includes future classes, price ladders up one step per new-class launch with a ~2-week step-up sale, recurring goes to SaaS; reverses the old "separate products" policy).
 
 ## How to use (cold pickup)
 1. Read `positioning/brief.md` end to end.

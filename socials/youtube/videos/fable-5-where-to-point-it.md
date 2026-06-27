@@ -1,7 +1,21 @@
 ---
 tags: [youtube, script, claude-code]
-status: draft
 date: 2026-06-25
+youtube-id: r4_KLZvHoaA
+youtube-title: "Anthropic Will Bring Back Fable 5 Differently"
+published: 2026-06-25
+duration: "11:09"
+views: 20450
+likes: 548
+comments: 53
+status: uploaded
+fetched: 2026-06-27
+revenue: 2403
+revenue-lift: 399
+revenue-utm: 0
+revenue-sessions: 10
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 ## Title options

@@ -1,11 +1,24 @@
 ---
-duration: "10-12 min"
 batch: 0
 order: 0
 batch_name: "Promo"
 class: "loopy-ai"
 chapter: "Trailer"
-status: draft
+youtube-id: 2-0lxK2wgJ8
+youtube-title: "Loop Engineering: The Future of AI Coding?"
+published: 2026-06-09
+duration: "16:04"
+views: 17048
+likes: 495
+comments: 88
+status: uploaded
+fetched: 2026-06-27
+revenue: 1480
+revenue-lift: 0
+revenue-utm: 6078
+revenue-sessions: 6
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 The guy who built Claude Code, on a podcast last week: *"I don't prompt Claude anymore. What I mostly use now is loops. I create loops, they do the rest of my job."*

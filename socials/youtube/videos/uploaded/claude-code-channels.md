@@ -1,7 +1,6 @@
 ---
 source: https://x.com/trq212/status/claude-code-channels
 date: 2026-03-20
-status: uploaded
 youtube-id: 4oqJ9wgy87k
 youtube-title: "Anthropic Just Dropped the Feature That Replaces OpenClaw"
 published: 2026-03-20
@@ -9,7 +8,14 @@ duration: "10:42"
 views: 13711
 likes: 314
 comments: 0
+status: private
 fetched: 2026-04-09
+revenue: 948
+revenue-lift: 0
+revenue-utm: 370
+revenue-sessions: 6
+revenue-method: "3-day time-proximity"
+revenue-fetched: 2026-06-27
 ---
 
 Remember when Anthropic dropped remote control and everyone said "this is OpenClaw for grownups"? Well, they just took it further. You can now text Claude Code from Telegram or Discord — and it texts you back.
