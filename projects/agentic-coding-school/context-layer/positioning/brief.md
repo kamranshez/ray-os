@@ -1,8 +1,8 @@
 # Positioning Brief — Agent Engineer reposition (Round 2)
 
 **Date:** 2026-06-27 · **Status:** positioning sharpened via interview (this revision supersedes the earlier Round-2 draft).
-**This file (`positioning/brief.md`) is the single source of truth for landing copy AND the VSL (`../vsl/`).** It supersedes the Round-1 drafts (removed 2026-06-27). Where anything conflicts with this, THIS wins.
-**Full research behind every claim:** `research/` (sibling). Read `research/00-synthesis-personas-positioning.md` for the decision trail, `research/06-competitor-naming-pricing.md` for the IndyDevDan teardown. **Open items: `open-decisions.md` (sibling).**
+**This file (`context-layer/positioning/brief.md`) is the single source of truth for landing copy AND the VSL (`../../vsl/`).** It supersedes the Round-1 drafts (removed 2026-06-27). Where anything conflicts with this, THIS wins.
+**Full audience research behind every claim:** `../audience/`. Read `../audience/00-personas.md` for the decision trail, `../audience/06-competitors-pricing.md` for the IndyDevDan teardown. **Open items: `open-decisions.md` (sibling). Pricing detail: `../pricing.md`. Copy/voice rules: `../voice.md`.**
 
 ---
 
