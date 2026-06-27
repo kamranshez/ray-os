@@ -8,7 +8,6 @@ class: "loopy-ai"
 chapter: "The Self-Improvement Loop"
 aliases: [self-improvement-loop]
 ---
-
 There isn't one agent here. There are two loops, running at two different speeds, and the slow one rewrites the fast one.
 
 That sentence is the whole chapter. Up to now you have built loops that do work. A worker churns through a backlog. A goal loop keeps itself alive against an objective. Those are inner loops, and they run constantly, one run per event. This segment adds a second loop on top: one that runs on a schedule, reads many runs of the inner loop, and edits the skill the inner loop is built on.
@@ -70,13 +69,20 @@ Source: https://x.com/zachlloydtweets/status/2066908445425496348
 ![[loopy-self-improvement-loop-two-loops-4.png]]
 ![[loopy-self-improvement-loop-two-loops-5.png]]
 
-Make it concrete with the issue triage example. The skill sorts every incoming issue into one of three buckets: ready to implement, duplicate, needs info.
+Make it concrete with a lead-qualification example. The skill scores every inbound lead into one of three buckets: hot, nurture, not a fit.
 
-The inner loop is a GitHub Action. A new issue is filed, the action fires, the triage skill runs, and a label gets applied. That is it. One issue, one run, one label, a trace left on the issue itself.
+The inner loop is a webhook. A form gets submitted, the hook fires, the qualifier skill runs, and a score gets written to the CRM record. That is it. One lead, one run, one score, a trace left on the record itself.
 
-The outer loop is a scheduled agent. Once a day it pulls every issue that got triaged, and it looks for one specific thing: where did a human change the label after the agent set it. The agent said ready to implement, a maintainer flipped it to needs info and left a comment about why. Each of those is a correction. The outer loop reads the pile of them, finds the pattern, and opens a diff to the triage skill so tomorrow's runs get the call right.
+The outer loop is a scheduled agent. Once a day it pulls every lead the skill scored, and it looks for one specific thing: where did a salesperson move the lead after the agent scored it. The agent said nurture, a rep dragged it straight to hot and booked a call, and noted in the record that the company size was the tell. Each of those is a correction. The outer loop reads the pile of them, finds the pattern, and opens a diff to the qualifier skill so tomorrow's runs weigh what the reps actually weigh.
 
-You did not retrain anything. You did not write a single new rule by hand. The skill got better because a loop read how the last hundred runs went and edited the instructions.
+You did not retrain anything. You did not write a single new rule by hand. The skill got better because a loop read how the last hundred leads were re-sorted and edited the instructions.
+
+[IMAGE: dark canvas, a horizontal flow telling the lead-qualification story. Left: an inbound form submission entering a tight fast cycle labeled "inner loop", where the qualifier skill stamps the CRM record with one of three scores (hot, nurture, not a fit) shown as colored chips. Center: a stack of scored CRM records, several of them showing a salesperson's hand dragging a "nurture" chip up to "hot", with a small note "company size was the tell" attached. Right: a large slow cycle labeled "outer loop, scheduled" reading that pile of re-sorts, finding the pattern, and emitting a diff back into the qualifier skill file. Caption: "the reps re-score, the loop learns what they weigh".]
+![[loopy-self-improvement-loop-lead-qual-1.png]]
+![[loopy-self-improvement-loop-lead-qual-2.png]]
+![[loopy-self-improvement-loop-lead-qual-3.png]]
+![[loopy-self-improvement-loop-lead-qual-4.png]]
+![[loopy-self-improvement-loop-lead-qual-5.png]]
 
 ---
 
