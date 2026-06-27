@@ -1,6 +1,6 @@
 ---
 name: excalidraw-gemini
-description: Generate excalidraw-style explanation images using the Gemini API (gemini-3-pro-image-preview). Use when the user wants to create visual explanations, diagrams, or illustrations in the hand-drawn excalidraw aesthetic via the Gemini path. Supports parallel generation of multiple variations with configurable timeout. Triggers on requests like "generate an excalidraw image with gemini", "excalidraw-gemini", "use gemini for excalidraw", or when the user explicitly asks for the Gemini route. Sibling skill [[excalidraw-codex]] does the same job through the `codex exec` headless CLI — default to whichever variant the user names; if unspecified, ask.
+description: Generate excalidraw-style explanation images using the Gemini API (gemini-3-pro-image-preview). Use when the user wants to create visual explanations, diagrams, or illustrations in the hand-drawn excalidraw aesthetic via the Gemini path. Supports parallel generation of multiple variations with configurable timeout. Triggers ONLY when the user explicitly asks for the Gemini route ("generate an excalidraw image with gemini", "excalidraw-gemini", "use gemini for excalidraw"). Sibling skill [[excalidraw-codex]] does the same job through the `codex exec` headless CLI with no API key, and is the RECOMMENDED DEFAULT. Prefer codex unless the user explicitly names Gemini.
 ---
 
 ## Engine

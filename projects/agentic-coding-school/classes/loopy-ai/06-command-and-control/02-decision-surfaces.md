@@ -90,35 +90,3 @@ The failure mode is making feedback expensive. The moment giving it requires a s
 ![[loopy-decision-surfaces-slack-feedback-3.png]]
 ![[loopy-decision-surfaces-slack-feedback-4.png]]
 ![[loopy-decision-surfaces-slack-feedback-5.png]]
-
----
-
-## Demo
-
-Three minutes, one channel, one issue.
-
-1. **The loop posts a decision.** A new issue lands. The triage loop posts into the channel: the issue title, its chosen label, ready-to-implement, and a one-line recommendation with the other options listed underneath. Point out that the label is a value from a fixed set, not a freeform sentence. That is the decision surface.
-
-2. **You override with an emoji.** You disagree. You react with the needs-info emoji. That single click is the deviation: agent said ready-to-implement, you said needs-info. Show that the reaction is the whole signal. No typing required.
-
-3. **You add the why in the thread.** You reply once in the thread: "ambiguous whether this needs a configurable setting." The loop reads the thread back. Now the recorded deviation has both parts, the flipped label and the reason.
-
-4. **Show what got stored.** Open the record the loop wrote: recommended label, actual label, the reason text, a timestamp. This single row is what the outer loop reads tomorrow. Multiply it by a hundred issues and you have a dataset nobody sat down to make.
-
-The point of the demo is that you did nothing unusual. You reviewed a decision and corrected it. The surface turned that into structured, diffable training data on its own.
-
----
-
-## Key Insight
-
-> Shape the output as a decision, not a paragraph, and a human's normal correction becomes diffable training data. Deviation is the label, and you collect it for free by doing the job you were already doing.
-
----
-
-## Where we go next
-
-You now have the surface that captures signal. A discrete decision the loop commits to, an override you give in one click, a reason you drop in a thread.
-
-But a decision surface raises an immediate question: which decisions should the loop make alone, and which should it stop and ask you about first? That is the [[autonomy-dial]], and it is the next segment. After that, once you have decisions flowing in and deviations piling up, we close the loop and let the agent rewrite its own skill from them in the [[self-improvement-loop]].
-
-See you in the next one.
