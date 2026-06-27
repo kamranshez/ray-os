@@ -8,16 +8,16 @@
 - **"Agent engineer" — a real, rising job title, BUT mostly denotes a DIFFERENT job.** KEY FINDING. Job postings, salary bands ($185K–$320K), 340% YoY posting-growth claims, self-titled LinkedIn profiles. **However** in the job market it means *someone who builds autonomous agent products* (LangGraph, multi-agent orchestration, RAG, evals) — NOT someone who uses coding agents to ship everyday software. Search intent points at the agent-builder career. There's also a softer identity usage (Doshby: "developers half-jokingly started rebranding themselves 'agent engineers'" after Karpathy). Two meanings; the higher-volume one is a partial audience mismatch.
 
 ## Competitor positioning table
-| Course / cohort | Identity flag | Price | Target |
-|---|---|---|---|
-| **aihero.dev — AI Coding for Real Engineers** (Matt Pocock) | **"Real Engineers"** | **$995** list | Working/senior devs on production code |
-| Ship with Claude Code & Codex (Avthar Sewrathan, Maven) | **"AI-Native Builder"** | **$1,499** | SWEs + PMs, "tab-complete → AI-led" |
-| Master Claude Pro Bootcamp (Hack'celeration) | "Master Claude Pro" | **€1,490 (~$1,600)** | Devs comfortable w/ terminal+git |
-| Build with Claude Code (John Kim, ByteByteAI) | **"think like an agentic engineer"** | 2-day intensive | Beginner→serious level-up |
-| Claude Code Masterclass (Luca Berton, Maven) | "Claude as a sharp junior you brief/review" | **$499** | Working devs, code quality |
-| Claude Camp / Bootcamp | "for working software engineers" | **$399–499** (team $399–449) | Professional engineers |
-| Real Python — Claude Code for Python Devs | "Hands-On **Agentic Coding**" | mid (Real Python tier) | Python devs |
-| Dominik Fretz — Claude Code Masterclass | **"agentic engineering"** methodology | workshop | Senior engineers + leads |
+| Course / cohort                                             | Identity flag                               | Price                        | Target                                 |
+| ----------------------------------------------------------- | ------------------------------------------- | ---------------------------- | -------------------------------------- |
+| **aihero.dev — AI Coding for Real Engineers** (Matt Pocock) | **"Real Engineers"**                        | **$995** list                | Working/senior devs on production code |
+| Ship with Claude Code & Codex (Avthar Sewrathan, Maven)     | **"AI-Native Builder"**                     | **$1,499**                   | SWEs + PMs, "tab-complete → AI-led"    |
+| Master Claude Pro Bootcamp (Hack'celeration)                | "Master Claude Pro"                         | **€1,490 (~$1,600)**         | Devs comfortable w/ terminal+git       |
+| Build with Claude Code (John Kim, ByteByteAI)               | **"think like an agentic engineer"**        | 2-day intensive              | Beginner→serious level-up              |
+| Claude Code Masterclass (Luca Berton, Maven)                | "Claude as a sharp junior you brief/review" | **$499**                     | Working devs, code quality             |
+| Claude Camp / Bootcamp                                      | "for working software engineers"            | **$399–499** (team $399–449) | Professional engineers                 |
+| Real Python — Claude Code for Python Devs                   | "Hands-On **Agentic Coding**"               | mid (Real Python tier)       | Python devs                            |
+| Dominik Fretz — Claude Code Masterclass                     | **"agentic engineering"** methodology       | workshop                     | Senior engineers + leads               |
 
 **Pattern:** premium players all flag an *engineer identity* — "Real Engineers," "AI-Native Builder," "agentic engineer." **Nobody leads with "agent engineer" as their banner.** The winning educator word is "engineer / agentic engineering," and "agent engineer" is an **open flag.**
 

@@ -22,8 +22,7 @@ Two segments visible:
 
 ## Recurring friction (operational, from this inbox)
 1. **Checkout/payment friction** — steady drip of PPP card-vs-billing country mismatches (~12+). Single most recurring customer-touch event here; a conversion/fraud-rule issue.
-2. **False-positive video-abuse suspensions** — automated "450MB in 5 min" permanent suspensions hitting real-looking users (e.g. engineering@consultadd.com). Legit students risk auto-lockout.
-3. **Billing-recognition confusion** — a buyer didn't recognize the "Claude Code Masterclass" Polar charge before confirming. Statement-descriptor clarity.
+2. **Billing-recognition confusion** — a buyer didn't recognize the "Claude Code Masterclass" Polar charge before confirming. Statement-descriptor clarity.
 
 (No recurring stream of access/password/content questions here — those go to the business address / in-app.)
 
