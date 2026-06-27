@@ -54,6 +54,13 @@ Every worker, no matter the domain, is five parts. You already know four of them
 
 Five parts. Four of them are primitives you've been building since the strip-the-model-out segment. The pick rule is the only new muscle, and it's the backlog rubric wearing a different hat.
 
+[IMAGE: dark canvas, a single tall worker box exploded into five stacked labeled compartments top to bottom: Trigger (an alarm/webhook icon waking it), Pick rule (a filter funnel selecting one card from an unordered set, highlighted as the only NEW part), Process step (the nested L3-L2-L1 stack tucked inside), Report step (an arrow writing back to the queue plus a Slack bubble), Retry rule (a loop-back arrow on failure), four compartments tagged "already built" and the pick-rule compartment tagged "new muscle"]
+![[loopy-l4-workers-five-part-anatomy-1.png]]
+![[loopy-l4-workers-five-part-anatomy-2.png]]
+![[loopy-l4-workers-five-part-anatomy-3.png]]
+![[loopy-l4-workers-five-part-anatomy-4.png]]
+![[loopy-l4-workers-five-part-anatomy-5.png]]
+
 ---
 
 ## The Stop hook is the cleanest trigger
@@ -70,6 +77,13 @@ That's the Stop hook. When an agent run completes, the Stop hook fires your scri
 The queue is fed by completion, not by a clock you guessed at or a webhook you have to wire up. The worker's own output becomes the worker's next input. That's the cleanest possible trigger, because the timing is exactly right by construction: the next thing happens precisely when the previous thing finished, never earlier, never on a stale schedule.
 
 We met Stop hooks back in the goal-mode segment as the place to move verification out of the prompt and into the infrastructure. Same hook, different job. There it was a gate at the exit. Here it's a trigger at the entrance. Worth seeing that one primitive does both.
+
+[IMAGE: dark canvas, a self-feeding loop drawn as a circle: an agent box finishing a run at the top, a Stop-hook trigger firing off its completion, the hook filing a fresh task card down into a queue, the queue feeding back up into the same agent so its own output becomes its next input; off to the side a crossed-out clock labeled cron and a crossed-out webhook plug, with a small caption "timed right by construction, never early, never on a stale schedule"]
+![[loopy-l4-workers-stop-hook-self-feeding-1.png]]
+![[loopy-l4-workers-stop-hook-self-feeding-2.png]]
+![[loopy-l4-workers-stop-hook-self-feeding-3.png]]
+![[loopy-l4-workers-stop-hook-self-feeding-4.png]]
+![[loopy-l4-workers-stop-hook-self-feeding-5.png]]
 
 ---
 
@@ -107,6 +121,13 @@ That's the mindset shift L4 forces. At L1 through L3 you hand the agent a task. 
 
 The compounding is the whole point. A task is paid for once and gone. A worker is paid for once and runs forever. Every item that enters the queue after you build it is leverage you already banked.
 
+[IMAGE: dark canvas, a split comparison: on the left a single "task" card consumed once and vanishing in a puff of smoke, labeled "paid once, gone"; on the right a "worker" engine box that a steady queue of cards keeps flowing through forever, each processed card stacking up as banked leverage, labeled "paid once, runs forever"; above the worker a throughput gauge with an arrow doubling and a callout bubble reading "give agents problems, not tasks"]
+![[loopy-l4-workers-leverage-task-vs-worker-1.png]]
+![[loopy-l4-workers-leverage-task-vs-worker-2.png]]
+![[loopy-l4-workers-leverage-task-vs-worker-3.png]]
+![[loopy-l4-workers-leverage-task-vs-worker-4.png]]
+![[loopy-l4-workers-leverage-task-vs-worker-5.png]]
+
 ---
 
 ## Where workers fail
@@ -120,6 +141,13 @@ A worker fails differently from a one-off task, because nobody's watching when i
 **No budget.** The worker churns through tokens with no ceiling. The first time a runaway worker burns a thousand dollars overnight, you learn this. Better to learn it from me.
 
 **No log review.** Nobody reads what the worker did. It could be quietly shipping garbage and you'd never know, because the whole appeal of a worker is that you stopped looking.
+
+[IMAGE: dark canvas, four warning panels in a 2x2 grid, each a worker failure mode with a small red warning triangle: "Silent failure" (a worker quietly dead while a queue piles up unprocessed behind it, nobody watching), "No kill switch" (a runaway worker mid-stream, a hand grasping for a brake that isn't there), "No budget" (a token meter spinning past a dollar ceiling, money burning overnight), "No log review" (a worker shipping garbage cards into a void nobody reads)]
+![[loopy-l4-workers-failure-modes-1.png]]
+![[loopy-l4-workers-failure-modes-2.png]]
+![[loopy-l4-workers-failure-modes-3.png]]
+![[loopy-l4-workers-failure-modes-4.png]]
+![[loopy-l4-workers-failure-modes-5.png]]
 
 Every one of these is the autonomy dial, applied to a loop that runs unattended. The dial we built in the last segment was per-action: ship-silently, ship-and-log, surface-as-decision, never-without-me. A worker is where that ship-and-log notch stops being optional. Unattended work that doesn't log is work you can't trust, because you weren't there to watch it happen.
 
@@ -136,6 +164,13 @@ Don't build that yet.
 A worker that watches another worker's output is the seed of a fleet, and a fleet without governance is how you get the runaway-loop horror story. The chain amplifies every failure mode above: silent failure in A starves B, a budget blowout in C cascades back up. Chained workers are real, and they're powerful, the bug-triage loop in [[bug-triage-loop]] is exactly a fleet of workers compounding, but they are a governance problem before they are a worker problem.
 
 Start with one worker. One queue, one process, one report. Get it boring and trustworthy. Earn the second one.
+
+[IMAGE: dark canvas, three worker boxes chained left to right as a little factory line: Worker A "finds problems" feeding Worker B "fixes them" feeding Worker C "reviews the fixes", but overlaid with a large semi-transparent "DON'T BUILD THIS YET" caution stamp and a note that a chain without governance amplifies every failure; below the chain a single solitary worker box glows as the recommended starting point, labeled "earn the second one"]
+![[loopy-l4-workers-chaining-warning-1.png]]
+![[loopy-l4-workers-chaining-warning-2.png]]
+![[loopy-l4-workers-chaining-warning-3.png]]
+![[loopy-l4-workers-chaining-warning-4.png]]
+![[loopy-l4-workers-chaining-warning-5.png]]
 
 ---
 

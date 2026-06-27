@@ -8,7 +8,6 @@ class: "loopy-ai"
 chapter: "L5 Discovery Loops"
 aliases: [l5-discovery]
 ---
-
 A discovery loop does not do the work. It decides what should become work.
 
 That one sentence is the whole level. Everything you have built up to now takes a thing you already decided needed doing and gets it done. L1 through L3 execute your decisions. L4 executes them on a stream without you re-asking each time. But every one of those loops is downstream of a human who looked at the world and said "this is worth doing."
