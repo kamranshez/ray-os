@@ -34,12 +34,8 @@ But that was never the lesson. The lesson was about reading the room. The person
 
 The rule covers one.
 
-[IMAGE: dark canvas, a single feedback note "too markety" at the top fanning into two diverging paths. Left path collapses to a narrow brick labeled "RULE: never mention pricing in sentence one" covering one tiny dot, red X. Right path opens into a wide principle labeled "if someone is venting, lead with empathy" spreading over many dots, green check. Caption: "same correction, two generalizations".]
-![[loopy-teach-the-agent-to-learn-rule-vs-principle-1.png]]
-![[loopy-teach-the-agent-to-learn-rule-vs-principle-2.png]]
-![[loopy-teach-the-agent-to-learn-rule-vs-principle-3.png]]
-![[loopy-teach-the-agent-to-learn-rule-vs-principle-4.png]]
-![[loopy-teach-the-agent-to-learn-rule-vs-principle-5.png]]
+[IMAGE: dark canvas, a single feedback note "too pricey" at the top fanning into two diverging paths. Left path collapses to a narrow brick labeled "RULE: never mention pricing in sentence one" covering one tiny dot, red X. Right path opens into a wide principle labeled "if someone is venting, lead with empathy" spreading over many dots, green check. Caption: "same correction, two generalizations".]
+[Add more placeholders here]
 
 Now run that forward a month. Every correction becomes another rule. The skill file does not get smarter, it gets longer. It turns into a decision tree, and a decision tree is brittle by construction. Each branch only fires on the exact situation that spawned it. The first time reality shows up wearing a slightly different outfit, none of the branches match, and the agent is back to guessing, except now it is guessing while dragging two hundred dead rules behind it.
 
@@ -48,17 +44,7 @@ Source: https://x.com/petradonka/status/2054897826149101588
 
 The outer loop did its job. It read the feedback and it edited the file. The job was just the wrong job.
 
----
-
-## Why the model won't fix this for you
-
-You might expect a strong model to round the corner on its own. Give it the correction and the context, and surely it generalizes.
-
-It does not, reliably, for judgment work. Generalizing from one correction means deciding which details were incidental and which were the point. That is a taste call, and taste is the thing the model is missing, which is the entire reason you are running a human-in-the-loop self-improvement system in the first place. (See [[self-improvement-loop]] for why judgment work has no cheap grader.) Asked to "update your instructions based on this feedback," the model takes the safe, literal path. It quotes the symptom back at you as a rule. It looks obedient and it is useless.
-
-So you do not ask the model to learn. You give it a skill whose only job is learning, and that skill carries the taste the base model lacks.
-
-[IMAGE: dark canvas, a strong model handed a correction plus the prompt "update your instructions based on this feedback". A fork: the path that needs "taste, decide which details were the point" is greyed out and locked, so the model takes the open, safe, literal path and outputs the symptom quoted straight back as a rigid rule, stamped "looks obedient, actually useless". Off to the side, a separate "learning skill" box labeled "carries the taste the base model lacks". Caption: "the model takes the literal path because taste is exactly what it's missing".]
+[Add more placeholders here]
 
 ---
 
@@ -106,8 +92,6 @@ Source: https://x.com/petradonka/status/2054897826149101588
 ![[loopy-teach-the-agent-to-learn-procedure-4.png]]
 ![[loopy-teach-the-agent-to-learn-procedure-5.png]]
 
-Notice what this procedure is. It is the curator role from [[ace-three-role-split]], pulled out and made explicit. ACE gave you the formal three-role shape. This is the curator written down as a skill you can read, version, and correct when it gets the generalization wrong.
-
 And it is not hypothetical. The seven steps above are a real, shipped skill. Warp open-sourced the exact `reply-learning` skill that maintains their community-reply agent, and it is this procedure written as a `SKILL.md` you can read top to bottom.
 Source: https://gist.github.com/petradonka/873e54b6464b36dc2720eee039071cfa
 
@@ -126,37 +110,3 @@ The learning skill is you trying to produce that second kind of teammate on purp
 And there is a side effect worth the price of admission on its own. To teach the agent, you have to say the quiet part out loud. A lot of taste lives implicitly in people's heads. Nobody on the team ever wrote down "lead with empathy when someone is venting," because everyone good just does it. The moment you have to encode it so an agent can apply it, you drag it onto the page. Your team ends up with a written, reviewable account of its own judgment, which it never had before. The agent is the excuse. The artifact is the real win.
 
 [IMAGE: dark canvas, a contrast. Left "configuring": a hand toggling fields in a rigid config file, each switch handling exactly one case. Right "teaching": a mentor watching a new hire make a call, saying "here's what I'd have done and why", and the hire walking off with a way of thinking that covers the next ten unseen cases. Below the right panel, a side-effect arrow: implicit team taste ("lead with empathy when someone is venting") being dragged out of people's heads onto a written, reviewable page. Caption: "you're training a teammate, and the by-product is your judgment written down".]
-
----
-
-## Demo
-
-One correction, run through the skill twice. First the naive way, then the right way, side by side.
-
-1. **Set the scene.** Show the inner loop's drafted reply to an annoyed user, and the human's actual reply, which dropped the pitch and led with "yeah, that is genuinely frustrating, here is what is going on." Show the current skill file open beside them.
-
-2. **The naive path.** Prompt a plain agent: "update the skill based on this feedback." Watch it append "never mention pricing in the first sentence." Point at the diff. One line, one case, file got longer.
-
-3. **The learning skill path.** Run the actual learning skill on the identical inputs. Walk the procedure on screen: it names the symptom, asks why, lands on "the agent pitched to someone who was venting," checks the existing principles, finds the tone section, and proposes the principle there instead of a new rule at the bottom.
-
-4. **Compare the diffs.** Naive diff: plus one brittle rule. Learning diff: one sharpened principle, and it actually deleted an older overlapping line. The file got shorter and stronger.
-
-5. **Prove the transfer.** Feed both versions a brand new angry thread that has nothing to do with pricing. The rule version pitches anyway, because no rule matched. The principle version leads with empathy. Same skill file size budget, completely different behavior.
-
-The point of the demo is that the inputs were identical. The only variable was whether a skill did the generalizing.
-
----
-
-## Key Insight
-
-> An outer loop that turns every correction into a rule is not learning, it is growing a decision tree. Learning is a separate skill whose only job is to ask why, find the pattern, and write a principle instead.
-
----
-
-## Where we go next
-
-The learning skill closes the gap between feedback and generalization. But it still proposes a change to a file that drives real behavior, and you do not let it merge that change on its own authority.
-
-The principle it writes is a suggestion until a human signs off. Next segment, [[skills-as-code]], we put that gate in place: every edit the loop proposes arrives as a reviewed diff, with history and rollback, so the agent can keep teaching itself without ever quietly going off the rails.
-
-See you in the next one.
