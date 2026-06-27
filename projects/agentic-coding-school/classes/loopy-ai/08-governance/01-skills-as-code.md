@@ -89,40 +89,6 @@ You review it like any other change. Approve, request edits, or reject. The usef
 
 ---
 
-## This is not a fifth primitive
-
-Be careful where you file this. It is governance, but it is not one of the four.
-
-[[governance-primitives]] gave you budgets, kill switches, action-log review, and retirement. Those are brakes on what a loop **does**. They cap the spend, stop the runaway, surface the actions, and pause the dead weight. They watch the loop's output.
-
-This is a brake on what a loop **changes about itself**. It watches the loop's instructions. Different surface entirely.
-
-I am keeping it separate on purpose. The governance segment was strict: four primitives, no more, and a fifth thing is usually one of the four wearing a costume. Skills-as-code is not one of those four wearing a costume. It is a genuinely different control, the one you only need once a loop is allowed to edit its own skill. Most loops never reach that point. The ones that do, the compounding ones, need this gate before they are safe to leave running.
-
-So: same category, its own segment. Governance over self-modification.
-
-[IMAGE: dark canvas, two governance surfaces side by side. Left "the four primitives" (budgets, kill switch, action-log, retirement) all pointing arrows at a loop's OUTPUT stream. Right "skills-as-code", a single new control pointing its arrow instead at the loop's own INSTRUCTIONS file. A bracket joins both under "governance", but a clear line keeps them as separate surfaces. Caption: "same category, different thing it watches".]
-
----
-
-## Demo
-
-Two minutes, one PR, deliberately unremarkable.
-
-1. **The trigger.** The daily learning loop wakes up, reads yesterday's feedback out of the Slack channel from [[slack-as-your-command-center]], and decides the triage skill misfires on one class of issue. Show it running headless.
-
-2. **The PR it opens.** Pull up the pull request. The title names the skill it wants to change: "Update triage-skill: sharpen the duplicate vs needs-info call." The body links the exact Slack threads it read and states the principle delta in plain words before any code.
-
-3. **The diff.** Open the Files Changed tab. The change touches `SKILL.md` and nothing else. A few lines reworded, one principle added. Small. Reviewable in thirty seconds.
-
-4. **You review.** Leave a comment asking it to soften one line, the same as you would on any teammate's PR. The loop pushes a fixup. Now merge.
-
-5. **The next run.** Re-run the inner loop on a fresh issue. It picks up the merged skill and triages correctly. The improvement is live, and there is a commit with your approval on it explaining why.
-
-The point of the demo is that it looks exactly like normal code review. That is the whole idea. You already know how to govern code. Make the skill code, and you already know how to govern the agent.
-
----
-
 ## Key Insight
 
 > A self-improving loop is safe the moment its changes stop being silent. Skills are files, files go in a repo, and the pull request is where the loop proposes and you decide. Continuous proposal, gated merge.
