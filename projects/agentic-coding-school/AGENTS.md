@@ -10,6 +10,8 @@ Folders encode **placement**; stage is encoded by `status` (see below), not by w
 - `ideas/` — upstream of a script. Two shapes: loose seeds/research live directly in `ideas/` (the classless inbox); `ideas/<prospective-class>/` groups drafts for a class that is being considered but is **not yet in the database** (currently `skills`, `multi-agent-orchestration`, `spec-driven-development`, `code-review`). Everything under `ideas/` is `status: "idea"`. When a prospective class is greenlit and added to the DB, its folder graduates to `classes/<class-slug>/`.
 - `corrections/` — short corrections and addenda to already-published videos, indexed by `corrections.md`. These sit **outside** the idea→scripted→filmed pipeline and carry no `status`.
 - `research/`, `vsl/` — supporting material, not class scripts.
+- `customer-research/` — standing source of truth on **who buys the class, what they want, and how to position to them** (personas, audience data, competitor/pricing, naming). Read `customer-research/README.md` + `00-synthesis-personas-positioning.md` before writing/revising landing-page copy, VSL scripts, ads, or pricing — instead of re-deriving the audience. Built from a 6-source market analysis (2026-06-26); append new data rather than redoing it.
+- `landing-copy/` — landing-page copy directions + the self-contained HTML mockup (`landing-copy-mockups.html`).
 
 `to-film/` is retired. It used to stage "not yet filmed" scripts by folder, but stage now lives in `status`, so its contents were drained into `classes/<slug>/_drafts/` (scripts for real DB classes) and `ideas/<prospective-class>/` (classes still being considered).
 
