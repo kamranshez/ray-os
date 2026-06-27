@@ -60,10 +60,11 @@ Extract only pitch-relevant passages: opening (~60s), mid-video pitch (mastercla
 
 ## STEP 5: PULL STRIPE CHARGES
 
-Run the script with Ray's Stripe key:
+**Stripe MCP is NOT attached in the cloud environment.** The script also requires a `rk_live_` key not available here. Skip this step and use PostHog `purchase_complete` server events as the revenue source instead. Note the limitation in the report's Methodology section.
+
+If Ray provides a `rk_live_` key via env var (`STRIPE_KEY`), run:
 
 ```bash
-export STRIPE_KEY='<ray-provided-rk_live-key>'
 python3 routines/youtube-performance-audit-references/pull_stripe_charges.py \
   --month YYYY-MM \
   --uploads "comma,separated,upload,dates" \
@@ -122,7 +123,16 @@ Save to `socials/youtube/performance/YYYY-MM.md`.
 
 ## STEP 8: NOTIFY ON SLACK
 
-Using the Slack message skill, send one to the #yt-performance-audit.
+Post to #yt-performance-audit using the `SLACK_BOT_TOKEN` env var (available in the Default with Bots environment):
+
+```bash
+curl -s -X POST https://slack.com/api/chat.postMessage \
+  -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+  -H "Content-Type: application/json; charset=utf-8" \
+  --data '{"channel": "#yt-performance-audit", "text": "<message>"}'
+```
+
+If `echo $SLACK_BOT_TOKEN` returns empty, write the summary to stdout and stop -- Ray will see it in the run log.
 
 Send Ray a summary of the audit.
 
