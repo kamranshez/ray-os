@@ -37,6 +37,18 @@
 
 **In short: don't bet the SEO on "agent engineer"; bet the *identity* on it.**
 
+## Deep teardown — IndyDevDan / agenticengineer.com (2026-06-27)
+The one competitor closest to the "agentic engineer" flag. Runs a **two-tier ladder by phase/maturity** (NOT theory-vs-practice):
+- **Principled AI Coding — $299** (one-time, lifetime). "Phase 1: AI Coding" / augment. ~6h, 8 lessons, beginner→advanced. Spine = **"BIG THREE: Context, Prompt, Model,"** *"Principles NOT tools."* Heavily **Aider**-centric. Refund: no-questions before lesson 4. **Long, strong testimonial wall** (named engineers, titles, "3–5x faster"; several admit "a bit pricey" = useful objection-handling).
+- **Tactical Agentic Coding — $599** (one-time, lifetime). "Phase 2: Agentic Coding" / out-of-the-loop. 8 lessons ("8 Tactics"). Spine = **"build the system that builds the system," "stop coding start templating," ZTE (Zero-Touch Engineering).** Outcome line: **"the engineer they can't replace."** Explicitly elitist (*"NOT FOR BEGINNERS… close this tab," "top 20%"*). Refund: 30-day before lesson 4. **Proof wall notably THIN** — leans on scarcity/authority not testimonials (a weakness Ray can beat).
+- **Agentic Horizon** — upsell **bolted onto TAC**: 6 advanced lessons (elite context eng, prompt-eng hierarchy, Agent SDK, multi-agent orchestration, agentic layers → "Codebase Singularity"). **Buyers vote on unreleased lessons.** Non-refundable. Price **~+$200 UNVERIFIED** (group-buy forum only).
+- **Relationship:** ladder by phase, home page = sorting hat ("Phase 1 vs Phase 2"); mental model **Augment → Automate → Deprecate.** **No official bundle / buy-both discount found.** **No team/enterprise pricing anywhere.**
+- **Funnel:** big free YouTube (@IndyDevDan) → $299 on-ramp → $599 flagship → Horizon upsell. The cheap tier only works because the free funnel is huge.
+- **Tone:** fear-heavy — *"evolve or die," "a race for survival," "deprecate us."*
+
+**Implications for Ray (see `00` for the full split recommendation):** don't mirror the 2-product split yet (his $397 already sits at Dan's midpoint; 39K subs ≪ Dan's funnel, a cheap tier would cannibalize). **Borrow** the expansion-upgrade mechanic + lesson-voting (fits "always current"), the Phase-1/Phase-2 sorting-hat framing, and honest API-cost disclosure. **Beat** him on: a real bundle, a Team/seat offer (he has none), a thicker flagship proof wall (Ray has 3,151 students), and a calmer respectful tone for a senior audience that Dan's doom-framing repels.
+*Verification: $299/$599 confirmed on official sale pages. Horizon ~+$200 and "no bundle"/"no team pricing" = could-not-verify-otherwise / absent. Older "$449/$250" figures are stale — disregard.*
+
 ## Caveats
 - Strong recency (most sources Feb–Jun 2026).
 - aihero $995 = list (templated price placeholders on official page; confirmed via two listing mirrors); launch-week sale lower.
