@@ -8,7 +8,6 @@ class: "loopy-ai"
 chapter: "Teach the Agent How to Learn"
 aliases: [teach-the-agent-to-learn]
 ---
-REf: https://x.com/petradonka/status/2054897826149101588 
 
 You built the self-improvement loop. The inner loop does the work, the outer loop reads the corrections and edits the skill. You wire it up, you feed it a week of feedback, and it does get better. Then it gets worse.
 
@@ -104,6 +103,11 @@ Source: https://x.com/petradonka/status/2054897826149101588
 ![[loopy-teach-the-agent-to-learn-procedure-5.png]]
 
 Notice what this procedure is. It is the curator role from [[ace-three-role-split]], pulled out and made explicit. ACE gave you the formal three-role shape. This is the curator written down as a skill you can read, version, and correct when it gets the generalization wrong.
+
+And it is not hypothetical. The seven steps above are a real, shipped skill. Warp open-sourced the exact `reply-learning` skill that maintains their community-reply agent, and it is this procedure written as a `SKILL.md` you can read top to bottom.
+Source: https://gist.github.com/petradonka/873e54b6464b36dc2720eee039071cfa
+
+Two things in it are worth stealing on top of the core steps. It carries a sharp test for the zoom-out step, the call between a pattern and a rule: can you name three or more different situations where this principle would change behavior? Three or more, it is a pattern worth codifying. Fewer, it is a rule wearing a principle's clothes. And it closes on an explicit length budget, the skill stays under about two hundred lines, which forces the learning loop to merge and sharpen instead of only ever appending. A budget is what turns "check against the existing principles" from advice into a constraint the loop has to satisfy.
 
 ---
 
