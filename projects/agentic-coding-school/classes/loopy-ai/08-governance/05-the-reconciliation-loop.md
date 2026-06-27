@@ -207,13 +207,3 @@ Total demo: three minutes. The point is that you wrote down how the world should
 ## Key Insight
 
 > A worker reaches a destination and stops. A discovery loop hunts for new destinations. A reconciliation loop holds a setpoint and never stops. The first two move you through the world. The third one keeps the world the way you said it should be.
-
----
-
-## Where we go next
-
-You can now build all three loop shapes: one that does the work, one that finds the work, and one that holds your declared state against reality. That is the full vocabulary of the climb.
-
-What is left is not a new shape but a habit: noticing, in your own day, which repeated frictions are secretly one of these three loops waiting to be written. That is the next one, and it is how you stop learning loops and start living in them.
-
-See you in the next one.
