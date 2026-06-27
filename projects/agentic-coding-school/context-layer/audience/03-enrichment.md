@@ -30,27 +30,27 @@
 ---
 
 ## Individual corporate buyers (sample)
-| Name-ish | Company | What it does | Likely role | Conf |
-|---|---|---|---|---|
-| Christian Shanklin | Heartvue.ai | Cardiac-MRI AI/healthcare SaaS | Lead SWE, full-stack, AWS-cert | High |
-| **Michael Whelehan** | **Trusted Shops** | E-commerce trust SaaS | **Senior SWE; Anthropic Community Ambassador; consults on AI agents / "Agentic Engineering"** | High |
-| Marcus Halawi | Cloud9 Stays | Luxury short-term-rental tech (13 ppl) | CEO/Founder | High |
-| Jackson Williams | Lead Odyssey | Cold-outbound/sales-automation SaaS | Solo founder | High |
-| Rasmus Hove Munk | hovemunk.dk | Bespoke dev consulting | Senior dev/owner, 30+ yrs | High |
-| Minh | TakTik OÜ | Strategic AI advisory/architecture (Fortune 500, EU AI Act) | Founder/CEO, 30+ yrs, **builds production agentic AI** | High |
-| Adam | ForgeFX Simulations | VR/AR/sim training (Halliburton, John Deere) | Co-founder & CTO, 20+ yrs, 19-person, $4.3M rev | High |
-| Matjaž | DOT357 | Google/Meta Ads agency | Founder/owner, cert. expert | High |
-| Serge | Kalloghlian Myers LLP | Securities class-action law firm | Partner (called to Ontario Bar 2008) | High |
-| Mohamed | PENGINE | Cloud-native wealth-mgmt SaaS (20+ eng) | Cloud Engineer | High |
-| Philipp Winkler | cirriton.de | AWS cloud consulting | Founder/Solutions Architect, AWS cert | High |
-| Marco Penna | AUTO1 Group | €8B used-car platform | Data Engineer (2021–22) | Med |
-| Ahamed Fofana | IBM / NYU grad | BigTech / cybersecurity academia | AI Engineer, MS student (jr–mid) | High |
-| Ryan | Novus Digital Media | Digital marketing + AI sales automation | IT mgr (20+ yrs) or founder | Med |
-| Noj | SISTRAN / Smartflow | Insurance software / automation consulting | Mid-level dev | Low-Med |
-| Jose | riffmnm.com | Coder/sound-engineer/musician (Barcelona) | Freelancer, multi-disciplinary | Med |
-| (—) | Longview Philanthropy | AI-governance/biosecurity grantmaking nonprofit | unclear | Low |
-| John | cirka.net | Full-stack dev / wiki platform | dev or architecture prof (ambiguous) | Med |
-| Nico | nicocmw.com | GitHub: agentic-patterns + Claude Code repos | Mid–senior dev, AI-agents enthusiast | Med |
+| Name-ish             | Company               | What it does                                                | Likely role                                                                                   | Conf    |
+| -------------------- | --------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------- |
+| Christian Shanklin   | Heartvue.ai           | Cardiac-MRI AI/healthcare SaaS                              | Lead SWE, full-stack, AWS-cert                                                                | High    |
+| **Michael Whelehan** | **Trusted Shops**     | E-commerce trust SaaS                                       | **Senior SWE; Anthropic Community Ambassador; consults on AI agents / "Agentic Engineering"** | High    |
+| Marcus Halawi        | Cloud9 Stays          | Luxury short-term-rental tech (13 ppl)                      | CEO/Founder                                                                                   | High    |
+| Jackson Williams     | Lead Odyssey          | Cold-outbound/sales-automation SaaS                         | Solo founder                                                                                  | High    |
+| Rasmus Hove Munk     | hovemunk.dk           | Bespoke dev consulting                                      | Senior dev/owner, 30+ yrs                                                                     | High    |
+| Minh                 | TakTik OÜ             | Strategic AI advisory/architecture (Fortune 500, EU AI Act) | Founder/CEO, 30+ yrs, **builds production agentic AI**                                        | High    |
+| Adam                 | ForgeFX Simulations   | VR/AR/sim training (Halliburton, John Deere)                | Co-founder & CTO, 20+ yrs, 19-person, $4.3M rev                                               | High    |
+| Matjaž               | DOT357                | Google/Meta Ads agency                                      | Founder/owner, cert. expert                                                                   | High    |
+| Serge                | Kalloghlian Myers LLP | Securities class-action law firm                            | Partner (called to Ontario Bar 2008)                                                          | High    |
+| Mohamed              | PENGINE               | Cloud-native wealth-mgmt SaaS (20+ eng)                     | Cloud Engineer                                                                                | High    |
+| Philipp Winkler      | cirriton.de           | AWS cloud consulting                                        | Founder/Solutions Architect, AWS cert                                                         | High    |
+| Marco Penna          | AUTO1 Group           | €8B used-car platform                                       | Data Engineer (2021–22)                                                                       | Med     |
+| Ahamed Fofana        | IBM / NYU grad        | BigTech / cybersecurity academia                            | AI Engineer, MS student (jr–mid)                                                              | High    |
+| Ryan                 | Novus Digital Media   | Digital marketing + AI sales automation                     | IT mgr (20+ yrs) or founder                                                                   | Med     |
+| Noj                  | SISTRAN / Smartflow   | Insurance software / automation consulting                  | Mid-level dev                                                                                 | Low-Med |
+| Jose                 | riffmnm.com           | Coder/sound-engineer/musician (Barcelona)                   | Freelancer, multi-disciplinary                                                                | Med     |
+| (—)                  | Longview Philanthropy | AI-governance/biosecurity grantmaking nonprofit             | unclear                                                                                       | Low     |
+| John                 | cirka.net             | Full-stack dev / wiki platform                              | dev or architecture prof (ambiguous)                                                          | Med     |
+| Nico                 | nicocmw.com           | GitHub: agentic-patterns + Claude Code repos                | Mid–senior dev, AI-agents enthusiast                                                          | Med     |
 
 ## Multi-buyer companies
 - **N26** (Berlin): 1,600-employee neobank, full German banking license, 24 EU markets. Serious fintech.
