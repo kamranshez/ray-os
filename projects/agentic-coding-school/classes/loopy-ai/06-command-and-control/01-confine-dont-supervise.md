@@ -15,6 +15,8 @@ That should sound reckless. It isn't. And the reason it isn't is the whole point
 
 You do not make a loop safe by watching it more carefully. You make it safe by putting it somewhere it cannot do damage. **Confine it, don't supervise it.**
 
+[IMAGE: dark canvas, two ways to make a loop safe side by side. Left, a tired human eye watching an agent, labeled "supervise: watch it harder", the agent still able to reach dangerous objects around it. Right, the same agent dropped inside a sealed box labeled "confine: put it where it cannot do damage", running wide open while the dangerous objects sit outside the wall. Caption: "confine it, don't supervise it".]
+
 ---
 
 ## The thing everyone does wrong
@@ -157,6 +159,8 @@ You want both, and they work at different altitudes. The brake stops the fleet w
 
 And keep this separate from the autonomy *ladder* from [[l1-essentials]], because the words blur together. The ladder is about *how long* a loop runs unattended. Duration. The box is about *what a loop can touch* while it runs. Capability. A loop that runs for a month inside a tight box is safe. A loop that runs for ten minutes on your laptop with full access can still email your investors in those ten minutes. High on the ladder isn't the scary part. No box is the scary part.
 
+[IMAGE: dark canvas, two panels. Left "the brake (reactive)": a loop already running and going wrong, a hand pulling a kill-switch cord after the fact, labeled "stops it after it acts". Right "the box (preventive)": the same loop sealed in a box, the harmful action greyed out and unreachable, labeled "harm was never possible". A small note underneath both: "confine first, the brake is the backstop you rarely need". Caption: "the box prevents, the brake reacts".]
+
 ---
 
 ## How you tune it
@@ -189,6 +193,8 @@ Five ways people get this wrong, and you'll recognise most of them from the cycl
 **A box with a door to production.** A confined machine that still has prod credentials sitting on it, or open network egress, isn't confined. The wall has to actually be a wall. No real data, no prod path, allowlist the egress.
 
 **No applier gate.** Letting the proposer also be the thing that merges and deploys. The whole point was to lift the dangerous action out to one watched place. If the loop can ship straight to prod, you built a fast way to break prod.
+
+[IMAGE: dark canvas, five failure cards in a row, each a small wrong sketch with a red X and a green "fix" arrow beneath it: "runs on your laptop -> move to an SSH box", "full tools to be safe -> minimum set, read-only first", "trusting the model to refuse -> remove the capability", "a box with a door to prod -> no creds, no egress", "no applier gate -> proposer cannot merge". Caption: "every failure here is a wall someone skipped".]
 
 ---
 

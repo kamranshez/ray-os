@@ -18,6 +18,8 @@ An outer loop that writes down what happened is not learning. It is transcriptio
 
 This segment is about the skill that makes the jump happen.
 
+[IMAGE: dark canvas, two doors out of a single correction. Door one "transcription": the correction is copied verbatim into a log, covering only the one case it came from, inert. Door two "learning": the same correction fans out as a general pattern that reshapes how the agent handles a hundred situations it was never told about. Caption: "feedback is not learning until one case changes a hundred".]
+
 ---
 
 ## The one failure mode
@@ -55,6 +57,8 @@ You might expect a strong model to round the corner on its own. Give it the corr
 It does not, reliably, for judgment work. Generalizing from one correction means deciding which details were incidental and which were the point. That is a taste call, and taste is the thing the model is missing, which is the entire reason you are running a human-in-the-loop self-improvement system in the first place. (See [[self-improvement-loop]] for why judgment work has no cheap grader.) Asked to "update your instructions based on this feedback," the model takes the safe, literal path. It quotes the symptom back at you as a rule. It looks obedient and it is useless.
 
 So you do not ask the model to learn. You give it a skill whose only job is learning, and that skill carries the taste the base model lacks.
+
+[IMAGE: dark canvas, a strong model handed a correction plus the prompt "update your instructions based on this feedback". A fork: the path that needs "taste, decide which details were the point" is greyed out and locked, so the model takes the open, safe, literal path and outputs the symptom quoted straight back as a rigid rule, stamped "looks obedient, actually useless". Off to the side, a separate "learning skill" box labeled "carries the taste the base model lacks". Caption: "the model takes the literal path because taste is exactly what it's missing".]
 
 ---
 
@@ -120,6 +124,8 @@ It does not feel like editing a config file. It feels like teaching a new hire. 
 The learning skill is you trying to produce that second kind of teammate on purpose.
 
 And there is a side effect worth the price of admission on its own. To teach the agent, you have to say the quiet part out loud. A lot of taste lives implicitly in people's heads. Nobody on the team ever wrote down "lead with empathy when someone is venting," because everyone good just does it. The moment you have to encode it so an agent can apply it, you drag it onto the page. Your team ends up with a written, reviewable account of its own judgment, which it never had before. The agent is the excuse. The artifact is the real win.
+
+[IMAGE: dark canvas, a contrast. Left "configuring": a hand toggling fields in a rigid config file, each switch handling exactly one case. Right "teaching": a mentor watching a new hire make a call, saying "here's what I'd have done and why", and the hire walking off with a way of thinking that covers the next ten unseen cases. Below the right panel, a side-effect arrow: implicit team taste ("lead with empathy when someone is venting") being dragged out of people's heads onto a written, reviewable page. Caption: "you're training a teammate, and the by-product is your judgment written down".]
 
 ---
 

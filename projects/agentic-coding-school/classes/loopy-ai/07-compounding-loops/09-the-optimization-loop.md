@@ -15,6 +15,8 @@ Same architecture, one part swapped. The self-improvement loop you just built re
 
 That is the optimization loop. It is the [[self-improvement-loop]] with the human seat filled by an automated check, and that single substitution is what lets it run on a corpus, converge, and stop.
 
+[IMAGE: dark canvas, the self-improvement loop with one seat swapped. The old seat, a human grader, slides out; an automated check slides in (test passes or fails, page renders or breaks, build compiles or does not). Beside the change, the loop's character flips from "waits for real feedback to trickle in" to "manufactures its own feedback on demand". Caption: "one seat swapped, human to machine, and the loop stops waiting".]
+
 ---
 
 ## The grader is not the improver

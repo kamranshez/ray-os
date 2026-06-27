@@ -15,6 +15,8 @@ Yes. But not silently.
 
 That one word is the whole segment. The difference between a loop that compounds and a loop that quietly goes insane is not how smart the rewrite is. It is whether a human ever sees the rewrite before it ships. Skills are files. Files go in a repo. And a repo gives you the three things that make self-modification safe: version history, review, and rollback.
 
+[IMAGE: dark canvas, an agent reaching toward its own skill file, with a fearful thought bubble "rewriting its own instructions?". Two paths fork. Silent self-edit drifting into something unrecognizable by week three, marked with a red X. Or the same edit routed through a repo box that grants version history, review, and rollback before anything ships, marked with a green check. Caption: "yes, but not silently".]
+
 This is the governance segment for the thing that scares people. The [[self-improvement-loop]] proposes changes to itself. [[teach-the-agent-to-learn]] makes those changes generalise instead of overfit. This segment is the gate they both have to pass through before anything becomes real.
 
 ---
@@ -32,6 +34,8 @@ Source: https://x.com/petradonka/status/2054897826149101588
 > Yes, but not silently.
 
 Hold onto the distinction. The danger was never the agent proposing a change. The danger was the change going live without a human in the path. Take the silence away and the fear goes with it. You get a loop that suggests improvements all day long, and a you that approves the ones worth keeping.
+
+[IMAGE: dark canvas, a do/don't split. Left "never let it change": a skill file padlocked, only a human hand allowed, the agent's proposals bouncing off, labeled "half right, kills the compounding". Right "never let it change without review": the agent freely proposing changes all day into a review gate where a human approves the worth-keeping ones, labeled "the fix". Caption: "the danger was the silence, not the proposing".]
 
 ---
 
@@ -96,6 +100,8 @@ This is a brake on what a loop **changes about itself**. It watches the loop's i
 I am keeping it separate on purpose. The governance segment was strict: four primitives, no more, and a fifth thing is usually one of the four wearing a costume. Skills-as-code is not one of those four wearing a costume. It is a genuinely different control, the one you only need once a loop is allowed to edit its own skill. Most loops never reach that point. The ones that do, the compounding ones, need this gate before they are safe to leave running.
 
 So: same category, its own segment. Governance over self-modification.
+
+[IMAGE: dark canvas, two governance surfaces side by side. Left "the four primitives" (budgets, kill switch, action-log, retirement) all pointing arrows at a loop's OUTPUT stream. Right "skills-as-code", a single new control pointing its arrow instead at the loop's own INSTRUCTIONS file. A bracket joins both under "governance", but a clear line keeps them as separate surfaces. Caption: "same category, different thing it watches".]
 
 ---
 

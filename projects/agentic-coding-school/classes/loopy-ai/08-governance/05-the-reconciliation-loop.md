@@ -17,6 +17,8 @@ Everything up to here has been pointed at work. A worker drains a queue of tasks
 
 Once you see it, you cannot unsee it. Because almost everything you care about, in life and in work, is a gap between where you are and where you want to be.
 
+[IMAGE: dark canvas, two loops contrasted. A "discovery loop" eye pointed outward at the world. A "reconciliation loop" eye pointed back at you, holding a card that reads "are you still where you said you wanted to be". Between a "declared state" line and an "actual state" line sits a highlighted gap, which the reconciliation loop measures. Caption: "almost everything you care about is a gap between where you are and where you want to be".]
+
 ---
 
 ## The three shapes, finally side by side
@@ -52,6 +54,8 @@ An ideal state is a standing description of how things should always be. "My tes
 You do not complete an ideal state. You maintain it. That is why a reconciliation loop never terminates the way a worker does. Its terminate condition is per-run, not per-objective: this tick, the gap is closed or the correction is queued, sleep until the next tick. The objective itself is immortal.
 
 If you treat an ideal state like a goal, you build a loop that fixes the thing once and walks away, and three weeks later you are back where you started and did not notice. If you treat a goal like an ideal state, you build a loop that burns budget forever guarding a target that was only ever meant to be hit once. Naming which one you have is the first move.
+
+[IMAGE: dark canvas, two panels. Left "goal = destination": a loop running at a finish-line flag, converging and then stopping, labeled "healthy, finite, done". Right "ideal state = standing description": a horizontal target line with no finish line, entropy arrows dragging the current state away and the loop endlessly yanking it back. Two warning labels below: "treat an ideal like a goal, fix once and silently regress in three weeks" and "treat a goal like an ideal, burn budget forever guarding a one-time target". Caption: "name which one you have first".]
 
 ---
 
@@ -108,6 +112,8 @@ The state is the memory of what it already corrected, so it does not fire the sa
 
 The terminate is per-run. Gap closed or correction dispatched, sleep until the next trigger. The loop as a standing thing never ends.
 
+[IMAGE: dark canvas, a thermostat drawn as the five-primitive loop. Trigger: a clock or a state-change spark. Work: read current state, hold ideal state, compute the gap, choose the shrinking action. Check: the ideal state written as a testable verifier (a Stripe query, a test run), not the model's opinion. State: a memory of what it already corrected, telling drift from a one-off. Terminate: per-run, gap closed then sleep, while the objective stays immortal. Caption: "a reconciliation loop is the five primitives filled thermostat-style".]
+
 ---
 
 ## The three kinds of ideal, in plain words
@@ -121,6 +127,8 @@ Things you want to never be true. The guard-invariant. Spend never exceeds budge
 Things you want to happen if something else happens. The event-condition-action rule. If a customer's usage drops to zero for a week, open a check-in. If a dependency ships a security patch, open an upgrade. These are the reconciliation loops that look the most like discovery loops, except the trigger is a declared condition rather than open-ended scanning.
 
 Write your ideal state as a list under those three headers and you have just specified a fleet of loops. That list, the always, the never, and the if-then, is the input. The loops are what you point at it.
+
+[IMAGE: dark canvas, one "ideal state" list split under three headers. "Always true (maintain)": main is green, backups ran, every prospect has a next action, with a loop that restores. "Never true (guard)": spend never exceeds budget, no secret committed, churn never breaks 2%, with a loop that alarms, blocks, or rolls back. "If this then that (event-condition-action)": usage drops to zero then open a check-in, a CVE ships then open an upgrade. An arrow shows the three-header list becoming a fleet of loops. Caption: "write the always, the never, and the if-then, and you have specified a fleet".]
 
 ---
 
@@ -137,6 +145,8 @@ Read it as a thermostat, not a worker. There is no queue and no ticket waiting. 
 The constraints in the back half of that command are not decoration. "One change, one commit, tests green" is the borrowed verifier and the deadband in one breath, it keeps a standing loop from thrashing your repo on every tiny wobble. "Never touch anything risky" is the autonomy notch, it pins the loop to low-blast-radius maintains and keeps it off the never-list while you are not watching. That is the entire reconciliation discipline compressed into a sentence you can paste before you finish this video.
 
 Source: https://x.com/mvanhorn (Matt Van Horn, "WTF Is a Loop? Part 2", Jun 2026)
+
+[IMAGE: dark canvas, a single pasted command "/loop 5m: one small verified repo improvement, one change, one commit, tests green, never touch anything risky" running on a five-minute timer with no queue and no ticket feeding it. Below, the implicit standing ideal "this repo always trends cleaner, never messier" as a target line the loop keeps nudging toward every tick. Annotations point at the command's clauses: "one commit, tests green = borrowed verifier plus deadband", "never touch anything risky = autonomy notch on low blast radius". Caption: "you declared a direction, not a task list".]
 
 ---
 
@@ -172,6 +182,8 @@ Source: https://danielmiessler.com/blog/ai-state-management
 
 Second, you stay in the loop for the high-blast-radius corrections. A maintain-invariant on a green test suite can self-heal silently. A guard-invariant on money or anything public comes to you with the gap, the proposed correction, and a recommendation, and it waits. This is the autonomy dial applied to a whole class of loop: low-stakes maintains get notch one, the never-list gets notch three, every time.
 
+[IMAGE: dark canvas, a reconciliation loop with the human placed at exactly two points and removed from a third. Removed: the "comparison, read the world, compute the gap", crossed out with "do this yourself and you have just appointed yourself the thermostat". Present: "declaring the ideal state" tagged values and taste, and "high-blast-radius corrections" where the loop brings the gap plus a proposed fix and waits. A small autonomy dial shows low-stakes maintains at notch one and the never-list at notch three. Caption: "stay out of the measuring, stay in for the taste and the dangerous edits".]
+
 ---
 
 ## The failure mode this level is most prone to
@@ -183,6 +195,8 @@ A worker that does the wrong task wastes one run. A reconciliation loop pointed 
 The defense is that the ideal state is itself a living document, not a stone tablet. Miessler treats articulating and re-articulating the ideal as the most important and hardest work there is, something you tighten, prune, and expand over time. So a mature reconciliation system has a slower meta-loop above it whose entire job is to re-examine the targets: are these still the states I want held. That is the same self-improvement instinct from the compounding-loops chapter, aimed one level up, at the setpoints instead of the work.
 
 The second, smaller failure is over-correction. A loop that yanks too hard at every tiny deviation thrashes. Give your corrections a deadband, the way a real thermostat does not fire the furnace for a half-degree wobble. Small drift inside the band is tolerated. Only real gaps trigger action.
+
+[IMAGE: dark canvas, a reconciliation loop labeled "green" cheerfully and continuously pulling reality toward a target marked "wrong / stale ideal", with the outcome below it shaded "bad" and nothing alarming because the loop is succeeding at its declared job. Above it a slower "meta-loop" re-examines the setpoints themselves, asking "are these still the states I want held", treating the ideal as a living document, not a stone tablet. To the side a thermostat with a shaded "deadband" zone ignores a half-degree wobble so the loop does not thrash. Caption: "a wrong ideal, enforced perfectly, is a machine that fights you forever".]
 
 ---
 

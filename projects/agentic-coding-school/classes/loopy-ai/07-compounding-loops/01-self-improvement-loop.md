@@ -16,6 +16,8 @@ The shift is small to say and large to absorb. The thing you iterate on stops be
 
 This is the move from [[l4-workers]] into compounding loops. A worker gets a task done. A compounding loop gets a little better at the task every day, without you touching it between runs.
 
+[IMAGE: dark canvas, a before/after split. Left labeled "what you used to iterate on": a hand crossing out and rewriting a tall stack of individual output answers one by one, each correction stranded and local. Right labeled "what you iterate on now": the hand edits a single "instructions" document once, and many fresh answers flow out of it correct by default, with a small clock showing the right side improving day over day on its own. Caption: "stop fixing answers, start improving the instructions that produce them".]
+
 ---
 
 ## Why your skill is already rotting

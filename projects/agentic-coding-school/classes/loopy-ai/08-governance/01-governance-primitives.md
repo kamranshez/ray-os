@@ -15,6 +15,8 @@ Everything below L6 produces things. Code, PRs, titles, cards, shortlists. L6 do
 
 There are four primitives. Token budgets. Kill switches. Action log review. Retirement. That's it. They are not glamorous. They are the brake, and you don't notice you needed a brake until you're already going too fast.
 
+[IMAGE: dark canvas, a stack of lower levels each emitting a product icon (code, a PR, a title card, a shortlist) rushing forward fast, and above them a single watchful "L6" layer drawn not as a producer but as a brake pedal pressing down on the whole stack. Four small labeled levers feed the brake: "token budgets", "kill switches", "action log review", "retirement". Caption: "L6 makes nothing, it watches the things that make things".]
+
 ---
 
 ## Why you can't teach this in the abstract
@@ -30,6 +32,8 @@ Every one of those can run away. The Ralph loop with a brittle outer loop and no
 You've now felt the shape of the thing that needs a brake. So now the four primitives stop being plumbing and start being the thing standing between you and a surprise invoice.
 
 The rest of the class assumes you have these. When the [[l4-workers]] segment says "kill switch," it means the one we build here. When [[l5-discovery]] says "token budget," it means this one. We're paying the tax once, up front, so every later loop can spend it.
+
+[IMAGE: dark canvas, left a parked car with a brake pedal tagged "trivia, nothing is moving", greyed out. Right the same brake on a car already speeding downhill, three runaway loops drawn as wheels labeled "Ralph with no exit", "goal loop calls budget = done", "autoresearch runs all night". A position marker on a rising path reads "you are here: gate of The Climb, after L3". Caption: "a brake only matters once something is moving".]
 
 ---
 
@@ -68,6 +72,8 @@ Four. No more. If a fifth thing feels load-bearing, it's usually one of these fo
 
 That's the set. Now the part that actually trips people up.
 
+[IMAGE: dark canvas, four labeled cards in a row: "token budgets" (a meter with hard and soft caps), "kill switches" (a single file flag every loop checks), "action log review" (a JSONL line read by a human eye), "retirement" (an idle loop being paused after N cold days). A fifth faint card to the side wearing a costume mask, with an arrow showing it is really just one of the four. Caption: "four brakes, and a fifth is always one of these in disguise".]
+
 ---
 
 ## Why budgets live in the runtime, not the prompt
@@ -101,6 +107,8 @@ Intent is not a control. Pick the mechanics now and commit, because "I'll add bu
 
 **Retirement.** A loop that hasn't written a log line marked `useful=true` in N days gets paused. And notice the trap: "useful" is itself a verifier. Retirement runs entirely on that one signal, so if `useful` is self-graded by the loop that wants to keep living, you've built a loop that votes for its own survival. Pick the signal carefully. Tie it to something external where you can, a merged PR, a shipped card, a real-world metric moving, the borrowed verifiers from earlier in the class, not the loop's own opinion of its work.
 
+[IMAGE: dark canvas, four wiring panels. Budgets: an SDK box with "max_budget_usd" feeding a "ccusage tail of JSONL" counter that trips a kill when a fleet runs hot. Kill switch: a ".fleet/KILL" file read by a Stop hook in code, not by the model. Action logs: structured JSONL lines with timestamp, tool, artifact ref, "useful=true". Retirement: a check pausing any loop with no "useful=true" in N days, with the signal tied to an external metric, not the loop's own vote. Caption: "every control sits one level below the model".]
+
 ---
 
 ## Is L6 itself a loop?
@@ -110,6 +118,8 @@ Yes. And saying so honors the Russian-doll framing from [[loop-stack]] without f
 L6 wires up as a plain L2, the builder-verifier shape from [[closing-the-loop]]. The builder is the four primitives running their checks: the budget tally, the kill-switch poll, the log writer, the retirement audit. The work artifact is a fleet health report, spend by loop, kills triggered, stale loops, retirement candidates. The verifier is a human, you, on a Sunday cadence, reading that report. The exit condition is a portfolio decision: keep, retire, reallocate, or escalate.
 
 L6 doesn't recurse forever because its verifier runs on a human cadence, not on every turn. That's the structural line between L6 and L7. L6 is the runtime watching the loops, fast and mechanical. L7 is you deciding which loops should exist at all, and L7 isn't just slow L6. It integrates information that doesn't live in the runtime: revenue, strategy, what you're trying to become. The budget tally can tell you a loop spent forty dollars. It cannot tell you whether that loop should exist. We come back to that in [[mission-command]].
+
+[IMAGE: dark canvas, an L2 builder-verifier loop. The builder box runs the four checks (budget tally, kill-switch poll, log writer, retirement audit) and emits a "fleet health report" artifact. A human verifier on a "Sunday cadence" clock reads it and makes a portfolio decision: keep, retire, reallocate, escalate. A dashed line separates it from an "L7" cloud labeled "should this loop exist at all (revenue, strategy)" that the runtime cannot see. Caption: "L6 watches the loops, L7 decides which loops should exist".]
 
 ---
 
@@ -122,6 +132,8 @@ Can your loops run forever without you noticing?
 If yes, you don't have governance. You have loops and hope. Governance is precisely the property that something stops, or pages you, or shows up in a report you actually read, before the spend or the damage compounds past the point you'd have chosen.
 
 It is not a monitoring tool. It is not an observability dashboard. You can bolt the fanciest dashboard in the world onto a fleet and still have no governance, because a dashboard nobody reads is the action-log failure mode with better graphics. Governance is the four primitives doing their job whether or not you're paying attention, plus you, on a cadence, closing the loop on them.
+
+[IMAGE: dark canvas, a single question on a card: "can your loops run forever without you noticing?". Two answers fork from it. "Yes" leads to a box labeled "loops and hope" with money quietly draining, marked red. "No" leads to a box where something stops, or pages you, or lands in a report you actually read before the damage compounds, marked green. A fancy dashboard sits off to the side greyed out, tagged "nobody reads it = the action-log failure with better graphics". Caption: "governance is what stops before you would have chosen to".]
 
 ---
 

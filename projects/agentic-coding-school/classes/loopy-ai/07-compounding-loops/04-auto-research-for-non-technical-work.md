@@ -42,6 +42,8 @@ The auto research workflow looks different. You say:
 
 The agent is no longer a copywriter. It is an experiment manager.
 
+[IMAGE: hand-drawn whiteboard sketch on white, friendly blue cartoon robot mascot, bold handwritten title "The Core Shift: Copywriter to Experiment Manager". LEFT panel with a faded grey label "Copywriter (Old Way)": a robot handed a sticky note "Give me 20 better titles" dumping a messy pile of unused title options into a bin, thought bubble "Pick the best-sounding one and hope", caption "Learning disappears." RIGHT panel marked with a green check "Experiment Manager (Auto Research)": a confident robot at a desk reading a structured brief card listing "Live feedback source / Allowed surface / Target metric / Constraints", running one labeled experiment along a small track CREATE → RUN → EVALUATE → STORE → REPORT, caption "Runs the smallest useful experiment." Handwritten bottom caption "Stop asking for the best answer. Ask for the smallest useful experiment." Colored-pencil shading.]
+
 ## The five pieces of the loop
 
 ### 1) A live feedback source
@@ -286,6 +288,8 @@ Once you see the pattern, you can apply it almost anywhere.
 - Report: winning pattern and next test
 
 The shape stays the same. Live feedback. Experiment table. Small surface. Constraints. Metric. Daily report. Everything else is implementation detail.
+
+[IMAGE: hand-drawn whiteboard sketch on white, friendly blue cartoon robot mascot holding up a stencil, bold handwritten title "The Pattern, Generalised: One Shape, Many Surfaces". CENTER: a master template card with six labeled empty slots stacked vertically: "Live feedback / Experiment table / Small surface / Metric / Constraint / Daily report". FOUR columns fanning out to the right, each a filled copy of the same six-slot card with its own values: "YouTube titles" (YouTube Analytics / Airtable / titles only / watch time per impression / 10% eligible videos / daily Slack), "Cold email" (Smartlead / Airtable / subject lines / positive reply rate / 10% send volume / daily Slack), "Landing pages" (analytics / Airtable / headline or CTA / qualified conversion / one variant / keep-or-revert), "Newsletters" (email platform / Airtable / subject line / click or reply rate / small segment / next test). The six slot labels stay identical across all four; only the values change. Handwritten bottom caption "Same six slots every time. Everything else is implementation detail." Colored-pencil shading.]
 
 ## The key insight
 

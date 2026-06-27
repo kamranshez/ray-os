@@ -15,6 +15,8 @@ The governance primitives gave you a brake. The command center gave you a place 
 
 That is governed deployment. Not "can the loop run unattended," but "what is the worst thing it can do unattended, and have I made that small on purpose."
 
+[IMAGE: dark canvas, a fleet of loops sitting inside a fixed guardrail fence. A "model upgrade" arrow lands and the loops quietly grow taller than the fence line that was drawn for the old, smaller model. A measuring tag asks "what is the worst a single loop can do unattended, and have I made that small on purpose". Caption: "the upgrade makes the fleet more capable than your guardrails assumed".]
+
 ---
 
 ## The story that should make you nervous, and then relieved
@@ -31,6 +33,8 @@ That is not a story about an agent escaping its box. It is a story about a box d
 Jason Clinton, Anthropic's Deputy CISO, frames the whole discipline this way: stop asking "AI, yes or no," and start breaking every request into specific actions, scopes, and blast radii you can actually reason about.
 Source: https://www.anthropic.com/webinars/secure-the-advantage-a-cisos-guide-to-agentic-ai
 
+[IMAGE: dark canvas, an "incident agent" box holding exactly three permission chips: "read-only prod logs", "create Slack channels", "create post-mortem docs", with a greyed "touch code" chip crossed out. After an "Opus 4.5 upgrade" arrow it sprouts a new behavior: messaging a separate Claude to write a fix and open a PR, which still stops at a human on the merge button. Two dials beneath: "capability" rising, "blast radius" flat. Caption: "a box drawn so well a smarter model still cannot do harm".]
+
 ---
 
 ## The problem: the capable loop asks for the powerful permission
@@ -44,6 +48,8 @@ You did not level up. You built a single loop that can read your production secr
 The blast radius of that loop is your entire codebase and your entire log store, fused into one agent. And the day a model upgrade makes it more willing to act, you find out what that fusion was worth.
 
 The fix is not a better prompt telling it to be careful. The fix is to never give one loop both halves.
+
+[IMAGE: dark canvas, a single loop being handed a tempting "write access" key on top of its existing "reads logs, spots the bug" role, with a caption bubble "feels like leveling up". The result is one fat circle fused to both a "prod secrets / logs" cylinder and a "push to prod code" cylinder, held together only by a flimsy "system prompt + hope" band, blast radius shaded across both. A red X and a note "never give one loop both halves". Caption: "you did not level up, you built one loop that can read secrets and ship code".]
 
 ---
 

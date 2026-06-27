@@ -19,6 +19,8 @@ This is the closing argument of the class. Watch this one even if you skipped th
 
 Source: Boris Cherny on Acquired Unplugged, June 2026.
 
+[IMAGE: dark canvas, the word "taste" not vanishing but sliding along an arrow from a box labeled "single judgments" to a new box labeled "criteria, thresholds, rubrics". A faded ghost label "taste goes away" crossed out underneath. Caption: "taste doesn't disappear, it relocates".]
+
 ---
 
 ## The claim
@@ -97,6 +99,8 @@ The painful part is that this isn't a fairness issue. The people with the most r
 
 The class can teach the skill. But it can't make people willing to learn it.
 
+[IMAGE: dark canvas, a senior person struggling to pour a glowing cloud labeled "implicit gut intuition" out of their head into a written rubric box, with a note "half the obvious intuitions turn out wrong". Below, a sorting fork splitting two ways: one path "compresses taste to rubric, scales 100x", the other "keeps doing 1x work at a higher layer". Caption: "the most refined taste is the hardest to write down".]
+
 ---
 
 ## Three drills to practise
@@ -165,6 +169,8 @@ That's not a worse role. That's a deeper role.
 
 The "member of technical staff" title is a transitional artifact. Don't tie your identity to it.
 
+[IMAGE: dark canvas, a single person labeled "loop curator: YouTube channel" standing over a panel of loops for one domain, holding the controls labeled "rubrics", "kill switches", "token budgets", "escalation paths", "action-log review cadence". A faded older title tag "member of technical staff" peeling off and falling away. Caption: "not a worse role, a deeper one".]
+
 ---
 
 ## What this class is really teaching
@@ -176,6 +182,8 @@ What it's teaching is how to compress intuition into rules a fleet can run witho
 Whether you stay close to your craft and use loops to scale it, or whether you get out of your craft entirely and use loops to do it for you, that's a values question, not a skill question.
 
 Be honest with yourself about which one you want. The skill works either way. The life is different.
+
+[IMAGE: dark canvas, center, intuition being compressed into a small block of rules that a fleet of loops then runs while the room is empty, labeled "rules a fleet can run without you in the room". Below it a values fork with two equal paths: "stay close to your craft, use loops to scale it" and "leave the craft, use loops to do it". A note "same skill, different life". Caption: "the skill works either way".]
 
 ---
 

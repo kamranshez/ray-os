@@ -15,6 +15,8 @@ That sentence is the whole segment. We have spent this entire class making loops
 
 Because here's the thing nobody tells you when they sell you the dream of twenty agents running overnight. The agents are not the constraint. You are.
 
+[IMAGE: dark canvas, twenty little agent loops humming happily on the left, all their output racing through a wide funnel that chokes down to a tiny opening at a single human head on the right. The narrow opening labeled "the last six inches", the human labeled "the real constraint". Caption: "the agents scale, you don't".]
+
 ---
 
 ## You are the bottleneck. This is what that costs.
@@ -51,6 +53,8 @@ Stop treating the delivery interface as an afterthought. It's the design problem
 That line is a literal engineering instruction, not a slogan. "Cleanest pipe into your decision surface" means: design the report so a tired human at 6am can act on it in seconds. Everything in this segment is a way of honouring that sentence.
 
 And the first move is to notice that a loop hands you two completely different kinds of thing, and they need completely different pipes.
+
+[IMAGE: dark canvas, two versions of the same setup side by side. Left, many loops dumping into a crude leaky firehose pointed at a flinching human, labeled "delivery as afterthought". Right, the same loops feeding one clean engineered pipe with a shaped nozzle delivering a tidy card to a calm human, labeled "the pipe is the design problem". Caption: "the cleanest pipe into your decision surface".]
 
 ---
 
@@ -116,6 +120,8 @@ This is the operational version of the [[intro]] thesis, and it's the reason thi
 
 It's also why the "just run more agents in parallel" advice keeps disappointing people. They scale the cheap thing. The expensive thing, your attention, doesn't scale, so the parallelism just converts into a bigger pile you can't read.
 
+[IMAGE: dark canvas, a single gate question in the center reading "can you keep up with the output of ONE loop?". A "no" branch leads to six loops all flooding a drowning human with the note "scaling the loops scales the flood". A "yes" branch leads to a calm human earning the right to add another loop. Caption: "fix the pipe before you add agents".]
+
 ---
 
 ## What this segment is not
@@ -127,6 +133,8 @@ It's not [[governance-primitives]]. That governs the loops: budgets, kill switch
 It's not [[mission-command]], which is the next segment. That's intent flowing down into the loops. This is work flowing back up to you. They're a matched pair, the two human-facing halves of the stack, and we film them to reference each other. Mission-command is how you tell the loops what you want. This is how they tell you what they did.
 
 And it's not a tour of notification tools. The channel is plumbing. The design call is what gets surfaced, when, and in what form. Get those three right and it works in Slack, in email, on a kanban board, or on an index card.
+
+[IMAGE: dark canvas, three labeled boxes distinguished from each other. "Governance" drawn as a fence with budgets and kill switches bounding the loops. "Mission command" drawn as an arrow of intent flowing DOWN into the loops. This segment highlighted, drawn as an arrow of finished work flowing UP to the human. A small note "matched pair: intent down, work up". Caption: "adjacent, not the same".]
 
 ---
 

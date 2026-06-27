@@ -17,6 +17,8 @@ It didn't. It collapsed.
 
 This segment names the mechanism, shows you why it's the *price* of self-improvement rather than a bug, and hands you the two antidotes you ship with every compounding loop from now on. Not one. Both.
 
+[IMAGE: dark canvas, a compounding loop's outputs over six weeks growing smooth and identical, wearing a green tag "looks like: found its voice, consistency, healthy". Underneath, the same picture flipped to a red truth tag "actually: collapsed", with a note "no test failed, no verifier threw". Caption: "the failure that looks exactly like success".]
+
 ---
 
 ## The fixed point
@@ -51,6 +53,8 @@ But watch the second-order effect. A tighter rubric produces narrower outputs. N
 So self-improvement and convergence are the same motion seen from two angles. The Curator is supposed to make the loop better. Left alone, it also makes the loop *smaller*. Every cycle the space of things your loop will ever produce shrinks a little.
 
 This is why you can't fix the echo chamber by being more careful. You cannot Curator your way out of it, because the Curator is the engine driving it. The fix has to come from outside the loop's own logic. Which is exactly what the two antidotes are.
+
+[IMAGE: dark canvas, a second loop running underneath the visible one: "Curator tightens the rubric" to "narrower outputs" to "narrower band to reflect on" to "an even tighter rubric", arrows spiraling inward and shrinking each pass. A label reads "the same motion, seen as improvement from one side and convergence from the other", with a crossed-out note "you cannot Curator your way out, it is the engine". Caption: "the thing that makes it improve is the thing that makes it shrink".]
 
 ---
 
@@ -93,6 +97,8 @@ And here's the load-bearing instruction. When that happens, you rewrite the rubr
 
 Rubric drift is a problem in the *context*, not the weights. We made this exact argument in the three-role-split segment: the playbook is the version-controlled asset that survives model swaps. Drift detection is how you find out when that asset has gone bad.
 
+[IMAGE: dark canvas, a quarterly check. Twenty recent loop outputs graded twice, once by the loop and once by a human grading blind, the two columns compared. A disagreement meter crosses a marked "15%" line and lights "rubric stale". A fork follows: the correct branch "rewrite the rubric" (green), the trap branch "just swap the model" crossed out (red) with a note "a fresh model reads the same stale rubric and hides the drift". Caption: "drift lives in the rubric, not the weights".]
+
 ---
 
 ## What this segment is not
@@ -102,6 +108,8 @@ It is not "diversity is good." That's a slogan, not a mechanism, and slogans don
 The mechanism is three specific things. *Where* the exogenous signal enters, one stage, the front door. *How often* it enters, every pass, not occasionally. And *how* you detect drift in the rubric that filters it, blind human grading against a fifteen percent disagreement threshold, on a calendar.
 
 If you can't point at those three things in your loop, you don't have an antidote. You have a hope.
+
+[IMAGE: dark canvas, a contrast. Left, a faded poster reading "diversity is good" crossed out and labeled "a slogan, a hope". Right, three concrete mechanism cards labeled "an antidote": WHERE the world enters (one stage, the front door), HOW OFTEN (every pass, not occasionally), HOW you catch drift (blind human grade against a 15% disagreement line, on a calendar). Caption: "if you can't point at all three, it's a hope, not an antidote".]
 
 ---
 

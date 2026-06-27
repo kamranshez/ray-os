@@ -15,6 +15,8 @@ That's the whole idea. And in October 2025, three labs gave it a name, a benchma
 
 This is the segment where the class snaps into focus. Because once you see this shape, you're going to realise you've been building pieces of it since the second video. Every loop we've made so far has had two of these three roles. Today we name the third one, and the stack you've been climbing turns out to have been one architecture the entire time.
 
+[IMAGE: dark canvas, the climbed stack of loops from across the class drawn as ascending steps, and on each step the same three-slot badge where two slots are already filled and one sits empty and greyed. A spotlight now lights up that third empty slot across every step at once, labeled "the role we name today". Caption: "two of the three roles all along, the stack was one architecture".]
+
 ---
 
 ## The thing everyone gets wrong about "self-improving"
@@ -85,6 +87,8 @@ Source: https://arxiv.org/abs/2510.04618
 
 A naive "verifier with memory" walks straight into both. The Curator's job is to prevent them. It grows the playbook in append-and-refine edits, dedups bullets, retires obsolete ones, and never lets one model bulldoze the whole file. That is not "verifier plus memory." It's a different job that happens to write to the same file the Generator reads.
 
+[IMAGE: dark canvas, two designs side by side. Left "verifier with memory": a verifier stamping single artifacts PASS or FAIL one at a time, beside a passive log pile where notes just accumulate. Right "the ACE split": a Reflector reading across a whole window of attempts and extracting one cross-iteration pattern, plus a Curator making small itemised delta edits into the playbook, with two hazards crossed out beneath it, "brevity bias" and "context collapse". Caption: "a different job, not a verifier with a memory bolted on".]
+
 ---
 
 ## A design call you actually have to make
@@ -98,6 +102,8 @@ This class commits to one answer: the structured failure report, not the diff.
 The reasoning is about grain. The plan author works at plan altitude. Hand it the coder's raw diff and you've poured implementation-local detail into a role whose job is to think above implementation. It starts reasoning about line-level concerns it has no business owning, and coder-local noise leaks upstream into your planning. The right signal at plan altitude is "test X failed on assertion Y, the affected module is Z." That's a fact the planner can act on. The diff is the coder's local concern, and it should stay there.
 
 This is closer to Anthropic's three-agent sprint-contract framing than to ACE's own Curator framing, and that's a deliberate pick. We're a class about loop design, not about weight-free continual learning research. If you ever flip this default for one of your own loops, write down why, because the wrong default quietly turns your three-role split back into two roles. You think you have a planner, a coder, and a checker. But if the planner is reading raw diffs, the planner has secretly become a second coder, and you've lost the separation you paid for.
+
+[IMAGE: dark canvas, a failed verifier hands its result toward the next plan author, forking into two routes. Top route passes the coder's raw line-level diff up, and the plan author quietly mutates into "a second coder" reasoning about lines it shouldn't own, labeled "separation lost" in red. Bottom route passes only a structured failure report ("test X failed on assertion Y, module Z"), and the plan author stays at plan altitude, labeled "separation kept" in green. Caption: "feed the planner the report, not the diff, or it becomes a second coder".]
 
 ---
 

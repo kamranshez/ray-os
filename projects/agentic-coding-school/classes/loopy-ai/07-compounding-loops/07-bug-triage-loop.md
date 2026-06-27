@@ -19,6 +19,8 @@ This is the loop Rippling used to ship AI across every product, for over a milli
 
 Let me show you why it's different, and why almost nobody has built it.
 
+[IMAGE: dark canvas, a tall stack of the class's other loops drawn as tiers, and one loop sitting underneath the entire stack labeled "the bug triage loop". Each bug it closes emits an upward pulse that makes every tier above it slightly more reliable, little green "+reliability" ticks lighting up across the whole stack. Caption: "the one loop that fixes the thing that makes the other loops".]
+
 ---
 
 ## The loop that fixes loops
@@ -56,6 +58,8 @@ They shipped AI across all of it, in production, for over a million users, in si
 Read that again, because every clause maps onto a level of the loop stack you already know.
 
 That sentence is an L5 discovery loop, an L4 worker, and an L2 verifier, composed into one pipeline. They didn't invent a new level. They wired three levels you've already met into a single production circuit.
+
+[IMAGE: dark canvas, the principal engineer's sentence laid out as a ribbon with each clause underlined and tagged: "pull failing traces" tagged source, "an agent understands and proposes solutions" tagged L4 worker, "run the evals again to see if it improves" tagged L2 verifier, "a human reviews and merges" tagged human gate. An arrow shows the tagged clauses snapping together into one production circuit. Caption: "no new level, three levels you already know wired into one circuit".]
 
 ---
 
@@ -123,6 +127,8 @@ The **Curator** is whoever maintains the evals. Every time a new failure mode sl
 
 That mapping is not a cute analogy. It's the reason the loop compounds. ACE works because the context evolves while the model stays still. The bug triage loop works for the identical reason, the eval suite evolves while the fixer stays replaceable. You've seen the abstract version. This is what it looks like when it's guarding a product a million people depend on.
 
+[IMAGE: dark canvas, the three ACE roles on the left mapped by arrows to their production counterparts on the right. "Generator" maps to "the fixer", "Reflector" maps to "the eval suite" (a frozen wall of assertions that refuses the candidate and hands back a structured break), "Curator" maps to "whoever adds the assertion that catches the next miss". The fixer is tagged "frozen, replaceable", the eval suite tagged "evolves, the asset". Caption: "the same split, wearing production clothes".]
+
 ---
 
 ## Why the human stays in for the merge
@@ -134,6 +140,8 @@ The human is not there because the loop is untrustworthy. The verifier is real, 
 And notice what the human reads. Not the diff. The action log. By the time it reaches the human, the diff has already passed the eval suite, so re-reading the code line by line is low-value. What the human is actually checking is the *judgement*: did the agent fix the real problem or paper over a symptom, did it pick the right trace to begin with, is the fix the kind of change we want in this codebase. That's a review of reasoning, not syntax. The borrowed verifier already handled syntax.
 
 This is the autonomy dial doing exactly what it's for. Stages one through four ship silently. Stage five never ships without you. One loop, two notches, because the actions inside it carry different blast radius.
+
+[IMAGE: dark canvas, the five-stage loop with an autonomy-dial notch on each stage. Stages one through four sit at a low "ships silently" notch, stage five sits pinned at the top "never without me" notch because its blast radius is a production change for a million users. At stage five a human reads an "action log" (which trace, what changed, the eval delta) rather than the diff, with a tag "reviewing judgement, not syntax, the verifier already did syntax". Caption: "one loop, two notches, set by blast radius".]
 
 ---
 
