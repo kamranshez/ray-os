@@ -55,6 +55,24 @@ if [[ -z "$PROMPT" || -z "$OUT_DIR" ]]; then
   exit 2
 fi
 
+# --- strip production timestamps from the prompt ------------------------------
+# Section headers from video scripts often carry timecodes, e.g.
+#   "### Don't waste the run on one leaf (7:55 - 9:25)".
+# Left in the prompt, the model renders the timecode INTO the image (it showed
+# up in a corner of generated diagrams). These are production directions, never
+# visual content, so we scrub them here while leaving the rest verbatim:
+#   * parenthesized ranges:   "(2:15 - 4:00)"  ->  ""
+#   * bare ranges:            "7:55 - 9:25"    ->  ""
+#   * lone parenthesized cue: "(0:00)"         ->  ""
+# Handles -, en dash, and em dash as the separator.
+PROMPT="$(printf '%s' "$PROMPT" | perl -CSAD -pe '
+  s/\(\s*\d{1,2}:\d{2}\s*[-\x{2013}\x{2014}]\s*\d{1,2}:\d{2}\s*\)//g;
+  s/\b\d{1,2}:\d{2}\s*[-\x{2013}\x{2014}]\s*\d{1,2}:\d{2}\b//g;
+  s/\(\s*\d{1,2}:\d{2}\s*\)//g;
+  s/[ \t]+$//;
+')"
+# -----------------------------------------------------------------------------
+
 # --- codex version pin -------------------------------------------------------
 # REQUIRES codex 0.139.x. codex 0.140.0+ shipped a regression (openai/codex#28422)
 # where image_gen produces a valid PNG but never persists it to disk (the new

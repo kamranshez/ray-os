@@ -13,6 +13,8 @@ For the **Gemini API** path (uses `gemini-3-pro-image-preview` via `GEMINI_API_K
 
 **ALWAYS pass the entire raw content verbatim as the prompt.** Never summarize, paraphrase, or condense the content. Whether it's a single section or a whole file, the full text goes into the wrapper as-is. This gives the model the richest context to produce accurate visuals. The wrapper script wraps the verbatim text with headless directives and aesthetic guidance — do not pre-wrap or rewrite it yourself.
 
+**Production timestamps are auto-stripped.** Video-script section headers often carry timecodes, e.g. `### Don't waste the run on one leaf (7:55 - 9:25)`. Left in, the model renders the timecode into a corner of the image. The wrapper now scrubs timestamp ranges (`(2:15 - 4:00)`, bare `7:55 - 9:25`, lone `(0:00)`; `-`/en/em dash separators) from the prompt before it reaches Codex, so you can still pass the section verbatim and the timecodes will not appear in the diagram. This is the only content the wrapper removes.
+
 ## Output Location — CRITICAL
 
 **All generated images go into the single vault-root `images/` folder — flat, no per-note subfolders.** This matches the vault's image convention (see the repo CLAUDE.md). Concretely, for this vault: `-o /Users/ray/Desktop/ray-os/images`.
