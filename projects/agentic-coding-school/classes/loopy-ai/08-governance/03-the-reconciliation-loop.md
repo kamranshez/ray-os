@@ -83,13 +83,7 @@ Source: https://danielmiessler.com/blog/personal-ai-future-state
 That sentence is a loop. The trigger is "periodic." The work is "assess current relative to desired." The output is "plan actions to move towards desired." He is describing the same five primitives you stripped a model down to in the toolbox, pointed at your life instead of your repo. His own framing of what a whole agent harness is for lands in the same place: it is "an advocate for you to move you towards your ideal state."
 Source: https://danielmiessler.com/blog/we-are-all-building-single-digital-assistant
 
-[IMAGE: dark canvas, a horizontal bar labeled "ideal state" at the top and a wobbling line labeled "current state" below it that keeps drifting down and getting yanked back up by repeated small "correction" arrows firing on a clock. Caption strip: "the loop never finishes, because entropy never finishes"]
-
-![[loopy-reconciliation-ideal-vs-current-drift-1.png]]
-![[loopy-reconciliation-ideal-vs-current-drift-2.png]]
-![[loopy-reconciliation-ideal-vs-current-drift-3.png]]
-![[loopy-reconciliation-ideal-vs-current-drift-4.png]]
-![[loopy-reconciliation-ideal-vs-current-drift-5.png]]
+[IMAGE: dark canvas, a horizontal bar labeled "ideal state" at the top and a wobbling line labeled "current state" below it that keeps drifting down and getting yanked back up by repeated small "correction" arrows firing on a clock. It should yank back up always to the same height it was before. Caption strip: "the loop never finishes, because entropy never finishes"]
 
 ---
 
