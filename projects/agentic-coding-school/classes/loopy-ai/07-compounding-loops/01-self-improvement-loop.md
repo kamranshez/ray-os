@@ -55,7 +55,7 @@ Stop thinking about one agent doing a job. Think about two loops at two cadences
 
 The inner loop does the work. It runs per event, constantly, in the moment. It triages the issue that just landed. It drafts the reply to the mention that just came in. Every run leaves a trace: a file, an agent trace, a Slack thread, a GitHub label. The trace matters more than it looks, because the outer loop has nothing to read without it. A run that left no record never happened, as far as improvement is concerned.
 
-The outer loop improves the skill. It runs on a schedule, daily is the common choice, and it does not do the work at all. It reads a stack of inner-loop runs, looks at how they actually went, and proposes a change to the skill file. Since skills are just files, that change is a diff.
+The outer loop improves the skill. It runs on a schedule, on the order of daily to weekly, and it does not do the work at all. It reads a stack of inner-loop runs, looks at how they actually went, and proposes a change to the skill file. Since skills are just files, that change is a diff.
 
 > "Since Skills are just files, this means it should make a diff to improve [the] Skill."
 Source: https://x.com/zachlloydtweets/status/2066908445425496348
@@ -77,6 +77,32 @@ The inner loop is a GitHub Action. A new issue is filed, the action fires, the t
 The outer loop is a scheduled agent. Once a day it pulls every issue that got triaged, and it looks for one specific thing: where did a human change the label after the agent set it. The agent said ready to implement, a maintainer flipped it to needs info and left a comment about why. Each of those is a correction. The outer loop reads the pile of them, finds the pattern, and opens a diff to the triage skill so tomorrow's runs get the call right.
 
 You did not retrain anything. You did not write a single new rule by hand. The skill got better because a loop read how the last hundred runs went and edited the instructions.
+
+---
+
+## How often the outer loop should run
+
+The moment a piece of feedback lands, there is a pull to go fix the skill right then. A comment comes in on a pull request, you open the agent, point it at the comment, and say update the skill. It feels responsive. It is the wrong move, and it fails for a reason you already understand from writing code.
+
+> "You end up with monkey patches on the skill that address each of these one by one, but they kind of miss the broader picture."
+Source: https://www.youtube.com/watch?v=jcfDKXc7Zxg
+
+Handle one report in isolation and the agent reaches for the most literal fix that points at that one complaint. Run the outer loop per event and the skill fills with those one-off patches, each solving a single case and none of them catching the shape of all the cases together. That is overfitting, and now it is the outer loop doing it.
+
+So you wait. You let feedback pool, a few days, maybe a week, until there are enough data points to show a pattern instead of a point.
+
+This is a design instinct you already trust, moved into skills. You do not pull an abstraction out of code the second time you repeat yourself. You wait for the third and fourth instance to tell you what the abstraction actually is. One or two corrections are not a pattern. A batch of them might be.
+
+Which means cadence is a real knob, with a failure mode on each side. Too frequent and the loop monkey-patches every report as it arrives. Too rare and the skill rots faster than the loop repairs it, while real corrections sit unread. The right setting is not a fixed number of days. It is whatever gives each run a batch big enough to generalize from. High-volume feedback, like Buzz's thousands of mentions a month, makes daily a full batch. A quieter skill might need a week to collect the same signal. Set the clock by the volume, not the calendar.
+
+This is the cadence twin of the per-edit lesson in [[teach-the-agent-to-learn]]. There the trap was turning one correction into one rule. Here it is running the loop so often that one correction is all it ever sees. Batching the feedback is what gives the learning skill something to zoom out from in the first place.
+
+[IMAGE: dark canvas, two horizontal timelines stacked. Top timeline "too frequent": every incoming feedback dot triggers an immediate tiny skill edit, and the skill file beside it grows into a tall stack of brick-like one-off patches labeled "monkey patches", tinted red. Bottom timeline "batched": feedback dots accumulate into a holding bin for a week, then one scheduled run reads the whole bin and emits a single clean diff into the skill file, which stays short, tinted green. Caption: "set the cadence by feedback volume, not the calendar".]
+![[loopy-self-improvement-loop-cadence-1.png]]
+![[loopy-self-improvement-loop-cadence-2.png]]
+![[loopy-self-improvement-loop-cadence-3.png]]
+![[loopy-self-improvement-loop-cadence-4.png]]
+![[loopy-self-improvement-loop-cadence-5.png]]
 
 ---
 
