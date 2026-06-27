@@ -51,9 +51,14 @@ def find(o,k):
     return None
 gb=find(cfg,"cachedGrowthBookFeatures") or {}
 
-# precompute which flags are ct() gates vs j() telemetry in the binary
-gates=set(re.findall(r'ct\("(tengu_[a-zA-Z0-9_]+)"',strings))
-telem=set(re.findall(r'j\("(tengu_[a-zA-Z0-9_]+)"',strings))
+# precompute which flags are gate() vs telemetry in the binary.
+# NOTE: the minified helper names DRIFT between releases. As of v2.1.193 the gate
+# helper is `it(` (was `ct(`) and the telemetry emitter is `G(` (was `j(`). We match
+# the known aliases so wired-vs-present classification survives the next rename; if a
+# future build classifies almost everything as "present", grep `("tengu_` to find the
+# new 2-char gate helper and add it to the alternation below.
+gates=set(re.findall(r'(?:it|ct)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+telem=set(re.findall(r'(?:G|j)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 present=set(re.findall(r'tengu_[a-zA-Z0-9_]+',strings))
 
 # known self-enable env overrides (extend as you discover more)
