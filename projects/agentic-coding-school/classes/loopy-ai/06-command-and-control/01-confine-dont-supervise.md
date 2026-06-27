@@ -218,6 +218,6 @@ Open a terminal. The whole demo is one loop, run somewhere it can't hurt you.
 
 ## Where we go next
 
-The box decides what a loop *can* touch. But a confined, wide-open loop still needs to hand you the occasional real decision, the one judgment call the proposal can't make for you. That's the next video, [[decision-surfaces]]: how the loop surfaces the small number of choices that genuinely need you, in a shape you can answer in one line.
+The box decides what a loop *can* touch. The next video is where the confined fleet reports, learns, and coordinates: [[slack-as-your-command-center]]. One channel per routine, where the loop posts its decisions as something you can correct in one tap, where that single reaction is the only signal it needs, and where the next run reads everything that happened while you were away. No approve buttons, because a confined loop never has to ask.
 
 And it pairs with the brake from [[governance-primitives]] and the comms pipe from [[keeping-you-in-the-loop]]. The box prevents harm, the brake stops what slips through, and the pipe carries what's left to you. Build the box first. Everything else gets easier once the loop has nowhere dangerous to stand. See you in the next one.
