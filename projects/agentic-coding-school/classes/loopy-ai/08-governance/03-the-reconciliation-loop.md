@@ -215,3 +215,15 @@ Total demo: three minutes. The point is that you wrote down how the world should
 ## Key Insight
 
 > A worker reaches a destination and stops. A discovery loop hunts for new destinations. A reconciliation loop holds a setpoint and never stops. The first two move you through the world. The third one keeps the world the way you said it should be.
+
+---
+
+## Where we go next
+
+Look again at what you did with Steinberger's one-liner. You aimed a reconciliation loop at a thing and let it hold that thing to a standing ideal. The thing happened to be a codebase. That is one direction you can point this loop, and it is the most concrete one, which is why we started there. Aim it at your repo, your churn, your runway, your inbox, and you get the thermostat you just built.
+
+There is a second direction, and it is the one that ties this whole class together. You can aim the exact same thermostat at your loops themselves. Not at a repo, not at a Stripe number, but at the fleet of loops you are now running, holding them to an ideal like "every loop is alive, inside budget, and actually closing its gap." A reconciliation loop whose room is your other loops.
+
+That is the supervisor loop, and it is next.
+
+See you in the next one.
