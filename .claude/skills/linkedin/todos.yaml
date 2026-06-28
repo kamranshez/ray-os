@@ -12,13 +12,13 @@
 # Keep this list lean: remove entries once they're done rather than letting
 # completed items accumulate.
 
-- task: Check engagement on Fable 5 "aim before you spend" post
+- task: Check engagement on "human faces / black market" Claude post
   description: >
-    Fable 5 / "aim before you spend" post (Post 1 from the Fable Return batch:
-    contrast hook + sweep-score-discard recipe, productive discomfort + aspiration).
-    Ray posted it himself 2026-06-25 with images + the video link in a comment.
-    First check at ~22 min: 3 reactions, 1 comment, 0 reposts, 41 impressions.
-    Status flipped to posted, URL recorded. Re-check at +3 days for fuller numbers.
-  due: 2026-06-28
+    Demand-thesis post (shock cold open: "People are buying and selling human
+    faces just to get access to Claude") sourced from the ChinaTalk transfer-station
+    article via steipete's tweet. Ray posted it himself 2026-06-28 with a screenshot
+    from the article + the lnkd.in/gTNBV4Vz link in the body. Pull reactions,
+    comments, reposts, and impressions and record them in the related_post frontmatter.
+  due: 2026-07-01
   status: pending
-  related_post: references/post-history/2026-06-25_fable-5-aim-before-you-spend.md
+  related_post: references/post-history/2026-06-28_claude-grey-market-faces-demand.md

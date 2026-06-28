@@ -45,6 +45,16 @@ def build_post_card(post: dict, index: int) -> str:
     number = post.get("number", index + 1)
     triggers = html.escape(post.get("triggers", ""))
     body = post.get("body", "")
+    screenshot = post.get("screenshot", "")
+
+    screenshot_html = ""
+    if screenshot:
+        screenshot_escaped = html.escape(screenshot).replace("\n", "<br>")
+        screenshot_html = f"""
+        <div class="screenshot-snippet">
+            <div class="screenshot-label">📸 Screenshot snippet to pair (verbatim from article)</div>
+            <blockquote class="screenshot-quote">{screenshot_escaped}</blockquote>
+        </div>"""
 
     # Convert post body to HTML: preserve line breaks, escape HTML
     body_escaped = html.escape(body)
@@ -101,7 +111,7 @@ def build_post_card(post: dict, index: int) -> str:
                     Send
                 </div>
             </div>
-        </div>
+        </div>{screenshot_html}
     </div>"""
 
 
@@ -281,6 +291,32 @@ def generate_html(posts: list[dict]) -> str:
         justify-content: space-around;
         padding: 4px 8px;
         border-top: 1px solid #e0dfdc;
+    }}
+
+    .screenshot-snippet {{
+        margin-top: 8px;
+        background: #fffdf5;
+        border: 1px dashed #c7b27a;
+        border-radius: 8px;
+        padding: 10px 12px;
+    }}
+
+    .screenshot-label {{
+        font-size: 11px;
+        font-weight: 700;
+        color: #8a6d1f;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        margin-bottom: 6px;
+    }}
+
+    .screenshot-quote {{
+        font-size: 13px;
+        line-height: 1.5;
+        color: #2b2b2b;
+        font-style: italic;
+        border-left: 3px solid #c7b27a;
+        padding-left: 10px;
     }}
 
     .action-btn {{
