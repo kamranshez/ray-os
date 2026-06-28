@@ -25,10 +25,17 @@ Do NOT carry a hardcoded list of "known features" — discover everything fresh 
 BIN=$(readlink -f "$(command -v claude)")
 case "$BIN" in */versions/*) ;; *) BIN=$(readlink -f ~/.local/bin/claude) ;; esac
 echo "binary: $BIN"
-bash ~/.claude/skills/binary-explorer/scripts/extract.sh "$BIN"
+# The binary-explorer skill used to ship extract.sh, but it has been removed from
+# ~/.claude/skills/. Extraction is just a cached `strings` dump keyed by version, so
+# inline it (falls back to the skill script if it's ever restored).
+VERSION="$(basename "$BIN")"; [[ "$VERSION" =~ ^[0-9]+\.[0-9]+ ]] || VERSION="$(claude --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+CACHE_DIR="$HOME/.claude/cache/binary-strings"; mkdir -p "$CACHE_DIR"
+STRINGS="$CACHE_DIR/$VERSION.txt"
+[[ -s "$STRINGS" ]] || strings "$BIN" > "$STRINGS"
+echo "MAIN_STRINGS=$STRINGS"
 ```
 
-The script prints `MAIN_STRINGS=<path>`. Capture that path as `$STRINGS`. Also capture the version (the binary path's `versions/<X.Y.Z>` segment, or `claude --version`).
+The snippet prints `MAIN_STRINGS=<path>`. Capture that path as `$STRINGS`. Also capture the version (the binary path's `versions/<X.Y.Z>` segment, or `claude --version`).
 
 ## Step 2: Build the current map
 
@@ -52,13 +59,16 @@ def find(o,k):
 gb=find(cfg,"cachedGrowthBookFeatures") or {}
 
 # precompute which flags are gate() vs telemetry in the binary.
-# NOTE: the minified helper names DRIFT between releases. As of v2.1.193 the gate
-# helper is `it(` (was `ct(`) and the telemetry emitter is `G(` (was `j(`). We match
-# the known aliases so wired-vs-present classification survives the next rename; if a
-# future build classifies almost everything as "present", grep `("tengu_` to find the
-# new 2-char gate helper and add it to the alternation below.
-gates=set(re.findall(r'(?:it|ct)\("(tengu_[a-zA-Z0-9_]+)"',strings))
-telem=set(re.findall(r'(?:G|j)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+# NOTE: the minified helper names DRIFT between releases. History: gate `ct(`→`it(`
+# (v2.1.193)→`at(` (v2.1.195); telemetry `j(`→`G(`→back to `j(`/`f_(` (v2.1.195). We
+# match the known aliases so wired-vs-present classification survives the next rename.
+# SANITY-CHECK `len(gates)` every run: it should be ~230+. If it's 0 (or nearly
+# everything classifies as "present" and DCE shows a `wired→present` avalanche), the
+# gate helper was renamed again — grep `("tengu_` in the strings to find the new
+# 1-2 char prefix whose call sites take a bare default (`!0`/`!1`/`null`/number), and
+# add it to the gates alternation below (telemetry prefixes take an `{...}` object).
+gates=set(re.findall(r'(?:at|it|ct)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+telem=set(re.findall(r'(?:j|f_|G)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 present=set(re.findall(r'tengu_[a-zA-Z0-9_]+',strings))
 
 # known self-enable env overrides (extend as you discover more)

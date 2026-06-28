@@ -51,3 +51,34 @@ No changes.
 - `tengu_orford_ness` — newly shipped (stripped → present). Org/enterprise managed-settings + error-tracking path ("your organization requires remote managed settings to load", Datadog error ingestion, subscription-switch).
 - `tengu_billiard_aviary` — **code removed** (present → stripped). Was the remote-memory-directory selector (override `CLAUDE_CODE_REMOTE_MEMORY_DIR`); gone from the binary this build.
 - `tengu_slate_fern` — **code removed** (present → stripped). Was the plugin/marketplace update nudge (returned a {days, sessions} reminder cadence for plugin marketplace updates); gone this build.
+
+## 2026-06-28 16:40 — v2.1.195 (upgraded from v2.1.193)
+
+NOTE: gate helper renamed `it(` → `at(` this build (telemetry now `j(`/`f_(`). Routine regex updated to match. Reclassified cleanly after a first buggy pass; counts below are correct.
+
+### 🔀 GrowthBook switches
+- **Artifact publishing** (`tengu_cobalt_plinth`) — ON → OFF. Gates the Artifacts feature (render an HTML page and publish/deploy it; CLAUDE_CODE_ARTIFACT, /api/frame/deploy). Team/enterprise-only behind `allow_cobalt_plinth`. Code still wired, gated off for Ray's account.
+- **Artifact direct-upload lane** (`tengu_cobalt_plinth_direct`) — OFF → ON. Uploads the rendered artifact directly (inline lane) instead of via a signed URL. Wired. env CLAUDE_CODE_ARTIFACT_DIRECT_UPLOAD.
+- **Precomputed compaction** (`tengu_sepia_moth`) — OFF → ON. Pre-warms the auto-compact summary ahead of time (`precomputeCompactionEnabled`) so compaction is ready when context fills. Wired.
+- **Auto-compact token threshold** (`tengu_amber_redwood3`) — "1000000" → "" (cleared). Token count at which auto-compaction triggers (1M); now empty, falls back to redwood2/default. Wired.
+- **Investigate-first clarifying questions** (`tengu_slate_harrier`) — "off" → "compact". Opus-4-7 only: whether Claude asks a clarifying question / investigates before acting (modes additive/compact/off). Wired. env CLAUDE_CODE_INVESTIGATE_FIRST.
+- **Malformed tool-use clean retry** (`tengu_malformed_tool_use_clean_retry`) — OFF → ON. Retries a malformed tool_use block cleanly instead of erroring. Wired.
+- **MCP large-output truncation prompt** (`tengu_mcp_subagent_prompt`) — OFF → ON. New MCP tool-result truncation/format-instructions prompt (Plain text / JSON-with-schema). Wired. env MCP_TRUNCATION_PROMPT_OVERRIDE.
+- **Tool-list filtering** (`tengu_shale_finch`) — OFF → ON. Filters a specific subset of built-in tools out of the resolved toolset under certain conditions. Wired.
+- **MCP root-combinator normalization** (`tengu_mcp_normalize_root_combinators`) — [] → ["learningcommons.org"]; ALSO newly wired (see DCE). Per-host allowlist that normalizes MCP server root URLs by hostname. Wired.
+- **Bridge min client version** (`tengu_bridge_min_version`) — minVersion 2.1.70 → 2.1.139. Minimum CLI version for the remote-control "bridge" (CCR/remote driving); older clients refused. Config payload.
+- **Long-context survey threshold** (`tengu_long_context_survey_threshold`) — "800000" → "" (cleared). Token count at which the "How is Claude doing this session?" survey fires. Off for Ray now.
+- **Long-context survey question variant** (`tengu_long_context_survey_question_variant`) — "instruction_following" → "" (cleared). Which question variant that survey shows.
+
+### 🆕 New flags
+- **Shoji engine** (`tengu_shoji_engine`) — wired, off. New settings/config-resolution engine producing an "effective config + sources" view (touches usage accounting). Real code, gated off. env CLAUDE_CODE_SHOJI_ENGINE.
+- **Per-model read-before-edit guard** (`tengu_velvet_hammer_opus_4_8`/`_opus_4_7`/`_opus_4_6`/`_fable_5`) — model-specific variants of `tengu_velvet_hammer`, which relaxes the "file must be Read before Edit" enforcement. Built at runtime via `${flag}_${model}`, so no literal string (classified "stripped") but functionally live via the base flag's per-model lookup. Per-model rollout scaffolding.
+- **Per-model read-before-write guard** (`tengu_velvet_mallet_opus_4_8`/`_opus_4_7`/`_opus_4_6`/`_fable_5`) — same mechanism for the Write tool (relaxes "must Read before overwrite").
+- **Report-findings tool** (`tengu_report_findings_tool`) — GB-only, stripped (no code yet). Name suggests an agent tool to report findings (review/bug-hunt). Upcoming, off.
+- `tengu_slate_ibis` — GB value ON but no code in this build (stripped); purpose unrecoverable from binary, flipping is a no-op here.
+- `tengu_linen_osprey`, `tengu_russet_linnet` — codename-only, stripped, off. No code/strings; purpose unrecoverable.
+
+### 🧱 DCE switches
+- **MCP root-combinator normalization** (`tengu_mcp_normalize_root_combinators`) — newly shipped (stripped → wired). Per-host MCP URL-normalization allowlist; also got its first host value (see switches).
+- `tengu_velvet_cascade` — retired from GrowthBook (was wired). Per-model gate for the condensed "simple_system_prompt" (checks model against a `.models` list). Code still present in 2.1.195; now driven only by managed `simple_system_prompt` settings, not a server gate.
+- `tengu_ladder_mq7`, `tengu_satin_quoll` — retired from GrowthBook (both already stripped/no code). Names gone server-side and no code in the binary; nothing changes, last purpose unrecoverable.

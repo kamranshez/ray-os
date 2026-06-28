@@ -107,3 +107,6 @@ auto_add_rejected:
   - handle: "@Mikeywebsite"
     date: "2026-06-21"
     reason: "30.9k subs, Claude Code/AI website tutorials; 0 outliers in last 10 (needs 2)."
+  - handle: "@samwitteveenai"
+    date: "2026-06-28"
+    reason: "123k subs, on-niche (agentic-coding LLMs / model releases); only 1 outlier in last ~5 (Ornith 1.0 51k = 3.3x median ~15.7k; VibeThinker 38k = 2.4x). Needs 2. Near miss -- mostly a model-launch news channel."
