@@ -12,13 +12,12 @@
 # Keep this list lean: remove entries once they're done rather than letting
 # completed items accumulate.
 
-- task: Check engagement on "human faces / black market" Claude post
+- task: Check engagement on Stanford CS153 Frontier Systems post
   description: >
-    Demand-thesis post (shock cold open: "People are buying and selling human
-    faces just to get access to Claude") sourced from the ChinaTalk transfer-station
-    article via steipete's tweet. Ray posted it himself 2026-06-28 with a screenshot
-    from the article + the lnkd.in/gTNBV4Vz link in the body. Pull reactions,
+    Curation/hype post ("Stanford quietly uploaded a masterclass") about the free
+    CS153 Frontier Systems lecture series on YouTube. Ray posted it himself
+    2026-06-29 with the playlist link in the first comment. Pull reactions,
     comments, reposts, and impressions and record them in the related_post frontmatter.
-  due: 2026-07-01
+  due: 2026-07-02
   status: pending
-  related_post: references/post-history/2026-06-28_claude-grey-market-faces-demand.md
+  related_post: references/post-history/2026-06-29_stanford-cs153-frontier-systems.md
