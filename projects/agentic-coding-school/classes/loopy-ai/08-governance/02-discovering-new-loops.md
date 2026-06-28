@@ -16,6 +16,11 @@ Because here is the quiet trap. Once you can build loops, you do not run out of 
 So this is a discovery loop, pointed in an unusual direction. Back in the climb you built a discovery loop that watches the world and surfaces new tasks. This one watches you, and surfaces new loops.
 
 [IMAGE: dark canvas, two discovery loops side by side. Left, an eye pointed outward at the world's streams (issues, tweets, Stripe) emitting "new tasks". Right, an eye pointed back at a person at a desk, replaying their own past few hours of work, emitting "new loops". A label under the right one reads "the stream is you". Caption: "a discovery loop aimed at your own work".]
+![[loopy-discovering-new-loops-intro-v1-1.png]]
+![[loopy-discovering-new-loops-intro-v1-2.png]]
+![[loopy-discovering-new-loops-intro-v1-3.png]]
+![[loopy-discovering-new-loops-intro-v1-4.png]]
+![[loopy-discovering-new-loops-intro-v1-5.png]]
 
 ---
 
@@ -28,6 +33,11 @@ But where did that shape come from? You. You noticed you kept triaging the same 
 That is the bottleneck now. Not "can I build the loop." You proved you can. The bottleneck is "do I even know which of my days is loop-shaped." And the cruel part is that the better you get at the work, the worse you get at seeing it, because the most repeated work is the most habitual, and habit is invisible from the inside. You are the fish, and the repetition is the water.
 
 [IMAGE: dark canvas, a stack of loop levels L1 to L5 all running smoothly, each fed by a small "loop shape" card. An arrow traces every card back to a single source: a thought bubble over a tired human head labeled "I noticed I keep doing this". That bubble is circled in red and labeled "the one input nobody automated". Caption: "the loops are easy now, the noticing is the bottleneck".]
+![[loopy-discovering-new-loops-the-real-bottleneck-is-noticing-not-building-v1-1.png]]
+![[loopy-discovering-new-loops-the-real-bottleneck-is-noticing-not-building-v1-2.png]]
+![[loopy-discovering-new-loops-the-real-bottleneck-is-noticing-not-building-v1-3.png]]
+![[loopy-discovering-new-loops-the-real-bottleneck-is-noticing-not-building-v1-4.png]]
+![[loopy-discovering-new-loops-the-real-bottleneck-is-noticing-not-building-v1-5.png]]
 
 ---
 
@@ -42,6 +52,11 @@ This is the same lesson as the discovery chapter, turned on yourself. Asking "wh
 So the move is not to think harder. The move is to capture the stream.
 
 [IMAGE: dark canvas, split. Left "from memory": a head emitting three large obvious bubbles (deploy checklist, standup, PR triage) while dozens of tiny faded bubbles fall out the bottom unrecorded, labeled "frequency is not what memory stores". Right "from a record": an append-only log of the day's actual actions, the same tiny bubbles all captured and now clusterable, labeled "read back what really happened". Caption: "you cannot remember your way to your loops".]
+![[loopy-discovering-new-loops-what-everyone-gets-wrong-you-cannot-introspect-you-v1-1.png]]
+![[loopy-discovering-new-loops-what-everyone-gets-wrong-you-cannot-introspect-you-v1-2.png]]
+![[loopy-discovering-new-loops-what-everyone-gets-wrong-you-cannot-introspect-you-v1-3.png]]
+![[loopy-discovering-new-loops-what-everyone-gets-wrong-you-cannot-introspect-you-v1-4.png]]
+![[loopy-discovering-new-loops-what-everyone-gets-wrong-you-cannot-introspect-you-v1-5.png]]
 
 ---
 
@@ -60,6 +75,11 @@ I would personally reach for Codex Chronicle here, because it is passive and con
 And its real edge is that it sees the whole machine, not one window. It watches every program you have open, and it watches the switching between them, the part of your work that no single tool ever records. The most valuable loops usually live in that switching: you pull a number out of Stripe in the browser, drop it in a spreadsheet, then retype it into Slack. No single app saw that workflow, because the workflow lived in the gaps between three apps. A screen recorder is the only thing standing high enough to see all of it at once.
 
 [IMAGE: dark canvas, Chronicle drawn as a passive recorder beside a working person. A film strip of screen frames runs into an OCR box, which writes into a "rolling memory" scroll labeled "rolling 10-min summaries, refreshed ~every minute". A discovery-loop agent reads the scroll and circles three identical sequences across different days, emitting a card "this repeats, make it a loop". Caption: "the agent reads its own memory of your screen".]
+![[loopy-discovering-new-loops-the-core-insight-capture-the-stream-automatically-v1-1.png]]
+![[loopy-discovering-new-loops-the-core-insight-capture-the-stream-automatically-v1-2.png]]
+![[loopy-discovering-new-loops-the-core-insight-capture-the-stream-automatically-v1-3.png]]
+![[loopy-discovering-new-loops-the-core-insight-capture-the-stream-automatically-v1-4.png]]
+![[loopy-discovering-new-loops-the-core-insight-capture-the-stream-automatically-v1-5.png]]
 
 ---
 
@@ -78,6 +98,11 @@ The state is the memory of what it already proposed, so it does not pitch you th
 The terminate is per-run: scan the window, post the shortlist of loop candidates, sleep until the next one.
 
 [IMAGE: dark canvas, the five-primitive loop labeled as a triager. Trigger: a clock, end of week. Work: read the captured history, cluster repeated workflows. Check: borrowed verifier, "recurred at least 3-4 times AND has a checkable output", with a red X on a one-off and on a vibe. State: a memory of candidates already proposed or built. Terminate: per-run, post shortlist then sleep. Caption: "the same triager, with you as the input stream".]
+![[loopy-discovering-new-loops-the-shape-it-is-the-triager-again-v1-1.png]]
+![[loopy-discovering-new-loops-the-shape-it-is-the-triager-again-v1-2.png]]
+![[loopy-discovering-new-loops-the-shape-it-is-the-triager-again-v1-3.png]]
+![[loopy-discovering-new-loops-the-shape-it-is-the-triager-again-v1-4.png]]
+![[loopy-discovering-new-loops-the-shape-it-is-the-triager-again-v1-5.png]]
 
 ---
 
@@ -92,6 +117,11 @@ So the cheapest version of this whole segment is one prompt. Point your agent at
 The honest tradeoff is the surface. Transcripts only see the work you did inside the agent. Everything you do in the browser, the spreadsheet, the dashboards, the apps you never pointed the agent at, leaves no mark in them. That is exactly the whole-machine view Chronicle has and the transcripts do not. So treat this as the on-ramp, not the ceiling: it costs you nothing, it works tonight, and it will find the loops that already passed through your agent. When you want the loops hiding in the rest of your day, you graduate to capturing the screen. The principle does not change across either one: point the discovery loop at a record of what you actually did, not at your memory of it.
 
 [IMAGE: dark canvas. A stack of past agent session transcripts (each a small chat-log card showing a user request and the agent's actions) flows into a discovery-loop agent reading back over them. The agent circles three transcripts that contain the same underlying request phrased differently and emits a card "you keep asking for this, make it a loop". A callout reads "transcripts capture intent, not just commands". Caption: "your agent already logged your real work, just read it back".]
+![[loopy-discovering-new-loops-you-do-not-need-chronicle-to-start-v1-1.png]]
+![[loopy-discovering-new-loops-you-do-not-need-chronicle-to-start-v1-2.png]]
+![[loopy-discovering-new-loops-you-do-not-need-chronicle-to-start-v1-3.png]]
+![[loopy-discovering-new-loops-you-do-not-need-chronicle-to-start-v1-4.png]]
+![[loopy-discovering-new-loops-you-do-not-need-chronicle-to-start-v1-5.png]]
 
 ---
 
@@ -104,6 +134,11 @@ Because a loop that proposes new loops is a self-modifying system, and you do no
 And every brake from this chapter applies to the new loop the moment it is born. It gets a budget. It gets a kill switch. Its instructions live in the repo. A loop that mints loops without those is exactly the runaway you spent this whole chapter learning to prevent, just one level up. The factory needs the same guardrails as the machines it builds.
 
 [IMAGE: dark canvas, a pipeline. A "discover loops" box emits a candidate card into a PR gate (the skills-as-code gate, three rows: workflow, recurrence evidence, draft skill). A human check approves it. The approved candidate becomes a new live loop, which is immediately wrapped in three small icons: a budget meter, a kill switch, a repo file. Caption: "a loop that builds loops earns the same brakes as the rest".]
+![[loopy-discovering-new-loops-from-candidate-to-loop-and-the-recursion-v1-1.png]]
+![[loopy-discovering-new-loops-from-candidate-to-loop-and-the-recursion-v1-2.png]]
+![[loopy-discovering-new-loops-from-candidate-to-loop-and-the-recursion-v1-3.png]]
+![[loopy-discovering-new-loops-from-candidate-to-loop-and-the-recursion-v1-4.png]]
+![[loopy-discovering-new-loops-from-candidate-to-loop-and-the-recursion-v1-5.png]]
 
 ---
 
@@ -116,6 +151,11 @@ You do not stay in the loop for the watching. The entire reason to use a capture
 You absolutely stay in the loop for one thing. Promoting a candidate into a real loop, because that is a judgment about whether this repetition is worth standardizing, and that is yours. Second, the privacy decision, which is why this is a governance segment and not a climb one.
 
 [IMAGE: dark canvas, the human placed at exactly two points and removed from a third. Removed: "watching and logging my own work", crossed out with "do this yourself and you are just a lossy recorder". Present: "promote a candidate into a live loop" tagged judgment, and "decide what gets recorded and where it lives" tagged privacy and trust, with a small lock icon and a "keep it local" note. Caption: "stay out of the watching, stay in for the promotion and the privacy".]
+![[loopy-discovering-new-loops-where-you-stay-in-the-loop-and-where-you-don-t-v1-1.png]]
+![[loopy-discovering-new-loops-where-you-stay-in-the-loop-and-where-you-don-t-v1-2.png]]
+![[loopy-discovering-new-loops-where-you-stay-in-the-loop-and-where-you-don-t-v1-3.png]]
+![[loopy-discovering-new-loops-where-you-stay-in-the-loop-and-where-you-don-t-v1-4.png]]
+![[loopy-discovering-new-loops-where-you-stay-in-the-loop-and-where-you-don-t-v1-5.png]]
 
 ---
 
@@ -128,6 +168,11 @@ The discovery loop is very good at finding repetition and completely blind to wh
 So the candidate review has a second question stapled to "is this worth automating": "should this task exist at all." Some of your most repeated work is a symptom, not a workflow. The highest-value output of this loop is sometimes not a new loop, it is the realization that you have been hand-running something a real fix would delete. Read every candidate with both questions, automate the genuine workflows, and use the rest as a map of what to go fix at the root.
 
 [IMAGE: dark canvas, a candidate card going through a two-question gate. Question one "is this worth automating?" with a green path to "build the loop". Question two "should this task even exist?" with a separate path to a trash icon labeled "fix at the root, delete the task". A worn dirt path labeled "cowpath" is shown being paved into a smooth road that still goes the wrong way, marked with a red X. Caption: "automating waste just makes faster waste".]
+![[loopy-discovering-new-loops-the-failure-mode-this-level-is-most-prone-to-v1-1.png]]
+![[loopy-discovering-new-loops-the-failure-mode-this-level-is-most-prone-to-v1-2.png]]
+![[loopy-discovering-new-loops-the-failure-mode-this-level-is-most-prone-to-v1-3.png]]
+![[loopy-discovering-new-loops-the-failure-mode-this-level-is-most-prone-to-v1-4.png]]
+![[loopy-discovering-new-loops-the-failure-mode-this-level-is-most-prone-to-v1-5.png]]
 
 ---
 

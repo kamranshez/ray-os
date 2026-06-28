@@ -16,6 +16,11 @@ That is not a failure. That is the destination. The whole climb up the stack was
 The answer is not "work harder." The answer is to keep removing yourself, one bottleneck at a time, until the only thing left in your hands is the thing only you can do.
 
 [IMAGE: dark canvas, the bottleneck of a system shown as a marker that has slid up a stack of layers labeled "model", "harness", "prompts", coming to rest on the top layer labeled "you", which glows as the new constraint. An arrow of time underneath showing the marker only ever climbing. Caption: "the bottleneck arrived where it was always headed".]
+![[loopy-removing-bottlenecks-intro-v1-1.png]]
+![[loopy-removing-bottlenecks-intro-v1-2.png]]
+![[loopy-removing-bottlenecks-intro-v1-3.png]]
+![[loopy-removing-bottlenecks-intro-v1-4.png]]
+![[loopy-removing-bottlenecks-intro-v1-5.png]]
 
 ---
 
@@ -78,6 +83,11 @@ Take any step where you are the constraint. It has exactly four honest fates, an
 The order is load-bearing. People reach for "loop it" first because it's the exciting one, and they end up paying a model to do a script's job badly, or worse, paying a model to do work that should not have existed. Delete, script, loop, keep. Run every bottleneck down that ladder.
 
 [IMAGE: dark canvas, a single bottleneck step dropped down a four-rung ladder tried in order: rung one "DELETE (did it need doing?)", rung two "SCRIPT (is it deterministic?)", rung three "LOOP (needs judgment, earns verifier + dial + budget)", rung four "KEEP (only you can do it)". A downward arrow showing you try them top to bottom and stop at the first that fits. Caption: "delete, script, loop, keep, in that order".]
+![[loopy-removing-bottlenecks-the-four-fates-of-a-bottleneck-v1-1.png]]
+![[loopy-removing-bottlenecks-the-four-fates-of-a-bottleneck-v1-2.png]]
+![[loopy-removing-bottlenecks-the-four-fates-of-a-bottleneck-v1-3.png]]
+![[loopy-removing-bottlenecks-the-four-fates-of-a-bottleneck-v1-4.png]]
+![[loopy-removing-bottlenecks-the-four-fates-of-a-bottleneck-v1-5.png]]
 
 ---
 
@@ -116,6 +126,11 @@ The fix is the eval-driven loop from the autoresearch segment. You don't author 
 That's the deepest cut. Removing yourself from the doing is the obvious half. Removing yourself from the building is the half that keeps paying off long after you've stopped looking at it.
 
 [IMAGE: dark canvas, left a single hand-written skill file frozen inside a block of ice while a rising model-version number climbs past it, labeled "frozen at the moment you wrote it". Right a loop made of "spec + eval suite + rewrite" that keeps regenerating the SKILL.md upward as the model improves, labeled "author the process, not the skill". Caption: "rerun the loop, don't rewrite forty skills by hand".]
+![[loopy-removing-bottlenecks-don-t-hand-build-your-tools-either-v1-1.png]]
+![[loopy-removing-bottlenecks-don-t-hand-build-your-tools-either-v1-2.png]]
+![[loopy-removing-bottlenecks-don-t-hand-build-your-tools-either-v1-3.png]]
+![[loopy-removing-bottlenecks-don-t-hand-build-your-tools-either-v1-4.png]]
+![[loopy-removing-bottlenecks-don-t-hand-build-your-tools-either-v1-5.png]]
 
 ---
 
@@ -128,6 +143,11 @@ Every bottleneck you remove surfaces the next one. Clear the approval queue and 
 And the ratchet runs backward too, which is the part Cramer was warning about. Automate a step that wanted your judgment and the cost doesn't show up today. It shows up as slop you have to unwind next month, a net liability, in his words. So the dial has a down notch here as well: if a looped bottleneck keeps producing work you have to redo, demote it. Pull it back to script, or back into your hands. Removing yourself is a ratchet you're allowed to reverse.
 
 [IMAGE: dark canvas, a ratchet wheel clicking upward one notch at a time, each notch labeled a bottleneck removed ("approvals", "triage", "deciding which loops exist"), moving up only when evidence earns it. A reverse pawl drawn in too, labeled "demote a looped step that keeps making slop". The top notch labeled "the portfolio decision, stays in your hands". Caption: "a ratchet you climb, and may reverse".]
+![[loopy-removing-bottlenecks-removing-yourself-is-a-ratchet-not-a-switch-v1-1.png]]
+![[loopy-removing-bottlenecks-removing-yourself-is-a-ratchet-not-a-switch-v1-2.png]]
+![[loopy-removing-bottlenecks-removing-yourself-is-a-ratchet-not-a-switch-v1-3.png]]
+![[loopy-removing-bottlenecks-removing-yourself-is-a-ratchet-not-a-switch-v1-4.png]]
+![[loopy-removing-bottlenecks-removing-yourself-is-a-ratchet-not-a-switch-v1-5.png]]
 
 ---
 

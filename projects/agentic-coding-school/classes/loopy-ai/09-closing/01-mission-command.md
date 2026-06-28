@@ -18,6 +18,11 @@ Most people never make the shift. They run a fleet of loops and steer every one 
 This is the other half of the human pair. Last segment was keeping-you-in-the-loop, the work flowing up to you. This one is intent flowing down. And here is the thing nobody tells you: the cleaner your intent goes down, the thinner the decisions coming back up.
 
 [IMAGE: dark canvas, a climb from a low rung labeled "L1: you write prompts" up to a high rung labeled "L7: you write intent". At L1 a hand types a step-by-step prompt into one loop; at L7 a hand passes a short intent doc to a whole fleet that then runs itself. Caption: "cleaner intent down, thinner decisions up".]
+![[loopy-mission-command-intro-v1-1.png]]
+![[loopy-mission-command-intro-v1-2.png]]
+![[loopy-mission-command-intro-v1-3.png]]
+![[loopy-mission-command-intro-v1-4.png]]
+![[loopy-mission-command-intro-v1-5.png]]
 
 ---
 
@@ -72,6 +77,11 @@ Notice what is not in that list. No step-by-step instructions. No prompt templat
 This is exactly the strip-the-model-out move, one more time, at the top of the stack. Back in segment three the five primitives were trigger, work, check, terminate, state. The intent doc is those same primitives written as prose for a fleet instead of as bash for one loop. Mission is the trigger and the work framed by purpose. Success criteria is the check. Kill criteria is terminate. The tradeoff order is the new state that survives between every run, the standing context. Same five slots. Higher altitude. No new primitive, the same way no level on the stack ever added a new primitive.
 
 [IMAGE: dark canvas, a single intent doc panel titled "standing orders" with five labeled slots stacked: "mission / schwerpunkt", "success criteria (borrowed verifier)", "tradeoff order", "kill criteria", "escalation format". Beside it a greyed-out trash bin holding "step-by-step instructions" and "tool sequences" crossed out. Caption: "write the what and the why, never the how".]
+![[loopy-mission-command-the-core-insight-write-what-not-how-v1-1.png]]
+![[loopy-mission-command-the-core-insight-write-what-not-how-v1-2.png]]
+![[loopy-mission-command-the-core-insight-write-what-not-how-v1-3.png]]
+![[loopy-mission-command-the-core-insight-write-what-not-how-v1-4.png]]
+![[loopy-mission-command-the-core-insight-write-what-not-how-v1-5.png]]
 
 ---
 
@@ -86,6 +96,11 @@ That is the same test you'd apply to a senior engineer joining your team. A good
 And this is where the connection to writing-effective-goals closes. A /goal is a tactical intent doc, mission command for one task. We even framed it that way at the time. The nine-section template, the DONE WHEN, the VERIFY that forces machine evidence into the transcript, the kill criteria, that was Auftragstaktik scoped to a single deliverable. A fleet intent doc is the identical artifact zoomed out, governing a continuous operation instead of one run. If you wrote a good /goal, you already know how to write intent. You just write it once for the operation instead of once per task.
 
 [IMAGE: dark canvas, a fresh worker loop being handed a single intent doc while the human walks away, the loop then making correct calls on its own. Beside it the same scene with a senior engineer reading a brief and shipping without pinging anyone. A label between them "same test, same failure modes". Caption: "operable from the doc alone, or it isn't intent".]
+![[loopy-mission-command-the-two-line-test-v1-1.png]]
+![[loopy-mission-command-the-two-line-test-v1-2.png]]
+![[loopy-mission-command-the-two-line-test-v1-3.png]]
+![[loopy-mission-command-the-two-line-test-v1-4.png]]
+![[loopy-mission-command-the-two-line-test-v1-5.png]]
 
 ---
 
@@ -102,6 +117,11 @@ No kill criteria. The doc says what to do but never what would make doing it a m
 When a doc has all three holes, it isn't intent. It's vibes in a document. It looks like delegation and behaves like abdication.
 
 [IMAGE: dark canvas, an intent doc with three holes punched through it, each labeled: "vague success criteria (self-grade)", "no tradeoff order (loop guesses)", "no kill criteria (optimises off a cliff)". Through the holes leaks the word "vibes". Caption: "all three holes and it's abdication wearing a doc".]
+![[loopy-mission-command-where-intent-docs-rot-v1-1.png]]
+![[loopy-mission-command-where-intent-docs-rot-v1-2.png]]
+![[loopy-mission-command-where-intent-docs-rot-v1-3.png]]
+![[loopy-mission-command-where-intent-docs-rot-v1-4.png]]
+![[loopy-mission-command-where-intent-docs-rot-v1-5.png]]
 
 ---
 

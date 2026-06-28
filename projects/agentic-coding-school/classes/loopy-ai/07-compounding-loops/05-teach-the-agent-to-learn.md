@@ -19,6 +19,11 @@ An outer loop that writes down what happened is not learning. It is transcriptio
 This segment is about the skill that makes the jump happen.
 
 [IMAGE: dark canvas, two doors out of a single correction. Door one "transcription": the correction is copied verbatim into a log, covering only the one case it came from, inert. Door two "learning": the same correction fans out as a general pattern that reshapes how the agent handles a hundred situations it was never told about. Caption: "feedback is not learning until one case changes a hundred".]
+![[loopy-teach-the-agent-to-learn-intro-v1-1.png]]
+![[loopy-teach-the-agent-to-learn-intro-v1-2.png]]
+![[loopy-teach-the-agent-to-learn-intro-v1-3.png]]
+![[loopy-teach-the-agent-to-learn-intro-v1-4.png]]
+![[loopy-teach-the-agent-to-learn-intro-v1-5.png]]
 
 ---
 
@@ -35,7 +40,21 @@ But that was never the lesson. The lesson was about reading the room. The person
 The rule covers one.
 
 [IMAGE: dark canvas, a single feedback note "too pricey" at the top fanning into two diverging paths. Left path collapses to a narrow brick labeled "RULE: never mention pricing in sentence one" covering one tiny dot, red X. Right path opens into a wide principle labeled "if someone is venting, lead with empathy" spreading over many dots, green check. Caption: "same correction, two generalizations".]
-[Add more placeholders here]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v1-1.png]]
+[IMAGE: dark canvas, one correction note dropping into a vending machine with two slots. The "RULE" slot dispenses a single brick cut to fit exactly one keyhole. The "PRINCIPLE" slot dispenses a master key that opens a whole wall of doors. Caption: "one correction, two things you can make from it".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v2-1.png]]
+
+[IMAGE: dark canvas, a bonsai versus a forest. Left, the rule as a tiny potted tree pruned to one shape that only survives in its exact pot, labeled "covers one case". Right, the principle as a root system feeding many trees across a field, labeled "covers a hundred". Caption: "a rule is potted, a principle has roots".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v3-1.png]]
+
+[IMAGE: dark canvas, the literal-fix reflex as a doctor's reflex hammer striking a knee. The tap is the complaint "too markety", the kick is the narrowest possible line "never mention pricing in sentence one", while the real lesson "read the room" drifts away unread above. Caption: "the reflex grabs the narrowest fix".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v4-1.png]]
+
+[IMAGE: dark canvas, a single complaint at the center of a field of situation-dots, with two concentric blast radii drawn over it. The inner radius, "rule", covers one dot. The outer radius, "principle", covers a hundred dots labeled pricing-in-sentence-one, feature comparison, roadmap link, the cheerful "have you tried". Caption: "same correction, the radius is your choice".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v5-1.png]]
+
+[IMAGE: dark canvas, a coin press stamping the lesson "this reply was too markety". Two dies sit above it. The "RULE" die imprints a one-off sticker good for a single use. The "PRINCIPLE" die imprints a reusable template that gets pressed across a whole sheet of future cases. Caption: "what you stamp the lesson into decides how far it travels".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v6-1.png]]
 
 Now run that forward a month. Every correction becomes another rule. The skill file does not get smarter, it gets longer. It turns into a decision tree, and a decision tree is brittle by construction. Each branch only fires on the exact situation that spawned it. The first time reality shows up wearing a slightly different outfit, none of the branches match, and the agent is back to guessing, except now it is guessing while dragging two hundred dead rules behind it.
 
@@ -44,7 +63,20 @@ Source: https://x.com/petradonka/status/2054897826149101588
 
 The outer loop did its job. It read the feedback and it edited the file. The job was just the wrong job.
 
-[Add more placeholders here]
+[IMAGE: dark canvas, a skill file drawn as a tower of stacked bricks growing one tick taller each "month", labeled "longer, not smarter". Each brick is a one-case rule, the tower sways and starts to topple. Caption: "a growing file is not a learning file".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v7-1.png]]
+
+[IMAGE: dark canvas, a sprawling decision tree of hundreds of brittle branches. A new situation walks up "wearing a slightly different outfit", none of the branches match its shape, and it falls straight through to a pit labeled "back to guessing". Caption: "the first unseen outfit, and nothing matches".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v8-1.png]]
+
+[IMAGE: dark canvas, an agent trying to sprint forward but dragging a long chain of luggage behind it, each bag stamped with a dead rule, the chain labeled "two hundred exceptions". It slows to a crawl. Caption: "guessing, while dragging every dead rule behind it".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v9-1.png]]
+
+[IMAGE: dark canvas, a calendar where each day spawns one new rule card that gets filed into an ever-fatter binder labeled "exceptions", while a sliver labeled "actual judgment" thins to almost nothing. Caption: "every correction becomes another exception".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v10-1.png]]
+
+[IMAGE: dark canvas, the outer loop shown completing its task correctly: a green check on "read the feedback" and "edited the file", but a large red stamp across the whole panel reading "wrong job". Off to the side sits the untouched real task, "turn it into a principle". Caption: "the loop did its job, the job was wrong".]
+![[loopy-teach-the-agent-to-learn-the-one-failure-mode-v11-1.png]]
 
 ---
 
@@ -110,3 +142,8 @@ The learning skill is you trying to produce that second kind of teammate on purp
 And there is a side effect worth the price of admission on its own. To teach the agent, you have to say the quiet part out loud. A lot of taste lives implicitly in people's heads. Nobody on the team ever wrote down "lead with empathy when someone is venting," because everyone good just does it. The moment you have to encode it so an agent can apply it, you drag it onto the page. Your team ends up with a written, reviewable account of its own judgment, which it never had before. The agent is the excuse. The artifact is the real win.
 
 [IMAGE: dark canvas, a contrast. Left "configuring": a hand toggling fields in a rigid config file, each switch handling exactly one case. Right "teaching": a mentor watching a new hire make a call, saying "here's what I'd have done and why", and the hire walking off with a way of thinking that covers the next ten unseen cases. Below the right panel, a side-effect arrow: implicit team taste ("lead with empathy when someone is venting") being dragged out of people's heads onto a written, reviewable page. Caption: "you're training a teammate, and the by-product is your judgment written down".]
+![[loopy-teach-the-agent-to-learn-you-are-teaching-not-configuring-v1-1.png]]
+![[loopy-teach-the-agent-to-learn-you-are-teaching-not-configuring-v1-2.png]]
+![[loopy-teach-the-agent-to-learn-you-are-teaching-not-configuring-v1-3.png]]
+![[loopy-teach-the-agent-to-learn-you-are-teaching-not-configuring-v1-4.png]]
+![[loopy-teach-the-agent-to-learn-you-are-teaching-not-configuring-v1-5.png]]

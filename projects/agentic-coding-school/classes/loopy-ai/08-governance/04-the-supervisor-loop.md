@@ -16,6 +16,11 @@ You have built loops that drain queues, loops that hunt for new work, and loops 
 A supervisor loop is a reconciliation loop whose room is your fleet. Its ideal state is not "main is green" or "churn under two percent." It is "every loop I am running is alive, inside budget, and actually closing its gap." Same thermostat. The thing it holds to a setpoint is the health of your other loops.
 
 [IMAGE: dark canvas, a thermostat icon with two arrows leaving it. Arrow one points down at a codebase labeled "last video: aim it at your work". Arrow two points at a cluster of small running loop-machines labeled "this video: aim it at your loops". Caption: "the same reconciliation loop, pointed at a stranger target".]
+![[loopy-the-supervisor-loop-intro-v1-1.png]]
+![[loopy-the-supervisor-loop-intro-v1-2.png]]
+![[loopy-the-supervisor-loop-intro-v1-3.png]]
+![[loopy-the-supervisor-loop-intro-v1-4.png]]
+![[loopy-the-supervisor-loop-intro-v1-5.png]]
 
 ---
 
@@ -28,6 +33,11 @@ Background is the point. Background is also exactly why failure goes silent. A l
 The property that made loops worth building, their autonomy, is the same property that hides their failure. You cannot watch what you built specifically so you would not have to watch it. This is the oldest question there is, older than computing. Who watches the watchers.
 
 [IMAGE: dark canvas, a dim room full of small humming loop-machines with the human walked out the door. In the back corner one machine has stalled and thrown a small red spark, completely unnoticed. Caption: "autonomy is why they are valuable, and why their failure is silent".]
+![[loopy-the-supervisor-loop-a-fleet-is-invisible-by-design-v1-1.png]]
+![[loopy-the-supervisor-loop-a-fleet-is-invisible-by-design-v1-2.png]]
+![[loopy-the-supervisor-loop-a-fleet-is-invisible-by-design-v1-3.png]]
+![[loopy-the-supervisor-loop-a-fleet-is-invisible-by-design-v1-4.png]]
+![[loopy-the-supervisor-loop-a-fleet-is-invisible-by-design-v1-5.png]]
 
 ---
 
@@ -40,6 +50,11 @@ The dangerous loop is the one that is alive, never errors, runs green on every s
 So the supervisor's real measurement is not the heartbeat. It is the gap trend. Over the last several runs, is the distance between current state and ideal shrinking, holding, or widening. A loop that is busy and green and on budget, but whose gap is widening, is the single most important thing this loop exists to catch, because nothing else in your whole system will catch it. Every other check that loop passes.
 
 [IMAGE: dark canvas, two loops side by side, both lit with a green "no errors" light. Left loop: a gap line steadily shrinking toward its ideal, labeled "winning". Right loop: a gap line steadily widening away from its ideal despite the green light, labeled "losing". A magnifier held by the supervisor reads the gap TREND, not the light. Caption: "watch the gap, not the heartbeat".]
+![[loopy-the-supervisor-loop-the-core-insight-green-is-not-the-same-as-winning-v1-1.png]]
+![[loopy-the-supervisor-loop-the-core-insight-green-is-not-the-same-as-winning-v1-2.png]]
+![[loopy-the-supervisor-loop-the-core-insight-green-is-not-the-same-as-winning-v1-3.png]]
+![[loopy-the-supervisor-loop-the-core-insight-green-is-not-the-same-as-winning-v1-4.png]]
+![[loopy-the-supervisor-loop-the-core-insight-green-is-not-the-same-as-winning-v1-5.png]]
 
 ---
 
@@ -60,6 +75,11 @@ The state is the memory of what it already restarted or already flagged, so it d
 The terminate is per run. Sweep the fleet, act, sleep.
 
 [IMAGE: dark canvas, the five-primitive loop drawn as a supervisor. Trigger: a clock. Current state input: a small dashboard of fleet telemetry (running? last success? budget burned? gap trend?). Ideal state: "all loops alive, in budget, gap shrinking". Check: the telemetry itself as the borrowed verifier, not the model's read. State: a memory of what it already restarted or flagged. Terminate: per-run sweep then sleep. Caption: "the same thermostat, the room is your loops".]
+![[loopy-the-supervisor-loop-the-shape-the-same-thermostat-a-different-room-v1-1.png]]
+![[loopy-the-supervisor-loop-the-shape-the-same-thermostat-a-different-room-v1-2.png]]
+![[loopy-the-supervisor-loop-the-shape-the-same-thermostat-a-different-room-v1-3.png]]
+![[loopy-the-supervisor-loop-the-shape-the-same-thermostat-a-different-room-v1-4.png]]
+![[loopy-the-supervisor-loop-the-shape-the-same-thermostat-a-different-room-v1-5.png]]
 
 ---
 
@@ -78,6 +98,11 @@ Busy but not winning, meaning green, on budget, and the gap is widening anyway. 
 The supervisor names which of the four is happening, then acts or escalates by blast radius. That is the autonomy dial from earlier in this chapter, applied to loops instead of edits.
 
 [IMAGE: dark canvas, one "unhealthy loop" box fanning out into four labeled paths. Dead then restart. Thrashing then widen the deadband or pause. Drifted then flag for re-scope. Busy but not winning then escalate. Each path tagged with an autonomy notch, the first two marked "auto", the last two marked "human". Caption: "name what is wrong, then act or escalate by blast radius".]
+![[loopy-the-supervisor-loop-what-the-supervisor-actually-does-four-diagnoses-v1-1.png]]
+![[loopy-the-supervisor-loop-what-the-supervisor-actually-does-four-diagnoses-v1-2.png]]
+![[loopy-the-supervisor-loop-what-the-supervisor-actually-does-four-diagnoses-v1-3.png]]
+![[loopy-the-supervisor-loop-what-the-supervisor-actually-does-four-diagnoses-v1-4.png]]
+![[loopy-the-supervisor-loop-what-the-supervisor-actually-does-four-diagnoses-v1-5.png]]
 
 ---
 
@@ -92,6 +117,11 @@ The supervisor is the one loop you keep a thin human thread on. It emits a heart
 You do not make the root of trust smart. You make it loud. Exactly one loop in your whole system is allowed to fail straight to a human, and this is the one. That is the bottom turtle, and it is a human.
 
 [IMAGE: dark canvas, a tall stack of "supervisor of a supervisor of a supervisor" boxes crossed out and labeled "turtles all the way down, solves nothing". Beside it the real design: a supervisor loop emitting a heartbeat into a small dumb cron icon, which pings a human the moment the heartbeat stops. Caption: "do not make the root of trust smart, make it loud".]
+![[loopy-the-supervisor-loop-who-watches-the-watcher-v1-1.png]]
+![[loopy-the-supervisor-loop-who-watches-the-watcher-v1-2.png]]
+![[loopy-the-supervisor-loop-who-watches-the-watcher-v1-3.png]]
+![[loopy-the-supervisor-loop-who-watches-the-watcher-v1-4.png]]
+![[loopy-the-supervisor-loop-who-watches-the-watcher-v1-5.png]]
 
 ---
 
@@ -106,6 +136,11 @@ You absolutely stay in the loop for two things. Re-scoping a drifted loop, becau
 And the twist. You are the dead-man's switch for the supervisor itself. Out of everything in this fleet, that one heartbeat is the single wire you keep your hand on.
 
 [IMAGE: dark canvas, the human placed at exactly two points and removed from a third, plus one wire. Removed: "watching whether my loops ran", crossed out with "do this yourself and you are just a lossy recorder". Present: "re-scope a drifted loop" tagged taste, and "approve the dangerous kills" tagged blast radius. A separate wire runs the supervisor's heartbeat straight to the human, labeled "the one thread you keep your hand on". Caption: "out of the sweeping, in for the taste, the kills, and the heartbeat".]
+![[loopy-the-supervisor-loop-where-you-stay-in-the-loop-and-where-you-don-t-v1-1.png]]
+![[loopy-the-supervisor-loop-where-you-stay-in-the-loop-and-where-you-don-t-v1-2.png]]
+![[loopy-the-supervisor-loop-where-you-stay-in-the-loop-and-where-you-don-t-v1-3.png]]
+![[loopy-the-supervisor-loop-where-you-stay-in-the-loop-and-where-you-don-t-v1-4.png]]
+![[loopy-the-supervisor-loop-where-you-stay-in-the-loop-and-where-you-don-t-v1-5.png]]
 
 ---
 

@@ -18,6 +18,11 @@ So this is the field guide. Nine ways a loop fails, the one-line tell for each, 
 One more thing before the list, and it's the whole frame. Half of these failures are temporary. They exist because of what the models can't do yet, and that floor is rising every few months. The other half don't move at all, because they're about what you want, not what the model can do. Knowing which is which is the last thing this class teaches you.
 
 [IMAGE: dark canvas, a loop drawn as a chain of labeled links (trigger, verifier, kill switch, dial, goal). One ordinary-looking link snapping under load while the rest hold, labeled "the weakest section you got lazy on". Off to the side a small field-guide booklet labeled "nine failure modes". Caption: "a loop dies of one weak link, not all of them".]
+![[loopy-where-loops-fail-right-now-intro-v1-1.png]]
+![[loopy-where-loops-fail-right-now-intro-v1-2.png]]
+![[loopy-where-loops-fail-right-now-intro-v1-3.png]]
+![[loopy-where-loops-fail-right-now-intro-v1-4.png]]
+![[loopy-where-loops-fail-right-now-intro-v1-5.png]]
 
 ---
 
@@ -80,6 +85,11 @@ The tell: a finished run that solved a problem next to the one you had.
 The cure was in the writing-effective-goals segment, the interview that fires the questions at you before any autonomous turn. This is the most clearly eroding failure on the list. Longer reliable runs and better mid-run clarification will absorb a lot of it. But it never hits zero, because the ambiguity was never in the worker. It was in you.
 
 [IMAGE: dark canvas, four failure cards in a row labeled "fake verifier", "stale verifier", "loop eats its own tail", "ambiguity compounds", each card fading and crumbling under a shared downward arrow labeled "every model release pushes these back". A small asterisk on the echo-chamber card noting "converges faster, harder to spot". Caption: "real today, eroding by the next release".]
+![[loopy-where-loops-fail-right-now-the-model-limited-failures-the-column-that-s-erodi-v1-1.png]]
+![[loopy-where-loops-fail-right-now-the-model-limited-failures-the-column-that-s-erodi-v1-2.png]]
+![[loopy-where-loops-fail-right-now-the-model-limited-failures-the-column-that-s-erodi-v1-3.png]]
+![[loopy-where-loops-fail-right-now-the-model-limited-failures-the-column-that-s-erodi-v1-4.png]]
+![[loopy-where-loops-fail-right-now-the-model-limited-failures-the-column-that-s-erodi-v1-5.png]]
 
 ---
 

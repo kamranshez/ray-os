@@ -20,6 +20,11 @@ This is the closing argument of the class. Watch this one even if you skipped th
 Source: Boris Cherny on Acquired Unplugged, June 2026.
 
 [IMAGE: dark canvas, the word "taste" not vanishing but sliding along an arrow from a box labeled "single judgments" to a new box labeled "criteria, thresholds, rubrics". A faded ghost label "taste goes away" crossed out underneath. Caption: "taste doesn't disappear, it relocates".]
+![[loopy-where-taste-went-intro-v1-1.png]]
+![[loopy-where-taste-went-intro-v1-2.png]]
+![[loopy-where-taste-went-intro-v1-3.png]]
+![[loopy-where-taste-went-intro-v1-4.png]]
+![[loopy-where-taste-went-intro-v1-5.png]]
 
 ---
 
@@ -31,13 +36,13 @@ That's a different cognitive skill.
 
 Some people who had great craft taste will be bad at rubric taste. Because rubric taste requires articulating what was previously intuitive. And most senior people would rather make a hundred individual judgments than write down the one rule that captures the same taste.
 
-[IMAGE: split panel. Left side a single person at a desk making one decision. Right side the same person, but their judgment encoded as a rubric on a screen that's running across hundreds of items in parallel]
+[IMAGE: dark canvas, two panels titled "old taste: judgment" and "new taste: rubric". Left, one craftsperson at a desk making a single call on one piece, thought bubble "does this feel right?", labeled "single judgment". Right, the same person pointing at a screen holding a rubric table (criteria and thresholds: form, proportion, craft, emotion, originality) that fans down over a row of many items stamped PASS, REVIEW, FAIL, labeled "same taste, applied hundreds of times". Caption: "old taste decides once, new taste writes the rule a loop applies thousands of times".]
+![[loopy-where-taste-went-the-claim-v1-1.png]]
+![[loopy-where-taste-went-the-claim-v1-2.png]]
+![[loopy-where-taste-went-the-claim-v1-3.png]]
+![[loopy-where-taste-went-the-claim-v1-4.png]]
+![[loopy-where-taste-went-the-claim-v1-5.png]]
 
-![[taste-judgment-to-rubric-evolution.png]]
-![[rubric-taste-operational-parallel-evals.png]]
-![[craft-taste-intuition-repeatable-standard.png]]
-![[rubric-taste-scales-decisions-per-case.png]]
-![[taste-skill-shift-intuition-to-rules.png]]
 
 ---
 
@@ -73,13 +78,13 @@ Was the winner winning because of contrast? Or because the topic itself was hot?
 
 **New taste.** Setting the threshold at which the review agent posts a finding. And the feedback signal it uses to self tune that threshold over the next hundred PRs.
 
-[IMAGE: three side by side panels, each showing old taste on top and new taste below, with the same person in both]
+[IMAGE: dark canvas, three columns titled "anki cards", "thumbnail picking", "code review", each split into an "old taste" row over a "new taste" row with the same person in both. Anki: old is writing one perfect card by feel, new is dials for source whitelist, daily cap, and a useful-i+1 policy. Thumbnail: old is picking one of three the designer sent, new is reading yesterday's A/B test to choose which lesson shapes tomorrow's hypothesis space, with a "wrong axis means the next ten drift" warning. Code review: old is spotting the bug in this PR, new is a review-agent settings panel (posting threshold, evidence required) that self-tunes over a hundred PRs. Caption: "craft taste picks the case, rubric taste sets the policy".]
+![[loopy-where-taste-went-three-pairs-that-show-the-shift-v1-1.png]]
+![[loopy-where-taste-went-three-pairs-that-show-the-shift-v1-2.png]]
+![[loopy-where-taste-went-three-pairs-that-show-the-shift-v1-3.png]]
+![[loopy-where-taste-went-three-pairs-that-show-the-shift-v1-4.png]]
+![[loopy-where-taste-went-three-pairs-that-show-the-shift-v1-5.png]]
 
-![[anki-cards-thumbnail-review-taste-shift.png]]
-![[three-pairs-showing-taste-evolution-detailed.png]]
-![[anki-thumbnail-code-review-selection-feedback.png]]
-![[craft-to-policy-choice-to-lesson-rules-to-system.png]]
-![[three-pairs-yellow-shirt-taste-shift-summary.png]]
 
 ---
 
@@ -100,6 +105,11 @@ The painful part is that this isn't a fairness issue. The people with the most r
 The class can teach the skill. But it can't make people willing to learn it.
 
 [IMAGE: dark canvas, a senior person struggling to pour a glowing cloud labeled "implicit gut intuition" out of their head into a written rubric box, with a note "half the obvious intuitions turn out wrong". Below, a sorting fork splitting two ways: one path "compresses taste to rubric, scales 100x", the other "keeps doing 1x work at a higher layer". Caption: "the most refined taste is the hardest to write down".]
+![[loopy-where-taste-went-why-the-move-is-hard-v1-1.png]]
+![[loopy-where-taste-went-why-the-move-is-hard-v1-2.png]]
+![[loopy-where-taste-went-why-the-move-is-hard-v1-3.png]]
+![[loopy-where-taste-went-why-the-move-is-hard-v1-4.png]]
+![[loopy-where-taste-went-why-the-move-is-hard-v1-5.png]]
 
 ---
 
@@ -135,13 +145,13 @@ This is the new code review. The artifact is not the prompt. It's the action log
 
 If you can't bring yourself to read the action log, you don't trust the loop. And you shouldn't. Loops you don't read drift, and you only notice when something has been wrong for a month.
 
-[IMAGE: three drill cards stacked vertically, each with a title and a one line outcome]
+[IMAGE: dark canvas, three stacked drill cards feeding one badge labeled "rubric taste". Card 1 "turn intuition into a rubric": a lightbulb becoming a three-to-five-criteria checklist with thresholds, note "test on 10 real cases". Card 2 "find the false negative": a colander letting one item slip through, replaced by a net labeled "fallback", note "name the silent failure class". Card 3 "read the action log": a week of days all checked, an action-log scroll, then a pencil editing the rubric, note "watch every action, update the rubric". Caption: "the drills that build rubric taste".]
+![[loopy-where-taste-went-three-drills-to-practise-v1-1.png]]
+![[loopy-where-taste-went-three-drills-to-practise-v1-2.png]]
+![[loopy-where-taste-went-three-drills-to-practise-v1-3.png]]
+![[loopy-where-taste-went-three-drills-to-practise-v1-4.png]]
+![[loopy-where-taste-went-three-drills-to-practise-v1-5.png]]
 
-![[three-taste-drills-overview-flow.png]]
-![[three-drills-practice-sequence-summary.png]]
-![[drills-reverse-order-sequence-flow.png]]
-![[three-drills-articulate-false-negative-read.png]]
-![[three-practice-drills-rubric-negative-loop.png]]
 
 ---
 
@@ -170,6 +180,11 @@ That's not a worse role. That's a deeper role.
 The "member of technical staff" title is a transitional artifact. Don't tie your identity to it.
 
 [IMAGE: dark canvas, a single person labeled "loop curator: YouTube channel" standing over a panel of loops for one domain, holding the controls labeled "rubrics", "kill switches", "token budgets", "escalation paths", "action-log review cadence". A faded older title tag "member of technical staff" peeling off and falling away. Caption: "not a worse role, a deeper one".]
+![[loopy-where-taste-went-the-terminal-role-v1-1.png]]
+![[loopy-where-taste-went-the-terminal-role-v1-2.png]]
+![[loopy-where-taste-went-the-terminal-role-v1-3.png]]
+![[loopy-where-taste-went-the-terminal-role-v1-4.png]]
+![[loopy-where-taste-went-the-terminal-role-v1-5.png]]
 
 ---
 
@@ -184,6 +199,12 @@ Whether you stay close to your craft and use loops to scale it, or whether you g
 Be honest with yourself about which one you want. The skill works either way. The life is different.
 
 [IMAGE: dark canvas, center, intuition being compressed into a small block of rules that a fleet of loops then runs while the room is empty, labeled "rules a fleet can run without you in the room". Below it a values fork with two equal paths: "stay close to your craft, use loops to scale it" and "leave the craft, use loops to do it". A note "same skill, different life". Caption: "the skill works either way".]
+![[loopy-where-taste-went-what-this-class-is-really-teaching-v1-1.png]]
+![[loopy-where-taste-went-what-this-class-is-really-teaching-v1-2.png]]
+![[loopy-where-taste-went-what-this-class-is-really-teaching-v1-3.png]]
+![[loopy-where-taste-went-what-this-class-is-really-teaching-v1-4.png]]
+![[loopy-where-taste-went-what-this-class-is-really-teaching-v1-5.png]]
+![[loopy-where-taste-went-what-this-class-is-really-teaching-v1-6.png]]
 
 ---
 

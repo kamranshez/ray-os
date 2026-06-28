@@ -16,6 +16,11 @@ Yes. But not silently.
 That one word is the whole segment. The difference between a loop that compounds and a loop that quietly goes insane is not how smart the rewrite is. It is whether a human ever sees the rewrite before it ships. Skills are files. Files go in a repo. And a repo gives you the three things that make self-modification safe: version history, review, and rollback.
 
 [IMAGE: dark canvas, an agent reaching toward its own skill file, with a fearful thought bubble "rewriting its own instructions?". Two paths fork. Silent self-edit drifting into something unrecognizable by week three, marked with a red X. Or the same edit routed through a repo box that grants version history, review, and rollback before anything ships, marked with a green check. Caption: "yes, but not silently".]
+![[loopy-skills-as-code-intro-v1-1.png]]
+![[loopy-skills-as-code-intro-v1-2.png]]
+![[loopy-skills-as-code-intro-v1-3.png]]
+![[loopy-skills-as-code-intro-v1-4.png]]
+![[loopy-skills-as-code-intro-v1-5.png]]
 
 This is the governance segment for the thing that scares people. The [[self-improvement-loop]] proposes changes to itself. [[teach-the-agent-to-learn]] makes those changes generalise instead of overfit. This segment is the gate they both have to pass through before anything becomes real.
 
@@ -36,6 +41,19 @@ Source: https://x.com/petradonka/status/2054897826149101588
 Hold onto the distinction. The danger was never the agent proposing a change. The danger was the change going live without a human in the path. Take the silence away and the fear goes with it. You get a loop that suggests improvements all day long, and a you that approves the ones worth keeping.
 
 [IMAGE: dark canvas, a do/don't split. Left "never let it change": a skill file padlocked, only a human hand allowed, the agent's proposals bouncing off, labeled "half right, kills the compounding". Right "never let it change without review": the agent freely proposing changes all day into a review gate where a human approves the worth-keeping ones, labeled "the fix". Caption: "the danger was the silence, not the proposing".]
+![[loopy-skills-as-code-the-fear-is-correct-the-conclusion-is-wrong-v1-1.png]]
+
+[IMAGE: dark canvas, a single dial labeled "silence". Turned all the way up, the agent's edits go live invisibly and the skill file drifts into something unrecognizable by week three, marked red. Turned down to zero, every edit surfaces in a review feed a human is scanning, the file still makes sense, marked green. Caption: "take the silence away and the fear goes with it".]
+![[loopy-skills-as-code-the-fear-is-correct-the-conclusion-is-wrong-v2-1.png]]
+
+[IMAGE: dark canvas, two rooms side by side. Left, a locked room where only a human may touch the skill file and the agent's proposals pile up rejected at the door, labeled "kills the compounding". Right, an open room with a turnstile where proposals flow in all day but only pass through when a human turns the gate, labeled "the fix". Caption: "don't lock the door, add a turnstile".]
+![[loopy-skills-as-code-the-fear-is-correct-the-conclusion-is-wrong-v3-1.png]]
+
+[IMAGE: dark canvas, a firehose of agent proposals pouring continuously toward a "production skill" box, intercepted by a single human-shaped valve that lets the worth-keeping ones through and drops the rest on the floor. Caption: "propose continuously, merge selectively".]
+![[loopy-skills-as-code-the-fear-is-correct-the-conclusion-is-wrong-v4-1.png]]
+
+[IMAGE: dark canvas, a week-three before/after. Top "silent self-edit" path ends with a human staring at a skill file they cannot recognize, captioned "cannot explain it". Bottom "reviewed" path reaches the same improvements but every change carries a name and a timestamp, captioned "can still explain it". Caption: "same compounding, but you keep the explanation".]
+![[loopy-skills-as-code-the-fear-is-correct-the-conclusion-is-wrong-v5-1.png]]
 
 ---
 

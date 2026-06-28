@@ -16,6 +16,11 @@ That is the whole jump. Up to now, the model produces an artifact, a borrowed ve
 This is the Karpathy-style eval-driven loop, ported out of machine learning and onto your skills. In ML you change a training script, run a benchmark, keep the change if the number went up. Here you change a SKILL.md, run an eval suite, keep the change if the score went up. Same loop. Different artifact.
 
 [IMAGE: dark canvas, two stacked loops sharing one shape. Top labeled "ML": a training script feeds a benchmark that emits a number, kept only if the number went up. Bottom labeled "your skills": a SKILL.md feeds an eval suite that emits a score, kept only if the score went up. A bracket joins them labeled "same loop, different artifact", with the SKILL.md highlighted as "the thing now under test". Caption: "the prompt becomes the variable, the output becomes evidence".]
+![[loopy-autoresearch-intro-v1-1.png]]
+![[loopy-autoresearch-intro-v1-2.png]]
+![[loopy-autoresearch-intro-v1-3.png]]
+![[loopy-autoresearch-intro-v1-4.png]]
+![[loopy-autoresearch-intro-v1-5.png]]
 
 ---
 
@@ -55,6 +60,11 @@ And an aggregate gate. Binary. Did this candidate beat the incumbent, yes or no.
 Here is the part people skip. You write the eval suite *before* you touch the prompt. The autoresearch loop mutates the prompt. The eval suite never moves. If the eval suite moves mid-run, you are not running an experiment, you are drifting, and you will fool yourself exactly the way hand-editing fools you. The suite is the one fixed point the whole loop pivots on.
 
 [IMAGE: dark canvas, an "eval suite" block bolted to the ground with an anchor, made of three labeled parts: a column of "fixed inputs" (three to five test scenarios), a "borrowed verifier" check beside each input, and one "aggregate gate" stamping PASS or FAIL for the whole run. A mutating prompt orbits this fixed block on a dotted arc labeled "the prompt moves, the suite never does". Caption: "the one fixed point the loop pivots on".]
+![[loopy-autoresearch-what-an-eval-suite-actually-is-v1-1.png]]
+![[loopy-autoresearch-what-an-eval-suite-actually-is-v1-2.png]]
+![[loopy-autoresearch-what-an-eval-suite-actually-is-v1-3.png]]
+![[loopy-autoresearch-what-an-eval-suite-actually-is-v1-4.png]]
+![[loopy-autoresearch-what-an-eval-suite-actually-is-v1-5.png]]
 
 ---
 
@@ -102,6 +112,11 @@ You log every attempt, kept or discarded, to a changelog: the score, the one cha
 And critically, the loop runs unattended. Once it starts, it does not stop to ask whether it should continue, because you are not at the keyboard, the same way the worker loops from the last few segments do not wait for permission on every turn. It stops on three conditions only: you stop it, it hits a budget cap of experiment cycles, or it hits ninety-five percent for three runs straight and admits diminishing returns.
 
 [IMAGE: dark canvas, a single-lane cycle: "read the failing outputs" to "form one hypothesis" to "make one targeted edit" to "run the suite" into a three-way gate. "Score up" keeps the edit as the new incumbent (green). "Score flat" and "score down" both snap back to the last known-good prompt (red revert arrows). A side ledger labeled "changelog" records every attempt, kept or discarded, with its one change and what moved. Caption: "only improvements survive, everything else reverts".]
+![[loopy-autoresearch-the-mutation-engine-v1-1.png]]
+![[loopy-autoresearch-the-mutation-engine-v1-2.png]]
+![[loopy-autoresearch-the-mutation-engine-v1-3.png]]
+![[loopy-autoresearch-the-mutation-engine-v1-4.png]]
+![[loopy-autoresearch-the-mutation-engine-v1-5.png]]
 
 ---
 
@@ -116,6 +131,11 @@ I am flagging the connection now and leaving it there. We build the formal versi
 The other warning I will only name. A loop that proposes its own changes and grades them against a suite it could learn to game is one bad eval away from optimising for the test instead of the task. That failure has a name, the echo chamber, and it gets its own segment later. The defense is the one you already have: borrowed verifiers that touch reality, and a suite small enough that the skill cannot just parrot it back.
 
 [IMAGE: dark canvas, the three-role split wearing a lab coat. A "Generator" produces work under a prompt, a "verifier" scores the work against the suite, and a third "mutator and curator" role edits the Generator's own prompt and keeps whichever version scored higher. The item on the curator's bench is labeled not "a fact" and not "a memory" but "the SKILL.md, the policy itself". Caption: "same machine, now pointed at the prompt instead of the work".]
+![[loopy-autoresearch-this-is-ace-wearing-a-lab-coat-v1-1.png]]
+![[loopy-autoresearch-this-is-ace-wearing-a-lab-coat-v1-2.png]]
+![[loopy-autoresearch-this-is-ace-wearing-a-lab-coat-v1-3.png]]
+![[loopy-autoresearch-this-is-ace-wearing-a-lab-coat-v1-4.png]]
+![[loopy-autoresearch-this-is-ace-wearing-a-lab-coat-v1-5.png]]
 
 ---
 

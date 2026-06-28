@@ -17,6 +17,11 @@ Not because Slack is special. Because you already live there, it is already on y
 This is the command center and the decision surface at once. Watch the fleet, leave the feedback the loops read next time they spawn, and let one loop route work to another. Three kinds of traffic, one channel.
 
 [IMAGE: dark canvas, several confined loops in sealed boxes on the left, all wired into a single Slack channel on a phone in the center labeled "one surface". Three labeled arrows of traffic around the phone: "loop to you (watch them)", "you to loop (feed them)", "loop to loop (feed each other)". Caption: "Slack is the command center and the decision surface at once".]
+![[loopy-slack-as-your-command-center-intro-v1-1.png]]
+![[loopy-slack-as-your-command-center-intro-v1-2.png]]
+![[loopy-slack-as-your-command-center-intro-v1-3.png]]
+![[loopy-slack-as-your-command-center-intro-v1-4.png]]
+![[loopy-slack-as-your-command-center-intro-v1-5.png]]
 
 ---
 

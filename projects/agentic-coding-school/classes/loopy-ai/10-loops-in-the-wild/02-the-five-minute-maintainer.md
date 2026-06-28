@@ -16,6 +16,11 @@ Every five minutes, while you work on something else, an agent makes one small, 
 This is a reconciliation loop from chapter five, the thermostat, pinned to one standing ideal: this repo always trends cleaner, never messier.
 
 [IMAGE: dark canvas, a thermostat dial mounted on a repo folder, its setpoint labeled "always cleaner, never messier". A 5-minute clock wired to it. Every tick the dial fires a small "one verified improvement" spark into the repo. A sleeping human in the corner labeled "you, working on something else". Caption: "the agent picks the work, not you".]
+![[loopy-the-five-minute-maintainer-intro-v1-1.png]]
+![[loopy-the-five-minute-maintainer-intro-v1-2.png]]
+![[loopy-the-five-minute-maintainer-intro-v1-3.png]]
+![[loopy-the-five-minute-maintainer-intro-v1-4.png]]
+![[loopy-the-five-minute-maintainer-intro-v1-5.png]]
 
 ---
 
@@ -28,6 +33,11 @@ A flaky test nobody re-runs. A comment that describes code that changed two refa
 You do not have a task here. You have a direction. And a direction is exactly what a reconciliation loop holds.
 
 [IMAGE: dark canvas, a repo drawn as a house quietly rotting in tiny ways, each labeled: "flaky test nobody re-runs", "stale comment from two refactors ago", "missing type". Each tiny rot has a Linear ticket floating beside it stamped "too small to file", so they pile into a growing heap labeled "never gets fixed". Off to the side, a compass labeled "direction, not a task" pointing toward "cleaner". Caption: "rot too small to ever rise to the top of a backlog".]
+![[loopy-the-five-minute-maintainer-the-problem-it-kills-v1-1.png]]
+![[loopy-the-five-minute-maintainer-the-problem-it-kills-v1-2.png]]
+![[loopy-the-five-minute-maintainer-the-problem-it-kills-v1-3.png]]
+![[loopy-the-five-minute-maintainer-the-problem-it-kills-v1-4.png]]
+![[loopy-the-five-minute-maintainer-the-problem-it-kills-v1-5.png]]
 
 ---
 
@@ -56,6 +66,11 @@ That is why the timer matters. The loop is not racing to a finish line, it is ho
 And notice what you did to start it. You did not assign a task. You declared a direction and pointed a loop at the gap. That is the whole move that takes you from running loops to living in them.
 
 [IMAGE: dark canvas, split contrast. On the left, a worker reaching a "finish line" flag and stopping, labeled "destination". On the right, a thermostat holding a flat "setpoint" line forever against a downward "entropy" arrow that never stops pulling, labeled "no finish line, just hold". A 5m clock between them captioned "the timer is just how often it checks the temperature". Caption: "a setpoint, not a destination".]
+![[loopy-the-five-minute-maintainer-why-it-works-a-setpoint-not-a-destination-v1-1.png]]
+![[loopy-the-five-minute-maintainer-why-it-works-a-setpoint-not-a-destination-v1-2.png]]
+![[loopy-the-five-minute-maintainer-why-it-works-a-setpoint-not-a-destination-v1-3.png]]
+![[loopy-the-five-minute-maintainer-why-it-works-a-setpoint-not-a-destination-v1-4.png]]
+![[loopy-the-five-minute-maintainer-why-it-works-a-setpoint-not-a-destination-v1-5.png]]
 
 ---
 
@@ -70,6 +85,11 @@ Read the back half of that command again, because it is not decoration. It is th
 Source: https://x.com/mvanhorn (Matt Van Horn, "WTF Is a Loop? Part 2", Jun 2026)
 
 [IMAGE: dark canvas, the command broken into three labeled safety parts. "One change, one commit, tests green" splits into a grader badge labeled "borrowed verifier" and a thermostat deadband zone labeled "no firing on a half-degree wobble". "Never touch anything risky" drawn as a short leash clipped to the loop, with a risky "major version bump" item held back behind a fence labeled "you approve this". Caption: "the constraints are the safety".]
+![[loopy-the-five-minute-maintainer-the-constraints-are-the-safety-v1-1.png]]
+![[loopy-the-five-minute-maintainer-the-constraints-are-the-safety-v1-2.png]]
+![[loopy-the-five-minute-maintainer-the-constraints-are-the-safety-v1-3.png]]
+![[loopy-the-five-minute-maintainer-the-constraints-are-the-safety-v1-4.png]]
+![[loopy-the-five-minute-maintainer-the-constraints-are-the-safety-v1-5.png]]
 
 ---
 
