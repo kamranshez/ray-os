@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Replace mode — find a BETTER, more comprehensible example sentence for an
-existing card, sourced from the Immersion Kit hosted corpus and re-ranked by
-Ray's own i+1 (known-word diff), then write a replace-draft for review.
+existing card, sourced from a tiered set of corpora (Immersion Kit → Nadeshiko →
+sentencesearch.neocities → kotu.io → local sentence bank) and re-ranked by Ray's
+own i+1 (known-word diff), then write a replace-draft for review.
 
 Why Immersion Kit and not the local banks: a head-to-head test (June 2026) on 12
 flagged leech words found IK won 9, tied 1, with 0 misses vs the local index's 3
@@ -31,6 +32,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import analyze  # reuse tokenizer + known-word diff (does NOT run its main())
@@ -40,6 +42,15 @@ from _env import load_skill_env
 
 IK_SEARCH = "https://apiv2.immersionkit.com/search"
 NADESHIKO_SEARCH = "https://api.nadeshiko.co/v1/search"  # fallback corpus
+# Audio-only web corpora (no screenshot, but huge coverage) — tiers 4 & 5.
+# sentencesearch ships its whole ~45k-sentence corpus as one static JSON it searches
+# client-side, so we mirror that file and substring-search it locally. kotu.io has a
+# live REST API over TV/anime/news/audiobook clips with native audio per subtitle.
+SENTENCESEARCH_DATA_URL = "https://sentencesearch.neocities.org/data/all_v11.json"
+SENTENCESEARCH_AUDIO_BASE = "https://receptomanijalogi.web.app/audio/"
+SENTENCESEARCH_CACHE_DAYS = 30   # re-download the static corpus at most monthly
+KOTU_SEARCH = "https://api.kotu.io/v2/media/anki/subtitles"
+KOTU_AUDIO_BASE = "https://api.kotu.io/v2/media/audio/external/"  # + externalFile.id
 LEN_MIN = 10          # below this, IK hits are usually fragments
 LEN_MAX = 45          # above this, the clip becomes a wall of text
 LEN_SWEET = 22        # ideal length; ranking prefers candidates near this
@@ -135,6 +146,98 @@ def nadeshiko_search(word, key, limit=FETCH_LIMIT):
     return out
 
 
+def load_sentencesearch(cfg):
+    """Download (and cache) the sentencesearch.neocities static corpus, return its
+    records. The site searches all ~45k sentences client-side from one JSON, so we
+    mirror that file into work_dir/cache and substring-search it locally — no per-word
+    HTTP, no rate limit. Returns [] if it can't be fetched (the tier is then skipped)."""
+    work = os.path.expanduser((cfg.get("work_dir") or "~/Documents/sentence-mining"))
+    cache = Path(work) / "cache" / "sentencesearch_all_v11.json"
+    fresh = cache.exists() and (
+        time.time() - cache.stat().st_mtime) < SENTENCESEARCH_CACHE_DAYS * 86400
+    if not fresh:
+        try:
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            req = urllib.request.Request(
+                SENTENCESEARCH_DATA_URL, headers={"User-Agent": "ray-sentence-mining/1.0"})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                cache.write_bytes(r.read())
+        except Exception as e:  # noqa: BLE001
+            if not cache.exists():
+                print(f"  · sentencesearch corpus unavailable: {e}", file=sys.stderr)
+                return []
+            # stale-but-present cache is better than nothing — fall through and use it
+    try:
+        return json.loads(cache.read_text())
+    except Exception:  # noqa: BLE001
+        return []
+
+
+def sentencesearch_examples(word, data):
+    """Substring-match the cached sentencesearch corpus. Audio-only (no image); each
+    record is {source, audio_jap, jap, eng} and the clip lives at AUDIO_BASE+audio_jap."""
+    out = []
+    for rec in data:
+        jap = rec.get("jap", "")
+        if word and word in jap:
+            out.append({
+                "sentence": jap,
+                "word_list": [],                          # not tokenized → never bare-flagged
+                "translation": rec.get("eng", ""),
+                "image": "",
+                "sound": SENTENCESEARCH_AUDIO_BASE + rec.get("audio_jap", ""),
+                "title": rec.get("source", "sentencesearch"),
+                "id": rec.get("audio_jap", ""),
+                "sentence_with_furigana": "",
+            })
+            if len(out) >= FETCH_LIMIT:
+                break
+    return out
+
+
+def kotu_search(word, limit=FETCH_LIMIT):
+    """Query kotu.io's media-example API (TV/anime/news/audiobook, native audio per
+    subtitle). Audio-only: the clip is at KOTU_AUDIO_BASE + externalFile.id; there is no
+    screenshot. Normalize to the same `ex` shape ik_search returns."""
+    qs = urllib.parse.urlencode(
+        {"q": word, "limit": str(limit), "order": "descending", "sort": "default"})
+    url = f"{KOTU_SEARCH}?{qs}"
+    last = None
+    for attempt in range(4):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "ray-sentence-mining/1.0"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                items = json.loads(r.read()).get("items", [])
+            break
+        except urllib.error.HTTPError as e:
+            last = e
+            if e.code == 429:
+                time.sleep(3 * (attempt + 1)); continue
+            raise
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            last = e
+            time.sleep(2 * (attempt + 1))
+    else:
+        raise RuntimeError(f"kotu unreachable after retries: {last}")
+
+    out = []
+    for it in items:
+        fid = (it.get("externalFile") or {}).get("id", "")
+        if not fid:
+            continue
+        out.append({
+            "sentence": it.get("text", ""),
+            "word_list": [],
+            "translation": "",                            # media endpoint ships no gloss
+            "image": "",
+            "sound": KOTU_AUDIO_BASE + fid,
+            "title": (it.get("video") or {}).get("title", "kotu"),
+            "id": it.get("id", ""),
+            "sentence_with_furigana": "",
+        })
+    return out
+
+
 def jp_len(s):
     return len(analyze.strip_html(s))
 
@@ -177,18 +280,23 @@ def looks_misleading(sentence, target_word):
     return not clean_occurrence
 
 
-def score_candidate(ex, target_word, known):
-    """Return (rank_tuple, extra_unknowns, bare_token, i_level) for an IK example,
+def score_candidate(ex, target_word, known, require_image=True):
+    """Return (rank_tuple, extra_unknowns, bare_token, i_level) for an example,
     or None if the candidate should be dropped outright.
 
-    `known` is (intervals, norm_intervals, mature_stems, threshold)."""
+    `known` is (intervals, norm_intervals, mature_stems, threshold). `require_image`
+    is True for the screenshot-bearing sources (IK / Nadeshiko / local bank) and False
+    for the audio-only web corpora (sentencesearch / kotu), which legitimately ship a
+    clip but no image — replace_apply writes the picture's "。" filler in that case."""
     intervals, norm_intervals, mature_stems, threshold = known
     sentence = ex.get("sentence", "")
     n = jp_len(sentence)
     if not (LEN_MIN <= n <= LEN_MAX):
         return None
-    if not (ex.get("image") and ex.get("sound")):
-        return None  # replace mode wants a card with media
+    if not ex.get("sound"):
+        return None  # every replacement needs at least native audio
+    if require_image and not ex.get("image"):
+        return None  # image-bearing sources must ship a screenshot
     if target_word not in sentence:
         return None
     if looks_misleading(sentence, target_word):
@@ -222,12 +330,12 @@ def score_candidate(ex, target_word, known):
     return rank, extra_unknowns, bare_token, i_level
 
 
-def _score_examples(examples, word, known, old_norm, source):
+def _score_examples(examples, word, known, old_norm, source, require_image=True):
     scored = []
     for ex in examples:
         if old_norm and _norm(ex.get("sentence", "")) == old_norm:
             continue  # identical to the card's current sentence → no improvement
-        res = score_candidate(ex, word, known)
+        res = score_candidate(ex, word, known, require_image=require_image)
         if res is None:
             continue
         rank, extra, bare, i_level = res
@@ -270,9 +378,13 @@ def bank_examples(word, banks):
     return out
 
 
-def best_for_word(word, known, old_sentence="", top=3, nadeshiko_key=None, banks=None):
-    """Canonical source order: Immersion Kit → Nadeshiko → local sentence bank.
-    Each tier is tried only if the previous one yields nothing usable for Ray."""
+def best_for_word(word, known, old_sentence="", top=3, nadeshiko_key=None, banks=None,
+                  ss_data=None):
+    """Canonical source order: Immersion Kit → Nadeshiko → sentencesearch.neocities →
+    kotu.io → local sentence bank. Each tier is tried only if the previous ones yield
+    nothing usable for Ray. IK/Nadeshiko ship a screenshot; the two web corpora are
+    audio-only but far broader, so they come next; the local bank is the indexed-subset
+    last resort (only what Ray has extracted)."""
     old_norm = _norm(old_sentence)
     try:
         scored = _score_examples(ik_search(word), word, known, old_norm, "immersionkit")
@@ -285,6 +397,18 @@ def best_for_word(word, known, old_sentence="", top=3, nadeshiko_key=None, banks
                                      known, old_norm, "nadeshiko")
         except Exception as e:  # noqa: BLE001
             print(f"  · {word} — Nadeshiko error: {e}", file=sys.stderr)
+    if not scored and ss_data:
+        try:
+            scored = _score_examples(sentencesearch_examples(word, ss_data), word,
+                                     known, old_norm, "sentencesearch", require_image=False)
+        except Exception as e:  # noqa: BLE001
+            print(f"  · {word} — sentencesearch error: {e}", file=sys.stderr)
+    if not scored:
+        try:
+            scored = _score_examples(kotu_search(word), word, known, old_norm,
+                                     "kotu", require_image=False)
+        except Exception as e:  # noqa: BLE001
+            print(f"  · {word} — kotu error: {e}", file=sys.stderr)
     if not scored and banks:
         try:
             scored = _score_examples(bank_examples(word, banks), word, known, old_norm, "bank")
@@ -375,6 +499,14 @@ def main():
     else:
         print("Bank fallback: off (no indexed banks)", file=sys.stderr)
 
+    # Tiers 4 & 5: audio-only web corpora (broad coverage, no screenshot). sentencesearch
+    # is a cached static corpus; kotu is a live API hit only on the words that miss above.
+    print("Loading sentencesearch corpus (cached)…", file=sys.stderr)
+    ss_data = load_sentencesearch(cfg)
+    print(f"sentencesearch fallback: {len(ss_data)} sentences" if ss_data
+          else "sentencesearch fallback: unavailable", file=sys.stderr)
+    print("kotu.io fallback: enabled (live API)", file=sys.stderr)
+
     out = []
     misses = []
     for i, note in enumerate(notes):
@@ -382,7 +514,8 @@ def main():
             time.sleep(REQUEST_DELAY)  # space requests so apiv2 doesn't 429
         word = note["word"]
         picks = best_for_word(word, known, old_sentence=note["old_sentence"],
-                              top=args.top, nadeshiko_key=nadeshiko_key, banks=banks)
+                              top=args.top, nadeshiko_key=nadeshiko_key, banks=banks,
+                              ss_data=ss_data)
         if not picks:
             # Carry the note_id so replace_apply can retire the card (no usable
             # replacement in any corpus → tag not-worth-learning + suspend).

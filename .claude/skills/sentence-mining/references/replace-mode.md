@@ -6,11 +6,14 @@ that actually shows 紅葉くん, a character name), or just incomprehensible st
 Replace mode swaps in a better, more comprehensible sentence **in place** and archives
 the old one. It does NOT create new cards (that's bank/video mode).
 
-## Canonical source order: Immersion Kit → Nadeshiko → local sentence bank
+## Canonical source order: Immersion Kit → Nadeshiko → sentencesearch → kotu → local sentence bank
 
 This is the order the skill **always** uses for finding example sentences — both here
 (fixing struggled-with cards) and for new-card mining. Each tier is tried only if the
-previous yields nothing usable *for Ray*:
+previous yields nothing usable *for Ray*. IK/Nadeshiko ship a screenshot; tiers 3–4 are
+**audio-only web corpora** (no image — `score_candidate(require_image=False)`, and
+`replace_apply` writes the picture's `。` filler) with far broader coverage; the local
+bank is the indexed-subset last resort:
 
 1. **Immersion Kit** (`apiv2.immersionkit.com`) — broadest corpus, anime-skewed. A June
    2026 head-to-head on 12 flagged leeches: IK won 9, tied 1, **0 misses** vs the local
@@ -19,7 +22,18 @@ previous yields nothing usable *for Ray*:
 2. **Nadeshiko** (`api.nadeshiko.co`, needs `NADESHIKO_API_KEY`) — drama-heavy corpus
    that covers formal/abstract words IK's anime corpus misses. Recovered `奉る`, `証券`,
    and the *real* `紅葉` (autumn leaves, not the character name) in testing.
-3. **Local sentence bank** — the indexed subs2srs `.apkg` banks (bank mode's corpus),
+3. **sentencesearch.neocities** — the site ships its whole ~45k-sentence corpus as one
+   static JSON (`/data/all_v11.json`) it searches client-side, so `load_sentencesearch`
+   mirrors that file into `work_dir/cache/` once a month and substring-searches it
+   locally (no per-word HTTP, no rate limit). Clean JLPT-tango / Anki-core native audio
+   at `receptomanijalogi.web.app/audio/<audio_jap>`; no image. Each record is
+   `{source, audio_jap, jap, eng}`.
+4. **kotu.io** (`api.kotu.io/v2/media/anki/subtitles?q=<word>`) — huge TV / anime / news
+   / audiobook corpus, live API. Each `item` has `text`, `externalFile.id` (clip audio at
+   `api.kotu.io/v2/media/audio/external/<id>`), and `video.title` (source). No gloss, no
+   image. Substring (not exact) match, so `looks_misleading` earns its keep dropping
+   `鉱山`-in-`住友金属鉱山` compound hits.
+5. **Local sentence bank** — the indexed subs2srs `.apkg` banks (bank mode's corpus),
    media served from local files. Last resort; only what's been indexed.
 
 None of these know what *Ray* knows, so `replace_search.py` grafts that back on: every

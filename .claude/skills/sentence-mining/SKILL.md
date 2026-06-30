@@ -51,11 +51,14 @@ incomprehensible) — that's **replace mode**, not bank mode. Bank/video mode *c
 new cards; replace mode *edits existing* ones in place and archives the old sentence.
 
 **Canonical sentence-source order (policy):** when finding an example sentence for a
-word, try **Immersion Kit → Nadeshiko → local sentence bank** in that order, keeping the
-first hit usable at Ray's i+1. This is **fully implemented in replace mode**. The
-new-card modes don't use it yet — video mode takes sentences from the video, bank mode
-from local banks; moving them onto this same order is the intended next step (not done
-yet). See [references/replace-mode.md](references/replace-mode.md).
+word, try **Immersion Kit → Nadeshiko → sentencesearch.neocities → kotu.io → local
+sentence bank** in that order, keeping the first hit usable at Ray's i+1. IK/Nadeshiko
+ship a screenshot; the two web corpora are audio-only but far broader (they catch the
+niche/loanword vocab the anime-skewed sources miss); the local bank is the indexed-subset
+last resort. This is **fully implemented in replace mode**. The new-card modes don't use
+it yet — video mode takes sentences from the video, bank mode from local banks; moving
+them onto this same order is the intended next step (not done yet). See
+[references/replace-mode.md](references/replace-mode.md).
 
 **Before anything else, ensure Anki is up** (skip for setup mode, which has no collection to hit yet). The create/fix modes all need AnkiConnect, so run `bash <skill-dir>/scripts/ensure_anki.sh` first — it launches Anki for you if it's closed and waits for it to load, instead of dying mid-pipeline on "Connection refused". Only stop and tell the user if it exits non-zero.
 
@@ -263,7 +266,7 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 | `extract_bank.py`       | bank  | parse `.apkg` → local index JSON + media dir                 |
 | `search_banks.py`       | bank  | word-list → top-N sentence candidates across indexed banks   |
 | `generate_media_bank.py`| bank  | copy bank media (or TTS fallback) + Gemini TTS explanation   |
-| `replace_search.py`     | replace | resolve target cards (flag / note-ids / words) → search Immersion Kit → Nadeshiko → local bank → filter + re-rank by your i+1 → replace-draft JSON |
+| `replace_search.py`     | replace | resolve target cards (flag / note-ids / words) → search Immersion Kit → Nadeshiko → sentencesearch → kotu → local bank → filter + re-rank by your i+1 → replace-draft JSON |
 | `replace_apply.py`      | replace | stage media (URL or local) + TTS explanation (best-effort), archive old sentence to `previous_versions`, overwrite fields, retag i-level, rehabilitate (de-leech/unsuspend/reset-to-due), clear flag:1 so the redone card just rejoins the study queue (`--done-flag N` to flag instead, `-1` to leave). Retires unfixable misses (`not-worth-learning` + suspend + clear flag; `--keep-misses` to skip). `--rehab-flag N` rehabilitates a batch with no field changes |
 | `push.py`               | both  | AnkiConnect addNotes onto `config.note_type` via `config.field_map` |
 | `ensure_anki.sh`        | all   | ping AnkiConnect; `open -a Anki` if down; wait for load + verify stable (run first) |
