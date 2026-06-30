@@ -26,6 +26,7 @@ channels:
   - "@rileybrownai"
   - "@dylandavisAI"
   - "@danny_why"  # auto-added 2026-06-15: 173k subs, 2 outliers (Claude Code/AI + faceless-YouTube niche)
+  - "@austin.marchese"  # auto-added 2026-06-29: 65.6k subs, 3 outliers (Claude Code/Skills/loop-engineering; "Stop Prompting Claude" Karpathy method 532k = 24.6x median / 8.1x views-sub)
 
 # Keywords for niche discovery (yt-dlp ytsearch)
 # Each keyword gets 20 results, filtered to last 24 hours
@@ -110,3 +111,6 @@ auto_add_rejected:
   - handle: "@samwitteveenai"
     date: "2026-06-28"
     reason: "123k subs, on-niche (agentic-coding LLMs / model releases); only 1 outlier in last ~5 (Ornith 1.0 51k = 3.3x median ~15.7k; VibeThinker 38k = 2.4x). Needs 2. Near miss -- mostly a model-launch news channel."
+  - handle: "@zinhoautomates"
+    date: "2026-06-29"
+    reason: "63.4k subs, clean on-niche (vibe coding / Claude Design / Codex tutorials); median ~15.3k, best is 31.4k = 2.05x = 0 outliers in last 5 (needs 2). On-niche near miss, likely qualifies on a future breakout."

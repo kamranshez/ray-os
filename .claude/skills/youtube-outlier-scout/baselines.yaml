@@ -99,3 +99,8 @@ channels:
     median: 49107
     video_count: 34
     subscribers: 189000
+  "@austin.marchese":
+    median: 21642
+    video_count: 7
+    subscribers: 65600
+    note: "auto-added 2026-06-29 (quick 10-video median); refresh for full baseline"
