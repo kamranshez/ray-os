@@ -82,3 +82,16 @@ NOTE: gate helper renamed `it(` → `at(` this build (telemetry now `j(`/`f_(`).
 - **MCP root-combinator normalization** (`tengu_mcp_normalize_root_combinators`) — newly shipped (stripped → wired). Per-host MCP URL-normalization allowlist; also got its first host value (see switches).
 - `tengu_velvet_cascade` — retired from GrowthBook (was wired). Per-model gate for the condensed "simple_system_prompt" (checks model against a `.models` list). Code still present in 2.1.195; now driven only by managed `simple_system_prompt` settings, not a server gate.
 - `tengu_ladder_mq7`, `tengu_satin_quoll` — retired from GrowthBook (both already stripped/no code). Names gone server-side and no code in the binary; nothing changes, last purpose unrecoverable.
+
+## 2026-06-29 — v2.1.195 (no version change)
+
+### 🔀 GrowthBook switches
+- **Default-async subagents** (`tengu_amber_heron`) — OFF → ON (via GrowthBook). In the Agent tool's launch path, this is one of the OR-terms that sets `is_async`: with it ON, a subagent spawned **without** an explicit `run_in_background` (and not a teammate) now defaults to running **asynchronously in the background** — the tool returns an `async_launched` status and notifies on completion instead of blocking the main loop. Code is wired, so the flip changes real behavior. Still overridden by `run_in_background:false`, teammate context, and `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS`.
+
+### 🆕 New flags
+- `tengu_lapis_anchor_budget` — GB value **15000000** (15M), stripped (literal key not in this binary). Companion to `tengu_lapis_anchor`, which controls the injected `<total_tokens>…tokens left</total_tokens>` reminder (modes off/infinite/fixed/countdown; env `CLAUDE_CODE_TOTAL_TOKENS_REMINDER`). The `_budget` value is almost certainly the token budget used in "fixed" mode (binary's hardcoded fixed default is `Nwm=5000000` = 5M). Server-side config staged ahead of the code that reads it — no direct call site this build, so flipping it is a no-op here.
+- `tengu_fleet_past_sessions` — GB false, stripped. Name ties to **FleetView** (the multi-agent fleet UI: `mountFleetView`, `FleetViewScreen`, `fleet_view_dispatch`). Probably gates a "past / historical sessions" view in the fleet manager. No direct call site in this build → upcoming/server-staged, off.
+- `tengu_gorse_fathom` — GB false, stripped. Codename-only; no strings or code in the binary, purpose unrecoverable from this build. Off, no-op.
+
+### 🧱 DCE switches
+None.
