@@ -13,7 +13,7 @@ description: >
   video-worthy. Also the per-video worker the gap-scout routine calls for each swept video.
   Do NOT use for a bulk channel sweep (that is the gap-scout routine / youtube-outlier-scout)
   or for plain wisdom extraction with no ACS gap-check (that is extract-wisdom).
-argument-hint: "[<youtube-url-or-id> | pasted transcript]  [output_dir=<path>]  [title=… channel=… publishedAt=…]"
+argument-hint: "[<youtube-url-or-id> | pasted transcript]  [channel_id=<slack-id>]  [title=… channel=… publishedAt=…]"
 allowed-tools:
   - Bash
   - Read
@@ -39,18 +39,23 @@ and the video pitches are the payload.** Spend your best reasoning on Stages 2-3
 Accept any of:
 - a YouTube URL or 11-char video id (validate against `^[A-Za-z0-9_-]{11}$`),
 - a pasted transcript (use it directly; skip the transcript fetch),
-- optional `output_dir=<path>` — when present you are in **routine mode**: write the report
-  files described in `references/slack-handoff.md` instead of printing. When absent you are
-  in **interactive mode**: print the report to the conversation.
+- optional `channel_id=<slack-id>` — when present you are in **routine mode**: you POST the
+  thread to that Slack channel yourself (the routine resolved the id once and handed it to
+  you), following `references/slack-posting.md`. When absent you are in **interactive mode**:
+  print the report to the conversation and post nothing.
 - optional `title=`, `channel=`, `publishedAt=` metadata (the routine passes these; in
   interactive mode infer from the page/transcript or ask only if it matters).
+
+You own the whole per-video job end to end: analyse, decide, and — in routine mode — post.
+The routine is only a scheduler; everything specific to turning ONE video into a thread
+lives here, so it is reusable and testable on its own.
 
 ## The pipeline (3 stages)
 
 ```
 STAGE 1  transcript → scope filter → EXTRACT WISDOM → cluster + PROMOTE SPINES (1-3)
 STAGE 2  for EACH spine, in parallel where possible:  deep-dive prose + ACS gap-check + pitch
-STAGE 3  DECIDE (post-worthy?) → assemble report → write files / print → log one line
+STAGE 3  DECIDE (post-worthy?) → assemble report → post the thread / print → log one line
 ```
 
 Stage 1 is the shared foundation everything hangs off, so it runs once, up front. Stage 2
@@ -219,22 +224,15 @@ not enough unless the missing angle is itself spine-level.
 5. **📚 Full wisdom (reference)** — the complete Stage 1c extraction.
 
 **EMIT.**
-- **Interactive mode** (no `output_dir`): print the assembled report to the conversation,
-  spine + verdict first. You may also save a copy to `reports/{YYYY-MM-DD}-{slug}.md`.
-- **Routine mode** (`output_dir` given): write the handoff files exactly as specified in
-  **`references/slack-handoff.md`** — `decision.json`, `main.txt`, and ordered `reply-NN-*.txt`
-  files (a human-readable `report.md` copy alongside them is fine too). You do NOT post to
-  Slack; the routine reads these and posts them. Keeping all curl/token/safe-encoding in the
-  routine and all wording here is the whole point of the split. Respect the Slack caps:
-  main.txt < 3000 chars, each reply < 3500 chars, splitting the wisdom across as many
-  `reply-` files as needed; truncate any single oversized block with an explicit `…` marker
-  rather than letting it overflow.
-
-  **Write these deliverables with Bash (`printf`/heredoc), not the Write tool.** Many
-  subagent harnesses block the Write tool on report-like files (`.md` especially), and
-  routine mode always runs inside a subagent — so a Write call will be rejected mid-run. A
-  `cat > "$output_dir/main.txt" <<'EOF' … EOF` heredoc (single-quoted delimiter so nothing
-  expands) sidesteps the guard and keeps the content byte-exact.
+- **Interactive mode** (no `channel_id`): print the assembled report to the conversation,
+  spine + verdict first, and post nothing. You may save a copy to
+  `reports/{YYYY-MM-DD}-{slug}.md` (write it with Bash, not the Write tool — many subagent
+  harnesses block the Write tool on report-like files).
+- **Routine mode** (`channel_id` given): POST the assembled report as ONE Slack thread to
+  that channel yourself, following **`references/slack-posting.md`** in full — it owns the
+  safe-encoding, the thumbnail check, the main-message blocks, the strictly-sequential thread
+  replies, the per-video error redaction, and the post gate (post nothing when `DECIDE`
+  returned not-post-worthy). If `DECIDE` was not-post-worthy, skip posting and just log.
 
 **LOG one line** (always, every exit path):
 `{videoId|paste} — {posted|covered|no-spine|out-of-scope|skipped} — spine: {spine} — {n} net-new / {m} complement — proposed: {titles}`
@@ -248,4 +246,6 @@ not volume of the wisdom.
 
 ## References
 - `references/wisdom-extraction.md` — the exact Stage 1c section spec + the 16-word rule.
-- `references/slack-handoff.md` — the routine-mode output contract (files + thread order).
+- `references/slack-posting.md` — how to post the thread in routine mode (safe-encoding,
+  thumbnail check, block layout, thread order, error redaction). Read it only when you have
+  a `channel_id`.
