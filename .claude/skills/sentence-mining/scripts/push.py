@@ -138,24 +138,34 @@ def main():
     for d in decks_needed:
         anki_request("createDeck", deck=d)
 
+    candidates = data["candidates"]
     notes = [
         build_note(c, data.get("source_url", ""), permanent_tag, data.get("source_id"))
-        for c in data["candidates"]
+        for c in candidates
     ]
 
-    # addNotes returns a list of new note IDs (or None for failures, in order).
-    note_ids = anki_request("addNotes", notes=notes)
+    # `canAddNotes` is the authoritative duplicate check. This AnkiConnect version
+    # rejects the WHOLE `addNotes` batch if even one note is a duplicate (it raises
+    # rather than returning None for that slot), so pre-filter the dupes out instead
+    # of letting one collision abort every other card.
+    can_add = anki_request("canAddNotes", notes=notes)
+    addable = [(c, n) for c, n, ok in zip(candidates, notes, can_add) if ok]
+    duplicates = [c["lemma"] for c, ok in zip(candidates, can_add) if not ok]
 
     added = 0
     failed = []
-    for candidate, note_id in zip(data["candidates"], note_ids):
-        if note_id is None:
-            failed.append(candidate["lemma"])
-            continue
-        added += 1
+    if addable:
+        # addNotes returns a list of new note IDs (or None for late failures, in order).
+        note_ids = anki_request("addNotes", notes=[n for _c, n in addable])
+        for (candidate, _n), note_id in zip(addable, note_ids):
+            if note_id is None:
+                failed.append(candidate["lemma"])
+                continue
+            added += 1
 
     print(json.dumps({
         "added": added,
+        "duplicates": duplicates,
         "failed": failed,
     }, ensure_ascii=False, indent=2))
 
