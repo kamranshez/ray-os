@@ -37,6 +37,11 @@ Prices, sections, and experiments drift. Before analysis, read the current truth
 - **1c. Plan preference — break down by `planFlavor`, NOT `licenseType`:** `purchase_button_clicked` by `planFlavor` (`six_month` vs `lifetime`). `licenseType` is uniformly `lifetime` on the landing and carries no signal.
 - **1d. Recovery health:** `checkout_abandoned` (split by `email_entered`) vs `checkout_recovered` (split by `by_promo`), 7d + 30d. Compute recovery rate two ways: against ALL abandons and against `email_entered=true` only (the recoverable denominator). **Baseline as of 2026-06-13: ~0.5% (90d) / ~1.4% (30d) of all abandons recovered; only ~25% of recoveries (5 of 20 over 90d) used the promo code.** Recovery lags 24–48h, so the trailing 7d understates — weight the 30d rate. If recovery stays <5% of *recoverable* abandons, recommend tuning (email-capture rate, Bento deliverability, copy/discount), NOT building.
 - **1e. Event totals:** `checkout_session_created`, `purchase_complete` (`source='server'`), `checkout_abandoned`, `checkout_recovered`, `paywall_viewed`, `paywall_cta_choice`, `pricing_section_viewed`, `newsletter_form_submitted`, `signin_failed`, `$rageclick`.
+- **1f. Hero sales-video watch funnel (NEW — events live from 2026-06-30, no history before that):** the landing hero VSL on `Hero.tsx` now emits playback milestones. Pull these as a drop-off funnel, counting **unique users** at each rung:
+  - `hero_video_started` — pressed play
+  - `hero_video_progress` with `progress_percent = 25`, then `= 50`, then `= 75` (each milestone fires once per user; query the breakdown on the `progress_percent` property)
+  - `hero_video_completed` — watched to the end
+  Compute, against `hero_video_started` as the denominator: % reaching 25 / 50 / 75 / completed, plus **started ÷ Hero unique viewers** (what share of people who see the hero actually press play). If `hero_video_started` returns 0 over the window, state "no video plays in range (events new 2026-06-30)" rather than reporting a tracking outage — do NOT treat empty history before that date as a bug.
 
 ## STEP 2: PULL STRIPE
 
@@ -69,6 +74,7 @@ Prices, sections, and experiments drift. Before analysis, read the current truth
 7. **Paywall conversion** — <15% = leaking.
 8. **Auth friction** — `signin_failed` + rage clicks. The only real code gap is uncategorized `signin_failed.error`. A valid recommendation is "add an `error_category` property to the existing capture so failures can be aggregated". Do NOT recommend surfacing errors or adding resend — both exist.
 9. **Newsletter** — capturing non-buyers?
+10. **Hero video engagement** (from 1f) — what share of hero viewers press play (`hero_video_started` ÷ Hero unique), and how far they get (25 → 50 → 75 → completed). A big drop before 50% means the VSL hook isn't landing; a healthy completion rate paired with weak purchase clicks means the offer/CTA after the video is the leak, not the video. Call out the steepest milestone drop and whether play-rate vs completion-rate is the weaker side. Events are new (2026-06-30), so caveat small samples.
 
 ## STEP 5: RECOMMENDATIONS
 
@@ -109,6 +115,8 @@ MESSAGE_1=$(cat <<'MSG'
 *Scroll-Through:* (from live section breakdown)
 {hero} → {section}% → … → EmailCapture {ec}%
 ⚠️ Biggest pre-pricing cliff: {section} ({drop}%)
+
+*Hero Video:* {started} plays ({play_rate}% of hero viewers) → 25% {p25}% · 50% {p50}% · 75% {p75}% · finished {completed}% _(events new 2026-06-30)_
 
 *Plan Clicks (by planFlavor):* 6-Month {sm}% · Lifetime {lt}%
 *Checkout Completion:* {completion}%  ·  *Recovery:* {recovered}/{abandoned} ({rec_rate}%, {rec_rate_email}% of email-captured)
@@ -181,3 +189,6 @@ curl -s -X POST "https://slack.com/api/chat.postMessage" \
 | `paywall_viewed` / `paywall_cta_choice` | `classSlug`, `cta` |
 | `newsletter_form_submitted` | — |
 | `signin_failed` | `error` (raw, uncategorized) |
+| `hero_video_started` | — (fires once per user on first play; live 2026-06-30) |
+| `hero_video_progress` | `progress_percent` (25 / 50 / 75; one event per milestone per user; live 2026-06-30) |
+| `hero_video_completed` | — (fires on video end; live 2026-06-30) |
