@@ -154,9 +154,9 @@ async def process_one(video_path, source_id, idx, candidate, workdir, semaphore,
     )
 
     # Register all three through AnkiConnect so add-on hooks see them as real adds.
-    store_media(sent_local, sent_audio)
+    sent_audio = store_media(sent_local, sent_audio)
     store_media(shot_local, screenshot)
-    store_media(exp_local, explain_audio)
+    explain_audio = store_media(exp_local, explain_audio)
 
     candidate["sentenceAudio_file"] = sent_audio
     candidate["picture_file"] = screenshot

@@ -107,16 +107,19 @@ async def process_one(idx: int, candidate: dict, workdir: Path, sem: asyncio.Sem
     sent_audio_field = ""
     src_audio = candidate.get("existing_audio", "")
     if src_audio and Path(src_audio).exists():
+        # ext trusts the bank file's own suffix -- store_media() sniffs the actual
+        # bytes and corrects it if a bank ever mislabels a file (same defect class
+        # as the July 2026 mp3-in-wav import batch).
         ext = Path(src_audio).suffix.lower() or ".mp3"
         target = f"{base}_sentence{ext}"
-        store_media(src_audio, target)
+        target = store_media(src_audio, target)
         sent_audio_field = target
     else:
         target = f"{base}_sentence_tts.mp3"
         local = workdir / target
         try:
             await gemini_tts(candidate["sentence"], local, sem)
-            store_media(local, target)
+            target = store_media(local, target)
             sent_audio_field = target
         except Exception as e:
             print(f"  sentence TTS failed for {candidate.get('lemma')!r}: {e}", file=sys.stderr)
@@ -135,7 +138,7 @@ async def process_one(idx: int, candidate: dict, workdir: Path, sem: asyncio.Sem
     exp_local = workdir / exp_target
     try:
         await gemini_tts(candidate["explanation"], exp_local, sem)
-        store_media(exp_local, exp_target)
+        exp_target = store_media(exp_local, exp_target)
     except Exception as e:
         print(f"  explanation TTS failed for {candidate.get('lemma')!r}: {e}", file=sys.stderr)
         exp_target = ""

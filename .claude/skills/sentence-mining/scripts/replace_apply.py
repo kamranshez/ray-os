@@ -81,15 +81,19 @@ async def process_one(entry, workdir: Path, sem):
         img_ext = _ext(entry["image_url"], "jpg")
         img_name = f"{base}_img.{img_ext}"
         _stage(entry["image_url"], workdir / img_name)
-        store_media(workdir / img_name, img_name)
+        img_name = store_media(workdir / img_name, img_name)
         entry["picture_field"] = f'<img src="{img_name}">'
     else:
         entry["picture_field"] = "。"
 
+    # Extension is guessed from the URL, not the bytes -- an external source (IK /
+    # Nadeshiko / web sentence sites) can serve content that doesn't match its own
+    # URL's apparent extension. store_media() sniffs the real bytes and corrects
+    # the filename before it's registered, so use its returned name below.
     snd_ext = _ext(entry["sound_url"], "mp3")
     snd_name = f"{base}_audio.{snd_ext}"
     _stage(entry["sound_url"], workdir / snd_name)
-    store_media(workdir / snd_name, snd_name)
+    snd_name = store_media(workdir / snd_name, snd_name)
     entry["sentence_audio_field"] = f"[sound:{snd_name}]"
 
     # Explanation TTS is best-effort: a dead/expired GEMINI key must NOT block the
@@ -98,7 +102,7 @@ async def process_one(entry, workdir: Path, sem):
     exp_name = f"{base}_explain.mp3"
     try:
         await gmb.gemini_tts(entry["explanation"], workdir / exp_name, sem)
-        store_media(workdir / exp_name, exp_name)
+        exp_name = store_media(workdir / exp_name, exp_name)
         entry["explanation_audio_field"] = f"[sound:{exp_name}]"
     except Exception as e:  # noqa: BLE001
         entry["explanation_audio_field"] = ""
