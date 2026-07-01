@@ -95,3 +95,48 @@ NOTE: gate helper renamed `it(` → `at(` this build (telemetry now `j(`/`f_(`).
 
 ### 🧱 DCE switches
 None.
+
+## 2026-06-30 — v2.1.196 (upgraded from v2.1.195)
+
+*🔀 GrowthBook switches*
+- **Cowork Chrome auto-mode default** (`tengu_cowork_chrome_automode_default`) — was OFF → now ON _(via GrowthBook)_. Gates the "chrome classifier floor" in Cowork's Claude-in-Chrome integration (`CLAUDE_CHROME_CLASSIFIER_FLOOR ?? it(...)`). With it on, Chrome browser actions in Cowork default to auto/permission mode driven by the permission classifier instead of prompting. Code still wired, so the flip is live for your account.
+
+*🆕 New flags*
+- `tengu_cobalt_plinth_putguard` — wired & ON. Part of the artifact-viewer/canvas module (sits next to `cobalt_plinth_fern`, `reader_persist`, `artifactViewerUrl`, `MAX_ARTIFACT_BYTES`). A guard on artifact PUT/persistence — write-protection when saving artifact state. _(wired, default on)_
+- `tengu_plugin_binary_assets` — wired, OFF. Env `CLAUDE_CODE_PLUGIN_BINARY_ASSETS`. Lets plugins ship binary assets that get fetched and cached to a local `assetCacheDir`. _(wired/upcoming, gated off)_
+- `tengu_mcp_path_scoped_permissions` — GB ON but stripped (no code). Path-scoped permissions for MCP tools (grant an MCP tool only within a path). Server-enabled but no call site this build → flipping is a no-op.
+- `tengu_long_context_survey_probability` & `tengu_long_context_survey_trigger_mode` — present (data strings), effective off (gb=""). Part of the in-product micro-survey infra ("How is Claude doing this session?"). Control the sampling probability and the trigger condition for the long-context survey.
+- `tengu_amber_packet`, `tengu_brass_sled` — stripped, OFF. Codenames reserved server-side; no binary code yet, behavior unknowable.
+- `tengu_velvet_hammer_mythos_5`, `tengu_velvet_hammer_sonnet_4_6` — stripped, OFF. Per-model variants of the velvet_hammer Edit-tool string-match validation (Mythos / Sonnet 4.6). No code shipped for these model-specific variants.
+
+*🧱 DCE switches*
+- `tengu_report_findings_tool` — newly shipped (stripped → wired). Env `CLAUDE_CODE_REPORT_FINDINGS`. Structured "report findings" tool for review-style agents (tied to `/code-review` + reasoning-effort tiers); code now present, gated off by default.
+- `tengu_russet_linnet` — newly shipped (stripped → wired). Env `CLAUDE_CODE_SKILL_DESC_REFRAME` ("skill_desc_reframe_arm_active"). Reframes/rewrites Skill tool descriptions before injection. Code now present, gated off.
+- `tengu_lapis_anchor_budget` — newly shipped (stripped → wired). Env `CLAUDE_CODE_TOTAL_TOKENS_REMINDER_BUDGET`. The token-budget threshold companion to `tengu_lapis_anchor` (total-tokens reminder); now GB-configurable instead of hardcoded.
+- `tengu_velvet_hammer` — gate retired (wired → present). Edit-tool fuzzy string-match validation pipeline (no_match/ambiguous/applies/lastRead). Gate call site removed; string survives only in the error-code telemetry list → behavior now unconditional.
+- `tengu_velvet_mallet` — gate retired (wired → present). Write-tool read-before-write + subagent-md-report-block enforcement ("File has not been read yet"; "Subagents should return findings as text, not write report files"). Gate removed; behavior now unconditional.
+- `tengu_event_watchdog_default_on` — code removed (wired → stripped). Defaulted an "event watchdog" on; string gone from this build, behavior retired.
+- `tengu_slim_subagent_claudemd` — code removed (wired → stripped). Gave subagents a slimmed-down CLAUDE.md (reduced project-memory context for subagents); code gone this build.
+
+## 2026-07-01 — v2.1.197 (upgraded from v2.1.196)
+
+**🔀 GrowthBook switches**
+
+- **Precompute compaction** (`tengu_sepia_moth`) — was ON → now OFF _(GrowthBook)_. Gates the `precomputeCompactionEnabled` behavior: precomputes the compacted conversation summary ahead of the compaction trigger so compaction is instant, and exposes a "Precompute compaction" toggle in settings. Code still wired; just gated off for your account now.
+- **Auto-mode stage-1 classifier hardening** (`tengu_auto_mode_config`) — payload changed _(GrowthBook)_. Added `s1SuffixByModel` for `claude-sonnet-5` / `claude-sonnet-5[1m]`: the new stage-1 prompt suffix tells the auto-mode (YOLO) permission classifier to judge an action by its full effect (what it runs/sends/publishes/enables), block if ANY rule could apply, and NOT apply user-intent/ALLOW exceptions (stage 2 handles those). Wired; effective off for you (auto mode).
+- **MCP root-combinator normalization** (`tengu_mcp_normalize_root_combinators`) — `["learningcommons.org"] → ["*"]` _(GrowthBook)_. Controls which MCP-server URL hostnames get root/OAuth-URL "combinator" normalization. Now applies to ALL hostnames (`*`) instead of one test domain. Wired.
+- **Bridge attestation config** (`tengu_bridge_attestation_enforce_config`) — `accept_level: VERIFIED_KEYLESS_DEVICE → VERIFIED_BY_GATE` _(GrowthBook)_. Device/bridge attestation security policy; when the parent `tengu_bridge_attestation_enforce` gate is on, defines the accepted attestation level. Now accepts "verified by gate" instead of "verified keyless device". Wired but gated off for you.
+- **Canary version stamp** (`tengu_canary`) — `{} → {external: "2.1.197"}` _(GrowthBook)_. Staged-rollout / canary marker tracking which build version is canaried; just bumped to the new version. Wired, effective off.
+- **Feature of the week** (`tengu_lilac_loom`) — `{} → null` _(GrowthBook)_. The `feature_of_the_week` spotlight (24h-cached eligibility promo highlighting a CC feature). Config cleared to null for you. Present (string only, not gate-wired).
+
+**🆕 New flags**
+
+- `tengu_frame_publish_context` — wired gate, default OFF. Sits in the artifact/"frame" publishing path (slug/title/favicon/label, `artifactReadVersions`); probably gates including extra context when publishing an artifact/frame. _(wired/upcoming)_
+- `tengu_saffron_credits_only_tiers` — wired gate; parses a list of plan tiers (default `["enterprise"]`) treated as "credits only" for billing/overage-consent logic. GB value `["enterprise"]`. _(wired)_
+- `tengu_usage_overage_included_models` — list of model ids included in/covered by usage-overage billing; `Uda()` prefix-matches a model against it, tied to `isUsingOverage`/`overageStatus`. Empty list currently. _(present)_
+- `tengu_startup_announcements` — config list of announcement messages shown at Claude Code startup, each optionally gated by `requiresModel` and tracked via impression counts. Empty currently. _(present/upcoming)_
+- `tengu_velvet_hammer_sonnet_5` — stripped, no code this build. A Sonnet-5-specific variant of the "velvet hammer" edit-tool guard (forces a Read before an Edit/Write; blocks stale edits). Name only, no behavior yet. _(stripped)_
+
+**🧱 DCE switches**
+
+None.
