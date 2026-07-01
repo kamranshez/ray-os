@@ -6,26 +6,6 @@ duration: "10-14 min"
 status: draft
 ---
 
-## Access Was Never the Point
-
-Here is the idea this whole video turns on. The moment your best model is rationed, getting access to it stops being the skill. Knowing the handful of jobs actually worth spending it on becomes the skill.
-
-Watch what just happened. The most capable model came back, and it came back metered. A slice of your weekly usage, then you are paying credits. And buried in the announcement was the real tell: some routine coding and debugging now falls back to a cheaper model.
-
-Read that again. They did not split the work by task type, cheap model for writing and expensive model for thinking. They split coding itself straight down the middle by difficulty. The routine half drops to the cheaper model. The hard half stays on the expensive one.
-
-That is the entire lesson, and the model maker is already doing it to you inside the product. So the only question left is which jobs deserve your most expensive model. It turns out there are about five.
-
-[IMAGE: dark background, a usage meter ticking up and slamming into a red weekly cap on the left, and on the right a stack of model tiers from a wide cheap band at the bottom to a thin glowing gold band at the top labeled "the expensive one"]
-
-![[five-jobs-rationed-tiers-1.png]]
-![[five-jobs-rationed-tiers-2.png]]
-![[five-jobs-rationed-tiers-3.png]]
-![[five-jobs-rationed-tiers-4.png]]
-![[five-jobs-rationed-tiers-5.png]]
-
----
-
 ## Two Ways You Waste It
 
 You waste a rationed model in two opposite directions, and most people manage to do both.
@@ -69,6 +49,32 @@ One expensive run. A pattern the rest of your stack replicates indefinitely.
 ![[five-jobs-golden-reference-3.png]]
 ![[five-jobs-golden-reference-4.png]]
 ![[five-jobs-golden-reference-5.png]]
+
+---
+
+## Point It At Your Own History
+
+Before you build anything else, point the same split at something other than your code. Point it at yourself.
+
+Your agent already saves every session to disk. A full record of where you and the model went in circles, re-explained the same context three times, or backed slowly out of a wrong turn. Almost nobody ever reads it back. That is the miss.
+
+So put a cheap model on it, on a schedule. Once a week it reads the conversations, not the code, and does the low judgment, high volume work it is good at. It finds the places you struggled. The same correction you typed on Monday and again on Thursday. The tasks that took ten messages when they should have taken two. It hands back a short list of recurring friction.
+
+Then, and only then, the expensive model gets involved. You give it that short list and one question. Which of these is worth fixing for good, and what is the fix. A skill. A small MCP server. A missing line in your CLAUDE.md. That is the judgment call, so it goes to the top tier, but it runs against a list a cheap model already built for free.
+
+Next week that friction is gone, because you turned it into a skill instead of paying to re-explain it a fourth time.
+
+This is also what feeds the map you are about to build. The friction log points straight at your real blast zones. And it compounds. Every week the harness gets a little sharper, which means the expensive model is needed on even fewer jobs than the week before.
+
+One caveat. Raw session logs are long and noisy, not built for a model to read cold. So have the cheap model distill each week down to a short digest first, or write the struggle points out at the end of every session with a hook. You point the expensive model at the digest, never the raw pile.
+
+[IMAGE: dark background, a stack of chat log files on the left being scanned by a small grey "cheap model" magnifier that pulls out a short list of red friction flags in the middle, and a single gold "expensive model" on the right stamping each flag into a labeled "skill" block]
+
+![[five-jobs-history-loop-1.png]]
+![[five-jobs-history-loop-2.png]]
+![[five-jobs-history-loop-3.png]]
+![[five-jobs-history-loop-4.png]]
+![[five-jobs-history-loop-5.png]]
 
 ---
 
