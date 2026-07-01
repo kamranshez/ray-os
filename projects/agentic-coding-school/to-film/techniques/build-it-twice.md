@@ -29,7 +29,11 @@ So your plan is written at the exact moment you understand the problem worst.
 
 [IMAGE: dark chalkboard, a rising "understanding" curve over a time axis, a pin labeled "you write the plan" sitting at the lowest point on the left, a pin labeled "you actually understand it" near the top on the right]
 
-![[images/build-it-twice/knowledge-curve.png]]
+![[build-it-twice-knowledge-curve-1.png]]
+![[build-it-twice-knowledge-curve-2.png]]
+![[build-it-twice-knowledge-curve-3.png]]
+![[build-it-twice-knowledge-curve-4.png]]
+![[build-it-twice-knowledge-curve-5.png]]
 
 Every decision in that plan is a guess made from the bottom of the curve. Which abstraction to use. Where the boundaries go. What the data model should be. You are choosing all of it while you know almost nothing.
 
@@ -47,7 +51,11 @@ You learn more in the first hour of building than in a week of planning. Not bec
 
 [IMAGE: dark chalkboard, two stacked bars labeled "1 week of planning" (short, thin understanding) and "1 hour of building" (tall, full understanding), arrow showing build buys more knowledge per unit time]
 
-![[images/build-it-twice/build-buys-knowledge.png]]
+![[build-it-twice-build-buys-knowledge-1.png]]
+![[build-it-twice-build-buys-knowledge-2.png]]
+![[build-it-twice-build-buys-knowledge-3.png]]
+![[build-it-twice-build-buys-knowledge-4.png]]
+![[build-it-twice-build-buys-knowledge-5.png]]
 
 So the cost question flips. A token costs a fraction of a cent. An hour of agent build time costs you almost nothing. A wrong abstraction shipped to production costs you months. When the cheap thing buys down the expensive risk, you do the cheap thing twice.
 
@@ -75,7 +83,11 @@ The only thing that has changed is the clock. The build-then-rebuild loop used t
 
 [IMAGE: dark chalkboard, two horizontal timelines stacked. Top labeled "Before AI": a long bar "build (3 to 4 months)" then a long bar "rewrite". Bottom labeled "Now": a tiny bar "build (1 day, throwaway)" then a bar "rebuild", same loop compressed]
 
-![[images/build-it-twice/timeline-compression.png]]
+![[build-it-twice-timeline-compression-1.png]]
+![[build-it-twice-timeline-compression-2.png]]
+![[build-it-twice-timeline-compression-3.png]]
+![[build-it-twice-timeline-compression-4.png]]
+![[build-it-twice-timeline-compression-5.png]]
 
 So stop treating the rebuild as a failure you are trying to avoid. It is the part where the real engineering happens. The first pass just earns you the right to do it well.
 
@@ -91,7 +103,11 @@ A clean rebuild inherits only the learnings.
 
 [IMAGE: dark chalkboard, two paths from a tangled box labeled "prototype". Top path "refactor" arrives at a still-tangled box carrying the same knots. Bottom path "reset" passes through a filter labeled "keep the learnings, drop the code" and arrives at a clean box]
 
-![[images/build-it-twice/reset-vs-refactor.png]]
+![[build-it-twice-reset-vs-refactor-1.png]]
+![[build-it-twice-reset-vs-refactor-2.png]]
+![[build-it-twice-reset-vs-refactor-3.png]]
+![[build-it-twice-reset-vs-refactor-4.png]]
+![[build-it-twice-reset-vs-refactor-5.png]]
 
 So you do not hand the agent the old code. You hand it the knowledge. You write down what you learned: the real data model, the edge cases that bit you, the boundary that turned out to be in the wrong place, the part that was secretly simple and the part that was secretly hard. Then you start a fresh build from that.
 
