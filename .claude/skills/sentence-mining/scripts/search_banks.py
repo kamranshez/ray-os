@@ -16,6 +16,10 @@ Ranking per (word, candidate sentence):
   6. Word appears as whole-segment (preceded/followed by punctuation or boundary)  +2
   7. Bank with more total sentence-bearing notes  small bonus
 
+Full-width speaker-name labels（（亜湖）/【フランセス】) that subs2srs prepends to TV
+lines are stripped before matching, scoring, and output — a word that only appears
+inside such a name (湖 inside 亜湖) is treated as absent and the candidate is skipped.
+
 Output JSON: same shape as analyze.py's candidates list, so downstream pipeline can reuse:
   {
     "source_id": "banksearch-<timestamp>",
@@ -47,6 +51,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -62,6 +67,20 @@ MAIN_DECK = ""
 LEN_SWEET = (15, 50)
 LEN_OK = (8, 80)
 
+# subs2srs rips of Japanese TV prefix each speaker's line with a name label in
+# full-width brackets: （亜湖）しょうがない / 【フランセス】自信ある？. These names
+# routinely CONTAIN the kanji of an unrelated target word (湖 "lake" lives inside
+# 亜湖 "Ako"), so a naive substring match mines the word from a character's NAME
+# instead of a real usage. Strip these labels before matching/scoring/display so a
+# word that only occurs inside a name is correctly treated as "not present".
+# Only labels at a line/segment start are stripped, so kanji-reading annotations
+# like 漢字（かんじ） (preceded by a kanji) are left untouched.
+_SPEAKER_LABEL = re.compile(r"(?:^|(?<=[\n\t　 ]))[（(【][^）)】\n]{1,10}[）)】]")
+
+
+def strip_speaker_labels(s: str) -> str:
+    return _SPEAKER_LABEL.sub("", s).strip()
+
 
 def load_indexes(index_dir: Path) -> list[dict]:
     files = sorted(index_dir.glob("*.notes.json"))
@@ -71,7 +90,7 @@ def load_indexes(index_dir: Path) -> list[dict]:
 
 
 def score_candidate(word: str, note: dict, bank: dict) -> tuple[int, float]:
-    s = note["sentence"]
+    s = strip_speaker_labels(note["sentence"])
     L = len(s)
     score = 0
     if note["audio_files"]:
@@ -100,7 +119,9 @@ def search_word(word: str, banks: list[dict], top: int) -> list[dict]:
     hits: list[tuple[int, float, dict, dict]] = []
     for bank in banks:
         for note in bank["notes"]:
-            s = note["sentence"]
+            s = strip_speaker_labels(note["sentence"] or "")
+            # Reject when the word only survives inside a （name） speaker label —
+            # that's the kanji-in-a-name false match (湖 inside 亜湖), not a usage.
             if not s or word not in s:
                 continue
             sc, tiebreak = score_candidate(word, note, bank)
@@ -125,7 +146,7 @@ def search_word(word: str, banks: list[dict], top: int) -> list[dict]:
             "lemma": word,
             "wordForm": word,
             "reading": note.get("reading", ""),
-            "sentence": note["sentence"],
+            "sentence": strip_speaker_labels(note["sentence"]),
             "i_level": "i?",                        # bank mode skips morph diff
             "deck": MAIN_DECK,
             "existing_audio": audio_path,
