@@ -33,6 +33,12 @@ On July 7th, Fable disappears from the $200 plan. Which means right now, the sma
 
 *[IMAGE: split screen. Left: a frantic queue of tickets being shovelled into a Fable terminal, labelled "OUTPUT". Right: a small stack of documents labelled "WHAT IT KNOWS", untouched.]*
 
+![[fable-exit-problem-output-vs-knowledge-1.png]]
+![[fable-exit-problem-output-vs-knowledge-2.png]]
+![[fable-exit-problem-output-vs-knowledge-3.png]]
+![[fable-exit-problem-output-vs-knowledge-4.png]]
+![[fable-exit-problem-output-vs-knowledge-5.png]]
+
 Here's what everyone with a $200 plan is doing this week. They've got a countdown in their head, and they're feeding Fable everything. Every backlog ticket, every half-finished feature, every "while I still have you" idea. Squeeze the genius for as much output as possible before the door closes.
 
 And I get it. That was my first instinct too. Line up every hard task I've been putting off and burn my weekly cap to zero. Half of YouTube is telling you to do exactly that right now. Run these prompts, ship these features, maximum extraction.
@@ -63,6 +69,12 @@ Most models reason a few steps out. Change the thing, check the thing works, don
 
 *[IMAGE: a ripple diagram. A database column rename in the centre, four concentric rings expanding outward, each ring labelled with the effects below. Rings light up one at a time as they're mentioned.]*
 
+![[fable-exit-ripple-column-rename-1.png]]
+![[fable-exit-ripple-column-rename-2.png]]
+![[fable-exit-ripple-column-rename-3.png]]
+![[fable-exit-ripple-column-rename-4.png]]
+![[fable-exit-ripple-column-rename-5.png]]
+
 Here's a tiny example. You rename a database column. First order, the rename itself. Second order, the ORM model and that one raw SQL string someone wrote in a migration script. Third order, the serialized blob another service reads, and the analytics event contract that quietly includes the old name. Fourth order, the downstream pipeline that ingests those events, and the revenue dashboard nobody remembers is wired to it. A cheap model catches the first hop, maybe the second. Fable walks the whole chain, unprompted.
 
 Every question in this exit interview is designed to cash in exactly that. You are not paying for faster code. You are paying for the model that sees around corners. Keep that in your head, because it's the test for every prompt in this video: does this question need the ripple, or just the first hop?
@@ -72,6 +84,12 @@ Every question in this exit interview is designed to cash in exactly that. You a
 ## Section 1: For those who won't use Fable 5 until it's back on the subscription
 
 *[IMAGE: an interview room. Two chairs. One labelled FABLE with a cardboard box of desk belongings next to it, one labelled OPUS holding a clipboard.]*
+
+![[fable-exit-interview-room-1.png]]
+![[fable-exit-interview-room-2.png]]
+![[fable-exit-interview-room-3.png]]
+![[fable-exit-interview-room-4.png]]
+![[fable-exit-interview-room-5.png]]
 
 A real exit interview has three questions. What do you know that we don't. What do you think of how we work. And what should we set up before you go. That's the whole structure, and every prompt in this section is one of those three questions pointed at your setup.
 
@@ -97,6 +115,14 @@ Now the honest drawbacks, because this can go wrong in ways that cost real money
 
 The fixes are cheap. Fable writes its own interview agenda in one small call. Opus conducts it, carries all the context, and hands Fable small distilled questions with hard termination criteria. Fable sets the syllabus. Opus runs the exam.
 
+*[IMAGE: the interview protocol loop, agenda to distilled question to answer to readback, captioned "Fable sets the syllabus. Opus runs the exam."]*
+
+![[fable-exit-exam-loop-1.png]]
+![[fable-exit-exam-loop-2.png]]
+![[fable-exit-exam-loop-3.png]]
+![[fable-exit-exam-loop-4.png]]
+![[fable-exit-exam-loop-5.png]]
+
 *Demo: run the main session as Opus and have it consult Fable per question via a subagent with the model parameter. Show one question, answer, readback round on screen, not the whole loop.*
 
 Whichever way you run it, the interview covers the same ground. Let me walk through the beats.
@@ -120,6 +146,14 @@ One line of git gives you files ranked by how often they change. Another pass gi
 `[FINDING NARRATION: walk through the single best finding from the pre-run. Name the files, say the downstream break in plain words, and point at the part a cheaper model would have read straight past.]`
 
 And here's why this matters more than it looks. Most repos at this point are geological layers. Some Opus 4.1 at the bottom, some 4.5, some 4.6, a stratum of Sonnet, maybe some GLM. Fable is the only model smart enough to see the strata and tell you which layer is load bearing.
+
+*[IMAGE: geological cross-section of a codebase, model names as rock strata, one layer marked LOAD BEARING.]*
+
+![[fable-exit-geological-strata-1.png]]
+![[fable-exit-geological-strata-2.png]]
+![[fable-exit-geological-strata-3.png]]
+![[fable-exit-geological-strata-4.png]]
+![[fable-exit-geological-strata-5.png]]
 
 **Then, you.** Because the second interview question is not about the code, it's about the working relationship. And here's the twist that makes this actually useful: I didn't ask Fable to critique my sessions with Fable. I asked it to read my sessions with Opus. Opus is the model that stays. That's the relationship that needs coaching.
 
@@ -193,6 +227,12 @@ These are questions about your system, not your code. Cheap models answer them p
 
 *[IMAGE: Fable's employee badge being swapped for a consultant lanyard labelled "SPECIALIST, BY APPOINTMENT".]*
 
+![[fable-exit-badge-consultant-swap-1.png]]
+![[fable-exit-badge-consultant-swap-2.png]]
+![[fable-exit-badge-consultant-swap-3.png]]
+![[fable-exit-badge-consultant-swap-4.png]]
+![[fable-exit-badge-consultant-swap-5.png]]
+
 Now, the second half. Maybe you're not quitting. Maybe you're keeping Fable through the API, or you just want to stop torching your weekly cap. Either way the discipline is the same: Fable stops being your daily driver and becomes the specialist you bring in for the handful of tasks where nothing else is good enough. Everything in the first half told you which tasks those are. Here's the system.
 
 ### Beat 5: The routing rule
@@ -215,6 +255,12 @@ One quick aside: route by model AND effort. Fable on low effort beats maxed-out 
 
 *[IMAGE: two doors. One swings both ways, sketchy and casual. One is a bank vault mid-close.]*
 
+![[fable-exit-one-way-two-way-doors-1.png]]
+![[fable-exit-one-way-two-way-doors-2.png]]
+![[fable-exit-one-way-two-way-doors-3.png]]
+![[fable-exit-one-way-two-way-doors-4.png]]
+![[fable-exit-one-way-two-way-doors-5.png]]
+
 Here's how to decide what still deserves Fable at all. Every technical decision is one of two doors.
 
 A two-way door you can walk back through. UI copy, styling, an internal refactor behind a stable interface, anything behind a feature flag. Get it wrong, revert, nothing calcifies. Let cheap models ship these all day, unsupervised.
@@ -224,6 +270,14 @@ A one-way door locks behind you. The database schema. A public API contract. The
 So the rule is one sentence: **Fable reviews every one-way door before it closes.** Cheap models can write the code. But anything irreversible gets a Fable review before merge, because judging a one-way door is exactly the third and fourth order reasoning from the start of this video. The code for an auth flow is small. The decision is enormous. Pay for the decision, not the keystrokes.
 
 ### Beat 7: A better harness beats a bigger model
+
+*[IMAGE: builder robot and adversarial reviewer robot looping until complaints run dry, with a dusty "ESCALATE TO FABLE" side exit.]*
+
+![[fable-exit-harness-builder-reviewer-loop-1.png]]
+![[fable-exit-harness-builder-reviewer-loop-2.png]]
+![[fable-exit-harness-builder-reviewer-loop-3.png]]
+![[fable-exit-harness-builder-reviewer-loop-4.png]]
+![[fable-exit-harness-builder-reviewer-loop-5.png]]
 
 And the move that sits above all of it. Before spending Fable on anything, ask one question: would a cheaper model in a better harness get there instead?
 
