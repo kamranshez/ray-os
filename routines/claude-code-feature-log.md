@@ -140,3 +140,30 @@ None.
 **🧱 DCE switches**
 
 None.
+
+## 2026-07-03 10:15 — v2.1.199 (from v2.1.197)
+
+_Gate helper prefix drifted `it(`→`ot(` this release; regex patched in the routine. `velvet_mallet`/`velvet_hammer` present→wired were regex artifacts (wrapper `$st`→`Jat`, ends in `at`) and were dropped — both are wired read-guards in both versions._
+
+**🔀 GrowthBook switches**
+- Weekly plan rate-limit config (`tengu_saffron_lattice`) — OFF → ON _(GrowthBook, wired)_. Parses the plan/weekly usage-limit UI config; dropped `hideRateLimitsDescription`, now sets `planLimitsEndDate: 2026-07-08`. Surfaces the rate-limit description + end-date banner.
+- Startup announcements (`tengu_startup_announcements`) — `[]` → Fable 5 promo _(config)_. Startup banner now carries "Fable 5 is back": up to 50% of weekly limit on Fable 5 until Jul 7, then usage credits. maxImpressions 100.
+- Artifact publish context (`tengu_frame_publish_context`) — OFF → ON _(wired)_. Gates attaching artifact read-version context when publishing an Artifact/frame.
+- Artifacts master gate (`tengu_cobalt_plinth`) — OFF → ON _(wired)_. Turns on the Artifact feature (publish HTML/MD to a hosted claude.ai page: `/api/frame/deploy/init`, `artifactViewerUrl`, FRAME_RUNTIME, MAX_ARTIFACT_BYTES). Now live for this account.
+- Auto-mode classifier config (`tengu_auto_mode_config`) — payload expanded _(wired, mode still off)_. Two-stage `/auto` safety classifier gained `sameTurnSiblingContext`, `jsonlTranscript`, `editRemovalVisibility`, `editRemovalCap: 3000`.
+- Overage-included models (`tengu_usage_overage_included_models`) — `[]` → `["Fable","Fable 5"]`. Models allowed to draw usage-credit overage past the plan cap (ties to the Fable 5 promo).
+- Canary pin (`tengu_canary`) — `{external:"2.1.197"}` → `{}` _(wired)_. External canary-version pin cleared now that 2.1.199 is the release.
+
+**🆕 New flags** (all name-only / stripped — no binary code yet)
+- `tengu_velvet_tide` — zero binary presence; purpose unknown, watch next release.
+- `tengu_md_artifact_styling` — likely styling/theming for Markdown Artifacts (pairs with cobalt_plinth). No code yet.
+- `tengu_ide_rc_auto_enable` — likely auto-enabling an IDE release-candidate build/extension. No code yet.
+- `tengu_plan_artifact` — likely publishing plan-mode output as an Artifact. No code yet.
+
+**🧱 DCE switches**
+- `tengu_amber_packet` — newly shipped (stripped → wired). Gates a background precompute-compaction path (`ot("tengu_amber_packet")&&!K$()`, feeds `Lba` alongside `precomputeCompactionEnabled`/`sepia_moth`) so a compaction is ready ahead of a stall.
+- `tengu_slate_ibis` — newly shipped (stripped → present, default ON). Gates the Explore/Plan **coordinator + worker** multi-agent system (`getCoordinatorAgents`, `WORKER_AGENT`, worker/coordinator prompts; honors `CLAUDE_CODE_DISABLE_EXPLORE_PLAN_AGENTS`). Read via getFeatureValue, hence "present".
+- `tengu_brass_sled` — newly shipped (stripped → wired). Gates injecting Windows toolchain detection into the shell system prompt (`kVa()`→`hks()` enumerates MSVC/VS-dev-shell tools on PATH).
+- `tengu_gorse_fathom` — newly shipped (stripped → wired). Gates extra memory guidance near the `memory-types` skill: prompt to save a `feedback` memory when the user corrects how a repeatable step was run.
+- `tengu_quartz_heron` — code removed (wired → stripped). Gated the built-in subagent default model (off → `"haiku"`, on → `"inherit"`). Removed → built-in agent model selection no longer haiku-gated.
+- `tengu_amber_heron` — code removed (wired → stripped). Gated defaulting the Agent/Task tool to async/background execution (fed the `is_async` decision). Removed → async-subagent behavior no longer behind this gate.
