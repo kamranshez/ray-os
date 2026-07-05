@@ -69,7 +69,7 @@ Every question in this exit interview is designed to cash in exactly that. You a
 
 ---
 
-## Section 1: The exit interview, for those who won't pay API prices until Fable is back
+## Section 1: For those who won't use Fable 5 until it's back on the subscription
 
 *[IMAGE: an interview room. Two chairs. One labelled FABLE with a cardboard box of desk belongings next to it, one labelled OPUS holding a clipboard.]*
 
@@ -153,7 +153,19 @@ For me that's the scriptwriter skill, the wisdom extractor, and the A/B tester, 
 
 You will be surprised how often the remake wins. And every one that does is Fable-grade judgement running in your setup every day, long after Fable is gone.
 
-### Beat 3: The meta-prompts
+### Beat 3: The golden reference
+
+The other thing to build before it goes: golden references. Two facts you already know, combined into one move. Models generate better than they edit. And cheap models match patterns better than they exercise judgement. So: spend one expensive Fable run building the canonical implementation, and from then on, cheap models get a single instruction. "Make the other forty look like this one." You've converted open-ended judgement into closed-ended pattern matching. Spent once, copied forever.
+
+*Screen: the entitlements state machine run on the course funnel.*
+
+Here's the one I ran. The entitlements state machine on my course funnel, the code that decides who has access to what. One Fable run produced the reference: the subscription lifecycle states, the failure matrix, declined card, refund, expired plan, webhook arriving twice, webhook arriving out of order, the grace-period rules, and the acceptance tests that pin all of it down.
+
+`[FINDING NARRATION: show the reference artifact from the pre-run. Point at the failure matrix specifically, the part a cheap model gets subtly wrong.]`
+
+Notice what makes this a good golden reference candidate: it's judgement-dense, it has huge blast radius, and it's exactly the kind of thing a cheap model would get plausibly, quietly wrong. Then after July 7th, the cheap model builds everything around it against the reference. It matches the pattern. It never has to invent it.
+
+### Beat 4: The meta-prompts
 
 The last two prompts in the interview are not mine. They're from Daniel Miessler's ten prompts post, link in the description, and I've cherry-picked the two that fit this moment perfectly.
 
@@ -177,13 +189,13 @@ These are questions about your system, not your code. Cheap models answer them p
 
 ---
 
-## Section 2: Keeping Fable in moderation
+## Section 2: For those who'll use Fable in moderation
 
 *[IMAGE: Fable's employee badge being swapped for a consultant lanyard labelled "SPECIALIST, BY APPOINTMENT".]*
 
 Now, the second half. Maybe you're not quitting. Maybe you're keeping Fable through the API, or you just want to stop torching your weekly cap. Either way the discipline is the same: Fable stops being your daily driver and becomes the specialist you bring in for the handful of tasks where nothing else is good enough. Everything in the first half told you which tasks those are. Here's the system.
 
-### Beat 4: The routing rule
+### Beat 5: The routing rule
 
 The foundation is one line, and I have to credit Simon Willison for it, link in the description. The move is judgement-based delegation. You tell your top model:
 
@@ -198,18 +210,6 @@ You're not writing routing rules. You're delegating the routing decision itself 
 Then my twist, the self-refining loop. After each subagent finishes, Fable grades the result against what it would have done, and updates its own routing notes. Get it wrong once, route better forever. The routing table is not static config, it's a judgement that gets sharper every session. You're not writing rules for Fable. You're letting Fable learn its own management style.
 
 One quick aside: route by model AND effort. Fable on low effort beats maxed-out cheaper models on plenty of tasks, at a fraction of the burn. The dial has two axes and most people only turn one.
-
-### Beat 5: The golden reference
-
-Two facts you already know, combined into one move. Models generate better than they edit. And cheap models match patterns better than they exercise judgement. So: spend one expensive Fable run building the canonical implementation, and from then on, cheap models get a single instruction. "Make the other forty look like this one." You've converted open-ended judgement into closed-ended pattern matching. Spent once, copied forever.
-
-*Screen: the entitlements state machine run on the course funnel.*
-
-Here's the one I ran. The entitlements state machine on my course funnel, the code that decides who has access to what. One Fable run produced the reference: the subscription lifecycle states, the failure matrix, declined card, refund, expired plan, webhook arriving twice, webhook arriving out of order, the grace-period rules, and the acceptance tests that pin all of it down.
-
-`[FINDING NARRATION: show the reference artifact from the pre-run. Point at the failure matrix specifically, the part a cheap model gets subtly wrong.]`
-
-Notice what makes this a good golden reference candidate: it's judgement-dense, it has huge blast radius, and it's exactly the kind of thing a cheap model would get plausibly, quietly wrong. Then the cheap model builds the surrounding UI against it. It matches the pattern. It never has to invent it.
 
 ### Beat 6: One-way doors and two-way doors
 
