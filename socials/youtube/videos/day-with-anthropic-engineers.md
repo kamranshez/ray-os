@@ -429,6 +429,14 @@ And before your next unfamiliar piece of work, ask for a blindspot pass. The bot
 
 One more thing I'll leave you with. Some of my friends work on reinforcement learning at Anthropic, which means they spend all day with models like Fable and Mythos. And even at that level, they told me the model still sometimes goes confidently down a completely wrong path, and the only thing that catches it is their own lived experience with the problem. So I asked them the uncomfortable question. If the internal models are that good, what's the difference between you prompting them and a junior engineer who just joined prompting them? Why are you paid more? And their answer came down to judgment. Knowing when the model is wrong, especially on judgment-heavy work, is still the job. There are plenty of situations where they know better than the model. One day it will know better than them. But that day isn't here yet. And until it is, that judgment is the part you bring too.
 
+> 🎨 DRAW `day-anthropic-senior-judgment-gap` — junior and senior staring at the same model output, ninety percent glowing correct with a confident wrong claim at the very end; only the senior's "lived experience" lens reveals the flaw, with a small closing-gap timeline underneath ("a few more years")
+
+![[day-anthropic-senior-judgment-gap-1.png]]
+![[day-anthropic-senior-judgment-gap-2.png]]
+![[day-anthropic-senior-judgment-gap-3.png]]
+![[day-anthropic-senior-judgment-gap-4.png]]
+![[day-anthropic-senior-judgment-gap-5.png]]
+
 And that's really where the whole day in Tokyo landed for me. The people building this thing are still figuring it out. There are many futures, and one of them may be directionally correct. I have no idea if mine is. But I'm enjoying finding out.
 
 ---
