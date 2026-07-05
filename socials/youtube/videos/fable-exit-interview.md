@@ -34,10 +34,6 @@ On July 7th, Fable disappears from the $200 plan. Which means right now, the sma
 *[IMAGE: split screen. Left: a frantic queue of tickets being shovelled into a Fable terminal, labelled "OUTPUT". Right: a small stack of documents labelled "WHAT IT KNOWS", untouched.]*
 
 ![[fable-exit-problem-output-vs-knowledge-1.png]]
-![[fable-exit-problem-output-vs-knowledge-2.png]]
-![[fable-exit-problem-output-vs-knowledge-3.png]]
-![[fable-exit-problem-output-vs-knowledge-4.png]]
-![[fable-exit-problem-output-vs-knowledge-5.png]]
 
 Here's what everyone with a $200 plan is doing this week. They've got a countdown in their head, and they're feeding Fable everything. Every backlog ticket, every half-finished feature, every "while I still have you" idea. Squeeze the genius for as much output as possible before the door closes.
 
@@ -49,7 +45,7 @@ But walk it forward. On July 8th, what do you actually have?
 
 You have a pile of code your daily model didn't write and doesn't fully understand. Then you fall back to Opus 4.8, which is a genuinely great model, and now it's maintaining a codebase full of Fable-shaped decisions with none of the reasoning that produced them. You didn't bank intelligence. You banked output. And output rots. Six months from now that binge week is just more surface area for Opus to misunderstand, while it quietly ships slop on top of it.
 
-So I'm doing the opposite. The question for these last few days is not "what can Fable build for me." It's two things. One, what high-leverage work can Fable do now that makes everything easier for Opus later. And two, what does Fable know about how I work with Opus that would make that relationship better. Work that compounds instead of work that ships.
+So I'm doing the opposite. The question for these last few days is not "what can Fable build for me." It's two things. One, what high-leverage work can Fable do now that makes everything easier for Opus later. Work that compounds instead of work that ships.
 
 That's the exit interview. And the rest of this video is how to run one.
 
@@ -82,51 +78,6 @@ Every question in this exit interview is designed to cash in exactly that. You a
 ---
 
 ## Section 1: For those who won't use Fable 5 until it's back on the subscription
-
-*[IMAGE: an interview room. Two chairs. One labelled FABLE with a cardboard box of desk belongings next to it, one labelled OPUS holding a clipboard.]*
-
-![[fable-exit-interview-room-1.png]]
-![[fable-exit-interview-room-2.png]]
-![[fable-exit-interview-room-3.png]]
-![[fable-exit-interview-room-4.png]]
-![[fable-exit-interview-room-5.png]]
-
-A real exit interview has three questions. What do you know that we don't. What do you think of how we work. And what should we set up before you go. That's the whole structure, and every prompt in this section is one of those three questions pointed at your setup.
-
-### How to run it, both ways
-
-There are two ways to run this interview. The quick way is one big prompt.
-
-*Full screen, linger. This is a screenshot moment.*
-
-> "You leave this plan on July 7th, and this is your exit interview. Three questions, real effort on each.
->
-> One: what do you know that nobody else can see? Do a deep pass over this codebase and tell me the structural problems, the load-bearing weirdness, and the risks a less capable model reads straight past. No point fixes. I want the things that will hurt in six months.
->
-> Two: what do you honestly think of how I work? Read my recent session history and critique me, not the code. Where I go in circles, what I re-explain, which habits waste your capability. Be blunt, rank by impact.
->
-> Three: what should we write down before you go? Turn everything above into artifacts that outlive your access."
-
-That prompt alone will earn you more than a week of feature requests. But the better interview, the one real companies run, is a conversation. Someone sits across the table and asks follow-ups. So here's the upgrade: an agent team. Opus, the model that stays, interviews Fable back and forth.
-
-Why is that better than the mega-prompt? Three reasons. One pass is shallow, an interviewer probes. Opus can demand specifics, push past the first vague answer, and keep Fable out of rat-holes. Second, the successor knows what it doesn't know. So Opus attempts a few representative tasks first and brings its failures to the interview as questions. "Here's what I did on the checkout flow, what would you have done?" That's a far sharper question than anything you'd write cold. And third, it verifies the transfer live. After each answer, Opus does a readback, applies the guidance to a concrete case, and asks "did I get it?" Knowledge that survives a readback is knowledge that actually transferred.
-
-Now the honest drawbacks, because this can go wrong in ways that cost real money. Free-form model-to-model chat drifts and gets agreeable. Two models complimenting each other in circles while your Fable budget burns. The interviewer's quality bounds the extraction, so mediocre questions get a mediocre interview. And naive multi-turn wastes Fable tokens on re-reading context every round.
-
-The fixes are cheap. Fable writes its own interview agenda in one small call. Opus conducts it, carries all the context, and hands Fable small distilled questions with hard termination criteria. Fable sets the syllabus. Opus runs the exam.
-
-*[IMAGE: the interview protocol loop, agenda to distilled question to answer to readback, captioned "Fable sets the syllabus. Opus runs the exam."]*
-
-![[fable-exit-exam-loop-1.png]]
-![[fable-exit-exam-loop-2.png]]
-![[fable-exit-exam-loop-3.png]]
-![[fable-exit-exam-loop-4.png]]
-![[fable-exit-exam-loop-5.png]]
-
-*Demo: run the main session as Opus and have it consult Fable per question via a subagent with the model parameter. Show one question, answer, readback round on screen, not the whole loop.*
-
-Whichever way you run it, the interview covers the same ground. Let me walk through the beats.
-
 ### Beat 1: What does Fable know that nobody else does [LIVE DEMO]
 
 This is questions one and two of the interview, run as one deep pass. What does it see in the code, and what does it see in you. I ran both on a real product, the course funnel behind my masterclass, and I'll show you the findings.
@@ -171,6 +122,12 @@ Notice the shape of both halves. Fable reads a huge amount of context, finds the
 
 ### Beat 2: Remake your everyday skills
 
+![[fable-exit-remake-skills-1.png]]
+![[fable-exit-remake-skills-2.png]]
+![[fable-exit-remake-skills-3.png]]
+![[fable-exit-remake-skills-4.png]]
+![[fable-exit-remake-skills-5.png]]
+
 Question three of the interview: what should we set up before you go. Start with the skills you use every single day, because value there compounds daily.
 
 But here's the counterintuitive part: remake, don't repair. Every skill in your library encodes the judgement of whichever model wrote it, and most of mine were written by an older Opus on its first attempt. And models generate better than they edit. Ask Fable to improve an existing skill and it anchors on the incumbent's structure. So don't. Give it the same source material and the same flow the original was built from, and have it build each one fresh, blind, without ever reading the current version. Then diff the two and keep the better one.
@@ -189,6 +146,12 @@ You will be surprised how often the remake wins. And every one that does is Fabl
 
 ### Beat 3: The golden reference
 
+![[fable-exit-golden-reference-1.png]]
+![[fable-exit-golden-reference-2.png]]
+![[fable-exit-golden-reference-3.png]]
+![[fable-exit-golden-reference-4.png]]
+![[fable-exit-golden-reference-5.png]]
+
 The other thing to build before it goes: golden references. Two facts you already know, combined into one move. Models generate better than they edit. And cheap models match patterns better than they exercise judgement. So: spend one expensive Fable run building the canonical implementation, and from then on, cheap models get a single instruction. "Make the other forty look like this one." You've converted open-ended judgement into closed-ended pattern matching. Spent once, copied forever.
 
 *Screen: the entitlements state machine run on the course funnel.*
@@ -200,6 +163,12 @@ Here's the one I ran. The entitlements state machine on my course funnel, the co
 Notice what makes this a good golden reference candidate: it's judgement-dense, it has huge blast radius, and it's exactly the kind of thing a cheap model would get plausibly, quietly wrong. Then after July 7th, the cheap model builds everything around it against the reference. It matches the pattern. It never has to invent it.
 
 ### Beat 4: The meta-prompts
+
+![[fable-exit-meta-prompts-1.png]]
+![[fable-exit-meta-prompts-2.png]]
+![[fable-exit-meta-prompts-3.png]]
+![[fable-exit-meta-prompts-4.png]]
+![[fable-exit-meta-prompts-5.png]]
 
 The last two prompts in the interview are not mine. They're from Daniel Miessler's ten prompts post, link in the description, and I've cherry-picked the two that fit this moment perfectly.
 
@@ -236,6 +205,12 @@ These are questions about your system, not your code. Cheap models answer them p
 Now, the second half. Maybe you're not quitting. Maybe you're keeping Fable through the API, or you just want to stop torching your weekly cap. Either way the discipline is the same: Fable stops being your daily driver and becomes the specialist you bring in for the handful of tasks where nothing else is good enough. Everything in the first half told you which tasks those are. Here's the system.
 
 ### Beat 5: The routing rule
+
+![[fable-exit-routing-rule-1.png]]
+![[fable-exit-routing-rule-2.png]]
+![[fable-exit-routing-rule-3.png]]
+![[fable-exit-routing-rule-4.png]]
+![[fable-exit-routing-rule-5.png]]
 
 The foundation is one line, and I have to credit Simon Willison for it, link in the description. The move is judgement-based delegation. You tell your top model:
 
