@@ -126,3 +126,6 @@ auto_add_rejected:
   - handle: "@iamAImaster"
     date: "2026-07-01"
     reason: "294k subs; mechanically clears bars (3 outliers vs ~4.5k median) but it's a general-AI-news/speculation channel -- the outliers are hype clickbait ('Claude 5.1 Confirmed', 'GTA VI + GPT-6'), while its actual agentic-coding content underperforms (Claude Code agent tutorial 3.7k, below median). Same low-median-hype pattern as @jessecunninghamv -- weak/non-core-niche signal."
+  - handle: "@ParkerPrompts"
+    date: "2026-07-03"
+    reason: "666k subs, clean on-niche (Fable 5, Codex, AI agents, AI-native). Healthy consistent channel (median ~68.6k, videos 35k-146k) but 0 outliers >= 3x in last 9 -- top is 'Claude Fable 5 is BANNED' at 2.13x. No current breakout; big channel with tight view band. Revisit on a real spike."
