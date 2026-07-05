@@ -8,7 +8,6 @@ class: "loopy-ai"
 chapter: "Command & Control"
 aliases: [confine-dont-supervise, the-autonomy-dial]
 ---
-
 The safest unattended coding agent in the world runs with full permissions and never asks you for anything. No confirmation prompts. No "are you sure." It just runs.
 
 That should sound reckless. It isn't. And the reason it isn't is the whole point of this video.
@@ -45,7 +44,7 @@ And it gets worse, because of *where* the loop is running.
 
 Your laptop is the single worst place to run an unattended loop. It's the one machine that has your SSH keys, your production credentials, your logged-in browser, your cloud tokens, all in reach. You gave the loop full permissions to save yourself the prompts, and full permissions on *that* machine means the blast radius is your entire digital life.
 
-So you go back to supervising. And the cycle repeats.
+So you go back to supervising. And the cycle repeats.x
 
 ---
 
