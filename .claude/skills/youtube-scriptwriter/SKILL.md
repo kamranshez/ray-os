@@ -191,10 +191,10 @@ The three hits show the formula scales to different video lengths:
 ## Output Format
 
 Write the script as a markdown document with:
-- Timestamp ranges for each section (estimated)
-- Section headers matching the formula above
+- Section headers matching the formula above — **plain headers, no timestamp ranges** (e.g. `## Hook`, not `## Hook (0:00 - 0:30)`). Ray reads these on a teleprompter; timings shift in recording and stale estimates are noise.
 - Actual spoken words (not bullet points — write what Ray will say)
 - `*Italicized stage directions*` for screen content and visuals
+- **No "Production notes" section at the bottom.** Anything that must be tracked (pre-runs, facts to verify, placeholders to fill) goes in a short "Meta notes" block near the top, above the script body — never appended after the closer.
 - Save to `socials/youtube/videos/<kebab-case-title>.md` with frontmatter:
 
 ```yaml
@@ -212,4 +212,4 @@ Generate 3 title options using different formulas:
 2. Bold claim + specificity
 3. Curiosity gap + exclusivity
 
-Present them in a table at the top of the script, like the auto-dream reference does.
+Present them as a numbered list at the top of the script (never a table — Ray's standing preference for title options).
