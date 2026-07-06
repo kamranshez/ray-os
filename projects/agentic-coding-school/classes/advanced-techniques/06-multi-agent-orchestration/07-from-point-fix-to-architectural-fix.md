@@ -5,7 +5,7 @@ order: 7
 batch_name: "Multi-Agent Orchestration"
 class: "advanced-techniques"
 chapter: "Multi-Agent Orchestration"
-status: "scripted"
+status: "filmed"
 aliases: [from-point-fix-to-architectural-fix]
 ---
 
