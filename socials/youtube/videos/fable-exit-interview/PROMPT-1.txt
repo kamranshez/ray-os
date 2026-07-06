@@ -1,1 +1,0 @@
-Spawn up an agent team with an Opus 4.8 agent interviews a Fable 5 agent as part of an exit interview with the goal of producing document(s) to help Opus 4.8 work effectively in this codebase going forwards on real tasks. Use my session transcript history to help inform what "real tasks" are.
