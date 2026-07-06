@@ -12,6 +12,24 @@ A prompting technique for reviewing fixes — your own, a subagent's, or an open
 
 The trigger phrase is literally **"is there something deeper at play?"** — or variants. It sounds casual, but it does something structural: it gives the reviewer permission to reject the framing, not just the fix.
 
+## How this differs from "point fix to architectural fix"
+
+If you watched [[from-point-fix-to-architectural-fix|the point fix to architectural fix video]], this one looks like the same idea. It isn't. They're perpendicular moves, and the difference is the whole point.
+
+That video is about **breadth**. The fix is correct. The problem is that the same pattern lives in a dozen other files, so you promote one confirmed fix into a structural change that closes the entire class at once. The question is *"where else does this live?"*
+
+This video is about **depth**. The fix "works," it passes every test, and it's still wrong, because it sits at the wrong layer. It silences the symptom while the real cause stays untouched. The question is *"is this even fixing the right thing?"*
+
+| | This video | Point to architectural |
+|---|---|---|
+| Axis | Depth (down the causal chain) | Breadth (across the codebase) |
+| Unit | One bug | A class of bugs |
+| Question | Is this the right *layer*? | Where *else* does this live? |
+| Shape | A reviewer's prompting lens | A harness promotion stage |
+| Assumes | The fix may be at the wrong layer | The fix is right, just too local |
+
+They compose, and the order matters: **depth before breadth.** Ask "is there something deeper at play?" first, so you know the fix is at the right layer. Only then take that correct, root-level fix and close the class. There's no point sweeping a symptom patch across fifty files.
+
 ## Why This Matters
 
 Coding models have a strong bias toward the happy path. When they see an error, their default instinct is:
