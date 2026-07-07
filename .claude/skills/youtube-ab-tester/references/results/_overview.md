@@ -6,7 +6,7 @@ This folder holds the channel's title/thumbnail A/B evidence. This file is the m
 
 | File | Owns | Read it when |
 |------|------|--------------|
-| `_master-summary.md` | Winning patterns, formula rankings, key rules, title↔thumbnail division of labor, test mechanics, diagnosis logic. Starts with a 10-point **Durable Insights TL;DR** (a digest of the tables below it). | "What works?" / "Why did X win?" / picking frames |
+| `_master-summary.md` | Winning patterns, formula rankings, key rules, title↔thumbnail division of labor, test mechanics, diagnosis logic. Starts with a 13-point **Durable Insights TL;DR** (a digest of the tables below it). Last reconciled 2026-07-07 (clean-room audit). | "What works?" / "Why did X win?" / picking frames |
 | `_anti-patterns.md` | The never-do list + a Downgraded (judgment-call) section. The single source of truth for what to avoid. | Before generating any title/thumbnail — required reading |
 | `_tests-still-worth-running.md` | Untested hypotheses worth a future round. | Planning what to test next |
 | `YYYY-MM/YYYY-MM-DD-slug.md` | Raw per-video rounds (title text, thumbnail text, watch-share, rank). | Need the actual numbers for a specific video; read the latest 4–6 for current patterns |
@@ -60,5 +60,7 @@ The number below is the source of truth. Some per-video files have a stale inter
 | V31 | 2026-06-11 | `2026-06/2026-06-11-nested-subagents.md` | |
 | V32 | 2026-06-21 | `2026-06/2026-06-21-anki-claude-code.md` | Anki + Claude Code; personal-workflow video, credential frame LOST |
 | V33 | 2026-06-26 | `2026-06/2026-06-26-fable-return.md` | Fable 5 returning; R2 winner "Anthropic is Finally Bringing X Back (Get Ready Now)" 38.8%; "(Leak!)" tag lost; R3 urgency parenthetical DRAGS once headline strong; R4 "Anthropic Will... Differently" 37.8% — authority opener load-bearing (+10pp over passive "The Signs Say") |
+| **V34** | 2026-07-06 | `2026-07/2026-07-06-code-with-claude.md` | Code with Claude event/insider video; payoff clause won ("Here's Their REAL Workflow" 38.1% vs payoff-free 27.4%). Same-day as V35 |
+| **V35** | 2026-07-06 | `2026-07/2026-07-06-fable-sunset.md` | ⚠️ internal frontmatter says `v34` — it is V35. Docs call it "V35-fable-sunset". Deadline title won (38.2%); recycled V33 thumb won within-test but video threw subscriber-skip flag (rank 9/10) |
 
-**Numbering collision (documented, not renamed):** both `2026-05-22-workflow-tool.md` and `2026-06-09-wtf-are-loops.md` carry a `## Video 27` internal header. The workflow-tool file is correct; the loops file is actually V30. This table is the source of truth. The reference docs disambiguate by slug ("V27-workflows" / "V30-loops"), which is why those suffixes exist. A physical renumber (header + `thumbnails/v27-wtf-are-loops/` folder + its `uploaded.json`) was deliberately deferred to avoid desync — keep using this table instead.
+**Numbering collisions (documented, not renamed):** (1) both `2026-05-22-workflow-tool.md` and `2026-06-09-wtf-are-loops.md` carry a `## Video 27` internal header — the workflow-tool file is correct; the loops file is actually V30 ("V27-workflows" / "V30-loops" in docs). (2) Both 2026-07-06 files self-label V34 — code-with-claude is the real V34; fable-sunset is V35 ("V35-fable-sunset" in docs). This table is the source of truth. Physical renumbers (headers + `thumbnails/` folders + `uploaded.json`) were deliberately deferred to avoid desync — keep using this table instead.

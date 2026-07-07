@@ -102,18 +102,18 @@ Transcript: <inline OR path to file>
 - Flag template reuse from the last 60 days. Justify any reuse in writing.
 - Frame diversity: at least 3 genuinely different framing categories.
 - Title + thumbnail must be COMPLEMENTARY, not redundant. Title says WHY/WHO, thumbnail says WHAT.
-- Format-ceiling warning: thesis/paradigm/leak/pillar videos historically pull ~17K vs ~45K for single-feature. Pillar exception: 5x masterclass CTR.
-- Anti-patterns: apply the FULL `_anti-patterns.md` table (required reading #2 above) — it is the single source of truth and includes the Downgraded/weak-negative section. Do not work from memory. Worst offenders to never ship (quick safety net): literal mechanism-description titles, "Stop X" accusatory, "Explained" framing, pipe format, multiple features in title, secrecy words ("Secret"/"Hidden"), topic-mismatched verbatim reuse.
+- Ceiling warnings — TWO distinct effects (see `_anti-patterns.md` § Ceiling Anti-Patterns): (a) FORMAT: thesis/paradigm/leak/pillar videos historically pull ~17K vs ~45K for single-feature (pillar exception: 5x masterclass CTR); (b) TOPIC: non-Anthropic topics (e.g. Codex) cap views even in feature format and compound on consecutive off-topic videos.
+- Anti-patterns: apply the FULL `_anti-patterns.md` table (required reading #2 above) — it is the single source of truth and includes the Downgraded/weak-negative section. Do not work from memory. Worst offenders to never ship (quick safety net): literal mechanism-description titles, absence-negation/passive-evidence framing ("Hasn't Announced", "The Signs Say"), "Stop X" accusatory, "Explained" framing, pipe format, multiple features in title, secrecy words and bare "(Leak!)" tags, topic-mismatched verbatim reuse.
 
 # Output format
 
-## Format-ceiling warning
+## Ceiling warning (format or topic)
 <only if applicable. Skip otherwise.>
 
 ## R1 recommended trio (3 frame-diverse pairings)
 For each:
 - Title: "..."
-- Frame: <authority | observable social proof | concrete-proof | pillar/insider | concrete-mechanic>
+- Frame: <authority | observable social proof | concrete-proof | pillar/insider | concrete-mechanic | rivalry/benefit-equivalence>
 - Thumbnail concept: <Matt-structural | Nate-folder | hybrid>
 - Thumbnail text: "..." (2-3 words ideal)
 - Complementarity check: <one line>
