@@ -418,9 +418,13 @@ def best_for_word(word, known, old_sentence="", top=3, nadeshiko_key=None, banks
 
 
 def resolve_notes(args, cfg):
-    """Return [{note_id, word, reading, old_sentence, old_fields_snapshot}]."""
+    """Return [{note_id, word, reading, old_sentence, ai_instructions, old_fields_snapshot}]."""
     fm = cfg["field_map"]
     wf, rf, sf = fm["word"], fm.get("reading", "reading"), fm["sentence"]
+    # Free-text field where Ray leaves per-card notes for the next AI pass
+    # ("I already know this word", "use a shorter sentence", "wrong reading").
+    # Surfaced on every entry so Claude reads it BEFORE curating that card.
+    aif = fm.get("ai_instructions", "ai_instructions")
     main, deferred = deck_main(cfg), deck_deferred(cfg)
     deck_clause = f'(deck:"{main}" OR deck:"{deferred}")'
 
@@ -448,6 +452,7 @@ def resolve_notes(args, cfg):
             "word": f.get(wf, {}).get("value", ""),
             "reading": analyze.strip_html(f.get(rf, {}).get("value", "")),
             "old_sentence": analyze.strip_html(f.get(sf, {}).get("value", "")),
+            "ai_instructions": analyze.strip_html(f.get(aif, {}).get("value", "")).strip(),
             "old_fields_snapshot": {k: v.get("value", "") for k, v in f.items()},
         })
     return notes
@@ -513,13 +518,18 @@ def main():
         if i:
             time.sleep(REQUEST_DELAY)  # space requests so apiv2 doesn't 429
         word = note["word"]
+        # Loud on stderr: a card carrying instructions must not be auto-curated
+        # like the others — Claude has to read and honor these first.
+        if note.get("ai_instructions"):
+            print(f"  ⚠ {word} — ai_instructions: {note['ai_instructions']}", file=sys.stderr)
         picks = best_for_word(word, known, old_sentence=note["old_sentence"],
                               top=args.top, nadeshiko_key=nadeshiko_key, banks=banks,
                               ss_data=ss_data)
         if not picks:
             # Carry the note_id so replace_apply can retire the card (no usable
             # replacement in any corpus → tag not-worth-learning + suspend).
-            misses.append({"word": word, "note_id": note["note_id"]})
+            misses.append({"word": word, "note_id": note["note_id"],
+                           "ai_instructions": note.get("ai_instructions", "")})
             print(f"  ✗ {word} — no usable replacement (IK + fallback)", file=sys.stderr)
             continue
         best = picks[0]

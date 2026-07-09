@@ -1,6 +1,6 @@
 ---
 name: sentence-mining
-description: Build and maintain Japanese sentence-mining cards for Anki, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + SudachiPy + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → search across your locally-indexed subs2srs .apkg banks for natural example sentences, reusing the bank's original audio + screenshot when available. (3) Replace mode — fix existing cards whose example sentence is bad (too short, a fragment, incomprehensible): pull a better, more comprehensible sentence (Immersion Kit → Nadeshiko → local bank, re-ranked by your own i+1), edit the card in place (archiving the old sentence to a previous_versions field), and rehabilitate the card (de-leech, unsuspend, reset-to-due) so you re-learn it fresh. All modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL, (b) a list of Japanese words, or (c) a request to improve/replace sentences on existing cards. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "replace the sentence for <word>", "find a better sentence for X", "fix my flag:1 cards", "these sentences are too short/confusing", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
+description: Build and maintain Japanese sentence-mining cards for Anki, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + SudachiPy + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → search across your locally-indexed subs2srs .apkg banks for natural example sentences, reusing the bank's original audio + screenshot when available. (3) Replace mode — fix existing cards whose example sentence is bad (too short, a fragment, incomprehensible): pull a better, more comprehensible sentence (Immersion Kit → Nadeshiko → local bank, re-ranked by your own i+1), edit the card in place (archiving the old sentence to a previous_versions field), and rehabilitate the card (de-leech, unsuspend, reset to new at the front of the queue) so you re-learn it fresh. All modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL, (b) a list of Japanese words, or (c) a request to improve/replace sentences on existing cards. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "replace the sentence for <word>", "find a better sentence for X", "fix my flag:1 cards", "these sentences are too short/confusing", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
 ---
 
 # Sentence Mining
@@ -120,6 +120,24 @@ Follow the reference for the mode you routed into. By the end of those steps you
 
 Read it. Zero candidates? Tell Ray why (all words known, all dupes, no hits across banks, etc.) and stop.
 
+## Step 3.4 — Read `ai_instructions` (per-card notes from Ray)
+
+The note type has an **`ai_instructions`** field (last field, under `previous_versions`). It's a free-text scratchpad where Ray leaves notes for the *next* AI pass on that specific card — he writes them while reviewing in Anki. `replace_search.py` reads it, prints a loud `⚠ <word> — ai_instructions: …` line to stderr, and attaches it to every entry (and every miss) in the draft JSON.
+
+**Before you curate or re-source a card, read its `ai_instructions` and obey it.** It overrides your own judgment and the automatic ranking. Typical notes and the right response:
+
+| Ray wrote                                | Do this                                                                   |
+|------------------------------------------|---------------------------------------------------------------------------|
+| "I already know this word"                | Don't fix it — move the entry into `misses` so `replace_apply` retires it (tag `not-worth-learning` + suspend + clear flag) |
+| "sentence is too long" / "shorter one"    | Pick a shorter `runner_ups[]` candidate instead of the top pick             |
+| "wrong reading" / "wrong sense"           | Re-check the candidate uses the card's reading; drop hits with the wrong one |
+| "this is a name, not a word"              | Retire it (same as "already know")                                          |
+| "explanation is confusing"                | Rewrite the explanation; keep the sentence                                  |
+
+**Clear the field once you've honored it** (`updateNoteFields` → `ai_instructions: ""`), so a one-shot instruction doesn't re-fire on every future run. Leave it in place only if it reads as a *standing* preference ("always keep sentences under 20 chars for this card").
+
+If an instruction is ambiguous or you can't safely act on it, don't guess — leave the card untouched, leave the field alone, and tell Ray what it said.
+
 ## Step 3.5 — Curate (shared, inline)
 
 Walk the candidate list and drop entries that aren't worth a card. **Filter aggressively** — a Ray-quality card teaches a generalizable word he'll hit again, not a one-off label from this specific source. Drop:
@@ -152,6 +170,11 @@ Explain it in the same way a native would explain it to a 13-year-old. Don't use
 1. Don't write the furigana for any of the words in brackets after the word.
 2. Don't start with stuff like という言葉を簡単に説明するね, just dive straight into explaining after starting with the word.
 ```
+
+**⚠️ Lead with the word — every explanation MUST begin with the target word itself**, then dive straight in (rule 2 above). This is the single most-missed part of the house style: Ray's 9000+ existing cards all open by naming the word (`核は、…` / `やり残すっていうのは、…` / `気迫\n強い気持ちや、…`). Do NOT open with the meaning ("あるものの中心の部分…") without stating the word first — a card that jumps into the definition cold reads wrong and the TTS never says the headword. Quick check before you save each one: does the explanation's **first token** contain the lemma? If not, rewrite it.
+
+- ✅ `やり残すは、やろうと思っていたことを途中で残してしまうことだよ。…`
+- ❌ `やろうと思っていたことを途中で残してしまうことだよ。…` (word never named up front)
 
 Write each explanation into the candidate's `explanation` field. Keep each under ~250 Japanese characters — it gets read aloud by TTS.
 
@@ -268,7 +291,7 @@ Leave the video / draft / intermediate JSONs in `~/Downloads/sentence-mining/`. 
 | `search_banks.py`       | bank  | word-list → top-N sentence candidates across indexed banks   |
 | `generate_media_bank.py`| bank  | copy bank media (or TTS fallback) + Gemini TTS explanation   |
 | `replace_search.py`     | replace | resolve target cards (flag / note-ids / words) → search Immersion Kit → Nadeshiko → sentencesearch → kotu → local bank → filter + re-rank by your i+1 → replace-draft JSON |
-| `replace_apply.py`      | replace | stage media (URL or local) + TTS explanation (best-effort), archive old sentence to `previous_versions`, overwrite fields, retag i-level, rehabilitate (de-leech/unsuspend/reset-to-due), clear flag:1 so the redone card just rejoins the study queue (`--done-flag N` to flag instead, `-1` to leave). Retires unfixable misses (`not-worth-learning` + suspend + clear flag; `--keep-misses` to skip). `--rehab-flag N` rehabilitates a batch with no field changes |
+| `replace_apply.py`      | replace | stage media (URL or local) + TTS explanation (best-effort), archive old sentence to `previous_versions`, overwrite fields, retag i-level, rehabilitate (de-leech/unsuspend/reset-to-new at the FRONT of the new queue; warns per deck when `new/day = 0` would bury the reset cards — relay that warning to Ray; `--due-now` = due today instead, skipping learning steps), clear flag:1 so the redone card just rejoins the study queue (`--done-flag N` to flag instead, `-1` to leave). Retires unfixable misses (`not-worth-learning` + suspend + clear flag; `--keep-misses` to skip). `--rehab-flag N` rehabilitates a batch with no field changes |
 | `push.py`               | both  | AnkiConnect addNotes onto `config.note_type` via `config.field_map` |
 | `ensure_anki.sh`        | all   | ping AnkiConnect; `open -a Anki` if down; wait for load + verify stable (run first) |
 | `_env.py`               | both  | loads `.env` into `os.environ`                               |

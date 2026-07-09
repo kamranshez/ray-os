@@ -10,9 +10,12 @@ For each entry (with `explanation` filled by Claude):
     recoverable and the old media never becomes "unused"
   - overwrite sentence / sentence_audio / picture / explanation / explanation_audio
   - retag the i-level (i1/i2/… reflecting how many other words are new for Ray)
-  - rehabilitate the card (de-leech, unsuspend, reset scheduling so it's due)
+  - rehabilitate the card (de-leech, unsuspend, reset scheduling to NEW at the
+    FRONT of the new queue — or due today with --due-now)
   - clear the input flag:1 (default) so the redone card just rejoins the study
-    queue — it's already reset to due. --done-flag N flags it instead.
+    queue. --done-flag N flags it instead. If the deck's new/day limit is 0, the
+    reset cards can't surface — the script detects this and warns (fix: raise the
+    limit, Custom Study, or --due-now).
 
 Unfixable misses (no usable replacement in any corpus) are retired instead: tagged
 `not-worth-learning`, suspended, and cleared off flag:1 (--keep-misses to skip).
@@ -161,10 +164,18 @@ def retire_note(nid):
     return cards
 
 
-def rehabilitate(nid):
+def rehabilitate(nid, position=0, due_now=False):
     """A struggled-with card getting a fresh sentence should be re-learned cleanly:
     drop the leech tag, unsuspend (leeches are often auto-suspended), and reset the
-    scheduling to new so it comes due again. Returns the card ids touched."""
+    scheduling to new so it comes due again. Returns the card ids touched.
+
+    `position` is the card's new-queue slot: forgetCards keeps the card's ORIGINAL
+    due position, which for an old card can be a million deep — behind every unseen
+    new card in the deck. Without repositioning, "rehabilitated" means "buried".
+
+    `due_now=True` additionally runs setDueDate 0, which converts the new card into
+    a review card due TODAY — the only way it surfaces when the deck's new/day is 0.
+    Trade-off: it skips the learning steps."""
     cards = anki_request("findCards", query=f"nid:{nid}")
     if not cards:
         return []
@@ -173,21 +184,52 @@ def rehabilitate(nid):
         anki_request("unsuspend", cards=cards)        # no-op if not suspended
     except Exception:  # noqa: BLE001
         pass
-    anki_request("forgetCards", cards=cards)          # reset scheduling → new → due
+    anki_request("forgetCards", cards=cards)          # reset scheduling → new
     # forgetCards resets scheduling but leaves the rep/lapse COUNTERS intact, so a
     # "rehabilitated" card keeps its lapse history and re-leeches far too soon. Zero
-    # them too so the fresh sentence really starts from scratch. setSpecificValueOfCard
-    # needs warning_check + integer values, and is per-card.
+    # them, and set `due` to the front of the new queue in the same per-card call.
+    # setSpecificValueOfCard needs warning_check + integer values, and is per-card.
     for cid in cards:
         try:
             anki_request("setSpecificValueOfCard", card=cid,
-                         keys=["reps", "lapses"], newValues=[0, 0], warning_check=True)
-        except Exception:  # noqa: BLE001 — counter reset is best-effort
+                         keys=["reps", "lapses", "due"],
+                         newValues=[0, 0, position], warning_check=True)
+        except Exception:  # noqa: BLE001 — counter/position reset is best-effort
             pass
+    if due_now:
+        try:
+            anki_request("setDueDate", cards=cards, days="0")
+        except Exception as e:  # noqa: BLE001
+            print(f"  · setDueDate failed for nid {nid}: {str(e)[:60]}", file=sys.stderr)
     return cards
 
 
-def apply_entry(entry, fm, today, done_flag=0):
+def warn_zero_new_limit(card_ids):
+    """Rehabilitated cards are NEW cards, so they only ever surface through their
+    deck's new/day limit. Ray parks decks with new/day = 0 — on such a deck the old
+    'reset to due — queued up next' claim was a lie: the cards sat invisible forever.
+    Detect that per deck and say so instead. Returns the blocked (deck, count) list."""
+    if not card_ids:
+        return []
+    per_deck = {}
+    for ci in anki_request("cardsInfo", cards=card_ids):
+        per_deck[ci["deckName"]] = per_deck.get(ci["deckName"], 0) + 1
+    blocked = []
+    for deck, n in sorted(per_deck.items()):
+        try:
+            per_day = anki_request("getDeckConfig", deck=deck).get("new", {}).get("perDay")
+        except Exception:  # noqa: BLE001
+            continue
+        if per_day == 0:
+            blocked.append((deck, n))
+            print(f'  ⚠ "{deck}" has new/day = 0 — its {n} rehabilitated card(s) are at '
+                  f"the FRONT of the new queue but will not appear until you raise the "
+                  f"limit, use Custom Study → \"Increase today's new card limit\", or "
+                  f"re-run with --due-now.", file=sys.stderr)
+    return blocked
+
+
+def apply_entry(entry, fm, today, done_flag=0, position=0, due_now=False):
     nid = entry["note_id"]
     old = entry["old_fields_snapshot"]
     existing_prev = old.get(fm.get("previous_versions", ""), "")
@@ -207,11 +249,12 @@ def apply_entry(entry, fm, today, done_flag=0):
     # Retag i-level; leave the flag and the kind tag (claude-sentence-*) untouched.
     anki_request("removeTags", notes=[nid], tags=I_TAGS)
     anki_request("addTags", notes=[nid], tags=entry["i_level"])
-    # Fresh sentence on a struggled-with card → de-leech + reset scheduling so it's due.
-    rehabilitate(nid)
-    # Clear the input flag (default) so the redone card just rejoins the study queue —
-    # the reset-to-due above already queues it up next. (--done-flag N to flag instead.)
+    # Fresh sentence on a struggled-with card → de-leech + reset scheduling, front of queue.
+    cards = rehabilitate(nid, position=position, due_now=due_now)
+    # Clear the input flag (default) so the redone card just rejoins the study queue.
+    # (--done-flag N to flag instead.)
     set_flag(nid, done_flag)
+    return cards
 
 
 def print_table(entries, misses):
@@ -234,12 +277,16 @@ async def main_async(args):
     cfg = load_config()
     fm = cfg["field_map"]
 
-    if args.rehab_flag is not None:  # de-leech + reset-to-due a whole flagged set
+    if args.rehab_flag is not None:  # de-leech + reset a whole flagged set
         nids = anki_request("findNotes", query=f"flag:{args.rehab_flag} {deck_clause(cfg)}")
-        for nid in nids:
-            rehabilitate(nid)
+        touched = []
+        for i, nid in enumerate(nids):
+            touched += rehabilitate(nid, position=i, due_now=args.due_now)
         print(f"Rehabilitated {len(nids)} card(s) flagged {args.rehab_flag} "
-              f"(leech tag removed, unsuspended, scheduling reset to due).")
+              f"(leech tag removed, unsuspended, reset to new at the front of the queue"
+              f"{', made due today' if args.due_now else ''}).")
+        if not args.due_now:
+            warn_zero_new_limit(touched)
         return
 
     data = json.loads(Path(args.draft).expanduser().read_text())
@@ -281,23 +328,28 @@ async def main_async(args):
         # Gemini RPM cap); Anki writes are serialized afterward to avoid write races.
         results = await asyncio.gather(
             *(process_one(e, workdir, sem) for e in ready), return_exceptions=True)
-        done = []
+        done, touched = [], []
         for e, r in zip(ready, results):
             if isinstance(r, Exception):
                 print(f"  ✗ {e['word']} — {r}", file=sys.stderr)
                 continue
             df = None if args.done_flag < 0 else args.done_flag
-            apply_entry(e, fm, today, done_flag=df)
+            touched += apply_entry(e, fm, today, done_flag=df,
+                                   position=len(done), due_now=args.due_now)
             done.append(e)
             print(f"  ✓ {e['word']} → {e['new_sentence'][:48]}", file=sys.stderr)
 
+    sched_note = ("reset + made due today" if args.due_now
+                  else "reset to new at the front of the queue")
     if args.done_flag < 0:
-        flag_note = "input flag left untouched"
+        flag_note = f"input flag left untouched, {sched_note}"
     elif args.done_flag == 0:
-        flag_note = "flag cleared, reset to due — queued up next"
+        flag_note = f"flag cleared, {sched_note}"
     else:
-        flag_note = f"moved to flag {args.done_flag}"
+        flag_note = f"moved to flag {args.done_flag}, {sched_note}"
     print(f"\nReplaced {len(done)}/{len(ready)} cards in place ({flag_note}).")
+    if not args.due_now:
+        warn_zero_new_limit(touched)
 
     # Retire unfixable misses: tag not-worth-learning, suspend, clear the input flag so
     # they leave the fix queue. --keep-misses leaves them on the flag for a later pass.
@@ -328,6 +380,11 @@ def main():
                          "flag so it just rejoins the study queue (it's already reset to "
                          "due). 1-7 = set that colored flag instead. Negative = leave the "
                          "input flag untouched. Input is flag:1.")
+    ap.add_argument("--due-now", action="store_true",
+                    help="After the reset, setDueDate 0 so each redone card becomes a "
+                         "review card due TODAY. Use when the deck's new/day limit is 0 "
+                         "(otherwise a reset-to-new card never surfaces). Trade-off: "
+                         "skips the learning steps.")
     ap.add_argument("--keep-misses", action="store_true",
                     help="Leave unfixable misses on the input flag. Default retires them: "
                          f"tag '{RETIRE_TAG}', suspend, clear the flag.")

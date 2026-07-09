@@ -11,7 +11,8 @@
     "explanation": "explanation",
     "explanation_audio": "explanationAudio",
     "source_url": "source_url",
-    "previous_versions": "previous_versions"
+    "previous_versions": "previous_versions",
+    "ai_instructions": "ai_instructions"
   },
 
   "decks": {

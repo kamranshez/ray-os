@@ -81,9 +81,17 @@ identical. Key from https://nadeshiko.co/user/developer (scope `READ_MEDIA`).
 
 **Flag convention:** Ray marks struggling cards with **flag:1** (input queue). Replace
 mode reads flag:1 and, after he confirms, **clears the flag** on each redone card so it
-just rejoins the study queue (it's reset to due, so it queues up next — no separate review
-bucket). Genuine misses stay on flag:1 so they remain in the "still needs fixing" bucket.
-(Override with `--done-flag N` if you ever want the redone set on a colored flag instead.)
+just rejoins the study queue (it's reset to a NEW card at the *front* of the new queue —
+no separate review bucket). Genuine misses stay on flag:1 so they remain in the "still
+needs fixing" bucket. (Override with `--done-flag N` if you ever want the redone set on
+a colored flag instead.)
+
+⚠ **New cards only surface through the deck's `new/day` limit.** Ray's main deck preset
+(`Sentence Mining`) has had `new/day = 0` — on such a deck a reset card is invisible
+forever, no matter how front-of-queue it is. `replace_apply.py` detects this per deck
+and prints a `⚠ … new/day = 0` warning; relay it to Ray with the three fixes (raise the
+limit, Custom Study → "Increase today's new card limit", or re-run with `--due-now`).
+Don't change his deck preset yourself.
 
 ```bash
 python3 <skill-dir>/scripts/replace_search.py \
@@ -113,6 +121,12 @@ Step 3.5 does for mining. The filters catch most junk, but you still judge: is t
 in its normal sense? Complete sentence? If the top pick is weak, look at `runner_ups[]`
 and swap it in (overwrite the entry's `new_sentence` / `translation` / `image_url` /
 `sound_url` / `ik_id` / `i_level` from the chosen runner-up), or drop the entry entirely.
+
+**First, check each entry's `ai_instructions`** — Ray's per-card note to you, carried on
+every entry and miss (and printed as a `⚠` line on stderr during the search). It overrides
+your judgment: "I already know this word" → move the entry into `misses` so it gets retired;
+"too long" → take a shorter runner-up; and so on. Clear the field once honored. See
+[SKILL.md](../SKILL.md) §"Step 3.4 — Read `ai_instructions`" for the full table.
 
 ### Step 2 — write explanations (Claude, inline)
 
@@ -150,12 +164,20 @@ Per card this:
 - overwrites `sentence`, `sentence_audio`, `picture`, `explanation`, `explanation_audio`
 - retags the i-level (`i1`/`i2`/…) to reflect the NEW sentence's complexity for Ray
 - **rehabilitates** the card so the fresh sentence is re-learned cleanly: removes the
-  `leech` tag, unsuspends, `forgetCards` to reset scheduling → the card becomes due, and
+  `leech` tag, unsuspends, `forgetCards` to reset scheduling → the card becomes NEW,
   zeroes the `reps`/`lapses` counters (forgetCards alone leaves them, so a card would keep
-  its lapse history and re-leech too soon)
+  its lapse history and re-leech too soon), and **repositions it to the front of the new
+  queue** (forgetCards keeps the card's original due position, which for an old card can
+  be a million deep — behind every unseen new card; without repositioning, "rehabilitated"
+  means "buried")
+- with **`--due-now`**: additionally `setDueDate 0`, turning the card into a review card
+  due today — the only way it surfaces when the deck's `new/day` is 0. Skips the learning
+  steps, so use it only when the limit blocks the normal path
+- **checks the deck's `new/day` limit** and prints a `⚠` warning per deck where it's 0
+  (see the box in Step 1) instead of claiming the cards are "queued up next"
 - **clears the flag**: input `flag:1` ("fix these") → **no flag** (default `--done-flag 0`).
-  The card was just reset to due, so clearing the flag lets it simply rejoin the study
-  queue and come up next — no separate review bucket to babysit. Genuine misses stay on
+  The card is at the front of the new queue, so clearing the flag lets it simply rejoin
+  the study flow — no separate review bucket to babysit. Genuine misses stay on
   flag:1 (still-to-fix). `--done-flag N` (1-7) sets a colored flag instead; `--done-flag -1`
   leaves the input flag untouched. The `claude-sentence-*` tag is kept.
 
@@ -172,8 +194,9 @@ Then summarize: replaced N, retired M (not-worth-learning + suspended), draft pa
 
 ### Rehabilitate a whole flagged batch (no field changes)
 
-To de-leech + unsuspend + reset-to-due every card flagged N without changing any field
-(e.g. after a batch was applied before this behavior existed):
+To de-leech + unsuspend + reset-to-new-at-front every card flagged N without changing any
+field (e.g. after a batch was applied before this behavior existed; add `--due-now` to
+also make them due today):
 
 ```bash
 python3 <skill-dir>/scripts/replace_apply.py --rehab-flag 3
