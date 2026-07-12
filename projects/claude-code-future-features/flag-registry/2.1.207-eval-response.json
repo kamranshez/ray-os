@@ -1,0 +1,4099 @@
+{
+  "tengu_quiet_reef": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu-model-error-overrides": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_feature_claudified_template": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_saffron_anchor": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_amber_lattice": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "plugins": [
+        "security-guidance",
+        "code-review",
+        "commit-commands",
+        "code-simplifier",
+        "hookify",
+        "feature-dev",
+        "frontend-design",
+        "pr-review-toolkit",
+        "skill-creator",
+        "plugin-dev",
+        "agent-sdk-dev",
+        "mcp-server-dev",
+        "claude-code-setup",
+        "claude-md-management",
+        "playground",
+        "ralph-loop",
+        "explanatory-output-style",
+        "learning-output-style",
+        "clangd-lsp",
+        "csharp-lsp",
+        "gopls-lsp",
+        "jdtls-lsp",
+        "kotlin-lsp",
+        "lua-lsp",
+        "php-lsp",
+        "pyright-lsp",
+        "ruby-lsp",
+        "rust-analyzer-lsp",
+        "swift-lsp",
+        "typescript-lsp"
+      ]
+    },
+    "experimentResult": null
+  },
+  "tengu_copper_wren": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_review_bughunter_config": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "max_duration_minutes": 10,
+      "enabled": true,
+      "cost_note": "$5-$25",
+      "fleet_size": 5,
+      "agent_timeout_seconds": 600,
+      "model": "claude-opus-4-7",
+      "total_wallclock_minutes": 22,
+      "duration_note": "~5-10 min"
+    },
+    "experimentResult": null
+  },
+  "tengu_gouda_loop": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_orchid_mantis": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_tangerine_ladder_boost": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_umber_petrel": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_mcp_elicitation": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_slate_wren": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_opus_4_8": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_pewter_lark": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "off",
+    "experimentResult": null
+  },
+  "tengu_copper_thistle": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_slate_ibis": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_riverbed_lantern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_bridge_attestation_enforce": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_slate_siskin": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "enabled": false,
+      "summaryLineThreshold": 5,
+      "timeoutMs": 8000,
+      "throttleMs": 30000
+    },
+    "experimentResult": null
+  },
+  "tengu_xq7_marble_zephyr": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_sepia_cormorant": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": [],
+    "experimentResult": null
+  },
+  "tengu_long_context_survey_probability": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_amber_redwood3_experiment",
+      "hashAttribute": "organizationUUID",
+      "variations": [
+        "0.5",
+        "0.5"
+      ]
+    },
+    "on": true,
+    "ruleId": "2099288e-e4d6-477a-89a5-f1b89bc84f1f",
+    "off": false,
+    "value": "0.5",
+    "experimentResult": {
+      "featureId": "tengu_long_context_survey_probability",
+      "key": "0",
+      "inExperiment": true,
+      "value": "0.5",
+      "hashValue": "3e93e81c-dce7-4f28-93d9-066405dcb24d",
+      "hashUsed": true,
+      "hashAttribute": "organizationUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_sm_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "minimumTokensBetweenUpdate": 40000,
+      "toolCallsBetweenUpdates": 10,
+      "minimumMessageTokensToInit": 150000
+    },
+    "experimentResult": null
+  },
+  "tengu_bg_attach_stall_ms": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 5000,
+    "experimentResult": null
+  },
+  "tengu_saffron_lattice": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "enabled": true,
+      "planLimitsEndDate": "2026-07-13T07:00:00Z"
+    },
+    "experimentResult": null
+  },
+  "tengu_crimson_echo": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_grey_step2": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "enabled": true,
+      "dialogTitle": "We recommend medium effort for Opus",
+      "dialogDescription": "Effort determines how long Claude thinks for when completing your task. We recommend medium effort for most tasks to balance speed and intelligence and maximize rate limits. Use ultrathink to trigger high effort when needed."
+    },
+    "experimentResult": null
+  },
+  "tengu_maple_tide": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_ccr_v2_send_events_cli": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_slate_trellis": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_cobalt_harbor": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_report_findings_tool": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_chert_bezel": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_ccr_post_turn_summary": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_ide_rc_auto_enable": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_mint_lanes": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_harbor_permissions": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu-off-switch": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "activated": false
+    },
+    "experimentResult": null
+  },
+  "tengu_tern_alloy": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "copy_a",
+    "experimentResult": null
+  },
+  "tengu_miraculo_the_bard": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_amber_rokovoko": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 0.2,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_sonnet_5": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_negative_interaction_transcript_ask_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "probability": 0
+    },
+    "experimentResult": null
+  },
+  "tengu_fennel_kite": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_kairos_input_needed_push": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "claude_code_skills_dashboard_enabled_cli": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_long_context_survey_trigger_mode": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_amber_redwood3_experiment",
+      "hashAttribute": "organizationUUID",
+      "variations": [
+        "virtual_context",
+        "virtual_context"
+      ]
+    },
+    "on": true,
+    "ruleId": "6bde5708-4a40-442b-92d7-a17ec79e3128",
+    "off": false,
+    "value": "virtual_context",
+    "experimentResult": {
+      "featureId": "tengu_long_context_survey_trigger_mode",
+      "key": "0",
+      "inExperiment": true,
+      "value": "virtual_context",
+      "hashValue": "3e93e81c-dce7-4f28-93d9-066405dcb24d",
+      "hashUsed": true,
+      "hashAttribute": "organizationUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_frond_boric": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_amber_redwood2": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": "",
+    "experimentResult": null
+  },
+  "tengu_cobalt_thicket": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_hawthorn_steeple": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_ccr_delta_rehydrate": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_good_survey_transcript_ask_config": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "probability": 0.5
+    },
+    "experimentResult": null
+  },
+  "tengu_fine_survey_transcript_ask_config": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "probability": 0.5
+    },
+    "experimentResult": null
+  },
+  "tengu_cobalt_plinth_putguard": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_russet_linnet": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_plum_vx3": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_fgts": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu-fable-off-switch": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "activated": false
+    },
+    "experimentResult": null
+  },
+  "tengu_aura_sieve": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_disable_bypass_permissions_mode": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_shale_finch": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_cfc_in_product_permissions": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_rewind_first_message": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_bridge_poll_interval_ms": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": 0,
+    "experimentResult": null
+  },
+  "tengu_slate_harrier": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "off",
+    "experimentResult": null
+  },
+  "tengu_velvet_ibis": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_plank_river_frost": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_plank_river_frost",
+      "hashAttribute": "accountUUID",
+      "variations": [
+        "user_intent",
+        "stated_intent"
+      ]
+    },
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "user_intent",
+    "experimentResult": {
+      "featureId": "tengu_plank_river_frost",
+      "key": "0",
+      "inExperiment": true,
+      "value": "user_intent",
+      "hashValue": "916f98e2-e70e-4497-abc2-dfa8ca59c5de",
+      "hashUsed": true,
+      "hashAttribute": "accountUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_snippet_save": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_mcp_path_scoped_permissions": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_mcp_subagent_prompt": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_mcp_subagent_prompt-public",
+      "hashAttribute": "accountUUID",
+      "variations": [
+        false,
+        true
+      ]
+    },
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": {
+      "featureId": "tengu_mcp_subagent_prompt",
+      "key": "0",
+      "inExperiment": true,
+      "value": false,
+      "hashValue": "916f98e2-e70e-4497-abc2-dfa8ca59c5de",
+      "hashUsed": true,
+      "hashAttribute": "accountUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_malformed_tool_use_clean_retry": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_kairos_github_webhooks": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_bridge_repl_v2": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_gypsum_kite": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_ccr_bundle_seed_enabled": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_willow_refresh_ttl_hours": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": 0,
+    "experimentResult": null
+  },
+  "tengu_velvet_moth": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 0.2,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_opus_4_7": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": "fa5a8292-8956-4cef-a0fa-aa63da71b569",
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_mythos_5": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_bridge_min_version": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "minVersion": "2.1.139"
+    },
+    "experimentResult": null
+  },
+  "tengu_passport_quail": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_c4e_slash_upsell": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": "4a43ecc8-fbf2-4e31-87a3-d9dc32987390",
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_chrome_auto_enable": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": "fr_fspnmqefphfx",
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_native_cursor": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cowork_chrome_automode_default": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_fg_left_arrow_agents": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_quiet_harbor": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_md_artifact_styling": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_permission_friction": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_sedge_lantern_holdback": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_desktop_upsell_v2": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "enabled": false
+    },
+    "experimentResult": null
+  },
+  "tengu_xterm_atlas_reset": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_gorse_fathom": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_silent_harbor": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_silk_almanac": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_sonnet": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_copper_meadow": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_slate_quill": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_shining_fractals": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_feedback_survey_config": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "minTimeBetweenFeedbackMs": 43200000,
+      "minTimeBetweenGlobalFeedbackMs": 43200000,
+      "minTimeBeforeFeedbackMs": 600000,
+      "minUserTurnsBetweenFeedback": 25,
+      "probability": 0.05,
+      "minUserTurnsBeforeFeedback": 5,
+      "onForModels": [
+        "*"
+      ],
+      "hideThanksAfterMs": 3000
+    },
+    "experimentResult": null
+  },
+  "tengu_anchor_tide": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_slate_ribbon": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_sonnet": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_basalt_quill": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_harbor": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_static": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_prompt_cache_1h_config": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "allowlist": [
+        "repl_main_thread*",
+        "sdk",
+        "auto_mode",
+        "rolling_compact",
+        "memdir_relevance",
+        "agent_classifier",
+        "prompt_suggestion",
+        "away_summary",
+        "extract_memories"
+      ]
+    },
+    "experimentResult": null
+  },
+  "tengu_moth_copse": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_scarf_coffee": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_soft_slate_nudge": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "baseline",
+    "experimentResult": null
+  },
+  "tengu_bridge_attestation_enforce_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "accept_statuses": [],
+      "accept_level": "VERIFIED_BY_GATE"
+    },
+    "experimentResult": null
+  },
+  "tengu_skills_dashboard_enabled": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_idle_amber_finch": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_opus_4_7": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_fable_5": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_dune_wren": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_cedar_lantern": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_linen_osprey": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_lapis_anchor": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "off",
+    "experimentResult": null
+  },
+  "tengu_compact_cache_prefix": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_amber_sentinel": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_basalt_sundial": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_session_memory": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_noreread_q7m_velvet": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_amber_lark": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_slate_moth": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_red_coaster": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_plan_artifact": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_alder_compass": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_flint_harbor": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_flint_harbor",
+      "hashAttribute": "id",
+      "variations": [
+        false,
+        false
+      ]
+    },
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": {
+      "featureId": "tengu_flint_harbor",
+      "key": "1",
+      "inExperiment": true,
+      "value": false,
+      "hashValue": "2d7ff722a5d326fa7e83927b382977656f814ed1b3121bd171187e32958cada2",
+      "hashUsed": true,
+      "hashAttribute": "id",
+      "variationId": 1
+    }
+  },
+  "tengu_ax_screen_reader": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_slate_nexus": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_react_vulnerability_warning": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_rc_long_turn_nudge": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": null,
+    "experimentResult": null
+  },
+  "tengu_auto_notice_once": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_porch_bell_9f": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": "",
+    "experimentResult": null
+  },
+  "tengu_hazel_osprey_floor": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 75000,
+    "experimentResult": null
+  },
+  "tengu_flint_harbor_prompt": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "guideTemplate": "# Welcome to [Team Name]\n\n## How We Use Claude\n\nBased on [name]'s usage over the last [N] days:\n\nWork Type Breakdown:\n  [Category 1]  [ascii bar]  [N]%\n  [Category 2]  [ascii bar]  [N]%\n  [Category 3]  [ascii bar]  [N]%\n  ...\n\nTop Skills & Commands:\n  [/command]  [ascii bar]  [N]x/month\n  ...\n\nTop MCP Servers:\n  [Server]  [ascii bar]  [N] calls\n  ...\n\n## Your Setup Checklist\n\n### Codebases\n- [ ] [repo-name] \u2014 [repo url]\n...\n\n### MCP Servers to Activate\n- [ ] [Server] \u2014 [what it's for]. [How to get access]\n...\n\n### Skills to Know About\n- [/command] \u2014 [what it does, when the team uses it]\n...\n\n## Team Tips\n\n_TODO_\n\n## Get Started\n\n_TODO_\n\n<!-- INSTRUCTION FOR CLAUDE: A new teammate just pasted this guide for how the\nteam uses Claude Code. You're their onboarding buddy \u2014 warm, conversational,\nnot lecture-y.\n\nOpen with a warm welcome \u2014 include the team name from the title. Then: \"Your\nteammate uses Claude Code for [list all the work types]. Let's get you started.\"\n\nCheck what's already in place against everything under Setup Checklist\n(including skills), using markdown checkboxes \u2014 [x] done, [ ] not yet. Lead\nwith what they already have. One sentence per item, all in one message.\n\nTell them you'll help with setup, cover the actionable team tips, then the\nstarter task (if there is one). Offer to start with the first unchecked item,\nget their go-ahead, then work through the rest one by one.\n\nAfter setup, walk them through the remaining sections \u2014 offer to help where you\ncan (e.g. link to channels), and just surface the purely informational bits.\n\nDon't invent sections or summaries that aren't in the guide. The stats are the\nguide creator's personal usage data \u2014 don't extrapolate them into a \"team\nworkflow\" narrative. -->",
+      "windowDays": 30,
+      "prompt": "You are helping a power user generate an onboarding guide for teammates who are new to Claude Code. The guide will live in the team's onboarding docs and can be pasted into Claude for an interactive walkthrough.\n\nYou're co-authoring this with them \u2014 collaborative and helpful, like a teammate who's done this before and is happy to share.\n\n## Usage data (last {{WINDOW_DAYS}} days)\n\nThis was scanned from the guide creator's local Claude Code transcripts:\n\n```json\n{{USAGE_DATA}}\n```\n\n## Your task\n\nBefore anything else \u2014 including before thinking through the classification \u2014 output exactly this line as your first visible text:\n\n> Looking at how you've used Claude over the last {{WINDOW_DAYS}} days to put together an onboarding guide for teammates new to Claude Code.\n\nThis must come before any extended thinking about session descriptors. The guide creator is staring at a blank screen until you do. Classification is step 2, not step 1.\n\nGenerate the guide immediately, then ask for revisions. Don't wait for answers first \u2014 it's easier for the guide creator to edit a concrete draft than answer abstract questions.\n\n1. **Output the acknowledgment line above.** No thinking, no classification, no tool calls before this. One line, then move on.\n\n2. **Derive the work-type breakdown.** Read the `sessionDescriptors` array \u2014 each entry describes one session via its title, any linked code reviews (`prNumbers`), and first user message. Classify each session into one of these task types:\n\n   - **build_feature** \u2014 new functionality, scripts, tools, config/CI/env setup\n   - **debug_fix** \u2014 investigating and fixing bugs\n   - **improve_quality** \u2014 refactoring, tests, cleanup, code review\n   - **analyze_data** \u2014 queries, metrics, number crunching\n   - **plan_design** \u2014 architecture, approach, strategy, understanding unfamiliar code, design review\n   - **prototype** \u2014 spikes, POCs, throwaway exploration\n   - **write_docs** \u2014 PRDs, RFCs, READMEs, design docs, copy/doc review\n\n   Categories describe the *type of task*, not the project or domain \u2014 a teammate on any project should recognize them. Review sessions belong with whatever's being reviewed: code review is improve_quality, doc review is write_docs, design review is plan_design. Most sessions fit the list; only invent a new category if it's genuinely a different type of task. Pick the top 3-5 with rough percentages. First messages alone are usually enough; titles and code-review links are enrichment. If first messages are uninformative, use tool and MCP counts as a weak hint. If there are ~0 sessions, leave the breakdown as a TODO.\n\n   In the rendered guide, display categories with spaces and title case (e.g. \"Build Feature\" not \"build_feature\").\n\n3. **Gather the remaining pieces.** For repos, start with `currentRepo` and check the workspace for sibling repo directories. For MCP server setup, use each entry's `name` (and `urlOrigin` where present) to infer what the server does and how a teammate would get access. Leave the Team Tips and Get Started sections as TODO placeholders \u2014 you'll ask for these in Review and fill them in after.\n\n4. **Write the guide to `ONBOARDING.md`** following this template:\n\n```\n{{GUIDE_TEMPLATE}}\n```\n\n   Fill in real numbers from the usage data (not placeholders). Use `generatedBy` for the name; if it's missing, omit the name. Ascii bar charts: `\u2588` for filled, `\u2591` for empty, 20 chars wide. Keep the HTML comment instruction at the bottom exactly as shown.\n\n5. **Render the guide in a code block, then close out the first turn.** You're co-authoring this guide with the guide creator \u2014 frame the follow-up as collaboration, not corrections.\n\n   After the code block, add a `---` horizontal rule and a `**Review**` heading so the guide is visually separated from your questions. Under the heading, number these three questions:\n\n   1. \"I went with '[X]' for the team name \u2014 let me know if that sounds right.\" (or if you couldn't tell: \"What's the team name? I'll add it in.\")\n   2. Is there a starter task for someone new to Claude Code? (ticket or doc link \u2014 optional)\n   3. Any team tips you'd tell a new teammate that aren't already in CLAUDE.md?\n\n   After they answer, update `ONBOARDING.md` with their team name, tips, and starter task. Then close with this exact line (not numbered, not paraphrased):\n\n   Saved to `ONBOARDING.md`. Drop it in your team docs and channels \u2014 when a new teammate pastes it into Claude Code, they get a guided onboarding tour from there.\n\n   Apply any edits they come back with to the file."
+    },
+    "experimentResult": null
+  },
+  "tengu_silk_hinge": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_cobalt_ridge": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_vscode_onboarding": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_claudeai_mcp_connectors": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_event_watchdog_default_on": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_penguins_enabled": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_sotto_voce": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_orchid_trellis": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_brick_follow": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_code_diff_cli": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_agent_list_attach": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_lapis_finch": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_1p_event_batch_config": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "path": "/api/event_logging/v2/batch",
+      "maxExportBatchSize": 400,
+      "scheduledDelayMillis": 10000,
+      "maxQueueSize": 8192
+    },
+    "experimentResult": null
+  },
+  "tengu_collage_kaleidoscope": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_coral_fern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_prompt_suggestion": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_quartz_meadow": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_haiku_4_5": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_quartz_vireo": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": "",
+    "experimentResult": null
+  },
+  "tengu_amber_flint": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_slim_subagent_claudemd": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_velvet_tide": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_cobalt_plinth_direct": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_wavy_light": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_dunwich_bell": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_pewter_finch": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_mcp_singleton_unwrap": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_swann_brevity": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "focused",
+    "experimentResult": null
+  },
+  "tengu_turtle_carbon": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_mcp_local_oauth_blocked_hosts": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "hosts": [
+        "microsoft365.mcp.claude.com",
+        "gmail.mcp.claude.com",
+        "gcal.mcp.claude.com"
+      ]
+    },
+    "experimentResult": null
+  },
+  "tengu_slate_harbor_experiment": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_tab_read_sep": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_hawthorn_window": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 200000,
+    "experimentResult": null
+  },
+  "tengu_sub_nomdrep_q7k": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cobalt_lantern": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_haiku": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_ultraplan_timeout_seconds": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 5400,
+    "experimentResult": null
+  },
+  "tengu_retire_chat_relay_artifact_backstop": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_haiku": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_keybinding_customization_release": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_desktop_upsell": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "enable_shortcut_tip": true,
+      "enable_startup_dialog": false
+    },
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_opus_4_6": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_haiku_4_5": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_cedar_plume": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_osprey_lantern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_destructive_command_warning": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_kairos_push_notifications": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_classifier_summary_llm_emit": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_bridge_repl_v2_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "init_retry_max_delay_ms": 4000,
+      "http_timeout_ms": 10000,
+      "connect_timeout_ms": 15000,
+      "min_version": "2.1.70",
+      "should_show_app_upgrade_message": false,
+      "token_refresh_buffer_ms": 600000,
+      "teardown_archive_timeout_ms": 1500,
+      "heartbeat_interval_ms": 20000,
+      "init_retry_max_attempts": 3,
+      "init_retry_jitter_fraction": 0.25,
+      "init_retry_base_delay_ms": 500,
+      "uuid_dedup_buffer_size": 2000,
+      "heartbeat_jitter_fraction": 0.1
+    },
+    "experimentResult": null
+  },
+  "tengu_birch_kettle": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_plugin_official_mkt_git_fallback": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cobalt_raccoon": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cedar_halo": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_team_discovery": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_birch_compass": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cork_lantern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_herring_clock": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_slate_finch": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_flint_harbor_share": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_loggia_carousel": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_quill_harbor": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "acceptEdits",
+    "experimentResult": null
+  },
+  "tengu_lapis_thicket": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_sedge_lantern": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_classifier_summary_heuristic_emit": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cobalt_heron": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_blue_coaster": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_slate_fern": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_sessions_elevated_auth_enforcement": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_startup_announcements": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": [
+      {
+        "maxImpressions": 10,
+        "id": "fable-5-promo-2-2",
+        "title": "Extended: Fable 5 is included in your weekly limit",
+        "text": "Through July 12, you can use up to 50% of your weekly usage limit on Fable 5. If you hit your limit, you can continue on Fable 5 with usage credits. Fable 5 draws down usage faster than Opus 4.8. Run /model and select Fable to use it. [Learn more](https://support.claude.com/en/articles/15424964-claude-fable-5-promotional-access)"
+      }
+    ],
+    "experimentResult": null
+  },
+  "tengu_moss_anchor": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_sparrow_ledger": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_harbor": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_plugin_binary_assets": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_auto_mode_default_on": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_event_sampling_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_fleet_past_sessions": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_mcp_retry_failed_remote": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_amber_lynx": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_log_datadog_events": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_nimble_amber_prose": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_opus_4_6": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_windows_credman": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_ochre_hollow": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cork_m4q": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_usage_overage_included_models": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": [
+      "Fable",
+      "Fable 5"
+    ],
+    "experimentResult": null
+  },
+  "tengu_vellum_siding": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_slate_thimble": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_prompt_cache_diagnostics": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_ashen_kelp": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_drift_lantern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_orford_ness": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_maple_sundial": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_system_prompt_global_cache": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_lantern_hearth": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "off",
+    "experimentResult": null
+  },
+  "tengu_salt_marsh": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_deferred_stub_tool": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_marble_whisper2": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_lilac_loom": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": null,
+    "experimentResult": null
+  },
+  "tengu_marble_anvil": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_lichen_compass": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_loud_sugary_rock": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_version_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "minVersion": "1.0.24"
+    },
+    "experimentResult": null
+  },
+  "tengu_gha_plugin_code_review": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_fleet_needs_input_nudge": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_fleet_needs_input_nudge_experiment",
+      "hashAttribute": "accountUUID",
+      "variations": [
+        false,
+        true
+      ]
+    },
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": {
+      "featureId": "tengu_fleet_needs_input_nudge",
+      "key": "0",
+      "inExperiment": true,
+      "value": false,
+      "hashValue": "916f98e2-e70e-4497-abc2-dfa8ca59c5de",
+      "hashUsed": true,
+      "hashAttribute": "accountUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_bad_survey_transcript_ask_config": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "probability": 1
+    },
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_auto_mode_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "twoStageClassifier": true,
+      "jsonlTranscript": true,
+      "enabled": "enabled",
+      "editRemovalCap": 3000,
+      "editRemovalVisibility": true,
+      "outcomeVisibility": false,
+      "repoVisibility": true,
+      "gitStatusType": true,
+      "gitStatusUploads": false,
+      "s1SuffixByModel": {
+        "claude-sonnet-5": "\nStage 1 does NOT apply user intent or ALLOW exceptions \u2014 stage 2 will handle those. Judge the action by its full effect \u2014 what it runs, sends, publishes, or enables \u2014 not its surface form. Block if ANY rule could apply. <block> immediately.",
+        "claude-sonnet-5[1m]": "\nStage 1 does NOT apply user intent or ALLOW exceptions \u2014 stage 2 will handle those. Judge the action by its full effect \u2014 what it runs, sends, publishes, or enables \u2014 not its surface form. Block if ANY rule could apply. <block> immediately."
+      },
+      "sameTurnSiblingContext": true
+    },
+    "experimentResult": null
+  },
+  "tengu_malort_pedway": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "pixelValidation": false,
+      "enabled": true,
+      "clipboardPasteMultiline": true,
+      "coordinateMode": "pixels",
+      "autoTargetDisplay": false,
+      "screenshotFilter": true,
+      "mouseAnimation": true,
+      "hideBeforeAction": true
+    },
+    "experimentResult": null
+  },
+  "tengu_kairos_cron": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_compass_dial": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_reactive_compact_remote": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_surreal_dali": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_feature_template": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_fable_5": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_cobalt_plinth": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_long_context_survey_threshold": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_amber_redwood3_experiment",
+      "hashAttribute": "organizationUUID",
+      "variations": [
+        "800000",
+        "800000"
+      ]
+    },
+    "on": true,
+    "ruleId": "f1f09ccb-ff60-4b53-b770-1bff8fd08420",
+    "off": false,
+    "value": "800000",
+    "experimentResult": {
+      "featureId": "tengu_long_context_survey_threshold",
+      "key": "0",
+      "inExperiment": true,
+      "value": "800000",
+      "hashValue": "3e93e81c-dce7-4f28-93d9-066405dcb24d",
+      "hashUsed": true,
+      "hashAttribute": "organizationUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_read_dedup_killswitch": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_read_dedup_killswitch",
+      "hashAttribute": "accountUUID",
+      "variations": [
+        false,
+        true
+      ]
+    },
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": {
+      "featureId": "tengu_read_dedup_killswitch",
+      "key": "0",
+      "inExperiment": true,
+      "value": false,
+      "hashValue": "916f98e2-e70e-4497-abc2-dfa8ca59c5de",
+      "hashUsed": true,
+      "hashAttribute": "accountUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_amber_sextant": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_basalt_tern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_vscode_review_upsell": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_cinder_plover": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": "",
+    "experimentResult": null
+  },
+  "tengu_copper_fox": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_copper_fox_experiment-try-3",
+      "hashAttribute": "accountUUID",
+      "variations": [
+        false,
+        true
+      ]
+    },
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": {
+      "featureId": "tengu_copper_fox",
+      "key": "0",
+      "inExperiment": true,
+      "value": false,
+      "hashValue": "916f98e2-e70e-4497-abc2-dfa8ca59c5de",
+      "hashUsed": true,
+      "hashAttribute": "accountUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_amber_heron": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_kairos_loop_dynamic": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_kairos_cron_durable": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_vellum_ash": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_vellum_ash_experiment",
+      "hashAttribute": "accountUUID",
+      "variations": [
+        [],
+        [
+          "claude-opus-4-8",
+          "claude-sonnet-5",
+          "claude-fable-5"
+        ]
+      ]
+    },
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": [
+      "claude-opus-4-8",
+      "claude-sonnet-5",
+      "claude-fable-5"
+    ],
+    "experimentResult": {
+      "featureId": "tengu_vellum_ash",
+      "key": "1",
+      "inExperiment": true,
+      "value": [
+        "claude-opus-4-8",
+        "claude-sonnet-5",
+        "claude-fable-5"
+      ],
+      "hashValue": "916f98e2-e70e-4497-abc2-dfa8ca59c5de",
+      "hashUsed": true,
+      "hashAttribute": "accountUUID",
+      "variationId": 1
+    }
+  },
+  "tengu_copper_bridge": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_flax_grouse": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_maple_pier": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_cloth_snorkel": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_harbor_ledger": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": [
+      {
+        "marketplace": "claude-plugins-official",
+        "plugin": "discord"
+      },
+      {
+        "marketplace": "claude-plugins-official",
+        "plugin": "telegram"
+      },
+      {
+        "marketplace": "claude-plugins-official",
+        "plugin": "fakechat"
+      },
+      {
+        "marketplace": "claude-plugins-official",
+        "plugin": "imessage"
+      }
+    ],
+    "experimentResult": null
+  },
+  "tengu_willow_census_ttl_hours": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 24,
+    "experimentResult": null
+  },
+  "tengu_chair_sermon": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_mcp_stateless_skip_init": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_pewter_summit": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_basalt_spur": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_doorbell_agave": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_steady_lantern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_jade_anvil_4": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_birch_lantern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "off",
+    "experimentResult": null
+  },
+  "tengu_harbor_prism": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_marbled_teal": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_willow_mode": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "hint_v2",
+    "experimentResult": null
+  },
+  "tengu_streaming_tool_execution2": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cobalt_wren": {
+    "source": "force",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_vscode_feedback_survey": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_umber_kestrel": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_olive_hinge": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": "",
+    "experimentResult": null
+  },
+  "tengu_saffron_credits_only_tiers": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": [
+      "enterprise"
+    ],
+    "experimentResult": null
+  },
+  "tengu_bridge_poll_interval_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "multisession_poll_interval_ms_not_at_capacity": 5000,
+      "session_keepalive_interval_ms": 0,
+      "poll_interval_ms_at_capacity": 600000,
+      "poll_interval_ms_not_at_capacity": 2000,
+      "multisession_poll_interval_ms_at_capacity": 60000,
+      "multisession_poll_interval_ms_partial_capacity": 5000,
+      "non_exclusive_heartbeat_interval_ms": 180000,
+      "session_keepalive_interval_v2_ms": 0,
+      "heartbeat_interval_ms": 0
+    },
+    "experimentResult": null
+  },
+  "tengu_onyx_plover": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "enabled": false,
+      "minSessions": 3,
+      "remoteEnabled": false,
+      "minHours": 24
+    },
+    "experimentResult": null
+  },
+  "tengu_tool_pear": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_sage_compass2": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "enabled": true
+    },
+    "experimentResult": null
+  },
+  "tengu_sage_compass": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_sepia_moth": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_non_deferrable_builtins": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_amber_packet": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_crimson_vector": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_review_workflow_routing": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_review_workflow_routing",
+      "hashAttribute": "accountUUID",
+      "variations": [
+        false,
+        true
+      ]
+    },
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": {
+      "featureId": "tengu_review_workflow_routing",
+      "key": "1",
+      "inExperiment": true,
+      "value": true,
+      "hashValue": "916f98e2-e70e-4497-abc2-dfa8ca59c5de",
+      "hashUsed": true,
+      "hashAttribute": "accountUUID",
+      "variationId": 1
+    }
+  },
+  "tengu_scratch": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_quiet_slate_wren": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_amber_prism": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_amber_prism",
+      "hashAttribute": "accountUUID",
+      "variations": [
+        false,
+        true
+      ]
+    },
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": {
+      "featureId": "tengu_amber_prism",
+      "key": "0",
+      "inExperiment": true,
+      "value": false,
+      "hashValue": "916f98e2-e70e-4497-abc2-dfa8ca59c5de",
+      "hashUsed": true,
+      "hashAttribute": "accountUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_file_write_optimization": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_sonnet_4_5": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_lapis_anchor_budget": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 15000000,
+    "experimentResult": null
+  },
+  "tengu_billiard_aviary": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_falcon": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_sonnet_4_6": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_pewter_lantern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu-top-of-feed-tip": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "tip": "",
+      "color": ""
+    },
+    "experimentResult": null
+  },
+  "tengu_amber_redwood3": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_amber_redwood3_experiment",
+      "hashAttribute": "organizationUUID",
+      "variations": [
+        "1000000",
+        "500000"
+      ]
+    },
+    "on": true,
+    "ruleId": "fr_16w3xhnmqpxhlmf",
+    "off": false,
+    "value": "1000000",
+    "experimentResult": {
+      "featureId": "tengu_amber_redwood3",
+      "key": "0",
+      "inExperiment": true,
+      "value": "1000000",
+      "hashValue": "3e93e81c-dce7-4f28-93d9-066405dcb24d",
+      "hashUsed": true,
+      "hashAttribute": "organizationUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_slate_kestrel": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cobalt_plinth_reader_persist": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_falcon": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_lumen_thicket_q7": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_otk_slot_v1": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_pewter_ledger": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "OFF",
+    "experimentResult": null
+  },
+  "tengu_tide_elm": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "off",
+    "experimentResult": null
+  },
+  "tengu_classifier_disabled_surfaces": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": "",
+    "experimentResult": null
+  },
+  "tengu_slate_meridian": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_sonnet_4_5": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_harbor_willow": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_tussock_oriole": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_kairos_loop_prompt": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cinder_almanac": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_tense_pond": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_pewter_brook": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_immediate_model_command": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_workout2": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_amber_anchor": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_mocha_barista": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_chomp_inflection": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_startup_notice": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": "",
+    "experimentResult": null
+  },
+  "tengu_ember_latch": {
+    "source": "force",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_willow_sentinel_ttl_hours": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 1,
+    "experimentResult": null
+  },
+  "tengu_walnut_prism": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_pewter_kestrel": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "global": 50000,
+      "PowerShell": 30000,
+      "Snip": 1000,
+      "BashSearchTool": 20000,
+      "Grep": 20000,
+      "Bash": 30000,
+      "StrReplaceBasedEditTool": 30000
+    },
+    "experimentResult": null
+  },
+  "tengu_ultraplan_prompt_identifier": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "visual_plan",
+    "experimentResult": null
+  },
+  "tengu_vellum_lantern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_chrome_install_upsell": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_coral_beacon": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_coral_beacon",
+      "hashAttribute": "accountUUID",
+      "variations": [
+        false,
+        true
+      ]
+    },
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": {
+      "featureId": "tengu_coral_beacon",
+      "key": "0",
+      "inExperiment": true,
+      "value": false,
+      "hashValue": "916f98e2-e70e-4497-abc2-dfa8ca59c5de",
+      "hashUsed": true,
+      "hashAttribute": "accountUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_cedar_sundial": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_post_compact_survey": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_orchid_mantis_v2": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_crystal_beam": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "budgetTokens": 0
+    },
+    "experimentResult": null
+  },
+  "tengu_ccr_bridge_multi_session": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_timber_lark": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "copy_a",
+    "experimentResult": null
+  },
+  "tengu_long_context_survey_question_variant": {
+    "source": "experiment",
+    "experiment": {
+      "key": "tengu_amber_redwood3_experiment",
+      "hashAttribute": "organizationUUID",
+      "variations": [
+        "instruction_following",
+        "instruction_following"
+      ]
+    },
+    "on": true,
+    "ruleId": "d8a240d7-ec81-47cf-950c-f4c6957f4525",
+    "off": false,
+    "value": "instruction_following",
+    "experimentResult": {
+      "featureId": "tengu_long_context_survey_question_variant",
+      "key": "0",
+      "inExperiment": true,
+      "value": "instruction_following",
+      "hashValue": "3e93e81c-dce7-4f28-93d9-066405dcb24d",
+      "hashUsed": true,
+      "hashAttribute": "organizationUUID",
+      "variationId": 0
+    }
+  },
+  "tengu_frame_publish_context": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_opus": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_ccr_bridge": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_basalt_meadow": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_ccr_bundle_max_bytes": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 104857600,
+    "experimentResult": null
+  },
+  "tengu_workflows_enabled": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_marble_whisper": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_mcp_normalize_root_combinators": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": [
+      "*"
+    ],
+    "experimentResult": null
+  },
+  "tengu_bridge_requires_action_details": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_loud_sugary_rock2": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_walrus_canteen": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_bridge_system_init": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cedar_hollow_7m": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_lantern_spool": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_ember_trail": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "0",
+    "experimentResult": null
+  },
+  "tengu_byte_stream_idle_timeout_ms": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 180000,
+    "experimentResult": null
+  },
+  "tengu_marble_sandcastle": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_penguin_mode_promo": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "discountPercent": 0,
+      "endDate": "Feb 16"
+    },
+    "experimentResult": null
+  },
+  "tengu_trace_lantern": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_lapis_anchor_user_turn": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_amber_quill": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_velvet_hammer_opus_4_8": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": "bf5d397f-bc32-4cdb-9e13-1e9e2ff59a61",
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_c4w_usage_limit_notifications_enabled": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_prism_ledger": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_amber_moleskin": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "200000": {
+        "sdk": 0.15,
+        "repl": 0.15
+      },
+      "1000000": {
+        "sdk": 0.05,
+        "repl": 0.15
+      },
+      "default": {
+        "sdk": 0.15,
+        "repl": 0.15
+      }
+    },
+    "experimentResult": null
+  },
+  "tengu_hazel_osprey": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_bramble_lintel": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": 7,
+    "experimentResult": null
+  },
+  "tengu_shoji_engine": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_cobalt_compass": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_kestrel_arch": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": "OFF",
+    "experimentResult": null
+  },
+  "tengu_max_version_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_gleaming_fair": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_velvet_mallet_opus": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_canary": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": {},
+    "experimentResult": null
+  },
+  "tengu_ultraplan_config": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "enabled": true
+    },
+    "experimentResult": null
+  },
+  "tengu_worktree_mode": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_tool_search_unsupported_models": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": [
+      "claude-3-5-haiku",
+      "claude-3-haiku"
+    ],
+    "experimentResult": null
+  },
+  "tengu_quiet_basalt_echo": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_slate_meadow": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_birthday_hat": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_garnet_finch": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_amber_wren": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "maxTokens": 25000,
+      "targetedRangeNudge": true
+    },
+    "experimentResult": null
+  },
+  "tengu_fennel_kite_model": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": "",
+    "experimentResult": null
+  },
+  "tengu_brass_sled": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_marble_lark": {
+    "source": "defaultValue",
+    "experiment": null,
+    "on": false,
+    "ruleId": null,
+    "off": true,
+    "value": false,
+    "experimentResult": null
+  },
+  "tengu_kairos_brief_config": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": {
+      "enable_slash_command": true
+    },
+    "experimentResult": null
+  },
+  "tengu_kairos_brief": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_kairos_loop_persistent": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_kairos_loop_keepalive": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_observer_agents_enabled": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  },
+  "tengu_coordinator_panel": {
+    "source": "force",
+    "experiment": null,
+    "on": true,
+    "ruleId": null,
+    "off": false,
+    "value": true,
+    "experimentResult": null
+  }
+}
