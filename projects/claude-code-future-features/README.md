@@ -54,3 +54,4 @@ See the `ungate-claude-code-feature` skill. The durable mechanism is the Proxyma
 - [[2.1.207-gated-flag-map]] — **full flag+env map** (`by-version/2.1.207-gated-flag-map.md`): 63 gated feature-flags + 36 env-var gates, ranked by video-worthiness, each with binary evidence and how to unlock. Built from the live GrowthBook eval capture.
 - [[2.1.207]] — earlier narrative catalogue (`by-version/2.1.207.md`)
 - [[observer-agents]] — observer/watchdog deep-dive (`features/observer-agents.md`)
+- [[coordinator-mode]] — delegation-only orchestrator deep-dive (`features/coordinator-mode.md`)
