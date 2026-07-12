@@ -17,6 +17,20 @@ If you're tempted to use a dash for an aside or pivot, that's usually a sign the
 
 **Before presenting any draft, mechanically scan the output for `—` and `–` and remove every instance.** This is non-optional. In past sessions, em dashes kept slipping through during iterative edits because "I know the rule" isn't enough. Run a literal search.
 
+## Intake Interview (Do This First)
+
+**Before drafting anything, interview Ray with the `AskUserQuestion` tool.** Do not skip this and jump straight to 5 variations. The defaults in this skill (long-ish bodies, always a CTA question, always a masterclass P.S.) are wrong about half the time, and guessing wastes a round trip. One batch of questions up front gets the send right.
+
+Ask 3-4 questions in a single `AskUserQuestion` call. Lead each option list with the most common answer and mark it "(Recommended)". The questions to cover:
+
+1. **Audience + intent.** Subscribers (warm, no hard sell) vs leads (coupon + soft sell). This changes whether there's a pitch at all and how strong it is.
+2. **Pitch level.** Pure value, no sell / soft P.S. plug / promo with deadline + price. Ray often sends pure-value issues with zero pitch, so never assume the masterclass P.S. is wanted, confirm it.
+3. **Length + depth.** Tight redirect (~150-250 words, tease don't teach) vs fuller explainer. Default is tight: the video does the teaching, the email earns the click.
+4. **The one thesis / angle to centre.** Ask if there's a single bold or opinionated claim Ray wants as the spine (e.g. "it may be the first RLM"). His strongest sends lead with one memorable take, not balanced feature coverage.
+5. **CTA + extras.** Whether to end with a reply-prompt question or just a warm sign-off, and whether he needs subject + preview lines this round.
+
+If Ray already specified some of these in his request, don't re-ask those, only fill the gaps. Keep it to one round of questions unless his answers open a genuinely new fork.
+
 ## Style DNA
 
 ### Voice
@@ -70,6 +84,8 @@ If you're tempted to use a dash for an aside or pivot, that's usually a sign the
 
 **For any video-redirect newsletter, a video thumbnail is mandatory, not optional.** Every draft in the output must include a `[VIDEO THUMBNAIL + LINK]` placeholder inside the body (typically after the 2nd or 3rd paragraph, before the "here's what I mean" elaboration). If the user hasn't supplied a thumbnail image, ask for one before presenting the drafts. Do not produce a video-redirect newsletter without a thumbnail, it's the CTA of the entire email.
 
+**Important: when Ray pastes a draft back to you, the thumbnail will not be visible in the pasted text.** His real email contains the embedded thumbnail image; copy-and-paste only carries the plain text, so the image silently drops out. Do NOT read the textual absence of `[VIDEO THUMBNAIL + LINK]` as Ray having removed the thumbnail, and do NOT keep flagging it as a missing CTA round after round. Mention it once if genuinely unsure, then assume the thumbnail is present in his actual email and move on. The same goes for any concern: raise it once, and if Ray's next paste keeps the thing you flagged, treat that as a deliberate choice, not an oversight to re-flag.
+
 When you have a thumbnail path, run the bundled script to overlay a YouTube-style play button:
 ```bash
 python3 scripts/add-play-button.py <input_thumbnail> [output_path]
@@ -85,7 +101,9 @@ By default the script resizes the output to 1280×720 at JPEG quality 80, which 
 
 ## CTA Questions
 
-CTA questions close the email with a reply prompt. The framing depends on the newsletter type:
+**A CTA question is optional, not a default.** Confirm in the intake whether Ray wants one. Several of his strongest sends close with just a warm sign-off ("Have a great weekend :)") and no reply prompt at all, because a manufactured engagement hook can cheapen a tight, opinion-led issue. Only include one when Ray asks for it or when the topic genuinely invites a reply.
+
+When you do include one, the framing depends on the newsletter type:
 
 **For feature-announcement / product-launch newsletters** (where the reader will obviously adopt the feature), CTAs must be **forward-looking**. Assume adoption. Ask about what they'll do *with* the feature, not how they were handling things *before* it.
 - Good: "What's the first thing you're going to point /monitor at? Dev server, test suite, Vercel deploy, or something weirder?"
@@ -100,6 +118,10 @@ Always make CTAs specific to the topic, never generic "what do you think?" promp
 ## Output Format
 
 The typical input is a video transcript that needs to be turned into a short, video-redirect newsletter (not a full essay retelling the video). The output is 5 body variations plus a global pool of 10 subject lines and 10 preview snippets. Ray picks one body, one subject, and one preview, and copies the trio.
+
+**Default length for a video-redirect issue is tight: roughly 150-250 words, tease don't teach.** The video does the teaching; the email exists to earn the click. Compress "how it works" to about two paragraphs (one problem, one fix), centre one bold or opinionated claim, and stop. Ray's actual sends run noticeably shorter than the Ali Abdaal examples, which calibrate essay-length and will pull drafts too long if you imitate their density. Lead with his own examples in `references/examples/` for length and register, and use Ali only for rhythm and rhetorical moves. Only go longer than ~250 words if the intake says "fuller explainer".
+
+**Pitch and CTA are conscious choices set in the intake, not automatic add-ons.** Do not auto-append a masterclass P.S. and do not auto-append a reply-prompt CTA. Some of the best issues carry zero sell and just a warm sign-off. Include each only when the intake calls for it.
 
 ### What to generate
 
@@ -158,18 +180,19 @@ Some newsletters include bonus content below the sign-off, like system prompts, 
 
 ## Workflow
 
-1. **Fetch the transcript if needed.** If the user provided a YouTube URL and no local transcript exists in `socials/youtube/transcripts/`, fetch one via `python3 ~/.claude/skills/supadata/scripts/supadata.py transcript <video_id>`. Don't assume the transcript is already on disk, check first.
-2. Read `references/examples.md` to calibrate tone and structure (remember to ignore its em dash usage, see the hard rule at the top of this file)
-3. Identify 5 distinct angles/hooks from the content
-4. Draft 5 complete newsletter variations (video-redirect format by default). Every variation must include the `[VIDEO THUMBNAIL + LINK]` placeholder in the body.
-5. Generate 10 subject lines, 10 preview snippets, and 5 CTA questions. Use the CTA framing rules: forward-looking for feature announcements, experience-sharing for evergreen.
-6. **Structural-consistency pass.** Re-read every variation looking for iterative-edit artifacts: numbered promises that don't match what follows ("two bad options" then only listing one), dangling sentence fragments that were truncated mid-edit, pronouns without clear antecedents, and paragraphs that contradict earlier paragraphs. This catches the kinds of drift that happen when you rewrite parts of a draft.
-7. **Dash scan.** Literally search every variation for `—` and `–` and remove them. Replace with commas, periods, parentheses, or a rewrite. Do this even if you "know" you didn't add any, they sneak in.
-8. Read through for conversational flow. If any sentence sounds like a blog post, rewrite it.
-9. **Handle the thumbnail.** Ask the user for a thumbnail image path if one wasn't provided (remember, thumbnails are mandatory for video-redirect newsletters). Then run `scripts/add-play-button.py` on it, which auto-resizes to 1280×720 at quality 80.
-10. Present everything together for Ray to mix and match. If Ray asks for HTML/viewer mode, render via `references/gmail-viewer-template.html`.
-11. After the email is sent, ask Ray to paste the final version back so it can be stored in `references/examples/` for future reference and performance tracking.
+1. **Run the intake interview.** Use `AskUserQuestion` to settle audience, pitch level, length, the one thesis to centre, and whether to include a CTA question (see "Intake Interview" above). Do this before drafting. Skip only the questions Ray already answered in his request.
+2. **Fetch the transcript if needed.** If the user provided a YouTube URL and no local transcript exists in `socials/youtube/transcripts/`, fetch one via `python3 ~/.claude/skills/supadata/scripts/supadata.py transcript <video_id>`. Don't assume the transcript is already on disk, check first.
+3. **Calibrate on Ray's own sent emails first.** Read the issues in `references/examples/` (these are Ray's real sends, in his actual voice and length) as the primary reference, then skim `references/examples.md` for Ali Abdaal rhythm and rhetorical moves only. Ignore all em dash usage (see the hard rule).
+4. Identify 5 distinct angles/hooks from the content
+5. Draft 5 complete newsletter variations (video-redirect format by default, ~150-250 words each unless the intake said fuller). Every variation must include the `[VIDEO THUMBNAIL + LINK]` placeholder in the body.
+6. Generate 10 subject lines and 10 preview snippets (only if the intake says Ray wants them this round). Include CTA questions only if the intake opted in; when included, use the framing rules: forward-looking for feature announcements, experience-sharing for evergreen.
+7. **Structural-consistency pass.** Re-read every variation looking for iterative-edit artifacts: numbered promises that don't match what follows ("two bad options" then only listing one), dangling sentence fragments that were truncated mid-edit, pronouns without clear antecedents, and paragraphs that contradict earlier paragraphs. This catches the kinds of drift that happen when you rewrite parts of a draft.
+8. **Dash scan.** Literally search every variation for `—` and `–` and remove them. Replace with commas, periods, parentheses, or a rewrite. Do this even if you "know" you didn't add any, they sneak in.
+9. Read through for conversational flow. If any sentence sounds like a blog post, rewrite it.
+10. **Handle the thumbnail.** Ask the user for a thumbnail image path if one wasn't provided (remember, thumbnails are mandatory for video-redirect newsletters). Then run `scripts/add-play-button.py` on it, which auto-resizes to 1280×720 at quality 80. If Ray points you at the final video file, you can also pull a clean frame with `ffmpeg -ss <seconds> -i <video> -frames:v 1 -q:v 2 out.jpg` and run the play-button script on that.
+11. Present everything together for Ray to mix and match. If Ray asks for HTML/viewer mode, render via `references/gmail-viewer-template.html`. Expect several iteration rounds where Ray pastes edited drafts back as plain text (without the thumbnail, which copy-paste strips, see the Video Thumbnail section).
+12. After the email is sent, ask Ray to paste the final version back and save it into `references/examples/<date>-<slug>/email.md` with the metadata header, the body (thumbnail marked as `[VIDEO THUMBNAIL]`), and a KEY PATTERNS line. Copy the play-button thumbnail into that folder as `video-thumbnail.jpg`. Then add a one-line entry to `references/examples.md`. This grows the voice corpus, which is the primary calibration source.
 
 ## Examples
 
-See `references/examples.md` for 5 full Ali Abdaal newsletters that demonstrate this style in action. Read this file when writing to calibrate tone and structure, but remember: **ignore its em dash usage**. The examples are for voice, rhythm, and structure only. Ray's hard rule against dashes overrides anything you see in those examples.
+The primary calibration source is **Ray's own sent newsletters** in `references/examples/`, indexed in `references/examples.md`. Read those first: they are short, declarative, opinion-led, and in his actual voice. `references/ali-abdaal/emails.md` is a secondary reference for conversational rhythm and rhetorical moves only, and it runs essay-length and uses em dashes, both of which you must NOT imitate. When the two pull in different directions (length, vulnerability, hedging), Ray's own examples win.
