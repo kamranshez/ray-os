@@ -44,6 +44,18 @@ CLAUDE_CODE_COORDINATOR_MODE=1 CLAUDE_CODE_REMOTE=1 CLAUDE_CODE_COORDINATOR_EXTR
 
 Note `CLAUDE_CODE_REMOTE=1` is a side door — that var normally travels with `CLAUDE_CODE_REMOTE_SESSION_ID` / `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` in genuine cloud sessions. Forcing it locally just to satisfy the gate works, but you're spoofing the remote-session check, not using a documented path.
 
+## Why "remote" — server intent vs. local adequacy
+
+The `Zs()` / `CLAUDE_CODE_REMOTE` half of the gate isn't arbitrary: coordinator mode is the front-end brain of an actual remote-session subsystem that sits right beside it in the binary. Near `getCoordinatorSystemPrompt` you find the whole cluster — `promoteRemoteSessionToPR`, `pollRemoteSessionEvents`, `interruptRemoteSession`, `awaitRemoteSessionResult`, `archiveRemoteSession`, `processMessagesForTeleportResume`, `checkOutTeleportedSessionBranch`, `BRIDGE_LOGIN_*` — and the entrypoint enum names the products it's built for: `remote_mobile`, `remote_desktop`, `remote_cowork`, `remote_baku`, `claude_code_remote`. In all of those the workspace cap is stamped `"remote"`, so `Zs()` is already true and the gate opens with **no env var**. `CLAUDE_CODE_REMOTE=1` is just the manual way to assert that same signal on a local box.
+
+**Is it "meant for a server"?** For Anthropic's hosted surfaces, yes — but the reason is **persistence/detachment, not compute**. Those products are built around "fire off a big task, close your laptop, get pinged when it's done": worker results, PR events, and peer messages all arrive as *later* async user-role messages (the `pollRemoteSessionEvents` / `awaitRemoteSessionResult` loop), so they want a host that stays alive while you're away. A local terminal dies the moment you close it. That's the whole reason the coordinator lives server-side there — not that it needs cloud hardware.
+
+**Is a local machine adequate? Yes — it's self-contained.** With the two env vars forced locally, both the coordinator and its workers run on your box: workers spawn as ordinary local subagents (`in_process_teammate`) through the same `Agent` / `SendMessage` / `TaskStop` tools, and `<task-notification>` results come back locally. The *only* capabilities that genuinely need the remote comms relay are the two comms-server-gated ones — cross-session peers (`ListAgents` / `ICt`, discovering other Claude sessions) and pushed GitHub PR events (`subscribe_pr_activity`). The core "fan out to workers, synthesize, report" loop is fully local.
+
+This is also why the full `DZh`/`getCoordinatorSystemPrompt` is parameterized on `e = hasCommsRoledServer` (`l(t.options.mcpClients)`): when a comms-roled MCP server is attached, the prompt **grows** the cross-session-peer and PR-subscription instructions; without it (the plain local case) those sections drop out. So `CLAUDE_CODE_REMOTE=1` locally buys you the orchestrator brain plus the local worker fleet, but *not* the cross-session / PR-push half — which is dead anyway without the relay (matching `isCcrCoordinator()` being dead code: `kZh(){return Dee()&&!1}`).
+
+**Practical upshot for the video:** running it locally is fine and needs no server — it's just off the default path. The orchestrator persona earns its keep on genuinely parallel work (big refactors, multi-file research, several PRs at once); its own prompt tells it *not* to fan out simple tasks, so locally it's the right tool only when you actually have parallelizable work — otherwise the normal hands-on agent is faster. The "server" framing is about *where Anthropic runs the walk-away product*, not a prerequisite for the pattern.
+
 ## What changes when it's active
 
 **1. The system prompt swaps** (`DZh`/`getCoordinatorSystemPrompt`, fired via `we("coordinator_mode_start")`):
