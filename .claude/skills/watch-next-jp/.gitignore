@@ -1,0 +1,10 @@
+# Your data — never commit
+data/
+config.json
+taste.md
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

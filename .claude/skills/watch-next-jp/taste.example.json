@@ -1,0 +1,58 @@
+{
+  "_comment": "Copy this to data/taste.json (or point taste_file at it) and fill it with YOUR taste. This is the input the /recommend skill reasons over — it replaces the event-sourced 'ledger' the original pipeline read from. EVERYTHING except a couple of seed videos is optional; a minimal file is just `liked_video_ids` + `channels`. Delete the _comment keys.",
+
+  "rated": [
+    {
+      "_comment": "One entry per video you've watched and formed an opinion on. Best-first is nice but not required. Only `title`/`rating` are really needed; the rest sharpens the skill's judgment.",
+      "video_id": "dQw4w9WgXcQ",
+      "title": "散歩vlog: 早朝の京都・鴨川沿いを歩く",
+      "channel": "ゆるり散歩",
+      "channel_id": "UCxxxxxxxxxxxxxxxxxxxxxx",
+      "rating": 5,
+      "genre": "vlog",
+      "format": "walking tour",
+      "topics": ["京都", "散歩", "日常"],
+      "tags": ["fascinating", "loved_format"],
+
+      "_axes_comment": "Optional 1–5 sub-scores, each on its own vector — don't average them. topic_pull=did the subject grip me, presenter=did I enjoy this person, audio_fidelity=recording quality, speech_clarity=delivery (clean vs fast/slurred), difficulty=how hard to follow.",
+      "axes": {"topic_pull": 4, "presenter": 5, "audio_fidelity": 4, "speech_clarity": 5, "difficulty": 2},
+
+      "_axis_valid_comment": "The censor: when a video was too hard to judge an axis fairly, mark that axis false so the skill ignores it. Classic case: understood-nothing content where presenter=5 is valid but topic_pull isn't.",
+      "axis_valid": {"topic_pull": true, "presenter": true, "audio_fidelity": true, "speech_clarity": true},
+
+      "difficulty": 2,
+      "taste_valid": true,
+      "adjusted_enjoyment": 5,
+
+      "_follow_comment": "Per-channel intent, decoupled from the star. 'more' = keep this channel a strong seed even on a mediocre video. 'block' = never recommend it.",
+      "follow": "more",
+      "note": "calm early-morning walk, clear narration, exactly my speed"
+    }
+  ],
+
+  "channels": [
+    {
+      "_comment": "Channels you have an opinion on. follow_state ∈ more|neutral|less|block. `profile` is a free 'presenter fingerprint' the skill matches against to discover UNKNOWN similar channels.",
+      "channel": "ゆるり散歩",
+      "channel_id": "UCxxxxxxxxxxxxxxxxxxxxxx",
+      "best_rating": 5,
+      "follow_state": "more",
+      "profile": {
+        "characterization": "calm, clear, mid-register solo narrator; dry humor; unhurried",
+        "dialect": "標準語",
+        "register": "casual-polite",
+        "energy": "low",
+        "humor": "dry",
+        "speaking_rate": "slow-moderate"
+      }
+    }
+  ],
+
+  "_derived_comment": "The three lists below are auto-derived from `rated`/`channels` if you omit them. Provide them explicitly to override.",
+  "liked_video_ids": ["dQw4w9WgXcQ"],
+  "blocked_channel_ids": [],
+
+  "_watched_comment": "Video ids you've already seen — harvested candidates matching these are dropped so they never get recommended back. Ids in `rated` are added automatically.",
+  "watched_video_ids": ["dQw4w9WgXcQ"],
+  "watched_count": 1
+}

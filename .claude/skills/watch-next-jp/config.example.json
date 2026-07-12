@@ -1,0 +1,13 @@
+{
+  "_comment": "Optional. Copy to config.json to override defaults. With no config.json at all, data lives in ./data/ and the built-in synthetic-TTS format blocklist applies.",
+
+  "data_dir": "./data",
+  "taste_file": "./data/taste.json",
+
+  "discover": {
+    "_format_comment": "Substrings (case-insensitive, matched against 'title + channel') that mark a candidate as auto-filtered. Omit this key to keep the built-in synthetic-TTS default in harvest.py; set to [] to disable format filtering entirely.",
+    "format_blocklist": null,
+    "_channel_comment": "Channel ids hard-vetoed regardless of taste.json.",
+    "channel_blocklist": []
+  }
+}
