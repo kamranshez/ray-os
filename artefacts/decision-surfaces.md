@@ -17,6 +17,12 @@ So the leverage point is no longer the model or the harness. It is the **decisio
 
 The human-factors literature has a name for the role you're drifting into: supervisory control. Operators who monitor mostly-autonomous systems reliably develop automation complacency; the better the system, the worse the vigilance. Aviation solved this not with willpower but with instruments: cockpits, checklists, and displays engineered so that the state of the system is *perceivable at a glance* and anomalies pop out. That is the correct frame. You are not "reading plans," you are instrument-rating your own cockpit.
 
+![[decision-surfaces-bottleneck-inversion-1.png]]
+![[decision-surfaces-bottleneck-inversion-2.png]]
+![[decision-surfaces-bottleneck-inversion-3.png]]
+![[decision-surfaces-bottleneck-inversion-4.png]]
+![[decision-surfaces-bottleneck-inversion-5.png]]
+
 ## 2. Why prose fails as a decision surface
 
 A markdown plan fails for structural reasons, not laziness:
@@ -28,6 +34,12 @@ A markdown plan fails for structural reasons, not laziness:
 
 Notice that all four failures are properties of the *medium*, and none of them improve as models improve. That matters for the [[bitter-lesson-harness-audit]] test: is this structure compensating for a model limitation (depreciating, delete it later) or for a durable requirement? Decision surfaces compensate for a **human** limitation: fixed reading speed, fixed working memory, vision system optimized for spatial pattern-matching over text parsing. Humans do not scale with compute. This is one of the few places where investing in elaborate scaffolding is *not* a bet against model progress; it is the piece that stays load-bearing at every capability level short of full autonomy, and it is precisely what makes higher autonomy safe to grant.
 
+![[decision-surfaces-why-prose-fails-1.png]]
+![[decision-surfaces-why-prose-fails-2.png]]
+![[decision-surfaces-why-prose-fails-3.png]]
+![[decision-surfaces-why-prose-fails-4.png]]
+![[decision-surfaces-why-prose-fails-5.png]]
+
 ## 3. What the mockup sweep already proved
 
 The `ios-onboarding-redesign` folder is more interesting than any single file in it: eleven paradigms of the *same plan* (linear storyboard, blueprint, review board, dual-lane, diff explorer, canvas, scrollytelling, simulator, RFC, deck, metro map). That is a design-space sweep of decision-surface formats, the same move as thumbnail A/B testing pointed at your own tooling. Worth keeping as a standing method: when a surface underperforms, fork the paradigm, not the content.
@@ -37,6 +49,12 @@ What the three inspected versions showed:
 - **v1 (linear storyboard)** is a presentation. Good first read, but it enforces sequential thinking, branches stay implicit, and you can never see the whole plan at once.
 - **v4 (dual-lane)** adds rigor: UI, frontend diffs, and backend diagram as parallel lanes, plus a cumulative "component ledger" of every file touched. But it needs a huge monitor, and branching still lives in your head. This is the "Dolaney" readability failure: density without spatial structure just moves the skimming problem around.
 - **v6 (canvas)** is the phase change. One 6800x4550 world, pan/zoom, fit-to-view. Branches are geometry: the cloud lane and BYOK lane visibly fork and rejoin, the skip path is a labeled dashed arc you cannot miss. Colored zones chunk the world ("TODAY: THE DEAD END" in red, the changeset in slate). A minimap kills disorientation. Double-click drops a sticky note *at the location it critiques*, with resolve/delete states and a Copy JSON export.
+
+![[decision-surfaces-mockup-sweep-1.png]]
+![[decision-surfaces-mockup-sweep-2.png]]
+![[decision-surfaces-mockup-sweep-3.png]]
+![[decision-surfaces-mockup-sweep-4.png]]
+![[decision-surfaces-mockup-sweep-5.png]]
 
 The generalizable grammar hiding in v6:
 
@@ -49,6 +67,12 @@ The generalizable grammar hiding in v6:
 
 And what v6 still lacks defines the roadmap: no persistence (reload wipes stickies), no freehand drawing, no automatic write-back (Copy JSON is manual), no multi-surface queue, mobile/tablet hostile.
 
+![[decision-surfaces-canvas-grammar-1.png]]
+![[decision-surfaces-canvas-grammar-2.png]]
+![[decision-surfaces-canvas-grammar-3.png]]
+![[decision-surfaces-canvas-grammar-4.png]]
+![[decision-surfaces-canvas-grammar-5.png]]
+
 ## 4. Anatomy of a good decision surface
 
 Beyond the canvas grammar, principles that should hold for *any* surface, not just plans:
@@ -59,6 +83,12 @@ Beyond the canvas grammar, principles that should hold for *any* surface, not ju
 - **Consistent grammar across surfaces.** If every plan renders in the same visual language (same zone colors, same wire semantics, same sticky mechanics), your eye trains on the format and per-surface comprehension cost drops toward zero. This is why cockpits are standardized.
 - **Honest at every altitude.** A polished mockup manufactures false confidence; the render is not the implementation. Keep the "under the hood" strips and the changeset ledger so beauty never substitutes for truth.
 - **Disposable to produce.** Surfaces are generated per decision and thrown away. The *grammar* is the asset; any individual artifact is not.
+
+![[decision-surfaces-anatomy-1.png]]
+![[decision-surfaces-anatomy-2.png]]
+![[decision-surfaces-anatomy-3.png]]
+![[decision-surfaces-anatomy-4.png]]
+![[decision-surfaces-anatomy-5.png]]
 
 ### Keeping the surface honest: verify by construction, then by cross-check
 
@@ -71,6 +101,12 @@ Attack them differently. Gap 2 should be closed **by construction**: derive the 
 
 The prior art for this is double-entry bookkeeping: a representation with a *built-in* verifier. Every transaction is written twice, and the books must balance; the redundancy is not waste, it is the error detector. A decision surface should have the same property: enough redundancy between spec, render, and reality that a lie shows up as an imbalance somewhere.
 
+![[decision-surfaces-two-lies-verification-1.png]]
+![[decision-surfaces-two-lies-verification-2.png]]
+![[decision-surfaces-two-lies-verification-3.png]]
+![[decision-surfaces-two-lies-verification-4.png]]
+![[decision-surfaces-two-lies-verification-5.png]]
+
 ## 5. The maturity ladder
 
 - **Stage 0: prose plan.** Where everyone starts. Skim-and-LGTM failure mode.
@@ -81,6 +117,12 @@ The prior art for this is double-entry bookkeeping: a representation with a *bui
 
 The honest framing of stage 4: it is not a stepping stone to full autonomy that later gets deleted. Preferences never fully transfer. Even at very high autonomy, someone owns taste, and that person needs instruments.
 
+![[decision-surfaces-maturity-ladder-1.png]]
+![[decision-surfaces-maturity-ladder-2.png]]
+![[decision-surfaces-maturity-ladder-3.png]]
+![[decision-surfaces-maturity-ladder-4.png]]
+![[decision-surfaces-maturity-ladder-5.png]]
+
 ## 6. Prior art worth stealing from
 
 - **Code review** is the one decision surface software already perfected: the diff, inline comments anchored to lines, resolve states, approve/request-changes. The whole idea can be described as "generalize the PR review loop beyond code diffs to plans, designs, and strategies."
@@ -90,6 +132,12 @@ The honest framing of stage 4: it is not a stepping stone to full autonomy that 
 - **Bret Victor** (Media for Thinking the Unthinkable, Dynamicland) for the underlying thesis: representations do the thinking; upgrade the representation and you upgrade the thinker.
 - **Tufte**: small multiples for option comparison (your 11-paradigm sweep *is* a small-multiples move), data-ink ratio as a check on decorative canvas bloat.
 - **Control-room and cockpit design** (ecological interface design): make system state perceivable, make anomalies pop out, standardize the instrument panel.
+
+![[decision-surfaces-prior-art-1.png]]
+![[decision-surfaces-prior-art-2.png]]
+![[decision-surfaces-prior-art-3.png]]
+![[decision-surfaces-prior-art-4.png]]
+![[decision-surfaces-prior-art-5.png]]
 
 ## 7. The lineage: representations that upgraded thinking
 
@@ -106,6 +154,12 @@ The Bret Victor point ("representations do the thinking") is not a metaphor; it 
 
 The common shape: the breakthrough is rarely new information, it is old information re-represented so the human perceptual system can do the work that deliberate reasoning was straining at. Chess masters don't calculate more than novices; they *see* more. The surface is how you buy that seeing.
 
+![[decision-surfaces-representation-lineage-1.png]]
+![[decision-surfaces-representation-lineage-2.png]]
+![[decision-surfaces-representation-lineage-3.png]]
+![[decision-surfaces-representation-lineage-4.png]]
+![[decision-surfaces-representation-lineage-5.png]]
+
 ## 8. What to build next, concretely
 
 1. **Extract the v6 grammar into the canvas skill as a spec**, not an example: zones, wires, cards, stickies, provenance tags, embedded plan JSON. Every future plan renders in this one language, and the render is *compiled from* the spec so it cannot misdraw it.
@@ -115,9 +169,21 @@ The common shape: the breakthrough is rarely new information, it is old informat
 5. **Then the ink layer** (embedded tldraw pane or stroke capture + screenshot ingestion), which unlocks the iPad workflow without a native app.
 6. **Only after 2-5 work: the queue.** Multiple sessions publishing surfaces into one inbox page. Do not build mission control before the single-surface round-trip is proven, or you get a beautiful backlog of unmade decisions.
 
+![[decision-surfaces-build-roadmap-1.png]]
+![[decision-surfaces-build-roadmap-2.png]]
+![[decision-surfaces-build-roadmap-3.png]]
+![[decision-surfaces-build-roadmap-4.png]]
+![[decision-surfaces-build-roadmap-5.png]]
+
 ## 9. Tensions to keep in view
 
 - **The surface can lie, two ways.** Aesthetically (polish manufactures confidence; enforce the under-the-hood strips) and factually (a misdrawn diagram is a confident falsehood; close it with render-by-construction plus the cheap-verifier fidelity pass from section 4).
 - **Fatigue scales with queue depth, not surface quality.** Without provenance tiers and auto-approve thresholds for low-stakes calls, better surfaces just let agents generate decision debt faster than you can pay it.
 - **Grammar lock-in.** The visual language should be versioned and pruned like any other harness structure; the *human-facing* purpose is durable, any *specific* encoding is not.
 - **Latency.** A surface that takes 10 minutes to generate changes what it gets used for. Cheap-and-instant beats rich-and-slow for most decisions; keep a fast plain tier.
+
+![[decision-surfaces-tensions-1.png]]
+![[decision-surfaces-tensions-2.png]]
+![[decision-surfaces-tensions-3.png]]
+![[decision-surfaces-tensions-4.png]]
+![[decision-surfaces-tensions-5.png]]
