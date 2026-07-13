@@ -2,6 +2,24 @@
 
 Two rounds of AskUserQuestion. Round 1 picks the angle; Round 2 fills only the ingredient gaps. Ray dictates his answers, so expect speech-to-text noise and interpret intent. The whole point of interviewing instead of just writing: the winning ingredients (receipts, demo details, verdicts) exist only in Ray's head, and a script built without them is a Tier 4 explainer no matter how well it is written.
 
+## Step 0: viability critique
+
+Before asking Ray anything, judge whether the idea deserves a video. This is a real gate, not a compliment sandwich: the channel's bottom third is full of well-made videos of ideas that were never going to work, and the cost of a video is a full day of Ray's time. Score the idea against five checks, each grounded in the performance data:
+
+1. **Precedent** — find the closest prior video in `performance-data.md` (same format, same title shape, same topic family). Its views/day and retention shape are the base rate for this idea. Name it and its numbers in the verdict.
+2. **Hook potential** — can this wear a Tier 1 wrapper (deadline, event, window, fresh discovery)? An idea with no possible urgency or story frame is structurally a Tier 4 explainer, the proven loser.
+3. **Differentiation** — does Ray have (or could he cheaply get) receipts nobody else has: an experiment, a dig, insider access, real production data? If every AI-tools channel can make the same video from the same changelog, expect commodity performance.
+4. **Audience fit** — the audience is agentic-coding practitioners. Ideas serving a different audience (general productivity, non-coding AI news) underperform regardless of quality.
+5. **Fatigue** — does it lean on an overused formula? "Anthropic Just Dropped" reuse is measurably decaying; a 15th+ instance of a title shape starts in a hole.
+
+Verdicts:
+
+- **Strong** — say why in two sentences, then go straight to Round 1.
+- **Viable with changes** — name the specific weakness and the specific fix (usually: add an urgency wrapper, or go get a receipt: run the experiment, do the dig, find the number). Bake the fix into the Round 1 angle options.
+- **Weak** — say plainly that this probably should not be a video, and where the material fits better: newsletter item, X post/thread, ACS class video (route to class-scriptwriter), or parked until a news moment gives it a wrapper. Still offer Round 1, with "park it / repurpose it" as the first option; Ray decides, not the rubric.
+
+The critique goes in chat as prose before the Round 1 AskUserQuestion. Be specific and cite numbers; "this might not perform well" is useless, "the closest precedent is kJ8FTPykawU which did 117 views/day and lost 80% of viewers by the 10% mark" is a decision Ray can act on.
+
 ## Round 1: the angle
 
 Derive 2-4 genuinely different angles from the messy thoughts. "Genuinely different" means they would produce different videos, not the same video with different titles. Typical spread for one piece of material:

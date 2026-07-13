@@ -15,13 +15,14 @@ The output is a full script in the established corpus shape: the same format as 
 
 1. **Ingest.** Read whatever Ray gives you: dictated text, a file, a tweet, a transcript. Assume dictation errors; interpret intent.
 2. **Read the playbook.** Read `references/format-playbook.md` for what performs and why. It is short and load-bearing; every downstream choice keys off it. When an angle decision needs actual numbers or a precedent video (has this title shape worked before? how did the closest prior video retain?), pull `references/performance-data.md` for the full ranked table, retention curves, and per-video format ledger.
-3. **Round 1 — the angle.** Derive 2-4 genuinely different angles from the material and present them with AskUserQuestion. Each option = an angle label, the format it maps to, why that format earns its keep (one performance fact from the playbook), and a preview with a title direction plus a two-line hook sketch. Ray picks the direction before any other question gets asked, because the angle determines which ingredients matter.
-4. **Round 2 — the missing ingredients.** Read `references/interview-guide.md`. Check the eight ingredients against what the messy thoughts already contain, and ask ONLY about the gaps: one AskUserQuestion round of up to 4 questions, a second round only if something load-bearing is still missing. Never ask about something Ray already told you.
-5. **Read golden scripts.** Read the 1-2 scripts from `socials/youtube/videos/uploaded/` that match the chosen angle (the playbook maps angles to files). Lock in the section shape, stage-direction style, and image-placeholder convention.
-6. **Draft.** Write the full script in one pass (see Output format). Prose the camera follows, not an outline. Ray improvises over it live, so clean written register; his verbal tics are added at delivery, not in the file.
-7. **Dash sweep.** Search the draft for `—` and `–` and rewrite them out. Hard rule, zero exceptions.
-8. **Save** to `socials/youtube/videos/<slug>.md` (kebab-case, no H1, `status: draft`). Report the path.
-9. **Offer follow-ups**: title/thumbnail A/B testing via youtube-ab-tester, image generation for the 🎨 DRAW placeholders via the excalidraw skills.
+3. **Viability critique.** Before any interview question, judge whether this should be a video at all (rubric in `references/interview-guide.md`). Deliver the verdict honestly in chat: strong / viable with changes / weak, with the reasoning and the closest precedent video's numbers. Ray would rather hear "this is a newsletter, not a video" before filming than after. A weak verdict does not end the flow; it changes Round 1 (include a park/repurpose option and make the fix explicit).
+4. **Round 1 — the angle.** Derive 2-4 genuinely different angles from the material and present them with AskUserQuestion. Each option = an angle label, the format it maps to, why that format earns its keep (one performance fact from the playbook), and a preview with a title direction plus a two-line hook sketch. Ray picks the direction before any other question gets asked, because the angle determines which ingredients matter.
+5. **Round 2 — the missing ingredients.** Read `references/interview-guide.md`. Check the eight ingredients against what the messy thoughts already contain, and ask ONLY about the gaps: one AskUserQuestion round of up to 4 questions, a second round only if something load-bearing is still missing. Never ask about something Ray already told you.
+6. **Read golden scripts.** Read the 1-2 scripts from `socials/youtube/videos/uploaded/` that match the chosen angle (the playbook maps angles to files). Lock in the section shape, stage-direction style, and image-placeholder convention.
+7. **Draft.** Write the full script in one pass (see Output format). Prose the camera follows, not an outline. Ray improvises over it live, so clean written register; his verbal tics are added at delivery, not in the file.
+8. **Dash sweep.** Search the draft for `—` and `–` and rewrite them out. Hard rule, zero exceptions.
+9. **Save** to `socials/youtube/videos/<slug>.md` (kebab-case, no H1, `status: draft`). Report the path.
+10. **Offer follow-ups**: title/thumbnail A/B testing via youtube-ab-tester, image generation for the 🎨 DRAW placeholders via the excalidraw skills.
 
 ---
 
