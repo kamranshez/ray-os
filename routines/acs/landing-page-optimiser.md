@@ -18,6 +18,7 @@ Past reports repeatedly declared features "unbuilt" or events "consumed by nothi
 
 - **No email capture inside the checkout path.** Decided by Ray (May 2026, reaffirmed Jul 2026): no email gate, no modal, no inline field, no "quick email step" before the Stripe redirect — friction kills checkouts, and guest straight-to-Stripe is deliberate. Low email capture on abandons (~5–10%) is an ACCEPTED TRADE-OFF of that design, not a leak to fix. Do not recommend capturing email earlier/upstream, A/B-testing an email field before checkout, or any variant of "grow the recovery denominator". Evaluate recovery ONLY against abandons that did capture an email.
 - **Never recommend perpetual or new discounts** (already in Key Principles; listed here too because it keeps re-surfacing as "win-back discount" variants).
+- **No `custom_text` / reassurance copy on the Stripe hosted checkout page.** TRIED AND REVERTED 2026-07-13 (PRs #618 → #619): Stripe rejects any Checkout Session that combines `custom_text` with `managed_payments`, which `createLifetimeCheckoutSession` enables ("You cannot use custom_text with Managed Payments." → 400, checkout down in prod). Adding guarantee/refund copy to Stripe's page is only possible by dropping `managed_payments`, which would lose hosted wallet support (Apple Pay / Link) — a bad trade. Do not recommend it. Pre-checkout reassurance belongs on our own page, not Stripe's.
 
 If a future channel message from Ray explicitly reverses one of these, cite that message when you resurface the topic; otherwise these are closed.
 
