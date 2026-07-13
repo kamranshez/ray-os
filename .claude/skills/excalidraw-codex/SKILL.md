@@ -154,7 +154,7 @@ Place embeds at the end of each section, before the next `---` or `##` heading.
 
 - `codex` CLI on PATH (`brew install codex` or via OpenAI installer) and a completed `codex login`.
 - No API key required for this skill; the codex session reuses whatever auth Codex stores in `~/.codex/auth.json`.
-- **Pinned to codex `0.139.x`.** codex `0.140.0`+ shipped a regression ([openai/codex#28422](https://github.com/openai/codex/issues/28422)) where `image_gen` produces a valid PNG but never saves it to disk, so codex falls back to flat wireframes / hand-written PIL scripts and no real image lands. The fix is on `main` but not in `0.140`/`0.141`. Until a fixed release ships, pin with `npm install -g @openai/codex@0.139.0` (the npm global wins PATH over the Homebrew cask, so it is safe and reversible via `npm uninstall -g @openai/codex`). The wrapper warns at runtime if a known-broken version is active.
+- **Requires codex `0.144.1`+** (`npm install -g @openai/codex@latest`). Two dead zones below that, both verified 2026-07-12: `0.140.0`–`0.143.x` shipped a regression ([openai/codex#28422](https://github.com/openai/codex/issues/28422)) where `image_gen` produces a valid PNG but never saves it to disk (fixed in `0.144`); and the old `0.139.0` pin this skill used to mandate is now ALSO broken, because the account's configured default model (`gpt-5.6-terra` in `~/.codex/config.toml`) rejects old CLIs with "requires a newer version of Codex". The failure is silent either way — the wrapper's `set -e` exits 1 with no output — so trust the wrapper's version warning, not the empty log. Do NOT re-pin to 0.139.
 
 ## Bundled Assets
 

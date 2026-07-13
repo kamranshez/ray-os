@@ -73,26 +73,27 @@ PROMPT="$(printf '%s' "$PROMPT" | perl -CSAD -pe '
 ')"
 # -----------------------------------------------------------------------------
 
-# --- codex version pin -------------------------------------------------------
-# REQUIRES codex 0.139.x. codex 0.140.0+ shipped a regression (openai/codex#28422)
-# where image_gen produces a valid PNG but never persists it to disk (the new
-# persistence gate only saves when status=="completed", but 0.140+ delivers the
-# image while status=="generating"). The result is no saved file, and codex
-# falls back to flat wireframes / hand-written PIL scripts. The fix is on `main`
-# but not in 0.140/0.141. Until a fixed release ships, pin with:
-#   npm install -g @openai/codex@0.139.0
-# (the npm global takes PATH priority over the Homebrew cask, so this is safe and
-# reversible: `npm uninstall -g @openai/codex` returns to the brew version.)
+# --- codex version check -----------------------------------------------------
+# REQUIRES codex 0.144.1+. History:
+#   * 0.140.0-0.143.x shipped a regression (openai/codex#28422) where image_gen
+#     produced a valid PNG but never persisted it to disk; fixed in 0.144.
+#   * The old 0.139.0 pin is now ALSO broken (verified 2026-07-12): the account's
+#     configured default model (gpt-5.6-terra in ~/.codex/config.toml) rejects
+#     old CLIs with "requires a newer version of Codex", and the failure is
+#     silent because this script's set -e kills the run before the error prints.
+# Verified working: 0.144.1 (2026-07-12, real 1672x941 PNGs saved). Install:
+#   npm install -g @openai/codex@latest
 CODEX_VER="$(codex --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
 case "$CODEX_VER" in
-  0.139.*) : ;;  # known-good, pinned
-  0.140.*|0.141.*)
-    echo "WARNING: codex $CODEX_VER is active. image_gen saving is BROKEN on 0.140+ (openai/codex#28422)." >&2
-    echo "         Images will not be produced correctly. Pin to the known-good version:" >&2
-    echo "           npm install -g @openai/codex@0.139.0" >&2
+  0.14[4-9].*|0.1[5-9]*.*|0.[2-9]*.*|[1-9]*.*) : ;;  # 0.144.1+ known-good
+  0.139.*|0.140.*|0.141.*|0.142.*|0.143.*)
+    echo "WARNING: codex $CODEX_VER is active. This version is BROKEN for this skill:" >&2
+    echo "         0.140-0.143 never save the PNG (openai/codex#28422); 0.139 is rejected by" >&2
+    echo "         the account's default model (gpt-5.6-terra needs a newer CLI). Upgrade:" >&2
+    echo "           npm install -g @openai/codex@latest" >&2
     ;;
-  "") echo "WARNING: could not determine codex version; this skill is pinned to codex 0.139.x." >&2 ;;
-  *)  echo "NOTE: codex $CODEX_VER is untested with this skill (pinned/verified on 0.139.x). If images do not save, see openai/codex#28422." >&2 ;;
+  "") echo "WARNING: could not determine codex version; this skill requires codex 0.144.1+." >&2 ;;
+  *)  echo "NOTE: codex $CODEX_VER is untested with this skill (verified on 0.144.1)." >&2 ;;
 esac
 # -----------------------------------------------------------------------------
 
