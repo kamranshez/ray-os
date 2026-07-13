@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Triage Board — Agentic Coding School</title>
+<style>
+  :root {
+    --surface-1: #fcfcfb;
+    --surface-2: #ffffff;
+    --plane: #f4f4f1;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --border: rgba(11,11,11,0.12);
+    --border-strong: rgba(11,11,11,0.22);
+    --shadow: 0 1px 2px rgba(0,0,0,0.05), 0 6px 16px rgba(0,0,0,0.06);
+    --shadow-drag: 0 12px 30px rgba(0,0,0,0.20);
+
+    --data: #2a78d6;      /* blue  */
+    --assumption: #b7791f;/* amber */
+    --judgment: #7c3aed;  /* violet */
+
+    --double: #1f9d55;    /* green */
+    --keep: #2a78d6;      /* blue  */
+    --fix: #d98a09;       /* amber */
+    --kill: #d03b3b;      /* red   */
+    --double-bg: rgba(31,157,85,0.10);
+    --keep-bg: rgba(42,120,214,0.10);
+    --fix-bg: rgba(217,138,9,0.11);
+    --kill-bg: rgba(208,59,59,0.10);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1: #1c1c1b;
+      --surface-2: #232322;
+      --plane: #101010;
+      --text-primary: #f4f4f2;
+      --text-secondary: #c3c2b7;
+      --text-muted: #8f8d86;
+      --grid: #2c2c2a;
+      --border: rgba(255,255,255,0.11);
+      --border-strong: rgba(255,255,255,0.26);
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 20px rgba(0,0,0,0.45);
+      --shadow-drag: 0 16px 36px rgba(0,0,0,0.6);
+
+      --data: #4f97ec;
+      --assumption: #e0a53a;
+      --judgment: #a276f0;
+
+      --double: #33c072;
+      --keep: #4f97ec;
+      --fix: #e6a52e;
+      --kill: #e85b5b;
+      --double-bg: rgba(51,192,114,0.13);
+      --keep-bg: rgba(79,151,236,0.13);
+      --fix-bg: rgba(230,165,46,0.13);
+      --kill-bg: rgba(232,91,91,0.13);
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--plane);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 1560px; margin: 0 auto; padding: 22px 20px 64px; }
+
+  /* ---------- header ---------- */
+  header.page { margin-bottom: 14px; }
+  h1 { font-size: 20px; font-weight: 650; margin: 0 0 3px; letter-spacing: -0.015em; }
+  .sub { font-size: 12.5px; color: var(--text-secondary); margin: 0; max-width: 92ch; }
+  .sub b { color: var(--text-primary); font-weight: 600; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 7px 14px; margin: 12px 0 0; font-size: 11.5px; color: var(--text-secondary); align-items: center; }
+  .prov { display: inline-flex; align-items: center; gap: 5px; }
+  .dotp { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .legend .sep { color: var(--text-muted); }
+
+  /* ---------- control bar ---------- */
+  .controlbar {
+    position: sticky; top: 0; z-index: 30;
+    background: var(--plane);
+    padding: 12px 0 12px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .summary-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 18px; margin-bottom: 12px; }
+  .progress-num { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; }
+  .progress-num span.big { font-size: 20px; }
+  .verdict-line { font-size: 12.5px; color: var(--text-secondary); }
+  .verdict-line b { color: var(--text-primary); }
+  .actions { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  button.act {
+    font-family: inherit; font-size: 12px; font-weight: 550;
+    background: var(--surface-2); color: var(--text-primary);
+    border: 1px solid var(--border-strong); border-radius: 8px;
+    padding: 7px 12px; cursor: pointer; transition: background .12s, border-color .12s;
+  }
+  button.act:hover { border-color: var(--text-secondary); }
+  button.act.primary { background: var(--text-primary); color: var(--plane); border-color: var(--text-primary); }
+  button.act.primary:hover { opacity: 0.9; }
+  .assume {
+    display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap;
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .assume .pill-a { display:inline-flex; align-items:center; gap:6px; }
+  .assume label { display: inline-flex; align-items: center; gap: 7px; }
+  .assume input[type=range] { width: 132px; accent-color: var(--assumption); }
+  .assume input[type=number] {
+    width: 68px; font-family: inherit; font-size: 12px; padding: 4px 6px;
+    background: var(--surface-2); color: var(--text-primary);
+    border: 1px solid var(--border); border-radius: 6px;
+  }
+  .assume .val { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text-primary); min-width: 42px; display:inline-block; }
+  .assume .hint { font-size: 11px; color: var(--text-muted); }
+
+  /* stacked volume bars */
+  .bars { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 26px; }
+  @media (max-width: 760px){ .bars { grid-template-columns: 1fr; } }
+  .barblock .barhead { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-secondary); margin-bottom: 5px; }
+  .barhead b { color: var(--text-primary); font-weight: 600; }
+  .stack { display: flex; height: 15px; border-radius: 5px; overflow: hidden; background: var(--grid); border: 1px solid var(--border); }
+  .stack > span { height: 100%; transition: width .28s cubic-bezier(.4,0,.2,1); min-width: 0; }
+  .seg-double { background: var(--double); }
+  .seg-keep { background: var(--keep); }
+  .seg-fix { background: var(--fix); }
+  .seg-kill { background: var(--kill); }
+  .seg-untriaged { background: repeating-linear-gradient(45deg, var(--grid), var(--grid) 5px, transparent 5px, transparent 10px); }
+
+  /* ---------- board ---------- */
+  .board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 14px; align-items: start; }
+  @media (max-width: 1180px){ .board { grid-template-columns: repeat(2, 1fr); } .col.tray { grid-column: 1 / -1; } }
+  @media (max-width: 620px){ .board { grid-template-columns: 1fr; } }
+
+  .col {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 10px 12px;
+    min-height: 130px;
+    transition: background .12s, border-color .12s, box-shadow .12s;
+  }
+  .col.tray { background: transparent; border-style: dashed; border-color: var(--border-strong); }
+  .col.dragover { border-color: var(--text-secondary); box-shadow: inset 0 0 0 2px var(--border-strong); }
+  .col.col-double.dragover { box-shadow: inset 0 0 0 2px var(--double); }
+  .col.col-keep.dragover   { box-shadow: inset 0 0 0 2px var(--keep); }
+  .col.col-fix.dragover    { box-shadow: inset 0 0 0 2px var(--fix); }
+  .col.col-kill.dragover   { box-shadow: inset 0 0 0 2px var(--kill); }
+
+  .colhead { display: flex; align-items: center; gap: 8px; padding: 2px 4px 10px; }
+  .colhead .name { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .colhead .cnt { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-left: auto; }
+  .colhead .swatch { width: 9px; height: 9px; border-radius: 3px; }
+  .col-double .colhead .name { color: var(--double); } .col-double .colhead .swatch { background: var(--double); }
+  .col-keep   .colhead .name { color: var(--keep);   } .col-keep   .colhead .swatch { background: var(--keep); }
+  .col-fix    .colhead .name { color: var(--fix);    } .col-fix    .colhead .swatch { background: var(--fix); }
+  .col-kill   .colhead .name { color: var(--kill);   } .col-kill   .colhead .swatch { background: var(--kill); }
+  .col-hint { font-size: 10.5px; color: var(--text-muted); font-weight: 400; text-transform: none; letter-spacing: 0; }
+  .tray .colhead .name { color: var(--text-secondary); }
+
+  .col-body { display: flex; flex-direction: column; gap: 9px; min-height: 24px; }
+  .tray .col-body { display: grid; grid-template-columns: repeat(auto-fill, minmax(248px, 1fr)); gap: 9px; }
+  .empty-hint { font-size: 11px; color: var(--text-muted); padding: 10px 6px; text-align: center; font-style: italic; }
+
+  /* ---------- card ---------- */
+  .tcard {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 11px 10px;
+    box-shadow: var(--shadow);
+    cursor: grab;
+    position: relative;
+    transition: box-shadow .12s, transform .06s, border-color .12s;
+  }
+  .tcard:active { cursor: grabbing; }
+  .tcard.dragging { opacity: 0.45; box-shadow: var(--shadow-drag); }
+  .tcard.unsettled { border-color: var(--assumption); border-style: dashed; }
+  .tcard.settled::before {
+    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 3px;
+  }
+  .tcard.v-double.settled::before { background: var(--double); }
+  .tcard.v-keep.settled::before   { background: var(--keep); }
+  .tcard.v-fix.settled::before    { background: var(--fix); }
+  .tcard.v-kill.settled::before   { background: var(--kill); }
+
+  .c-top { display: flex; align-items: flex-start; gap: 8px; }
+  .c-name { font-size: 13px; font-weight: 650; letter-spacing: -0.01em; word-break: break-word; line-height: 1.25; }
+  .c-kind { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px; }
+  .rec-tag {
+    margin-left: auto; flex: none; font-size: 9.5px; font-weight: 650; letter-spacing: 0.03em;
+    padding: 2px 6px; border-radius: 20px; text-transform: uppercase; white-space: nowrap;
+    border: 1px solid; opacity: 0.9;
+  }
+  .rec-double { color: var(--double); border-color: var(--double); background: var(--double-bg); }
+  .rec-keep   { color: var(--keep);   border-color: var(--keep);   background: var(--keep-bg); }
+  .rec-fix    { color: var(--fix);    border-color: var(--fix);    background: var(--fix-bg); }
+  .rec-kill   { color: var(--kill);   border-color: var(--kill);   background: var(--kill-bg); }
+
+  .c-stats { display: flex; flex-wrap: wrap; gap: 4px 6px; margin: 9px 0 8px; }
+  .stat {
+    font-size: 10.5px; font-variant-numeric: tabular-nums;
+    background: var(--plane); border: 1px solid var(--border); border-radius: 6px;
+    padding: 2px 6px; color: var(--text-secondary);
+  }
+  .stat b { color: var(--text-primary); font-weight: 650; }
+  .stat.ratio { border-color: var(--data); color: var(--data); }
+  .stat.ratio b { color: var(--data); }
+  .stat.rev { border-color: var(--assumption); color: var(--assumption); }
+  .stat.rev b { color: var(--assumption); }
+
+  .c-prov {
+    font-size: 11.5px; line-height: 1.4; color: var(--text-primary);
+    background: color-mix(in srgb, var(--judgment) 6%, transparent);
+    border-left: 2px solid var(--judgment);
+    border-radius: 0 6px 6px 0;
+    padding: 7px 9px 7px 9px; margin-bottom: 9px;
+  }
+  .c-prov .jtag {
+    font-size: 8.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--judgment); display: inline-block; margin-bottom: 3px;
+  }
+
+  .c-chips { display: flex; gap: 4px; }
+  .chip {
+    flex: 1; font-family: inherit; font-size: 10px; font-weight: 650; letter-spacing: 0.02em;
+    padding: 5px 2px; border-radius: 6px; cursor: pointer; text-transform: uppercase;
+    border: 1px solid var(--border); background: var(--surface-1); color: var(--text-secondary);
+    transition: all .1s;
+  }
+  .chip:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+  .chip[data-v="double"].on { background: var(--double); border-color: var(--double); color: #fff; }
+  .chip[data-v="keep"].on   { background: var(--keep);   border-color: var(--keep);   color: #fff; }
+  .chip[data-v="fix"].on    { background: var(--fix);    border-color: var(--fix);    color: #fff; }
+  .chip[data-v="kill"].on   { background: var(--kill);   border-color: var(--kill);   color: #fff; }
+  @media (prefers-color-scheme: dark){ .chip.on { color: #0d0d0d; } }
+
+  .c-rationale { margin-top: 9px; }
+  .c-rationale.hidden { display: none; }
+  .r-label { font-size: 10px; color: var(--assumption); font-weight: 600; margin-bottom: 4px; display:flex; align-items:center; gap:5px; }
+  .r-input {
+    width: 100%; font-family: inherit; font-size: 11.5px; line-height: 1.35;
+    background: var(--surface-1); color: var(--text-primary);
+    border: 1px solid var(--border-strong); border-radius: 7px; padding: 6px 8px; resize: vertical;
+    min-height: 34px;
+  }
+  .r-input:focus { outline: 2px solid var(--assumption); outline-offset: -1px; border-color: var(--assumption); }
+  .r-saved { display: flex; align-items: flex-start; gap: 6px; font-size: 11.5px; color: var(--text-secondary); }
+  .r-saved .q { color: var(--text-muted); font-style: italic; }
+  .r-saved .edit { margin-left: auto; flex:none; font-size: 10px; color: var(--data); cursor: pointer; text-decoration: underline; background:none; border:none; font-family:inherit; padding:0; }
+  .followtag { font-size: 9.5px; color: var(--text-muted); margin-top: 6px; }
+  .followtag.match { color: var(--double); }
+
+  footer.src { margin-top: 26px; font-size: 11px; color: var(--text-muted); line-height: 1.5; max-width: 96ch; }
+  footer.src code { font-size: 10.5px; }
+
+  .toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--text-primary); color: var(--plane); font-size: 12.5px; font-weight: 550;
+    padding: 10px 16px; border-radius: 9px; box-shadow: var(--shadow-drag);
+    opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s; z-index: 60;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="page">
+    <h1>Triage Board — Agentic Coding School</h1>
+    <p class="sub">Every revenue asset gets a verdict. <b>19 assets</b> (7 acquisition channels + 12 pages) from the last 30 days to 12 Jul 2026 — <b>12,684 unique visitors, &minus;14%</b> vs the prior month. Drag each card into a column, or tap a verdict. Each drop asks you <b>one line: why</b>. Nothing is pre-placed, but each card carries a faint recommended column you can follow or overrule.</p>
+    <div class="legend">
+      <span class="prov"><span class="dotp" style="background:var(--data)"></span>data — computed from the traffic arrays</span>
+      <span class="sep">·</span>
+      <span class="prov"><span class="dotp" style="background:var(--assumption)"></span>assumption — adjustable input, not fact</span>
+      <span class="sep">·</span>
+      <span class="prov"><span class="dotp" style="background:var(--judgment)"></span>judgment — my provocation, argue with it</span>
+    </div>
+  </header>
+
+  <div class="controlbar">
+    <div class="summary">
+      <div class="summary-top">
+        <div class="progress-num"><span class="big" id="triaged-n">0</span> / 19 triaged</div>
+        <div class="verdict-line" id="verdict-sentence">Untriaged. Start with the loudest card and force yourself to commit.</div>
+        <div class="actions">
+          <button class="act" id="btn-reset" title="Clear all verdicts and rationales">Reset</button>
+          <button class="act primary" id="btn-copy">Copy decisions JSON</button>
+        </div>
+      </div>
+
+      <div class="bars">
+        <div class="barblock">
+          <div class="barhead"><span>Channel visitor volume by verdict <span class="hint" style="color:var(--text-muted)">(of 13,917 channel visits)</span></span><b id="ch-summary">0% decided</b></div>
+          <div class="stack" id="bar-channels"></div>
+        </div>
+        <div class="barblock">
+          <div class="barhead"><span>Page visitor volume by verdict <span class="hint" style="color:var(--text-muted)">(of 15,329 page visits)</span></span><b id="pg-summary">0% decided</b></div>
+          <div class="stack" id="bar-pages"></div>
+        </div>
+      </div>
+
+      <div class="assume" style="margin-top:13px; padding-top:12px; border-top:1px solid var(--border);">
+        <span class="pill-a"><span class="dotp" style="background:var(--assumption)"></span><b style="color:var(--text-primary);">Revenue lens</b></span>
+        <label>If <input type="range" id="conv" min="0.1" max="5" step="0.1" value="1"><span class="val" id="conv-val">1.0%</span> of an asset's visitors are new prospects who buy</label>
+        <label>at <span style="color:var(--text-muted)">$</span><input type="number" id="price" min="1" step="1" value="397"> lifetime</label>
+        <span class="hint">→ shows prospective revenue at stake on acquisition cards. Member/class pages are retention assets; churn signals carry no sale.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="board" id="board">
+    <section class="col tray" data-verdict="" id="col-tray" aria-label="Untriaged tray">
+      <div class="colhead"><span class="name">Untriaged</span><span class="cnt" id="cnt-tray">19</span></div>
+      <div class="col-body" id="body-tray"></div>
+    </section>
+    <section class="col col-double" data-verdict="double" id="col-double" aria-label="Double down column">
+      <div class="colhead"><span class="swatch"></span><span class="name">Double-down <span class="col-hint">put more in</span></span><span class="cnt" id="cnt-double">0</span></div>
+      <div class="col-body" id="body-double"></div>
+    </section>
+    <section class="col col-keep" data-verdict="keep" id="col-keep" aria-label="Keep column">
+      <div class="colhead"><span class="swatch"></span><span class="name">Keep <span class="col-hint">maintain, don't over-invest</span></span><span class="cnt" id="cnt-keep">0</span></div>
+      <div class="col-body" id="body-keep"></div>
+    </section>
+    <section class="col col-fix" data-verdict="fix" id="col-fix" aria-label="Fix column">
+      <div class="colhead"><span class="swatch"></span><span class="name">Fix <span class="col-hint">broken but worth repairing</span></span><span class="cnt" id="cnt-fix">0</span></div>
+      <div class="col-body" id="body-fix"></div>
+    </section>
+    <section class="col col-kill" data-verdict="kill" id="col-kill" aria-label="Kill column">
+      <div class="colhead"><span class="swatch"></span><span class="name">Kill <span class="col-hint">stop spending attention</span></span><span class="cnt" id="cnt-kill">0</span></div>
+      <div class="col-body" id="body-kill"></div>
+    </section>
+  </div>
+
+  <footer class="src">
+    <b>Honest at every altitude.</b> Channel visitor counts sum to 13,917 — above the 12,684 unique total — because a person returning through a different channel is recounted; page visits (15,329) likewise overlap across pages. So the two volume bars use those channel/page sub-totals as their own denominators, not the unique total. The 12 Jul day is partial and the 20 Jun spike (1,367) is a one-off, both included in the 30-day figures. Views/visitor, share, and all counts are <span style="color:var(--data)">data</span>; the conversion rate and price are <span style="color:var(--assumption)">assumptions</span> you set; recommended columns and provocations are <span style="color:var(--judgment)">judgment</span>. Source: PostHog project 236619, pulled 12 Jul 2026.
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'acs-triage-board-v1';
+const CHANNEL_TOTAL = 13917;  // sum of channel visitors (double-counted)
+const PAGE_TOTAL = 15329;     // sum of page visitors (overlapping)
+
+/* asset cards. visitors/views are DATA. provocation/rec are JUDGMENT.
+   side: 'acq' = acquisition (revenue-at-stake applies) | 'ret' = retention | 'signal' = churn signal */
+const ASSETS = [
+  // ---- channels ----
+  { id:'ch-direct', name:'Direct', kind:'Channel', side:'acq', visitors:5400, views:8914, rec:'keep',
+    prov:`Your biggest channel is a black box: Direct lumps returning members typing the URL, untagged links, and brand search together at 1.65 pages/visitor. You can't double-down on "Direct" because you don't know what it is. Instrument it before you trust it.` },
+  { id:'ch-referral', name:'Referral', kind:'Channel', side:'acq', visitors:3649, views:16066, rec:'double',
+    prov:`Referral generates 16,066 views — more than every other channel combined (15,250) — at 4.4 pages/visitor, your deepest engagement anywhere. But "Referral" won't tell you WHO. One embedded link is doing enormous work invisibly. Find it and feed it.` },
+  { id:'ch-video', name:'Organic Video', kind:'Channel', side:'acq', visitors:1975, views:1981, rec:'fix',
+    prov:`YouTube is your stated #1 acquisition engine, yet these visitors view exactly 1.0 pages and leave. The channel→site handoff is leaking your highest-intent traffic. This is arguably the single highest-leverage fix on the board.` },
+  { id:'ch-search', name:'Organic Search', kind:'Channel', side:'acq', visitors:1575, views:2581, rec:'keep',
+    prov:`Steady, warm, free: 1,575 visitors at 1.64 pages with no ongoing effort. Nothing screams here. The only question is whether any deliberate SEO would turn a passive 11% of traffic into a growth lever, or whether it's fine left alone.` },
+  { id:'ch-email', name:'Email', kind:'Channel', side:'acq', visitors:912, views:1266, rec:'fix',
+    prov:`Email returns only 912 visitors while /unsubscribe logged 408 — you're shedding nearly one unsubscribe for every two returns. Either the list is decaying faster than it earns, or the sends don't drive clicks. Fix the loop or stop paying for it.` },
+  { id:'ch-shopping', name:'Organic Shopping', kind:'Channel', side:'acq', visitors:275, views:332, rec:'kill',
+    prov:`Why does a $397 course have "Organic Shopping" traffic at all? 275 visitors from shopping surfaces smells like mis-tagging or a Merchant/product listing you forgot exists. Find out what it even is before you assign it any value.` },
+  { id:'ch-social', name:'Organic Social', kind:'Channel', side:'acq', visitors:131, views:176, rec:'kill',
+    prov:`131 visitors. Under 1% of traffic. If you spend any hours a week on organic social, this is the clearest "stop" on the board — the data says it isn't paying for your attention. Reclaim the hours for YouTube.` },
+  // ---- pages ----
+  { id:'pg-home', name:'/', kind:'Landing page', side:'acq', visitors:6891, views:7090, rec:'double',
+    prov:`Over half of everyone who reaches your site sees only this page and leaves (1.03 pages/visitor). The landing page is the highest-leverage surface you own: a 0.1pt conversion lift here outweighs any single channel tweak. Treat it as object #1.` },
+  { id:'pg-signin', name:'/auth/sign-in', kind:'Auth', side:'ret', visitors:2631, views:3167, rec:'keep',
+    prov:`Sign-in is your #2 page at 2,631 visitors, but it outnumbers sign-up 5.5-to-1 — this is overwhelmingly returning members, not new ones. A healthy retention signal, not a growth surface. Keep it frictionless; don't over-invest.` },
+  { id:'pg-member', name:'/member', kind:'Member hub', side:'ret', visitors:1117, views:4112, rec:'keep',
+    prov:`The member hub pulls 3.68 pages/visitor — your stickiest destination. 1,117 members returning is the retention core that justifies the whole $397 lifetime model. There's no decision here except: protect this experience.` },
+  { id:'pg-claudecode', name:'/member/class/claude-code', kind:'Class', side:'ret', visitors:899, views:3655, rec:'double',
+    prov:`Your Claude Code class is the runaway winner: 899 visitors at 4.07 pages, ahead of loopy-ai (673) and every other class. This is proof of what your audience wants more of. Double down on the topic — in free content AND the next paid class.` },
+  { id:'pg-newsletter', name:'/newsletter', kind:'Newsletter', side:'acq', visitors:736, views:738, rec:'fix',
+    prov:`736 signup-page visits at exactly 1.0 pages, against 408 unsubscribes. The newsletter neither converts deeply nor obviously feeds sales right now — it's a slow-leaking bucket. Decide what it's actually FOR (nurture? launches?) or stop feeding it.` },
+  { id:'pg-loopyai', name:'/member/class/loopy-ai', kind:'Class', side:'ret', visitors:673, views:2228, rec:'keep',
+    prov:`Solid #2 class: 673 visitors, 3.31 pages. Consistent engagement without being a breakout. Keep it in the library — it earns its slot — but it isn't the topic to bet the next launch on. Claude Code is.` },
+  { id:'pg-callback', name:'/auth/callback', kind:'Auth', side:'ret', visitors:500, views:860, rec:'keep',
+    prov:`Pure plumbing — the OAuth return step. 500 visitors is a byproduct of sign-in/up, not an asset with its own value. Nothing to decide except "does it work." Keep and ignore; don't let it eat a triage slot in your head.` },
+  { id:'pg-signup', name:'/auth/sign-up', kind:'Auth', side:'acq', visitors:475, views:702, rec:'fix',
+    prov:`Only 475 new-signup visits in 30 days — the literal top of your paid funnel, and it's thin. If 6,891 hit the landing page and just 475 reach sign-up, the leak between them is where new revenue dies. Fix the path INTO here.` },
+  { id:'pg-unsub', name:'/unsubscribe', kind:'Churn signal', side:'signal', visitors:408, views:412, rec:'fix',
+    prov:`408 unsubscribes in 30 days — 45% of the 912 visitors email brought back, and more people than the entire Organic Social channel. This isn't a page to optimise; it's a warning light. Read it as a FIX order for the email program.` },
+  { id:'pg-workflows', name:'/member/class/workflows', kind:'Class', side:'ret', visitors:354, views:807, rec:'keep',
+    prov:`Mid-pack class: 354 visitors, 2.28 pages. Fine, unremarkable. Keep it live, but it's not pulling its weight next to claude-code — a candidate to refresh, re-promote, or fold into a stronger track later.` },
+  { id:'pg-fundamentals', name:'/member/class/fundamental-techniques', kind:'Class', side:'ret', visitors:340, views:820, rec:'keep',
+    prov:`340 visitors at a healthy 2.41 pages — people who open it engage, but few open it. That's a discoverability problem, not a quality one. Keep it, and surface it better inside /member instead of rebuilding it.` },
+  { id:'pg-advanced', name:'/member/class/advanced-techniques', kind:'Class', side:'ret', visitors:305, views:868, rec:'keep',
+    prov:`Lowest-traffic class (305) but the highest pages/visitor of the mid-pack (2.85) — a small, deeply-engaged audience. Niche but loved. Keep it for retention; just don't expect it to pull new signups.` },
+];
+
+const VERDICTS = ['double','keep','fix','kill'];
+const VLABEL = { double:'Double-down', keep:'Keep', fix:'Fix', kill:'Kill' };
+const fmt = n => n.toLocaleString('en-US');
+const fmtMoney = n => '$' + Math.round(n).toLocaleString('en-US');
+
+/* ---------- state ---------- */
+let state = {};   // id -> { verdict, rationale }
+let conv = 1.0, price = 397;
+try {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  if (saved.state) state = saved.state;
+  if (typeof saved.conv === 'number') conv = saved.conv;
+  if (typeof saved.price === 'number') price = saved.price;
+} catch (e) {}
+ASSETS.forEach(a => { if (!state[a.id]) state[a.id] = { verdict:null, rationale:'' }; });
+
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ state, conv, price })); } catch (e) {}
+}
+
+/* ---------- derived helpers ---------- */
+const ratioOf = a => a.views / a.visitors;
+function shareOf(a) {
+  return a.kind === 'Channel' ? a.visitors / CHANNEL_TOTAL : a.visitors / PAGE_TOTAL;
+}
+function revenueOf(a) {
+  if (a.side !== 'acq') return null;
+  return a.visitors * (conv / 100) * price;
+}
+
+/* ---------- build cards once ---------- */
+const cardNodes = new Map();
+const rInputs = new Map();
+
+function buildCard(a) {
+  const card = document.createElement('div');
+  card.className = 'tcard';
+  card.setAttribute('draggable', 'true');
+  card.dataset.id = a.id;
+
+  const ratio = ratioOf(a);
+  const ratioLabel = a.kind === 'Channel' || a.kind === 'Landing page' || a.kind==='Newsletter' || a.kind==='Churn signal'
+    ? 'views/visitor' : 'pages/visit';
+
+  card.innerHTML = `
+    <div class="c-top">
+      <div>
+        <div class="c-name">${a.name}</div>
+        <div class="c-kind">${a.kind}</div>
+      </div>
+      <span class="rec-tag rec-${a.rec}" title="My recommended column — follow or overrule">rec: ${VLABEL[a.rec]}</span>
+    </div>
+    <div class="c-stats">
+      <span class="stat"><b>${fmt(a.visitors)}</b> visitors</span>
+      <span class="stat"><b>${fmt(a.views)}</b> views</span>
+      <span class="stat ratio"><b>${ratio.toFixed(2)}</b> ${ratioLabel}</span>
+      <span class="stat"><b>${(shareOf(a)*100).toFixed(1)}%</b> of ${a.kind==='Channel'?'channels':'pages'}</span>
+      <span class="stat rev" data-rev="${a.id}"></span>
+    </div>
+    <div class="c-prov"><span class="jtag">judgment</span>${a.prov}</div>
+    <div class="c-chips">
+      ${VERDICTS.map(v => `<button class="chip" data-v="${v}" aria-label="Mark ${VLABEL[v]}">${VLABEL[v]}</button>`).join('')}
+    </div>
+    <div class="c-rationale hidden" data-rat="${a.id}">
+      <div class="r-label"><span class="dotp" style="background:var(--assumption)"></span>Why this verdict? (forced — one line)</div>
+      <textarea class="r-input" rows="1" placeholder="e.g. 4.4 views/visitor is my best engagement — worth instrumenting the source"></textarea>
+      <div class="followtag" data-follow="${a.id}"></div>
+    </div>
+  `;
+
+  // chip clicks (click-to-assign fallback)
+  card.querySelectorAll('.chip').forEach(ch => {
+    ch.addEventListener('click', () => setVerdict(a.id, ch.dataset.v, true));
+  });
+
+  // rationale input
+  const ta = card.querySelector('.r-input');
+  rInputs.set(a.id, ta);
+  const commit = () => {
+    state[a.id].rationale = ta.value.trim();
+    save();
+    updateCardChrome(a.id);
+    updateSummary();
+  };
+  ta.addEventListener('input', () => {
+    ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px';
+    state[a.id].rationale = ta.value.trim();
+    save(); updateSummary();
+    card.classList.toggle('unsettled', !state[a.id].rationale);
+    card.classList.toggle('settled', !!state[a.id].rationale);
+  });
+  ta.addEventListener('blur', commit);
+  ta.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ta.blur(); } });
+
+  // drag
+  card.addEventListener('dragstart', e => {
+    card.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', a.id);
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  card.addEventListener('dragend', () => card.classList.remove('dragging'));
+
+  cardNodes.set(a.id, card);
+  return card;
+}
+
+/* ---------- placement + chrome ---------- */
+function bodyFor(verdict) {
+  return document.getElementById('body-' + (verdict || 'tray'));
+}
+function placeCard(id) {
+  const a = state[id];
+  bodyFor(a.verdict).appendChild(cardNodes.get(id));
+}
+function updateCardChrome(id) {
+  const card = cardNodes.get(id);
+  const st = state[id];
+  const v = st.verdict;
+  card.classList.remove('v-double','v-keep','v-fix','v-kill','settled','unsettled');
+  card.querySelectorAll('.chip').forEach(ch => ch.classList.toggle('on', ch.dataset.v === v));
+
+  const rat = card.querySelector('[data-rat]');
+  const followEl = card.querySelector('[data-follow]');
+  if (!v) {
+    rat.classList.add('hidden');
+    followEl.textContent = '';
+    return;
+  }
+  card.classList.add('v-' + v);
+  rat.classList.remove('hidden');
+  if (st.rationale) { card.classList.add('settled'); }
+  else { card.classList.add('unsettled'); }
+
+  const asset = ASSETS.find(x => x.id === id);
+  if (v === asset.rec) { followEl.textContent = '↳ matches recommendation'; followEl.classList.add('match'); }
+  else { followEl.textContent = '↳ overruled rec: ' + VLABEL[asset.rec]; followEl.classList.remove('match'); }
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+function setVerdict(id, verdict, focusRationale) {
+  state[id].verdict = verdict;
+  placeCard(id);
+  updateCardChrome(id);
+  updateCounts();
+  updateSummary();
+  save();
+  if (verdict && focusRationale) {
+    const ta = rInputs.get(id);
+    setTimeout(() => { ta.focus(); ta.style.height='auto'; ta.style.height = ta.scrollHeight+'px'; }, 40);
+  }
+}
+
+/* ---------- revenue rendering ---------- */
+function renderRevenue() {
+  ASSETS.forEach(a => {
+    const el = document.querySelector(`[data-rev="${a.id}"]`);
+    if (!el) return;
+    const rev = revenueOf(a);
+    if (rev === null) {
+      el.style.display = 'none';
+    } else {
+      el.style.display = '';
+      el.innerHTML = `<b>${fmtMoney(rev)}</b>/mo at stake`;
+      el.title = `${fmt(a.visitors)} visitors × ${conv}% × ${fmtMoney(price)} — assumption, not measured`;
+    }
+  });
+}
+
+/* ---------- counts + summary bars ---------- */
+function updateCounts() {
+  const counts = { tray:0, double:0, keep:0, fix:0, kill:0 };
+  ASSETS.forEach(a => { counts[state[a.id].verdict || 'tray']++; });
+  document.getElementById('cnt-tray').textContent = counts.tray;
+  VERDICTS.forEach(v => document.getElementById('cnt-'+v).textContent = counts[v]);
+  const triaged = ASSETS.length - counts.tray;
+  document.getElementById('triaged-n').textContent = triaged;
+  // empty hints
+  ['tray', ...VERDICTS].forEach(k => {
+    const body = bodyFor(k === 'tray' ? null : k);
+    let hint = body.querySelector('.empty-hint');
+    const has = body.querySelector('.tcard');
+    if (!has && !hint) {
+      hint = document.createElement('div');
+      hint.className = 'empty-hint';
+      hint.textContent = k === 'tray' ? 'All assets triaged.' : 'Drop assets here';
+      body.appendChild(hint);
+    } else if (has && hint) { hint.remove(); }
+  });
+}
+
+function volumeByVerdict(kindFilter) {
+  const vol = { double:0, keep:0, fix:0, kill:0, untriaged:0 };
+  ASSETS.filter(kindFilter).forEach(a => {
+    const v = state[a.id].verdict || 'untriaged';
+    vol[v] += a.visitors;
+  });
+  return vol;
+}
+function renderStack(elId, vol, total) {
+  const el = document.getElementById(elId);
+  el.innerHTML = '';
+  [['double','seg-double'],['keep','seg-keep'],['fix','seg-fix'],['kill','seg-kill'],['untriaged','seg-untriaged']].forEach(([k,cls]) => {
+    const w = (vol[k] / total) * 100;
+    if (w <= 0) return;
+    const s = document.createElement('span');
+    s.className = cls;
+    s.style.width = w.toFixed(2) + '%';
+    s.title = `${VLABEL[k] || 'Untriaged'}: ${fmt(vol[k])} visits (${w.toFixed(0)}%)`;
+    el.appendChild(s);
+  });
+}
+
+function updateSummary() {
+  const chVol = volumeByVerdict(a => a.kind === 'Channel');
+  const pgVol = volumeByVerdict(a => a.kind !== 'Channel');
+  renderStack('bar-channels', chVol, CHANNEL_TOTAL);
+  renderStack('bar-pages', pgVol, PAGE_TOTAL);
+
+  const chDecided = 100 - (chVol.untriaged / CHANNEL_TOTAL * 100);
+  const pgDecided = 100 - (pgVol.untriaged / PAGE_TOTAL * 100);
+  document.getElementById('ch-summary').textContent = chDecided.toFixed(0) + '% decided';
+  document.getElementById('pg-summary').textContent = pgDecided.toFixed(0) + '% decided';
+
+  // headline sentence
+  const chCut = (chVol.kill + chVol.fix) / CHANNEL_TOTAL * 100;
+  const pgCut = (pgVol.kill + pgVol.fix) / PAGE_TOTAL * 100;
+  const chUp = (chVol.double) / CHANNEL_TOTAL * 100;
+  const triaged = ASSETS.filter(a => state[a.id].verdict).length;
+  const line = document.getElementById('verdict-sentence');
+  if (triaged === 0) {
+    line.innerHTML = 'Untriaged. Start with the loudest card and force yourself to commit.';
+  } else if (triaged < ASSETS.length) {
+    line.innerHTML = `So far you've marked channels covering <b>${chCut.toFixed(0)}%</b> of channel traffic KILL/FIX and pages covering <b>${pgCut.toFixed(0)}%</b>. <b>${ASSETS.length - triaged}</b> assets still have no verdict.`;
+  } else {
+    line.innerHTML = `Complete. You'd cut/repair <b>${chCut.toFixed(0)}%</b> of channel volume and <b>${pgCut.toFixed(0)}%</b> of page volume, and double down on <b>${chUp.toFixed(0)}%</b> of channel traffic. Copy the JSON to hand it back.`;
+  }
+}
+
+/* ---------- drop zones ---------- */
+document.querySelectorAll('.col').forEach(col => {
+  const verdict = col.dataset.verdict || null;
+  col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('dragover'); e.dataTransfer.dropEffect='move'; });
+  col.addEventListener('dragleave', e => { if (!col.contains(e.relatedTarget)) col.classList.remove('dragover'); });
+  col.addEventListener('drop', e => {
+    e.preventDefault();
+    col.classList.remove('dragover');
+    const id = e.dataTransfer.getData('text/plain');
+    if (id) setVerdict(id, verdict, !!verdict);
+  });
+});
+
+/* ---------- assumptions ---------- */
+const convEl = document.getElementById('conv'), convVal = document.getElementById('conv-val');
+const priceEl = document.getElementById('price');
+convEl.value = conv; convVal.textContent = conv.toFixed(1) + '%';
+priceEl.value = price;
+convEl.addEventListener('input', () => {
+  conv = parseFloat(convEl.value); convVal.textContent = conv.toFixed(1) + '%';
+  renderRevenue(); save();
+});
+priceEl.addEventListener('input', () => {
+  price = Math.max(1, parseFloat(priceEl.value) || 1);
+  renderRevenue(); save();
+});
+
+/* ---------- copy / reset ---------- */
+document.getElementById('btn-copy').addEventListener('click', () => {
+  const chVol = volumeByVerdict(a => a.kind === 'Channel');
+  const pgVol = volumeByVerdict(a => a.kind !== 'Channel');
+  const payload = {
+    surface: 'triage-board',
+    generatedAt: new Date().toISOString(),
+    window: 'last 30 days to 2026-07-12',
+    assumptions: { conversionPct: conv, priceUSD: price, note: 'conversion applied to acquisition-side visitor counts only; visitor counts double-count returners' },
+    progress: {
+      triaged: ASSETS.filter(a => state[a.id].verdict).length,
+      total: ASSETS.length,
+      channelVolumeByVerdict: chVol,
+      pageVolumeByVerdict: pgVol
+    },
+    verdicts: ASSETS.map(a => ({
+      id: a.id, name: a.name, kind: a.kind, side: a.side,
+      visitors: a.visitors, views: a.views,
+      viewsPerVisitor: +ratioOf(a).toFixed(3),
+      shareOfSegment: +(shareOf(a)).toFixed(4),
+      revenueAtStakeUSD: revenueOf(a) === null ? null : Math.round(revenueOf(a)),
+      recommended: a.rec,
+      verdict: state[a.id].verdict,
+      followedRecommendation: state[a.id].verdict ? state[a.id].verdict === a.rec : null,
+      rationale: state[a.id].rationale || ''
+    }))
+  };
+  const text = JSON.stringify(payload, null, 2);
+  const done = () => toast('Decisions JSON copied to clipboard');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else fallbackCopy(text, done);
+});
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e) { toast('Copy failed — select manually'); }
+  document.body.removeChild(ta);
+}
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  if (!confirm('Clear every verdict and rationale? This cannot be undone.')) return;
+  ASSETS.forEach(a => { state[a.id] = { verdict:null, rationale:'' }; });
+  save();
+  ASSETS.forEach(a => {
+    const ta = rInputs.get(a.id); ta.value=''; ta.style.height='auto';
+    placeCard(a.id); updateCardChrome(a.id);
+  });
+  updateCounts(); updateSummary();
+  toast('Board reset');
+});
+
+/* ---------- init ---------- */
+ASSETS.forEach(a => buildCard(a));
+// restore rationale text into inputs
+ASSETS.forEach(a => { const ta = rInputs.get(a.id); if (state[a.id].rationale) ta.value = state[a.id].rationale; });
+ASSETS.forEach(a => { placeCard(a.id); updateCardChrome(a.id); });
+// size restored textareas
+ASSETS.forEach(a => { const ta = rInputs.get(a.id); if (ta.value){ ta.style.height='auto'; ta.style.height = ta.scrollHeight+'px'; } });
+renderRevenue();
+updateCounts();
+updateSummary();
+</script>
+</body>
+</html>

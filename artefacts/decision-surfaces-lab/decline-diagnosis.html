@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decline diagnosis — is the −14% real, and does it matter for revenue?</title>
+<style>
+  :root {
+    --surface-1: #fcfcfb;
+    --surface-2: #f4f4f1;
+    --plane: #f9f9f7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;   /* blue  — visitors */
+    --series-2: #1baf7a;   /* aqua  — pageviews */
+    --good: #006300;
+    --good-fill: rgba(0,99,0,0.12);
+    --bad: #d03b3b;
+    --bad-fill: rgba(208,59,59,0.12);
+    --data: #2a78d6;
+    --assume: #b5730a;
+    --assume-fill: rgba(181,115,10,0.12);
+    --judge: #7d4bd0;
+    --judge-fill: rgba(125,75,208,0.12);
+    --camp-artifact: #1baf7a;
+    --camp-real: #d03b3b;
+    --camp-assume: #b5730a;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1: #1a1a19;
+      --surface-2: #232322;
+      --plane: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --axis: #383835;
+      --border: rgba(255,255,255,0.12);
+      --series-1: #3987e5;
+      --series-2: #199e70;
+      --good: #0ca30c;
+      --good-fill: rgba(12,163,12,0.16);
+      --bad: #e34948;
+      --bad-fill: rgba(227,73,72,0.16);
+      --data: #3987e5;
+      --assume: #e5a53d;
+      --assume-fill: rgba(229,165,61,0.16);
+      --judge: #a986e8;
+      --judge-fill: rgba(169,134,232,0.16);
+      --camp-artifact: #199e70;
+      --camp-real: #e34948;
+      --camp-assume: #e5a53d;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--plane);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--text-primary);
+    line-height: 1.45;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 26px 24px 80px; }
+  h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .sub { font-size: 13px; color: var(--text-secondary); margin: 0 0 20px; max-width: 760px; }
+  .sub code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: 11.5px; }
+
+  /* provenance chips */
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600;
+          padding: 1.5px 7px; border-radius: 20px; letter-spacing: 0.02em; text-transform: uppercase; vertical-align: middle; }
+  .chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+  .chip.data { color: var(--data); background: rgba(42,120,214,0.10); }
+  .chip.data::before { background: var(--data); }
+  .chip.assume { color: var(--assume); background: var(--assume-fill); }
+  .chip.assume::before { background: var(--assume); }
+  .chip.judge { color: var(--judge); background: var(--judge-fill); }
+  .chip.judge::before { background: var(--judge); }
+
+  /* ---------- verdict banner (whole before parts) ---------- */
+  .verdict {
+    position: sticky; top: 0; z-index: 30;
+    background: var(--surface-1);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 22px;
+    box-shadow: 0 4px 22px rgba(0,0,0,0.06);
+  }
+  .verdict .vhead { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .verdict .vlabel { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+  .verdict .stance { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin: 4px 0 2px; }
+  .verdict .stance.artifact { color: var(--good); }
+  .verdict .stance.real { color: var(--bad); }
+  .verdict .stance.mixed { color: var(--assume); }
+  .verdict .action { font-size: 14px; color: var(--text-primary); margin: 6px 0 0; }
+  .verdict .action b { font-weight: 600; }
+  .verdict .lead { font-size: 12.5px; color: var(--text-secondary); margin-top: 8px; }
+  .massbar { height: 12px; border-radius: 7px; overflow: hidden; display: flex; margin-top: 12px; background: var(--surface-2); border: 1px solid var(--border); }
+  .massbar > span { display: block; height: 100%; }
+  .massbar .m-art { background: var(--camp-artifact); }
+  .massbar .m-real { background: var(--camp-real); }
+  .masslegend { display: flex; gap: 16px; font-size: 11.5px; color: var(--text-secondary); margin-top: 7px; flex-wrap: wrap; }
+  .masslegend .k { display: inline-flex; align-items: center; gap: 6px; }
+  .masslegend .sw { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+  /* ---------- reframe strip ---------- */
+  .reframe { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 26px; }
+  .metric { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 12px 13px; }
+  .metric .m-k { font-size: 11.5px; color: var(--text-secondary); margin-bottom: 5px; }
+  .metric .m-v { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .metric .m-d { font-size: 12px; font-weight: 600; margin-top: 3px; }
+  .metric .m-d.good { color: var(--good); }
+  .metric .m-d.bad { color: var(--bad); }
+  .metric .m-d.flat { color: var(--text-secondary); }
+  .metric.headline { outline: 2px solid var(--bad); outline-offset: -2px; }
+
+  .section-h { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+  .section-sub { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 18px; max-width: 720px; }
+
+  /* ---------- tree ---------- */
+  .tree { position: relative; }
+  #connectors { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+  .root-node {
+    position: relative; z-index: 1;
+    max-width: 440px; margin: 0 auto 34px;
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 18px; text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .root-node .r-t { font-size: 13px; font-weight: 600; }
+  .root-node .r-v { font-size: 30px; font-weight: 600; color: var(--bad); letter-spacing: -0.02em; margin: 2px 0; }
+  .root-node .r-s { font-size: 11.5px; color: var(--text-secondary); }
+
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; position: relative; z-index: 1; }
+
+  .node {
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+    padding: 0; overflow: hidden;
+    border-left: 4px solid var(--text-muted);
+    display: flex; flex-direction: column;
+  }
+  .node.camp-artifact { border-left-color: var(--camp-artifact); }
+  .node.camp-real { border-left-color: var(--camp-real); }
+  .node.camp-assume { border-left-color: var(--camp-assume); }
+  .node .n-head { padding: 14px 16px 10px; }
+  .node .n-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 7px; }
+  .node .n-camp { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-left: auto; padding: 2px 8px; border-radius: 20px; }
+  .node.camp-artifact .n-camp { color: var(--camp-artifact); background: var(--good-fill); }
+  .node.camp-real .n-camp { color: var(--camp-real); background: var(--bad-fill); }
+  .node.camp-assume .n-camp { color: var(--camp-assume); background: var(--assume-fill); }
+  .node h3 { font-size: 15px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.005em; }
+  .node .claim { font-size: 12.5px; color: var(--text-secondary); margin: 0; }
+
+  .miniwrap { padding: 4px 16px 6px; }
+  .mini-title { font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 6px 0 2px; }
+  svg.mini { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .fa { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--border); }
+  .fa .col { padding: 11px 14px; font-size: 12px; }
+  .fa .col.for { border-right: 1px solid var(--border); }
+  .fa .col .h { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .fa .col.for .h { color: var(--good); }
+  .fa .col.against .h { color: var(--bad); }
+  .fa ul { margin: 0; padding: 0; list-style: none; }
+  .fa li { position: relative; padding-left: 14px; margin-bottom: 5px; color: var(--text-secondary); line-height: 1.35; }
+  .fa li::before { content: ""; position: absolute; left: 2px; top: 7px; width: 5px; height: 5px; border-radius: 50%; }
+  .fa .col.for li::before { background: var(--good); }
+  .fa .col.against li::before { background: var(--bad); }
+  .fa li b { color: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .n-foot { padding: 12px 16px 14px; border-top: 1px solid var(--border); background: var(--surface-2); }
+  .test { font-size: 11.5px; color: var(--text-secondary); margin: 0 0 12px; }
+  .test b { color: var(--text-primary); font-weight: 600; }
+  .test .tk { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-right: 6px; }
+
+  /* confidence slider */
+  .conf { }
+  .conf .clab { display: flex; justify-content: space-between; align-items: baseline; font-size: 11.5px; color: var(--text-secondary); margin-bottom: 4px; }
+  .conf .cval { font-weight: 600; font-size: 13px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; margin: 0; accent-color: var(--judge); height: 22px; }
+  .conf-note { font-size: 10.5px; color: var(--text-muted); margin-top: 2px; }
+
+  /* assumption tri-state */
+  .tristate { display: flex; gap: 6px; margin-top: 4px; }
+  .tristate button {
+    flex: 1; font-family: inherit; font-size: 11.5px; font-weight: 600;
+    padding: 7px 4px; border-radius: 7px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--surface-1); color: var(--text-secondary);
+  }
+  .tristate button[data-on="true"].yes { background: var(--good); border-color: var(--good); color: #fff; }
+  .tristate button[data-on="true"].no { background: var(--bad); border-color: var(--bad); color: #fff; }
+  .tristate button[data-on="true"].unsure { background: var(--assume); border-color: var(--assume); color: #fff; }
+  .assume-implic { font-size: 11.5px; color: var(--text-secondary); margin-top: 9px; padding: 8px 10px; background: var(--surface-1); border: 1px dashed var(--border); border-radius: 7px; }
+  .assume-implic b { color: var(--text-primary); }
+
+  .action-line { font-size: 11.5px; margin-top: 11px; padding-top: 10px; border-top: 1px dashed var(--border); color: var(--text-secondary); }
+  .action-line .ak { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 2px; }
+  .action-line b { color: var(--text-primary); font-weight: 600; }
+
+  textarea.note {
+    width: 100%; margin-top: 11px; resize: vertical; min-height: 34px;
+    font-family: inherit; font-size: 11.5px; color: var(--text-primary);
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 7px;
+    padding: 7px 9px;
+  }
+  textarea.note::placeholder { color: var(--text-muted); }
+
+  /* export bar */
+  .exportbar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
+    background: var(--surface-1); border-top: 1px solid var(--border);
+    padding: 11px 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+  }
+  .exportbar .ex-note { font-size: 12px; color: var(--text-secondary); margin-right: auto; }
+  .exportbar .ex-note b { color: var(--text-primary); font-weight: 600; }
+  button.btn {
+    font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
+    padding: 9px 15px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface-2); color: var(--text-primary);
+  }
+  button.btn.primary { background: var(--text-primary); color: var(--plane); border-color: var(--text-primary); }
+  button.btn:hover { opacity: 0.9; }
+  button.btn.ghost { background: transparent; color: var(--text-secondary); }
+
+  .global-note-wrap { margin: 26px 0 0; }
+  .global-note-wrap label { font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 6px; }
+  textarea.global-note { width: 100%; min-height: 60px; resize: vertical; font-family: inherit; font-size: 13px;
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 9px; padding: 11px 13px; color: var(--text-primary); }
+
+  .legend-provenance { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-secondary); margin: 0 0 22px; align-items: center; }
+
+  footer.src { margin-top: 30px; font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+
+  @media (max-width: 860px) {
+    .reframe { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+    #connectors { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Decline diagnosis</h1>
+  <p class="sub">The dashboard headline reads <b>&minus;14% unique visitors</b>. Before you act on it: is that decline real, and does it matter for <b>revenue</b>? This is a hypothesis tree. Each branch shows evidence for and against computed live from the daily series in <code>acs-traffic-dashboard.html</code>, a cheap next test, and a confidence you set. The verdict at the top recomputes as you go — and it is allowed to conclude <i>no action</i>.</p>
+
+  <div class="legend-provenance">
+    <span class="chip data">data</span> computed from the arrays
+    <span class="chip assume">assumption</span> adjustable input, not in the data
+    <span class="chip judge">judgment</span> my recommendation — override it
+  </div>
+
+  <!-- VERDICT BANNER -->
+  <div class="verdict" id="verdict">
+    <div class="vhead">
+      <span class="vlabel">Current verdict <span class="chip judge">judgment</span></span>
+      <span class="vlabel" id="verdict-confmix"></span>
+    </div>
+    <div class="stance" id="verdict-stance">—</div>
+    <p class="action" id="verdict-action"></p>
+    <div class="lead" id="verdict-lead"></div>
+    <div class="massbar" id="massbar"><span class="m-art" style="width:50%"></span><span class="m-real" style="width:50%"></span></div>
+    <div class="masslegend">
+      <span class="k"><span class="sw" style="background:var(--camp-artifact)"></span>Confidence mass on "phantom / no revenue action"</span>
+      <span class="k"><span class="sw" style="background:var(--camp-real)"></span>Confidence mass on "genuine problem, act"</span>
+    </div>
+  </div>
+
+  <!-- REFRAME STRIP -->
+  <p class="section-h">The number that should stop you <span class="chip data">data</span></p>
+  <p class="section-sub">Visitors fell, but every other metric moved the <i>healthy</i> way. Revenue = visitors &times; conversion &times; price. If the visitors you lost were the ones who never engaged, the decline is a composition change, not a revenue loss.</p>
+  <div class="reframe" id="reframe"></div>
+
+  <!-- TREE -->
+  <p class="section-h">Why might visitors be down? <span class="chip judge">judgment</span></p>
+  <p class="section-sub">Six candidate causes. Colour = what each implies: <b style="color:var(--camp-artifact)">green</b> = no revenue action needed, <b style="color:var(--camp-real)">red</b> = a genuine problem to fix, <b style="color:var(--camp-assume)">amber</b> = an assumption only you can resolve. Set your confidence on each; the verdict weighs them.</p>
+
+  <div class="tree">
+    <svg id="connectors" preserveAspectRatio="none"></svg>
+    <div class="root-node" id="rootNode">
+      <div class="r-t">Unique visitors, last 30 days</div>
+      <div class="r-v">12,684 &nbsp;<span style="font-size:15px">&minus;14%</span></div>
+      <div class="r-s">vs previous 30 days (14,665) — the claim under test</div>
+    </div>
+    <div class="cards" id="cards"></div>
+  </div>
+
+  <div class="global-note-wrap">
+    <label for="globalNote">Your read (free text — captured in the export)</label>
+    <textarea class="global-note" id="globalNote" placeholder="e.g. 'Agree it's a composition shift. I did slow uploads that week — YouTube lever, not the offer. No action on the site.'"></textarea>
+  </div>
+
+  <footer class="src">
+    Window: 2026-06-12 → 2026-07-12 (31 days; final day partial and excluded from all means/trends). Source arrays copied verbatim from <code>artefacts/acs-traffic-dashboard.html</code> (PostHog project 236619). Channel visitor counts sum above the 30-day unique total because a returning person re-enters through different channels. The &minus;14% headline compares to the previous 30-day window (2026-05-13 → 2026-06-11), which is <b>not present in this dataset</b> — every claim about it is flagged accordingly. No external requests; state persists in <code>localStorage</code>.
+  </footer>
+</div>
+
+<div class="exportbar">
+  <div class="ex-note">Every slider, assumption, and note is captured. <b id="saveState">Saved</b></div>
+  <button class="btn ghost" id="resetBtn">Reset to defaults</button>
+  <button class="btn" id="downloadBtn">Download JSON</button>
+  <button class="btn primary" id="copyBtn">Copy decisions JSON</button>
+</div>
+
+<script>
+"use strict";
+const NS = "http://www.w3.org/2000/svg";
+const fmt = n => n.toLocaleString("en-US");
+const pct = n => (n > 0 ? "+" : "") + n.toFixed(0) + "%";
+const el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+
+/* ==================== RAW DATA (verbatim from dashboard) ==================== */
+const daily = [
+  ["2026-06-12",452,934],["2026-06-13",729,1476],["2026-06-14",398,982],["2026-06-15",467,1118],
+  ["2026-06-16",429,1115],["2026-06-17",458,1060],["2026-06-18",431,1048],["2026-06-19",678,2060],
+  ["2026-06-20",1367,1794],["2026-06-21",600,1171],["2026-06-22",903,1506],["2026-06-23",758,1273],
+  ["2026-06-24",664,1248],["2026-06-25",732,1315],["2026-06-26",557,979],["2026-06-27",353,607],
+  ["2026-06-28",444,989],["2026-06-29",416,972],["2026-06-30",402,799],["2026-07-01",377,710],
+  ["2026-07-02",327,781],["2026-07-03",323,774],["2026-07-04",306,705],["2026-07-05",487,1258],
+  ["2026-07-06",740,1258],["2026-07-07",353,750],["2026-07-08",331,694],["2026-07-09",301,600],
+  ["2026-07-10",364,739],["2026-07-11",240,481],["2026-07-12",49,120]
+];
+const headline = { visitors: 12684, visitorsPrev: 14665, pageviews: 31316, sessions: 28256,
+                   pageviewsDelta: 0, avgSessionDelta: 6, bounceDelta: -8 };
+const channels = [
+  ["Direct",5400,8914],["Referral",3649,16066],["Organic Video",1975,1981],["Organic Search",1575,2581],
+  ["Email",912,1266],["Organic Shopping",275,332],["Organic Social",131,176]
+];
+
+/* ==================== DERIVED EVIDENCE (computed, not asserted) ==================== */
+const full = daily.slice(0, -1);                 // 30 full days
+const partial = daily[daily.length - 1];         // 2026-07-12
+const vis = full.map(d => d[1]);
+const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
+const sum = a => a.reduce((s, x) => s + x, 0);
+
+const half = 15;
+const firstHalf = vis.slice(0, half), secondHalf = vis.slice(half);
+const m1 = mean(firstHalf), m2 = mean(secondHalf);
+const halfDrop = (m2 - m1) / m1 * 100;
+
+const spikeVal = Math.max(...vis);               // 1367 on 06-20
+const firstNoSpike = firstHalf.filter(v => v !== spikeVal);
+const m1ns = mean(firstNoSpike);
+const halfDropNoSpike = (m2 - m1ns) / m1ns * 100;
+
+// elevation window 06-19..06-25 (the "bump")
+const inBump = d => d[0] >= "2026-06-19" && d[0] <= "2026-06-25";
+const bumpDays = full.filter(inBump);
+const bumpMean = mean(bumpDays.map(d => d[1]));
+const preBump = full.filter(d => d[0] <= "2026-06-18");        // 06-12..06-18
+const preBumpMean = mean(preBump.map(d => d[1]));
+const julyDays = full.filter(d => d[0] >= "2026-07-01");
+const julyMean = mean(julyDays.map(d => d[1]));
+const baselineStep = (julyMean - preBumpMean) / preBumpMean * 100;
+
+// pv per visitor
+const pvPerVisNow = headline.pageviews / headline.visitors;
+const pvPrev = headline.pageviews / (1 + headline.pageviewsDelta / 100); // pageviews ~flat
+const pvPerVisPrev = pvPrev / headline.visitorsPrev;
+const pvPerVisDelta = (pvPerVisNow - pvPerVisPrev) / pvPerVisPrev * 100;
+
+// July linear regression
+function linreg(ys) {
+  const n = ys.length, xs = ys.map((_, i) => i);
+  const mx = mean(xs), my = mean(ys);
+  let sxy = 0, sxx = 0, syy = 0;
+  for (let i = 0; i < n; i++) { sxy += (xs[i]-mx)*(ys[i]-my); sxx += (xs[i]-mx)**2; syy += (ys[i]-my)**2; }
+  const slope = sxy / sxx, intercept = my - slope*mx;
+  const r2 = syy === 0 ? 0 : (sxy*sxy)/(sxx*syy);
+  return { slope, intercept, r2 };
+}
+const julyReg = linreg(julyDays.map(d => d[1]));
+
+// weekday means
+const wdNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const wdBuckets = [[],[],[],[],[],[],[]];
+full.forEach(d => { const wd = new Date(d[0]+"T00:00:00Z").getUTCDay(); wdBuckets[wd].push(d[1]); });
+const wdMeans = wdBuckets.map(b => b.length ? mean(b) : 0);
+const wdOrder = [1,2,3,4,5,6,0]; // Mon..Sun
+const wdHi = wdOrder.reduce((a,i)=> wdMeans[i]>wdMeans[a]?i:a, 1);
+const wdLo = wdOrder.reduce((a,i)=> wdMeans[i]<wdMeans[a]?i:a, 1);
+const wdSwing = (wdMeans[wdHi]-wdMeans[wdLo])/wdMeans[wdLo]*100;
+
+// organic video = drive-by tail
+const orgVideo = channels.find(c => c[0] === "Organic Video");
+const referral = channels.find(c => c[0] === "Referral");
+const orgVideoPv = orgVideo[2] / orgVideo[1];
+const referralPv = referral[2] / referral[1];
+const lowIntentVisitors = channels.filter(c => c[2]/c[1] <= 1.35).reduce((s,c)=> s + c[1], 0);
+
+const partialPv = partial[2] / partial[1];
+
+const C = { m1, m2, halfDrop, m1ns, halfDropNoSpike, spikeVal, bumpMean, preBumpMean, julyMean,
+  baselineStep, pvPerVisNow, pvPerVisPrev, pvPerVisDelta, julySlope: julyReg.slope, julyR2: julyReg.r2,
+  wdSwing, wdHi: wdNames[wdHi], wdLo: wdNames[wdLo], orgVideoPv, referralPv, orgVideoVis: orgVideo[1],
+  lowIntentVisitors, partialVis: partial[1], partialPv };
+
+/* ==================== HYPOTHESES ==================== */
+const HYP = [
+  {
+    id: "composition", camp: "artifact", defConf: 75,
+    title: "It's a composition shift, not a loss",
+    claim: "You shed low-intent visitors while the engaged core held. That's not a revenue decline.",
+    mini: "metrics",
+    for: [
+      () => `Pageviews & sessions <b>flat</b> while visitors fell &minus;14% — the same page consumption from fewer people.`,
+      () => `Views per visitor rose <b>${pvPerVisPrev.toFixed(2)}&rarr;${pvPerVisNow.toFixed(2)}</b> (<b>${pct(pvPerVisDelta)}</b>): each remaining visitor goes deeper.`,
+      () => `Avg session <b>+6%</b>, bounce <b>&minus;8%</b> — both the healthy direction.`,
+      () => `<b>${fmt(lowIntentVisitors)}</b> current visitors come from &le;1.35 views/visitor channels (Organic Video/Social/Shopping) — a big, easily-shed low-value tail.`
+    ],
+    against: [
+      () => `We lack channel-by-period data, so we can't <i>prove</i> the lost visitors were the low-value ones.`,
+      () => `Higher views/visitor could also be a few power users, not a cleaner mix.`
+    ],
+    test: "Pull PostHog channel breakdown for this window vs the prior one. If the drop is Organic Video / Social / Shopping, this is confirmed.",
+    action: "No revenue action. The decline is in visitors who barely convert; the buyers are intact."
+  },
+  {
+    id: "baseline", camp: "artifact", defConf: 55,
+    title: "The −14% is vs an invisible baseline",
+    claim: "The prior 30-day window isn't in this dataset, so the exact −14% can't be independently checked.",
+    mini: "window",
+    for: [
+      () => `The daily series here only covers the <b>current</b> window (06-12&rarr;07-12). The comparison window (05-13&rarr;06-11) is <b>absent</b>.`,
+      () => `Per-day unique counts don't sum to the 30-day dedup total, so &minus;14% can't be rebuilt from these arrays.`,
+      () => `The final day is partial (<b>${fmt(C.partialVis)}</b> visitors) — including it in any trend fakes a steeper drop.`
+    ],
+    against: [
+      () => `PostHog is a trustworthy source; the number is probably right even if we can't re-derive it here.`,
+      () => `The <i>within-window</i> downtrend is real regardless of the baseline (see the decay & regression branches).`
+    ],
+    test: "Export the prior 30-day daily series from PostHog and drop it into this same array. Cheap, five minutes.",
+    action: "Verify the baseline before treating −14% as precise. The direction is safe; the magnitude isn't yet."
+  },
+  {
+    id: "regression", camp: "artifact", defConf: 60,
+    title: "June was a launch bump, receding",
+    claim: "19–25 June was a week-long elevation, not a one-day spike. July is regression to the real baseline.",
+    mini: "regression",
+    for: [
+      () => `19&ndash;25 Jun averaged <b>${Math.round(bumpMean)}</b>/day vs a pre-bump baseline of <b>${Math.round(preBumpMean)}</b> — a whole elevated week, not a single outlier.`,
+      () => `Remove that week and the line is close to flat: July mean <b>${Math.round(julyMean)}</b> vs pre-bump June <b>${Math.round(preBumpMean)}</b>.`
+    ],
+    against: [
+      () => `July (${Math.round(julyMean)}) still sits <b>${pct(baselineStep)}</b> under the pre-bump June baseline — a modest genuine softening beyond the bump receding.`,
+      () => `The "spike" of ${fmt(spikeVal)} on 06-20 is real traffic; treating it as noise discards a repeatable acquisition event.`
+    ],
+    test: "Compare pre-bump June baseline to July baseline directly (done live: " + Math.round(preBumpMean) + " → " + Math.round(julyMean) + "). Then find what drove 19–25 Jun and whether it's repeatable.",
+    action: "No action. A launch/video spike is receding to baseline; the baseline itself is roughly stable."
+  },
+  {
+    id: "decay", camp: "real", defConf: 30,
+    title: "Genuine ongoing audience decay",
+    claim: "Traffic is eroding week over week and will keep compounding if untreated.",
+    mini: "decay",
+    for: [
+      () => `Half-over-half, daily visitors fell <b>${Math.round(m1)}&rarr;${Math.round(m2)}</b> (<b>${pct(halfDrop)}</b>) — and <b>${pct(halfDropNoSpike)}</b> even with the spike removed.`,
+      () => `Within July the fitted trend is negative (<b>${julyReg.slope.toFixed(1)}</b> visitors/day).`
+    ],
+    against: [
+      () => `That July slope is weak and noisy — R&sup2; only <b>${julyReg.r2.toFixed(2)}</b>; the 06-Jul rebound to ${fmt(740)} breaks any clean decline.`,
+      () => `Every engagement metric moved <i>up</i> — true audience decay would drag sessions and pageviews down too, and they're flat.`
+    ],
+    test: "Extend the window forward one more week. If the slope holds and pageviews finally turn down, this becomes the live hypothesis.",
+    action: "If real: investigate acquisition & retention now — decay compounds. But the engagement signals argue against it."
+  },
+  {
+    id: "weekday", camp: "artifact", defConf: 40,
+    title: "Weekday / seasonal mix",
+    claim: "The window ends on lower-traffic weekdays, exaggerating the apparent drop.",
+    mini: "weekday",
+    for: [
+      () => `There's a real weekly rhythm: <b>${C.wdHi}</b> is the strongest day, <b>${C.wdLo}</b> the weakest, a <b>${pct(wdSwing)}</b> swing.`,
+      () => `Early-July includes a US holiday week (04 Jul) that reliably softens B2B/dev traffic.`
+    ],
+    against: [
+      () => `The half-over-half drop survives weekday averaging — both halves contain full weeks.`,
+      () => `A mix effect explains wobble, not a sustained ${pct(halfDrop)} step down.`
+    ],
+    test: "Compare same-weekday to same-weekday across the two halves. If Mondays ≈ Mondays, the drop is mix; if not, it's real.",
+    action: "No action. Normalise for weekday before reading any single-week movement."
+  },
+  {
+    id: "youtube", camp: "assume", defConf: null, defState: "unknown",
+    title: "Upstream: YouTube cadence slowed",
+    claim: "Fewer uploads → fewer of the drive-by Organic Video visitors. Not in the data — only you know.",
+    mini: "youtube",
+    assumption: true,
+    for: [
+      () => `Organic Video brings <b>${fmt(C.orgVideoVis)}</b> visitors at exactly <b>${orgVideoPv.toFixed(1)}</b> views/visitor — pure land-and-leave from YouTube.`,
+      () => `That's the <i>same</i> low-value tail the composition branch says you shed. A cadence dip would remove precisely these visitors, sparing revenue.`
+    ],
+    against: [
+      () => `Upload dates aren't in this dataset — this is an assumption, not a measurement.`,
+      () => `Referral (${referralPv.toFixed(1)} views/visitor) drives far more engagement than Organic Video; if the loss is there instead, the story changes.`
+    ],
+    test: "Check your YouTube upload dates for 24 Jun–11 Jul vs the prior 30 days. You already know this — one click resolves the whole tree.",
+    // action set dynamically by state
+    actionYes: "Confirmed lever: top-of-funnel input dipped. Fix is YouTube cadence, not the site or the offer. Revenue impact ≈ 0.",
+    actionNo: "Then the low-value tail shrank for another reason — pull channel-by-period data before concluding.",
+    actionUnknown: "Resolve this first: it's the cheapest, highest-leverage node in the tree."
+  }
+];
+
+/* ==================== STATE ==================== */
+const LS_KEY = "decline-diagnosis-v1";
+const defaults = () => {
+  const s = { conf: {}, assume: {}, notes: {}, global: "" };
+  HYP.forEach(h => { if (h.assumption) s.assume[h.id] = h.defState; else s.conf[h.id] = h.defConf; });
+  return s;
+};
+let state = load();
+function load() {
+  try { const raw = localStorage.getItem(LS_KEY); if (raw) { const p = JSON.parse(raw); const d = defaults();
+    return { conf: {...d.conf, ...p.conf}, assume: {...d.assume, ...p.assume}, notes: {...d.notes, ...p.notes}, global: p.global || "" }; }
+  } catch(e) {}
+  return defaults();
+}
+let saveTimer;
+function save() {
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+  const s = document.getElementById("saveState"); s.textContent = "Saved ✓";
+  clearTimeout(saveTimer); saveTimer = setTimeout(() => s.textContent = "Saved", 1200);
+}
+
+/* ==================== REFRAME STRIP ==================== */
+(function reframe() {
+  const items = [
+    { k: "Unique visitors", v: fmt(headline.visitors), d: "−14%", cls: "bad", head: true },
+    { k: "Pageviews", v: fmt(headline.pageviews), d: "0%", cls: "flat" },
+    { k: "Sessions", v: fmt(headline.sessions), d: "0%", cls: "flat" },
+    { k: "Views / visitor", v: pvPerVisNow.toFixed(2), d: pct(pvPerVisDelta), cls: "good" },
+    { k: "Avg session", v: "3m 15s", d: "+6%", cls: "good" },
+    { k: "Bounce rate", v: "27.8%", d: "−8%", cls: "good" }
+  ];
+  document.getElementById("reframe").innerHTML = items.map(i =>
+    `<div class="metric${i.head ? " headline" : ""}">
+      <div class="m-k">${i.k}</div>
+      <div class="m-v">${i.v}</div>
+      <div class="m-d ${i.cls}">${i.d}<span style="color:var(--text-muted);font-weight:400"> vs prev.</span></div>
+    </div>`).join("");
+})();
+
+/* ==================== MINI CHARTS ==================== */
+function svgFrame(w, h) { const s = el("svg", { class: "mini", viewBox: `0 0 ${w} ${h}` }); s.setAttribute("preserveAspectRatio","none"); return s; }
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function miniMetrics() {                 // diverging bars around 0
+  const w = 300, h = 118, midX = w * 0.52, T = 6, rowH = 17, gap = 3;
+  const s = el("svg", { class: "mini", viewBox: `0 0 ${w} ${h}` });
+  const rows = [
+    ["Visitors", -14, "bad"], ["Pageviews", 0, "flat"], ["Sessions", 0, "flat"],
+    ["Views/visitor", +Math.round(pvPerVisDelta), "good"], ["Avg session", +6, "good"], ["Bounce", -8, "good"]
+  ];
+  const maxAbs = 16, scale = (w - midX - 46) / maxAbs;
+  s.setAttribute("viewBox", `0 0 ${w} ${T*2 + rows.length*(rowH+gap)}`);
+  s.appendChild(el("line", { x1: midX, x2: midX, y1: 0, y2: T*2 + rows.length*(rowH+gap), stroke: cssv("--axis"), "stroke-width": 1 }));
+  rows.forEach((r, i) => {
+    const y = T + i*(rowH+gap);
+    const val = r[1], col = r[2] === "bad" ? cssv("--bad") : r[2] === "good" ? cssv("--good") : cssv("--text-muted");
+    const bw = Math.abs(val)*scale;
+    const x = val >= 0 ? midX : midX - bw;
+    const lab = el("text", { x: midX - 6, y: y + rowH/2 + 3.5, "text-anchor": "end", "font-size": 9.5, fill: cssv("--text-secondary") });
+    lab.textContent = r[0]; s.appendChild(lab);
+    s.appendChild(el("rect", { x, y, width: Math.max(bw, val===0?0:1.5), height: rowH, rx: 2, fill: col, opacity: val===0?0.25:0.9 }));
+    const vl = el("text", { x: (val>=0 ? midX + bw + 4 : midX - bw - 4), y: y + rowH/2 + 3.5, "text-anchor": val>=0?"start":"end", "font-size": 9.5, "font-weight": 600, fill: col });
+    vl.textContent = val === 0 ? "0%" : (val>0?"+":"−") + Math.abs(val) + "%"; s.appendChild(vl);
+  });
+  return s;
+}
+
+function lineMini(days, opts) {
+  opts = opts || {};
+  const w = 300, h = 96, L = 4, R = 4, T = 8, B = 4;
+  const pw = w - L - R, ph = h - T - B;
+  const ys = days.map(d => d[1]);
+  const yMax = Math.max(...ys) * 1.08;
+  const X = i => L + (i / (days.length - 1)) * pw;
+  const Y = v => T + ph - (v / yMax) * ph;
+  const s = svgFrame(w, h);
+  // optional shaded region
+  if (opts.shade) {
+    const idx = days.map((d,i)=>[d,i]).filter(([d]) => opts.shade(d[0])).map(([,i])=>i);
+    if (idx.length) {
+      const x0 = X(Math.min(...idx)) - pw/(days.length-1)/2, x1 = X(Math.max(...idx)) + pw/(days.length-1)/2;
+      s.appendChild(el("rect", { x: Math.max(L,x0), y: T, width: Math.min(x1,L+pw)-Math.max(L,x0), height: ph, fill: cssv("--assume"), opacity: 0.14 }));
+      const t = el("text", { x: (Math.max(L,x0)+Math.min(x1,L+pw))/2, y: T + 9, "text-anchor": "middle", "font-size": 8.5, fill: cssv("--assume"), "font-weight": 600 });
+      t.textContent = opts.shadeLabel || ""; s.appendChild(t);
+    }
+  }
+  // optional baseline lines
+  (opts.baselines || []).forEach(b => {
+    s.appendChild(el("line", { x1: L, x2: L+pw, y1: Y(b.v), y2: Y(b.v), stroke: b.color, "stroke-width": 1, "stroke-dasharray": "3 3", opacity: 0.9 }));
+    const t = el("text", { x: L+pw, y: Y(b.v) - 3, "text-anchor": "end", "font-size": 8.5, fill: b.color, "font-weight": 600 });
+    t.textContent = b.label; s.appendChild(t);
+  });
+  // regression line
+  if (opts.reg) {
+    const rg = opts.reg;
+    s.appendChild(el("line", { x1: X(0), x2: X(days.length-1), y1: Y(rg.intercept), y2: Y(rg.intercept + rg.slope*(days.length-1)),
+      stroke: cssv("--bad"), "stroke-width": 1.5, "stroke-dasharray": "4 2" }));
+  }
+  const path = days.map((d,i) => `${i?"L":"M"}${X(i)},${Y(d[1])}`).join(" ");
+  s.appendChild(el("path", { d: path, fill: "none", stroke: cssv("--series-1"), "stroke-width": 1.8, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+  return s;
+}
+
+function miniWindow() {                 // current window with greyed "prior" block
+  const w = 300, h = 96, T = 8, B = 4, gap = 8;
+  const priorW = w * 0.42;
+  const s = svgFrame(w, h);
+  // prior (unknown) block
+  s.appendChild(el("rect", { x: 0, y: T, width: priorW - gap, height: h - T - B, fill: cssv("--text-muted"), opacity: 0.10, rx: 4 }));
+  for (let i = 0; i < 6; i++) s.appendChild(el("line", { x1: (i+1)*(priorW-gap)/7, x2: (i+1)*(priorW-gap)/7, y1: T, y2: h-B, stroke: cssv("--text-muted"), opacity: 0.14 }));
+  const q = el("text", { x: (priorW-gap)/2, y: h/2, "text-anchor": "middle", "font-size": 20, fill: cssv("--text-muted"), "font-weight": 600 }); q.textContent = "?"; s.appendChild(q);
+  const pl = el("text", { x: (priorW-gap)/2, y: h - B - 2, "text-anchor": "middle", "font-size": 8, fill: cssv("--text-muted") }); pl.textContent = "prior 30d — not in data"; s.appendChild(pl);
+  // current window mini-line
+  const L = priorW, R = 4, pw = w - L - R, ph = h - T - B;
+  const ys = full.map(d => d[1]); const yMax = Math.max(...ys)*1.08;
+  const X = i => L + (i/(full.length-1))*pw, Y = v => T + ph - (v/yMax)*ph;
+  s.appendChild(el("path", { d: full.map((d,i)=>`${i?"L":"M"}${X(i)},${Y(d[1])}`).join(" "), fill:"none", stroke: cssv("--series-1"), "stroke-width": 1.8, "stroke-linejoin":"round" }));
+  const cl = el("text", { x: L + pw/2, y: T + 8, "text-anchor": "middle", "font-size": 8, fill: cssv("--series-1"), "font-weight": 600 }); cl.textContent = "current 30d — measured"; s.appendChild(cl);
+  return s;
+}
+
+function miniWeekday() {
+  const w = 300, h = 96, T = 8, B = 16, L = 4, R = 4;
+  const pw = w - L - R, ph = h - T - B;
+  const s = svgFrame(w, h);
+  const vals = wdOrder.map(i => wdMeans[i]);
+  const labels = wdOrder.map(i => wdNames[i]);
+  const yMax = Math.max(...vals)*1.12;
+  const bw = pw / vals.length * 0.62, step = pw / vals.length;
+  vals.forEach((v, i) => {
+    const x = L + i*step + (step-bw)/2, bh = (v/yMax)*ph;
+    const isHi = wdOrder[i] === wdHi, isLo = wdOrder[i] === wdLo;
+    s.appendChild(el("rect", { x, y: T + ph - bh, width: bw, height: bh, rx: 2,
+      fill: isHi ? cssv("--good") : isLo ? cssv("--bad") : cssv("--series-1"), opacity: (isHi||isLo)?0.9:0.55 }));
+    const t = el("text", { x: x + bw/2, y: h - 5, "text-anchor": "middle", "font-size": 8.5, fill: cssv("--text-muted") }); t.textContent = labels[i]; s.appendChild(t);
+  });
+  return s;
+}
+
+function miniYoutube() {                 // views/visitor per channel, ranked
+  const w = 300, h = 108, T = 6, B = 4, L = 82, R = 30;
+  const pw = w - L - R;
+  const rows = channels.map(c => [c[0], c[2]/c[1]]).sort((a,b)=>a[1]-b[1]);
+  const band = (h - T - B)/rows.length, thick = Math.min(11, band-3);
+  const maxV = Math.max(...rows.map(r=>r[1]));
+  const s = svgFrame(w, h);
+  rows.forEach((r,i) => {
+    const y = T + i*band + (band-thick)/2, bw = (r[1]/maxV)*pw;
+    const isVideo = r[0] === "Organic Video";
+    const nm = el("text", { x: L-6, y: y+thick/2+3.3, "text-anchor":"end", "font-size": 8.7, fill: isVideo?cssv("--assume"):cssv("--text-secondary"), "font-weight": isVideo?700:400 }); nm.textContent = r[0]; s.appendChild(nm);
+    s.appendChild(el("rect", { x: L, y, width: Math.max(bw,1.5), height: thick, rx: 2, fill: isVideo?cssv("--assume"):cssv("--series-1"), opacity: isVideo?0.95:0.5 }));
+    const vl = el("text", { x: L+bw+4, y: y+thick/2+3.3, "font-size": 8.5, fill: isVideo?cssv("--assume"):cssv("--text-muted"), "font-weight":600 }); vl.textContent = r[1].toFixed(1); s.appendChild(vl);
+  });
+  const cap = el("text", { x: L, y: h-0, "font-size": 8, fill: cssv("--text-muted") }); s.appendChild(cap);
+  return s;
+}
+
+function makeMini(kind) {
+  if (kind === "metrics") return miniMetrics();
+  if (kind === "window") return miniWindow();
+  if (kind === "weekday") return miniWeekday();
+  if (kind === "youtube") return miniYoutube();
+  if (kind === "regression") return lineMini(full, {
+    shade: d => d >= "2026-06-19" && d <= "2026-06-25", shadeLabel: "launch bump",
+    baselines: [ { v: preBumpMean, label: "Jun base " + Math.round(preBumpMean), color: cssv("--text-secondary") },
+                 { v: julyMean, label: "Jul base " + Math.round(julyMean), color: cssv("--series-2") } ] });
+  if (kind === "decay") return lineMini(julyDays, { reg: julyReg });
+  return svgFrame(300, 96);
+}
+const miniCaption = {
+  metrics: "Change vs previous 30 days — one metric down, five flat or up",
+  window: "What this dataset can and can't see",
+  regression: "Daily visitors; bump week shaded, baselines dashed",
+  decay: "July only, with fitted trend line",
+  weekday: "Mean visitors by weekday (green=high, red=low)",
+  youtube: "Views per visitor by channel — Organic Video is the drive-by tail"
+};
+
+/* ==================== RENDER NODES ==================== */
+const cardsEl = document.getElementById("cards");
+HYP.forEach(h => {
+  const node = document.createElement("div");
+  node.className = "node camp-" + h.camp;
+  node.id = "node-" + h.id;
+  const campLabel = h.camp === "artifact" ? "no action" : h.camp === "real" ? "would need action" : "your call";
+  node.innerHTML = `
+    <div class="n-head">
+      <div class="n-top">
+        <span class="chip ${h.assumption ? "assume" : "judge"}">${h.assumption ? "assumption" : "hypothesis"}</span>
+        <span class="n-camp">${campLabel}</span>
+      </div>
+      <h3>${h.title}</h3>
+      <p class="claim">${h.claim}</p>
+    </div>
+    <div class="miniwrap">
+      <div class="mini-title">${miniCaption[h.mini] || ""}</div>
+      <div class="mini-host"></div>
+    </div>
+    <div class="fa">
+      <div class="col for"><div class="h">Evidence for</div><ul>${h.for.map(f=>`<li>${f()}</li>`).join("")}</ul></div>
+      <div class="col against"><div class="h">Evidence against</div><ul>${h.against.map(f=>`<li>${f()}</li>`).join("")}</ul></div>
+    </div>
+    <div class="n-foot">
+      <p class="test"><span class="tk">Cheap test</span>${h.test}</p>
+      <div class="control-host"></div>
+      <div class="action-line"><span class="ak">If this is the cause</span><span class="node-action"></span></div>
+      <textarea class="note" placeholder="Note on this branch…"></textarea>
+    </div>`;
+  cardsEl.appendChild(node);
+  node.querySelector(".mini-host").appendChild(makeMini(h.mini));
+
+  // control: slider or tristate
+  const ctrl = node.querySelector(".control-host");
+  if (h.assumption) {
+    ctrl.innerHTML = `
+      <div class="conf"><div class="clab"><span>Is this true?</span></div></div>
+      <div class="tristate" data-id="${h.id}">
+        <button class="yes" data-v="true">Yes, I slowed</button>
+        <button class="unsure" data-v="unknown">Unsure</button>
+        <button class="no" data-v="false">No, normal</button>
+      </div>
+      <div class="assume-implic"></div>`;
+    ctrl.querySelectorAll(".tristate button").forEach(b => b.addEventListener("click", () => {
+      state.assume[h.id] = b.dataset.v; save(); syncNode(h); recompute();
+    }));
+  } else {
+    ctrl.innerHTML = `
+      <div class="conf">
+        <div class="clab"><span>Your confidence this is the cause</span><span class="cval">${state.conf[h.id]}%</span></div>
+        <input type="range" min="0" max="100" step="5" value="${state.conf[h.id]}">
+        <div class="conf-note">Default ${h.defConf}% is my read (judgment) — drag to set yours.</div>
+      </div>`;
+    const rng = ctrl.querySelector("input");
+    rng.addEventListener("input", () => {
+      state.conf[h.id] = +rng.value;
+      ctrl.querySelector(".cval").textContent = rng.value + "%";
+      save(); recompute();
+    });
+  }
+  // note
+  const note = node.querySelector(".note");
+  note.value = state.notes[h.id] || "";
+  note.addEventListener("input", () => { state.notes[h.id] = note.value; save(); });
+  syncNode(h);
+});
+
+function syncNode(h) {
+  const node = document.getElementById("node-" + h.id);
+  const actEl = node.querySelector(".node-action");
+  if (h.assumption) {
+    const st = state.assume[h.id];
+    node.querySelectorAll(".tristate button").forEach(b => b.setAttribute("data-on", String(b.dataset.v === st)));
+    const implic = node.querySelector(".assume-implic");
+    const map = { "true": h.actionYes, "false": h.actionNo, "unknown": h.actionUnknown };
+    implic.innerHTML = `<b>${st === "true" ? "→ " : st === "false" ? "→ " : ""}</b>${map[st]}`;
+    actEl.textContent = map[st];
+  } else {
+    actEl.textContent = h.action;
+  }
+}
+
+/* ==================== VERDICT ENGINE ==================== */
+function recompute() {
+  let artMass = 0, realMass = 0;
+  let lead = null, leadConf = -1;
+  HYP.forEach(h => {
+    if (h.assumption) return;
+    const c = state.conf[h.id];
+    if (h.camp === "artifact") artMass += c; else if (h.camp === "real") realMass += c;
+    if (c > leadConf) { leadConf = c; lead = h; }
+  });
+  const yt = state.assume["youtube"];
+  // YouTube assumption tilts the mass
+  let ytLine = "";
+  if (yt === "true") { artMass += 60; ytLine = "You confirmed YouTube cadence slowed — that shed the drive-by tail, sparing revenue."; }
+  else if (yt === "false") { realMass += 15; ytLine = "You ruled out a YouTube slowdown — the tail shrank for another reason; find it before concluding."; }
+  else { ytLine = "The YouTube-cadence assumption is unresolved — resolving it is the single cheapest move."; }
+
+  const total = artMass + realMass || 1;
+  const artPct = artMass / total * 100;
+  const stanceEl = document.getElementById("verdict-stance");
+  const actionEl = document.getElementById("verdict-action");
+  const leadEl = document.getElementById("verdict-lead");
+  const mixEl = document.getElementById("verdict-confmix");
+
+  document.querySelector(".massbar .m-art").style.width = artPct + "%";
+  document.querySelector(".massbar .m-real").style.width = (100 - artPct) + "%";
+  mixEl.textContent = `${Math.round(artPct)}% phantom · ${Math.round(100-artPct)}% real`;
+
+  let stance, cls, action;
+  if (artPct >= 66) {
+    stance = "Likely a phantom problem — no revenue action";
+    cls = "artifact";
+    action = `<b>Don't touch the site or the offer.</b> ${lead ? lead.action : ""}`;
+  } else if (artPct <= 40) {
+    stance = "Likely a genuine decline — worth acting";
+    cls = "real";
+    action = `<b>Treat it as real.</b> ${lead ? lead.action : ""}`;
+  } else {
+    stance = "Mixed signal — resolve the assumption before acting";
+    cls = "mixed";
+    action = `<b>Hold.</b> The evidence is split; run the cheapest test on your leading branch before spending effort.`;
+  }
+  stanceEl.className = "stance " + cls;
+  stanceEl.textContent = stance;
+  actionEl.innerHTML = action;
+  leadEl.innerHTML = `Leading branch: <b>${lead ? lead.title : "—"}</b> (${leadConf}%). ${ytLine}`;
+}
+document.getElementById("globalNote").value = state.global;
+document.getElementById("globalNote").addEventListener("input", e => { state.global = e.target.value; save(); });
+recompute();
+
+/* ==================== CONNECTORS ==================== */
+function drawConnectors() {
+  const svg = document.getElementById("connectors");
+  const tree = document.querySelector(".tree");
+  const root = document.getElementById("rootNode");
+  if (getComputedStyle(svg).display === "none") return;
+  const tb = tree.getBoundingClientRect();
+  svg.setAttribute("viewBox", `0 0 ${tb.width} ${tb.height}`);
+  svg.innerHTML = "";
+  const rb = root.getBoundingClientRect();
+  const rx = rb.left - tb.left + rb.width/2, ry = rb.bottom - tb.top;
+  document.querySelectorAll(".node").forEach(n => {
+    const nb = n.getBoundingClientRect();
+    const nx = nb.left - tb.left + nb.width/2, ny = nb.top - tb.top;
+    const camp = n.classList.contains("camp-artifact") ? cssv("--camp-artifact") : n.classList.contains("camp-real") ? cssv("--camp-real") : cssv("--camp-assume");
+    const midY = (ry + ny) / 2;
+    const p = el("path", { d: `M${rx},${ry} C${rx},${midY} ${nx},${midY} ${nx},${ny}`, fill: "none", stroke: camp, "stroke-width": 1.5, opacity: 0.4 });
+    svg.appendChild(p);
+    svg.appendChild(el("circle", { cx: nx, cy: ny, r: 3, fill: camp, opacity: 0.6 }));
+  });
+}
+window.addEventListener("resize", drawConnectors);
+window.addEventListener("load", drawConnectors);
+setTimeout(drawConnectors, 60);
+
+/* ==================== EXPORT ==================== */
+function buildExport() {
+  let artMass = 0, realMass = 0, lead = null, leadConf = -1;
+  HYP.forEach(h => { if (h.assumption) return; const c = state.conf[h.id];
+    if (h.camp === "artifact") artMass += c; else realMass += c; if (c > leadConf){leadConf=c; lead=h;} });
+  const yt = state.assume["youtube"];
+  if (yt === "true") artMass += 60; else if (yt === "false") realMass += 15;
+  const total = artMass + realMass || 1;
+  const artPct = Math.round(artMass/total*100);
+  const stance = artPct >= 66 ? "phantom-no-action" : artPct <= 40 ? "genuine-decline-act" : "mixed-test-first";
+  return {
+    surface: "decline-diagnosis",
+    generatedAt: new Date().toISOString(),
+    window: { current: "2026-06-12..2026-07-12", partialDayExcluded: "2026-07-12", priorWindowInData: false },
+    computedEvidence: {
+      halfOverHalf: { firstHalfMean: +m1.toFixed(1), secondHalfMean: +m2.toFixed(1), dropPct: +halfDrop.toFixed(1), dropPctSpikeRemoved: +halfDropNoSpike.toFixed(1) },
+      bump: { window: "2026-06-19..2026-06-25", mean: +bumpMean.toFixed(1), preBumpJuneMean: +preBumpMean.toFixed(1), julyMean: +julyMean.toFixed(1), julyVsPreBumpPct: +baselineStep.toFixed(1) },
+      engagement: { pvPerVisitorPrev: +pvPerVisPrev.toFixed(3), pvPerVisitorNow: +pvPerVisNow.toFixed(3), pvPerVisitorDeltaPct: +pvPerVisDelta.toFixed(1), pageviewsDeltaPct: headline.pageviewsDelta, avgSessionDeltaPct: headline.avgSessionDelta, bounceDeltaPct: headline.bounceDelta },
+      julyTrend: { slopePerDay: +julyReg.slope.toFixed(2), r2: +julyReg.r2.toFixed(3) },
+      weekday: { highDay: C.wdHi, lowDay: C.wdLo, swingPct: +wdSwing.toFixed(1) },
+      channels: { organicVideoVisitors: C.orgVideoVis, organicVideoPvPerVisitor: +orgVideoPv.toFixed(2), referralPvPerVisitor: +referralPv.toFixed(2), lowIntentTailVisitors: lowIntentVisitors }
+    },
+    hypotheses: HYP.map(h => ({
+      id: h.id, title: h.title, camp: h.camp, kind: h.assumption ? "assumption" : "hypothesis",
+      confidence: h.assumption ? null : state.conf[h.id],
+      assumptionState: h.assumption ? state.assume[h.id] : null,
+      impliedAction: h.assumption ? (state.assume[h.id]==="true"?h.actionYes:state.assume[h.id]==="false"?h.actionNo:h.actionUnknown) : h.action,
+      cheapTest: h.test, note: state.notes[h.id] || ""
+    })),
+    verdict: { stance, artifactConfidenceMass: artMass, realConfidenceMass: realMass, phantomPct: artPct,
+      leadingHypothesis: lead ? lead.id : null, youtubeAssumption: yt },
+    globalNote: state.global
+  };
+}
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const txt = JSON.stringify(buildExport(), null, 2);
+  try { await navigator.clipboard.writeText(txt); flash("copyBtn", "Copied ✓"); }
+  catch(e) { const ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); flash("copyBtn","Copied ✓"); }
+});
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(buildExport(), null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob); const a = document.createElement("a");
+  a.href = url; a.download = "decline-diagnosis.json"; a.click(); URL.revokeObjectURL(url);
+  flash("downloadBtn", "Downloaded ✓");
+});
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("Reset all confidences, assumptions, and notes to defaults?")) return;
+  state = defaults(); save(); location.reload();
+});
+function flash(id, txt) { const b = document.getElementById(id); const o = b.textContent; b.textContent = txt; setTimeout(()=>b.textContent=o, 1400); }
+</script>
+</body>
+</html>
