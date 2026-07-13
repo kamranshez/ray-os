@@ -29,7 +29,13 @@ Load the PostHog MCP, the Slack MCP, and the Agentic-Coding-School MCP via ToolS
 
 PostHog: project 'Agentic Coding School', id 236619, org 'Ray Amjad LTD'. The default project (HyperWhisper, 224249) returns 0 for every ACS event; that is not a tracking bug. Switch to 236619 before any query. Follow the PostHog discovery workflow strictly: search -> info -> schema -> call, and confirm an event or property exists via read-data-schema before querying it. Do not guess names. Exclude internal/test accounts. Timezone UTC.
 
-KNOWN events: `newsletter_confirmed`, `newsletter_survey_answer` (`question_id` = 'current_role'), `newsletter_start_selected` (`video_id`, `video_short_id`, `video_title`, `segment`, `position`), `newsletter_browse_free_classes_clicked`, `video_started` (`videoId`, `classSlug`, `isFree`), `video_progress` (`percent`, deciles), `video_completed`, `checkout_session_created`, `purchase_complete`.
+KNOWN events: `newsletter_confirmed`, `newsletter_survey_answer` (`question_id` = 'current_role'), `newsletter_start_selected` (`video_id`, `video_short_id`, `video_title`, `segment`, `position`), `newsletter_browse_free_classes_clicked`, `video_started` (`videoId`, `classSlug`, `isFree`, `viewerHasAccess`), `video_progress` (`percent`, deciles), `video_completed`, `checkout_session_created`, `purchase_complete`, `entitlement_changed`.
+
+ENTITLEMENT (who is paying, and who is not):
+- `video_started.viewerHasAccess` (bool) = the VIEWER's entitlement when they pressed play. `video_started.isFree` (bool) = the VIDEO's gate. **These are unrelated. Reading `isFree` as "a free user watched" is the single easiest way to get this whole analysis backwards.**
+- PERSON properties, written server-side on every entitlement change: `has_access`, `plan` ('lifetime' | 'three_month' | 'monthly' | 'yearly'), `purchase_source` ('checkout' | 'org_seat' | 'manual_grant' | 'comp'), `access_source` ('subscription' | 'organization'), `is_team_seat`, `tier`, `forever_pass`, `entitlement_expires_at`. The `entitlement_changed` event fires on each change.
+- Person-on-events is ON, so `person.properties.has_access` read off an event is its value AT THAT EVENT'S INGEST, not today's. Use it for historical questions without apology.
+- These signals begin at the entitlement-tracking deploy. Before that date they are absent, not false. **Never read a missing property as `false`.**
 
 ## STEP 0 - READ YOUR OWN HISTORY FIRST
 
@@ -77,7 +83,17 @@ Use a 90-day window: the lag from free lesson to purchase is long, so a 7-day re
 
 That join is the whole reason `video_id` is on the selection event. `video_short_id` is the stable identity for history and does NOT appear on `video_started`, so do not try to join on it.
 
-**EXCLUDE anyone who already had access.** Drop from the sample entirely any person whose FIRST `purchase_complete` is EARLIER than their `newsletter_start_selected`. They were already a paying member when they picked the card, so they cannot convert, and leaving them in inflates the denominator of whichever video they happened to click and silently punishes it. Note the count you dropped. (This is a reconstruction from event history, so a customer who bought long before PostHog's retention window will not be caught. Say so if the number looks off.)
+**EXCLUDE anyone who already had access.** A person who was already paying when they picked a card cannot convert, so leaving them in inflates the denominator of whichever video they happened to click and silently punishes it. Note the count you dropped.
+
+Use the FIRST of these that is available for a given person, in this order:
+
+1. **`video_started.viewerHasAccess`** (event property, boolean). This is the direct answer: it is the viewer's entitlement at the exact moment they pressed play. `viewerHasAccess = true` means drop them. **Prefer this above everything else.** Do not confuse it with `video_started.isFree`, which describes the VIDEO's gate and tells you nothing about the person.
+2. **`person.properties.has_access`** (person property, set server-side whenever entitlement changes; see also `plan`, `is_team_seat`, `purchase_source`, `forever_pass`). Person-on-events is enabled, so on any event this reflects the value AS OF that event's ingest, not today. That is what makes it safe to use for a historical question.
+3. **The old reconstruction, as a FALLBACK ONLY:** drop anyone whose first `purchase_complete` predates their `newsletter_start_selected`.
+
+Signals 1 and 2 only exist for events ingested after the entitlement-tracking deploy, so for older events you will still be leaning on 3. **State in your post which signal you actually used, and from what date the good signals start.**
+
+Why the ordering matters: the fallback is not merely coarser, it is WRONG for a specific cohort. A team purchase fires exactly ONE `purchase_complete`, on the purchaser. Every invited seat holder has full paid access and no purchase event of their own, so the reconstruction sails them into the sample as if they were prospects, and they can never convert. Comps, manual grants, and anyone who bought before PostHog's retention window are wrong the same way. If signals 1 and 2 are present, do not fall back to 3 to "double check" them; 3 is the one that is wrong.
 
 Then per video, at PERSON level, over the remaining sample:
 - **clicks** = distinct persons who selected it
@@ -122,7 +138,7 @@ Resolve the channel via slack_search_channels. If missing, post to #general pref
 2. **WHAT I DID.** State plainly whether you culled, rotated, re-tagged, or changed nothing. If you wrote, name the exact videos in and out, and give the one-line `rotate_free_videos` call that REVERTS it, so Ray can undo you in one paste.
 3. Picker CTR, click -> play rate (with the sign-up wall caveat from Step 2), and the trailing-7d delta, marked as overlapping if the previous run was 3 days ago.
 4. Per-video table, ranked: video, clicks, starts, start -> purchase %, LOW CONFIDENCE flag.
-5. How many already-paying people you dropped from the sample.
+5. How many already-paying people you dropped from the sample, WHICH signal you used to identify them (`viewerHasAccess` / `has_access` / the `purchase_complete` fallback), and how many of them were team seats (`is_team_seat`). The seat count is worth watching: those people were invisible before and were quietly dragging down whatever they clicked.
 6. Position-bias note: any video that only wins from slot 1.
 7. Role x video: the one or two genuinely surprising pairings.
 8. **Purchase lag** (Rule 4): median and p75 days from `video_started` to first later `purchase_complete`, with the sample size. One line. Flag it explicitly if the median exceeds the current 14-day floor, because that means the floor is wrong and Ray needs to raise it.
