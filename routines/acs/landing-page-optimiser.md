@@ -14,6 +14,13 @@ Past reports repeatedly declared features "unbuilt" or events "consumed by nothi
 4. If you cannot verify a claim in the time available, say "unverified" — do not assert it as fact, and do not use it as the basis for a top-5 recommendation.
 5. If you find yourself writing "Nth consecutive flag," STOP and re-verify the feature exists before re-issuing the recommendation. That phrasing is how a hallucination compounds week over week.
 
+## ⛔ SETTLED PRODUCT DECISIONS (do not re-recommend, in ANY phrasing)
+
+- **No email capture inside the checkout path.** Decided by Ray (May 2026, reaffirmed Jul 2026): no email gate, no modal, no inline field, no "quick email step" before the Stripe redirect — friction kills checkouts, and guest straight-to-Stripe is deliberate. Low email capture on abandons (~5–10%) is an ACCEPTED TRADE-OFF of that design, not a leak to fix. Do not recommend capturing email earlier/upstream, A/B-testing an email field before checkout, or any variant of "grow the recovery denominator". Evaluate recovery ONLY against abandons that did capture an email.
+- **Never recommend perpetual or new discounts** (already in Key Principles; listed here too because it keeps re-surfacing as "win-back discount" variants).
+
+If a future channel message from Ray explicitly reverses one of these, cite that message when you resurface the topic; otherwise these are closed.
+
 ## STEP 0: PIN POSTHOG PROJECT
 
 Call `switch-project` with `projectId: 236619` ("Agentic Coding School"). The default "HyperWhisper" (id 224249) returns 0 for every ACS event — do NOT report as a tracking outage. If every event returns 0, re-check the project pin before reporting anything.
@@ -35,7 +42,7 @@ Prices, sections, and experiments drift. Before analysis, read the current truth
 - **1a. Section scroll-through:** `landing_section_viewed` broken down by `section`, DAU math. Use the returned section values as the canonical ordered list.
 - **1b. Main funnel:** `$pageview` → `purchase_button_clicked` → `checkout_session_created` → `purchase_complete` (filter `source = 'server'`). Ordered, 7d.
 - **1c. Plan preference — break down by `planFlavor`, NOT `licenseType`:** `purchase_button_clicked` by `planFlavor` (`six_month` vs `lifetime`). `licenseType` is uniformly `lifetime` on the landing and carries no signal.
-- **1d. Recovery health:** `checkout_abandoned` (split by `email_entered`) vs `checkout_recovered` (split by `by_promo`), 7d + 30d. Compute recovery rate two ways: against ALL abandons and against `email_entered=true` only (the recoverable denominator). **Baseline as of 2026-06-13: ~0.5% (90d) / ~1.4% (30d) of all abandons recovered; only ~25% of recoveries (5 of 20 over 90d) used the promo code.** Recovery lags 24–48h, so the trailing 7d understates — weight the 30d rate. If recovery stays <5% of *recoverable* abandons, recommend tuning (email-capture rate, Bento deliverability, copy/discount), NOT building.
+- **1d. Recovery health:** `checkout_abandoned` (split by `email_entered`) vs `checkout_recovered` (split by `by_promo`), 7d + 30d. Compute recovery rate two ways: against ALL abandons and against `email_entered=true` only (the recoverable denominator). **Baseline as of 2026-06-13: ~0.5% (90d) / ~1.4% (30d) of all abandons recovered; only ~25% of recoveries (5 of 20 over 90d) used the promo code.** Recovery lags 24–48h, so the trailing 7d understates — weight the 30d rate. If recovery stays <5% of *recoverable* abandons, recommend tuning the existing emails (Bento deliverability, copy, timing), NOT building — and per Settled Product Decisions, do NOT recommend capturing email earlier in the checkout path.
 - **1e. Event totals:** `checkout_session_created`, `purchase_complete` (`source='server'`), `checkout_abandoned`, `checkout_recovered`, `paywall_viewed`, `paywall_cta_choice`, `pricing_section_viewed`, `newsletter_form_submitted`, `signin_failed`, `$rageclick`.
 - **1f. Hero sales-video watch funnel (NEW — events live from 2026-06-30, no history before that):** the landing hero VSL on `Hero.tsx` now emits playback milestones. Pull these as a drop-off funnel, counting **unique users** at each rung:
   - `hero_video_started` — pressed play
@@ -70,7 +77,7 @@ Prices, sections, and experiments drift. Before analysis, read the current truth
 3. **Pricing reach** — % of hero viewers reaching pricing.
 4. **Purchase click rate** — % of pricing viewers clicking buy. <5% = pricing copy needs work.
 5. **Plan preference** — 6-Month Pro vs Lifetime (by `planFlavor`). Owner prefers upfront cash, so a healthy Lifetime share is good.
-6. **Checkout completion + recovery** — completion rate is the dominant funnel leak historically (~7–10%). Recovery is already built but only recovers ~1.4% (30d). The sharper question: are abandons even capturing an email? If `email_entered=false` dominates, abandons are structurally unrecoverable and the fix is upstream (capture email earlier), not in the recovery emails. Recommend tuning the existing flow accordingly — never building it.
+6. **Checkout completion + recovery** — completion rate is the dominant funnel leak historically (~7–10%). Recovery is already built but only recovers ~1.4% (30d). Most abandons carry no email (`email_entered=false`); that is the accepted cost of the guest straight-to-Stripe design (see Settled Product Decisions), so treat email-less abandons as out of scope, not as a leak. Judge recovery only against the email-captured subset, and recommend tuning the existing emails (copy, timing, deliverability) — never building it, never adding upstream email capture.
 7. **Paywall conversion** — <15% = leaking.
 8. **Auth friction** — `signin_failed` + rage clicks. The only real code gap is uncategorized `signin_failed.error`. A valid recommendation is "add an `error_category` property to the existing capture so failures can be aggregated". Do NOT recommend surfacing errors or adding resend — both exist.
 9. **Newsletter** — capturing non-buyers?
