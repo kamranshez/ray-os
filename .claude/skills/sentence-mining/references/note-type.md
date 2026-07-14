@@ -19,7 +19,7 @@ sentence field works fine.
 | `explanation_audio` | no | `[sound:…mp3]` — Gemini TTS of the explanation |
 | `source_url` | no | The original video URL (video mode) |
 | `previous_versions` | no | Append-only, newest-first archive of sentences replaced by replace mode (see [replace-mode.md](replace-mode.md)) |
-| `ai_instructions` | no | **Read-mostly.** Ray's free-text note to the next AI pass on this card ("I already know this word", "sentence too long"). The skill reads and obeys it, then clears it — see [SKILL.md](../SKILL.md) §"Step 3.4" |
+| `ai_instructions` | no | **Read-mostly.** Ray's free-text note to the next AI pass on this card ("I already know this word", "sentence too long"). The skill reads and obeys it, then clears it — see [pipeline.md](pipeline.md#2--curate) §CURATE |
 
 Any other fields the note type has (definition, pitch accent, frequency, etc.) are
 left untouched for the user to fill at review time (e.g. via Yomitan).

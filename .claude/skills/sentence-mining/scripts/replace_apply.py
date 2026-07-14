@@ -31,10 +31,8 @@ import datetime
 import json
 import os
 import re
-import shutil
 import sys
 import tempfile
-import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -53,23 +51,10 @@ I_TAGS = " ".join(f"i{n}" for n in range(0, 10)) + " i?"  # i0..i9 + i? — clea
 RETIRE_TAG = "not-worth-learning"  # disposition for unfixable misses
 
 
-def _ext(url, default):
-    tail = url.split("?")[0].rsplit(".", 1)
-    return tail[1].lower() if len(tail) == 2 and len(tail[1]) <= 4 else default
-
-
-def _download(url, dest: Path):
-    req = urllib.request.Request(url, headers={"User-Agent": "ray-sentence-mining/1.0"})
-    with urllib.request.urlopen(req, timeout=30) as r, open(dest, "wb") as f:
-        f.write(r.read())
-
-
-def _stage(src, dest: Path):
-    """Put a remote URL or a local file path at `dest` so it can be stored in Anki."""
-    if src.startswith("http://") or src.startswith("https://"):
-        _download(src, dest)
-    else:  # local sentence-bank media — copy in
-        shutil.copyfile(src, dest)
+# Media staging (URL download or local-file copy) and extension guessing are shared with
+# the bank/new-card path — one implementation, so a fix to either applies to both.
+_ext = gmb._ext_of
+_stage = gmb._stage
 
 
 async def process_one(entry, workdir: Path, sem):

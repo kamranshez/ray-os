@@ -1,142 +1,152 @@
-# Bank Mode
+# Bank mode
 
-Source: a **list of target words** (or a single word). For each word, find a natural example sentence inside Ray's locally-indexed subs2srs `.apkg` banks, reuse the bank's original audio + screenshot when present, and produce a draft card per word.
+**Input:** a list of target words. **Output:** one new card per word.
 
-When this mode triggers:
-- Ray pastes a list of Japanese words and says anything like "make cards", "mine these", "find sentences for", "leech these"
-- Ray says "what's left in <show>" or "pull i+1 from my <show> bank" (a future variant — currently word-list only)
-- Ray writes `/sentence-mining` with no URL and a list of words
+> "I keep forgetting 同期, give me a card."
 
-If Ray gives a URL → that's [video-mode](video-mode.md), not bank mode.
+Video mode is for when Ray has a *specific clip* he wants to mine. Bank mode is the other
+direction: he names the words, and the skill goes and finds a good sentence for each.
 
-## Why bank mode exists
+**Everything after SOURCE is [the shared pipeline](pipeline.md).** This file only covers the
+two stages that differ.
 
-Video mode is great when Ray has a *specific clip* he wants to mine. But often the trigger is the other direction: "I keep forgetting `同期`, give me a card." Bank mode answers that — it searches a corpus of Japanese sentences Ray already has indexed and pulls a sentence that uses the word in context, with the original native audio when the bank shipped one.
+## Triggers
 
-Cards built this way are tagged `claude-sentence-bank` (vs. `claude-sentence-mining` for video-sourced cards) and additionally `bank:<bank-id>` so you can filter by source show.
+- Ray pastes a list of Japanese words: "make cards", "mine these", "find sentences for", "leech these"
+- Ray names one word he keeps forgetting
+- `/sentence-mining` with no URL and a list of words
 
-## Prerequisites
+A URL instead → [video mode](video-mode.md). A word that **already has a card** →
+[replace mode](replace-mode.md) (the ask is a *better* sentence, not a new card).
 
-1. **At least one `.apkg` indexed** — see [setup](#one-time-setup-indexing-banks) below.
-2. **AnkiConnect running** (port 8765) — same as video mode.
-3. **GEMINI_API_KEY** in the skill's `.env` — only needed when a bank lacks audio for a chosen sentence (we synthesize via Gemini TTS).
+---
 
-## One-time setup: indexing banks
-
-Banks are the `.apkg` files in `config.banks.source_dir` (set at setup). Extract them into local JSON indexes:
+## 1 · SOURCE — word list → the cascade
 
 ```bash
-# No args → indexes every .apkg in config.banks.source_dir into config.banks.index_dir:
-python3 <skill-dir>/scripts/extract_bank.py
-# Or point at a single file / a different directory:
-python3 <skill-dir>/scripts/extract_bank.py "/path/to/specific.apkg"
-```
-
-Output lands in `config.banks.index_dir` (default `~/Downloads/sentence-mining/banks/index/`):
-- `<bank-id>.notes.json` — searchable index (1 record per note: sentence, audio refs, image refs, meaning)
-- `<bank-id>.media/` — extracted audio+image with original filenames
-
-The `<bank-id>` is derived from the source filename (NFC-normalized, alnum + Japanese + dash + underscore preserved). See [bank-formats.md](bank-formats.md) for known notetypes and the [apkg-schema.md](apkg-schema.md) for the underlying ZIP/SQLite layout.
-
-**Re-extraction is safe** — `cp -n` semantics for media; JSON is overwritten. Run it again when Ray adds new banks.
-
-**Big banks are slow.** A 1GB audiobook bank is mostly mp3s; extraction copies all of them. For audiobook/Terrace House sized banks, consider running with `--skip-media` (TODO — not yet implemented) and rehydrating per-card as needed.
-
-## Step 1: Intake — collect the word list
-
-Words can come in as:
-- Comma-separated in chat: `同期, 西暦, 和暦`
-- A file path Ray pastes
-- A leech export Ray pastes (one word per line, possibly with reading/meaning columns — keep just the first column)
-
-Normalize to a plain list of strings. Deduplicate preserving order.
-
-## Step 2: Search banks
-
-```bash
-python3 <skill-dir>/scripts/search_banks.py \
+python3 <skill-dir>/scripts/find_sentences.py \
     --words "同期,西暦,和暦" \
-    --top-per-word 3 \
-    --output ~/Downloads/sentence-mining/banksearch.json
+    --output <work>/banksearch.json
 ```
 
-For each word, the script scans every `<bank-id>.notes.json`, finds notes whose sentence contains the word as a literal substring, and ranks hits by:
+Per word, in order:
 
-| signal | points |
-|---|---|
-| Bank has audio for this note | +6 |
-| Bank has image for this note | +4 |
-| target_word field exactly equals the search word | +5 |
-| Sentence length 15–50 chars (sweet spot for review) | +3 |
-| Sentence length 8–14 or 51–80 chars (OK) | +1 |
-| Word appears at a clean boundary (punctuation or end) | +2 |
+1. **Skip if a card already exists** in the mining decks. (`push.py` sets
+   `allowDuplicate: False` so it'd be rejected at the end anyway — catching it here means we
+   don't burn a cascade lookup and a TTS call on it first.)
+2. **Warn if the word is already known** — an exact lemma/normalized match at or above the
+   maturity threshold — but **build the card anyway**. Ray typed this word on purpose, and the
+   known-word diff is a hint about sequencing, never a verdict on worth (and it is wrong
+   sometimes). `--skip-known` refuses instead. See
+   [pipeline.md §ROUTE](pipeline.md#6--route).
+3. **Run [the cascade](pipeline.md#the-sentence-cascade)** — Immersion Kit → Nadeshiko →
+   sentencesearch → kotu → local bank, re-ranked by Ray's own i+1.
+4. **Route by i-level** — `i1` → main deck, anything denser → deferred. (Same rule as video
+   mode. Pass `--no-defer-above-i1` to force everything to main.)
 
-Ties break by shorter sentence.
+Words with no usable hit anywhere become **misses** — report them; don't invent a sentence.
 
-The script also records `bank_meaning` (English translation if the bank ships one), useful for sanity-checking the sense matches the one Ray wanted.
+Other flags: `--words-file <path>` (one word per line, extra columns ignored, so a pasted leech
+export just works) · `--top N` runner-ups per word · `--refresh-known`.
 
-### Known limitation: literal substring matching
+### Why this replaced the old bank-only search
 
-Current search is substring-only. `言う` won't match a sentence with `言って`. To handle inflected forms, tokenize the bank sentences with SudachiPy at index time and store per-note lemma sets, then match lemma-to-lemma. Not done yet.
+Until July 2026 this mode called `search_banks.py --words`, which searched **only the local
+`.apkg` banks** — the *last* tier of the cascade — using its own scoring table, substring-only
+matching, and no known-word check at all. Replace mode, meanwhile, had the full five-tier
+cascade with i+1 re-ranking. The same word therefore produced a measurably **worse** card
+through bank mode than through replace mode, which is exactly backwards.
 
-## Step 3: Curate — pick which hits become cards
+Both now call the same `_sources.best_for_word()`. `search_banks.py` still exists and still
+does the within-bank ranking, but it is reached **only as tier 5 of the cascade**, never as
+the whole search.
 
-Inline, look at the top hits per word and pick. Heuristic:
+The trade-off Ray accepted: sentences now come from the web tiers far more often than from his
+own indexed shows, so fewer cards carry a subs2srs screenshot from a series he's actually
+watching. Coverage and i+1 quality won out. The bank tier is still there and still preferred
+over nothing — it just has to earn the slot.
 
-- **Prefer the one with audio + image** even if the sentence is slightly less elegant. A card with native audio + screenshot is a vastly better study artifact than a text-only one.
-- **Clean obvious noise.** If the sentence is `(line1) (line2)` (subs2srs concatenated two subtitle frames), drop the chunk that doesn't contain the target word.
-- **Drop dupes vs. existing cards.** Query AnkiConnect for `<word-field>:<lemma>` across the configured mining decks (`config.field_map.word`, `config.decks`) and skip any word that already has a card. **This step is currently a manual check** — automate it in `search_banks.py` next.
-- **For zero-hit words**, tell Ray and ask. He may want to (a) index more banks, (b) accept a synthetic Claude-written example sentence with Gemini TTS, or (c) skip.
+---
 
-For each kept candidate, set `deck` to `config.decks.main`. (Bank mode doesn't use the `deferred` deck — these aren't i+2+ by definition since they're hand-selected.)
-
-## Step 4: Generate explanations
-
-Same as video-mode Step 4 — read [explanation-prompt.md](explanation-prompt.md), produce one `explanation` field per candidate inline using the prompt template (Japanese only, ~200–250 chars, no English).
-
-If a candidate's audio comes from a bank's actual show (e.g., the Tokyo Ghoul subtitle audio), feel free to reference the source context in the explanation when natural — but don't overload the card with show-specific lore the next viewer won't know.
-
-## Step 5: Generate media (bank-mode)
+## 4 · MEDIA
 
 ```bash
 python3 <skill-dir>/scripts/generate_media_bank.py \
-    --candidates ~/Downloads/sentence-mining/banksearch.json \
-    --output ~/Downloads/sentence-mining/bank.draft.json
+    --candidates <work>/banksearch.json \
+    --output <work>/bank.draft.json
 ```
 
-For each candidate:
-- If `existing_audio` resolves to a real file → copies it to `<anki-media>/sm_bank_<bank-id>_<note-id>_sentence.<ext>` (preserves extension; `.ogg` files work in Anki natively).
-- Else → calls Gemini TTS on the sentence text → `<anki-media>/sm_bank_<bank-id>_<note-id>_sentence_tts.mp3`.
-- If `existing_image` resolves → copies it as `<anki-media>/sm_bank_<bank-id>_<note-id>_image.<ext>`. Else leaves picture field blank (no placeholder).
-- Always runs Gemini TTS on the `explanation` text → `<anki-media>/sm_explain_bank_<bank-id>_<note-id>.mp3`.
+Stages each candidate's clip and screenshot. The cascade hands over `sound_url` / `image_url`,
+which are **URLs** for the web tiers and **local file paths** for the bank tier — one `_stage`
+helper handles both, so which tier a sentence came from stops mattering once it's been chosen.
+Then Gemini-TTS the explanation.
 
-This script differs from video-mode's `generate_media.py` in two ways: it never invokes ffmpeg for clipping (the bank already did that), and it skips screenshots entirely (the bank either shipped one or there isn't one).
+The audio-only tiers (sentencesearch, kotu) ship no image; `push.py` writes the `。` filler.
+That's the normal path, not an error — see [pipeline.md §MEDIA](pipeline.md#4--media).
 
-## Step 6: Preview + approval
+Sentence TTS is now a *fallback*, not a routine step: every cascade tier requires native audio,
+so it only fires for a legacy draft or a hand-edited candidate with no source clip.
 
-Same as video mode — print a summary and wait for Ray's confirmation. Distinguishing bits to surface:
+---
 
-```
-Mined N bank cards (word list: <words>):
+## 5 · WRITE
 
-  1. 同期 [tokyo_ghoul_season_1] 🔊🖼
-     "同期では二人 二人共 聡明で強い意思を持った女性でした"
-  2. 西暦 [legend_of_the_galactic_heroes_eng_jp]
-     "西暦2166年には 木星の衛星 イオに" (sentence TTS synthesized; no image)
-
-  Misses: 和暦 (no hit across 10 indexed banks)
+```bash
+python3 <skill-dir>/scripts/push.py --draft <work>/bank.draft.json
 ```
 
-Always list misses explicitly so Ray can choose to add more banks or accept synthetic fallback.
+Standard `addNotes`. Tagged `claude-sentence-bank` + the i-level.
 
-## Step 7: Push
+> The `claude-sentence-bank` tag predates the cascade, so it now means **"mined from a word
+> list"**, not "sourced from a local bank". Kept as-is for continuity with the cards already
+> in Ray's collection.
 
-Same `push.py` as video mode — the script detects `source == "bank-search"` in the draft and applies the `claude-sentence-bank` permanent tag (vs. `claude-sentence-mining`), plus the `i?` level tag. Per-run context (`bank_id`, `source`) stays in the draft JSON only; it is not promoted to Anki tags.
+Then **[Step 7 · QUEUE](pipeline.md#7--queue--offer-this-every-mode-every-time)** — offer it,
+every time.
 
-Bank cards always land in `config.decks.main` (no Deferred routing — see Step 3).
+### Summary shape
 
-## Gotchas specific to bank mode
+```
+Pushed 3 cards from a word list ✓
 
-- **Substring match misses inflections.** Already mentioned; a real fix needs SudachiPy tokenization at index time.
-- **No known-check yet.** The learner might already know a word they sent; bank mode pushes a card anyway. The known-set machinery now exists (`config.known_words`, reused from video mode) — wiring it into `search_banks.py` is the obvious next step.
-- **`Migaku Japanese` Audio field is often empty even though the notetype declares it.** The detector says the bank "has audio" structurally, but resolution at media-gen time falls back to TTS. This is the right behavior — the structural signal is still useful for ranking — but Ray may be surprised that a "Migaku" bank produces synthesized audio.
+  → Sentence Mining (i+1): 2
+    1. 皮算用 [nadeshiko] 🔊🖼 "交渉は皮算用で行えます"
+    2. 泰然  [nadeshiko] 🔊🖼 "どうして こんな泰然としていられるんだ?"
+
+  → Deferred (i+2 and above): 1
+    3. 面食らう [i2] [nadeshiko] 🔊🖼 "予備知識 ねえと 面食らうのも当然か"
+
+  Misses: 和暦 — no usable sentence in any tier.
+  Skipped: 同期 (already has a card).
+```
+
+---
+
+## One-time setup: indexing banks (cascade tier 5)
+
+Banks are the `.apkg` files in `config.banks.source_dir` (set at setup):
+
+```bash
+python3 <skill-dir>/scripts/extract_bank.py                      # all of source_dir
+python3 <skill-dir>/scripts/extract_bank.py "/path/to/one.apkg"  # or just one
+```
+
+Output lands in `config.banks.index_dir` (default `~/Downloads/sentence-mining/banks/index/`):
+`<bank-id>.notes.json` (one record per note: sentence, audio/image refs, meaning) and
+`<bank-id>.media/`. The `<bank-id>` derives from the filename (NFC-normalized). See
+[bank-formats.md](bank-formats.md) for known notetypes and [apkg-schema.md](apkg-schema.md) for
+the ZIP/SQLite layout.
+
+**Re-extraction is safe** — `cp -n` semantics for media, JSON overwritten. Re-run when Ray adds
+a bank. **Big banks are slow**: a 1GB audiobook bank is mostly mp3s and extraction copies all
+of them.
+
+## Gotchas
+
+- **The bank tier is substring-only.** `言う` won't match a sentence containing `言って`. A real
+  fix needs SudachiPy tokenization at index time with per-note lemma sets. Not done. This
+  matters much less now that the bank is tier 5 rather than the whole search.
+- **`Migaku Japanese`'s Audio field is often empty** even though the notetype declares it. The
+  detector says the bank "has audio" structurally, but resolution at media time finds nothing
+  and the candidate is dropped from the bank tier. Correct behavior — just don't be surprised
+  that a "Migaku" bank contributes fewer hits than its size suggests.

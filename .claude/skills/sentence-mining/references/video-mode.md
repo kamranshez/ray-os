@@ -1,118 +1,115 @@
-# Video Mode
+# Video mode
 
-Source: a **video URL** (Instagram reel, YouTube video/Short, TikTok, Twitter/X video) or a **local video file path**. The flow downloads (if URL), transcribes via AssemblyAI, splits into sentence chunks, runs SudachiPy + the built-in known-word diff (see [known-words.md](known-words.md)) to find i+1 sentences (one unknown word), and produces draft cards.
+**Input:** a video URL (Instagram reel, YouTube video/Short, TikTok, Twitter/X) or a local file.
+**Output:** new cards, with the sentence, audio and screenshot taken from the video itself.
 
-When this mode triggers:
+This is the one mode that does **not** use the sentence cascade — the whole point is that the
+sentence comes from the clip Ray actually watched.
+
+**Everything after SOURCE is [the shared pipeline](pipeline.md).**
+
+## Triggers
+
 - Ray pastes any of the URL types above
-- Ray says "mine this video", "make sentence cards from <url>", "turn this reel into cards"
-- Ray writes `/sentence-mining` with a URL
+- "mine this video" · "make sentence cards from \<url\>" · "turn this reel into cards"
 
-If Ray gives a list of words instead → that's [bank-mode](bank-mode.md).
+A list of words instead → [bank mode](bank-mode.md).
 
-## Step 1: Download
+---
+
+## 1 · SOURCE
+
+### 1a — Download
 
 ```bash
-mkdir -p ~/Downloads/sentence-mining
-cd ~/Downloads/sentence-mining
-# Stable, descriptive output template so re-runs are idempotent.
+mkdir -p ~/Downloads/sentence-mining && cd ~/Downloads/sentence-mining
 yt-dlp -o "%(extractor)s-%(id)s.%(ext)s" --no-playlist <URL>
 ```
 
-For local files, skip — note the path.
+The stable output template keeps re-runs idempotent. Local files: skip, note the path.
 
-Record `VIDEO_PATH` and `SOURCE_ID` (e.g. `instagram-DZHudfuRmdJ`) — everything downstream depends on these.
+Record `VIDEO_PATH` and `SOURCE_ID` (e.g. `instagram-DZHudfuRmdJ`) — everything downstream
+depends on them.
 
-## Step 2: Transcribe (raw)
+### 1b — Transcribe
 
 ```bash
 python3 <skill-dir>/scripts/transcribe.py "$VIDEO_PATH" \
     > ~/Downloads/sentence-mining/$SOURCE_ID.transcript.json
 ```
 
-Output contains `full_text` and a flat `words` array. Each word has `start_ms`, `end_ms`, and a `speaker` label (`"A"`, `"B"`, …) from AssemblyAI's diarization pass. **Sentence splitting is intentionally NOT done here** — see Step 2.5.
+Output has `full_text` and a flat `words` array, each word with `start_ms`, `end_ms`, and a
+`speaker` label from AssemblyAI's diarization.
 
-**Why no rule-based splitter:** AssemblyAI's Japanese sentence segmenter is unreliable for casual/fast speech, and earlier rule-based splitters chopped at character/duration caps regardless of meaning. Claude does this with full context instead.
+**Sentence splitting is intentionally NOT done here.** AssemblyAI's Japanese segmenter is
+unreliable for casual/fast speech, and earlier rule-based splitters chopped at character or
+duration caps regardless of meaning. You do it in 1c, with full context.
 
-**Why diarization:** speaker turn changes are the strongest "natural meaning boundary" signal — much better than punctuation alone for casual conversation. Don't pass `speakers_expected`; auto-detection handles 1, 2, or N speakers.
+**Why diarization:** speaker turn changes are the strongest "natural meaning boundary" signal —
+much better than punctuation alone for casual conversation. Don't pass `speakers_expected`;
+auto-detection handles 1, 2, or N speakers.
 
-## Step 2.5: Correct + split (inline — no script)
+### 1c — Correct + split (inline, no script)
 
-Read the raw transcript. Produce a `sentences` array where each sentence is a card-worthy chunk: roughly **3–12 seconds** of audio, **20–60 Japanese characters**, ending at a natural meaning boundary.
+Read the raw transcript. Produce a `sentences` array where each chunk is card-worthy: roughly
+**3–12 seconds**, **20–60 Japanese characters**, ending at a natural meaning boundary.
 
-**Speaker turn = strongest natural boundary.** Every time the speaker changes, close the current chunk. Within a single speaker's turn you can let a chunk run a bit longer (up to ~12s / 60 chars) if it adds useful context — that's the whole point of having diarization. Inside a long turn, prefer secondary boundaries: sentence-final particle, clause break, hard punctuation.
+**Correct first.** Walk `full_text`; for each sequence that doesn't read as natural Japanese,
+work out what was likely said and substitute:
+- phonetically similar mistakes (`線理眼` → `千里眼`, `特度` → `得度`)
+- wrong kanji homophones where the topic is clear (`公開` ↔ `後悔`)
+- numbers transcribed weirdly (a `1` floating alone is a bug)
 
-A chunk's `speaker` field is the speaker of its words. If a chunk straddles speakers (rare — usually means diarization mis-tagged a backchannel like "うん" / "そうだね"), pick the dominant speaker.
+**Don't over-correct** — ambiguous, leave it. Fix obvious errors; don't rewrite the speaker.
 
-**Correction pass first.** Walk through `full_text`. For each suspicious sequence — anything that doesn't read as natural Japanese — figure out what was likely actually said given context and substitute:
-- Phonetically similar mistakes (`線理眼` → `千里眼`, `特度` → `得度`)
-- Wrong kanji homophones picked when topic is clear (`公開` ↔ `後悔`)
-- Numbers transcribed weirdly (`1` floating alone is a bug)
+**Then split.** **Speaker turn = strongest boundary**: every time the speaker changes, close the
+chunk. Within one speaker's turn a chunk can run longer (~12s / 60 chars) if it adds useful
+context — that's the whole point of having diarization. Inside a long turn, prefer secondary
+boundaries: sentence-final particle, clause break, hard punctuation.
 
-Don't over-correct — ambiguous → leave it. The goal is fixing obvious errors, not rewriting the speaker.
+Each chunk needs `text` (corrected), `start_ms` / `end_ms` (from first/last word), `speaker`
+(the dominant one — a chunk straddling speakers usually means diarization mis-tagged a
+backchannel like うん / そうだね), and `words` (the input slice, **preserving original timings** —
+ffmpeg slices off these, so the correction stays purely textual).
 
-**Then split.** Use the corrected text + word-level timings + speaker labels. Each chunk needs:
-- `text` — corrected sentence (one self-contained thought)
-- `start_ms`, `end_ms` — from first/last word
-- `speaker` — dominant speaker label
-- `words` — slice of input `words` (preserves original timings; ffmpeg slices off these)
+Write back into the same transcript file under the `sentences` key. Print a short summary
+(duration + char count + first 50 chars per chunk) so Ray can spot bad splits.
 
-When you correct text, the `text` field reflects the correction but the `words` array preserves originals — the correction is purely textual.
-
-Write back to the same transcript file (set the `sentences` key).
-
-Before moving on, print a short summary (duration + char count + first 50 chars per chunk) so Ray can spot obvious splitting mistakes.
-
-## Step 3: Analyze — tokenize, diff, dedupe, rank
-
-Single video:
+### 1d — Analyze
 
 ```bash
 python3 <skill-dir>/scripts/analyze.py \
     --transcript ~/Downloads/sentence-mining/$SOURCE_ID.transcript.json \
-    --source-id "$SOURCE_ID" \
-    --source-url "$URL" \
+    --source-id "$SOURCE_ID" --source-url "$URL" \
     > ~/Downloads/sentence-mining/$SOURCE_ID.candidates.json
 ```
 
-**Batch mode (preferred when mining ≥2 videos)** — share one SudachiPy + AnkiConnect load across all of them. Write `manifest.json`:
+It loads the [known-word set](known-words.md) (cached), tokenizes with SudachiPy (SplitMode C),
+finds each unknown lemma's best sentence (i+1 preferred, falling back to i+2, i+3…), drops words
+that already have cards in the mining decks, ranks by JPDB frequency if `config.jpdb_priority_csv`
+is set, and caps at 50 candidates. Routes by i-level per
+[pipeline.md §ROUTE](pipeline.md#6--route).
+
+**Batch form (preferred for ≥2 videos)** — one SudachiPy load, one known-word scan, one
+AnkiConnect dedup query shared across all of them (that query was the source of the parallel-run
+timeout we used to hit). Write a `manifest.json`:
 
 ```json
 [
-  {"transcript": "~/Downloads/sentence-mining/instagram-AAA.transcript.json", "source_id": "instagram-AAA", "source_url": "..."},
-  {"transcript": "~/Downloads/sentence-mining/instagram-BBB.transcript.json", "source_id": "instagram-BBB", "source_url": "..."}
+  {"transcript": "…/instagram-AAA.transcript.json", "source_id": "instagram-AAA", "source_url": "…"},
+  {"transcript": "…/instagram-BBB.transcript.json", "source_id": "instagram-BBB", "source_url": "…"}
 ]
 ```
 
 ```bash
-python3 <skill-dir>/scripts/analyze.py \
-    --manifest ~/Downloads/sentence-mining/manifest.json \
-    --output-dir ~/Downloads/sentence-mining/
+python3 <skill-dir>/scripts/analyze.py --manifest …/manifest.json --output-dir ~/Downloads/sentence-mining/
 ```
 
-The batch form writes one `<source-id>.candidates.json` per entry. Same analysis per video, but the SudachiPy tokenizer loads once instead of N times, the known-word set is scanned once and shared, and the AnkiConnect dedup query runs once instead of N — that query was the source of the parallel-run timeout we hit before.
+Zero candidates? Tell Ray why (all words known? all dupes? no Japanese detected?) and stop.
 
-**What analyze.py does:**
-- Loads the **known-word set** once from `config.known_words.sources` (cached; see [known-words.md](known-words.md))
-- Tokenizes each sentence with SudachiPy (SplitMode C)
-- Two-layer dedup for "learner already knows this word" (both built once from the known sources):
-  1. **Highest card interval ≥ threshold** — the token's `dictionary_form()` has a highest interval across the configured known-source cards ≥ `interval_threshold` (default 21) → known
-  2. **Normalized-form match** — the token's `normalized_form()` (SudachiPy's canonical spelling) hits the known set, catching orthographic variants the surface lemma misses (すべて↔全て, ご飯↔御飯, 邂逅↔かいこう, 籠る↔籠もる) — this replaced the old jamdict/kanji-stem lookups
-- For each unknown lemma, finds the **best sentence** (i+1 preferred; falls back i+2, i+3…)
-- Queries AnkiConnect for the existing target-word field across the configured mining decks (`config.decks`); drops dupes
-- Ranks remaining unknowns by JPDB lemma priority if `config.jpdb_priority_csv` is set (lower line = more frequent = higher priority); otherwise keeps source order
-- Caps output at 50 candidates
+---
 
-Output: candidate cards with `lemma`, `reading`, `sentence`, `sentence_start_ms`, `sentence_end_ms`, `target_word_start_ms`, `unknown_count_in_sentence`, `jpdb_rank`, `deck`, `i_level` (`i1`, `i2`, `i3`, …), and `speaker`.
-
-**Deck routing** (deck names come from `config.decks`):
-- **i+1 cards** (one unknown — cleanest context) → `decks.main` (enter normal daily review)
-- **i+2 and higher** → `decks.deferred` (a top-level sibling deck, kept separate so messy ones can be swept later, but cards stay unsuspended). Falls back to `decks.main` if no deferred deck is configured.
-
-Both decks are checked for duplicates before adding.
-
-Read the output. If zero candidates, tell Ray why (all words known? all dupes? no Japanese detected?) and stop.
-
-## Step 5 (video-specific): Generate media
+## 4–5 · MEDIA + WRITE (one command)
 
 ```bash
 python3 <skill-dir>/scripts/generate_media.py \
@@ -122,17 +119,43 @@ python3 <skill-dir>/scripts/generate_media.py \
     > ~/Downloads/sentence-mining/$SOURCE_ID.draft.json
 ```
 
-Per candidate:
-- Clips sentence audio with ffmpeg → `<anki-media>/sm_<source-id>_<idx>.mp3`
-- Grabs middle frame as JPEG (640px wide max) → `<anki-media>/sm_<source-id>_<idx>.jpg`
-- Calls Gemini 3.1 Flash TTS Preview on the explanation → `<anki-media>/sm_explain_<source-id>_<idx>.mp3`
+Per candidate: ffmpeg-clips the sentence audio, grabs the middle frame as a JPEG (640px max),
+and Gemini-TTSes the explanation.
 
-Anki media folder: `/Users/ray/Library/Application Support/Anki2/User 1/collection.media/`
+**Video mode pushes inline by default.** Three workers run in parallel and each card is inserted
+into Anki the instant *its own* media is ready — cards stream in one by one while the next batch
+is still generating, so **completion order is not input order. That's expected.** The push path
+reuses `push.py`'s note builder, so tags / field-mapping / dedup are identical to the batch path.
 
-**Concurrency + inline push (default).** Cards run through a pool of 3 workers (TTS capped at 3 with 429 backoff — Gemini's free-tier limit is 10 RPM). By default each card is inserted into Anki the instant its own media is ready, so cards stream in one by one while the next batch is still generating (completion order is not input order — that's expected). Per-card insert results print to stderr; the full draft JSON still goes to stdout. Pass `--no-push` to only stage the draft and push later with `push.py` (draft-only flow). If you hit rate limits, lower `TTS_CONCURRENCY` in the script. The push path reuses `push.py`'s note builder, so tags/field-mapping/dedup (`allowDuplicate: False`) are identical to the batch path — re-running on already-mined words just reports them as duplicates rather than creating doubles.
+`--no-push` stages the draft only, for a separate `push.py` run.
 
-## Gotchas specific to video mode
+Then **[Step 7 · QUEUE](pipeline.md#7--queue--offer-this-every-mode-every-time)**.
 
-- **AssemblyAI Japanese quality varies wildly.** Music-heavy reels with overlaid voice may give garbage. If a transcript has obvious errors (broken sentences, kana-only output where kanji should be), surface this to Ray before generating cards — bad sentences mean bad cards.
-- **Segmentation isn't perfect.** SudachiPy SplitMode C keeps most compounds whole, but words can still split or fuse in odd ways. Because the known-set and the candidates use the *same* tokenizer, segmentation is at least self-consistent — but still spot-check the target-word field for weirdness in the draft summary.
-- **Diarization is not always clean for backchannels.** "うん" / "そうだね" interjections may flip speaker labels mid-sentence. Use judgment in Step 2.5 to consolidate.
+### Summary shape
+
+```
+Pushed 17 cards from <SOURCE_ID> to Anki ✓
+
+  → Sentence Mining (i+1): 12
+    1. 気迫 (きはく) — "彼は気迫のこもった目で..." [JPDB rank 4823]
+    …
+  → Deferred (i+2/i+3): 5
+    13. 揶揄う (からかう) — "…" [JPDB rank 12044]
+    …
+
+Skipped during curation: <N> (ads / tokenizer fragments / transcription errors).
+Draft: ~/Downloads/sentence-mining/<source>.draft.json
+```
+
+---
+
+## Gotchas
+
+- **AssemblyAI's Japanese quality varies wildly.** Music-heavy reels with overlaid voice may give
+  garbage. If a transcript has obvious errors (broken sentences, kana-only where kanji should
+  be), **surface it to Ray before generating cards** — bad sentences mean bad cards.
+- **Segmentation isn't perfect.** SplitMode C keeps most compounds whole, but words still split
+  or fuse oddly. Because the known-set and the candidates use the *same* tokenizer, segmentation
+  is at least self-consistent — but spot-check the target-word field in the draft summary.
+- **Diarization is not clean for backchannels.** うん / そうだね interjections may flip speaker
+  labels mid-sentence. Use judgment in 1c to consolidate.
