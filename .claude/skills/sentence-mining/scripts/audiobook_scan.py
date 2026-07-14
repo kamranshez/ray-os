@@ -31,10 +31,11 @@ goes to `deferred`, not to a suspend. The diff is also wrong sometimes (it wante
 突っ伏す because 突 appears in 突然): a needless deferral is one click to undo, a needless
 suspend is a word he chose vanishing silently.
 
-  retire   -> target word is ALREADY KNOWN. The audiobook tool mined a word Ray learned
-              long ago. Not worth a card — tag not-worth-learning + suspend.
-  deferred -> the sentence has unknowns BEYOND the target, so it's above i+1.
   main     -> clean i+1: the target is the only thing Ray doesn't know.
+  rescue   -> the sentence has unknowns BEYOND the target, so it's above i+1. Send the word
+              back through the cascade for an easier sentence; keep the card either way.
+  deferred -> above i+1 with no easier sentence anywhere, or the lemma already matured on
+              another card. Later, not never.
 
 This script deliberately decides nothing about the explanation TEXT. Claude writes those
 inline in house style, because that needs Japanese fluency a script doesn't have.
@@ -307,7 +308,7 @@ def main():
         clean += not e["defects"]
     print(f"Scanned {len(entries)} audiobook card(s): {args.query}")
     print(f"  route  → main: {counts['main']}   rescue: {counts['rescue']}   "
-          f"retire: {counts['retire']}")
+          f"deferred: {counts['deferred']}")
     print(f"  {len(entries) - clean} need fixing, {clean} already house standard")
     print(f"\nDraft: {out}")
     if counts["rescue"]:
