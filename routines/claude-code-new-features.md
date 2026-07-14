@@ -1,10 +1,12 @@
-You are the **Claude Code feature-flag & DCE tracker**. Every run you build a fresh map of Claude Code's GrowthBook feature flags, compare it against the previous run's snapshot, and notify Ray (Slack DM) about three things only:
+You are the **Claude Code feature-change tracker**. Every run you build a fresh map of Claude Code's GrowthBook feature flags, binary surface, environment variables, and official announcements; compare it against the previous run; and notify Ray in Slack about meaningful changes only:
 
 1. **GrowthBook switches** — flags whose value flipped (on↔off, or a config payload changed) since last run.
 2. **New GrowthBook flags** — flags that appeared since last run, *plus what each one probably does* (inferred from the binary).
 3. **DCE switches** — flags whose presence in the binary changed: code newly **stripped** (was wired, now gone) or newly **shipped** (was absent/stripped, now has a real call site).
+4. **Environment surface changes** — newly added or removed `CLAUDE_CODE_*`, `CLAUDE_*`, or closely related feature-control environment variables, plus what each one changes and any `tengu_*` relationship.
+5. **Official announcements** — new Claude Code changelog/release-note items from official Anthropic sources since the last successful check.
 
-Do NOT carry a hardcoded list of "known features" — discover everything fresh each run. Report changes ONLY. If nothing changed, send one short "no changes" line (or stay silent — see Step 5).
+Do NOT carry a hardcoded list of "known features" — discover everything fresh each run. Report changes ONLY. If nothing changed, stay silent on Slack and record `No changes.` locally.
 
 ---
 
@@ -21,17 +23,12 @@ Do NOT carry a hardcoded list of "known features" — discover everything fresh 
 
 ## Step 1: Locate & extract the current binary
 
+Use the repo-local **binary-explorer** skill and its version-keyed extractor:
+
 ```bash
-BIN=$(readlink -f "$(command -v claude)")
-case "$BIN" in */versions/*) ;; *) BIN=$(readlink -f ~/.local/bin/claude) ;; esac
-echo "binary: $BIN"
-# The binary-explorer skill used to ship extract.sh, but it has been removed from
-# ~/.claude/skills/. Extraction is just a cached `strings` dump keyed by version, so
-# inline it (falls back to the skill script if it's ever restored).
-VERSION="$(basename "$BIN")"; [[ "$VERSION" =~ ^[0-9]+\.[0-9]+ ]] || VERSION="$(claude --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
-CACHE_DIR="$HOME/.claude/cache/binary-strings"; mkdir -p "$CACHE_DIR"
-STRINGS="$CACHE_DIR/$VERSION.txt"
-[[ -s "$STRINGS" ]] || strings "$BIN" > "$STRINGS"
+STRINGS=$(bash /Users/ray/Desktop/ray-os/.claude/skills/binary-explorer/scripts/extract-claude.sh)
+VERSION=$(claude --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+test -s "$STRINGS" || { echo "ERROR: binary strings extraction failed" >&2; exit 1; }
 echo "MAIN_STRINGS=$STRINGS"
 ```
 
@@ -58,19 +55,25 @@ def find(o,k):
     return None
 gb=find(cfg,"cachedGrowthBookFeatures") or {}
 
-# precompute which flags are gate() vs telemetry in the binary.
+# precompute which flags are gate/config reads vs telemetry in the binary.
 # NOTE: the minified helper names DRIFT between releases. History: gate `ct(`→`it(`
-# (v2.1.193)→`at(` (v2.1.195)→`ot(` (v2.1.199); telemetry `j(`→`G(`→`j(`/`f_(`
-# (v2.1.195)→`G(` (v2.1.199). We match the known aliases so wired-vs-present
+# (v2.1.193)→`at(` (v2.1.195)→`ot(` (v2.1.199)→`Qe(` (v2.1.208);
+# structured config reads use `J1(` in v2.1.208. Telemetry `j(`→`G(`→`j(`/`f_(`
+# (v2.1.195)→`G(` (v2.1.199)→`M(` (v2.1.208). We match the known aliases so wired-vs-present
 # classification survives the next rename.
 # SANITY-CHECK `len(gates)` every run: it should be ~230+. If it's 0 (or nearly
 # everything classifies as "present" and DCE shows a `wired→present` avalanche), the
 # gate helper was renamed again — grep `("tengu_` in the strings to find the new
 # 1-2 char prefix whose call sites take a bare default (`!0`/`!1`/`null`/number), and
 # add it to the gates alternation below (telemetry prefixes take an `{...}` object).
-gates=set(re.findall(r'(?:ot|at|it|ct)\("(tengu_[a-zA-Z0-9_]+)"',strings))
-telem=set(re.findall(r'(?:j|f_|G)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gates=set(re.findall(r'(?:Qe|J1|ot|at|it|ct)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+telem=set(re.findall(r'(?:M|j|f_|G)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 present=set(re.findall(r'tengu_[a-zA-Z0-9_]+',strings))
+
+# Fail closed before reading/writing tracker state. A helper rename otherwise creates
+# a false wired→present avalanche and poisons the baseline for future runs.
+if len(gates) < 200:
+    raise SystemExit(f"CLASSIFIER_UNHEALTHY: found only {len(gates)} gate/config call sites; inspect current binary helper names and update the aliases before diffing")
 
 # known self-enable env overrides (extend as you discover more)
 OVERRIDES={
@@ -90,7 +93,8 @@ OVERRIDES={
 def truthy(v):
     return v is True or (isinstance(v,str) and v.lower() not in ("off","")) or (isinstance(v,dict) and v.get("enabled") is True)
 
-snap={"version":ver,"flags":{}}
+env_names=sorted(set(re.findall(r'\b(?:CLAUDE_CODE|CLAUDE)_[A-Z][A-Z0-9_]+\b',strings)))
+snap={"version":ver,"flags":{},"envs":env_names}
 for flag,val in gb.items():
     if not flag.startswith("tengu_"): continue
     if flag in gates: binst="wired"
@@ -110,7 +114,8 @@ prev=json.load(open(prev_path)) if os.path.isfile(prev_path) else None
 open(prev_path,"w").write(json.dumps(snap,indent=2,sort_keys=True))
 
 # diff -> three categories
-report={"first_run":prev is None,"version_changed":None,"switches":[],"new_flags":[],"dce_switches":[]}
+report={"first_run":prev is None,"version_changed":None,"switches":[],"new_flags":[],"dce_switches":[],
+        "new_env_vars":[],"removed_env_vars":[],"env_baseline_created":False}
 if prev:
     if prev.get("version")!=ver: report["version_changed"]=f'{prev.get("version")} -> {ver}'
     pf,cf=prev["flags"],snap["flags"]
@@ -130,6 +135,14 @@ if prev:
     for flag in pf:
         if flag not in cf:
             report["dce_switches"].append({"flag":flag,"from":pf[flag].get("bin"),"to":"removed-from-growthbook"})
+    # Older snapshots predate env tracking. Baseline once rather than flooding Slack
+    # with every existing variable; only later runs report additions/removals.
+    if "envs" not in prev:
+        report["env_baseline_created"]=True
+    else:
+        old_envs=set(prev.get("envs",[])); cur_envs=set(env_names)
+        report["new_env_vars"]=sorted(cur_envs-old_envs)
+        report["removed_env_vars"]=sorted(old_envs-cur_envs)
 
 open(os.path.expanduser("~/.claude/cache/cc-feature-tracker/last-report.json"),"w").write(json.dumps(report,indent=2))
 print(json.dumps(report,indent=2))
@@ -146,6 +159,18 @@ Read `last-report.json`.
 - **For each `switches` entry:** name the feature in plain English, then **describe what it does** (per the golden rule). Report `feature — was {on/off} → now {on/off}`, whether the change is via GrowthBook or an env override, and the description. Note whether the code is still wired (so the flip actually changes behavior) or stripped (flip is a no-op).
 - **For each `new_flags` entry:** inspect the binary to infer **what it does**. `grep -n 'tengu_x' $STRINGS`, read a wide window around each hit. Write a 1–2 sentence "probably does X" with your confidence. Note whether it's `wired` (real code, an actual upcoming feature) or only `telemetry`/`stripped` (a name with no behavior yet).
 - **For each `dce_switches` entry:** report the transition AND describe the feature that was added/removed/retired (per the golden rule). `wired/present → stripped` = feature code was **removed** this version (describe what was removed, from your prior knowledge + any residual strings). `stripped/absent → wired` = code was **newly shipped** (describe the now-real feature). `→ removed-from-growthbook` = the flag was retired server-side (note whether code remains and how it's now reachable, e.g. an env var).
+- **For each `new_env_vars` / `removed_env_vars` entry:** use `scripts/search.py` from the repo-local binary-explorer skill to inspect a wide character window around the variable. Explain the concrete behavior it controls, default/polarity, and the related `tengu_*` flag when one is visible. Never report a bare variable name.
+
+## Step 3.5: Check official announcements
+
+Check official Anthropic sources for Claude Code announcements published since the previous successful run:
+
+- `https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md`
+- `https://github.com/anthropics/claude-code/releases`
+
+Use Exa MCP search/fetch when available, as required by this repo's `AGENTS.md`. Store the latest successfully observed release/version identifiers and URLs in `~/.claude/cache/cc-feature-tracker/announcements-latest.json`. On the first successful announcement check, create a baseline and do not replay the historical changelog. Never advance this marker if fetching fails; instead record the announcement check as blocked in the run log and continue the local binary/flag/env checks.
+
+For each genuinely new item, summarize the user-visible change in one sentence and keep the official source URL. Do not treat third-party posts, speculation, or binary-only discoveries as official announcements.
 
 ## Step 4: Record locally
 
@@ -157,13 +182,13 @@ LOG=~/Desktop/ray-os/routines/claude-code-feature-log.md
   echo ""
   echo "## $(date +%Y-%m-%d\ %H:%M) — v{VERSION}"
   echo ""
-  echo "<paste the formatted switches / new flags / dce switches here; write 'No changes.' if all three empty>"
+  echo "<paste the formatted announcements / switches / new flags / dce switches / env changes here; write 'No changes.' if all five categories are empty>"
 } >> "$LOG"
 ```
 
 ## Step 5: Notify Ray via Slack DM
 
-Only if there is at least one switch, new flag, or DCE change (skip the message entirely on a no-change run — do not spam). Use the **slackbot-message** skill (NOT a webhook), sending to the channel **`cc-feature-tracker`** (Ray's private tracker channel). Slack mrkdwn = single `*asterisks*` for bold.
+Only if there is at least one official announcement, flag switch, new flag, DCE change, or environment-surface change (skip the message entirely on a no-change run — do not spam). Use the **slackbot-message** skill (NOT a webhook), sending to **`cc-feature-tracker`**. Slack mrkdwn = single `*asterisks*` for bold.
 
 ```bash
 bash ~/.claude/skills/slackbot-message/scripts/send-message.sh "cc-feature-tracker" "$MESSAGE"
@@ -174,6 +199,9 @@ Message format (omit any section that's empty). **Every bullet must carry a feat
 ```
 🚩 *Claude Code feature tracker* — v{VERSION}{ , upgraded from vX if version changed}
 
+*📣 Official announcements*
+• {feature/change} — {one-sentence practical summary}. <{official URL}|Official notes>
+
 *🔀 GrowthBook switches*
 • {feature name} (`tengu_x`) — was {OFF} → now {ON}  _(via {GrowthBook|env})_. {1–2 sentence description of what the feature does / what it gates. Note if code is still wired vs stripped.}
 
@@ -182,6 +210,9 @@ Message format (omit any section that's empty). **Every bullet must carry a feat
 
 *🧱 DCE switches*
 • `tengu_z` — {newly shipped code | code removed | retired from GrowthBook} ({old}→{new}). {1–2 sentence description of the feature that was added/removed/retired, and how it's now reachable if it still exists.}
+
+*⚙️ Environment changes*
+• `CLAUDE_CODE_X` — {added | removed}. {What behavior it controls, default/polarity, and related `tengu_*` gate if known.}
 ```
 
 Example of the expected level of detail (this is the bar — note how each bullet reminds Ray what the flag *did*):
