@@ -70,14 +70,14 @@ For a single section:
 For an entire markdown file:
 
 1. Read the file and split into semantic chunks (see "Semantic Chunking").
-2. **Process up to 5 chunks in parallel.** The Codex CLI's `image_gen` tool serializes per-session, so to get throughput we launch separate `codex exec` calls — each its own session UUID.
-3. For each chunk, run the wrapper in a **background Bash task** (`run_in_background: true`):
+2. **Fan out ALL chunks at once (full parallelism, no artificial cap).** The Codex CLI's `image_gen` tool serializes per-session, so throughput comes entirely from launching separate `codex exec` calls, each its own session UUID. Launch every chunk simultaneously so a whole deck finishes in one wave (one call's wall-clock, ~5 to 12 min) instead of several sequential waves. There is no shared rate-limit gateway (unlike the Gemini API), so the only ceiling is whatever the codex account allows.
+3. **Preferred pattern for more than ~4 chunks: one driver script, launched once in the background.** Writing N separate `run_in_background` Bash tasks is noisy and hard to track. Instead write a single driver `.sh` to the scratchpad that: (a) writes each chunk's verbatim prompt to its own `.txt` (heredoc, so backticks and quotes survive), (b) loops the slugs launching every `generate.sh` call concurrently with `&` (set `MAX` to the chunk count for a single wave; drop it only if you actually hit quota errors), (c) `wait`s for all, then (d) tallies produced files per slug. Launch that driver once with `run_in_background: true`. Each `generate.sh` gets its own `-x <unique-chunk-slug>` and a per-slug log so you can retry only the failures.
    - Output dir: the vault-root `images/` folder (`-o /Users/ray/Desktop/ray-os/images`)
    - Name: `-x <unique-chunk-slug>` (class + note + chunk, so files never collide)
    - Prompt: the **entire chunk content verbatim**
 4. Wait for the whole batch, then add all embeds.
 
-**Why 5 instead of 2:** unlike the Gemini API there is no shared rate-limit gateway to worry about — the bottleneck is whatever the codex account allows. Stay polite at 5 concurrent and back off if you see auth or quota errors in the JSONL stream.
+**On concurrency:** default to launching everything at once; the codex account is the only real limit. If the JSONL stream shows auth or quota errors, back off (halve the wave and retry the failed slugs), but do NOT pre-throttle to a small number just to be cautious. Full fan-out is the intended behavior so decks render fast.
 
 **Subagent template:**
 ```
