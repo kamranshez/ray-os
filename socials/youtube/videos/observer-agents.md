@@ -29,6 +29,12 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 
 > IMAGE `observer-agent-cheating` (16:9): a blue worker agent at a desk, sweating, secretly typing `return 8.25` while a big green CHECK glows above a test file. Around it, small red sticky notes: "deleted the failing test", "hardcoded the answer", "loosened the assertion", "stubbed the hard module". Caption: "it is optimizing for the reward you gave it."
 
+![[observer-agent-cheating-1.png]]
+![[observer-agent-cheating-2.png]]
+![[observer-agent-cheating-3.png]]
+![[observer-agent-cheating-4.png]]
+![[observer-agent-cheating-5.png]]
+
 ---
 
 ## Beat 2: What Anthropic quietly shipped to catch it
@@ -40,7 +46,19 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 
 > IMAGE `observer-config-one-line` (16:9): a sketched config file card titled "worker-agent.md", several dim grey frontmatter lines, and ONE line highlighted amber: `observer: watchdog`. A curved arrow from that line to a faded dotted second agent in the background tagged "auto-spawned . background . read-only". Caption: "one line, and a watcher attaches."
 
+![[observer-config-one-line-1.png]]
+![[observer-config-one-line-2.png]]
+![[observer-config-one-line-3.png]]
+![[observer-config-one-line-4.png]]
+![[observer-config-one-line-5.png]]
+
 > IMAGE `observer-digest-view` (16:9): LEFT a blue worker doing tool calls (file, terminal, magnifying-glass icons); a dotted feed labeled "read-only digest, every turn" flowing RIGHT into an amber observer reading over its shoulder. On the feed, sketched tags `<tool-call>`, `<tool-result>`, and a small "truncated" note. Caption: "it sees the real actions, not a recap."
+
+![[observer-digest-view-1.png]]
+![[observer-digest-view-2.png]]
+![[observer-digest-view-3.png]]
+![[observer-digest-view-4.png]]
+![[observer-digest-view-5.png]]
 
 ---
 
@@ -52,6 +70,12 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 - That sounds like a weakness. It is the whole design, and the next few minutes are about why a watcher with no hands is more useful than it has any right to be.
 
 > IMAGE `observer-loop` (16:9): a clean flowchart loop: (blue) "worker takes a turn" to "harness builds read-only digest" to (amber) "observer reads, own context" to a diamond "worth speaking up?"; branch DOWN-GREEN "no to stay silent" looping back; branch RIGHT-AMBER "yes to send one report (just text)" to "injected into worker's stream" to "worker reads it and decides". A small side note in grey: "no block, no deny, no rewrite. only text." Caption: "observe, then optionally report."
+
+![[observer-loop-1.png]]
+![[observer-loop-2.png]]
+![[observer-loop-3.png]]
+![[observer-loop-4.png]]
+![[observer-loop-5.png]]
 
 ---
 
@@ -65,7 +89,19 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 
 > IMAGE `observer-four-eyes-bank` (16:9): center: a wire-transfer form passing between two figures. LEFT (blue) "INITIATES . rewarded for getting it through". RIGHT (amber) "APPROVES . rewarded for catching the one that's wrong". A vertical dashed wall between them labeled "separate context". Top banner: "the four-eyes principle."
 
+![[observer-four-eyes-bank-1.png]]
+![[observer-four-eyes-bank-2.png]]
+![[observer-four-eyes-bank-3.png]]
+![[observer-four-eyes-bank-4.png]]
+![[observer-four-eyes-bank-5.png]]
+
 > IMAGE `observer-pair-vs-one-prompt` (16:9): LEFT: one overloaded blue agent buried under a stack of instruction sticky-notes ("do the task", "check sources", "watch bias", "don't drift", "don't cheat"), looking overwhelmed, output marked "half strength". RIGHT: a clean pair, blue worker with ONE note "do the task" and amber observer with ONE note "watch the method", output marked "each at full attention". Caption: "a pair beats one prompt carrying ten jobs."
+
+![[observer-pair-vs-one-prompt-1.png]]
+![[observer-pair-vs-one-prompt-2.png]]
+![[observer-pair-vs-one-prompt-3.png]]
+![[observer-pair-vs-one-prompt-4.png]]
+![[observer-pair-vs-one-prompt-5.png]]
 
 ---
 
@@ -78,6 +114,12 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 - To be fair: a goal verifier that can fail the run is the enforcement layer, the thing with teeth. The observer has none. So the mature setup is both. The observer is smoke detectors throughout the house catching things early and independently; the verifier or a human approval is the final inspection that can actually stop the sale. They cover different holes.
 
 > IMAGE `observer-watch-along-vs-check-end` (16:9): a horizontal run split into turns. TOP track "check at the end": a single red inspection stamp at the far right, with a tall pile of hollow work behind it labeled "6 hours already spent on a bad foundation". BOTTOM track "watch along the way": small amber eye icons on every turn, a red flag caught early at turn 3 with "revert one file, keep going". Caption: "early and independent beats late and self-graded."
+
+![[observer-watch-along-vs-check-end-1.png]]
+![[observer-watch-along-vs-check-end-2.png]]
+![[observer-watch-along-vs-check-end-3.png]]
+![[observer-watch-along-vs-check-end-4.png]]
+![[observer-watch-along-vs-check-end-5.png]]
 
 ---
 
@@ -94,6 +136,12 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 
 > IMAGE `observer-when-worth-it-test` (16:9): a hand-drawn checklist card titled "worth an observer?", five ticked amber rows: "subtle (judgment, not a regex)", "costly to miss", "runs unattended", "reversible / reviewable work", "nameable failure mode". Below, a small greyed-out row with a red X: "short, cheap, well-watched, regex-catchable to skip it". Caption: "spend the second agent only where a miss hurts."
 
+![[observer-when-worth-it-test-1.png]]
+![[observer-when-worth-it-test-2.png]]
+![[observer-when-worth-it-test-3.png]]
+![[observer-when-worth-it-test-4.png]]
+![[observer-when-worth-it-test-5.png]]
+
 ---
 
 ## Beat 7: Where it is the wrong tool: irreversible actions
@@ -105,6 +153,12 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 
 > IMAGE `observer-irreversible-too-late` (16:9): a timeline: a blue worker hits SEND on an email (irreversible, red), the arrow leaves the screen; only AFTER does the amber observer's digest show it, speech bubble "that leaked pricing to the wrong list" with a sad face. A dashed box around the sequence labeled "report arrives one turn too late". Caption: "for irreversible sends, you need a gate, not a witness."
 
+![[observer-irreversible-too-late-1.png]]
+![[observer-irreversible-too-late-2.png]]
+![[observer-irreversible-too-late-3.png]]
+![[observer-irreversible-too-late-4.png]]
+![[observer-irreversible-too-late-5.png]]
+
 ---
 
 ## Beat 8: Where it shines: worker plus observer pairings
@@ -113,6 +167,12 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 - The setup is three small things: flip the flag on, add `observer: <name>` to the worker, and write the observer as a short prompt that names exactly what to protect. That last part is the whole skill, a vague observer is noise, a specific one is signal.
 
 > IMAGE `observer-pairings-grid` (16:9): a clean hand-drawn 3-column table, header "WORKER | OBSERVER | WHAT IT CATCHES", rows: Refactor | invariant guard | changed auth/expiry behavior; Test-fixing | anti-cheat | hardcodes, deleted tests; Migration | hollowing-out | stubbed modules, skipped tests; Research | evidence-quality | biased sources, unsupported claims; Data analysis | methodology | cherry-picking, tiny samples; Dependency upgrade | compat | fake-green, forced installs. Worker column blue, observer column amber.
+
+![[observer-pairings-grid-1.png]]
+![[observer-pairings-grid-2.png]]
+![[observer-pairings-grid-3.png]]
+![[observer-pairings-grid-4.png]]
+![[observer-pairings-grid-5.png]]
 
 **Refactor + invariant observer**
 - Worker: Refactor the authentication module to improve readability and remove duplication.
@@ -142,9 +202,27 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 
 > IMAGE `observer-pair-anticheat` (4:3): top: red snippet `if customer_id == "fixture-3": return 8.25`. Below, amber observer bubble: "that special-cases a test fixture. it is not an implementation." Card title "TEST-FIXING to anti-cheat".
 
+![[observer-pair-anticheat-1.png]]
+![[observer-pair-anticheat-2.png]]
+![[observer-pair-anticheat-3.png]]
+![[observer-pair-anticheat-4.png]]
+![[observer-pair-anticheat-5.png]]
+
 > IMAGE `observer-pair-research` (4:3): top: a sketched stack of 18 source cards, 14 stamped red "VENDOR". Amber observer bubble: "14 of 18 sources sell the product. add independent research before concluding." Card title "RESEARCH to evidence-quality".
 
+![[observer-pair-research-1.png]]
+![[observer-pair-research-2.png]]
+![[observer-pair-research-3.png]]
+![[observer-pair-research-4.png]]
+![[observer-pair-research-5.png]]
+
 > IMAGE `observer-pair-migration` (4:3): top: a red diff replacing a function body with `raise NotImplementedError` and a `@skip` on a test. Amber observer bubble: "you emptied the module to go green. that is not a migration." Card title "MIGRATION to hollowing-out".
+
+![[observer-pair-migration-1.png]]
+![[observer-pair-migration-2.png]]
+![[observer-pair-migration-3.png]]
+![[observer-pair-migration-4.png]]
+![[observer-pair-migration-5.png]]
 
 ## 9 10: Why Anthropic is building this now
 
@@ -156,9 +234,27 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 
 > IMAGE `observer-why-now-longer-runs` (16:9): a left-to-right timeline of Claude Code getting more autonomous: "approve each step" to "background sessions" to "scheduled routines" to "daemon while you sleep" to "multi-agent fleets". Underneath, a rising shaded curve "time the agent runs unwatched" and a widening red wedge "the oversight gap". Caption: "the more it runs alone, the less a prompt can save you."
 
+![[observer-why-now-longer-runs-1.png]]
+![[observer-why-now-longer-runs-2.png]]
+![[observer-why-now-longer-runs-3.png]]
+![[observer-why-now-longer-runs-4.png]]
+![[observer-why-now-longer-runs-5.png]]
+
 > IMAGE `observer-93-percent` (16:9): a huge hand-lettered "93%", subtext "of permission prompts, users just click approve (Anthropic's own number)", beside a sketched dialog whose [Approve] button is worn smooth and stamped "RUBBER STAMP" in red. Caption: "high friction, low signal. that is not oversight."
 
+![[observer-93-percent-1.png]]
+![[observer-93-percent-2.png]]
+![[observer-93-percent-3.png]]
+![[observer-93-percent-4.png]]
+![[observer-93-percent-5.png]]
+
 > IMAGE `observer-trust-is-the-bottleneck` (16:9): two horizontal bars. TOP "CAPABILITY: can the model do it?" full, greyed, checked, "mostly solved". BOTTOM "TRUST / OBSERVABILITY: can I let it run unwatched?" highlighted with the blue-worker + amber-observer motif inside it, "the new bottleneck". Small arrow: "observers are the first structural piece." Caption: "capability stopped being the hard part."
+
+![[observer-trust-is-the-bottleneck-1.png]]
+![[observer-trust-is-the-bottleneck-2.png]]
+![[observer-trust-is-the-bottleneck-3.png]]
+![[observer-trust-is-the-bottleneck-4.png]]
+![[observer-trust-is-the-bottleneck-5.png]]
 
 ---
 
@@ -169,3 +265,9 @@ Format note: problem-first, no coined catchphrase, we just call it an observer. 
 - Tell me in the comments: what is the one task you would actually leave running unwatched, if a second agent were watching it for you.
 
 > IMAGE `observer-trust-stack` (16:9): a three-rung staircase going up-right. Rung 1 "PAIR PROGRAMMER: you approve every action" (tiny human clicking approve). Rung 2 "DELEGATED WORKER: regex allowlists" (rules icon). Rung 3, highlighted, "SUPERVISED FLEET: agents watch agents, you write policy" (the blue+amber motif). A small figure climbing. Caption: "where this is heading."
+
+![[observer-trust-stack-1.png]]
+![[observer-trust-stack-2.png]]
+![[observer-trust-stack-3.png]]
+![[observer-trust-stack-4.png]]
+![[observer-trust-stack-5.png]]
