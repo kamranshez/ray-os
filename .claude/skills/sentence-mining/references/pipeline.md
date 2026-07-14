@@ -88,16 +88,22 @@ loud `⚠ <word> — ai_instructions: …` to stderr and attach it to every entr
 
 | Ray wrote                              | Do this                                                                 |
 |----------------------------------------|-------------------------------------------------------------------------|
-| "I already know this word"             | Don't fix it — move the entry into `misses` so it gets retired (`not-worth-learning` + suspend + clear flag) |
 | "sentence is too long" / "shorter one" | Pick a shorter `runner_ups[]` candidate instead of the top pick          |
 | "wrong reading" / "wrong sense"        | Re-check the candidate uses the **card's** reading; drop wrong-reading hits |
-| "this is a name, not a word"           | Retire it (same as "already know")                                       |
-| "explanation is confusing"             | Rewrite the explanation; keep the sentence                              |
+| "explanation is confusing" / "too hard" | Rewrite the explanation and re-render its audio; keep the sentence      |
+| "the audio sounds like something else" | The explanation-audio filename collided. Re-render it keyed on the note ID |
+| "I already know this word"             | Believe him — but **defer, don't destroy**. Move the card to the deferred deck. Nothing here suspends or tags `not-worth-learning` (see [§ROUTE](#6--route)) |
 
 **Clear the field once you've honored it** (`updateNoteFields` → `ai_instructions: ""`) so
 a one-shot instruction doesn't re-fire forever. Leave it only if it reads as a *standing*
 preference ("always keep sentences under 20 chars for this card"). If an instruction is
 ambiguous, don't guess — leave the card untouched, leave the field alone, tell Ray what it said.
+
+> **The field is only read by the mode that's running.** `replace_search.py` sees only *flagged*
+> cards; `audiobook_scan.py` sees only the audiobook batch. A note left on a plain video- or
+> bank-mode card is read by neither. **[Instructions mode](instructions-mode.md) is the sweep
+> that catches all of them** — it selects on the field itself, and it is the only thing that
+> clears it. Run it when Ray mentions notes on cards, and offer it whenever the scan is cheap.
 
 ### 2b — Drop what isn't worth a card
 
@@ -289,7 +295,8 @@ without adding study value. The full data still lives in the draft JSON for debu
 | Mode              | Gate                        | Why |
 |-------------------|-----------------------------|-----|
 | video, bank       | **none** — push immediately | New cards are additive. Anki's own review queue is the real gate: bad cards get suspended or deleted there. Ray confirmed in June 2026 that asking "say push to commit" was pure friction. |
-| audiobook         | **none** — apply immediately | Nothing here is destructive: retire is tag+suspend, a deck move is a deck move. (Ray, July 2026.) |
+| audiobook         | **none** — apply immediately | Nothing here is destructive. It never suspends; the worst it does is move a deck, and a deck move is one click to undo. (Ray, July 2026.) |
+| instructions      | **none** — apply immediately | Ray *asked* for the change, in writing, on the card. But if the note asks for a new **sentence**, that's a replace-mode job and takes replace mode's gate. |
 | **replace**       | **ALWAYS, every run**       | It **overwrites cards Ray has already studied.** Show the old→new table (`replace_apply.py --dry-run`) and wait for explicit confirmation. No exceptions. |
 
 Skip auto-push only if Ray explicitly said "draft only" / "don't push" / "let me review first"

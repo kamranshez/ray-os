@@ -1,35 +1,38 @@
 ---
 name: sentence-mining
-description: Build and maintain Japanese sentence-mining cards for Anki, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. Four modes, and the skill ASKS which one you want on every launch. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + SudachiPy + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → find the best example sentence for each through one canonical cascade (Immersion Kit → Nadeshiko → sentencesearch → kotu → your locally-indexed subs2srs .apkg banks), re-ranked by your own i+1, with native audio and a screenshot where the source ships one. (3) Replace mode — fix existing cards whose example sentence is bad (too short, a fragment, incomprehensible): pull a better sentence through the same cascade, edit the card in place (archiving the old sentence to a previous_versions field), and rehabilitate the card so you re-learn it fresh. (4) Audiobook mode — adopt cards that an EXTERNAL audiobook miner (audiobook-viewer, tag:audiobook) pushed into Anki half-built: rewrite their explanations in house style so they lead with the word, generate the missing explanation TTS, strip the tool's leftover English `definition`/frequency fields, fix blank picture fields that make cards double-play audio on mobile, and auto-route every card by your i+1 diff — already-known words get retired, and sentences above i+1 are RESCUED with an easier sentence from the cascade rather than dumped in the deferred deck. All modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL, (b) a list of Japanese words, (c) a request to improve/replace sentences on existing cards, or (d) any mention of audiobook cards needing explanations, audio, or cleanup. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "replace the sentence for <word>", "find a better sentence for X", "fix my flag:1 cards", "these sentences are too short/confusing", "write better explanations for my audiobook cards", "generate the audio for those explanations", "the cards I made audiobook mining", "clean up my audiobook cards", "this card is too hard, defer it", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
+description: Build and maintain Japanese sentence-mining cards for Anki, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. Five modes, and the skill ASKS which one you want on every launch. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + SudachiPy + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → find the best example sentence for each through one canonical cascade (Immersion Kit → Nadeshiko → sentencesearch → kotu → your locally-indexed subs2srs .apkg banks), re-ranked by your own i+1, with native audio and a screenshot where the source ships one. (3) Replace mode — fix existing cards whose example sentence is bad (too short, a fragment, incomprehensible): pull a better sentence through the same cascade, edit the card in place (archiving the old sentence to a previous_versions field), and rehabilitate the card so you re-learn it fresh. (4) Audiobook mode — adopt cards that an EXTERNAL audiobook miner (audiobook-viewer, tag:audiobook) pushed into Anki half-built: rewrite their explanations in house style so they lead with the word, generate the missing explanation TTS, strip the tool's leftover English `definition`/frequency fields, fix blank picture fields that make cards double-play audio on mobile, and auto-route every card by your i+1 diff — a card whose sentence is above i+1 is RESCUED with an easier sentence from the cascade, and only falls back to the deferred deck if the cascade finds nothing. Nothing is ever suspended or retired. (5) Instructions mode — sweep the whole collection for cards where you typed a note into the `ai_instructions` field while reviewing ("the explanation is too hard", "the audio sounds wrong", "add a picture"), act on each one, and then CLEAR the field so it can't re-fire. All modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL, (b) a list of Japanese words, (c) a request to improve/replace sentences on existing cards, (d) any mention of audiobook cards needing explanations, audio, or cleanup, or (e) any mention of AI instructions / notes left on cards. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "replace the sentence for <word>", "find a better sentence for X", "fix my flag:1 cards", "these sentences are too short/confusing", "write better explanations for my audiobook cards", "generate the audio for those explanations", "the cards I made audiobook mining", "clean up my audiobook cards", "this card is too hard, defer it", "check my ai_instructions", "act on the notes I left on my cards", "what did I flag for you", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
 ---
 
 # Sentence Mining
 
-**There is one pipeline. The four modes are four entry points into it.**
+**There is one pipeline. The five modes are five entry points into it.**
 
 They differ at exactly two stages — where the sentence comes from (SOURCE) and whether the
 card is added or updated (WRITE). Everything else is shared, and all of it is written down
 once, in **[references/pipeline.md](references/pipeline.md)**.
 
 ```
-        video          bank          replace        audiobook
-    a URL or file   a word list   bad sentence   external tool's
-                                  on my card     half-built cards
-          │              │              │              │
-          ▼              ▼              ▼              ▼
-    ┌───────────────────────────────────────────────────────────┐
-    │  1 SOURCE   ◀── the modes differ here                      │
-    │  2 CURATE       ai_instructions, then drop the junk        │
-    │  3 EXPLAIN      house style — LEAD WITH THE WORD           │
-    │  4 MEDIA        clip + image + TTS, via store_media()      │
-    │  5 WRITE    ◀── the modes differ here (add vs update)      │
-    │  6 ROUTE        i+1 → main · i+2 → deferred · known → retire│
-    │  7 QUEUE        or it never surfaces                       │
-    └───────────────────────────────────────────────────────────┘
+     video         bank        replace      audiobook    instructions
+  a URL or file  a word list  bad sentence  external     a note Ray typed
+                              on my card    tool's cards  into a card
+        │             │            │             │             │
+        ▼             ▼            ▼             ▼             ▼
+    ┌────────────────────────────────────────────────────────────────┐
+    │  1 SOURCE   ◀── the modes differ here                           │
+    │  2 CURATE       ai_instructions first, then drop the junk       │
+    │  3 EXPLAIN      house style — LEAD WITH THE WORD                │
+    │  4 MEDIA        clip + image + TTS, via store_media()           │
+    │  5 WRITE    ◀── the modes differ here (add vs update)           │
+    │  6 ROUTE        i+1 → main · above i+1 → rescue, else deferred  │
+    │  7 QUEUE        or it never surfaces                            │
+    └────────────────────────────────────────────────────────────────┘
                               │
                               ▼
                             Anki
 ```
+
+**Nothing in this skill suspends a card or tags it `not-worth-learning`.** The known-word diff
+decides *sequencing* (see it later), never *worth* — see [pipeline.md §ROUTE](references/pipeline.md#6--route).
 
 **Read [pipeline.md](references/pipeline.md) once you know the mode.** Then read that mode's
 reference, which is short and covers only its SOURCE/WRITE deltas and its own gotchas. If you
@@ -53,7 +56,12 @@ in one breath ("audiobook mode on the ryu cards"), that IS his answer — skip t
 | bank      | a list of words                | cascade → **new** cards                          | [bank-mode.md](references/bank-mode.md) |
 | replace   | `flag:1` / "find a better sentence" | swap in a better sentence, **in place**     | [replace-mode.md](references/replace-mode.md) |
 | audiobook | cards tagged `audiobook`       | bring an external tool's cards up to house standard | [audiobook-mode.md](references/audiobook-mode.md) |
+| instructions | a note Ray typed into `ai_instructions` | do what the note says, **then clear it**  | [instructions-mode.md](references/instructions-mode.md) |
 | setup     | first run / no `config.json`   | write the per-user config                        | [setup.md](references/setup.md) |
+
+**Offer instructions mode whenever there are outstanding notes**, even if Ray launched the
+skill for something else. It's one cheap query — `python3 scripts/instructions_scan.py` — and
+an unread instruction is Ray having typed something to you that nobody ever read.
 
 ### Telling the modes apart
 
@@ -72,6 +80,13 @@ forgetting 同期" with no card → bank. "The sentence on my 同期 card is a f
   picture, leftover English fields, and nothing ever checked it against Ray's known words. The
   fix is normalization + i+1 routing. Cards whose sentences turn out to be too hard get an
   easier one from the cascade — the same SOURCE stage, not a call into another mode.
+
+**Instructions vs everything else.** The other four modes are *you* deciding what's wrong with
+a card. Instructions mode is *Ray* telling you, in his own words, in the card itself. It's
+selected by the field, not by the defect — so it cuts across all the others: an
+`ai_instruction` can turn out to need a replace-mode sentence swap, an audiobook-style field
+fix, or just a re-render of the explanation audio. Read the note, then use whichever tool it
+calls for. What makes it a *mode* rather than a step is that nothing else sweeps for the field.
 
 ## Before anything else
 
@@ -138,7 +153,8 @@ tokenizer the miner uses. See [known-words.md](references/known-words.md).
 | `analyze.py`             | 1 SOURCE     | *video* — SudachiPy tokenize + known-word diff (cached) + JPDB rank |
 | `find_sentences.py`      | 1 SOURCE     | *bank* — word list → cascade → new-card candidates (dedupes vs existing + known words) |
 | `replace_search.py`      | 1 SOURCE     | *replace* — resolve target cards (flag / note-ids / words) → cascade → replace-draft |
-| `audiobook_scan.py`      | 1 SOURCE     | *audiobook* — `--groups` buckets cards by book; `--query` diffs each card against the house standard + the i+1 set → draft with `defects[]` and a `main`/`rescue`/`retire` route |
+| `audiobook_scan.py`      | 1 SOURCE     | *audiobook* — `--groups` buckets cards by book; `--query` diffs each card against the house standard + the i+1 set → draft with `defects[]` and a `main`/`rescue`/`deferred` route |
+| `instructions_scan.py`   | 1 SOURCE     | *instructions* — sweep the whole note type for a non-empty `ai_instructions` → draft with Ray's note + `facts[]` (a second opinion on it). The only thing that finds a note on an unflagged card |
 | `extract_bank.py`        | 1 SOURCE     | one-time — parse `.apkg` → local index JSON + media dir (feeds cascade tier 5) |
 | `search_banks.py`        | 1 SOURCE     | cascade **tier 5** only — within-bank ranking. *Not an entry point any more; reached through `_sources.py`.* |
 | `generate_media.py`      | 4 MEDIA      | *video* — ffmpeg clip + screenshot + Gemini TTS (3 parallel); pushes each card inline as it finishes (`--no-push` = draft only) |
@@ -146,6 +162,7 @@ tokenizer the miner uses. See [known-words.md](references/known-words.md).
 | `push.py`                | 5 WRITE      | AnkiConnect `addNotes` onto `config.note_type` via `config.field_map` |
 | `replace_apply.py`       | 4–6          | *replace* — stage media + TTS, archive the old sentence, overwrite fields, retag, rehabilitate, retire misses. `--dry-run` for the mandatory gate; `--rehab-flag N` to rehabilitate a batch with no field changes |
 | `audiobook_apply.py`     | 4–6          | *audiobook* — TTS the explanation, overwrite, clear the tool's foreign fields, `。` a blank picture, retag, route. `--dry-run`, `--only <ids>` |
+| `instructions_apply.py`  | 4–6          | *instructions* — `retts` / `fields` / `route` / `none` per card, **then clear `ai_instructions`** so it can't re-fire. Keeps standing preferences. `--dry-run`, `--only`, `--clear-anyway` |
 | `queue_cards.py`         | 7 QUEUE      | make finished cards actually appear. `--due-now` (default choice) or `--raise-limit N`. Main deck only — refuses to queue deferred cards |
 | `audit_media.py`         | maintenance  | scan collection.media for extension/content mismatches; `--fix` corrects + updates every referencing note |
 
