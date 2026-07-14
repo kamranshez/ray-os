@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACS Revenue — Where the Next Unit of Effort Goes</title>
+<style>
+  :root {
+    --bg: #0b0e13; --panel: #121722; --panel-2: #171d2a; --panel-3: #1c2333;
+    --border: rgba(255,255,255,0.09); --border-strong: rgba(255,255,255,0.2);
+    --text: #e8eaf0; --text-2: #a9b0bf; --muted: #6d7484;
+    --accent: #4da3ff; --gold: #e8b64c; --green: #4ec98a; --red: #e06a5e;
+    --purple: #a98bf5; --cyan: #4ecfd0; --orange: #f0913e;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px 100px; }
+
+  /* header */
+  header { padding: 56px 0 30px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+  .kicker { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 12px; font-weight: 600; }
+  h1 { font-size: 34px; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.15; }
+  .standfirst { color: var(--text-2); font-size: 16.5px; max-width: 74ch; }
+  .standfirst b { color: var(--text); font-weight: 600; }
+  .runmeta { margin-top: 18px; color: var(--muted); font-size: 12.5px; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  .runmeta code { background: var(--panel); padding: 1.5px 6px; border-radius: 4px; border: 1px solid var(--border); color: var(--text-2); }
+
+  /* nav */
+  nav { position: sticky; top: 0; background: rgba(11,14,19,0.92); backdrop-filter: blur(10px); z-index: 20; border-bottom: 1px solid var(--border); margin-bottom: 34px; }
+  nav .inner { max-width: 1080px; margin: 0 auto; padding: 11px 24px; display: flex; gap: 20px; flex-wrap: wrap; }
+  nav a { color: var(--text-2); text-decoration: none; font-size: 13px; padding: 3px 0; border-bottom: 2px solid transparent; }
+  nav a:hover { color: var(--text); border-bottom-color: var(--accent); }
+
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 54px 0 6px; font-weight: 650; }
+  h2 + .sectionsub { color: var(--text-2); font-size: 15px; margin: 0 0 20px; max-width: 78ch; }
+
+  /* the week */
+  .week { display: grid; gap: 12px; }
+  .act { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; display: grid; grid-template-columns: 46px 1fr auto; gap: 18px; align-items: start; }
+  .act.top { border-color: rgba(78,201,138,0.45); background: linear-gradient(180deg, rgba(78,201,138,0.06), transparent 60%), var(--panel); }
+  .act .n { font-size: 22px; font-weight: 750; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.3; }
+  .act.top .n { color: var(--green); }
+  .act h3 { margin: 0 0 5px; font-size: 17px; letter-spacing: -0.01em; }
+  .act p { margin: 0; color: var(--text-2); font-size: 14px; }
+  .act .why { color: var(--muted); font-size: 12.5px; margin-top: 7px; }
+  .act .size { text-align: right; white-space: nowrap; }
+  .act .size .v { font-size: 16px; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
+  .act .size .l { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .act .size .v.free { color: var(--cyan); }
+  .act .size .v.na { color: var(--muted); }
+
+  /* corrections */
+  .corr { background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: 0 10px 10px 0; padding: 15px 18px; margin-bottom: 11px; }
+  .corr .believed { color: var(--muted); font-size: 13px; text-decoration: line-through; text-decoration-color: rgba(224,106,94,0.6); margin-bottom: 6px; }
+  .corr .truth { font-size: 14.5px; }
+  .corr .truth b { color: var(--red); }
+  .corr .impact { color: var(--text-2); font-size: 13px; margin-top: 7px; }
+
+  /* stat strip */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 11px; margin: 22px 0 8px; }
+  .stat { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .stat .v { font-size: 23px; font-weight: 750; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 11.5px; color: var(--muted); margin-top: 3px; line-height: 1.35; }
+  .stat.g .v { color: var(--green); } .stat.r .v { color: var(--red); }
+  .stat.a .v { color: var(--accent); } .stat.o .v { color: var(--orange); }
+  .stat.p .v { color: var(--purple); } .stat.c .v { color: var(--cyan); }
+
+  /* questions */
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .filters button { background: var(--panel); border: 1px solid var(--border); color: var(--text-2); font: inherit; font-size: 12.5px; padding: 5px 13px; border-radius: 20px; cursor: pointer; transition: all .12s; }
+  .filters button:hover { border-color: var(--border-strong); color: var(--text); }
+  .filters button.on { background: var(--accent); border-color: var(--accent); color: #08111c; font-weight: 600; }
+
+  .q { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; transition: border-color .15s; }
+  .q:hover { border-color: var(--border-strong); }
+  .q.open { border-color: var(--accent); }
+  .qhead { padding: 15px 18px; cursor: pointer; display: grid; grid-template-columns: 40px 1fr auto; gap: 14px; align-items: center; }
+  .qhead:hover { background: var(--panel-2); }
+  .qid { font-size: 12px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .qtitle { font-size: 14.5px; }
+  .qtitle .lead { color: var(--text); }
+  .badges { display: flex; gap: 6px; align-items: center; }
+  .badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 20px; font-weight: 650; white-space: nowrap; }
+  .b-broke { background: rgba(224,106,94,0.16); color: var(--red); border: 1px solid rgba(224,106,94,0.35); }
+  .b-surprise { background: rgba(232,182,76,0.14); color: var(--gold); border: 1px solid rgba(232,182,76,0.32); }
+  .b-confirm { background: rgba(78,201,138,0.13); color: var(--green); border: 1px solid rgba(78,201,138,0.3); }
+  .chev { color: var(--muted); font-size: 12px; transition: transform .18s; }
+  .q.open .chev { transform: rotate(90deg); }
+
+  .qbody { display: none; padding: 4px 18px 20px; border-top: 1px solid var(--border); }
+  .q.open .qbody { display: block; }
+  .row { margin-top: 15px; }
+  .row .lbl { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 5px; font-weight: 650; }
+  .row .val { font-size: 14px; color: var(--text-2); }
+  .row .val b { color: var(--text); }
+  .fork { background: var(--panel-2); border-radius: 8px; padding: 11px 13px; font-size: 13.5px; color: var(--text-2); border-left: 3px solid var(--border-strong); }
+  .verdict { background: rgba(78,201,138,0.07); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 11px 13px; font-size: 14px; }
+  .verdict b { color: var(--green); }
+  .prior { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .prior .box { background: var(--panel-2); border-radius: 8px; padding: 10px 12px; }
+  .prior .box .h { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+  .prior .box .t { font-size: 13px; color: var(--text-2); }
+  .prior .box.actual { border: 1px solid rgba(232,182,76,0.3); }
+  .prior .box.actual .h { color: var(--gold); }
+  .prior .box.actual .t { color: var(--text); }
+  .nums { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .num { background: var(--panel-3); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 12.5px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .num b { color: var(--text); }
+  .caveat { font-size: 12.5px; color: var(--muted); margin-top: 4px; padding-left: 14px; position: relative; }
+  .caveat::before { content: "▸"; position: absolute; left: 0; color: var(--orange); }
+
+  /* bars */
+  .bars { margin-top: 6px; }
+  .bar { display: grid; grid-template-columns: 190px 1fr 78px; gap: 12px; align-items: center; margin-bottom: 7px; font-size: 13px; }
+  .bar .nm { color: var(--text-2); }
+  .bar .track { background: var(--panel-3); border-radius: 4px; height: 22px; overflow: hidden; }
+  .bar .fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; color: #08111c; font-weight: 650; }
+  .bar .amt { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); font-weight: 600; }
+
+  /* misc */
+  .cards2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 12px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 17px 19px; }
+  .card h4 { margin: 0 0 8px; font-size: 15px; }
+  .card p { margin: 0; color: var(--text-2); font-size: 13.5px; }
+  .card.warn { border-left: 3px solid var(--orange); border-radius: 0 12px 12px 0; }
+  .card.bug { border-left: 3px solid var(--red); border-radius: 0 12px 12px 0; }
+  .card.win { border-left: 3px solid var(--green); border-radius: 0 12px 12px 0; }
+
+  .conv { display: grid; grid-template-columns: 74px 1fr; gap: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 9px; }
+  .conv .score { text-align: center; }
+  .conv .score .big { font-size: 18px; font-weight: 750; color: var(--green); }
+  .conv .score .lbl { font-size: 9.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .conv .t { font-size: 14px; }
+  .conv .t .d { color: var(--text-2); }
+
+  .method { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; }
+  .method ol { margin: 0; padding-left: 20px; color: var(--text-2); font-size: 14px; }
+  .method li { margin-bottom: 9px; }
+  .method li b { color: var(--text); }
+  .openq { color: var(--text-2); font-size: 14px; padding-left: 16px; position: relative; margin-bottom: 8px; }
+  .openq::before { content: "?"; position: absolute; left: 0; color: var(--purple); font-weight: 700; }
+  footer { margin-top: 60px; padding-top: 22px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<nav><div class="inner">
+  <a href="#week">The week</a>
+  <a href="#broke">What broke</a>
+  <a href="#questions">The 11 questions</a>
+  <a href="#crosscut">Cross-cutting</a>
+  <a href="#sketch">Sketch round</a>
+  <a href="#method">Method</a>
+  <a href="#open">Still open</a>
+</div></nav>
+
+<div class="wrap">
+<header>
+  <div class="kicker">Decision report · Agentic Coding School</div>
+  <h1>Where does the next unit of effort go?</h1>
+  <div class="standfirst">Five blinded builders sketched competing decision surfaces from the raw data. Then a questioner asked the questions nobody had thought to ask, and four answerers went and got the numbers. <b>The answers re-ranked the plan and killed two assumptions the whole analysis had been resting on.</b> This is what survived.</div>
+  <div class="runmeta">
+    <span>2026-07-13</span>
+    <span>Sources: <code>PostHog</code> <code>VidTempla</code> <code>Bento</code> <code>ACS platform</code></span>
+    <span>11 questions · 4 answerers · ~650 comments read · 15 launches measured</span>
+  </div>
+</header>
+
+<h2 id="week">The re-ranked week</h2>
+<p class="sectionsub">Before the question round, the plan was "build checkout-recovery emails." That lever is real but roughly six times smaller than it looked, and something cheaper now outranks it.</p>
+<div class="week">
+  <div class="act top">
+    <div class="n">1</div>
+    <div>
+      <h3>Open checkout on your phone</h3>
+      <p>Mobile converts checkout sessions at <b>5.3%</b> against desktop's <b>13.8%</b>. Mobile users clear the button-to-session step <i>better</i> than desktop (75% vs 69%) and then collapse on the Stripe payment page — more intent, dying at payment.</p>
+      <div class="why">Start by checking Apple Pay / wallet support and rendering. A bounded engineering fix, not a new content system. (n=24 mobile purchases — direction solid, magnitude fuzzy.)</div>
+    </div>
+    <div class="size"><div class="v">~$9k</div><div class="l">per 60d</div></div>
+  </div>
+  <div class="act">
+    <div class="n">2</div>
+    <div>
+      <h3>Capture email earlier in checkout</h3>
+      <p>Only <b>240 of 1,517</b> abandoners (16%) ever left an email address. The other 1,277 are unreachable by any campaign, ever. This is the constraint that caps the recovery lever — and it is upstream of it.</p>
+      <div class="why">Every hour spent on recovery-email copy before this ships is capped at 16% of the audience.</div>
+    </div>
+    <div class="size"><div class="v free">unlocks #3</div><div class="l">prerequisite</div></div>
+  </div>
+  <div class="act">
+    <div class="n">3</div>
+    <div>
+      <h3>Author the recovery sequence</h3>
+      <p>Abandoners genuinely never come back: organic recovery is <b>0.6%</b>, not the feared 25-35%. So the emails are worth sending — and the plumbing already exists. Bento has been tagging <code>acs_expired_checkout</code> since February; nothing consumes it.</p>
+      <div class="why">Build, not fix — but it's a sequence off an existing tag, not an integration project.</div>
+    </div>
+    <div class="size"><div class="v">$3-8k</div><div class="l">per 60d</div></div>
+  </div>
+  <div class="act">
+    <div class="n">4</div>
+    <div>
+      <h3>Mail the list more than 2.5 times a month</h3>
+      <p>Email buyers pay <b>$341</b> on average — the highest AOV of any channel, 55% above YouTube's $220. That comes from a 3,843-person list at ~55% open rates, mailed twice a month, with zero conversion or recovery emails in existence.</p>
+      <div class="why">The subscriber conversion multiple is only 1.67x, but the case rests on AOV and under-mailing, not on the multiple.</div>
+    </div>
+    <div class="size"><div class="v">$341</div><div class="l">AOV, best channel</div></div>
+  </div>
+  <div class="act top">
+    <div class="n">5</div>
+    <div>
+      <h3>Film Ultraplan vs Superpowers</h3>
+      <p>Seven distinct commenters asked for this head-to-head on one video, and <b>you already promised it on camera</b> — <i>"A lot of folks have been asking this so I'll do a little investigation in the morning tomorrow."</i> It's a comparison/workflow piece, which is the format that earns 4.3x news per 1k views, and it sits inside the topic cluster that drives 65% of video revenue.</p>
+      <div class="why">The topic was chosen for you by the audience. Production cost is low — you already hold the opinion.</div>
+    </div>
+    <div class="size"><div class="v">chosen</div><div class="l">next video</div></div>
+  </div>
+  <div class="act">
+    <div class="n">6</div>
+    <div>
+      <h3>Fix the identity-stitching bug</h3>
+      <p>Server-side purchase events aren't stitched to the anonymous browsing person. One defect explains three separate symptoms: 86% of purchases missing <code>utm_source</code>, 39% of buyers with no client history, and the fog around recovery sizing.</p>
+      <div class="why">Not revenue this week — but every attribution number in this report gets sharper the day it lands.</div>
+    </div>
+    <div class="size"><div class="v na">upstream</div><div class="l">of everything</div></div>
+  </div>
+</div>
+
+<h2 id="broke">What broke</h2>
+<p class="sectionsub">Three things the analysis had been treating as established. The question round went and checked them.</p>
+
+<div class="corr">
+  <div class="believed">"Four classes are built but unreleased: codex, context-engineering, prompt-engineering, for-business."</div>
+  <div class="truth"><b>All four are shipped.</b> Codex has <b>47 videos</b> and was updated on 2026-07-12. Prompt-engineering has 13, context-engineering 11, for-business 7. Paying members describe watching them.</div>
+  <div class="impact">This "verified ground truth" was inferred from the classes' absence from traffic — but absence of traffic is a <b>discovery problem, not a shipping problem</b>. There are 78 videos of built product that nobody can find. That reframes an entire branch of the plan.</div>
+</div>
+
+<div class="corr">
+  <div class="believed">"The recovery-email lever is worth $13-27k per 60 days."</div>
+  <div class="truth"><b>It's worth roughly $3-8k.</b> The estimate assumed all 1,510 abandoners were reachable. Only 240 of them left an email address.</div>
+  <div class="impact">The lever survives — abandoners really don't come back on their own (0.6% organic recovery) — but it drops below the mobile-checkout fix, and its own prerequisite is capturing email earlier.</div>
+</div>
+
+<div class="corr">
+  <div class="believed">"<code>refund_processed</code> carries no amount, so refunds can't be netted out."</div>
+  <div class="truth"><b>The property is <code>amountRefunded</code></b>, populated on 35 of 35 events. The pack looked for <code>amount</code>. Refunds are computable: <b>2.46%</b> by count, <b>4.37%</b> by USD ($7,277 over 180d).</div>
+  <div class="impact">Refunds are half what was feared and are simply not a problem for this business — but no revenue figure in the earlier analysis nets them out.</div>
+</div>
+
+<h2>The shape of the business, in six numbers</h2>
+<div class="stats">
+  <div class="stat r"><div class="v">75-80%</div><div class="l">collapse in between-launch baseline revenue (~$2-3.9k/day → ~$400-800/day)</div></div>
+  <div class="stat g"><div class="v">5.82x</div><div class="l">lift on the newest launch — the strongest ever measured</div></div>
+  <div class="stat o"><div class="v">~4 min</div><div class="l">median time from first touch to purchase. This is an impulse business</div></div>
+  <div class="stat a"><div class="v">65%</div><div class="l">of video revenue from 5 videos, all teaching a durable operating method</div></div>
+  <div class="stat p"><div class="v">−0.65</div><div class="l">correlation between views and revenue per 1k views. Views are not the goal</div></div>
+  <div class="stat c"><div class="v">86%</div><div class="l">of purchases carry no utm_source. Every attribution number is a floor</div></div>
+</div>
+
+<h2 id="questions">The eleven questions</h2>
+<p class="sectionsub">Each was written with a fork attached — "if X, do A; if Y, do B" — and a prior guess, so that surprise could be measured rather than claimed. Click any question to open it.</p>
+
+<div class="filters">
+  <button class="on" data-f="all">All 11</button>
+  <button data-f="broke">Broke an assumption (4)</button>
+  <button data-f="surprise">Surprised the prior (10)</button>
+  <button data-f="confirm">Confirmed a prior (3)</button>
+</div>
+
+<div id="qlist">
+
+<div class="q" data-tags="broke surprise">
+  <div class="qhead">
+    <div class="qid">Q1</div>
+    <div class="qtitle"><span class="lead">Do abandoners just buy anyway?</span> <span style="color:var(--muted)">— the question that could have killed the plan</span></div>
+    <div class="badges"><span class="badge b-broke">re-sized the lever</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If organic recovery is under 15%, recovery emails hold as the big lever. If it's over 35%, the emails mostly cannibalize sales that close anyway — redirect the effort entirely.</div></div>
+    <div class="row"><div class="lbl">Prior vs actual</div><div class="prior">
+      <div class="box"><div class="h">Prior guess</div><div class="t">~900 unique people behind the events; ~25% eventually purchase organically</div></div>
+      <div class="box actual"><div class="h">Actual</div><div class="t">1,517 unique people (so events ≈ people); <b>0.6%</b> organic recovery. Abandoners are far <i>deader</i> than assumed.</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">The plan survives — but a constraint nobody had priced changes its size. <b>Only 240 of 1,517 abandoners (16%) left an email address at all.</b> The other 1,277 cannot be reached by any campaign, ever. The $13-27k estimate was built on the full population; the reachable pool is worth ~$3-8k per 60 days.</div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict"><b>Build the recovery sequence</b> — but the highest-leverage move inside this lever is capturing email <i>earlier in checkout</i>, not writing better copy.</div></div>
+    <div class="row"><div class="lbl">Numbers</div><div class="nums">
+      <span class="num">abandon events <b>1,621</b></span><span class="num">unique persons <b>1,517</b></span><span class="num">retry multiplicity <b>1.07×</b></span><span class="num">organic recovery <b>0.6%</b></span><span class="num">reachable by email <b>240</b></span><span class="num">unreachable <b>1,277</b></span>
+    </div></div>
+  </div>
+</div>
+
+<div class="q" data-tags="broke surprise">
+  <div class="qhead">
+    <div class="qid">Q8</div>
+    <div class="qtitle"><span class="lead">Is mobile checkout worse than desktop?</span> <span style="color:var(--muted)">— the cheapest lever on the board</span></div>
+    <div class="badges"><span class="badge b-broke">new #1 priority</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If mobile completes much worse and is a big traffic share, fix mobile checkout <i>before</i> recovery emails. If completion is device-flat, the leak is offer/trust, not UX.</div></div>
+    <div class="row"><div class="lbl">Prior vs actual</div><div class="prior">
+      <div class="box"><div class="h">Prior guess</div><div class="t">Mobile ~40% below desktop, and the majority of YouTube sessions</div></div>
+      <div class="box actual"><div class="h">Actual</div><div class="t">Mobile is <b>62% worse</b> — but it is <i>not</i> the YouTube majority. 79% of YouTube traffic is desktop.</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">The diagnostic is unusually clean. Mobile clears purchase-button → checkout-session <b>better</b> than desktop (75% vs 69%), then collapses at the payment step. Mobile users show <i>more</i> intent and die on the Stripe-hosted payment page.</div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict"><b>Fix mobile checkout first</b> — ~$9k/60d, ahead of the re-sized recovery lever, and a bounded engineering fix rather than a new content system. Cheapest first step: open checkout on a phone and look at Apple Pay / wallet support.</div></div>
+    <div class="row"><div class="lbl">Numbers</div><div class="nums">
+      <span class="num">mobile conv <b>5.3%</b></span><span class="num">desktop conv <b>13.8%</b></span><span class="num">mobile share of funnel <b>25%</b></span><span class="num">mobile share of YouTube <b>18%</b></span>
+    </div></div>
+    <div class="row"><div class="lbl">Caveats</div>
+      <div class="caveat">n=24 mobile purchases — direction is solid, magnitude is fuzzy.</div>
+      <div class="caveat">Bot-exclusion cross-check could not be run: <code>$virt_is_bot</code> isn't populated in this project. Reported as absent, not passed.</div>
+    </div>
+  </div>
+</div>
+
+<div class="q" data-tags="broke surprise">
+  <div class="qhead">
+    <div class="qid">Q7</div>
+    <div class="qtitle"><span class="lead">Which unreleased class do the comments want?</span> <span style="color:var(--muted)">— the question with a false premise</span></div>
+    <div class="badges"><span class="badge b-broke">premise was wrong</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If one class shows clear repeated demand, the next video teases or launches it. If demand is diffuse, make a standalone workflow video and don't gate the week on a class.</div></div>
+    <div class="row"><div class="lbl">Prior vs actual</div><div class="prior">
+      <div class="box"><div class="h">Prior guess</div><div class="t">Context-engineering and prompt-engineering draw the most asks; for-business is smaller but higher-intent</div></div>
+      <div class="box actual"><div class="h">Actual</div><div class="t">Prompt-engineering drew <b>zero</b> asks in ~650 comments. And <b>none of the four classes is unreleased</b> — they all exist and ship.</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">The question rested on a false premise. Codex has <b>47 videos</b> (last updated 2026-07-12), prompt-engineering 13, context-engineering 11, for-business 7. The real finding: <b>four classes exist that the audience cannot find</b>. Meanwhile the strongest signal in the whole corpus is off the class list entirely — <b>7 distinct commenters</b> on one video asking for an Ultraplan-vs-Superpowers head-to-head, which you had already publicly promised.</div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict"><b>Standalone workflow video — and the topic is already chosen: Ultraplan vs Superpowers.</b> It's the format that earns 4.3x, it's in the winning topic cluster, and you already hold the opinion. The classes need <i>discovery</i>, not a launch.</div></div>
+    <div class="row"><div class="lbl">Numbers</div><div class="nums">
+      <span class="num">comments read <b>~650</b></span><span class="num">codex asks <b>4-9</b></span><span class="num">context-eng <b>2</b></span><span class="num">for-business <b>4</b></span><span class="num">prompt-eng <b>0</b></span><span class="num">Ultraplan askers <b>7</b></span><span class="num">excalidraw asks <b>9</b></span>
+    </div></div>
+    <div class="row"><div class="lbl">Caveats</div>
+      <div class="caveat">The answerer's own first pass <i>missed</i> the headline finding: its keyword scan only looked for the four class topics, so it was structurally blind to demand for anything else. The Ultraplan cluster surfaced only when a reader read threads without a filter. Treat the class tallies as reliable and any claim of "no other demand" as unreliable.</div>
+      <div class="caveat">Codex demand is partly endogenous — two sampled videos are themselves Codex videos.</div>
+      <div class="caveat">The one Codex video in the revenue set earned $30/1k views, 4th worst. High comment volume has not translated into buying intent.</div>
+    </div>
+  </div>
+</div>
+
+<div class="q" data-tags="broke surprise">
+  <div class="qhead">
+    <div class="qid">Q9</div>
+    <div class="qtitle"><span class="lead">Is the per-video launch pulse decaying?</span> <span style="color:var(--muted)">— the answer is a trap</span></div>
+    <div class="badges"><span class="badge b-broke">reframed the business</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If lift is holding or growing, videos remain the growth engine. If it's decaying, the audience is saturating — shift effort from top-of-funnel video to mid-funnel conversion.</div></div>
+    <div class="row"><div class="lbl">Prior vs actual</div><div class="prior">
+      <div class="box"><div class="h">Prior guess</div><div class="t">Slight decay over 9 months, but not collapse — videos still pay, marginally less than before</div></div>
+      <div class="box actual"><div class="h">Actual</div><div class="t">Lift is <b>growing</b> (1.62x → 1.85x → 2.34x; newest launch 5.82x). But the decay is real and it's <b>in the wrong place</b>.</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">The rising multiple is partly arithmetic: the <b>between-launch baseline collapsed 75-80%</b>, from ~$2,000-3,900/day in March-April to ~$400-800/day now. Videos still pay — on clean like-for-like excess, more than they used to ($1,311 → $3,194 per launch). <b>It is everything that is not a video that has stopped paying.</b></div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict">The fork was a false binary and the data forces the <b>and</b>: keep making videos <i>and</i> treat the mid-funnel as urgent, because almost no revenue now happens on days you don't publish. And "make more videos" only holds <i>inside</i> the Q3 topic cluster — the Anki video, wrong topic, produced <b>negative</b> lift (−$1,393).</div></div>
+    <div class="row"><div class="lbl">Numbers</div><div class="nums">
+      <span class="num">Mar-Apr lift <b>1.62×</b></span><span class="num">May <b>1.85×</b></span><span class="num">Jun-Jul <b>2.34×</b></span><span class="num">newest <b>5.82×</b></span><span class="num">baseline collapse <b>75-80%</b></span><span class="num">launches measured <b>15</b></span>
+    </div></div>
+    <div class="row"><div class="lbl">Caveats</div>
+      <div class="caveat">The window is ~4 months, not 9 — purchase events effectively begin 2026-03-13.</div>
+      <div class="caveat">A 72h window undercounts long-tail videos; an April video's last attributed purchase landed in July. The 3-day lift is a lower bound.</div>
+    </div>
+  </div>
+</div>
+
+<div class="q" data-tags="surprise">
+  <div class="qhead">
+    <div class="qid">Q5</div>
+    <div class="qtitle"><span class="lead">How long do buyers deliberate?</span></div>
+    <div class="badges"><span class="badge b-surprise">prior wrong</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If most buy more than 24h after first touch, this is a nurture business — invest in the consideration path and stop over-reading launch pulses. If most buy same-session, it's impulse — time launches for pulses.</div></div>
+    <div class="row"><div class="lbl">Prior vs actual</div><div class="prior">
+      <div class="box"><div class="h">Prior guess</div><div class="t">Median 2-4 days; ~55% of purchases happen more than 24h after first touch</div></div>
+      <div class="box actual"><div class="h">Actual</div><div class="t">Median <b>~4 minutes</b>. 82-89% buy within <b>30 minutes</b>. Only 6-9% take over 24h.</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">This is an <b>impulse business</b>, decisively. The answerer stress-tested its own result against the person-merging bias: 39% of buyers have no client-side history, but that bias pushes measured lag <i>down</i>, so it recomputed on the 731 buyers who <i>do</i> have history — and the conclusion held (median 0.07h, 82% within 30 min). <b>The finding survives because the bias runs against it.</b></div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict"><b>Impulse-driven.</b> The publish-day revenue spikes are real signal, not noise to discount. Do not invest in a long post-visit nurture path.</div></div>
+    <div class="row"><div class="lbl">Caveats</div>
+      <div class="caveat">This proves buyers <i>convert</i> in-session, not that they never deliberated. The real consideration happens on YouTube, off-site, where PostHog cannot see it.</div>
+    </div>
+  </div>
+</div>
+
+<div class="q" data-tags="surprise">
+  <div class="qhead">
+    <div class="qid">Q6</div>
+    <div class="qtitle"><span class="lead">Does the newsletter path convert?</span> <span style="color:var(--muted)">— the answer nobody asked for is the good one</span></div>
+    <div class="badges"><span class="badge b-surprise">reframed email</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If subscribers convert multiples higher but the list is small, list-growth on-ramps are the ignored lever. If the list is healthy, email execution is the lever. If it barely converts, drop email strategically.</div></div>
+    <div class="row"><div class="lbl">Prior vs actual</div><div class="prior">
+      <div class="box"><div class="h">Prior guess</div><div class="t">Subscribers convert 3-6x cold traffic; the list is small and slow-growing</div></div>
+      <div class="box actual"><div class="h">Actual</div><div class="t">Only <b>1.67x</b> — a quarter of the low end. But the list is <b>3,843 actives at ~55% opens</b>, and email buyers pay <b>$341</b>, the highest AOV of any channel.</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">The conversion multiple disappointed — and is barely measurable anyway: PostHog sees only <b>11% of the real list</b> (407 persons vs Bento's 3,843; <code>newsletter_confirmed</code> only fires since March), so 1.67x is a floor computed on the newest, least-converted subscribers. <b>The decisive fact is one nobody asked for:</b> email buyers pay $341 against YouTube's $220 (+55%). Email isn't a cheap volume channel — it produces the <i>most valuable customers</i>. And it's mailed 2.5 times a month with zero conversion or recovery emails.</div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict"><b>Email is a real lever — on AOV and under-mailing, not on the multiple.</b> Send more, build the recovery sequence, and ship the instrumentation fix alongside it (fire <code>newsletter_confirmed</code> for the whole list, or tag sends with <code>utm_campaign</code>) or the next round of this analysis will be just as blind.</div></div>
+    <div class="row"><div class="lbl">Numbers</div><div class="nums">
+      <span class="num">email AOV <b>$341</b></span><span class="num">YouTube AOV <b>$220</b></span><span class="num">overall AOV <b>$206</b></span><span class="num">subscriber conv <b>2.95%</b></span><span class="num">cold conv <b>1.77%</b></span><span class="num">list visible to PostHog <b>10.6%</b></span>
+    </div></div>
+  </div>
+</div>
+
+<div class="q" data-tags="surprise">
+  <div class="qhead">
+    <div class="qid">Q11</div>
+    <div class="qtitle"><span class="lead">Does retention predict revenue better than format?</span></div>
+    <div class="badges"><span class="badge b-surprise">prior inverted</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If retention predicts better, optimize for retention and hook when picking topics. If the format label wins, keep using the workflow-vs-news split as the cue.</div></div>
+    <div class="row"><div class="lbl">Prior vs actual</div><div class="prior">
+      <div class="box"><div class="h">Prior guess</div><div class="t">Retention predicts revenue-per-view better than the coarse format label</div></div>
+      <div class="box actual"><div class="h">Actual</div><div class="t">Retention doesn't predict at all — its correlation is <b>negative</b> (ρ −0.30, p=0.25). The format label scores <b>ρ +0.66 (p=0.007)</b>.</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">Retention and revenue pull in <i>opposite</i> directions. News videos actually <b>retain better</b> (30.8% vs 26.8%) while earning 4-9x less per 1k views. Retention adds nothing once format is known (within-format ρ +0.04 / −0.03). And views correlate <b>negatively</b> with revenue-per-1k (ρ −0.65).</div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict"><b>Pick topics by format; treat retention as a craft target, never as the selector.</b> The mechanism is <i>audience intent, not attention</i>: viral news hits pull large, well-retained, low-intent crowds. A workflow video selects for people with a job to do, and those people buy.</div></div>
+    <div class="row"><div class="lbl">Numbers</div><div class="nums">
+      <span class="num">retention ρ <b>−0.30</b></span><span class="num">format ρ <b>+0.66</b></span><span class="num">views ρ <b>−0.65</b></span><span class="num">workflow <b>$263/1k</b></span><span class="num">news <b>$61/1k</b></span><span class="num">gap <b>4.3× mean, 8.9× median</b></span>
+    </div></div>
+    <div class="row"><div class="lbl">Caveats</div>
+      <div class="caveat">CTR could not be tested — VidTempla rejects impressions/CTR metrics. That half is genuinely unanswered, not answered-and-null.</div>
+      <div class="caveat">n=17. The format correlation clears significance; the retention one does not — the honest statement is "retention shows no detectable relationship", not "retention is proven to hurt".</div>
+    </div>
+  </div>
+</div>
+
+<div class="q" data-tags="surprise">
+  <div class="qhead">
+    <div class="qid">Q10</div>
+    <div class="qtitle"><span class="lead">Are promo buyers low-quality revenue?</span></div>
+    <div class="badges"><span class="badge b-surprise">cohort not identifiable</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If promo refunds match baseline and there's no cannibalization, another promo is a safe revenue pull. If refunds are elevated or a post-promo trough appears, promos are low-quality revenue — stay evergreen.</div></div>
+    <div class="row"><div class="lbl">Prior vs actual</div><div class="prior">
+      <div class="box"><div class="h">Prior guess</div><div class="t">Baseline refunds 4-6%; the April promo cohort elevated at 7-9%</div></div>
+      <div class="box actual"><div class="h">Actual</div><div class="t"><b>2.46%</b> by count, <b>4.37%</b> by USD. Refunds are simply not a problem. And the "April promo cohort" <b>doesn't exist as a clean object</b>.</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">There is no discount flag before June, and realized price is ~40% below list in <i>every</i> month — so April was a <b>volume event, not a discount event</b>. The genuine hesitation is elsewhere: a sustained <b>57% post-April revenue trough</b> that has not recovered in 11 weeks. But it can't be separated from a simultaneous product-lineup change (a cheap ~$73 SKU disappeared; the lifetime plan only appears from 2026-04-09).</div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict">A promo is <b>safe on refund grounds</b> — but run a <b>bounded</b> one, because cannibalization is genuinely unresolved. Instrument it this time (tag the discount on purchase properties; the flag exists as of June). Cheap high-leverage fix: add email/userId to <code>refund_processed</code> so refund cohorts become computable at all — only 13 of 35 refunds link to a purchase today.</div></div>
+    <div class="row"><div class="lbl">Numbers</div><div class="nums">
+      <span class="num">refund rate <b>2.46%</b> by count</span><span class="num"><b>4.37%</b> by USD</span><span class="num">refunds <b>35</b></span><span class="num">refunded <b>$7,277</b></span><span class="num">post-April trough <b>−57%/day</b></span>
+    </div></div>
+  </div>
+</div>
+
+<div class="q" data-tags="confirm surprise">
+  <div class="qhead">
+    <div class="qid">Q3</div>
+    <div class="qtitle"><span class="lead">Which video topics actually convert?</span></div>
+    <div class="badges"><span class="badge b-confirm">confirmed + sharpened</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If a clear topic cluster dominates, the next video is another entry in it. If revenue is spread flat, topic doesn't drive it and the lever is CTA/offer.</div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">A head of <b>5 videos drives 65%</b> of all video-attributed revenue — and what they share is <b>not a format but a topic</b>: each teaches a <b>durable operating method</b> for running Claude Code as a multi-agent or autonomous system (subagents, loops, the insider's real workflow) rather than announcing a single feature.</div></div>
+    <div class="row"><div class="lbl">The sharp bit</div><div class="val">The same headline on two different videos produced a <b>6x conversion gap</b>. A video on exactly the right topic, framed as a beginner tutorial, converted <b>1</b> purchase. So neither the format label nor even the title is the lever. <b>The lever is whether the video hands an existing practitioner a new operating method that leaves them with a capability gap the course closes.</b></div></div>
+    <div class="row"><div class="lbl">Top of the ranking</div><div class="bars">
+      <div class="bar"><div class="nm">Biggest Subagent Upgrade</div><div class="track"><div class="fill" style="width:100%;background:var(--green)">31 purchases</div></div><div class="amt">$7,270</div></div>
+      <div class="bar"><div class="nm">Anthropic Engineers' Workflow</div><div class="track"><div class="fill" style="width:96%;background:var(--green)">30 purchases</div></div><div class="amt">$6,999</div></div>
+      <div class="bar"><div class="nm">Loop Engineering</div><div class="track"><div class="fill" style="width:84%;background:var(--accent)">26 purchases</div></div><div class="amt">$6,078</div></div>
+      <div class="bar"><div class="nm">Fable 5 Is Back (news)</div><div class="track"><div class="fill" style="width:10%;background:var(--red)"></div></div><div class="amt">$745</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict"><b>Clear topic cluster — write into it.</b> Not "workflow vs news" but "a durable operating method for running agents unattended", aimed at someone who already uses Claude Code and suspects they're using it badly. No more single-feature announcements; no more off-topic crossovers.</div></div>
+    <div class="row"><div class="lbl">Caveats</div>
+      <div class="caveat">86% of purchases carry no <code>utm_source</code>. Per-video revenue is a hard floor; the <i>ranking</i> holds (all videos undercounted by the same mechanism) but absolute numbers are understated.</div>
+      <div class="caveat"><code>utm_campaign</code> is first-touch, so a video that <i>closes</i> a previously-touched viewer gets zero credit.</div>
+    </div>
+  </div>
+</div>
+
+<div class="q" data-tags="confirm surprise">
+  <div class="qhead">
+    <div class="qid">Q2</div>
+    <div class="qtitle"><span class="lead">Is "YouTube closes worst" an artifact of returning customers?</span></div>
+    <div class="badges"><span class="badge b-confirm">hypothesis killed</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If existing customers are a big share of YouTube traffic, "YouTube closes worst" is an artifact — keep pouring effort in. If the prospect-only rate is still lowest, the lever is a warmer on-ramp, not more videos.</div></div>
+    <div class="row"><div class="lbl">Prior vs actual</div><div class="prior">
+      <div class="box"><div class="h">Prior guess</div><div class="t">20-30% of YouTube traffic is existing customers; prospect-only close rate climbs to ~11-12%</div></div>
+      <div class="box actual"><div class="h">Actual</div><div class="t"><b>6 of 10,687</b> (0.06%). The artifact hypothesis is empirically empty. Close rate moves 10.17% → 10.19%.</div></div>
+    </div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict"><b>The lever is a warmer on-ramp</b> — free lessons, the unused <code>/watch</code> pages — <b>not more videos, and definitely not defunding YouTube.</b></div></div>
+    <div class="row"><div class="lbl">The honest hedge</div><div class="val">The "direct" bucket that YouTube loses to (13.64%) is <b>stuffed with misattributed YouTube buyers</b> — 86% of purchases carry no utm_source, which inflates direct and deflates YouTube <i>by construction</i>. The 3.4-point gap is an <b>upper bound</b>.</div></div>
+  </div>
+</div>
+
+<div class="q" data-tags="confirm">
+  <div class="qhead">
+    <div class="qid">Q4</div>
+    <div class="qtitle"><span class="lead">Does a recovery automation already exist?</span></div>
+    <div class="badges"><span class="badge b-confirm">confirmed + cheaper</span><span class="chev">›</span></div>
+  </div>
+  <div class="qbody">
+    <div class="row"><div class="lbl">The fork it fed</div><div class="fork">If one exists and underperforms, the task is FIX (cheap). If none exists, the 1.1% recovery rate is "no system" and the BUILD is high-ROI. If events don't even reach Bento, the first task is plumbing.</div></div>
+    <div class="row"><div class="lbl">Answer</div><div class="val">Zero recovery automations or sequences exist — the only Bento workflow is "Unsubscribe to Webhook". <b>But the abandonment signal already lands</b>: tags <code>acs_expired_checkout</code> (created 2026-02-24) and <code>acs_expired_team_checkout</code> have been firing on subscribers for months. Nothing consumes them.</div></div>
+    <div class="row"><div class="lbl">Verdict</div><div class="verdict"><b>Build, not fix — and no plumbing needed.</b> The task is authoring a triggered sequence off a tag that already exists, not building an integration.</div></div>
+  </div>
+</div>
+
+</div>
+
+<h2 id="crosscut">Cross-cutting: one bug behind three symptoms</h2>
+<div class="cards2">
+  <div class="card bug">
+    <h4>The identity-stitching bug</h4>
+    <p>Server-side purchase events aren't stitched to the anonymous browsing person. That single defect explains <b>86% of purchases missing utm_source</b>, <b>39% of buyers with no client history</b>, and part of the recovery-sizing fog. Fix it and every attribution number in this report sharpens.</p>
+  </div>
+  <div class="card warn">
+    <h4>The business became launch-shaped</h4>
+    <p>Between-launch baseline revenue fell <b>75-80%</b>. Video lift is <i>growing</i>; everything that isn't a video has stopped paying. That's why the mid-funnel work is urgent rather than optional — right now, revenue happens on publish days.</p>
+  </div>
+  <div class="card win">
+    <h4>78 videos nobody can find</h4>
+    <p>Four classes — codex (47 videos), prompt-engineering (13), context-engineering (11), for-business (7) — are shipped, updated, and drawing near-zero traffic. This is the largest piece of already-paid-for work sitting idle in the business. It needs discovery, not production.</p>
+  </div>
+  <div class="card">
+    <h4>Instrumentation debt is the tax on every answer</h4>
+    <p>PostHog sees 11% of the email list. Refunds don't link to purchases (13 of 35). Discount flags didn't exist before June. Bot flags aren't populated. Each of these turned a clean question into a bounded estimate — and each is a small fix.</p>
+  </div>
+</div>
+
+<h2 id="sketch">What the sketch round had already established</h2>
+<p class="sectionsub">Before the questions, five builders were each blinded to any prior analysis and derived their own findings from the raw data. Independent agreement between blinded builders is the verification. These held up — and the question round then re-sized two of them.</p>
+<div class="conv">
+  <div class="score"><div class="big">5 / 5</div><div class="lbl">builders</div></div>
+  <div><div class="t"><b>Checkout is the binding constraint, not traffic.</b> <span class="d">1,613 abandons in 60d against 17 recovered; ~$131k of expressed intent vs $44k realized. <i>Q1 and Q8 later re-sized this: the recovery half is ~$3-8k, and the mobile half is ~$9k.</i></span></div></div>
+</div>
+<div class="conv">
+  <div class="score"><div class="big">5 / 5</div><div class="lbl">builders</div></div>
+  <div><div class="t"><b>Attribution is half-blind; YouTube's true share is ~62%, not the measured 34%.</b> <span class="d">Every per-video ROI figure undercounts by ~2x. <i>Q2 and the cross-cutting bug later explained the mechanism.</i></span></div></div>
+</div>
+<div class="conv">
+  <div class="score"><div class="big">4 / 5</div><div class="lbl">builders</div></div>
+  <div><div class="t"><b>Workflow videos out-earn news ~10-19x per view.</b> <span class="d"><i>Q11 confirmed and sharpened this to 4.3x on means / 8.9x on medians with full view data — and killed retention as an alternative predictor. Q3 then found the deeper cut: it's the operating-method topic, not the format label.</i></span></div></div>
+</div>
+<div class="conv">
+  <div class="score"><div class="big">3 / 5</div><div class="lbl">builders</div></div>
+  <div><div class="t"><b>No revenue crisis — April was a promo artifact; baseline ~$23-26k/month.</b> <span class="d"><i>Q10 partly overturned this: April was a volume event, not a discount event, and there IS an unresolved 57% post-April trough.</i></span></div></div>
+</div>
+
+<h2 id="method">How this was produced</h2>
+<div class="method">
+  <ol>
+    <li><b>Blinded sketch round.</b> Five builders each got the raw data pack with the orchestrator's conclusions deliberately <i>withheld</i> — the pack states what <i>is</i>, never what it <i>means</i>. Each derived its own findings and built a working surface of a different underlying model. Agreement between builders who couldn't see each other is evidence; agreement with a shared conclusion would have been an echo.</li>
+    <li><b>Question round.</b> A questioner agent — given the business, the sources, and the converged findings <i>as priors to stress, not settled facts</i> — generated 16 candidate questions, several deliberately designed to <b>break</b> a finding. Every question carried a fork ("if X do A, if Y do B") and a prior guess, so surprise could be measured rather than asserted.</li>
+    <li><b>Four answerers, one per source</b>, ran the real queries in parallel: PostHog (person-level counterfactuals; revenue attribution), VidTempla + the ACS platform (comments, retention, class state), Bento (email infrastructure). They were forbidden to approximate — "not answerable" was a valid answer, and a fabricated number would poison the decision.</li>
+    <li><b>The connectors died mid-run.</b> PostHog, VidTempla, and the ACS platform dropped for about an hour. Every blocked agent held its position with pre-drafted queries rather than guessing, and reported the blocker. The round resumed on reconnect. <b>No number in this report was estimated to fill a gap.</b></li>
+  </ol>
+</div>
+
+<h2 id="open">Still open</h2>
+<p class="sectionsub">Named honestly, because a report that hides its gaps is a confident lie.</p>
+<div class="openq"><b>The 57% post-April revenue trough.</b> Real, sustained 11 weeks, and confounded with a product-lineup change. It deserves its own investigation and is the single biggest unexplained thing in the data.</div>
+<div class="openq"><b>Whether the four classes would sell if anyone could find them.</b> Comment demand is intent, not revenue — and the one Codex video in the revenue set monetized 4th-worst, which is a genuine warning that Codex enthusiasm may be chatter rather than buying intent.</div>
+<div class="openq"><b>What the untrafficked <code>/watch</code> free-lesson pages are worth.</b> No exposure means no data. Q2 says a warmer on-ramp is the YouTube lever; the only way to price it is to run traffic through it.</div>
+<div class="openq"><b>Why abandoners abandon.</b> Events show <i>where</i> people drop, never the motive. Q8 localizes it to the Stripe payment page on mobile, which is the closest thing to a cause this data can produce.</div>
+<div class="openq"><b>True willingness-to-pay at $397.</b> Realized price is ~40% below list every month. That's a pricing question a live test answers and backward-looking data cannot.</div>
+
+<footer>
+  Sources: PostHog (project 236619), VidTempla, Bento, ACS platform, and codebase-verified ground truth. All figures whole USD; PostHog <code>amount</code> properties are stored in cents and converted. Per-video revenue is a floor (86% of purchases carry no <code>utm_source</code>). Full data and per-question queries: <code>data-pack.json</code> → <code>question_round</code>, and <code>answers-*.json</code> in this folder.
+</footer>
+</div>
+
+<script>
+  document.querySelectorAll('.qhead').forEach(h => {
+    h.addEventListener('click', () => h.parentElement.classList.toggle('open'));
+  });
+  const btns = document.querySelectorAll('.filters button');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    const f = b.dataset.f;
+    document.querySelectorAll('.q').forEach(q => {
+      const show = f === 'all' || (q.dataset.tags || '').split(' ').includes(f);
+      q.style.display = show ? '' : 'none';
+    });
+  }));
+</script>
+</body>
+</html>
