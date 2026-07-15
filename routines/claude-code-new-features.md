@@ -57,17 +57,20 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 
 # precompute which flags are gate/config reads vs telemetry in the binary.
 # NOTE: the minified helper names DRIFT between releases. History: gate `ct(`→`it(`
-# (v2.1.193)→`at(` (v2.1.195)→`ot(` (v2.1.199)→`Qe(` (v2.1.208);
-# structured config reads use `J1(` in v2.1.208. Telemetry `j(`→`G(`→`j(`/`f_(`
-# (v2.1.195)→`G(` (v2.1.199)→`M(` (v2.1.208). We match the known aliases so wired-vs-present
-# classification survives the next rename.
+# (v2.1.193)→`at(` (v2.1.195)→`ot(` (v2.1.199)→`Qe(` (v2.1.208)→`Ze(`
+# (v2.1.210); structured/async reads in the current build also pass through `J1(`,
+# `vme(`, `Xfe(`, `dgt(`, and `S6n(`, while boolean eligibility checks use `Xq(`
+# and `IPi(`. Context-derived keys can be passed through `bvi(` before `Ze(`.
+# Telemetry `j(`→`G(`→`j(`/`f_(` (v2.1.195)→`G(` (v2.1.199)→`M(` (v2.1.208)
+# (with event wrappers `N(`, `bb(`, `I0(`, `QEu(`, and `Qxc(` in v2.1.210). We match
+# the known aliases so wired-vs-present classification survives the next rename.
 # SANITY-CHECK `len(gates)` every run: it should be ~230+. If it's 0 (or nearly
 # everything classifies as "present" and DCE shows a `wired→present` avalanche), the
 # gate helper was renamed again — grep `("tengu_` in the strings to find the new
 # 1-2 char prefix whose call sites take a bare default (`!0`/`!1`/`null`/number), and
 # add it to the gates alternation below (telemetry prefixes take an `{...}` object).
-gates=set(re.findall(r'(?:Qe|J1|ot|at|it|ct)\("(tengu_[a-zA-Z0-9_]+)"',strings))
-telem=set(re.findall(r'(?:M|j|f_|G)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gates=set(re.findall(r'(?:Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+telem=set(re.findall(r'(?:M|j|f_|G|N|bb|I0|QEu|Qxc|\$Wt|a|l|U|B|qrr|w|re)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 present=set(re.findall(r'tengu_[a-zA-Z0-9_]+',strings))
 
 # Fail closed before reading/writing tracker state. A helper rename otherwise creates
@@ -228,6 +231,27 @@ Example of the expected level of detail (this is the bar — note how each bulle
 ```
 
 If `SLACK_BOT_TOKEN`/skill is unavailable, print the full message to stdout instead so it lands in the run log.
+
+## Step 6: Commit and push the tracker files
+
+After the run is fully recorded (including no-change runs), automatically commit and push only these two durable tracker files when either changed:
+
+- `routines/claude-code-new-features.md`
+- `routines/claude-code-feature-log.md`
+
+The worktree may contain unrelated user changes. Never stage them and never use `git add -A` or `git add .`. Validate the scoped patch, then commit and push the current branch:
+
+```bash
+cd ~/Desktop/ray-os
+if ! git diff --quiet -- routines/claude-code-new-features.md routines/claude-code-feature-log.md; then
+  git diff --check -- routines/claude-code-new-features.md routines/claude-code-feature-log.md
+  git add -- routines/claude-code-new-features.md routines/claude-code-feature-log.md
+  git commit -m "Update Claude Code feature tracker"
+  git push origin "$(git branch --show-current)"
+fi
+```
+
+If commit or push fails, record the exact blocker in the run log and report it in the automation result. Do not broaden the staged scope to work around a failure.
 
 ---
 

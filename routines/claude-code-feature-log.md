@@ -167,3 +167,83 @@ _Gate helper prefix drifted `it(`→`ot(` this release; regex patched in the rou
 - `tengu_gorse_fathom` — newly shipped (stripped → wired). Gates extra memory guidance near the `memory-types` skill: prompt to save a `feedback` memory when the user corrects how a repeatable step was run.
 - `tengu_quartz_heron` — code removed (wired → stripped). Gated the built-in subagent default model (off → `"haiku"`, on → `"inherit"`). Removed → built-in agent model selection no longer haiku-gated.
 - `tengu_amber_heron` — code removed (wired → stripped). Gated defaulting the Agent/Task tool to async/background execution (fed the `is_async` decision). Removed → async-subagent behavior no longer behind this gate.
+
+## 2026-07-15 10:24 — v2.1.210 (upgraded from v2.1.199)
+
+Classifier repaired from binary evidence before diffing: current GrowthBook reads use `Ze`, with `J1`/`vme`/`Xfe`/`dgt`/`S6n`/`Xq`/`IPi` wrappers and `bvi` context-derived keys. Health check: 286 gate/config call sites, 1,292 telemetry references, 1,633 `tengu_` strings. Environment baseline captured: 524 variables; no additions/removals reported. Official Anthropic changelog/release check blocked because Exa MCP was unavailable; no announcement marker was advanced.
+
+### 🔀 GrowthBook switches
+- `tengu_copper_fox` — effective ON → OFF. Enables fork-style subagents; the current build still contains the feature path, but the GrowthBook value is now off and no override is set.
+- `tengu_orford_ness` — OFF → ON. Gates first-party error reporting, minimum-version checks, and related eligibility handling; current code is present and effective.
+- `tengu_auto_mode_config` — payload expanded while effective state stayed OFF. Configures Auto Mode’s two-stage classifier, sibling context, JSONL transcript handling, edit-removal visibility/cap, and Git/outcome context; the code is wired but Auto Mode remains off for this account.
+- `tengu_saffron_lattice` — plan-limit deadline moved Jul 8 → Jul 20 while enabled. Controls usage-overage/Fable entitlement behavior and plan-limit messaging; wired and effective.
+- `tengu_slate_harrier` — `compact` → `off`. Controls Opus 4.7 “investigate first” prompting before questions/actions; wired but now disabled.
+- `tengu_cedar_sundial` — OFF → ON, but code is stripped. Historical purpose was stale-read edit recovery; this flip is a no-op in 2.1.210.
+- `tengu_shale_finch` — ON → OFF. Controls output/prompt-injection sanitization and disallowed-tool filtering; code is wired but disabled.
+- `tengu_shoji_engine` — OFF → ON, but code is stripped. Historical settings/config-resolution engine behavior is gone from this build; no effect.
+- `tengu_mcp_subagent_prompt` — ON → OFF. Controls guidance when MCP/blob results exceed output limits and are saved for inspection; wired but disabled.
+- `tengu_ember_latch` — ON → OFF. Enables extra-usage and usage-credit admin-request flows; wired but disabled.
+- `tengu_bridge_attestation_enforce` — OFF → ON. Enforces trusted-device attestation for Remote Control control requests; wired and effective.
+- `tengu_cobalt_plinth_reader_persist` — OFF → ON. Persists Artifact/frame reader state and stored artifact versions; wired and effective.
+- `tengu_startup_announcements` — Fable 5 promo payload replaced and max impressions 100 → 10. Selects/throttles startup announcements; wired, but the current announcement is not effective because the cached flag is false.
+- `tengu_velvet_hammer_opus_4_8` — OFF → ON, but code is stripped. No current Opus-specific implementation survives, so the switch is a no-op.
+
+### 🆕 New flags
+- `tengu_rc_long_turn_nudge` — new, GB `null`, wired but unset. Likely controls a Remote Control upsell after a long turn, with threshold/probability/impression settings.
+- `tengu_umber_kestrel` — new, OFF, wired but disabled. Controls availability of the `EndConversation` tool.
+- `tengu_plugin_feedback_survey_config` — new, `{}`, wired. Configures plugin feedback-survey triggers, scopes, and cooldowns.
+- `tengu_lapis_anchor_user_turn` — new, OFF, wired but disabled. Re-anchors token-reminder budgets after each user turn.
+- `tengu_marbled_teal` — new, OFF, stripped. No surviving behavior or reliable purpose is recoverable from this binary.
+- `tengu_zinc_harbor` — new, OFF, stripped. No surviving behavior or reliable purpose is recoverable from this binary.
+- `tengu_rate_limit_promo_notices` — new, empty list, present. Configures notices shown around usage and rate limits; no active notices are supplied.
+- `tengu_chrome_install_upsell` — new, OFF, wired but disabled. Controls Claude-in-Chrome installation/setup upsell UI.
+- `tengu_slate_trellis` — new, OFF, stripped. No surviving behavior or reliable purpose is recoverable from this binary.
+- `tengu_vellum_ash` — new, empty list, wired. Disables legacy todo/task tools when the current model matches configured entries.
+- `tengu_deferred_stub_tool` — new, ON, wired and effective. Provides a deferred Document/Image stub tool for fallback loading.
+- `tengu_quiet_reef` — new, OFF, stripped. No surviving behavior or reliable purpose is recoverable from this binary.
+- `tengu_cobalt_plinth_osier` — new, OFF, wired but disabled. Kills/disables shared-scope Artifact listing.
+- `tengu_fleet_needs_input_nudge` — new, ON, stripped. A Fleet input nudge is server-staged, but no implementation is present in this build.
+- `tengu_wavy_light` — new, OFF, stripped. No surviving behavior or reliable purpose is recoverable from this binary.
+- `tengu_salt_marsh` — new, OFF, wired but disabled. Adds memory-citation instructions to prompts when enabled.
+- `tengu_dash_flame` — new, OFF, stripped. No surviving behavior or reliable purpose is recoverable from this binary.
+- `tengu_bridge_system_init` — new, ON, wired and effective. Gates sending Remote Control bridge `system/init` data.
+- `tengu_walnut_spire` — new, OFF, wired but disabled. An internal gate near model/review logic; the exact product surface is not named in surviving strings.
+- `tengu_updater_range_resume` — new, OFF, stripped. No surviving updater-resume behavior is present.
+- `tengu_haze_glass` — new, OFF, wired but disabled. Gates organization-memory discovery and synchronization.
+- `tengu_kairos_ready_nudge` — new, GB `null`, stripped. No surviving ready-nudge behavior is present.
+- `tengu_retire_chat_relay_artifact_backstop` — new, OFF, wired but disabled. Disables Artifacts in chat-relay/noninteractive contexts.
+- `tengu_lantern_prism` — new, OFF, wired but disabled. Gates the Ultra/cloud-review path and can also be enabled through its environment override.
+- `tengu_juniper_relay_config` — new, `{}`, stripped. No surviving relay-config behavior is present.
+- `tengu_juniper_relay` — new, OFF, stripped. No surviving relay behavior is present.
+
+### 🧱 DCE switches
+- `tengu_ide_rc_auto_enable` — newly shipped (stripped → wired). Sends an IDE-side Remote Control auto-enable gate during session initialization.
+- `tengu_fine_survey_transcript_ask_config` — newly shipped (present → wired). Configures transcript-sharing prompts for “fine” survey outcomes.
+- `tengu_malort_pedway` — newly shipped (present → wired). Controls Computer Use enablement, pixel validation, clipboard safety, mouse animation, and coordinate mode.
+- `tengu_cloth_snorkel` — newly shipped (stripped → wired). Gates Artifact MCP runtime capability declarations.
+- `tengu_kairos_cron_durable` — newly shipped (present → wired). Controls whether scheduled tasks persist in `.claude/scheduled_tasks.json` across restarts.
+- `tengu_sparrow_ledger` — code removed (wired → stripped). The prior verify-prompt/ledger behavior is absent from this build.
+- `tengu_ccr_bundle_seed_enabled` — newly shipped (present → wired). Allows seeded bundles for eligible remote/background sessions.
+- `tengu_cedar_sundial` — code removed (wired → stripped). Duplicate DCE entry; the stale-read edit-recovery behavior is absent.
+- `tengu_bridge_min_version` — newly shipped (present → wired). Rejects Remote Control clients below the configured minimum version.
+- `tengu_herring_clock` — code removed (wired → stripped). The prior memory-store behavior is absent; no current effect.
+- `tengu_shoji_engine` — code removed (wired → stripped). Duplicate DCE entry; the historical settings engine is absent.
+- `tengu_bridge_poll_interval_config` — newly shipped (present → wired). Configures bridge polling, heartbeat, reclaim, and keepalive intervals.
+- `tengu_velvet_tide` — newly shipped (stripped → wired). Enables the simplified system-prompt path for supported models.
+- `tengu_max_version_config` — newly shipped (present → wired). Sets updater maximum-version and forced-downgrade behavior.
+- `tengu_slate_ibis` — newly shipped (present → wired). Enables coordinator, Explore, and Plan-agent tooling; it honors `CLAUDE_CODE_DISABLE_EXPLORE_PLAN_AGENTS`.
+- `tengu_orchid_mantis_v2` — code removed (wired → stripped). The prior schedule-offer behavior is absent.
+- `tengu_marble_lark` — code removed (wired → stripped). The prior memory-path behavior is absent.
+- `tengu_silk_almanac` — code removed (wired → stripped). The prior team-memory multistore behavior is absent.
+- `tengu_desktop_upsell` — newly shipped (present → wired). Configures desktop shortcut and contextual upsell tips.
+- `tengu_version_config` — newly shipped (present → wired). Enforces a minimum Claude Code version and displays the update message.
+- `tengu_good_survey_transcript_ask_config` — newly shipped (present → wired). Configures transcript-sharing prompts for “good” survey outcomes.
+- `tengu_kairos_cron` — newly shipped (present → wired). Enables cron/scheduled-task tools and `/schedule`.
+- `tengu_fleet_past_sessions` — newly shipped (stripped → wired). Enables Fleet past-session browsing, with `CLAUDE_CODE_FLEET_PAST_SESSIONS` as an environment override.
+- `tengu_startup_announcements` — newly shipped (present → wired). Selects/throttles startup announcements; this is the same live path described in the GrowthBook switch above.
+- `tengu_bridge_repl_v2_config` — newly shipped (present → wired). Configures Remote Control REPL v2, including minimum version and metadata.
+- `tengu_orchid_mantis` — code removed (wired → stripped). The prior schedule-offer behavior is absent.
+- `tengu_bad_survey_transcript_ask_config` — newly shipped (present → wired). Configures transcript-sharing prompts for “bad” survey outcomes.
+- `tengu_velvet_hammer` — code removed (wired → stripped). The previous edit-tool validation path no longer survives in this build.
+- `tengu_fleetview_onboarding_v2` — retired from GrowthBook (wired → removed-from-growthbook). No current flag string or gate remains, so its Fleet onboarding behavior is unrecoverable.
+- `tengu_quartz_heron` — retired from GrowthBook (stripped → removed-from-growthbook). No current flag string or gate remains, so the historical behavior is unrecoverable.
