@@ -9,11 +9,11 @@ pattern: contrast hook
 media: text only
 status: posted
 engagement:
-  reactions: 6
+  reactions: 8
   comments: 1
   reposts: 0
-  impressions: 467
-  last_checked: 2026-06-25
+  impressions: 543
+  last_checked: 2026-07-15
 url: https://www.linkedin.com/feed/update/urn:li:activity:7470491246776610817/
 notes: >
   Post 1 from the nested-subagents batch (10 variations from transcript.txt,

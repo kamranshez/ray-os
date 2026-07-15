@@ -5,10 +5,11 @@ format: curation / hype ("X dropped an amazing free class")
 trigger: aspiration + productive discomfort (most people are sleeping through it)
 source: Stanford CS153 Frontier Systems YouTube playlist (Altman lecture)
 engagement:
-  reactions: TBD
-  comments: TBD
-  reposts: TBD
-  impressions: TBD
+  reactions: 21
+  comments: 1
+  reposts: 0
+  impressions: 2580
+last_checked: 2026-07-15
 ---
 
 Stanford University quietly uploaded a masterclass and called it a normal lecture series.

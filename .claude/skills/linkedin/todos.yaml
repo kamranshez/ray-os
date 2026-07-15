@@ -11,13 +11,3 @@
 #
 # Keep this list lean: remove entries once they're done rather than letting
 # completed items accumulate.
-
-- task: Check engagement on Stanford CS153 Frontier Systems post
-  description: >
-    Curation/hype post ("Stanford quietly uploaded a masterclass") about the free
-    CS153 Frontier Systems lecture series on YouTube. Ray posted it himself
-    2026-06-29 with the playlist link in the first comment. Pull reactions,
-    comments, reposts, and impressions and record them in the related_post frontmatter.
-  due: 2026-07-02
-  status: pending
-  related_post: references/post-history/2026-06-29_stanford-cs153-frontier-systems.md

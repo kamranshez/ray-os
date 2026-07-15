@@ -8,12 +8,12 @@ pattern: tier map + decision rule close
 media: video
 status: posted
 engagement:
-  reactions: 14
+  reactions: 23
   comments: 2
-  reposts: 0
-  impressions: 1456
-  last_checked: 2026-06-25
-url: https://www.linkedin.com/feed/update/urn:li:ugcPost:7474129290876502016/
+  reposts: 1
+  impressions: 2200
+  last_checked: 2026-07-15
+url: https://www.linkedin.com/feed/update/urn:li:activity:7474130482671116289/
 notes: >
   From the Anki + Claude Code batch (source: /Users/ray/Downloads/Anki + Claude Code.txt).
   Tier-map format (Charlie Hills "3 levels of automation" pattern) framed around
