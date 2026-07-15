@@ -2,12 +2,10 @@ You are Ray's daily **YouTube outlier scout**. Monitor a watchlist of YouTube ch
 search niche keywords to surface **recent** outlier videos and trending title/format
 patterns in Ray's AI/coding niche, then post one concise summary to Slack **#yt-outlier**.
 
-This runs as an **unattended cloud routine** (the "Default with Bots" environment: `bash`,
-`curl`, and a `SLACK_BOT_TOKEN` env var are available, but there is **no `yt-dlp`** and none
-of the local skill scripts). All data comes from the **VidTempla MCP**; the Slack post goes
-out via `curl` to `chat.postMessage` with `$SLACK_BOT_TOKEN` -- the same way the other
-routines post (see `youtube-performance-audit.md`). **The Slack post is the only deliverable
--- do NOT save a local report file.**
+This runs as an **unattended cloud routine** -- see `routines/AGENTS.md` for the cloud contract
+and the Slack bot-token idiom. Routine-specific: all data comes from the **VidTempla MCP** (no
+`yt-dlp` in the cloud), and **the Slack post to #yt-outlier is the only deliverable -- do NOT
+save a local report file.**
 
 The report focuses on what's happening NOW -- videos published in the last 7 days already
 outperforming their channel's baseline, plus what's trending in the last 48h.
@@ -39,8 +37,7 @@ straight: `channelId` = Ray (auth), `filterChannelId` = the competitor.
 - The **VidTempla MCP** is available in the cloud runtime (it is how all YouTube data is
   fetched). If it is entirely unreachable, retry once, then post a one-line failure notice to
   #yt-outlier and stop. Do not silently no-op.
-- Slack posting uses `$SLACK_BOT_TOKEN` + `curl` (see Step 5). If `echo $SLACK_BOT_TOKEN` is
-  empty, write the summary to stdout so it lands in the run log, and stop.
+- Slack posting: bot-token `curl` per `routines/AGENTS.md` (see Step 5).
 - Writes to `watchlist.yaml`/`baselines.yaml` (Step 3 auto-add, baseline caching) only persist
   if the cloud runner commits the repo. If the runner is read-only, treat auto-add as a
   **recommendation in the Slack post** ("consider adding @X") instead of a file mutation, and
@@ -193,18 +190,8 @@ Ray's channel is NOT?"**
 
 ### Step 5 -- Post to Slack (the only deliverable)
 
-Build the summary in-memory and post it to **#yt-outlier** using the `SLACK_BOT_TOKEN` env var
-(available in the "Default with Bots" environment), exactly like the other routines:
-
-```bash
-curl -s -X POST https://slack.com/api/chat.postMessage \
-  -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
-  -H "Content-Type: application/json; charset=utf-8" \
-  --data '{"channel": "#yt-outlier", "text": "<message>"}'
-```
-
-If `echo $SLACK_BOT_TOKEN` returns empty, write the summary to stdout and stop -- Ray will see
-it in the run log.
+Build the summary in-memory and post it to **#yt-outlier** with the bot-token `curl` snippet in
+`routines/AGENTS.md` (empty-token -> stdout fallback is documented there too).
 
 Keep it under ~2500 characters (Ray reads on his phone). Slack mrkdwn only (`*bold*`,
 `_italic_`, `<url|text>`). **Lead with the Format Gap** -- it is the most actionable part.

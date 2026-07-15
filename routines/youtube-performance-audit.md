@@ -123,18 +123,8 @@ Save to `socials/youtube/performance/YYYY-MM.md`.
 
 ## STEP 8: NOTIFY ON SLACK
 
-Post to #yt-performance-audit using the `SLACK_BOT_TOKEN` env var (available in the Default with Bots environment):
-
-```bash
-curl -s -X POST https://slack.com/api/chat.postMessage \
-  -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
-  -H "Content-Type: application/json; charset=utf-8" \
-  --data '{"channel": "#yt-performance-audit", "text": "<message>"}'
-```
-
-If `echo $SLACK_BOT_TOKEN` returns empty, write the summary to stdout and stop -- Ray will see it in the run log.
-
-Send Ray a summary of the audit.
+Post to #yt-performance-audit with the bot-token `curl` snippet in `routines/AGENTS.md`
+(empty-token -> stdout fallback is documented there too). Send Ray a summary of the audit.
 
 **Message format:**
 ```
