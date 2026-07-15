@@ -46,11 +46,12 @@ See the `ungate-claude-code-feature` skill. The durable mechanism is the Proxyma
 ## Confirmed working ungates (v2.1.207)
 
 - **Kairos** brief/loop family — launched, slash command surfaces.
-- **Observer agents** (`CLAUDE_CODE_EXPERIMENTAL_OBSERVER_AGENTS=1`) — confirmed working; demo pair lives in `.claude/agents/observed-demo.md` + `watchdog-demo.md`. Deep-dive: `features/observer-agents.md`.
+- **Observer agents** (`CLAUDE_CODE_EXPERIMENTAL_OBSERVER_AGENTS=1`) — confirmed working; the demo pair and its rig now live outside the vault at `~/Desktop/observer-demo/` (`.claude/agents/implementer.md` + `watchdog.md`, alongside the `tax.py` rig). Deep-dive: `features/observer-agents.md`.
 - **Coordinator mode** (`CLAUDE_CODE_COORDINATOR_MODE=1`) — delegation-only orchestrator.
 
 ## Index
 
+- [[2.1.209]] — **2.1.207 → 2.1.209 diff** (`by-version/2.1.209.md`): 34 flags added / 21 removed, 5 new env vars. Headline: **Artifact MCP** (`CLAUDE_CODE_ARTIFACT_MCP` — published claude.ai pages can call your MCP connectors at runtime). Also: Remote-Control "follow on your phone" nudges, memory self-rating write-back, Anthropic remote-override of official-plugin prompts, teleport branch guard. Kairos morning-brief and the Edit staleness flags (cedar_sundial/velvet_hammer) shipped and lost their gates.
 - [[2.1.207-gated-flag-map]] — **full flag+env map** (`by-version/2.1.207-gated-flag-map.md`): 63 gated feature-flags + 36 env-var gates, ranked by video-worthiness, each with binary evidence and how to unlock. Built from the live GrowthBook eval capture.
 - [[2.1.207-env-impact-map]] — **env-var impact ranking** (`by-version/2.1.207-env-impact-map.md`): all 402 `CLAUDE_CODE_*` vars triaged; 163 behavior-changers grouped major / moderate / minor by how big a change each makes.
 - [[2.1.207]] — earlier narrative catalogue (`by-version/2.1.207.md`)
