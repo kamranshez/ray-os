@@ -11,7 +11,7 @@ description: >
   "find the spine idea", "is this already covered in the school", "what should I film from
   this", "mine this video for ACS", or just drops a transcript/link and asks what's
   video-worthy. Also the per-video worker the gap-scout routine calls for each swept video.
-  Do NOT use for a bulk channel sweep (that is the gap-scout routine / youtube-outlier-scout)
+  Do NOT use for a bulk channel sweep (that is the gap-scout routine / youtube-outlier-research routine)
   or for plain wisdom extraction with no ACS gap-check (that is extract-wisdom).
 argument-hint: "[<youtube-url-or-id> | pasted transcript]  [channel_id=<slack-id>]  [title=… channel=… publishedAt=…]"
 allowed-tools:

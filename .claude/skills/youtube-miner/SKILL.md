@@ -16,7 +16,7 @@ description: >-
   "ideas that could become Agentic Coding School videos", but the goal is parameterizable for any
   channel or purpose. Do NOT use for single-video transcript lookups (just fetch the transcript),
   for competitor TITLE research or outlier/trend scouting across many channels (both now
-  live in youtube-outlier-scout).
+  live in the youtube-outlier-research routine).
 ---
 
 # YouTube Miner

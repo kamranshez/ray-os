@@ -1,6 +1,6 @@
 ---
 name: youtube-ab-tester
-description: End-to-end YouTube A/B testing for Ray's channel (@RAmjad) — title generation via subagent, thumbnail image generation via `gemini-3-pro-image-preview` at 1K, results recording, and the underlying scripts/golden references all live here. Use whenever the user wants to brainstorm titles, generate thumbnails (text or images), record A/B test results, analyze title/thumbnail performance, or asks things like "suggest titles", "what titles should I test", "make a thumbnail", "thumbnail variations", "5 thumbnails for this video", "Matt style", "Nate style", "record these results", "what's working", or "update the A/B test results". Also trigger when the user shares a screenshot of YouTube A/B test results and wants analysis or recording. Do NOT use for competitor title research (use youtube-outlier-scout instead) or video scripting (use youtube-scriptwriter instead).
+description: End-to-end YouTube A/B testing for Ray's channel (@RAmjad) — title generation via subagent, thumbnail image generation via `gemini-3-pro-image-preview` at 1K, results recording, and the underlying scripts/golden references all live here. Use whenever the user wants to brainstorm titles, generate thumbnails (text or images), record A/B test results, analyze title/thumbnail performance, or asks things like "suggest titles", "what titles should I test", "make a thumbnail", "thumbnail variations", "5 thumbnails for this video", "Matt style", "Nate style", "record these results", "what's working", or "update the A/B test results". Also trigger when the user shares a screenshot of YouTube A/B test results and wants analysis or recording. Do NOT use for competitor title research (the youtube-outlier-research routine covers niche/competitor research) or video scripting (use youtube-scriptwriter instead).
 ---
 
 ## What This Skill Does
@@ -55,6 +55,7 @@ The reference data is the source of truth — re-derive recommendations from act
 - `references/results/_tests-still-worth-running.md` — Untested hypotheses worth exploring
 - `references/results/YYYY-MM/` — Per-video A/B test results, `YYYY-MM-DD-slug.md`. **Read the most recent 4-6 video files (glob the latest month folder) for current patterns.**
 - `references/thumbnails/v{N}-{slug}/tested/` — winning thumbnails by video, browse to see what worked
+- **Cross-skill input:** the latest 2-3 posts in the **#yt-outlier** Slack channel (read via the Slack MCP `slack_read_channel`) — what's winning across the niche right now, produced by the `routines/youtube-outlier-research.md` scout routine. The A/B archive says what worked for Ray; the #yt-outlier posts say what's working in the niche this week. Title generation reads BOTH (the subagent template below requires it).
 
 **This file (SKILL.md) holds operating procedure only.** Patterns and rules live in the `results/` docs above — SKILL.md points to them and must not restate them (a restated rule drifts out of sync on the next edit).
 
@@ -72,7 +73,7 @@ Audience preferences drift over time. When patterns from older videos conflict w
 
 # PART 1 — Title generation (always via subagent)
 
-**Never write titles in main context.** Title brainstorming requires reading the full reference corpus (master-summary, anti-patterns, 4-6 recent video files, the transcript or topic brief, and `socials/youtube/videos/uploaded/` for stale-template checks). Doing this inline burns main-context tokens and pollutes the conversation.
+**Never write titles in main context.** Title brainstorming requires reading the full reference corpus (master-summary, anti-patterns, 4-6 recent video files, the 2-3 latest #yt-outlier Slack posts, the transcript or topic brief, and `socials/youtube/videos/uploaded/` for stale-template checks). Doing this inline burns main-context tokens and pollutes the conversation.
 
 Instead: spawn a fresh `general-purpose` subagent with a self-contained prompt. The subagent reads the data, synthesizes the slate, and returns title + thumbnail **pairings** as one structured output.
 
@@ -94,11 +95,14 @@ Transcript: <inline OR path to file>
 2. /Users/ray/Desktop/ray-os/.claude/skills/youtube-ab-tester/references/results/_anti-patterns.md
 3. /Users/ray/Desktop/ray-os/.claude/skills/youtube-ab-tester/references/results/_tests-still-worth-running.md
 4. The 4-6 most recent video result files under references/results/YYYY-MM/ (latest month first)
-5. socials/youtube/videos/uploaded/ — list filenames to check 60-day template reuse
-6. Optionally browse references/thumbnails/v{N}-{slug}/tested/ folders from recent videos to see what winning thumbnails looked like
+5. The 2-3 most recent posts in the #yt-outlier Slack channel — what's winning across the niche RIGHT NOW, plus any shell-fatigue warnings about Ray's own title patterns. Read them via the Slack MCP: load the tool first with ToolSearch (`select:mcp__claude_ai_Slack__slack_read_channel`), then read the newest messages from the `yt-outlier` channel. If the channel can't be read or the newest post is >14 days old, say so instead of inventing niche signals.
+6. socials/youtube/videos/uploaded/ — list filenames to check 60-day template reuse
+7. Optionally browse references/thumbnails/v{N}-{slug}/tested/ folders from recent videos to see what winning thumbnails looked like
 
 # Hard rules
 - Apply recency weighting (last 4 videos full weight; 5-9 ago high; 10+ durable anti-patterns only).
+- Ground at least 2 options in a CURRENT outlier signal from the #yt-outlier posts. Cite the actual outlier title + channel + multiplier inline. Only cite patterns that literally appear in a post — never stretch an outlier to fit a frame you already wanted (e.g. do not relabel an urgency-listicle outlier as evidence for a momentum frame). If no recent post exists (>14 days old), say so instead of inventing signals.
+- Heed shell-fatigue warnings from the #yt-outlier posts (e.g. an overused opener shell across Ray's recent uploads) even when that shell is PROVEN in the A/B archive — flag any option that reuses a fatigued shell.
 - Flag template reuse from the last 60 days. Justify any reuse in writing.
 - Frame diversity: at least 3 genuinely different framing categories.
 - Title + thumbnail must be COMPLEMENTARY, not redundant. Title says WHY/WHO, thumbnail says WHAT.
@@ -114,10 +118,11 @@ Transcript: <inline OR path to file>
 For each:
 - Title: "..."
 - Frame: <authority | observable social proof | concrete-proof | pillar/insider | concrete-mechanic | rivalry/benefit-equivalence>
+- Evidence: <channel A/B precedent and/or current outlier signal (title, channel, multiplier)>
 - Thumbnail concept: <Matt-structural | Nate-folder | hybrid>
 - Thumbnail text: "..." (2-3 words ideal)
 - Complementarity check: <one line>
-- Risk flags: <stale template / topic ceiling / anti-pattern adjacent>
+- Risk flags: <stale template / fatigued shell / topic ceiling / anti-pattern adjacent>
 
 ## Extras (5-7 more options)
 Same format. Cover authority, social-proof, concrete-proof, insider/pillar, concrete-mechanic.
