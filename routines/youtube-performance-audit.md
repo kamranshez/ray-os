@@ -28,7 +28,7 @@ Before starting, verify:
 3. **PostHog MCP** — loaded and switched to project 236619
 4. **VidTempla MCP** — loaded
 
-If any are missing → send a Telegram message asking Ray to provide them and stop.
+If any are missing → post a short Slack message to #yt-performance-audit (bot-token `curl` per `routines/AGENTS.md`) asking Ray to provide them, and stop.
 
 ---
 
