@@ -53,7 +53,7 @@ it means everywhere else in the skill.
 | Route      | Meaning                                                          | What happens |
 |------------|------------------------------------------------------------------|--------------|
 | `main`     | Clean i+1 — the target is the only unknown in the sentence        | Stays in the main deck |
-| `rescue`   | The sentence has unknowns *beyond* the target (above i+1)         | → rescue, below |
+| `rescue`   | The sentence has unknowns *beyond* the target (above i+1) — a **candidate** | i+3+ → cascade for an easier sentence; i+2 → keep the book sentence, defer. See below |
 | `deferred` | Above i+1 with no easier sentence, **or** the lemma already matured on another card | Moved to the deferred deck |
 
 > ### Never suspend. Never tag `not-worth-learning`.
@@ -69,32 +69,54 @@ it means everywhere else in the skill.
 Read each entry's `ai_instructions` before acting on it and obey it — see
 [pipeline.md §CURATE](pipeline.md#2--curate).
 
-### Rescue the too-hard cards — this is the good part
+### Rescue only the *truly* dense cards — i+3 and above
 
-A `rescue` card is not a bad card. The **word** is still worth learning; it's the audiobook's
-*sentence* that's too dense, which is just what novel prose is like. So don't exile it to the
-deferred deck. Send it back through **[the cascade](pipeline.md#the-sentence-cascade)** for an
+A `rescue`-routed card is not a bad card. The **word** is worth learning; the audiobook's
+*sentence* just carries extra unknowns beyond the target.
+
+**But Ray reads the books he mines.** A sentence he actually met in the novel is more memorable
+than a random anime line the cascade digs up — so a sentence with just *one* extra unknown (i+2)
+is worth **keeping**, not replacing. Ray's rule (July 2026): **only rescue i+3 or above.** For
+i+1 and i+2 cards, keep the book's own sentence — bring it to house standard, and let the i+2
+ones route to deferred like any above-i+1 card.
+
+> The scan still *routes* every above-i+1 card as `rescue` (it diffs at i+1), so treat `rescue`
+> as "**candidate**", not "must-replace". From that list, send **only the i+3+ noteIds** to the
+> cascade. The i+1/i+2 candidates stay in `audiobook_apply` — they keep their book sentence and
+> get field-fixed in place (i+2 → deferred, i+1 → main unless Ray queued it).
+
+Send the i+3+ cards back through **[the cascade](pipeline.md#the-sentence-cascade)** for an
 easier sentence for the same word:
 
 ```bash
-python3 <skill-dir>/scripts/replace_search.py --note-ids <the rescue noteIds> --output <work>/rescue.json
+python3 <skill-dir>/scripts/replace_search.py --note-ids <the i+3+ noteIds> --output <work>/rescue.json
 python3 <skill-dir>/scripts/replace_apply.py --draft <work>/rescue.json
 ```
 
-This routinely turns an i+3 card into a clean i+1. Real example from the first batch — 天真爛漫,
-whose audiobook sentence carried two extra unknowns (襟足, ちょん切る):
+This routinely turns an i+3 card into a clean i+1. Real example — 天真爛漫, whose audiobook
+sentence carried two extra unknowns (襟足, ちょん切る):
 
 ```
 audiobook:  私は天真爛漫で心配事といえば生活指導部に自慢の襟足をちょん切られることくらいだった。   (i3)
 cascade:    母の死を乗り越えた明るく天真爛漫なアイドルを                                    (i1) ✓
 ```
 
-Cards the cascade **misses** (no easier sentence anywhere) keep their dense sentence and fall
-through to the deferred deck at apply time. That's the honest fallback, not the default.
+> **Two things `replace_apply` does NOT do for audiobook cards — do them yourself, right after:**
+> 1. **It leaves the tool's foreign fields** (`definition`, `pitch_accent`, `frequency_*`)
+>    untouched — pure replace mode never had them. Clear them per rescued note:
+>    `updateNoteFields` → `definition: ""` (etc.).
+> 2. **It keeps the card in place** (main deck) and rehabs it to new. A rescued audiobook card is
+>    one Ray isn't studying yet, so `changeDeck` it to the **deferred** deck.
+>
+> Don't try to reuse `audiobook_apply --only <rescued ids>` for this: that draft's `explanation`
+> was written for the *old* sentence, so it would re-TTS the wrong text. The manual two-step
+> (clear `definition` + `changeDeck` deferred) is the clean path.
 
-**Expect a lot of rescue.** Novel prose is dense — 7 of the first 11 cards were above i+1.
-That's the corpus being honest, not the diff being broken. Rescue them; don't loosen the
-threshold.
+Cards the cascade **misses** (no easier sentence anywhere) keep their dense sentence and fall
+through to the deferred deck. That's the honest fallback, not the default.
+
+**Don't over-rescue.** Only i+3+ earns a replacement now — an i+2 book sentence is a feature (Ray
+read it), not a defect. If a batch is mostly i+1/i+2, expect *little* rescue, and that's correct.
 
 ---
 
