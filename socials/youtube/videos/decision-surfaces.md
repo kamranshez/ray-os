@@ -34,6 +34,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-hook-fable-leaving-3.png]]
 ![[decision-surfaces-hook-fable-leaving-4.png]]
 ![[decision-surfaces-hook-fable-leaving-5.png]]
+![[decision-surfaces-hook-fable-leaving-6.png]]
+![[decision-surfaces-hook-fable-leaving-7.png]]
+![[decision-surfaces-hook-fable-leaving-8.png]]
+![[decision-surfaces-hook-fable-leaving-9.png]]
+![[decision-surfaces-hook-fable-leaving-10.png]]
 
 ---
 
@@ -44,11 +49,10 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 - Coin the term: "A decision surface is the representation you're looking at in the moment you make a call." Not the info itself, the form it takes when it hits your eyes.
 - You already believe this, just not for planning:
 	- Generals: map table, not a stack of reports.
-	- Chess players: set up the board, never review from notation. The fork is invisible in text.
 	- "Same information. Different surface. Different blunders caught."
 - The claim: "a wall of markdown is one of the worst decision surfaces ever invented", and it's the one you approve every plan on.
 
-> 🎨 DRAW `decision-surfaces-markdown-wall-hidden-flaw`: a tall wall of markdown text with one line glowing faint red, invisible unless you squint, versus a map table and a chessboard where the same flaw sits exposed in the open
+> 🎨 DRAW `decision-surfaces-markdown-wall-hidden-flaw`: a tall wall of markdown text with one line glowing faint red, invisible unless you squint, versus a map table where the same flaw sits exposed in the open
 
 ![[decision-surfaces-markdown-wall-hidden-flaw-1.png]]
 ![[decision-surfaces-markdown-wall-hidden-flaw-2.png]]
@@ -58,6 +62,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-markdown-wall-hidden-flaw-6.png]]
 ![[decision-surfaces-markdown-wall-hidden-flaw-7.png]]
 ![[decision-surfaces-markdown-wall-hidden-flaw-8.png]]
+![[decision-surfaces-markdown-wall-hidden-flaw-9.png]]
+![[decision-surfaces-markdown-wall-hidden-flaw-10.png]]
+![[decision-surfaces-markdown-wall-hidden-flaw-11.png]]
+![[decision-surfaces-markdown-wall-hidden-flaw-12.png]]
+![[decision-surfaces-markdown-wall-hidden-flaw-13.png]]
 
 - Bret Victor, 2014, The Humane Representation of Thought:
 	- Great leaps in thinking = new representations. Arabic numerals over Roman. Algebraic notation over paragraphs.
@@ -72,6 +81,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-victor-cheap-representations-3.png]]
 ![[decision-surfaces-victor-cheap-representations-4.png]]
 ![[decision-surfaces-victor-cheap-representations-5.png]]
+![[decision-surfaces-victor-cheap-representations-6.png]]
+![[decision-surfaces-victor-cheap-representations-7.png]]
+![[decision-surfaces-victor-cheap-representations-8.png]]
+![[decision-surfaces-victor-cheap-representations-9.png]]
+![[decision-surfaces-victor-cheap-representations-10.png]]
 
 ---
 
@@ -94,6 +108,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-onboarding-dead-end-3.png]]
 ![[decision-surfaces-onboarding-dead-end-4.png]]
 ![[decision-surfaces-onboarding-dead-end-5.png]]
+![[decision-surfaces-onboarding-dead-end-6.png]]
+![[decision-surfaces-onboarding-dead-end-7.png]]
+![[decision-surfaces-onboarding-dead-end-8.png]]
+![[decision-surfaces-onboarding-dead-end-9.png]]
+![[decision-surfaces-onboarding-dead-end-10.png]]
 
 ---
 
@@ -116,6 +135,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-sixteen-representations-grid-3.png]]
 ![[decision-surfaces-sixteen-representations-grid-4.png]]
 ![[decision-surfaces-sixteen-representations-grid-5.png]]
+![[decision-surfaces-sixteen-representations-grid-6.png]]
+![[decision-surfaces-sixteen-representations-grid-7.png]]
+![[decision-surfaces-sixteen-representations-grid-8.png]]
+![[decision-surfaces-sixteen-representations-grid-9.png]]
+![[decision-surfaces-sixteen-representations-grid-10.png]]
 
 ---
 
@@ -136,6 +160,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-demo-prompt-canvas-3.png]]
 ![[decision-surfaces-demo-prompt-canvas-4.png]]
 ![[decision-surfaces-demo-prompt-canvas-5.png]]
+![[decision-surfaces-demo-prompt-canvas-6.png]]
+![[decision-surfaces-demo-prompt-canvas-7.png]]
+![[decision-surfaces-demo-prompt-canvas-8.png]]
+![[decision-surfaces-demo-prompt-canvas-9.png]]
+![[decision-surfaces-demo-prompt-canvas-10.png]]
 
 ---
 
@@ -170,6 +199,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-playfair-table-to-chart-3.png]]
 ![[decision-surfaces-playfair-table-to-chart-4.png]]
 ![[decision-surfaces-playfair-table-to-chart-5.png]]
+![[decision-surfaces-playfair-table-to-chart-6.png]]
+![[decision-surfaces-playfair-table-to-chart-7.png]]
+![[decision-surfaces-playfair-table-to-chart-8.png]]
+![[decision-surfaces-playfair-table-to-chart-9.png]]
+![[decision-surfaces-playfair-table-to-chart-10.png]]
 
 ---
 
@@ -192,6 +226,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-walk-the-board-3.png]]
 ![[decision-surfaces-walk-the-board-4.png]]
 ![[decision-surfaces-walk-the-board-5.png]]
+![[decision-surfaces-walk-the-board-6.png]]
+![[decision-surfaces-walk-the-board-7.png]]
+![[decision-surfaces-walk-the-board-8.png]]
+![[decision-surfaces-walk-the-board-9.png]]
+![[decision-surfaces-walk-the-board-10.png]]
 
 - The review pass, live. Double click, drop stickies:
 	1. Activation screen has a buy a license button, but no in-app purchase path on iOS. That button is a lie. Cut it or link out.
@@ -208,6 +247,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-canvas-review-loop-3.png]]
 ![[decision-surfaces-canvas-review-loop-4.png]]
 ![[decision-surfaces-canvas-review-loop-5.png]]
+![[decision-surfaces-canvas-review-loop-6.png]]
+![[decision-surfaces-canvas-review-loop-7.png]]
+![[decision-surfaces-canvas-review-loop-8.png]]
+![[decision-surfaces-canvas-review-loop-9.png]]
+![[decision-surfaces-canvas-review-loop-10.png]]
 
 ---
 
@@ -230,6 +274,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-plan-mutates-v6-v7-3.png]]
 ![[decision-surfaces-plan-mutates-v6-v7-4.png]]
 ![[decision-surfaces-plan-mutates-v6-v7-5.png]]
+![[decision-surfaces-plan-mutates-v6-v7-6.png]]
+![[decision-surfaces-plan-mutates-v6-v7-7.png]]
+![[decision-surfaces-plan-mutates-v6-v7-8.png]]
+![[decision-surfaces-plan-mutates-v6-v7-9.png]]
+![[decision-surfaces-plan-mutates-v6-v7-10.png]]
 
 ---
 
@@ -251,6 +300,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-honest-limits-three-3.png]]
 ![[decision-surfaces-honest-limits-three-4.png]]
 ![[decision-surfaces-honest-limits-three-5.png]]
+![[decision-surfaces-honest-limits-three-6.png]]
+![[decision-surfaces-honest-limits-three-7.png]]
+![[decision-surfaces-honest-limits-three-8.png]]
+![[decision-surfaces-honest-limits-three-9.png]]
+![[decision-surfaces-honest-limits-three-10.png]]
 
 - **Three: this is bigger than planning, I can't stop seeing it.** Data visualisation:
 	- Today: ask Claude for a chart, get one static view, one framing somebody chose for you. "A table wearing a chart costume."
@@ -266,6 +320,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-everything-is-a-surface-3.png]]
 ![[decision-surfaces-everything-is-a-surface-4.png]]
 ![[decision-surfaces-everything-is-a-surface-5.png]]
+![[decision-surfaces-everything-is-a-surface-6.png]]
+![[decision-surfaces-everything-is-a-surface-7.png]]
+![[decision-surfaces-everything-is-a-surface-8.png]]
+![[decision-surfaces-everything-is-a-surface-9.png]]
+![[decision-surfaces-everything-is-a-surface-10.png]]
 
 ---
 
@@ -280,6 +339,11 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-key-insight-quote-3.png]]
 ![[decision-surfaces-key-insight-quote-4.png]]
 ![[decision-surfaces-key-insight-quote-5.png]]
+![[decision-surfaces-key-insight-quote-6.png]]
+![[decision-surfaces-key-insight-quote-7.png]]
+![[decision-surfaces-key-insight-quote-8.png]]
+![[decision-surfaces-key-insight-quote-9.png]]
+![[decision-surfaces-key-insight-quote-10.png]]
 
 ---
 
@@ -299,3 +363,8 @@ Delivery note: bullets are talking cues, riff over them. Lines in quotes are wor
 ![[decision-surfaces-close-choose-the-surface-3.png]]
 ![[decision-surfaces-close-choose-the-surface-4.png]]
 ![[decision-surfaces-close-choose-the-surface-5.png]]
+![[decision-surfaces-close-choose-the-surface-6.png]]
+![[decision-surfaces-close-choose-the-surface-7.png]]
+![[decision-surfaces-close-choose-the-surface-8.png]]
+![[decision-surfaces-close-choose-the-surface-9.png]]
+![[decision-surfaces-close-choose-the-surface-10.png]]
