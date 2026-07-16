@@ -154,6 +154,7 @@ Place embeds at the end of each section, before the next `---` or `##` heading.
 
 - `codex` CLI on PATH (`brew install codex` or via OpenAI installer) and a completed `codex login`.
 - No API key required for this skill; the codex session reuses whatever auth Codex stores in `~/.codex/auth.json`.
+- **Auth expiry produces the SAME silent zero-images failure as the version dead zones** (verified 2026-07-16): if the codex login has lapsed, every call dies on `401 Unauthorized` / `turn.failed` and the old wrapper exited with an empty log. The wrapper now detects `turn.failed` and prints the 401 hint, but if you ever see all slugs tally 0 images with empty logs, check `codex login status` FIRST before suspecting versions. Fix is interactive: the user runs `codex login` themselves (suggest `! codex login` in a Claude Code session).
 - **Requires codex `0.144.1`+** (`npm install -g @openai/codex@latest`). Two dead zones below that, both verified 2026-07-12: `0.140.0`–`0.143.x` shipped a regression ([openai/codex#28422](https://github.com/openai/codex/issues/28422)) where `image_gen` produces a valid PNG but never saves it to disk (fixed in `0.144`); and the old `0.139.0` pin this skill used to mandate is now ALSO broken, because the account's configured default model (`gpt-5.6-terra` in `~/.codex/config.toml`) rejects old CLIs with "requires a newer version of Codex". The failure is silent either way — the wrapper's `set -e` exits 1 with no output — so trust the wrapper's version warning, not the empty log. Do NOT re-pin to 0.139.
 
 ## Bundled Assets

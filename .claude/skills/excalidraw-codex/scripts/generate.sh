@@ -149,7 +149,24 @@ EOF
 TMP_LOG="$(mktemp)"
 trap 'rm -f "$TMP_LOG"' EXIT
 
-printf '%s' "$WRAPPED_PROMPT" | codex "${CODEX_ARGS[@]}" - 2>&1 | tee "$TMP_LOG" >/dev/null
+# `|| true`: with set -e + pipefail, a nonzero codex exit would kill the script
+# HERE, before any error reporting below could run — that made auth expiry
+# (401 turn.failed) fail silently with an empty log. Tolerate the exit code,
+# then inspect the captured JSONL for what actually happened.
+printf '%s' "$WRAPPED_PROMPT" | codex "${CODEX_ARGS[@]}" - 2>&1 | tee "$TMP_LOG" >/dev/null || true
+
+# Surface fatal turn errors explicitly (auth expiry is the common one).
+if grep -q '"type":"turn.failed"' "$TMP_LOG"; then
+  echo "Codex turn FAILED. Error detail:" >&2
+  grep -o '"turn.failed".*' "$TMP_LOG" | head -1 >&2
+  if grep -q '401 Unauthorized' "$TMP_LOG"; then
+    echo "" >&2
+    echo "This is an AUTH failure: the codex CLI is logged out or its token expired." >&2
+    echo "Check with:  codex login status" >&2
+    echo "Fix with:    codex login   (interactive browser flow)" >&2
+  fi
+  exit 1
+fi
 
 THREAD_ID=$(grep -m1 -o '"thread_id":"[^"]*"' "$TMP_LOG" | head -1 | sed 's/.*"thread_id":"\([^"]*\)".*/\1/')
 if [[ -z "$THREAD_ID" ]]; then

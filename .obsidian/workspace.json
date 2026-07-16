@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "socials/youtube/videos/observer-agents.md",
+                "file": "socials/youtube/videos/decision-surfaces.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "observer-agents"
+              "title": "decision-surfaces"
             }
           }
         ]
@@ -182,33 +182,33 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "80cabf04a70af318",
+  "active": "446ab2d10da273db",
   "lastOpenFiles": [
+    "images/decision-surfaces-victor-cheap-representations-10.png",
+    "images/decision-surfaces-victor-cheap-representations-9.png",
+    "images/decision-surfaces-victor-cheap-representations-8.png",
+    "images/decision-surfaces-victor-cheap-representations-7.png",
+    "images/decision-surfaces-victor-cheap-representations-6.png",
+    "images/decision-surfaces-hook-fable-leaving-10.png",
+    "images/decision-surfaces-hook-fable-leaving-9.png",
+    "images/decision-surfaces-hook-fable-leaving-8.png",
+    "images/decision-surfaces-hook-fable-leaving-7.png",
+    "images/decision-surfaces-hook-fable-leaving-6.png",
+    "images/decision-surfaces-close-choose-the-surface-10.png",
+    "socials/youtube/videos/decision-surfaces-script-decisions.md",
+    "socials/youtube/videos/decision-surfaces.md",
+    "socials/youtube/videos/observer-agents.md",
     "projects/claude-code-future-features/observer-demo-rig/__pycache__/test_tax.cpython-314.pyc",
-    "images/observer-irreversible-too-late-5.png",
-    "images/observer-irreversible-too-late-4.png",
-    "images/observer-irreversible-too-late-3.png",
-    "images/observer-irreversible-too-late-2.png",
-    "images/observer-irreversible-too-late-1.png",
-    "images/observer-agent-cheating-5.png",
-    "images/observer-agent-cheating-4.png",
-    "images/observer-agent-cheating-3.png",
-    "images/observer-agent-cheating-2.png",
-    "images/observer-agent-cheating-1.png",
     "projects/agentic-coding-school/classes/loopy-ai/loopy-ai-ideas.html",
     "artefacts/loopy-ai-ideas.html",
     "artefacts/decision-interfaces/acs-revenue-v2/report.html",
     "routines/acs/weekly-question-round.md",
-    "socials/youtube/videos/decision-surfaces.md",
-    "socials/youtube/videos/observer-agents.md",
-    "socials/youtube/videos/decision-surfaces-script-decisions.md",
     "artefacts/observer-agents-L5-internals.html",
     "artefacts/observer-agents-L5-binary.html",
     "artefacts/observer-agents-L2-four-eyes.html",
     "artefacts/observer-agents-L4-myth-vs-real.html",
     "artefacts/observer-agents-L2-four-eyes.html.tmp.5741.1f13035e6854",
     "artefacts/observer-agents-L4-myth-vs-real.html.tmp.5741.7bf793a5b26b",
-    "artefacts/observer-agents-L3-loop.html",
     "artefacts/decision-surfaces-lab/brief.md",
     "artefacts/youtube-format-analysis-2026-07.md",
     "projects/agentic-coding-school/to-film/techniques/plan-with-contrasts.md",
