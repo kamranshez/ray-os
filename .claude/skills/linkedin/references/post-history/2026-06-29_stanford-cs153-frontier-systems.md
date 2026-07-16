@@ -8,8 +8,8 @@ engagement:
   reactions: 21
   comments: 1
   reposts: 0
-  impressions: 2580
-last_checked: 2026-07-15
+  impressions: 2589
+  last_checked: 2026-07-16
 ---
 
 Stanford University quietly uploaded a masterclass and called it a normal lecture series.

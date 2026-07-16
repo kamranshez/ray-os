@@ -6,13 +6,13 @@ triggers:
   secondary: aspiration
 pattern: contrast hook + recipe
 media: image
-status: posted
+status: deleted
 engagement:
   reactions: 3
   comments: 1
   reposts: 0
   impressions: 41
-  last_checked: 2026-06-25
+  last_checked: 2026-07-16
 url: https://www.linkedin.com/feed/update/urn:li:activity:7475899420081954816/
 notes: >
   From the Fable Return batch (source: /Users/ray/Downloads/31. Fable Return/transcript.txt).
@@ -27,6 +27,8 @@ notes: >
   recipe as "the technique that even Anthropic engineers use", and appended a
   video-in-comments CTA. Two typos fixed before saving: "Sweep every the codebase" ->
   "Sweep every file in the codebase", "Score each sections" -> "Score each section".
+  2026-07-16: Direct permalink now reports "This post was deleted or removed";
+  marked deleted without changing the last recorded live metrics.
 ---
 
 Fable 5 is coming back. People have spotted changes in the Claude Code binary before any announcement.
