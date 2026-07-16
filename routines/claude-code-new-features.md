@@ -58,19 +58,24 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 # precompute which flags are gate/config reads vs telemetry in the binary.
 # NOTE: the minified helper names DRIFT between releases. History: gate `ct(`→`it(`
 # (v2.1.193)→`at(` (v2.1.195)→`ot(` (v2.1.199)→`Qe(` (v2.1.208)→`Ze(`
-# (v2.1.210); structured/async reads in the current build also pass through `J1(`,
-# `vme(`, `Xfe(`, `dgt(`, and `S6n(`, while boolean eligibility checks use `Xq(`
-# and `IPi(`. Context-derived keys can be passed through `bvi(` before `Ze(`.
+# (v2.1.210)→`et(` (v2.1.211); structured/async reads in the current build also
+# pass through `Fme(`, `uM(`, `pme(`, and React hook `Vgt(`, while boolean
+# eligibility checks use `hj(` and `c1i(`. `Eqn(` is the refresh-aware async read.
+# Older builds used `J1(`, `vme(`, `Xfe(`, `dgt(`, `S6n(`, `Xq(`, `IPi(`, and
+# context-derived `bvi(` reads; v2.1.211 uses `Jwi(` to suffix per-model gate
+# keys such as `tengu_velvet_mallet_<model>`. Keep those aliases for cross-version diffs.
 # Telemetry `j(`→`G(`→`j(`/`f_(` (v2.1.195)→`G(` (v2.1.199)→`M(` (v2.1.208)
-# (with event wrappers `N(`, `bb(`, `I0(`, `QEu(`, and `Qxc(` in v2.1.210). We match
+# (with event wrappers `N(`, `bb(`, `I0(`, `QEu(`, and `Qxc(` in v2.1.210), then
+# `M(` with async/event wrappers `Pb(`, `V0(`, `MHc(`, and `hwu(` in v2.1.211. We match
 # the known aliases so wired-vs-present classification survives the next rename.
 # SANITY-CHECK `len(gates)` every run: it should be ~230+. If it's 0 (or nearly
 # everything classifies as "present" and DCE shows a `wired→present` avalanche), the
 # gate helper was renamed again — grep `("tengu_` in the strings to find the new
 # 1-2 char prefix whose call sites take a bare default (`!0`/`!1`/`null`/number), and
 # add it to the gates alternation below (telemetry prefixes take an `{...}` object).
-gates=set(re.findall(r'(?:Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)\("(tengu_[a-zA-Z0-9_]+)"',strings))
-telem=set(re.findall(r'(?:M|j|f_|G|N|bb|I0|QEu|Qxc|\$Wt|a|l|U|B|qrr|w|re)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gates=set(re.findall(r'(?:et|Fme|uM|pme|Vgt|hj|c1i|Eqn|Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gates.update(re.findall(r'(?:et|Fme|uM|pme|Vgt|Ze|Qe|ot|at|it|ct)\((?:Jwi|bvi)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+telem=set(re.findall(r'(?:M|Pb|V0|MHc|hwu|j|f_|G|N|bb|I0|QEu|Qxc|\$Wt|a|l|U|B|qrr|w|re)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 present=set(re.findall(r'tengu_[a-zA-Z0-9_]+',strings))
 
 # Fail closed before reading/writing tracker state. A helper rename otherwise creates
@@ -94,7 +99,7 @@ OVERRIDES={
  "tengu_cobalt_wren":"CLAUDE_CODE_CLASSIFIER_SUMMARY",
 }
 def truthy(v):
-    return v is True or (isinstance(v,str) and v.lower() not in ("off","")) or (isinstance(v,dict) and v.get("enabled") is True)
+    return v is True or (isinstance(v,(int,float)) and not isinstance(v,bool) and v != 0) or (isinstance(v,str) and v.lower() not in ("off","")) or (isinstance(v,dict) and v.get("enabled") is True)
 
 env_names=sorted(set(re.findall(r'\b(?:CLAUDE_CODE|CLAUDE)_[A-Z][A-Z0-9_]+\b',strings)))
 snap={"version":ver,"flags":{},"envs":env_names}

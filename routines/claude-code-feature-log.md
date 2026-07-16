@@ -247,3 +247,28 @@ Classifier repaired from binary evidence before diffing: current GrowthBook read
 - `tengu_velvet_hammer` — code removed (wired → stripped). The previous edit-tool validation path no longer survives in this build.
 - `tengu_fleetview_onboarding_v2` — retired from GrowthBook (wired → removed-from-growthbook). No current flag string or gate remains, so its Fleet onboarding behavior is unrecoverable.
 - `tengu_quartz_heron` — retired from GrowthBook (stripped → removed-from-growthbook). No current flag string or gate remains, so the historical behavior is unrecoverable.
+
+## 2026-07-16 09:21 — v2.1.211 (upgraded from v2.1.210)
+
+Classifier repaired from binary evidence before diffing: the main GrowthBook reader is now `et`, with `Fme`/`uM` structured reads, `pme`/`Vgt` refresh-aware reads, `hj`/`c1i` boolean eligibility checks, and `Jwi` per-model dynamic keys. Health check: 294 gate/config flags; the apparent `tengu_velvet_mallet` wired → present transition was rejected as a classifier artifact because its live gate now uses `et(Jwi(...))`. Official Anthropic changelog/release check was blocked because Exa MCP is unavailable; no announcement marker was advanced.
+
+### 🔀 GrowthBook switches
+- `tengu_shale_finch` — OFF → ON via GrowthBook. Removes `TodoWrite`, `TaskCreate`, `TaskGet`, `TaskUpdate`, and `TaskList` from non-teammate subagents after their toolset is resolved; code is wired and effective. The nearby output neutralizer is unconditional and is not controlled by this flag.
+- `tengu_slate_harrier` — `off` → `compact` via GrowthBook. Enables the Opus 4.7 “investigate first” instruction that makes Claude perform brief read-only investigation before asking a clarifying question; code is wired and effective in compact mode, with `CLAUDE_CODE_INVESTIGATE_FIRST` taking precedence when set.
+- `tengu_cowork_chrome_automode_default` — ON → OFF via GrowthBook. Supplies the default Chrome classifier-floor switch inside Auto Mode permission construction; code remains wired, but the floor is now off unless `CLAUDE_CHROME_CLASSIFIER_FLOOR` overrides it.
+- `tengu_cloth_snorkel` — OFF → ON via GrowthBook. Enables Artifact MCP runtime capability declarations and connector summaries for published artifact frames; code is wired and effective, with `CLAUDE_CODE_ARTIFACT_MCP` taking precedence.
+- `tengu_mcp_subagent_prompt` — OFF → ON via GrowthBook. Enables the stronger MCP large-result recovery prompt that tells subagents how to inspect saved JSON/text output completely rather than relying on the legacy truncation text; code is wired and effective, with `MCP_TRUNCATION_PROMPT_OVERRIDE` taking precedence.
+- `tengu_velvet_hammer_opus_4_7` — OFF → ON in GrowthBook, but stripped from v2.1.211. Its last-known purpose is an Opus 4.7-specific bypass of the Edit tool's read-before-edit/stale-file guard; no call site survives, so the switch is a no-op.
+- `tengu_velvet_hammer_sonnet_5` — OFF → ON in GrowthBook, but stripped from v2.1.211. Its last-known purpose is a Sonnet 5-specific bypass of the Edit tool's read-before-edit/stale-file guard; no call site survives, so the switch is a no-op.
+
+### 🆕 New flags
+- `tengu_media_byte_cap` — new numeric config `25165824` (24 MiB), wired and effective. During API message normalization it removes the oldest base64 image/document blocks until the request falls under the byte cap, replacing emptied content with `[media removed: request limit]` and emitting stripped-byte telemetry.
+
+### 🧱 DCE switches
+- `tengu_kairos_ready_nudge` — newly shipped (stripped → wired), but cached value is `null`, so it is inactive. Configures probability, impression count, and impression key for a Remote Control-ready push notification; the path additionally requires push-notification/Remote Control eligibility and suppresses itself in unsupported surfaces.
+
+### ⚙️ Environment changes
+- `CLAUDE_CODE_ENABLE_REFRESH_MCP_TOOLS` — added, opt-in boolean. When true it exposes the `RefreshMcpTools` tool, which re-queries already-connected MCP servers and reports tools added or removed; no related `tengu_*` gate is visible.
+- `CLAUDE_CODE_FORWARD_SUBAGENT_TEXT` — added, opt-in boolean (also exposed as `--forward-subagent-text`). When true it forwards ordinary assistant/user text blocks from subagents alongside their tool events and avoids suppressing that text in noninteractive streaming; no related `tengu_*` gate is visible.
+- `CLAUDE_CODE_GB_DISK_CACHE_WHEN_TELEMETRY_OFF` — added, opt-in boolean. Allows cached GrowthBook values on disk to remain usable when telemetry-backed GrowthBook initialization is otherwise unavailable; `DISABLE_GROWTHBOOK` still wins and disables the path.
+- `CLAUDE_CODE_RESUME_INTERRUPTED_TURN_MAX_AGE_MS` — added, positive millisecond threshold used only with interrupted-turn resume. It suppresses automatic resubmission/synthetic continuation when the last meaningful message is at least this old; invalid positive input falls back to 3,600,000 ms, `0` disables the age check, and there is no related `tengu_*` gate.
