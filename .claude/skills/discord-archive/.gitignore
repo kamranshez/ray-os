@@ -1,0 +1,4 @@
+.discord-session.json
+_channels.json
+__pycache__/
+*.pyc

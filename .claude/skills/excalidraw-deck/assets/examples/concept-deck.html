@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>the orchestration tax · Claude Code Workflow tool</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  /* Excalidraw's actual fonts, loaded from their public repo via jsdelivr */
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
+<script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
+<style>
+  :root {
+    --cream: #1c1c1c; --paper: #262626; --ink: #e8e8e8; --ink-soft: #9b9b9b;
+    --ink-faint: #555555; --rule: #3a3a3a;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--cream); color: var(--ink);
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Excalifont', cursive; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 4px 4px; z-index: 1;
+  }
+
+  /* ===== STAGE (full height, no topbar, no sidebar) ===== */
+  .stage {
+    position: fixed; top: 0; bottom: 0; left: 0; right: 0;
+    display: flex; flex-direction: column; z-index: 5;
+  }
+  .sketch-wrap {
+    flex: 1 1 auto; min-height: 0; display: flex; align-items: center;
+    justify-content: center; padding: 8px 14px 2px; position: relative;
+  }
+  .sketch-wrap svg {
+    width: 100%; height: 100%; display: block; transition: opacity 250ms ease;
+  }
+  .sketch-wrap svg.fading { opacity: 0; }
+
+  .caption-area {
+    flex: 0 0 auto; text-align: center; padding: 2px 28px 50px;
+    transition: opacity 250ms ease;
+  }
+  .caption-area.fading { opacity: 0; }
+  .caption-area h2 {
+    font-family: 'Excalifont', cursive; font-weight: 700; margin: 0 0 6px;
+    font-size: clamp(1.6rem, 2.8vw, 2.35rem); line-height: 1.05; color: var(--ink);
+  }
+  .caption-area p {
+    font-family: 'Excalifont', cursive; margin: 0 auto;
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem); line-height: 1.4;
+    color: var(--ink-soft); max-width: 980px;
+  }
+
+  /* ===== TAP ZONES ===== */
+  .tap-zone { position: fixed; top: 0; bottom: 0; width: 50%; z-index: 8; cursor: pointer; }
+  .tap-zone.left { left: 0; }
+  .tap-zone.right { right: 0; }
+
+  /* draw-on animation */
+  .draw-on path, .draw-on line, .draw-on circle, .draw-on rect {
+    stroke-dasharray: 1500; stroke-dashoffset: 1500; animation: drawOn 700ms ease forwards;
+  }
+  @keyframes drawOn { to { stroke-dashoffset: 0; } }
+  .draw-on text { opacity: 0; animation: fadeIn 500ms ease forwards; animation-delay: 400ms; }
+  @keyframes fadeIn { to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="sketch-wrap" id="sketch-wrap">
+    <svg id="sketch" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="caption-area" id="caption">
+    <h2 id="headline">you already have a workflow</h2>
+    <p id="caption-text">a job you run over and over, and Claude is the one running it</p>
+  </div>
+</div>
+
+<div class="tap-zone left" id="tap-left"></div>
+<div class="tap-zone right" id="tap-right"></div>
+
+<script>
+(() => {
+  // Excalidraw palette
+  const COLORS = {
+    ink: '#e8e8e8',          // light strokes + text
+    soft: '#9b9b9b',         // secondary text
+    faint: '#555555',        // subtle lines
+    card: '#323232',         // inner card on dark
+    yellow: '#4d4526',       // dark amber
+    blue: '#1f3a4d',         // dark blue
+    green: '#234a2c',        // dark green
+    pink: '#4d2a39',         // dark pink
+    amber: '#523a23',        // dark orange
+    paper: '#262626',        // dark panel
+    emerald: '#5bd66f',      // bright green accent
+    rose: '#ff6b6b',         // bright red accent
+    lightRed: '#4d2626',     // dark red
+    softEmerald: '#234a2c',  // dark green (alias)
+    violet: '#352c4d',       // dark violet
+    teal: '#1d4642',         // dark teal
+    blueStroke: '#74b9e7',   // light blue accent
+    yellowStroke: '#f0a429', // amber accent
+  };
+  const MONO = "'Cascadia Code', ui-monospace, monospace";
+
+  const svg = document.getElementById('sketch');
+  let rc = rough.svg(svg);
+
+  const clearSvg = (s) => { while (s.firstChild) s.removeChild(s.firstChild); };
+
+  const addRect = (x, y, w, h, opts={}) => {
+    const node = rc.rectangle(x, y, w, h, {
+      stroke: COLORS.ink, strokeWidth: 1.6, roughness: 2.0, bowing: 1.6,
+      fill: opts.fill, fillStyle: opts.fillStyle || 'solid', fillWeight: 1,
+      hachureGap: 6, ...opts
+    });
+    svg.appendChild(node);
+    return node;
+  };
+  const addLine = (x1,y1,x2,y2, opts={}) => {
+    const node = rc.line(x1,y1,x2,y2, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.5, ...opts });
+    svg.appendChild(node);
+    return node;
+  };
+  const addCircle = (cx,cy,d, opts={}) => {
+    const node = rc.circle(cx,cy,d, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node);
+    return node;
+  };
+  const addEllipse = (cx,cy,w,h, opts={}) => {
+    const node = rc.ellipse(cx,cy,w,h, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.8, ...opts });
+    svg.appendChild(node);
+    return node;
+  };
+  const addPath = (path, opts={}) => {
+    const node = rc.path(path, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node);
+    return node;
+  };
+
+  const addText = (x,y, text, opts={}) => {
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('font-family', opts.font || "'Excalifont', cursive");
+    t.setAttribute('font-size', opts.size || 24);
+    t.setAttribute('fill', opts.fill || COLORS.ink);
+    t.setAttribute('text-anchor', opts.anchor || 'start');
+    if (opts.weight) t.setAttribute('font-weight', opts.weight);
+    if (opts.style) t.setAttribute('font-style', opts.style);
+    t.textContent = text;
+    svg.appendChild(t);
+    return t;
+  };
+
+  const addArrow = (x1,y1,x2,y2, opts={}) => {
+    const curve = opts.curve != null ? opts.curve : 30;
+    const cx = (x1+x2)/2 + curve;
+    const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+    const path = `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+    addPath(path, opts);
+    const angle = Math.atan2(y2-cy, x2-cx);
+    const ah = opts.arrowSize || 14;
+    const ax1 = x2 - ah*Math.cos(angle - Math.PI/7);
+    const ay1 = y2 - ah*Math.sin(angle - Math.PI/7);
+    const ax2 = x2 - ah*Math.cos(angle + Math.PI/7);
+    const ay2 = y2 - ah*Math.sin(angle + Math.PI/7);
+    addLine(x2,y2,ax1,ay1, opts);
+    addLine(x2,y2,ax2,ay2, opts);
+  };
+
+  // checkmark / x icon
+  const addCheck = (cx, cy, size=18, color=COLORS.emerald) => {
+    addPath(`M ${cx-size*0.6} ${cy} L ${cx-size*0.1} ${cy+size*0.5} L ${cx+size*0.7} ${cy-size*0.6}`, {
+      stroke: color, strokeWidth: 3.5, roughness: 1.2
+    });
+  };
+  const addCross = (cx, cy, size=18, color=COLORS.rose) => {
+    addLine(cx-size*0.6, cy-size*0.6, cx+size*0.6, cy+size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+    addLine(cx-size*0.6, cy+size*0.6, cx+size*0.6, cy-size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+  };
+
+  // ============== SLIDES ==============
+  const slides = [];
+
+  // -------- SLIDE 2: YOU ALREADY HAVE A WORKFLOW --------
+  const slideAlreadyHave = {
+    headline: 'you already have a workflow',
+    caption: 'a job you run over and over, and Claude is the one running it',
+    draw: () => {
+      // the orchestrator above
+      addRect(620, 130, 360, 150, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(800, 195, 'Claude', { size: 40, anchor: 'middle', weight: 700 });
+      addText(800, 242, 'the ORCHESTRATOR', { size: 23, anchor: 'middle', weight: 700, fill: COLORS.rose, font: MONO });
+
+      // the 4-step job
+      const steps = [
+        { label: 'implement', color: COLORS.blue },
+        { label: 'review', color: COLORS.violet },
+        { label: 'fix', color: COLORS.amber },
+        { label: 'review again', color: COLORS.violet },
+      ];
+      steps.forEach((s, i) => {
+        const x = 170 + i * 320;
+        addRect(x, 470, 240, 130, { fill: s.color, fillStyle: 'solid', strokeWidth: 2 });
+        addText(x + 120, 524, s.label, { size: 25, anchor: 'middle', weight: 700 });
+        addText(x + 120, 561, 'subagent', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+        if (i < 3) addArrow(x + 240, 535, x + 320, 535, { stroke: COLORS.ink, strokeWidth: 2, curve: 0, arrowSize: 12 });
+        // arrow down from the orchestrator to this step
+        addArrow(800, 285, x + 120, 462, { stroke: COLORS.rose, strokeWidth: 1.5, curve: (x+120-800)*0.03, arrowSize: 8 });
+      });
+
+      addText(800, 695, 'decides what runs next · holds every result', { size: 28, anchor: 'middle', fill: COLORS.ink, weight: 600 });
+    }
+  };
+  slides.push(slideAlreadyHave);
+
+  // -------- SLIDE 3: THE ORCHESTRATION TAX --------
+  const slideTax = {
+    headline: 'the orchestration tax',
+    caption: 'the price of letting the model run the project, not just do the tasks',
+    draw: () => {
+      // central orchestrator
+      addRect(580, 320, 440, 210, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(800, 408, 'Claude', { size: 42, anchor: 'middle', weight: 700 });
+      addText(800, 460, 'THE ORCHESTRATOR', { size: 23, anchor: 'middle', weight: 700, fill: COLORS.rose, font: MONO });
+
+      addRect(690, 565, 220, 38, { strokeWidth: 1.6 });
+      addRect(694, 569, 130, 30, { fill: COLORS.rose, fillStyle: 'solid', stroke: COLORS.ink, strokeWidth: 1 });
+      addText(800, 638, 'tokens spent on coordination, not work', { size: 19, anchor: 'middle', fill: COLORS.rose, weight: 700, style: 'italic' });
+
+      // cost 01
+      addRect(110, 120, 430, 150, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+      addText(140, 168, '01 · the token tax', { size: 23, weight: 700, font: MONO });
+      addText(140, 206, 'every coordination decision is', { size: 18 });
+      addText(140, 234, 'a model call that does no work', { size: 18 });
+
+      // cost 02
+      addRect(1060, 120, 430, 150, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2 });
+      addText(1090, 168, '02 · no visibility', { size: 23, weight: 700, font: MONO });
+      addText(1090, 206, 'a wall of text scrolls past, so', { size: 18 });
+      addText(1090, 234, 'you cannot tell what step it is on', { size: 18 });
+
+      // cost 03
+      addRect(430, 720, 740, 140, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2 });
+      addText(460, 768, '03 · it gets sloppy', { size: 23, weight: 700, font: MONO });
+      addText(460, 806, 'a long run packs 400k tokens into the context window', { size: 18 });
+      addText(460, 834, 'coordinating that deep, the orchestrator drifts off your task', { size: 18 });
+
+      // faint arrows linking callouts to the box
+      addArrow(500, 245, 600, 350, { stroke: COLORS.faint, strokeWidth: 1.3, curve: 20, arrowSize: 8 });
+      addArrow(1100, 245, 1000, 350, { stroke: COLORS.faint, strokeWidth: 1.3, curve: -20, arrowSize: 8 });
+      addArrow(1045, 715, 1000, 510, { stroke: COLORS.faint, strokeWidth: 1.3, curve: 14, arrowSize: 8 });
+    }
+  };
+  slides.push(slideTax);
+
+  // -------- SLIDE 4: A TAX AT EVERY HANDOFF --------
+  const slideHandoff = {
+    headline: 'a tax at every handoff',
+    caption: 'subagents help with context, but Claude still passes every result by hand',
+    draw: () => {
+      // the orchestrator, top center
+      addRect(610, 110, 380, 130, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(800, 165, 'Claude, the orchestrator', { size: 23, anchor: 'middle', weight: 700, font: MONO });
+      addText(800, 206, 'reads and re-passes every result', { size: 19, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+
+      // 3 subagents along the bottom
+      const subs = [
+        { x: 280, color: COLORS.blue, label: 'subagent A' },
+        { x: 800, color: COLORS.green, label: 'subagent B' },
+        { x: 1320, color: COLORS.amber, label: 'subagent C' },
+      ];
+      subs.forEach(s => {
+        addRect(s.x - 150, 560, 300, 130, { fill: s.color, fillStyle: 'solid', strokeWidth: 2 });
+        addText(s.x, 635, s.label, { size: 23, anchor: 'middle', weight: 700, font: MONO });
+      });
+
+      // arrows: A up, down to B, B up, down to C
+      addArrow(290, 555, 660, 245, { stroke: COLORS.ink, strokeWidth: 2, curve: -50, arrowSize: 12 });
+      addArrow(720, 245, 770, 555, { stroke: COLORS.ink, strokeWidth: 2, curve: -50, arrowSize: 12 });
+      addArrow(840, 555, 890, 245, { stroke: COLORS.ink, strokeWidth: 2, curve: -50, arrowSize: 12 });
+      addArrow(950, 245, 1310, 555, { stroke: COLORS.ink, strokeWidth: 2, curve: -50, arrowSize: 12 });
+
+      // tax meter clicks at each join
+      [[500,355],[745,400],[855,400],[1100,355]].forEach(([x,y]) => {
+        addCircle(x, y, 48, { fill: COLORS.rose, fillStyle: 'solid', strokeWidth: 1.6 });
+        addText(x, y+9, '$', { size: 30, anchor: 'middle', weight: 700, fill: '#fff' });
+      });
+
+      addText(800, 765, 'four subagents is not one tax. it is a tax at every join.', {
+        size: 24, anchor: 'middle', fill: COLORS.rose, weight: 700, style: 'italic'
+      });
+      addText(800, 805, 'the more you fan out, the more you pay', { size: 20, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+    }
+  };
+  slides.push(slideHandoff);
+
+  // -------- SLIDE: WHAT IT UNLOCKS (model wrapper vs code wrapper) --------
+  const slideUnlocks = {
+    headline: 'what it unlocks: the same run, without the tax',
+    caption: 'wrap the steps in the model and you pay at every join — wrap them in code and you do not',
+    draw: () => {
+      const steps = ['task 1', 'task 2', 'task 3', 'task 4', 'task 5'];
+      const boxX = i => 150 + i * 272;
+
+      // ---- BEFORE: the model wraps the work ----
+      addText(150, 150, 'model wrapper', { size: 27, weight: 700, fill: COLORS.rose, font: MONO });
+      addText(150, 182, 'Claude carries every result to the next step — a token tax at each join', { size: 17, fill: COLORS.soft, style: 'italic' });
+      steps.forEach((s, i) => {
+        const x = boxX(i);
+        addRect(x, 215, 202, 115, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+        addText(x + 101, 279, s, { size: 21, anchor: 'middle', weight: 700, font: MONO });
+        if (i < steps.length - 1) {
+          addCircle(x + 237, 272, 46, { fill: COLORS.rose, fillStyle: 'solid', strokeWidth: 1.6 });
+          addText(x + 237, 282, '$', { size: 28, anchor: 'middle', weight: 700, fill: '#fff' });
+        }
+      });
+      addText(800, 388, 'tokens burned at every arrow · the deeper it runs, the sloppier it gets', {
+        size: 19, anchor: 'middle', fill: COLORS.rose, weight: 700, style: 'italic'
+      });
+
+      // divider
+      addLine(130, 438, 1470, 438, { stroke: COLORS.faint, strokeWidth: 1.5 });
+
+      // ---- AFTER: code wraps the work ----
+      addText(150, 502, 'code wrapper', { size: 27, weight: 700, fill: COLORS.emerald, font: MONO });
+      addText(150, 534, 'a workflow file carries every result — for zero tokens', { size: 17, fill: COLORS.soft, style: 'italic' });
+      steps.forEach((s, i) => {
+        const x = boxX(i);
+        addRect(x, 567, 202, 115, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+        addText(x + 101, 631, s, { size: 21, anchor: 'middle', weight: 700, font: MONO });
+        if (i < steps.length - 1) {
+          addArrow(x + 202, 624, x + 272, 624, { stroke: COLORS.emerald, strokeWidth: 2.6, curve: 0, arrowSize: 13 });
+        }
+      });
+      addText(800, 740, 'every join is free — loop 20, 30 agents and context never fills', {
+        size: 19, anchor: 'middle', fill: COLORS.emerald, weight: 700, style: 'italic'
+      });
+
+      addText(800, 808, 'same five steps — one run pays a tax at every arrow, the other pays nothing', {
+        size: 22, anchor: 'middle', fill: COLORS.ink, weight: 700, style: 'italic'
+      });
+    }
+  };
+  slides.push(slideUnlocks);
+
+  // -------- SLIDE 5: WHAT THE WORKFLOW TOOL IS --------
+  const slideWhatItIs = {
+    headline: 'the workflow tool: code is the orchestrator',
+    caption: 'one JavaScript file does the coordinating, and the model only does the work',
+    draw: () => {
+      // the file
+      addRect(560, 100, 480, 330, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2.4 });
+      addPath('M 1000 100 L 1040 100 L 1040 140 Z', { stroke: COLORS.ink, fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 1.4 });
+      addText(592, 156, 'workflow.js', { size: 26, weight: 700, font: MONO });
+      addText(592, 184, 'the file is the orchestrator', { size: 18, fill: COLORS.soft, style: 'italic' });
+      addLine(592, 200, 1008, 200, { stroke: COLORS.soft });
+
+      const code = [
+        "phase('Review')",
+        "const r = await agent('review it')",
+        "if (r.passed) return r",
+        "await agent('fix the issues')",
+      ];
+      // highlight the two agent() lines
+      addRect(580, 230, 444, 32, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 0, roughness: 2.4 });
+      addRect(580, 314, 444, 32, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 0, roughness: 2.4 });
+      code.forEach((l, i) => addText(596, 254 + i*42, l, { size: 19, font: MONO }));
+
+      addText(800, 460, 'every  agent()  call spawns one fresh Claude', { size: 22, anchor: 'middle', weight: 700, font: MONO });
+
+      [430, 800, 1170].forEach(x => {
+        addArrow(800, 482, x, 558, { stroke: COLORS.emerald, strokeWidth: 1.8, curve: (x-800)*0.04, arrowSize: 11 });
+        addRect(x - 150, 578, 300, 160, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2 });
+        addText(x, 622, 'agent', { size: 24, anchor: 'middle', weight: 700, font: MONO });
+        addLine(x - 110, 640, x + 110, 640, { stroke: COLORS.soft });
+        addText(x, 673, 'clean, empty', { size: 19, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+        addText(x, 699, 'context window', { size: 19, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+        addText(x, 725, 'does one task', { size: 19, anchor: 'middle', fill: COLORS.ink });
+      });
+
+      addText(800, 792, 'the model still thinks. it just no longer runs the plan.', {
+        size: 22, anchor: 'middle', fill: COLORS.emerald, weight: 700, style: 'italic'
+      });
+    }
+  };
+  slides.push(slideWhatItIs);
+
+  // -------- SLIDE 6: THE BASIC EXAMPLE --------
+  const slideBasicExample = {
+    headline: 'the basic example',
+    caption: 'implement-and-review: the loop lives in code, so it cannot be forgotten',
+    draw: () => {
+      addRect(110, 110, 1010, 740, { fill: COLORS.paper, fillStyle: 'solid', strokeWidth: 2 });
+      addText(150, 165, 'implement-and-review.js', { size: 24, weight: 700, font: MONO });
+      addLine(150, 182, 1080, 182, { stroke: COLORS.soft });
+
+      const lines = [
+        { t: "phase('Implement')" },
+        { t: "await agent('implement the feature')" },
+        { t: "" },
+        { t: "let round = 0" },
+        { t: "do {" },
+        { t: "  round++" },
+        { t: "  review = await agent('review it', { schema })", hi: true },
+        { t: "  if (review.passed) break", hi: true },
+        { t: "  await agent('fix: ' + review.issues)", hi: true },
+        { t: "} while (round < 3)" },
+      ];
+      let y = 238;
+      lines.forEach(l => {
+        if (l.hi) addRect(146, y - 27, 800, 40, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 0, roughness: 2.4 });
+        addText(165, y, l.t, { size: 22, font: MONO });
+        y += 46;
+      });
+
+      // annotations
+      addText(1175, 410, 'a real loop', { size: 22, fill: COLORS.rose, weight: 700 });
+      addArrow(1165, 425, 1000, 470, { stroke: COLORS.rose, strokeWidth: 1.6, curve: 20, arrowSize: 9 });
+
+      addText(1175, 545, 'if / break on', { size: 20, fill: COLORS.emerald, weight: 700 });
+      addText(1175, 573, 'real data', { size: 20, fill: COLORS.emerald, weight: 700 });
+      addArrow(1165, 555, 990, 560, { stroke: COLORS.emerald, strokeWidth: 1.6, curve: 10, arrowSize: 9 });
+
+      addText(1175, 670, 'a hard cap,', { size: 20, fill: COLORS.soft, weight: 700 });
+      addText(1175, 697, 'every loop', { size: 18, fill: COLORS.soft });
+      addText(1175, 721, 'needs one', { size: 18, fill: COLORS.soft });
+      addArrow(1165, 680, 1010, 660, { stroke: COLORS.soft, strokeWidth: 1.6, curve: -10, arrowSize: 9 });
+
+      addText(615, 815, "reviewing is no longer the model's decision. it is the file's.", {
+        size: 22, anchor: 'middle', fill: COLORS.ink, weight: 700, style: 'italic'
+      });
+    }
+  };
+  slides.push(slideBasicExample);
+
+  // -------- SLIDE 7: THE TOOLKIT --------
+  const slideToolkit = {
+    headline: 'the toolkit',
+    caption: 'six primitives cover ninety percent of every workflow you will write',
+    draw: () => {
+      const prims = [
+        { name: 'agent()', desc: 'spawn one fresh subagent', color: COLORS.blue },
+        { name: 'parallel()', desc: 'run a batch at once, wait for all', color: COLORS.green },
+        { name: 'pipeline()', desc: 'stream items through stages', color: COLORS.violet },
+        { name: 'schema', desc: 'force a structured answer back', color: COLORS.amber },
+        { name: 'phase / log', desc: 'a live view of what is running', color: COLORS.pink },
+        { name: 'args', desc: 'inputs you pass into the run', color: COLORS.teal },
+      ];
+      prims.forEach((p, i) => {
+        const col = i % 3;
+        const x = 130 + col * 460;
+        const y = i < 3 ? 165 : 470;
+        addRect(x, y, 410, 250, { fill: p.color, fillStyle: 'solid', strokeWidth: 2 });
+        addText(x + 205, y + 88, p.name, { size: 34, anchor: 'middle', weight: 700, font: MONO });
+        addLine(x + 50, y + 118, x + 360, y + 118, { stroke: COLORS.soft });
+        addText(x + 205, y + 168, p.desc, { size: 19, anchor: 'middle' });
+      });
+      addText(800, 802, 'plus a budget for token-aware loops, and you can nest one workflow in another', {
+        size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+    }
+  };
+  slides.push(slideToolkit);
+
+  // -------- SLIDE: BUDGET --------
+  const slideBudget = {
+    headline: 'budget: let the tokens decide when to stop',
+    caption: 'a loop keeps spawning agents until the run is out of budget',
+    draw: () => {
+      // the loop, as code
+      addRect(150, 120, 720, 215, { fill: COLORS.yellow, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(184, 170, 'budget-loop.js', { size: 22, weight: 700, font: MONO });
+      addLine(184, 186, 836, 186, { stroke: COLORS.soft });
+      addText(184, 232, 'while (budget.remaining() > 50_000) {', { size: 20, font: MONO });
+      addRect(170, 250, 540, 34, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 0, roughness: 2.4 });
+      addText(200, 274, "await agent('find one more bug')", { size: 20, font: MONO });
+      addText(184, 318, '}', { size: 20, font: MONO });
+
+      // the token budget, draining
+      addText(1230, 168, 'token budget', { size: 24, anchor: 'middle', weight: 700 });
+      addRect(1000, 200, 460, 74, { fill: COLORS.card, fillStyle: 'solid', strokeWidth: 2 });
+      addRect(1004, 204, 150, 66, { fill: COLORS.emerald, fillStyle: 'solid', strokeWidth: 0 });
+      addText(1077, 312, 'remaining', { size: 17, anchor: 'middle', fill: COLORS.emerald, weight: 700, font: MONO });
+      addText(1310, 312, 'spent', { size: 17, anchor: 'middle', fill: COLORS.soft, font: MONO });
+
+      // the run scaling itself to the budget
+      const steps = [
+        { label: 'agent 1', state: 'done' },
+        { label: 'agent 2', state: 'done' },
+        { label: 'agent 3', state: 'done' },
+        { label: 'agent 4', state: 'running' },
+        { label: 'stop', state: 'stop' },
+      ];
+      steps.forEach((s, i) => {
+        const x = 130 + i * 290;
+        const fill = s.state === 'stop' ? COLORS.lightRed
+          : s.state === 'running' ? COLORS.blue : COLORS.softEmerald;
+        addRect(x, 420, 250, 130, { fill, fillStyle: 'solid', strokeWidth: 2 });
+        addText(x + 125, 493, s.label, { size: 23, anchor: 'middle', weight: 700, font: MONO });
+        if (s.state === 'done') addCheck(x + 32, 452, 12, COLORS.emerald);
+        if (s.state === 'stop') addCross(x + 32, 452, 13, COLORS.rose);
+        if (i < steps.length - 1) addArrow(x + 250, 485, x + 290, 485, { stroke: COLORS.ink, strokeWidth: 2, curve: 0, arrowSize: 10 });
+      });
+
+      addText(800, 632, 'every loop checks budget.remaining() before it spends again', {
+        size: 22, anchor: 'middle', weight: 700
+      });
+      addText(800, 686, 'the run scales itself to the tokens you gave it — no fixed agent count', {
+        size: 21, anchor: 'middle', fill: COLORS.soft, style: 'italic'
+      });
+      addText(800, 760, 'set a token target, and the workflow loops until it is spent', {
+        size: 23, anchor: 'middle', fill: COLORS.emerald, weight: 700, style: 'italic'
+      });
+    }
+  };
+  slides.push(slideBudget);
+
+  // -------- SLIDE 9: DETERMINISM & RESUME --------
+  const slideDeterminism = {
+    headline: 'the orchestration is free, and it can resume',
+    caption: 'the code spends zero tokens, and a failed run picks up from where it died',
+    draw: () => {
+      addPath('M 800 120 Q 812 460 800 800', { stroke: COLORS.faint, strokeWidth: 1.4, roughness: 2.4, fill: 'none' });
+
+      // LEFT: zero-token orchestration
+      addText(400, 165, 'the code runs free', { size: 30, anchor: 'middle', weight: 700 });
+      addRect(140, 200, 520, 430, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      ['phase()', 'parallel()', 'pipeline()', 'if / while'].forEach((l,i) => {
+        const y = 240 + i*92;
+        addRect(190, y, 420, 64, { fill: COLORS.card, fillStyle: 'solid', strokeWidth: 1.4 });
+        addText(218, y + 40, l, { size: 22, font: MONO });
+        addText(580, y + 40, '0 tok', { size: 19, anchor: 'end', fill: COLORS.emerald, weight: 700, font: MONO });
+      });
+      addText(400, 670, 'the model is never asked "what runs next"', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addText(400, 730, 'you have not reduced the tax.', { size: 22, anchor: 'middle', weight: 700 });
+      addText(400, 766, 'you have deleted it.', { size: 28, anchor: 'middle', weight: 700, fill: COLORS.emerald });
+
+      // RIGHT: resume from cache
+      addText(1190, 165, 'a run can resume', { size: 30, anchor: 'middle', weight: 700 });
+      const stagesR = [
+        { label: 'stage 1', state: 'cached' },
+        { label: 'stage 2', state: 'cached' },
+        { label: 'stage 3', state: 'cached' },
+        { label: 'stage 4', state: 'rerun' },
+        { label: 'stage 5', state: 'new' },
+      ];
+      stagesR.forEach((s, i) => {
+        const y = 215 + i * 86;
+        const fill = s.state === 'cached' ? COLORS.softEmerald : s.state === 'rerun' ? COLORS.amber : COLORS.card;
+        addRect(950, y, 480, 64, { fill, fillStyle: 'solid', strokeWidth: 1.6 });
+        addText(1010, y + 40, s.label, { size: 22, font: MONO, weight: 600 });
+        const tag = s.state === 'cached' ? 'from cache' : s.state === 'rerun' ? 'edited, re-runs' : 'runs fresh';
+        addText(1405, y + 40, tag, { size: 18, anchor: 'end', fill: s.state === 'cached' ? COLORS.emerald : COLORS.soft, weight: 700, style: 'italic' });
+        if (s.state === 'cached') addCheck(978, y + 32, 11, COLORS.emerald);
+      });
+      addText(1190, 700, 'fix stage 4 and re-run. stages 1, 2 and 3 replay', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addText(1190, 728, 'instantly. you only pay for what you changed.', { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+    }
+  };
+  slides.push(slideDeterminism);
+
+  // -------- SLIDE: RESUME A RUN (append a step, pay only for it) --------
+  const slideResume = {
+    headline: 'resume a run, pay for the new step only',
+    caption: 'append a step at the end and resume: steps 1 through 8 replay from the journal for free, and only the new step does real work',
+    draw: () => {
+      // the run, resumed: 8 cached steps + 1 live
+      addText(80, 142, 'resume the run', { size: 22, fill: COLORS.soft, style: 'italic', font: MONO });
+      for (let i = 0; i < 8; i++) {
+        const x = 80 + i*112;
+        addRect(x, 168, 96, 92, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 1.8 });
+        addText(x+48, 206, 'S' + (i+1), { size: 22, anchor: 'middle', weight: 700, font: MONO });
+        addCheck(x+48, 236, 10, COLORS.emerald);
+      }
+      addLine(80, 282, 976, 282, { stroke: COLORS.emerald, strokeWidth: 1.6 });
+      addText(528, 318, 'replayed from the journal  .  0 tokens  .  instant', { size: 20, anchor: 'middle', fill: COLORS.emerald, weight: 700, style: 'italic' });
+      addArrow(980, 214, 1076, 214, { stroke: COLORS.ink, strokeWidth: 2, curve: 0, arrowSize: 11 });
+      addRect(1080, 148, 320, 150, { fill: COLORS.blue, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(1240, 202, 'step 9', { size: 30, anchor: 'middle', weight: 700, font: MONO });
+      addText(1240, 242, 'the only live run', { size: 19, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      addText(1240, 276, '~100k tokens', { size: 18, anchor: 'middle', fill: COLORS.ink, font: MONO });
+
+      // the bill: a fresh run vs the resume
+      addText(80, 402, 'the bill', { size: 22, fill: COLORS.soft, style: 'italic', font: MONO });
+      addText(92, 450, 'fresh run', { size: 22, weight: 700, fill: COLORS.rose, font: MONO });
+      addRect(340, 423, 1060, 46, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+      addText(370, 454, '9 agents  .  ~900k tokens  .  ~50s', { size: 21, weight: 700, font: MONO });
+      addText(92, 537, 'resume', { size: 22, weight: 700, fill: COLORS.emerald, font: MONO });
+      addRect(340, 510, 135, 46, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+      addText(407, 541, '1 agent', { size: 20, anchor: 'middle', weight: 700, font: MONO });
+      addText(500, 541, '.  ~100k tokens  .  ~8s', { size: 21, fill: COLORS.soft, font: MONO });
+
+      // the three guardrails
+      addText(80, 632, 'the rules', { size: 22, fill: COLORS.soft, style: 'italic', font: MONO });
+      const rules = ['resume with resumeFromRunId', 'append the step at the end', 'same session'];
+      rules.forEach((t, i) => {
+        const x = 80 + i*500;
+        addRect(x, 650, 470, 70, { fill: COLORS.card, fillStyle: 'solid', strokeWidth: 1.6 });
+        addText(x+235, 692, t, { size: 18, anchor: 'middle', weight: 700, font: MONO });
+      });
+    }
+  };
+  slides.push(slideResume);
+
+  // -------- SLIDE 11: WHEN TO REACH FOR IT --------
+  const slideClose = {
+    headline: 'when to reach for a workflow',
+    caption: 'repeatable, fans out, worth resuming. that is the sweet spot.',
+    draw: () => {
+      const yes = [
+        { label: 'repeatable', sub: 'you run it again and again' },
+        { label: 'fans out', sub: 'many agents, or many stages' },
+        { label: 'worth resuming', sub: 'long enough to fail halfway' },
+      ];
+      yes.forEach((c, i) => {
+        const x = 130 + i * 460;
+        addRect(x, 150, 410, 200, { fill: COLORS.softEmerald, fillStyle: 'solid', strokeWidth: 2 });
+        addCheck(x + 52, 212, 20, COLORS.emerald);
+        addText(x + 230, 222, c.label, { size: 29, anchor: 'middle', weight: 700 });
+        addText(x + 205, 290, c.sub, { size: 18, anchor: 'middle', fill: COLORS.soft, style: 'italic' });
+      });
+
+      addRect(330, 390, 940, 86, { fill: COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2 });
+      addCross(388, 433, 17, COLORS.rose);
+      addText(815, 442, 'one-off task?  just let Claude do it.', { size: 24, anchor: 'middle', weight: 700, font: MONO });
+
+      addRect(200, 535, 1200, 270, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2.4 });
+      addText(800, 600, 'the shift', { size: 23, anchor: 'middle', weight: 700, fill: COLORS.soft, style: 'italic' });
+      addText(800, 672, 'the plan belongs in code.', { size: 34, anchor: 'middle', weight: 700 });
+      addText(800, 732, 'the model belongs on the work.', { size: 34, anchor: 'middle', weight: 700, fill: COLORS.emerald });
+    }
+  };
+  slides.push(slideClose);
+
+  // ============== STATE / RENDER ==============
+  let current = 0;
+  const render = (idx, animate=true) => {
+    const slide = slides[idx];
+    const captionEl = document.getElementById('caption');
+    captionEl.classList.add('fading');
+    svg.classList.add('fading');
+    setTimeout(() => {
+      clearSvg(svg);
+      rc = rough.svg(svg);
+      slide.draw();
+      if (animate) { svg.classList.add('draw-on'); svg.getBoundingClientRect(); }
+      document.getElementById('headline').textContent = slide.headline;
+      document.getElementById('caption-text').textContent = slide.caption;
+      svg.classList.remove('fading');
+      captionEl.classList.remove('fading');
+      if (animate) setTimeout(() => svg.classList.remove('draw-on'), 1200);
+    }, 220);
+  };
+  const goTo = (idx) => { if (idx < 0 || idx >= slides.length || idx === current) return; current = idx; render(current); };
+  const next = () => goTo(current + 1);
+  const prev = () => goTo(current - 1);
+
+  render(current);
+  document.getElementById('tap-left').addEventListener('click', prev);
+  document.getElementById('tap-right').addEventListener('click', next);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+})();
+</script>
+
+</body>
+</html>
