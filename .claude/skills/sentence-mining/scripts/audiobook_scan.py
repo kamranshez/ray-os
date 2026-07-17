@@ -78,37 +78,27 @@ BORING_TAGS = {AUDIOBOOK_TAG, "claude-sentence-mining", "claude-sentence-bank",
 # free: they come back with zero defects and apply skips them.
 
 
-def _norm_word(w: str) -> str:
-    return strip_furigana(strip_html(w)).strip()
+from _style import KANJI as _KANJI, leads_with_word, norm_word as _norm_word  # noqa: E402
 
 
-_KANJI = re.compile(r"[一-鿿]")
-
-
-def leads_with_word(explanation: str, word: str) -> bool:
-    """House style: the explanation opens by NAMING the word, so the TTS actually says the
-    headword and the card reads like Ray's other 9000. We look in the opening clause (before
-    the first 、or 。), which is where the canonical `X は、…` opener always puts it.
-
-    An exact substring match is too strict, because a card's word is often an INFLECTED form
-    (突っ伏した, 猟奇的な) while the correct explanation opens with the dictionary form
-    (突っ伏す, 猟奇的). Those are naming the headword, not dodging it. So we fall back to the
-    word's kanji skeleton — 突っ伏した → 突伏 — and accept the opener if those kanji all show
-    up, in order, in the head. That tolerates okurigana drift without matching an unrelated
-    word that merely shares one kanji."""
-    exp = strip_html(explanation).strip()
-    w = _norm_word(word)
-    if not exp or not w:
-        return False
-    head = re.split(r"[、。\n]", exp, maxsplit=1)[0]
-    if w in head:
+def word_in_sentence(word: str, sentence: str) -> bool:
+    """Is the card's word actually IN its own sentence? The audiobook tool sometimes clips
+    the line so the mined word falls off (あれ, July 2026). An exact substring check alone
+    is too strict — the sentence often carries an INFLECTED form (悔しい appears as
+    悔しそうに) — so also accept the word minus its final kana (the inflection stem), and
+    fall back to the word's kanji appearing in order (same tolerance as leads_with_word).
+    This flags gross clipping for a human look; it doesn't need to be a perfect parser."""
+    s = sentence.replace(" ", "").replace("　", "")
+    if not word or word in s:
         return True
-    kanji = _KANJI.findall(w)
+    if len(word) >= 3 and word[:-1] in s:
+        return True
+    kanji = _KANJI.findall(word)
     if not kanji:
-        return False  # kana-only word: the exact match above was already its best shot
+        return False
     pos = -1
     for k in kanji:
-        pos = head.find(k, pos + 1)
+        pos = s.find(k, pos + 1)
         if pos < 0:
             return False
     return True
@@ -124,6 +114,12 @@ def scan_note(note, fm, intervals, norm_intervals, mature_stems):
 
     # ---- defects: how does this card differ from what the skill would have built? ----
     defects = []
+    if not word_in_sentence(word, sentence):
+        # The tool clipped the line and the card's word isn't in its own sentence
+        # (あれ, July 2026: the leading interjection was cut off). Don't write an
+        # explanation against a sentence that doesn't contain the word — send the
+        # card through replace mode for a real sentence instead.
+        defects.append("word_not_in_sentence")
     if not explanation.strip():
         defects.append("explanation_missing")
     elif not leads_with_word(explanation, word):
@@ -244,10 +240,12 @@ def main():
         def needs_work(n):
             g = lambda k: n["fields"].get(fm.get(k, ""), {}).get("value", "")  # noqa: E731
             mapped = set(fm.values())
+            word = _norm_word(g("word"))
             return bool(
                 not g("explanation_audio").strip()
                 or not g("picture").strip()
-                or not leads_with_word(g("explanation"), _norm_word(g("word")))
+                or not leads_with_word(g("explanation"), word)
+                or not word_in_sentence(word, strip_html(g("sentence")))
                 or any(k not in mapped and v.get("value", "").strip()
                        for k, v in n["fields"].items())
             )

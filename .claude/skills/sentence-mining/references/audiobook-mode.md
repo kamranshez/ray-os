@@ -23,6 +23,7 @@ not as edge cases:
 | `explanation_audio_missing`   | No TTS on the explanation at all. |
 | `picture_blank`               | Makes the card autoplay its sentence audio on **both** sides on mobile. Fill with `。`. See [pipeline.md §MEDIA](pipeline.md#4--media). |
 | `foreign_fields:…`            | The tool leaves its own fields behind (`definition` with an English gloss, `pitch_accent`, `frequency_*`). Ray doesn't want English on these cards. |
+| `word_not_in_sentence`        | The tool clipped the line and the card's word isn't in its own sentence (あれ, July 2026 — the leading interjection was cut off). **Don't write an explanation against a sentence that doesn't contain the word** — send the card through replace mode for a real sentence instead. |
 | *(unchecked i+1)*             | Nothing diffed the card against Ray's known words, so words he learned years ago (僕) and sentences far above i+1 (天真爛漫's original) land in the main deck next to good cards. |
 
 ---
@@ -105,8 +106,11 @@ cascade:    母の死を乗り越えた明るく天真爛漫なアイドルを  
 > 1. **It leaves the tool's foreign fields** (`definition`, `pitch_accent`, `frequency_*`)
 >    untouched — pure replace mode never had them. Clear them per rescued note:
 >    `updateNoteFields` → `definition: ""` (etc.).
-> 2. **It keeps the card in place** (main deck) and rehabs it to new. A rescued audiobook card is
->    one Ray isn't studying yet, so `changeDeck` it to the **deferred** deck.
+> 2. **Route it by the NEW sentence's i-level** (Ray, July 2026) — the same ROUTE table as
+>    everywhere else. A rescue that landed a clean i+1 belongs in the **main** deck; making
+>    the card study-ready is the whole point of rescuing it. One that came back still above
+>    i+1 gets `changeDeck` to the **deferred** deck. (`replace_apply` leaves every card in
+>    the deck it found it in, so only the still-above-i+1 ones need a move.)
 >
 > Don't try to reuse `audiobook_apply --only <rescued ids>` for this: that draft's `explanation`
 > was written for the *old* sentence, so it would re-TTS the wrong text. The manual two-step

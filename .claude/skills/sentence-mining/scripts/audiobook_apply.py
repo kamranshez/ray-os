@@ -31,11 +31,12 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from _env import load_skill_env  # noqa: E402
+from _env import load_skill_env, require_healthy_gemini_key  # noqa: E402
 load_skill_env()
 
 from _config import load_config, deck_main, deck_deferred  # noqa: E402
 from _anki import anki_request, store_media  # noqa: E402
+from _style import refuse_if_bad_explanations  # noqa: E402
 from generate_media_bank import gemini_tts  # noqa: E402
 
 I_TAGS = {f"i{n}" for n in range(1, 10)} | {"i?"}
@@ -116,11 +117,25 @@ async def main_async(args):
               file=sys.stderr)
         sys.exit(1)
 
+    # House-style gate on the non-empty explanations — NOT waivable: a written
+    # explanation that doesn't open by naming the word is the #1 defect this very
+    # mode exists to fix, so writing one back would be self-defeating.
+    refuse_if_bad_explanations(
+        [(e["word"], e["explanation"]) for e in entries if e.get("explanation", "").strip()],
+        "audiobook_apply.py")
+
     if args.dry_run:
         for e in entries:
             print(f"{e['word']:8} {e['i_level']:3} → {e['route']:8} | {e['route_reason']}")
             print(f"         fixes: {', '.join(e['defects']) or 'none'}")
         return
+
+    # Hard pre-flight: refuse a missing/ephemeral GEMINI_API_KEY BEFORE any card is
+    # written. Best-effort TTS below only covers genuinely mid-run failures — a key
+    # that predictably dies would half-fix the whole batch (text lands, audio silently
+    # doesn't), which is exactly how 41 cards shipped without audio in July 2026.
+    if any(e.get("explanation", "").strip() for e in entries):
+        require_healthy_gemini_key()
 
     workdir = Path(cfg["work_dir"]) / "audiobook-tts"
     workdir.mkdir(parents=True, exist_ok=True)
@@ -136,7 +151,38 @@ async def main_async(args):
     for e in entries:
         results[apply_one(e, cfg, fm, audio.get(e["noteId"]))].append(e["word"])
 
-    print(f"\nAudiobook mode: {len(entries)} card(s) brought to house standard ✓\n")
+    # ---- post-write verify: report what's actually ON the cards, never what we meant ----
+    # An earlier version printed "brought to house standard ✓" unconditionally, so a run
+    # whose TTS silently failed still claimed success — and nobody noticed the missing
+    # audio until review time. Re-read every note and let the fields do the talking.
+    mapped = set(fm.values())
+    live = {n["noteId"]: n["fields"]
+            for n in anki_request("notesInfo", notes=[e["noteId"] for e in entries])}
+    incomplete = []
+    for e in entries:
+        f = live.get(e["noteId"], {})
+        get = lambda key: f.get(fm.get(key, ""), {}).get("value", "").strip()  # noqa: E731
+        probs = [msg for cond, msg in (
+            (not get("explanation"), "no explanation"),
+            (not get("explanation_audio"), "NO EXPLANATION AUDIO"),
+            (not get("picture"), "blank picture"),
+            (any(k not in mapped and v.get("value", "").strip() for k, v in f.items()),
+             "foreign fields left"),
+        ) if cond]
+        if probs:
+            incomplete.append((e["word"], probs))
+
+    done = len(entries) - len(incomplete)
+    if incomplete:
+        print(f"\nAudiobook mode: {done}/{len(entries)} card(s) verified at house standard — "
+              f"{len(incomplete)} NOT done:")
+        for w, probs in incomplete:
+            print(f"  ⚠ {w}: {', '.join(probs)}")
+        print("  Re-run this draft once the cause is fixed (already-clean fields are skipped).")
+    else:
+        print(f"\nAudiobook mode: {len(entries)} card(s) at house standard — "
+              "verified on the cards ✓")
+    print()
     if results["main"]:
         print(f"  → {deck_main(cfg)} (i+1): {len(results['main'])}")
         print(f"      {'、'.join(results['main'])}")
@@ -144,9 +190,6 @@ async def main_async(args):
         print(f"  → {deck_deferred(cfg)} (above i+1, or lemma already matured — "
               f"learn later, nothing dropped): {len(results['deferred'])}")
         print(f"      {'、'.join(results['deferred'])}")
-    failed = [e["word"] for e in needs_tts if audio.get(e["noteId"]) is None]
-    if failed:
-        print(f"\n  ⚠ explanation TTS failed (fields still fixed): {'、'.join(failed)}")
     print("\nNow run:  python3 scripts/audit_media.py --fix")
     print("  (audiobook audio was made by an external tool, so it never passed through")
     print("   store_media() — a .mp3 that's really M4A is silently mute on AnkiMobile.)")

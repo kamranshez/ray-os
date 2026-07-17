@@ -38,8 +38,9 @@ import wave
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _env import load_skill_env  # noqa: E402
+from _env import load_skill_env, require_healthy_gemini_key  # noqa: E402
 from _anki import store_media  # noqa: E402
+from _style import refuse_if_bad_explanations  # noqa: E402
 
 GEMINI_MODEL = "gemini-3.1-flash-tts-preview"
 GEMINI_VOICE = "Puck"
@@ -198,15 +199,17 @@ async def process_one(idx: int, candidate: dict, workdir: Path, sem: asyncio.Sem
 
 async def main_async(args):
     load_skill_env()
-    if not os.environ.get("GEMINI_API_KEY"):
-        sys.exit("GEMINI_API_KEY not set — add to <skill-dir>/.env or export.")
+    require_healthy_gemini_key()  # covers missing AND ephemeral (would die mid-run)
 
     data = json.loads(Path(args.candidates).expanduser().read_text())
 
-    keep = [c for c in data["candidates"] if c.get("explanation", "").strip()]
-    skipped = len(data["candidates"]) - len(keep)
-    if skipped:
-        print(f"Skipping {skipped} candidate(s) with empty explanation", file=sys.stderr)
+    # House-style gate: refuse before ANY download/TTS spend — a bad or empty
+    # explanation means the draft needs rewriting, not media. (Curation drops an
+    # unwanted candidate by DELETING its entry, never by blanking the explanation.)
+    refuse_if_bad_explanations(
+        [(c["lemma"], c.get("explanation", "")) for c in data["candidates"]],
+        "generate_media_bank.py")
+    keep = data["candidates"]
 
     sem = asyncio.Semaphore(TTS_CONCURRENCY)
     with tempfile.TemporaryDirectory(prefix="sm_bank_media_") as tmp:

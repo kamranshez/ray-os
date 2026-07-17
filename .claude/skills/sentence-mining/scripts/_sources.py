@@ -288,6 +288,12 @@ def _is_kanji(c):
 
 # Honorifics that turn a noun into a proper name (紅葉くん = "Momiji", not "autumn leaves").
 NAME_MARKERS = ("くん", "ちゃん", "さん", "様", "氏", "先輩", "君")
+# A candidate that trails off on one of these reads broken and its clip cuts mid-thought:
+# a comma, or a bare case/topic particle with no verb after it (…彼女が, …文芸書、 — both
+# ranked #1 in July 2026 before this check existed; CURATE caught them only by eye).
+# Deliberately NOT here: sentence-final particles that end real utterances (よ ね か な
+# さ わ ぞ の), and て/で — a bare te-form is a complete casual request (死なないで).
+FRAGMENT_TAILS = set("、,がをはにとへも")
 # Idioms where the target carries a non-literal meaning that mis-teaches the word.
 IDIOM_BLOCKLIST = {"呆れる": ("聞いて呆れる",)}
 
@@ -333,6 +339,9 @@ def score_candidate(ex, target_word, known, require_image=True):
     n = jp_len(sentence)
     if not (LEN_MIN <= n <= LEN_MAX):
         return None
+    tail = sentence.rstrip(" 　…‥.")
+    if tail and tail[-1] in FRAGMENT_TAILS:
+        return None  # trails off mid-clause — the docs' fragment rule, enforced
     if not ex.get("sound"):
         return None  # every card needs at least native audio
     if require_image and not ex.get("image"):

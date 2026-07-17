@@ -25,10 +25,11 @@ import wave
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _env import load_skill_env
+from _env import load_skill_env, require_healthy_gemini_key
 from _anki import store_media
 import push as push_mod
 from _config import load_config
+from _style import refuse_if_bad_explanations
 
 GEMINI_MODEL = "gemini-3.1-flash-tts-preview"
 GEMINI_VOICE = "Puck"
@@ -175,14 +176,16 @@ async def process_one(video_path, source_id, idx, candidate, workdir, semaphore,
 
 async def main_async(args):
     load_skill_env()
-    if not os.environ.get("GEMINI_API_KEY"):
-        sys.exit(
-            "GEMINI_API_KEY not set. Add it to <skill-dir>/.env "
-            "(copy .env.example to .env) or export it in your shell."
-        )
+    require_healthy_gemini_key()  # covers missing AND ephemeral (would die mid-run)
 
     with open(args.candidates, encoding="utf-8") as f:
         data = json.load(f)
+
+    # House-style gate: refuse before ANY ffmpeg/TTS spend — a bad explanation means
+    # the draft needs rewriting, not media.
+    refuse_if_bad_explanations(
+        [(c["lemma"], c.get("explanation", "")) for c in data["candidates"]],
+        "generate_media.py")
 
     source_url = data.get("source_url", "")
 
@@ -218,7 +221,6 @@ async def main_async(args):
                         push=args.push, source_url=source_url,
                         push_lock=push_lock, report=report)
             for i, c in enumerate(data["candidates"])
-            if c.get("explanation", "").strip()
         ]
         processed = await asyncio.gather(*tasks)
 

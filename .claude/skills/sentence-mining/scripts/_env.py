@@ -34,3 +34,33 @@ def warn_if_ephemeral_gemini_key():
               "    permanent API key. TTS will 401 once it expires. Get a permanent key at\n"
               "    https://aistudio.google.com/apikey (looks like 'AIzaSy…').", file=sys.stderr)
     return True
+
+
+def require_healthy_gemini_key():
+    """Hard pre-flight for any script about to WRITE explanation TTS onto cards.
+
+    An ephemeral OAuth token (`AQ.…`/`ya29.…`) predictably dies within ~1h, and the
+    fix modes' best-effort TTS then half-fixes a whole batch: the explanation TEXT
+    lands, the audio silently doesn't, and nothing surfaces it until Ray studies the
+    cards. (July 2026: this is exactly how a batch ran with a token instead of a key.)
+    So refuse up front, before anything is written — a 2-second failure beats a
+    silently audio-less batch. Best-effort still covers genuinely mid-run failures.
+
+    `SM_ALLOW_EPHEMERAL_GEMINI_KEY=1` overrides for a deliberate short run on a
+    fresh token."""
+    k = os.environ.get("GEMINI_API_KEY", "")
+    if k.startswith("AIza"):
+        return
+    if k and os.environ.get("SM_ALLOW_EPHEMERAL_GEMINI_KEY") == "1":
+        print("  ⚠ Running on an ephemeral GEMINI_API_KEY (SM_ALLOW_EPHEMERAL_GEMINI_KEY=1)."
+              " It can expire mid-run; check the summary for missing audio.", file=sys.stderr)
+        return
+    if not k:
+        sys.exit("GEMINI_API_KEY is not set. Add it to <skill-dir>/.env — get a key at "
+                 "https://aistudio.google.com/apikey (looks like 'AIzaSy…').")
+    sys.exit("GEMINI_API_KEY looks like a temporary OAuth token (expires ~1h), not a "
+             "permanent API key.\nRefusing to start: TTS would die mid-run and leave cards "
+             "with explanation text but NO audio, silently.\nGet a permanent key at "
+             "https://aistudio.google.com/apikey (looks like 'AIzaSy…') and put it in "
+             "<skill-dir>/.env.\n(Override for a deliberate short run: "
+             "SM_ALLOW_EPHEMERAL_GEMINI_KEY=1.)")

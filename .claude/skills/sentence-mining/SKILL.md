@@ -63,6 +63,14 @@ in one breath ("audiobook mode on the ryu cards"), that IS his answer — skip t
 skill for something else. It's one cheap query — `python3 scripts/instructions_scan.py` — and
 an unread instruction is Ray having typed something to you that nobody ever read.
 
+**Also check the audiobook backlog, every launch** — `python3 scripts/audiobook_scan.py
+--groups` takes ~0.2s (it's a pure field check; no known-word scan). If any group reports
+`needs_work > 0`, surface it before doing anything else. The audiobook-viewer pushes cards
+into Anki half-built with no announcement, and nothing else ever looks: in July 2026, 41
+cards sat with no explanation and no explanation audio until Ray happened to review one and
+typed a note on it — and that note was on ONE card; the other 40 were silent. This check is
+the reader for the cards that never get a note.
+
 ### Telling the modes apart
 
 **Create vs fix.** If the word has no card yet → **video** or **bank**. If the card already

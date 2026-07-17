@@ -38,9 +38,10 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import analyze  # strip_html
 import generate_media_bank as gmb  # reuse gemini_tts + GEMINI_* config
-from _env import load_skill_env, warn_if_ephemeral_gemini_key
+from _env import load_skill_env, require_healthy_gemini_key
 from _anki import anki_request, store_media
 from _config import load_config, deck_main, deck_deferred
+from _style import refuse_if_bad_explanations
 
 
 def _norm(s):
@@ -278,11 +279,12 @@ async def main_async(args):
     entries = data.get("entries", [])
     misses = data.get("misses", [])
 
-    ready = [e for e in entries if e.get("explanation", "").strip()]
-    no_exp = [e["word"] for e in entries if not e.get("explanation", "").strip()]
-    if no_exp:
-        print(f"Skipping {len(no_exp)} entr(y/ies) with no explanation: {', '.join(no_exp)}",
-              file=sys.stderr)
+    # House-style gate — runs for --dry-run too, so offenders are caught before the
+    # old→new table ever reaches Ray. Drop an unwanted entry by DELETING it from the
+    # draft, never by blanking its explanation.
+    refuse_if_bad_explanations(
+        [(e["word"], e.get("explanation", "")) for e in entries], "replace_apply.py")
+    ready = entries
 
     if args.dry_run:
         print_table(ready, misses)
@@ -303,7 +305,9 @@ async def main_async(args):
         ready = [e for e in ready if cur.get(e["note_id"]) != _norm(e["new_sentence"])]
 
     load_skill_env()
-    warn_if_ephemeral_gemini_key()  # TTS is best-effort, so don't exit if missing/temporary
+    # Hard pre-flight: refuse a missing/ephemeral key BEFORE any card is written.
+    # Best-effort TTS only covers mid-run failures, not a key that predictably dies.
+    require_healthy_gemini_key()
 
     today = datetime.date.today().isoformat()
     sem = asyncio.Semaphore(gmb.TTS_CONCURRENCY)

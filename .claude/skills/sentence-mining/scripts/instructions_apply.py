@@ -37,7 +37,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from _anki import anki_request, store_media  # noqa: E402
 from _config import deck_deferred, deck_main, load_config  # noqa: E402
-from _env import load_skill_env, warn_if_ephemeral_gemini_key  # noqa: E402
+from _style import refuse_if_bad_explanations  # noqa: E402
+from _env import load_skill_env, require_healthy_gemini_key  # noqa: E402
 from generate_media_bank import gemini_tts  # noqa: E402
 
 PICTURE_FILLER = "。"
@@ -125,11 +126,24 @@ async def main_async(args):
     if bad:
         sys.exit(f"Unknown action(s): {', '.join(bad)}\nValid: {', '.join(sorted(VALID))}")
 
+    # House-style gate on whatever text retts would speak — a rewrite that doesn't open
+    # by naming the word, OR an existing explanation that never did, would re-record the
+    # exact defect Ray's note is complaining about. Empty text keeps its own per-entry
+    # warn in retts_one (it means "no text to speak", not a style violation). Runs for
+    # --dry-run too, so the plan is honest.
+    refuse_if_bad_explanations(
+        [(e["word"], e.get("new_explanation", "").strip() or e.get("explanation", ""))
+         for e in entries if "retts" in e["action"]],
+        "instructions_apply.py (retts)", allow_empty=True)
+
     audio = {}
     needs = [e for e in entries if "retts" in e["action"]]
     if needs:
         load_skill_env()
-        warn_if_ephemeral_gemini_key()
+        if not args.dry_run:
+            # Hard pre-flight: a retts on a missing/ephemeral key would silently strand
+            # the card without audio — the exact defect retts exists to fix.
+            require_healthy_gemini_key()
         workdir = Path(cfg["work_dir"]) / "instructions-tts"
         workdir.mkdir(parents=True, exist_ok=True)
         sem = asyncio.Semaphore(3)  # Gemini free tier is 10 RPM.

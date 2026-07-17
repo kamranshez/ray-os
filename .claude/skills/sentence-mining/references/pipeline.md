@@ -62,7 +62,10 @@ candidate from every tier is tokenized with the same SudachiPy + known-word mach
 Candidates are dropped outright when: length is outside 10–45 chars · there's no native
 audio · an image-bearing tier shipped no image · the target is glued into a kanji compound
 (`攻撃抑制` for 抑制) · it reads as a name (`紅葉くん`) · it sits inside a mis-teaching idiom
-(`聞いて呆れる`). Then ranked by *(fewest other-unknowns, bare token, closest to ~22 chars)*.
+(`聞いて呆れる`) · it trails off on a comma or a bare case/topic particle (`…彼女が`,
+`…文芸書、` — both ranked #1 in July 2026 before `score_candidate` enforced this; CURATE
+caught them only by eye). Then ranked by *(fewest other-unknowns, bare token, closest to
+~22 chars)*.
 
 > **Rate limits.** IK's apiv2 throttles bursts hard — you'll see `No route to host` on
 > apiv2 specifically while the rest of the internet is fine. Both callers do all words in
@@ -171,8 +174,13 @@ wrong *and the TTS never says the headword* — which is the whole point of the 
 - ❌ `首の後ろ側、特にそこに生えている髪の毛を指します。…` ← what the audiobook tool writes
 
 **Check before you save each one: does the first token contain the lemma?** If not, rewrite it.
-(`audiobook_scan.py` checks this mechanically via `leads_with_word`, and tolerates the
-dictionary form of an inflected card word — 突っ伏した → `突っ伏すは、…`.)
+
+> **Since 2026-07-17 this rule is ENFORCED, not just requested.** `push.py`, both
+> `generate_media*` scripts, and every `*_apply.py` call
+> `_style.refuse_if_bad_explanations()` up front and **exit 1 listing the offenders** if any
+> explanation is empty or fails `leads_with_word` (which tolerates the dictionary form of an
+> inflected card word — 突っ伏した → `突っ伏すは、…` — and a quoted `「…」` opener). A bad
+> explanation can no longer reach Anki; fix the draft and re-run.
 
 Keep each under ~250 Japanese characters; it gets read aloud. Write it into the entry's
 `explanation` field.
@@ -232,9 +240,15 @@ Gemini's free tier is 10 RPM. `generate_media.py` caps TTS concurrency at 3,
 `generate_media_bank.py` at 2 (override with `SM_TTS_CONCURRENCY`); both back off
 exponentially on 429. If you still hit limits, lower the cap or serialize.
 
-**Explanation TTS is best-effort in the fix modes**: a dead/expired `GEMINI_API_KEY` must not
-block a card's sentence/audio/image update. On failure the explanation TEXT still lands and
-only `explanation_audio` is left empty — regenerate later.
+**Explanation TTS is best-effort in the fix modes — but only for genuinely MID-RUN failures.**
+Every TTS-writing script hard-fails up front (`_env.require_healthy_gemini_key()`) when the
+key is missing or is an ephemeral OAuth token (`AQ.…`/`ya29.…`) that predictably dies within
+the hour — a 2-second refusal beats a batch that lands its text and silently skips its audio
+(July 2026: exactly that shipped 41 audio-less cards). Get a permanent `AIzaSy…` key at
+https://aistudio.google.com/apikey; `SM_ALLOW_EPHEMERAL_GEMINI_KEY=1` overrides for a
+deliberate short run. Past the gate, a failure mid-run doesn't block the card's
+sentence/audio/image update: the explanation TEXT still lands, `explanation_audio` stays
+empty, and the post-write verify names the affected cards — regenerate later.
 
 ---
 

@@ -19,6 +19,7 @@ ALL_KATAKANA = re.compile(r"^[゠-ヿ]+$")
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _config import load_config
+from _style import refuse_if_bad_explanations
 
 ANKICONNECT = "http://localhost:8765"
 MODEL = ""
@@ -132,6 +133,10 @@ def main():
         data = json.load(f)
 
     permanent_tag = PERMANENT_TAG_BANK if data.get("source") == "bank-search" else PERMANENT_TAG_VIDEO
+
+    # House-style gate: refuse the whole batch before anything lands.
+    refuse_if_bad_explanations(
+        [(c["lemma"], c.get("explanation", "")) for c in data["candidates"]], "push.py")
 
     # Make sure both decks exist (createDeck is idempotent).
     decks_needed = {c["deck"] for c in data["candidates"]}
