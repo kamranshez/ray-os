@@ -99,7 +99,12 @@ OVERRIDES={
  "tengu_cobalt_wren":"CLAUDE_CODE_CLASSIFIER_SUMMARY",
 }
 def truthy(v):
-    return v is True or (isinstance(v,(int,float)) and not isinstance(v,bool) and v != 0) or (isinstance(v,str) and v.lower() not in ("off","")) or (isinstance(v,dict) and v.get("enabled") is True)
+    # Only boolean gates (or structured configs with an explicit boolean
+    # `enabled`) have an on/off effective state. Numeric thresholds,
+    # probabilities, TTLs, byte limits, and string variants are config payloads,
+    # not truthy feature enables; treating them as booleans creates false
+    # effective-state switches when the payload itself is unchanged.
+    return v is True or (isinstance(v,dict) and v.get("enabled") is True)
 
 env_names=sorted(set(re.findall(r'\b(?:CLAUDE_CODE|CLAUDE)_[A-Z][A-Z0-9_]+\b',strings)))
 snap={"version":ver,"flags":{},"envs":env_names}
@@ -133,7 +138,12 @@ if prev:
             report["new_flags"].append({"flag":flag,"gb":cur["gb"],"bin":cur["bin"],"effective":cur["effective"]})
             continue
         # 1) GrowthBook switch: effective state or raw value/payload changed
-        if old.get("effective")!=cur["effective"] or json.dumps(old.get("gb"),sort_keys=True)!=json.dumps(cur["gb"],sort_keys=True):
+        # A switch is a real GrowthBook payload change or an override entering/
+        # leaving the process environment. Do not diff the derived `effective`
+        # field by itself: classifier-semantics repairs (for example, correctly
+        # recognizing numeric thresholds as config rather than ON) would create
+        # a false switch avalanche despite unchanged GB and env inputs.
+        if old.get("env_set")!=cur["env_set"] or json.dumps(old.get("gb"),sort_keys=True)!=json.dumps(cur["gb"],sort_keys=True):
             report["switches"].append({"flag":flag,"from":old.get("gb"),"to":cur["gb"],
                                        "eff_from":old.get("effective"),"eff_to":cur["effective"],"bin":cur["bin"]})
         # 3) DCE switch: binary presence class changed

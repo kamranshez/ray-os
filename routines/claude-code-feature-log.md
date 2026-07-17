@@ -272,3 +272,31 @@ Classifier repaired from binary evidence before diffing: the main GrowthBook rea
 - `CLAUDE_CODE_FORWARD_SUBAGENT_TEXT` — added, opt-in boolean (also exposed as `--forward-subagent-text`). When true it forwards ordinary assistant/user text blocks from subagents alongside their tool events and avoids suppressing that text in noninteractive streaming; no related `tengu_*` gate is visible.
 - `CLAUDE_CODE_GB_DISK_CACHE_WHEN_TELEMETRY_OFF` — added, opt-in boolean. Allows cached GrowthBook values on disk to remain usable when telemetry-backed GrowthBook initialization is otherwise unavailable; `DISABLE_GROWTHBOOK` still wins and disables the path.
 - `CLAUDE_CODE_RESUME_INTERRUPTED_TURN_MAX_AGE_MS` — added, positive millisecond threshold used only with interrupted-turn resume. It suppresses automatic resubmission/synthetic continuation when the last meaningful message is at least this old; invalid positive input falls back to 3,600,000 ms, `0` disables the age check, and there is no related `tengu_*` gate.
+
+## 2026-07-17 09:20 — v2.1.211
+
+Classifier healthy at 294 gate/config flags. Repaired the tracker before diffing so numeric thresholds, probabilities, TTLs, byte limits, and string variants are treated as configuration payloads rather than boolean ON states; effective-only classifier changes can no longer create a false switch avalanche. Official Anthropic changelog/release checking was blocked because the required Exa MCP search/fetch tools are not registered in this runtime; `announcements-latest.json` remains absent and its marker was not advanced.
+
+### 🔀 GrowthBook switches
+- `tengu_auto_mode_config` — structured payload changed: the Sonnet 5 stage-1 hardening suffix was removed and per-model severity thresholds were added (`t1/t2`: Sonnet 5 `25/35`, Opus 4.8 `45/35`). This wired config controls Auto Mode's two-stage permission classifier; it is consumed only when Auto Mode runs and is not itself a standalone boolean enable.
+- `tengu_russet_linnet` — OFF → ON. Enables Skill-tool description reframing before skills are injected, with `CLAUDE_CODE_SKILL_DESC_REFRAME` taking precedence; wired and effective via GrowthBook.
+- `tengu_kairos_ready_nudge` — `null` → `{probability:0.25,maxImpressions:5,impressionKey:"v1"}`. Activates a wired Remote Control-ready push nudge for 25% of eligible events, capped at five impressions; push-notification and surface eligibility still gate delivery.
+- `tengu_umber_kestrel` — OFF → ON. The surviving constant identifies the `EndConversation` tool, which lets comms-only agents end a turn explicitly; the flag is present but its read is indirect, so actual enablement cannot be proven from a literal gate call site.
+- `tengu_lantern_spool` — OFF → ON. Adds `anthropic-usage-limit: extended` to eligible nested/subagent first-party API calls; wired and effective, but only for entitled first-party sessions and not auxiliary/compact calls.
+- `tengu_rc_long_turn_nudge` — `null` → `{thresholdSec:10,probability:0.5,maxImpressions:5,impressionKey:"v1"}`. Activates the wired “Check in from your phone” Remote Control nudge after a 10-second turn for 50% of eligible sessions, capped at five; `CLAUDE_CODE_FORCE_RC_LONG_TURN_NUDGE` can force the test path.
+- `tengu_cobalt_harbor` — OFF → ON. Makes Remote Control start automatically by default unless an explicit `remote_control_at_startup` setting overrides it; wired and effective, while OAuth, organization policy, provider, and entitlement checks still apply.
+
+### 🆕 New flags
+- `tengu_stone_shell` — new OFF, stripped. No string or implementation survives in this binary, so its behavior is unrecoverable and the cached value has no effect.
+- `tengu_cobalt_thistle` — new OFF, wired. Gates an alternate shell-tool instruction set that relaxes the warning against using `cat`/`head`/`sed`/`awk`/`echo` and changes working-directory guidance; built but currently disabled.
+- `tengu_cobalt_harbor_notice` — new ON, wired. Shows the “Keep working from anywhere” Remote Control auto-on notice, capped at three impressions, only when auto-on is active and Remote Control/policy eligibility passes.
+- `tengu_juniper_vale` — new `{enabled:false,maxChars:500,autoDismissAfterMs:30000}`, stripped. The binary contains no call site or string, so the apparent text/auto-dismiss config is server-staged but ineffective here.
+- `tengu_juniper_gantry` — new OFF, stripped. No surviving binary evidence reveals its purpose; the cached value is ineffective in this build.
+- `tengu_rc_permission_nudge` — new `{afterPromptCount:2,probability:0.5,maxImpressions:3}`, wired. Offers “Approve tool calls from your phone” after two eligible permission prompts in a connected Remote Control session, at 50% probability and up to three times; `CLAUDE_CODE_RC_PERMISSION_NUDGE` can replace the payload.
+- `tengu_ultrareview_git_init_recovery_enabled` — new OFF, stripped. Its name suggests Ultra Review git-init recovery, but no implementation survives, so purpose cannot be confirmed and the flag has no effect.
+
+### 🧱 DCE switches
+- `tengu_amber_quill` — retired from GrowthBook (wired → removed-from-growthbook). The binary still contains the contextual-tips classifier that inspects conversation/project context and can surface CLAUDE.md-aware tips, but its gate defaults OFF and has no environment override; removal from the live cache therefore leaves the feature disabled even though code remains.
+
+### ⚙️ Environment changes
+- No added or removed `CLAUDE_CODE_*` / `CLAUDE_*` controls.
