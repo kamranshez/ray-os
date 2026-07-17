@@ -5,10 +5,10 @@ media: video
 status: posted
 engagement:
   reactions: 10
-  comments: 4
+  comments: 5
   reposts: 0
-  impressions: 822
-  last_checked: 2026-07-16
+  impressions: 941
+  last_checked: 2026-07-17
 url: https://www.linkedin.com/feed/update/urn:li:activity:7482812254950981632/
 notes: Backfilled from Ray's activity feed on 2026-07-16; hook, metrics, permalink, and activity-ID-derived date verified.
 ---

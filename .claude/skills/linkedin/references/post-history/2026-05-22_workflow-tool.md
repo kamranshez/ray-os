@@ -10,8 +10,8 @@ engagement:
   reactions: 16
   comments: 3
   reposts: 0
-  impressions: 1007
-  last_checked: 2026-07-16
+  impressions: 1008
+  last_checked: 2026-07-17
 url: https://www.linkedin.com/feed/update/urn:li:activity:7463588686622998528/
 notes: Post 5 chosen from workflow-tool batch. Source = /Users/ray/Downloads/transcript.srt (Claude Code workflow tool, deterministic multi-agent orchestration). Ray edited "off by default behind an env var" to "off by default right now."
 ---

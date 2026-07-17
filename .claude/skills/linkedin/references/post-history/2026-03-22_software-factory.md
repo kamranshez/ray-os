@@ -9,7 +9,7 @@ engagement:
   comments: 1
   reposts: 0
   impressions: 591
-  last_checked: 2026-07-16
+  last_checked: 2026-07-17
 url: https://www.linkedin.com/feed/update/urn:li:activity:7441339377177272320/
 video: pOsGxVKYd3s
 notes: Based on video pOsGxVKYd3s. Covers cloud-based scheduled tasks, software factory model, Sentry fixer demo. Proper sentence-case capitalization per updated skill rules.

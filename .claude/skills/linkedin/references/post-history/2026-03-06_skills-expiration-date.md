@@ -12,7 +12,7 @@ engagement:
   comments: 1
   reposts: 1
   impressions: 955
-  last_checked: 2026-07-16
+  last_checked: 2026-07-17
 url: https://www.linkedin.com/feed/update/urn:li:activity:7434875785540198401/
 notes: >
   Backfilled 2026-06-25 during a full activity-feed sweep — this post was live on
