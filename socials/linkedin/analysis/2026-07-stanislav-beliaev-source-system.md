@@ -25,6 +25,15 @@ Monitor GitHub trending + model launch announcements + viral X charts, pour ever
 
 No arxiv.org or huggingface.co in the sample -- he is repo-first, not paper-first.
 
+### Update 2026-07-18: deeper 13-post live capture
+
+A live-feed scrape (full dump: [[2026-07-stanislav-beliaev-feed]]) extended the sample to 13 posts (20h-1mo) and added two source lanes the HTML save missed:
+
+5. **Reddit/X threads repackaged** -- "A senior engineer on Reddit explained ONE skill..." and an X WHOOP-leaderboard post. Viral dev-forum wisdom, re-narrated.
+6. **Vendor resources/guides** -- e.g. Anthropic's 36-page "build an AI startup with Claude" guide.
+
+Engagement range across 13: 298-3,299 reactions, 29-96 comments. Cadence confirmed at ~1 post per 2-3 days. Template unchanged and near-invariant.
+
 ## The template (7 of 8 posts)
 
 1. Hook line ending in a colon: news + superlative/shock ("China open-sourced a model that...", "This repo just hit 87k+ stars 🔥", "🚨 X JUST launched Y").
