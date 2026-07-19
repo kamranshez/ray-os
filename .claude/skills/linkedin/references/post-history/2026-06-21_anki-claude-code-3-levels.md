@@ -11,8 +11,8 @@ engagement:
   reactions: 23
   comments: 2
   reposts: 1
-  impressions: 2209
-  last_checked: 2026-07-17
+  impressions: 2235
+  last_checked: 2026-07-19
 url: https://www.linkedin.com/feed/update/urn:li:activity:7474130482671116289/
 notes: >
   From the Anki + Claude Code batch (source: /Users/ray/Downloads/Anki + Claude Code.txt).
