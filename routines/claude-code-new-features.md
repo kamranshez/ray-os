@@ -63,7 +63,9 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 # eligibility checks use `hj(` and `c1i(`. `Eqn(` is the refresh-aware async read.
 # Older builds used `J1(`, `vme(`, `Xfe(`, `dgt(`, `S6n(`, `Xq(`, `IPi(`, and
 # context-derived `bvi(` reads; v2.1.211 uses `Jwi(` to suffix per-model gate
-# keys such as `tengu_velvet_mallet_<model>`. Keep those aliases for cross-version diffs.
+# keys such as `tengu_velvet_mallet_<model>`. v2.1.214 uses direct wrappers
+# `uge(`, `fO(`, `Nbt(`, `n3i(`, `Jj(`, `Bhe(`, and `qVn(`, plus `YHi(` for
+# per-model suffixes. Keep those aliases for cross-version diffs.
 # Telemetry `j(`→`G(`→`j(`/`f_(` (v2.1.195)→`G(` (v2.1.199)→`M(` (v2.1.208)
 # (with event wrappers `N(`, `bb(`, `I0(`, `QEu(`, and `Qxc(` in v2.1.210), then
 # `M(` with async/event wrappers `Pb(`, `V0(`, `MHc(`, and `hwu(` in v2.1.211. We match
@@ -73,8 +75,16 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 # gate helper was renamed again — grep `("tengu_` in the strings to find the new
 # 1-2 char prefix whose call sites take a bare default (`!0`/`!1`/`null`/number), and
 # add it to the gates alternation below (telemetry prefixes take an `{...}` object).
-gates=set(re.findall(r'(?:et|Fme|uM|pme|Vgt|hj|c1i|Eqn|Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)\("(tengu_[a-zA-Z0-9_]+)"',strings))
-gates.update(re.findall(r'(?:et|Fme|uM|pme|Vgt|Ze|Qe|ot|at|it|ct)\((?:Jwi|bvi)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gate_helpers=r'(?:et|uge|fO|Nbt|n3i|Jj|Bhe|qVn|Fme|uM|pme|Vgt|hj|c1i|Eqn|Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)'
+gates=set(re.findall(gate_helpers+r'\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gates.update(re.findall(gate_helpers+r'\((?:YHi|Jwi|bvi)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+# Config keys are sometimes hoisted to a minified variable before being passed to
+# a GrowthBook wrapper (for example `var Yau="tengu_review_bughunter_config";
+# ... fO(Yau,...)`). Resolve those indirections so a helper rename cannot look like DCE.
+gate_vars={name:flag for name,flag in re.findall(r'\b(?:var |let |const )?([A-Za-z_$][\w$]*)="(tengu_[a-zA-Z0-9_]+)"',strings)}
+gate_vars.update({name:flag for name,flag in re.findall(r"\b(?:var |let |const )?([A-Za-z_$][\w$]*)='(tengu_[a-zA-Z0-9_]+)'",strings)})
+gate_var_reads=set(re.findall(gate_helpers+r'\(([A-Za-z_$][\w$]*)[,)]',strings))
+gates.update(gate_vars[name] for name in gate_var_reads if name in gate_vars)
 telem=set(re.findall(r'(?:M|Pb|V0|MHc|hwu|j|f_|G|N|bb|I0|QEu|Qxc|\$Wt|a|l|U|B|qrr|w|re)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 present=set(re.findall(r'tengu_[a-zA-Z0-9_]+',strings))
 
@@ -106,7 +116,18 @@ def truthy(v):
     # effective-state switches when the payload itself is unchanged.
     return v is True or (isinstance(v,dict) and v.get("enabled") is True)
 
-env_names=sorted(set(re.findall(r'\b(?:CLAUDE_CODE|CLAUDE)_[A-Z][A-Z0-9_]+\b',strings)))
+raw_env_names=set(re.findall(r'\b(?:CLAUDE_CODE|CLAUDE)_[A-Z][A-Z0-9_]+\b',strings))
+# Bun's strings extraction can concatenate a minified identifier onto a real env
+# literal (`...PROMPTQ`, `...TYPEDI`) or expose a trailing-prefix fragment. Drop
+# those artifacts whenever the canonical one-character-shorter name is also present.
+non_env_symbols={
+    # Internal exported JS constant for the bundled Claude Code docs skill; it
+    # is not read from process.env (confirmed from the 2.1.211 call site).
+    "CLAUDE_CODE_SKILL_DESCRIPTION",
+}
+env_names=sorted(name for name in raw_env_names
+                 if name not in non_env_symbols and not name.endswith('_')
+                 and not (name[:-1] in raw_env_names and name[-1] in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'))
 snap={"version":ver,"flags":{},"envs":env_names}
 for flag,val in gb.items():
     if not flag.startswith("tengu_"): continue

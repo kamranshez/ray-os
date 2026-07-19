@@ -300,3 +300,48 @@ Classifier healthy at 294 gate/config flags. Repaired the tracker before diffing
 
 ### ⚙️ Environment changes
 - No added or removed `CLAUDE_CODE_*` / `CLAUDE_*` controls.
+
+## 2026-07-19 09:26 — v2.1.214 (upgraded from v2.1.211)
+
+Classifier aliases were repaired from binary evidence before trusting the diff: 2.1.214 uses `uge`, `fO`, `Nbt`, `n3i`, `Jj`, `Bhe`, and `qVn` readers plus `YHi` model-suffixed keys and hoisted flag constants. Health check: 329 gate/config flags. This removed 12 bogus DCE transitions. The environment scanner also discarded 12 minified-string suffix/prefix artifacts and the non-env `CLAUDE_CODE_SKILL_DESCRIPTION` symbol. Official Anthropic changelog/release checking was blocked because the required Exa MCP search/fetch tools are not registered; `announcements-latest.json` remains absent and its marker was not advanced.
+
+### 🔀 GrowthBook switches
+- **Startup announcements** (`tengu_startup_announcements`) — the prior Fable 5 promotional card was removed (`[...]` → `[]`). This wired structured config selects startup cards with model and impression limits; the empty list is effective, so no startup announcement is shown.
+- **Canary update pin** (`tengu_canary`) — `{}` → `{external: "2.1.214"}`. This wired installer config selects an external canary when it is newer than the latest allowed build; because the installed build is already 2.1.214, it does not trigger another upgrade.
+- **Weekly-limit promo notice** (`tengu_rate_limit_promo_notices`) — `[]` → a seven-day-bar notice for “+50% weekly limits promo through Aug 19.” This wired config appends the notice beneath the `/usage` weekly bar, so the new message is user-visible when that bar is rendered.
+- **EndConversation tool** (`tengu_umber_kestrel`) — ON → OFF. Gates the deferred `EndConversation` tool used by restricted comms/abuse-handling agents to end a turn explicitly; code remains wired, but the tool is now disabled and was additionally model-floor/entrypoint restricted when enabled.
+
+### 🆕 New flags
+- `tengu_mcp_claudeai_eligibility_gate` — new ON and wired. Enforces server entitlement on `claudeai-proxy` MCP integrations by marking ineligible servers unavailable; effective for this account, but actual access still depends on the server entitlement response.
+- `tengu_thistle_grebe` — new value `"default"`, stripped. No string or implementation survives in 2.1.214, so behavior is unrecoverable and the server value has no effect in this build.
+- `tengu_marl_cormorant` — new OFF, stripped. Codename only with no binary call site; purpose is unrecoverable and the flag is ineffective in this build.
+- `tengu_gault_kestrel` — new OFF, stripped. Codename only with no binary call site; purpose is unrecoverable and the flag is ineffective in this build.
+
+### 🧱 DCE switches
+- `tengu_cobalt_heron` — code removed (wired → stripped). Previously gated a contextual tip suggesting that Pro users switch away from Opus after passing roughly 50% usage; it was already OFF, so removal does not change current behavior.
+- `tengu_slate_moth` — code removed (wired → stripped). Previously suggested `/compact` when context exceeded roughly 300k tokens and stale-file context exceeded roughly 100k; it was already OFF, so removal is behaviorally inert.
+- `tengu_team_discovery` — code removed (wired → stripped). Previously fetched daily-cached team usage from `/api/claude_code/discovery/team_usage` to recommend team-used skills and MCP servers; it also required `allow_team_discovery` and was OFF, so no live behavior was lost for this account.
+- `tengu_stone_shell` — newly shipped (stripped → wired), currently OFF. Gates injection of the new `# auto memory` file-based-memory guidance when no explicit memory store, Cowork override, or project override applies; the code exists but is inactive.
+- `tengu_juniper_vale` — newly shipped (stripped → wired), cached `{enabled:false,maxChars:500,autoDismissAfterMs:30000}`. Configures a post-feedback follow-up prompt and its text/auto-dismiss limits; disabled, so the new UI remains inactive.
+- `tengu_juniper_relay` — newly shipped (stripped → wired), currently OFF. Gates a reviewable local `SendFeedback` draft queue for model-detected bugs or frustration; first-party/product-feedback eligibility is also required, and `CLAUDE_CODE_SEND_FEEDBACK=false` hard-disables it.
+- `tengu_juniper_relay_config` — newly shipped (stripped → wired), cached `{}`. Supplies the `SendFeedback` tool description/config defaults but does not enable the tool independently; the parent relay gate remains OFF.
+
+### ⚙️ Environment changes
+- `CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION` — added. Positive integer cumulative subagent-spawn cap, minimum 1 and default 200; direct and effective with no GrowthBook gate.
+- `CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION` — added. Positive integer cumulative WebSearch cap, minimum 1 and default 200; direct and effective with no GrowthBook gate.
+- `CLAUDE_CODE_MEMORY_PUSH_DELETE_MODE` — added. Selects shared-memory deletion propagation: `corroborate` (default; two missing scans at least 30s apart), `immediate`, or `never`; overrides `tengu_mem_push_delete_mode`, while backend and safety eligibility still apply.
+- `CLAUDE_CODE_NANKEEN_KESTREL` — added. Truthy value force-enables the native Windows sandbox ahead of `tengu_nankeen_kestrel`; false falls through to the gate, and the control is inert off Windows or when policy/dependencies block sandboxing.
+- `CLAUDE_CODE_NO_MODEL_FALLBACK` — added. Truthy value collapses model fallback chains to the primary model and prevents compaction/Fable substitutions; direct with no GrowthBook gate, so primary-model policy or credit failures can surface instead of falling back.
+- `CLAUDE_CODE_OTEL_CONTENT_MAX_LENGTH` — added. Positive integer telemetry-only truncation cap in characters, default 61,440, further bounded by standard OTEL attribute/log/span limits; it does not enable exporting or bypass redaction.
+- `CLAUDE_CODE_RESUME_SOURCE_ALIVE` — added internal transport value (`sessionId|ISO-boundary[|parentSessionId]`). Marks a concurrent source session alive so a resumed/forked child does not adopt source-owned file-history/checkpoint state; malformed values are ignored and there is no GrowthBook relationship.
+- `CLAUDE_CODE_SEND_FEEDBACK` — added tri-state control, but only `false` is a hard kill switch. True or unset still requires wired `tengu_juniper_relay`, first-party/product-feedback eligibility, and a supported mode; the tool creates a reviewable draft and does not send automatically.
+- `CLAUDE_CODE_USE_ANTHROPIC_GOOGLE_CLOUD` — added. Truthy value selects the `claude.googleapis.com` provider after higher-precedence gateway/Bedrock/Foundry/AWS choices; IAM, project, workspace, and model access still gate effectiveness.
+- `CLAUDE_CODE_SKIP_ANTHROPIC_GOOGLE_CLOUD_AUTH` — added. Truthy value skips ADC only when the Anthropic Google Cloud provider is selected, enabling upstream/pre-signed authorization; it does not bypass service authorization.
+- `CLAUDE_PID` — added internal child-process value overwritten with the parent Claude PID. The Linux `pkill` shim uses it to refuse matches that would terminate Claude's parent process; user-provided values are overridden.
+- `CLAUDE_CODE_ENABLE_MORNING_BRIEF` — removed. Previously enabled the Cowork-only `/morning` brief; the live feature path is gone in 2.1.214.
+- `CLAUDE_CODE_MORNING_BRIEF_PROMPT` — removed. Previously overrode the Cowork morning-brief prompt with a trimmed 500–50,000-character value; removal follows the feature's deletion.
+- `CLAUDE_CODE_ENABLE_OPUS_4_7_FAST_MODE` — removed schema-only residue. It was declaration/export/init DCE with no effective runtime read in 2.1.211, so removal is cleanup; current fast mode targets Opus 4.8 and remains entitlement/GrowthBook-gated.
+- `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE` — removed schema-only residue. It had no effective runtime read in 2.1.211, so no behavior was lost.
+- `CLAUDE_CODE_MID_CONVERSATION_SYSTEM` — removed schema-only residue. It had no effective runtime read; the real positive lever `CLAUDE_CODE_FORCE_MID_CONVERSATION_SYSTEM` remains and can still be blocked in HIPAA contexts.
+- `CLAUDE_CODE_PLAN_MODE_INTERVIEW_PHASE` — removed schema-only residue. It had no effective runtime read in 2.1.211, so removal is behaviorally inert.
+- `CLAUDE_INTERNAL_WARM_RESUME_QA` — removed schema-only residue. It had no effective runtime read in 2.1.211, so removal is behaviorally inert.
