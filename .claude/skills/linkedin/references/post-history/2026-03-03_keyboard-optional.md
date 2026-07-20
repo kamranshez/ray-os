@@ -8,8 +8,8 @@ engagement:
   reactions: 11
   comments: 0
   reposts: 0
-  impressions: 1198
-  last_checked: 2026-07-19
+  impressions: 1199
+  last_checked: 2026-07-20
 url: https://www.linkedin.com/feed/update/urn:li:activity:7434563376166518784/
 notes: Voice Mode announcement. Shorter format, capitalized. Includes skeptic counterpoint quote and remote control callback. User edited from initial draft — removed push-to-talk detail paragraph and "isn't dead" closer.
 ---

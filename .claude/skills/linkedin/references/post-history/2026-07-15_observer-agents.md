@@ -4,11 +4,11 @@ hook: "Last week, Anthropic shipped a feature into Claude Code with no blog post
 media: video
 status: posted
 engagement:
-  reactions: 12
+  reactions: 13
   comments: 5
   reposts: 0
-  impressions: 1195
-  last_checked: 2026-07-19
+  impressions: 1506
+  last_checked: 2026-07-20
 url: https://www.linkedin.com/feed/update/urn:li:activity:7482812254950981632/
 notes: Backfilled from Ray's activity feed on 2026-07-16; hook, metrics, permalink, and activity-ID-derived date verified.
 ---

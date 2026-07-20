@@ -11,8 +11,8 @@ engagement:
   reactions: 22
   comments: 0
   reposts: 2
-  impressions: 1663
-  last_checked: 2026-07-19
+  impressions: 1664
+  last_checked: 2026-07-20
 url: https://www.linkedin.com/feed/update/urn:li:activity:7470088985466478593/
 notes: >
   Second attempt on the loops paradigm-shift angle after deleting the
