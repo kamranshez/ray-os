@@ -11,3 +11,13 @@
 #
 # Keep this list lean: remove entries once they're done rather than letting
 # completed items accumulate.
+
+- task: Check engagement on Boris steps post
+  description: >
+    Pull reactions/comments/reposts/impressions for the Boris "steps of agentic
+    coding" text post and backfill the engagement block in
+    references/post-history/2026-07-20_boris-steps-of-agentic-coding.md.
+    Also confirm the YouTube link went in as the first comment.
+  due: 2026-07-23
+  status: pending
+  related_post: references/post-history/2026-07-20_boris-steps-of-agentic-coding.md
