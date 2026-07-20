@@ -345,3 +345,33 @@ Classifier aliases were repaired from binary evidence before trusting the diff: 
 - `CLAUDE_CODE_MID_CONVERSATION_SYSTEM` — removed schema-only residue. It had no effective runtime read; the real positive lever `CLAUDE_CODE_FORCE_MID_CONVERSATION_SYSTEM` remains and can still be blocked in HIPAA contexts.
 - `CLAUDE_CODE_PLAN_MODE_INTERVIEW_PHASE` — removed schema-only residue. It had no effective runtime read in 2.1.211, so removal is behaviorally inert.
 - `CLAUDE_INTERNAL_WARM_RESUME_QA` — removed schema-only residue. It had no effective runtime read in 2.1.211, so removal is behaviorally inert.
+
+## 2026-07-20 09:26 — v2.1.215 (upgraded from v2.1.214)
+
+Classifier aliases were repaired from 2.1.215 binary evidence before trusting the diff: new readers are `dge`, `$bt`, `mO`, `u3i`, `Xj`, `Uhe`, and `WVn`, with `QHi` model-suffixed keys, optional client-data reads, and `$`-prefixed hoisted flag constants. Health check: 331 gate/config flags; the stricter helper boundary correctly excludes the telemetry call `oe("tengu_fleetview", {...})`. This suppressed 17 bogus wired→present transitions. The environment scanner also removed the concatenated artifacts `CLAUDE_CODE_SUPPRESS_SESSION_ATTRIBUTIONIS` and `CLAUDE_GATEWAY_LOG_LEVELI1`. Official Anthropic changelog/release checking was blocked because the required Exa MCP search/fetch tools are not registered; `announcements-latest.json` remains absent and its marker was not advanced.
+
+### 🔀 GrowthBook switches
+- **Canary update pin** (`tengu_canary`) — `{external:"2.1.214"}` → `{external:"2.1.215"}`. This wired updater config may replace the normal latest version with a newer external canary, subject to the configured maximum; because 2.1.215 is already installed, the new pin causes no further update now.
+- **EndConversation tool** (`tengu_umber_kestrel`) — OFF → ON. Enables the deferred tool that lets abuse-handling agents explicitly end a conversation after warning the user; wired and effective only for qualifying CLI entrypoints and model floors (Opus 4.8+, Sonnet 5+, or Fable/Mythos 5+).
+- **Subagent task-tool filtering** (`tengu_shale_finch`) — ON → OFF. When enabled it removes `TodoWrite`, `TaskCreate`, `TaskGet`, `TaskUpdate`, and `TaskList` from ordinary non-teammate subagents; the code remains wired, but the filter is now inactive.
+- **Model task/todo blacklist** (`tengu_vellum_ash`) — `[]` → `["claude-opus-4-8","claude-sonnet-5","claude-fable-5"]`. This wired list disables task/todo tools, reminders, and rendering when the current model identifier matches an entry; it is now behaviorally effective on those three model families even though it is a structured config rather than a boolean gate.
+- **Investigate-first prompt** (`tengu_slate_harrier`) — `compact` → `off`. Controls the Opus 4.7 instruction to perform brief read-only investigation before asking a clarifying question; wired but now disabled, with `CLAUDE_CODE_INVESTIGATE_FIRST` still able to override it.
+- **Extended nested-call usage header** (`tengu_lantern_spool`) — ON → OFF. Adds `anthropic-usage-limit: extended` to eligible nested/subagent or compact requests on the first-party Anthropic endpoint; wired but now inactive, and server entitlement would still decide whether to honor it.
+- **MCP large-result recovery prompt** (`tengu_mcp_subagent_prompt`) — ON → OFF. Selects strict JSON/text complete-inspection instructions after oversized MCP output is saved; wired but now falls back to the legacy offset/search guidance unless `MCP_TRUNCATION_PROMPT_OVERRIDE` forces the newer branch.
+- **Remote Control auto-start default** (`tengu_cobalt_harbor`) — ON → OFF. Supplies the default for starting Remote Control automatically; wired but no longer auto-enables it, while an explicit `remote_control_at_startup` setting can still win and OAuth, provider, policy, and entitlement checks remain required.
+- **Sonnet 5 Edit-guard variant** (`tengu_velvet_hammer_sonnet_5`) — server value ON → OFF, but the flag is stripped. Its last-known purpose is a Sonnet-5-specific bypass of the Edit tool's read-before-edit/stale-file guard; no call site survives in 2.1.215, so both values are runtime no-ops.
+
+### 🆕 New flags
+- `tengu_heron_tallow` — new OFF and stripped. No string, call site, or reliable historical evidence survives in the binary, so its behavior is unrecoverable and the cached value has no effect.
+
+### 🧱 DCE switches
+- `tengu_gault_kestrel` — newly shipped (stripped → wired), currently OFF. When enabled it relaxes the action-safety prompt by removing the instruction to surface contradictions or unowned targets before proceeding; `CLAUDE_CODE_GAULT_KESTREL` can force it on, and no entitlement gate is visible.
+- `tengu_marl_cormorant` — newly shipped (stripped → wired), currently OFF. When enabled it adds an Exec-tool reminder that command output is shown to Claude, not reliably to the user; `CLAUDE_CODE_MARL_CORMORANT` can force it on, and no entitlement gate is visible.
+- `tengu_thistle_grebe` — newly shipped (stripped → wired), cached `"default"`. Selects subagent steering: `default` keeps delegation nudges, `no_nudges` removes them, and `counter_steer` injects explicit anti-overdelegation guidance; precedence is env → client data → GrowthBook → default, so today's value preserves baseline behavior.
+
+### ⚙️ Environment changes
+- `CLAUDE_CODE_GAULT_KESTREL` — added force-ON boolean for `tengu_gault_kestrel`. Truthy removes the contradiction/unowned-target caution from the action-safety prompt; false does not override a true client-data or GrowthBook value, and it is currently unset.
+- `CLAUDE_CODE_MARL_CORMORANT` — added force-ON boolean for `tengu_marl_cormorant`. Truthy adds the Exec output-visibility reminder; false does not override a true client-data or GrowthBook value, and it is currently unset.
+- `CLAUDE_CODE_THISTLE_GREBE` — added enum override for `tengu_thistle_grebe`: `default`, `no_nudges`, or `counter_steer`. It has highest precedence and can explicitly restore `default`; it is currently unset, so the cached `default` applies.
+
+Slack notification was attempted twice through the required `slackbot-message` script, but both escalated executions were rejected after the automatic permission review timed out. The complete message is preserved in the automation run output; delivery to `cc-feature-tracker` remains unresolved.

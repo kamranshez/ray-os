@@ -65,7 +65,10 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 # context-derived `bvi(` reads; v2.1.211 uses `Jwi(` to suffix per-model gate
 # keys such as `tengu_velvet_mallet_<model>`. v2.1.214 uses direct wrappers
 # `uge(`, `fO(`, `Nbt(`, `n3i(`, `Jj(`, `Bhe(`, and `qVn(`, plus `YHi(` for
-# per-model suffixes. Keep those aliases for cross-version diffs.
+# per-model suffixes. v2.1.215 adds async `Xj(` / `WVn(` reads, structured
+# config helpers `$bt(` / `mO(`, direct client-data `XUi(` reads, `Zyc(` as
+# an env/client-data/boolean-gate bridge, `dge(`/`Uhe(`/`u3i(` wrappers, and `QHi(`
+# for per-model suffixes. Keep those aliases for cross-version diffs.
 # Telemetry `j(`→`G(`→`j(`/`f_(` (v2.1.195)→`G(` (v2.1.199)→`M(` (v2.1.208)
 # (with event wrappers `N(`, `bb(`, `I0(`, `QEu(`, and `Qxc(` in v2.1.210), then
 # `M(` with async/event wrappers `Pb(`, `V0(`, `MHc(`, and `hwu(` in v2.1.211. We match
@@ -75,15 +78,17 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 # gate helper was renamed again — grep `("tengu_` in the strings to find the new
 # 1-2 char prefix whose call sites take a bare default (`!0`/`!1`/`null`/number), and
 # add it to the gates alternation below (telemetry prefixes take an `{...}` object).
-gate_helpers=r'(?:et|uge|fO|Nbt|n3i|Jj|Bhe|qVn|Fme|uM|pme|Vgt|hj|c1i|Eqn|Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)'
-gates=set(re.findall(gate_helpers+r'\("(tengu_[a-zA-Z0-9_]+)"',strings))
-gates.update(re.findall(gate_helpers+r'\((?:YHi|Jwi|bvi)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gate_helpers=r'(?:et|Xj|WVn|\$bt|mO|XUi|Zyc|dge|Uhe|u3i|uge|fO|Nbt|n3i|Jj|Bhe|qVn|Fme|uM|pme|Vgt|hj|c1i|Eqn|Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)'
+gate_call=r'(?<![\w$])'+gate_helpers
+gates=set(re.findall(gate_call+r'(?:\?\.)?\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gates.update(re.findall(gate_call+r'(?:\?\.)?\((?:QHi|YHi|Jwi|bvi)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 # Config keys are sometimes hoisted to a minified variable before being passed to
 # a GrowthBook wrapper (for example `var Yau="tengu_review_bughunter_config";
 # ... fO(Yau,...)`). Resolve those indirections so a helper rename cannot look like DCE.
-gate_vars={name:flag for name,flag in re.findall(r'\b(?:var |let |const )?([A-Za-z_$][\w$]*)="(tengu_[a-zA-Z0-9_]+)"',strings)}
-gate_vars.update({name:flag for name,flag in re.findall(r"\b(?:var |let |const )?([A-Za-z_$][\w$]*)='(tengu_[a-zA-Z0-9_]+)'",strings)})
-gate_var_reads=set(re.findall(gate_helpers+r'\(([A-Za-z_$][\w$]*)[,)]',strings))
+gate_vars={name:flag for name,flag in re.findall(r'(?<![\w$])(?:var |let |const )?([A-Za-z_$][\w$]*)="(tengu_[a-zA-Z0-9_]+)"',strings)}
+gate_vars.update({name:flag for name,flag in re.findall(r"(?<![\w$])(?:var |let |const )?([A-Za-z_$][\w$]*)='(tengu_[a-zA-Z0-9_]+)'",strings)})
+gate_call_args=re.findall(gate_call+r'(?:\?\.)?\(([^)]{0,200})\)',strings)
+gate_var_reads={name for args in gate_call_args for name in re.findall(r'[A-Za-z_$][\w$]*',args)}
 gates.update(gate_vars[name] for name in gate_var_reads if name in gate_vars)
 telem=set(re.findall(r'(?:M|Pb|V0|MHc|hwu|j|f_|G|N|bb|I0|QEu|Qxc|\$Wt|a|l|U|B|qrr|w|re)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 present=set(re.findall(r'tengu_[a-zA-Z0-9_]+',strings))
@@ -107,6 +112,9 @@ OVERRIDES={
  "tengu_pewter_brook":"CLAUDE_CODE_NO_FLICKER",
  "tengu_lapis_anchor":"CLAUDE_CODE_TOTAL_TOKENS_REMINDER",
  "tengu_cobalt_wren":"CLAUDE_CODE_CLASSIFIER_SUMMARY",
+ "tengu_gault_kestrel":"CLAUDE_CODE_GAULT_KESTREL",
+ "tengu_marl_cormorant":"CLAUDE_CODE_MARL_CORMORANT",
+ "tengu_thistle_grebe":"CLAUDE_CODE_THISTLE_GREBE",
 }
 def truthy(v):
     # Only boolean gates (or structured configs with an explicit boolean
@@ -119,15 +127,23 @@ def truthy(v):
 raw_env_names=set(re.findall(r'\b(?:CLAUDE_CODE|CLAUDE)_[A-Z][A-Z0-9_]+\b',strings))
 # Bun's strings extraction can concatenate a minified identifier onto a real env
 # literal (`...PROMPTQ`, `...TYPEDI`) or expose a trailing-prefix fragment. Drop
-# those artifacts whenever the canonical one-character-shorter name is also present.
+# those artifacts whenever the canonical shorter name is also present.
 non_env_symbols={
     # Internal exported JS constant for the bundled Claude Code docs skill; it
     # is not read from process.env (confirmed from the 2.1.211 call site).
     "CLAUDE_CODE_SKILL_DESCRIPTION",
 }
+def concatenated_env_artifact(name):
+    # Bun may glue a one- or two-character minified symbol onto a canonical env
+    # literal (`...THISTLE_GREBEJ`, `...ATTRIBUTIONIS`, `...LOG_LEVELI1`). A real
+    # env suffix is underscore-delimited, so only suppress an undelimited tail
+    # when the exact shorter canonical literal also exists.
+    return any(name.startswith(base) and 1 <= len(name)-len(base) <= 2
+               and '_' not in name[len(base):]
+               for base in raw_env_names if base != name)
 env_names=sorted(name for name in raw_env_names
                  if name not in non_env_symbols and not name.endswith('_')
-                 and not (name[:-1] in raw_env_names and name[-1] in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'))
+                 and not concatenated_env_artifact(name))
 snap={"version":ver,"flags":{},"envs":env_names}
 for flag,val in gb.items():
     if not flag.startswith("tengu_"): continue
