@@ -56,16 +56,12 @@ def build_post_card(post: dict, index: int) -> str:
             <blockquote class="screenshot-quote">{screenshot_escaped}</blockquote>
         </div>"""
 
-    # Convert post body to HTML: preserve line breaks, escape HTML
+    # Editable body: keep literal newlines and escape HTML. The .post-body div is
+    # contenteditable with white-space:pre-wrap, so what's shown === what gets copied
+    # (innerText round-trips the exact text, blank lines and all).
     body_escaped = html.escape(body)
-    # Double newlines become paragraph breaks, single newlines become <br>
-    body_html = body_escaped.replace("\n\n", '</p><p class="post-paragraph">').replace(
-        "\n", "<br>"
-    )
-    body_html = f'<p class="post-paragraph">{body_html}</p>'
-
-    # The raw text for clipboard (no HTML)
-    body_for_clipboard = body.replace("\\", "\\\\").replace("`", "\\`").replace("${", "\\${")
+    body_id = f"body-{number}"
+    char_count = len(body)
 
     return f"""
     <div class="post-card" id="post-{number}">
@@ -73,8 +69,9 @@ def build_post_card(post: dict, index: int) -> str:
             <div class="post-label">
                 <span class="post-number">Post {number}</span>
                 <span class="post-triggers">{triggers}</span>
+                <span class="char-count" id="count-{number}" data-n="{char_count}">{char_count} chars</span>
             </div>
-            <button class="copy-btn" onclick="copyPost(this, `{body_for_clipboard}`)">
+            <button class="copy-btn" onclick="copyPost(this, '{body_id}')">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
                     <path d="M3 10V3C3 2.44772 3.44772 2 4 2H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -92,7 +89,7 @@ def build_post_card(post: dict, index: int) -> str:
                     <div class="post-time">Just now &middot; <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 107 7 7 7 0 00-7-7zM3 8a5 5 0 014.54-4.98C5.6 3.56 4 6.73 4 8s1.6 4.44 3.54 4.98A5 5 0 013 8zm6.64 4.81A8.93 8.93 0 0010 8a8.93 8.93 0 00-.36-4.81A5 5 0 0113 8a5 5 0 01-3.36 4.81zM8 12.5A8.43 8.43 0 016 8a8.43 8.43 0 012-4.5A8.43 8.43 0 0110 8a8.43 8.43 0 01-2 4.5z"/></svg></div>
                 </div>
             </div>
-            <div class="post-body">{body_html}</div>
+            <div class="post-body" id="{body_id}" contenteditable="true" spellcheck="true" oninput="updateCount({number})">{body_escaped}</div>
             <div class="post-actions">
                 <div class="action-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 9V5a3 3 0 00-6 0v1m0 0H6a2 2 0 00-2 2v1a2 2 0 002 2h2m0-5v5m10-1v6a2 2 0 01-2 2H8a2 2 0 01-2-2v-6m12 0h-4m4 0a2 2 0 002-2v-1a2 2 0 00-2-2h-2m-4 5V6"/></svg>
@@ -276,15 +273,31 @@ def generate_html(posts: list[dict]) -> str:
         font-size: 14px;
         line-height: 1.5;
         color: #000000e6;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        outline: none;
+        border-radius: 6px;
+        transition: box-shadow 0.15s, background 0.15s;
+        cursor: text;
     }}
 
-    .post-body .post-paragraph {{
-        margin-bottom: 8px;
+    .post-body:hover {{
+        background: #fafafa;
     }}
 
-    .post-body .post-paragraph:last-child {{
-        margin-bottom: 0;
+    .post-body:focus {{
+        background: #fffef8;
+        box-shadow: inset 0 0 0 2px #0a66c2;
     }}
+
+    .char-count {{
+        font-size: 11px;
+        color: #00000066;
+        font-variant-numeric: tabular-nums;
+    }}
+
+    .char-count.warn {{ color: #b45309; font-weight: 600; }}
+    .char-count.over {{ color: #c11; font-weight: 700; }}
 
     .post-actions {{
         display: flex;
@@ -347,7 +360,7 @@ def generate_html(posts: list[dict]) -> str:
 
 <div class="page-header">
     <h1>LinkedIn Post Variations</h1>
-    <p>{len(posts)} variations &middot; each uses different emotional triggers</p>
+    <p>{len(posts)} variations &middot; click any post to edit it in place, then Copy &middot; LinkedIn folds behind &ldquo;&hellip;see more&rdquo; near 1,300 chars, hard limit 3,000</p>
 </div>
 
 <div class="posts-grid">
@@ -355,7 +368,20 @@ def generate_html(posts: list[dict]) -> str:
 </div>
 
 <script>
-function copyPost(btn, text) {{
+function updateCount(n) {{
+    var body = document.getElementById('body-' + n);
+    var el = document.getElementById('count-' + n);
+    if (!body || !el) return;
+    var len = body.innerText.length;
+    el.textContent = len + ' chars';
+    el.classList.remove('warn', 'over');
+    if (len > 3000) el.classList.add('over');
+    else if (len > 1300) el.classList.add('warn');
+}}
+
+function copyPost(btn, bodyId) {{
+    var body = document.getElementById(bodyId);
+    var text = body ? body.innerText : '';
     var copiedHtml = `
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -397,6 +423,11 @@ function copyPost(btn, text) {{
         fallbackCopy();
     }}
 }}
+
+// Color the counters correctly on first load.
+document.querySelectorAll('.post-body[id^="body-"]').forEach(function(body) {{
+    updateCount(body.id.replace('body-', ''));
+}});
 </script>
 
 </body>

@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>the five steps of ai coding · hand-drawn deck</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  /* Excalidraw's actual fonts, from their public repo via jsdelivr */
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+</style>
+<script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
+<style>
+  :root {
+    --cream: #1c1c1c; --paper: #262626; --ink: #e8e8e8; --ink-soft: #9b9b9b;
+    --ink-faint: #555555; --rule: #3a3a3a;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--cream); color: var(--ink);
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Excalifont', cursive; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 4px 4px; z-index: 1;
+  }
+
+  /* ===== STAGE (full height, no topbar, no sidebar) ===== */
+  .stage {
+    position: fixed; top: 0; bottom: 0; left: 0; right: 0;
+    display: flex; flex-direction: column; z-index: 5;
+  }
+  .sketch-wrap {
+    flex: 1 1 auto; min-height: 0; display: flex; align-items: center;
+    justify-content: center; padding: 8px 14px 2px; position: relative;
+  }
+  .sketch-wrap svg {
+    width: 100%; height: 100%; display: block; transition: opacity 250ms ease;
+  }
+  .sketch-wrap svg.fading { opacity: 0; }
+
+  .caption-area {
+    flex: 0 0 auto; text-align: center; padding: 2px 28px 50px;
+    transition: opacity 250ms ease;
+  }
+  .caption-area.fading { opacity: 0; }
+  .caption-area h2 {
+    font-family: 'Excalifont', cursive; font-weight: 700; margin: 0 0 6px;
+    font-size: clamp(1.6rem, 2.8vw, 2.35rem); line-height: 1.05; color: var(--ink);
+  }
+  .caption-area p {
+    font-family: 'Excalifont', cursive; margin: 0 auto;
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem); line-height: 1.4;
+    color: var(--ink-soft); max-width: 980px;
+  }
+
+  /* ===== TAP ZONES ===== */
+  .tap-zone { position: fixed; top: 0; bottom: 0; width: 50%; z-index: 8; cursor: pointer; }
+  .tap-zone.left { left: 0; }
+  .tap-zone.right { right: 0; }
+
+  /* draw-on animation */
+  .draw-on path, .draw-on line, .draw-on circle, .draw-on rect {
+    stroke-dasharray: 1500; stroke-dashoffset: 1500; animation: drawOn 700ms ease forwards;
+  }
+  @keyframes drawOn { to { stroke-dashoffset: 0; } }
+  .draw-on text { opacity: 0; animation: fadeIn 500ms ease forwards; animation-delay: 400ms; }
+  @keyframes fadeIn { to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="sketch-wrap" id="sketch-wrap">
+    <svg id="sketch" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="caption-area" id="caption">
+    <h2 id="headline">the idea</h2>
+    <p id="caption-text">one sentence that says what this slide shows</p>
+  </div>
+</div>
+
+<div class="tap-zone left" id="tap-left"></div>
+<div class="tap-zone right" id="tap-right"></div>
+
+<script>
+(() => {
+  // ===== Excalidraw dark palette. Use colour for MEANING, not decoration:
+  //   rose / lightRed  = problem, cost, failure
+  //   emerald / green  = success, done, the good path
+  //   blue/violet/amber/yellow/card = neutral stages or categories
+  //   soft = secondary text   faint = subtle lines
+  const COLORS = {
+    ink: '#e8e8e8', soft: '#9b9b9b', faint: '#555555', card: '#323232',
+    yellow: '#4d4526', blue: '#1f3a4d', green: '#234a2c', pink: '#4d2a39',
+    amber: '#523a23', paper: '#262626', emerald: '#5bd66f', rose: '#ff6b6b',
+    lightRed: '#4d2626', softEmerald: '#234a2c', violet: '#352c4d', teal: '#1d4642',
+    blueStroke: '#74b9e7', yellowStroke: '#f0a429', violetStroke: '#b197fc',
+  };
+  const MONO = "'Cascadia Code', ui-monospace, monospace";
+
+  // Optional per-slide text scale. Default 1 = author at native sizes.
+  // A slide may set { scale: 1.2 } to bump all its non-mono text at once.
+  let TEXT_SCALE = 1, MONO_SCALE = 1;
+
+  const svg = document.getElementById('sketch');
+  let rc = rough.svg(svg);
+  const clearSvg = (s) => { while (s.firstChild) s.removeChild(s.firstChild); };
+
+  const addRect = (x, y, w, h, opts={}) => {
+    const node = rc.rectangle(x, y, w, h, {
+      stroke: COLORS.ink, strokeWidth: 1.6, roughness: 2.0, bowing: 1.6,
+      fill: opts.fill, fillStyle: opts.fillStyle || 'solid', fillWeight: 1, hachureGap: 6, ...opts
+    });
+    svg.appendChild(node); return node;
+  };
+  const addLine = (x1,y1,x2,y2, opts={}) => {
+    const node = rc.line(x1,y1,x2,y2, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.5, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addCircle = (cx,cy,d, opts={}) => {
+    const node = rc.circle(cx,cy,d, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, fill: opts.fill, fillStyle: opts.fillStyle || 'solid', ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addEllipse = (cx,cy,w,h, opts={}) => {
+    const node = rc.ellipse(cx,cy,w,h, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.8, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addPath = (path, opts={}) => {
+    const node = rc.path(path, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addText = (x,y, text, opts={}) => {
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('font-family', opts.font || "'Excalifont', cursive");
+    const isMono = (opts.font || '').indexOf('Cascadia') !== -1;
+    t.setAttribute('font-size', (opts.size || 24) * (isMono ? MONO_SCALE : TEXT_SCALE));
+    t.setAttribute('fill', opts.fill || COLORS.ink);
+    t.setAttribute('text-anchor', opts.anchor || 'start');
+    if (opts.weight) t.setAttribute('font-weight', opts.weight);
+    if (opts.style) t.setAttribute('font-style', opts.style);
+    t.textContent = text; svg.appendChild(t); return t;
+  };
+  // Curved arrow with a head. curve:0 = straight. Make it REACH its target
+  // (end on the box edge), never overshoot into the next box or float in space.
+  const addArrow = (x1,y1,x2,y2, opts={}) => {
+    const curve = opts.curve != null ? opts.curve : 30;
+    const cx = (x1+x2)/2 + curve; const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+    addPath(`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`, opts);
+    const angle = Math.atan2(y2-cy, x2-cx); const ah = opts.arrowSize || 14;
+    addLine(x2,y2, x2 - ah*Math.cos(angle - Math.PI/7), y2 - ah*Math.sin(angle - Math.PI/7), opts);
+    addLine(x2,y2, x2 - ah*Math.cos(angle + Math.PI/7), y2 - ah*Math.sin(angle + Math.PI/7), opts);
+  };
+  const addCheck = (cx, cy, size=18, color=COLORS.emerald) => {
+    addPath(`M ${cx-size*0.6} ${cy} L ${cx-size*0.1} ${cy+size*0.5} L ${cx+size*0.7} ${cy-size*0.6}`, {
+      stroke: color, strokeWidth: 3.5, roughness: 1.2
+    });
+  };
+  const addCross = (cx, cy, size=18, color=COLORS.rose) => {
+    addLine(cx-size*0.6, cy-size*0.6, cx+size*0.6, cy+size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+    addLine(cx-size*0.6, cy+size*0.6, cx+size*0.6, cy-size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+  };
+  // circular arrow (a loop/routine glyph)
+  const loopCircle = (cx, cy, r, color) => {
+    addPath(`M ${cx+r} ${cy} A ${r} ${r} 0 1 1 ${cx+r*0.7} ${cy-r*0.7}`, { stroke: color, strokeWidth: 2.2 });
+    const ang = Math.PI/4 + Math.PI/2;
+    const tx = cx+r*0.7, ty = cy-r*0.7, ah = 13;
+    addLine(tx, ty, tx-ah*Math.cos(ang-Math.PI/7), ty-ah*Math.sin(ang-Math.PI/7), { stroke: color, strokeWidth: 2.2 });
+    addLine(tx, ty, tx-ah*Math.cos(ang+Math.PI/7), ty-ah*Math.sin(ang+Math.PI/7), { stroke: color, strokeWidth: 2.2 });
+  };
+
+  // ============== SLIDES ==============
+  // Each slide = one idea, one diagram. headline + caption go in the DOM
+  // caption-area (below the canvas); the SVG holds the diagram and short
+  // FUNCTIONAL labels only.
+  const slides = [];
+
+  // --- 1: the ladder (role-ladder) ---
+  slides.push({
+    headline: 'your job changes every step',
+    caption: 'the agents multiply; your role climbs from pair to steering by intent',
+    draw: () => {
+      const cols = [
+        { role:'blocked',            agents:'0',     c:COLORS.lightRed },
+        { role:'a pair',             agents:'1',     c:COLORS.blue },
+        { role:'orchestrator',       agents:'10',    c:COLORS.violet },
+        { role:'manager of managers',agents:'100',   c:COLORS.amber },
+        { role:'steering by intent', agents:'1000+', c:COLORS.softEmerald },
+      ];
+      cols.forEach((s, i) => {
+        const x = 90 + i*300;
+        addRect(x, 200, 260, 110, { fill: COLORS.card, strokeWidth: 2.2 });
+        addText(x+130, 248, 'you', { size: 19, anchor: 'middle', weight: 700 });
+        addText(x+130, 282, s.role, { size: 15, anchor: 'middle', fill: COLORS.soft });
+        addArrow(x+130, 315, x+130, 385, { strokeWidth: 1.8, curve: 0, arrowSize: 11 });
+        addRect(x, 390, 260, 170, { fill: s.c, strokeWidth: 2.2 });
+        addText(x+130, 470, s.agents, { size: 34, anchor: 'middle', weight: 700, font: MONO });
+        addText(x+130, 510, 'agents', { size: 15, anchor: 'middle', fill: COLORS.soft });
+        addText(x+130, 620, 'step ' + i, { size: 16, anchor: 'middle', fill: COLORS.soft, font: MONO });
+      });
+    }
+  });
+
+  // --- 2: step 0 (model-cage) ---
+  slides.push({
+    headline: 'step 0 . gated',
+    caption: 'the approved model lives in a cage while the frontier sits behind the wall',
+    draw: () => {
+      addRect(180, 260, 420, 320, { fill: COLORS.lightRed, strokeWidth: 2.4 });
+      for (let k=1;k<6;k++) addLine(180 + k*70, 260, 180 + k*70, 580, { stroke: COLORS.rose, strokeWidth: 1.6 });
+      addText(390, 415, 'approved:', { size: 20, anchor: 'middle', fill: COLORS.soft });
+      addText(390, 455, 'a 2-year-old model', { size: 22, anchor: 'middle', weight: 700 });
+      addText(390, 630, 'what you get', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      addLine(800, 180, 800, 660, { stroke: COLORS.faint, strokeWidth: 3, strokeLineDash: [14,10] });
+      addText(800, 155, 'approval wall', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      const models = ['frontier model', 'agents', 'mcp tools'];
+      models.forEach((m, i) => {
+        addRect(940, 220 + i*150, 480, 110, { fill: COLORS.blue, strokeWidth: 2 });
+        addText(1180, 283 + i*150, m, { size: 21, anchor: 'middle', weight: 700, font: MONO });
+        addArrow(935, 275 + i*150, 815, 340 + i*60, { stroke: COLORS.rose, strokeWidth: 1.6, curve: -20, arrowSize: 11 });
+        addCross(870, 310 + i*55, 13);
+      });
+      addText(1180, 655, 'what exists', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }
+  });
+
+  // --- 3: step 1 (cannot-look-away) ---
+  slides.push({
+    headline: 'step 1 . assisted',
+    caption: 'low trust means your eyes never leave the screen while the agent works',
+    draw: () => {
+      addRect(180, 280, 300, 180, { fill: COLORS.card, strokeWidth: 2.4 });
+      addText(330, 375, 'you', { size: 26, anchor: 'middle', weight: 700 });
+      addPath('M 560 370 Q 660 300 760 370 Q 660 440 560 370', { strokeWidth: 2.2 });
+      addCircle(660, 370, 44, { fill: COLORS.blue, strokeWidth: 2 });
+      addLine(770, 350, 1010, 320, { stroke: COLORS.faint, strokeWidth: 1.2, strokeLineDash: [7,7] });
+      addLine(770, 390, 1010, 420, { stroke: COLORS.faint, strokeWidth: 1.2, strokeLineDash: [7,7] });
+      addRect(1020, 280, 400, 180, { fill: COLORS.blue, strokeWidth: 2.4 });
+      addText(1220, 360, 'agent working', { size: 22, anchor: 'middle', weight: 700, font: MONO });
+      addText(1220, 400, 'edit . edit . edit', { size: 16, anchor: 'middle', fill: COLORS.soft, font: MONO });
+      const labels = ['watch','watch','watch','watch','watch','approve'];
+      labels.forEach((t, i) => {
+        const x = 180 + i*212;
+        const last = i === labels.length-1;
+        addRect(x, 560, 192, 80, { fill: last ? COLORS.softEmerald : COLORS.lightRed, strokeWidth: 1.8 });
+        addText(x+96, 608, t, { size: 17, anchor: 'middle', font: MONO, fill: last ? COLORS.emerald : COLORS.rose });
+      });
+      addText(180, 535, 'your next 30 minutes', { size: 15, fill: COLORS.soft });
+    }
+  });
+
+  // --- 4: bridge 1 -> 2 (four-unlocks) ---
+  slides.push({
+    headline: 'four things unlock step 2',
+    caption: 'more than one agent, a verification loop you trust, auto mode, automated review',
+    draw: () => {
+      const cards = [
+        { t:'run >1 agent',           sub:'worktrees keep them apart' },
+        { t:'self verification loop', sub:'tests . build . lint . e2e' },
+        { t:'auto mode',              sub:'no blocking permission prompts' },
+        { t:'automated code review',  sub:'claude reviews claude first' },
+      ];
+      cards.forEach((c, i) => {
+        const x = 150 + (i%2)*700, y = 170 + Math.floor(i/2)*280;
+        addRect(x, y, 600, 220, { fill: COLORS.card, strokeWidth: 2.2 });
+        addText(x+300, y+95, c.t, { size: 24, anchor: 'middle', weight: 700, font: MONO });
+        addText(x+300, y+140, c.sub, { size: 16, anchor: 'middle', fill: COLORS.soft });
+        addCheck(x+300, y+180, 15);
+      });
+    }
+  });
+
+  // --- 5: step 2 (lanes) ---
+  slides.push({
+    headline: 'step 2 . parallel',
+    caption: 'each agent runs in its own lane; you hop between them, steering not typing',
+    draw: () => {
+      const lanes = [
+        { p: 0.85, task:'fix nav overlap' }, { p: 0.55, task:'og tags' },
+        { p: 0.95, task:'video sort bug' },  { p: 0.35, task:'mobile padding' },
+        { p: 0.70, task:'dead links' },      { p: 0.45, task:'search empty state' },
+      ];
+      lanes.forEach((l, i) => {
+        const y = 160 + i*95;
+        addText(140, y+38, 'wt-' + (i+1), { size: 16, font: MONO, fill: COLORS.soft });
+        addLine(240, y+30, 1360, y+30, { stroke: COLORS.faint, strokeWidth: 1 });
+        addRect(240, y, 1120*l.p, 60, { fill: COLORS.blue, strokeWidth: 1.6 });
+        addText(260, y+38, l.task, { size: 15, font: MONO });
+        if (l.p > 0.9) addCheck(1400, y+30, 13);
+      });
+      const hops = [[1180, 190], [860, 380], [1050, 570]];
+      hops.forEach((p, i) => {
+        addCircle(p[0], p[1], 34, { fill: COLORS.yellow, strokeWidth: 2 });
+        if (i < hops.length-1) addArrow(p[0], p[1]+20, hops[i+1][0], hops[i+1][1]-22, { stroke: COLORS.yellowStroke, strokeWidth: 1.4, curve: 40, arrowSize: 10 });
+      });
+      addText(1180, 145, 'you', { size: 15, anchor: 'middle', fill: COLORS.yellowStroke });
+    }
+  });
+
+  // --- 6: bridge 2 -> 3 (context-pipes) ---
+  slides.push({
+    headline: 'let claude pull its own context',
+    caption: 'the missing context you used to paste in becomes sources claude reads itself',
+    draw: () => {
+      const sources = ['the codebase', 'the wiki', 'discussions'];
+      sources.forEach((s, i) => {
+        const y = 220 + i*160;
+        addRect(160, y, 340, 110, { fill: COLORS.violet, strokeWidth: 2 });
+        addText(330, y+62, s, { size: 20, anchor: 'middle', weight: 700, font: MONO });
+        addArrow(505, y+55, 660, 430, { strokeWidth: 2, curve: (430 - y - 55)*0.12, arrowSize: 12 });
+      });
+      addRect(670, 330, 380, 200, { fill: COLORS.blue, strokeWidth: 2.4 });
+      addText(860, 420, 'claude', { size: 26, anchor: 'middle', weight: 700, font: MONO });
+      addText(860, 460, 'asks before it acts', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      addArrow(1055, 430, 1210, 430, { strokeWidth: 2.2, curve: 0, arrowSize: 14 });
+      addRect(1220, 350, 260, 160, { fill: COLORS.softEmerald, strokeWidth: 2.2 });
+      addText(1350, 425, 'the right', { size: 20, anchor: 'middle', weight: 700 });
+      addText(1350, 458, 'change', { size: 20, anchor: 'middle', weight: 700 });
+      addText(860, 640, 'the question moves from did you read the code to what context was missing', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }
+  });
+
+  // --- 7: bridge 2 -> 3 (loops-calendar) ---
+  slides.push({
+    headline: 'break the work into routines',
+    caption: 'one-off tasks become recurring loops pinned to a schedule',
+    draw: () => {
+      addText(330, 180, 'one-off asks', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      const pile = [[210, 230], [330, 260], [250, 330], [380, 350], [290, 420]];
+      pile.forEach((p) => {
+        addRect(p[0], p[1], 170, 60, { fill: COLORS.lightRed, strokeWidth: 1.6 });
+      });
+      addText(330, 540, 'ad hoc . forgotten . repeated', { size: 15, anchor: 'middle', fill: COLORS.rose });
+      addArrow(560, 360, 700, 360, { strokeWidth: 2.4, curve: 0, arrowSize: 15 });
+      addText(1080, 180, 'routines on a schedule', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      const days = ['mon','tue','wed','thu','fri'];
+      days.forEach((d, i) => {
+        const x = 730 + i*145;
+        addRect(x, 230, 130, 330, { stroke: COLORS.faint, strokeWidth: 1.4 });
+        addText(x+65, 265, d, { size: 15, anchor: 'middle', font: MONO, fill: COLORS.soft });
+        loopCircle(x+65, 380, 34, COLORS.emerald);
+        if (i % 2 === 0) loopCircle(x+65, 490, 34, COLORS.emerald);
+      });
+      addText(1080, 630, 'same job, every day, without being asked', { size: 16, anchor: 'middle', fill: COLORS.emerald });
+    }
+  });
+
+  // --- 8: step 3 (scout-anatomy) ---
+  slides.push({
+    headline: 'anatomy of one scout',
+    caption: 'ux-friction-scout reads the live product, finds friction and files it, daily',
+    draw: () => {
+      const boxes = [
+        { t:'the live app',  sub:'agenticcoding.school', c:COLORS.card },
+        { t:'ux-friction-scout', sub:'runs on cron, in the cloud', c:COLORS.violet },
+        { t:'3 frictions', sub:'ranked, with repro steps', c:COLORS.amber },
+        { t:'#acs-friction', sub:'posted to slack', c:COLORS.teal },
+        { t:'backlog', sub:"tomorrow's agent work", c:COLORS.softEmerald },
+      ];
+      boxes.forEach((b, i) => {
+        const x = 65 + i*305;
+        addRect(x, 360, 250, 160, { fill: b.c, strokeWidth: 2.2 });
+        addText(x+125, 430, b.t, { size: 18, anchor: 'middle', weight: 700, font: MONO });
+        addText(x+125, 468, b.sub, { size: 13, anchor: 'middle', fill: COLORS.soft });
+        if (i < boxes.length-1) addArrow(x+255, 440, x+300, 440, { strokeWidth: 2, curve: 0, arrowSize: 12 });
+      });
+      loopCircle(190, 240, 40, COLORS.emerald);
+      addText(250, 248, 'every day', { size: 15, font: MONO, fill: COLORS.emerald });
+    }
+  });
+
+  // --- 8b: step 3 (create-loop gallery) ---
+  slides.push({
+    headline: 'the same shape, anywhere',
+    caption: 'any source an agent can read becomes a loop that files work for other agents',
+    draw: () => {
+      const rows = [
+        { cadence:'daily',  src:'prod errors',  srcSub:'sentry . posthog',
+          scout:'error-triage-scout', scoutSub:'clusters recurring crashes',
+          out:'ranked fix tickets', y:160 },
+        { cadence:'weekly', src:'the codebase', srcSub:'exports . flags . branches',
+          scout:'dead-code-sweeper', scoutSub:'finds what nothing calls',
+          out:'cleanup backlog', y:350 },
+        { cadence:'weekly', src:'docs vs code', srcSub:'readme . api reference',
+          scout:'docs-drift-scout', scoutSub:'diffs docs against behavior',
+          out:'stale sections flagged', y:540 },
+      ];
+      rows.forEach((r) => {
+        const cy = r.y + 65;
+        loopCircle(85, cy - 10, 24, COLORS.emerald);
+        addText(85, cy + 45, r.cadence, { size: 13, anchor: 'middle', font: MONO, fill: COLORS.soft });
+        addRect(150, r.y, 330, 130, { fill: COLORS.card, strokeWidth: 2 });
+        addText(315, cy - 6, r.src, { size: 19, anchor: 'middle', weight: 700, font: MONO });
+        addText(315, cy + 26, r.srcSub, { size: 13, anchor: 'middle', fill: COLORS.soft });
+        addArrow(485, cy, 585, cy, { strokeWidth: 2, curve: 0, arrowSize: 12 });
+        addRect(590, r.y, 420, 130, { fill: COLORS.violet, strokeWidth: 2 });
+        addText(800, cy - 6, r.scout, { size: 19, anchor: 'middle', weight: 700, font: MONO });
+        addText(800, cy + 26, r.scoutSub, { size: 13, anchor: 'middle', fill: COLORS.soft });
+        addArrow(1015, cy, 1115, cy, { strokeWidth: 2, curve: 0, arrowSize: 12 });
+        addRect(1120, r.y, 330, 130, { fill: COLORS.teal, strokeWidth: 2 });
+        addText(1285, cy + 6, r.out, { size: 16, anchor: 'middle', weight: 700, font: MONO });
+      });
+    }
+  });
+
+  // --- 9: step 4 (two-gears) ---
+  slides.push({
+    headline: 'step 4 . the two loops',
+    caption: 'one loop creates work, one loop closes it; the backlog is where they mesh',
+    draw: () => {
+      loopCircle(420, 420, 190, COLORS.violetStroke);
+      addText(420, 400, 'create', { size: 24, anchor: 'middle', weight: 700 });
+      addText(420, 440, 'scouts find work', { size: 15, anchor: 'middle', fill: COLORS.soft });
+      loopCircle(1180, 420, 190, COLORS.emerald);
+      addText(1180, 400, 'close', { size: 24, anchor: 'middle', weight: 700 });
+      addText(1180, 440, 'fix . pr . verify . ship', { size: 15, anchor: 'middle', fill: COLORS.soft });
+      addRect(680, 350, 240, 140, { fill: COLORS.card, strokeWidth: 2.4 });
+      addText(800, 415, 'backlog', { size: 21, anchor: 'middle', weight: 700 });
+      addArrow(590, 330, 690, 370, { stroke: COLORS.violetStroke, strokeWidth: 1.8, curve: 20, arrowSize: 11 });
+      addArrow(925, 400, 1010, 380, { stroke: COLORS.emerald, strokeWidth: 1.8, curve: -15, arrowSize: 11 });
+      addText(800, 660, 'neither loop needs you to turn', { size: 17, anchor: 'middle', fill: COLORS.soft });
+    }
+  });
+
+  // --- 10: bridge 3 -> 4 (wall-of-green) ---
+  slides.push({
+    headline: 'monitoring at 1000 agents',
+    caption: 'you stop reading work and start reading exceptions',
+    draw: () => {
+      for (let r=0;r<6;r++) for (let c=0;c<14;c++) {
+        const idx = r*14+c;
+        const isBad = idx === 23 || idx === 61;
+        const x = 200 + c*80, y = 200 + r*72;
+        addCircle(x, y, 30, { fill: isBad ? COLORS.lightRed : COLORS.softEmerald, strokeWidth: 1, stroke: isBad ? COLORS.rose : COLORS.faint });
+        if (isBad) addCircle(x, y, 58, { stroke: COLORS.rose, strokeWidth: 2 });
+      }
+      addArrow(880, 370, 1330, 500, { stroke: COLORS.rose, strokeWidth: 1.8, curve: 40, arrowSize: 12 });
+      addArrow(1000, 630, 1330, 540, { stroke: COLORS.rose, strokeWidth: 1.8, curve: -25, arrowSize: 12 });
+      addRect(1340, 480, 160, 90, { fill: COLORS.card, strokeWidth: 2 });
+      addText(1420, 532, 'you', { size: 20, anchor: 'middle', weight: 700 });
+      addText(800, 700, '84 running . 2 need a human', { size: 17, anchor: 'middle', font: MONO, fill: COLORS.soft });
+    }
+  });
+
+  // --- 11: the scoreboard (table-strip, constant time) ---
+  slides.push({
+    headline: 'the scoreboard',
+    caption: 'the same afternoon of yours buys 10x more at every step',
+    draw: () => {
+      const cols = [
+        { s:'step 1', shipped:'1' },
+        { s:'step 2', shipped:'8' },
+        { s:'step 3', shipped:'50' },
+        { s:'step 4', shipped:'500' },
+      ];
+      addText(230, 330, 'shipped', { size: 19, font: MONO, fill: COLORS.soft, anchor: 'end' });
+      cols.forEach((c, i) => {
+        const x = 320 + i*290;
+        const last = i === cols.length-1;
+        addText(x+120, 200, c.s, { size: 20, anchor: 'middle', font: MONO });
+        addRect(x, 240, 240, 140, { fill: last ? COLORS.softEmerald : COLORS.card, strokeWidth: 2 });
+        addText(x+120, 325, c.shipped, { size: 38, anchor: 'middle', weight: 700, font: MONO, fill: last ? COLORS.emerald : COLORS.ink });
+      });
+      // your time: one constant bar under all four columns
+      addText(230, 500, 'min of you', { size: 19, font: MONO, fill: COLORS.soft, anchor: 'end' });
+      addRect(320, 430, 1110, 130, { fill: COLORS.card, strokeWidth: 2 });
+      addText(875, 505, 'the same 30 min', { size: 26, anchor: 'middle', weight: 700, font: MONO });
+      addArrow(320, 640, 1440, 640, { stroke: COLORS.emerald, strokeWidth: 2, curve: 0, arrowSize: 13 });
+      addText(880, 680, 'shipped climbs . your time does not', { size: 17, anchor: 'middle', fill: COLORS.emerald });
+    }
+  });
+
+  // ============== STATE / RENDER ==============
+  let current = 0;
+  const render = (idx, animate=true) => {
+    const slide = slides[idx];
+    const captionEl = document.getElementById('caption');
+    captionEl.classList.add('fading');
+    svg.classList.add('fading');
+    setTimeout(() => {
+      clearSvg(svg);
+      rc = rough.svg(svg);
+      TEXT_SCALE = slide.scale != null ? slide.scale : 1;
+      MONO_SCALE = slide.monoScale != null ? slide.monoScale : 1;
+      slide.draw();
+      if (animate) { svg.classList.add('draw-on'); svg.getBoundingClientRect(); }
+      document.getElementById('headline').textContent = slide.headline;
+      document.getElementById('caption-text').textContent = slide.caption;
+      svg.classList.remove('fading');
+      captionEl.classList.remove('fading');
+      if (animate) setTimeout(() => svg.classList.remove('draw-on'), 1200);
+    }, 220);
+  };
+  const goTo = (idx) => { if (idx < 0 || idx >= slides.length || idx === current) return; current = idx; render(current); };
+  const next = () => goTo(current + 1);
+  const prev = () => goTo(current - 1);
+
+  render(current);
+  document.getElementById('tap-left').addEventListener('click', prev);
+  document.getElementById('tap-right').addEventListener('click', next);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+})();
+</script>
+</body>
+</html>

@@ -19,3 +19,6 @@
 DerivedData/
 # Playwright MCP browser-automation artifacts (ephemeral traces/logs)
 .playwright-mcp/
+
+# Session scratchpad — temporary working files, never committed
+scratchpad/

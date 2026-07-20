@@ -1,0 +1,1491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>five levels of ai coding — slide picker</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-display: swap;
+  }
+</style>
+<script src="./rough.js"></script>
+<style>
+  :root {
+    --bg: #1c1c1c; --paper: #262626; --ink: #e8e8e8; --ink-soft: #9b9b9b;
+    --ink-faint: #555555; --rule: #3a3a3a; --accent: #f0a429;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Excalifont', cursive; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 4px 4px; z-index: 1;
+  }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(28,28,28,0.94); backdrop-filter: blur(8px);
+    border-bottom: 1px dashed var(--rule);
+    padding: 14px 28px; display: flex; align-items: center; gap: 18px;
+  }
+  header h1 { margin: 0; font-size: 24px; }
+  header h1 .muted { color: var(--ink-soft); font-size: 17px; }
+  header .spacer { flex: 1; }
+  header .count {
+    font-family: 'Cascadia Code', ui-monospace, monospace; font-size: 14px;
+    color: var(--ink-soft); padding: 8px 14px; background: var(--paper);
+    border: 1.5px solid var(--ink-faint); border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink-faint);
+  }
+  header .count b { color: var(--accent); font-weight: 700; }
+  header button {
+    font-family: 'Excalifont', cursive; font-size: 18px; padding: 6px 16px 8px;
+    background: var(--accent); color: #1e1e1e; border: 2px solid var(--ink);
+    border-radius: 12px; cursor: pointer; box-shadow: 2px 3px 0 var(--ink);
+    transition: transform 100ms ease;
+  }
+  header button:hover { transform: translate(-1px,-1px); box-shadow: 3px 4px 0 var(--ink); }
+  header button:active { transform: translate(1px,2px); box-shadow: 0 0 0 var(--ink); }
+  header button.secondary { background: var(--paper); color: var(--ink); }
+  main { padding: 36px 28px 120px; max-width: 1780px; margin: 0 auto; position: relative; z-index: 2; }
+  .topic { margin-bottom: 60px; }
+  .topic-head {
+    display: flex; align-items: baseline; gap: 16px; margin-bottom: 18px;
+    padding-bottom: 10px; border-bottom: 1px dashed var(--rule);
+  }
+  .topic-num { font-family: 'Cascadia Code', monospace; font-size: 14px; color: var(--ink-faint); }
+  .topic-title { font-size: 22px; }
+  .topic-section {
+    margin-left: auto; font-family: 'Cascadia Code', monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent);
+  }
+  .variations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .var-card {
+    background: var(--paper); border: 2px solid var(--ink-faint); border-radius: 14px;
+    overflow: hidden; display: flex; flex-direction: column;
+    box-shadow: 3px 4px 0 var(--ink-faint); transition: all 120ms ease;
+  }
+  .var-card:hover { transform: translate(-1px,-1px); box-shadow: 4px 5px 0 var(--ink-soft); border-color: var(--ink-soft); }
+  .var-card.selected { border-color: var(--accent); box-shadow: 4px 5px 0 var(--accent); background: #2b2415; }
+  .slide {
+    aspect-ratio: 16 / 9; background: var(--bg); position: relative;
+    overflow: hidden; border-bottom: 1.5px dashed var(--rule); cursor: pointer;
+  }
+  .slide svg { width: 100%; height: 100%; display: block; }
+  .var-meta { padding: 12px 14px; }
+  .var-meta .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .var-meta .label {
+    font-family: 'Cascadia Code', monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-soft);
+  }
+  .var-meta input, .var-meta textarea {
+    width: 100%; background: var(--bg); border: 1.5px solid var(--ink-faint);
+    border-radius: 8px; padding: 7px 10px; color: var(--ink);
+    font-family: 'Excalifont', cursive; font-size: 15px; line-height: 1.3;
+  }
+  .var-meta input { margin-bottom: 7px; font-size: 17px; }
+  .var-meta textarea { min-height: 46px; resize: vertical; }
+  .var-meta input:focus, .var-meta textarea:focus { outline: none; border-color: var(--accent); }
+  .select-btn {
+    width: 100%; margin-top: 10px; padding: 6px 12px 8px; background: var(--bg);
+    color: var(--ink); border: 2px solid var(--ink-soft); border-radius: 10px;
+    cursor: pointer; font-family: 'Excalifont', cursive; font-size: 17px;
+    box-shadow: 2px 2px 0 var(--ink-soft); transition: all 100ms ease;
+  }
+  .select-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--ink-soft); border-color: var(--ink); }
+  .var-card.selected .select-btn {
+    background: var(--accent); color: #1e1e1e; border-color: var(--accent);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--accent); color: #1e1e1e; padding: 8px 22px 10px;
+    border: 2px solid var(--ink); border-radius: 12px; box-shadow: 3px 4px 0 var(--ink);
+    font-size: 18px; transition: transform 220ms ease; z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>five levels of ai coding <span class="muted">— 10 beats × 5 variations · pick the story</span></h1>
+  <div class="spacer"></div>
+  <div class="count"><b id="selCount">0</b> selected</div>
+  <button class="secondary" id="clearBtn">clear</button>
+  <button id="copyBtn">copy as JSON</button>
+</header>
+
+<main id="grid"></main>
+
+<div class="toast" id="toast">copied</div>
+
+<script>
+// Deck-native dark palette: picked slides transfer 1:1 into the deck file.
+const COLORS = {
+  ink: '#e8e8e8', soft: '#9b9b9b', faint: '#555555', card: '#323232',
+  yellow: '#4d4526', blue: '#1f3a4d', green: '#234a2c', pink: '#4d2a39',
+  amber: '#523a23', paper: '#262626', emerald: '#5bd66f', rose: '#ff6b6b',
+  lightRed: '#4d2626', softEmerald: '#234a2c', violet: '#352c4d', teal: '#1d4642',
+  blueStroke: '#74b9e7', yellowStroke: '#f0a429',
+};
+const MONO = "'Cascadia Code', ui-monospace, monospace";
+
+function el(tag, attrs={}) {
+  const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+
+// Same helper API as the deck template, scoped to one svg.
+function H(svg, rc) {
+  const h = {
+    rect(x,y,w,hh,o={}) {
+      const n = rc.rectangle(x,y,w,hh,{
+        stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.6,
+        roughness: o.roughness != null ? o.roughness : 2.0, bowing: 1.6,
+        fill: o.fill, fillStyle: o.fillStyle || 'solid', fillWeight: 1, hachureGap: 6, ...o
+      });
+      svg.appendChild(n); return n;
+    },
+    line(x1,y1,x2,y2,o={}) {
+      const n = rc.line(x1,y1,x2,y2,{ stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4, roughness: 1.5, ...o });
+      svg.appendChild(n); return n;
+    },
+    circle(cx,cy,d,o={}) {
+      const n = rc.circle(cx,cy,d,{ stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4, roughness: 1.6, fill: o.fill, fillStyle: o.fillStyle || 'solid', ...o });
+      svg.appendChild(n); return n;
+    },
+    path(d,o={}) {
+      const n = rc.path(d,{ stroke: o.stroke || COLORS.ink, strokeWidth: o.strokeWidth || 1.4, roughness: 1.6, ...o });
+      svg.appendChild(n); return n;
+    },
+    text(x,y,t,o={}) {
+      const n = el('text',{ x, y,
+        'font-family': o.font || "'Excalifont', cursive",
+        'font-size': o.size || 24,
+        fill: o.fill || COLORS.ink,
+        'text-anchor': o.anchor || 'start' });
+      if (o.weight) n.setAttribute('font-weight', o.weight);
+      if (o.style) n.setAttribute('font-style', o.style);
+      n.textContent = t; svg.appendChild(n); return n;
+    },
+    arrow(x1,y1,x2,y2,o={}) {
+      const curve = o.curve != null ? o.curve : 0;
+      const cx = (x1+x2)/2 + curve; const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+      const d = curve === 0 ? `M ${x1} ${y1} L ${x2} ${y2}` : `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+      h.path(d, o);
+      const ang = Math.atan2(y2-cy, x2-cx); const ah = o.arrowSize || 14;
+      h.line(x2,y2, x2-ah*Math.cos(ang-Math.PI/7), y2-ah*Math.sin(ang-Math.PI/7), o);
+      h.line(x2,y2, x2-ah*Math.cos(ang+Math.PI/7), y2-ah*Math.sin(ang+Math.PI/7), o);
+    },
+    loopBack(x1,y1,x2,y2,dip,o={}) {
+      const cx=(x1+x2)/2, cy=dip;
+      h.path(`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`, o);
+      const ang = Math.atan2(y2-cy, x2-cx); const ah = o.arrowSize || 14;
+      h.line(x2,y2, x2-ah*Math.cos(ang-Math.PI/7), y2-ah*Math.sin(ang-Math.PI/7), o);
+      h.line(x2,y2, x2-ah*Math.cos(ang+Math.PI/7), y2-ah*Math.sin(ang+Math.PI/7), o);
+    },
+    check(cx,cy,size=18,color=COLORS.emerald) {
+      h.path(`M ${cx-size*0.6} ${cy} L ${cx-size*0.1} ${cy+size*0.5} L ${cx+size*0.7} ${cy-size*0.6}`, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+    },
+    cross(cx,cy,size=18,color=COLORS.rose) {
+      h.line(cx-size*0.6, cy-size*0.6, cx+size*0.6, cy+size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+      h.line(cx-size*0.6, cy+size*0.6, cx+size*0.6, cy-size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+    },
+  };
+  return h;
+}
+
+// ---- shared glyphs ----
+function chip(h, x, y, w, hh, label, o={}) {
+  h.rect(x, y, w, hh, { fill: o.fill || COLORS.card, fillStyle: 'solid', strokeWidth: o.strokeWidth || 2 });
+  h.text(x+w/2, y+hh/2 + (o.sub ? -2 : 8), label, { size: o.size || 20, anchor: 'middle', weight: 700, font: o.mono === false ? undefined : MONO, fill: o.labelFill });
+  if (o.sub) h.text(x+w/2, y+hh/2 + 28, o.sub, { size: o.subSize || 14, anchor: 'middle', fill: COLORS.soft });
+}
+function stickman(h, cx, cy, s=1, color=COLORS.ink) {
+  h.circle(cx, cy, 30*s, { strokeWidth: 2, stroke: color });
+  h.line(cx, cy+15*s, cx, cy+60*s, { strokeWidth: 2, stroke: color });
+  h.line(cx-20*s, cy+32*s, cx+20*s, cy+32*s, { strokeWidth: 2, stroke: color });
+  h.line(cx, cy+60*s, cx-16*s, cy+90*s, { strokeWidth: 2, stroke: color });
+  h.line(cx, cy+60*s, cx+16*s, cy+90*s, { strokeWidth: 2, stroke: color });
+}
+function phoneGlyph(h, x, y, w, hh) {
+  h.rect(x, y, w, hh, { fill: COLORS.paper, strokeWidth: 2.4 });
+  h.line(x+w*0.35, y+18, x+w*0.65, y+18, { stroke: COLORS.faint, strokeWidth: 3 });
+}
+function gauge(h, cx, cy, r, frac, color, o={}) {
+  h.path(`M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}`, { stroke: o.arcStroke || COLORS.faint, strokeWidth: 2.4 });
+  const ang = Math.PI * (1 - frac);
+  h.line(cx, cy, cx + r*0.82*Math.cos(ang), cy - r*0.82*Math.sin(ang), { stroke: color, strokeWidth: 4, roughness: 1.2 });
+  h.circle(cx, cy, 14, { fill: color, stroke: color });
+}
+function loopCircle(h, cx, cy, r, color) {
+  h.path(`M ${cx+r} ${cy} A ${r} ${r} 0 1 1 ${cx+r*0.7} ${cy-r*0.7}`, { stroke: color, strokeWidth: 2.2 });
+  const ang = Math.PI/4 + Math.PI/2;
+  const tx = cx+r*0.7, ty = cy-r*0.7, ah = 13;
+  h.line(tx, ty, tx-ah*Math.cos(ang-Math.PI/7), ty-ah*Math.sin(ang-Math.PI/7), { stroke: color, strokeWidth: 2.2 });
+  h.line(tx, ty, tx-ah*Math.cos(ang+Math.PI/7), ty-ah*Math.sin(ang+Math.PI/7), { stroke: color, strokeWidth: 2.2 });
+}
+
+const BEATS = [];
+
+// ============================================================
+// BEAT 1 — the ladder (overview)
+// ============================================================
+BEATS.push({ id: 1, section: 'overview', title: 'the ladder', vars: [
+
+  { kind: 'staircase', headline: 'the five steps',
+    caption: "boris cherny's ladder of ai adoption; each step is roughly 10x the agents",
+    draw: (h) => {
+      const steps = [
+        { n:'0', name:'gated',     count:'0 agents',      top:560, c:COLORS.lightRed },
+        { n:'1', name:'assisted',  count:'~1 agent',      top:465, c:COLORS.blue },
+        { n:'2', name:'parallel',  count:'~10 agents',    top:370, c:COLORS.violet },
+        { n:'3', name:'autonomy',  count:'~100 agents',   top:275, c:COLORS.amber },
+        { n:'4', name:'ai native', count:'~1000+ agents', top:180, c:COLORS.softEmerald },
+      ];
+      steps.forEach((s, i) => {
+        const x = 120 + i*280;
+        h.rect(x, s.top, 260, 700 - s.top, { fill: s.c, strokeWidth: 2.2 });
+        h.text(x+130, s.top+46, s.n, { size: 32, anchor: 'middle', weight: 700, font: MONO });
+        h.text(x+130, s.top+80, s.name, { size: 21, anchor: 'middle' });
+        h.text(x+130, s.top+110, s.count, { size: 15, anchor: 'middle', fill: COLORS.soft, font: MONO });
+      });
+      stickman(h, 530, 415, 0.55);
+      h.text(530, 385, 'most engineers', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }},
+
+  { kind: 'staircase-bottlenecks', headline: 'the five steps',
+    caption: 'every step has one bottleneck; naming yours tells you where you are',
+    draw: (h) => {
+      const steps = [
+        { n:'0', name:'gated',     bn:'approvals',        top:500, c:COLORS.lightRed },
+        { n:'1', name:'assisted',  bn:'your attention',   top:425, c:COLORS.blue },
+        { n:'2', name:'parallel',  bn:'reviewing output', top:350, c:COLORS.violet },
+        { n:'3', name:'autonomy',  bn:'trust in the loop',top:275, c:COLORS.amber },
+        { n:'4', name:'ai native', bn:'finding the work', top:200, c:COLORS.softEmerald },
+      ];
+      steps.forEach((s, i) => {
+        const x = 120 + i*280;
+        h.rect(x, s.top, 260, 620 - s.top, { fill: s.c, strokeWidth: 2.2 });
+        h.text(x+130, s.top+42, s.n + ' . ' + s.name, { size: 20, anchor: 'middle', weight: 700 });
+        h.text(x+130, 668, 'bottleneck', { size: 13, anchor: 'middle', fill: COLORS.faint, font: MONO });
+        h.text(x+130, 695, s.bn, { size: 17, anchor: 'middle', fill: COLORS.soft });
+      });
+    }},
+
+  { kind: 'growing-circles', headline: 'the five steps',
+    caption: 'agent count grows 10x per step, from zero to a thousand',
+    draw: (h) => {
+      const dots = [
+        { cx:190,  d:70,  label:'gated',     count:'0',      c:null },
+        { cx:480,  d:70,  label:'assisted',  count:'1',      c:COLORS.blue },
+        { cx:790,  d:130, label:'parallel',  count:'10',     c:COLORS.violet },
+        { cx:1110, d:200, label:'autonomy',  count:'100',    c:COLORS.amber },
+        { cx:1420, d:290, label:'ai native', count:'1000+',  c:COLORS.softEmerald },
+      ];
+      dots.forEach((s) => {
+        if (s.c) h.circle(s.cx, 400, s.d, { fill: s.c, strokeWidth: 2.2 });
+        else { h.circle(s.cx, 400, s.d, { strokeWidth: 1.6, strokeLineDash: [8,7], stroke: COLORS.faint }); h.cross(s.cx, 400, 16); }
+        if (s.c) h.text(s.cx, 410, s.count, { size: 26, anchor: 'middle', weight: 700, font: MONO });
+        h.text(s.cx, 640, s.label, { size: 20, anchor: 'middle' });
+        h.text(s.cx, 670, 'agents: ' + s.count, { size: 14, anchor: 'middle', fill: COLORS.soft, font: MONO });
+      });
+      h.arrow(150, 720, 1470, 720, { stroke: COLORS.faint, strokeWidth: 1.6, arrowSize: 12 });
+    }},
+
+  { kind: 'role-ladder', headline: 'your job changes every step',
+    caption: 'the agents multiply; your role climbs from pair to steering by intent',
+    draw: (h) => {
+      const cols = [
+        { role:'blocked',            agents:'0',     c:COLORS.lightRed },
+        { role:'a pair',             agents:'1',     c:COLORS.blue },
+        { role:'orchestrator',       agents:'10',    c:COLORS.violet },
+        { role:'manager of managers',agents:'100',   c:COLORS.amber },
+        { role:'steering by intent', agents:'1000+', c:COLORS.softEmerald },
+      ];
+      cols.forEach((s, i) => {
+        const x = 90 + i*300;
+        h.rect(x, 200, 260, 110, { fill: COLORS.card, strokeWidth: 2.2 });
+        h.text(x+130, 248, 'you', { size: 19, anchor: 'middle', weight: 700 });
+        h.text(x+130, 282, s.role, { size: 15, anchor: 'middle', fill: COLORS.soft });
+        h.arrow(x+130, 315, x+130, 385, { strokeWidth: 1.8, arrowSize: 11 });
+        h.rect(x, 390, 260, 170, { fill: s.c, strokeWidth: 2.2 });
+        h.text(x+130, 470, s.agents, { size: 34, anchor: 'middle', weight: 700, font: MONO });
+        h.text(x+130, 510, 'agents', { size: 15, anchor: 'middle', fill: COLORS.soft });
+        h.text(x+130, 620, 'step ' + i, { size: 16, anchor: 'middle', fill: COLORS.soft, font: MONO });
+      });
+    }},
+
+  { kind: 'org-trees', headline: 'from a pair to an org tree',
+    caption: 'each step reshapes the org chart underneath you',
+    draw: (h) => {
+      const px = [90, 390, 690, 990, 1290];
+      px.forEach((x, i) => {
+        h.rect(x, 180, 260, 440, { stroke: COLORS.faint, strokeWidth: 1.4, strokeLineDash: [9,8] });
+        h.text(x+130, 665, 'step ' + i, { size: 16, anchor: 'middle', fill: COLORS.soft, font: MONO });
+      });
+      // step 0: you alone, crossed
+      h.circle(220, 300, 40, { fill: COLORS.card, strokeWidth: 2 });
+      h.cross(220, 400, 18);
+      // step 1: you + one agent
+      h.circle(520, 280, 40, { fill: COLORS.card, strokeWidth: 2 });
+      h.line(520, 300, 520, 380, { strokeWidth: 1.6 });
+      h.circle(520, 410, 44, { fill: COLORS.blue, strokeWidth: 2 });
+      // step 2: you + 5 agents
+      h.circle(820, 260, 40, { fill: COLORS.card, strokeWidth: 2 });
+      for (let k=0;k<5;k++) {
+        const ax = 720 + k*50;
+        h.line(820, 280, ax, 390, { strokeWidth: 1.2 });
+        h.circle(ax, 410, 34, { fill: COLORS.violet, strokeWidth: 1.8 });
+      }
+      // step 3: tree, two tiers
+      h.circle(1120, 250, 40, { fill: COLORS.card, strokeWidth: 2 });
+      for (let k=0;k<3;k++) {
+        const mx = 1050 + k*70;
+        h.line(1120, 270, mx, 350, { strokeWidth: 1.2 });
+        h.circle(mx, 370, 30, { fill: COLORS.amber, strokeWidth: 1.6 });
+        for (let j=0;j<3;j++) {
+          const lx = mx - 40 + j*40;
+          h.line(mx, 385, lx, 460, { strokeWidth: 1 });
+          h.circle(lx, 475, 20, { fill: COLORS.amber, strokeWidth: 1.2 });
+        }
+      }
+      // step 4: dense forest of dots
+      h.circle(1420, 250, 40, { fill: COLORS.card, strokeWidth: 2 });
+      for (let r=0;r<4;r++) for (let c=0;c<6;c++) {
+        h.circle(1330 + c*36, 350 + r*56, 16, { fill: COLORS.softEmerald, strokeWidth: 1, stroke: COLORS.faint });
+      }
+      h.text(1420, 590, '...x1000', { size: 15, anchor: 'middle', fill: COLORS.soft, font: MONO });
+    }},
+]});
+
+// ============================================================
+// BEAT 2 — step 0 . gated
+// ============================================================
+BEATS.push({ id: 2, section: 'step 0', title: 'gated', vars: [
+
+  { kind: 'gate-pipeline', headline: 'step 0 . gated',
+    caption: 'older models behind gateways, auth and approval chains; outputs never leave your laptop',
+    draw: (h) => {
+      const boxes = [
+        { t:'claude',      sub:'older models only',  c:COLORS.blue },
+        { t:'ai gateway',  sub:'adds latency',       c:COLORS.lightRed },
+        { t:'custom auth', sub:'adds latency',       c:COLORS.lightRed },
+        { t:'approvals',   sub:'adds weeks',         c:COLORS.lightRed },
+        { t:'you',         sub:'outputs stay local', c:COLORS.card },
+      ];
+      boxes.forEach((b, i) => {
+        const x = 65 + i*305;
+        h.rect(x, 380, 250, 150, { fill: b.c, strokeWidth: 2.2 });
+        h.text(x+125, 448, b.t, { size: 23, anchor: 'middle', weight: 700, font: MONO });
+        h.text(x+125, 485, b.sub, { size: 15, anchor: 'middle', fill: COLORS.soft });
+        if (i < boxes.length-1) {
+          const rose = (i === boxes.length-2);
+          h.arrow(x+255, 455, x+300, 455, { stroke: rose ? COLORS.rose : COLORS.ink, strokeWidth: 2, arrowSize: 12 });
+        }
+      });
+      h.cross(1257, 410, 16);
+    }},
+
+  { kind: 'model-cage', headline: 'step 0 . gated',
+    caption: 'the approved model lives in a cage while the frontier sits behind the wall',
+    draw: (h) => {
+      // cage with approved older model
+      h.rect(180, 260, 420, 320, { fill: COLORS.lightRed, strokeWidth: 2.4 });
+      for (let k=1;k<6;k++) h.line(180 + k*70, 260, 180 + k*70, 580, { stroke: COLORS.rose, strokeWidth: 1.6 });
+      h.text(390, 415, 'approved:', { size: 20, anchor: 'middle', fill: COLORS.soft });
+      h.text(390, 455, 'a 2-year-old model', { size: 22, anchor: 'middle', weight: 700 });
+      h.text(390, 630, 'what you get', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      // the wall
+      h.line(800, 180, 800, 660, { stroke: COLORS.faint, strokeWidth: 3, strokeLineDash: [14,10] });
+      h.text(800, 155, 'approval wall', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      // frontier models behind it
+      const models = ['frontier model', 'agents', 'mcp tools'];
+      models.forEach((m, i) => {
+        h.rect(940, 220 + i*150, 480, 110, { fill: COLORS.blue, strokeWidth: 2 });
+        h.text(1180, 283 + i*150, m, { size: 21, anchor: 'middle', weight: 700, font: MONO });
+        h.arrow(935, 275 + i*150, 815, 340 + i*60, { stroke: COLORS.rose, strokeWidth: 1.6, curve: -20, arrowSize: 11 });
+        h.cross(870, 310 + i*55, 13);
+      });
+      h.text(1180, 655, 'what exists', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }},
+
+  { kind: 'stuck-local', headline: 'step 0 . gated',
+    caption: 'no approval path for hosting what claude builds, so outputs die on your laptop',
+    draw: (h) => {
+      // laptop
+      h.rect(220, 280, 480, 300, { fill: COLORS.card, strokeWidth: 2.4 });
+      h.rect(160, 580, 600, 40, { fill: COLORS.paper, strokeWidth: 2.4 });
+      h.text(460, 250, 'your laptop', { size: 20, anchor: 'middle', fill: COLORS.soft });
+      const files = ['prototype.html', 'analysis.ipynb', 'internal-tool'];
+      files.forEach((f, i) => {
+        h.rect(260, 310 + i*80, 400, 60, { fill: COLORS.blue, strokeWidth: 1.8 });
+        h.text(460, 347 + i*80, f, { size: 17, anchor: 'middle', font: MONO });
+      });
+      // blocked arrow to prod
+      h.arrow(770, 430, 1090, 430, { stroke: COLORS.rose, strokeWidth: 2.4, arrowSize: 15 });
+      h.cross(930, 385, 18);
+      h.text(930, 350, 'no deploy path', { size: 16, anchor: 'middle', fill: COLORS.rose });
+      h.rect(1100, 320, 340, 220, { fill: COLORS.paper, strokeWidth: 2, strokeLineDash: [10,8], stroke: COLORS.faint });
+      h.text(1270, 420, 'prod', { size: 24, anchor: 'middle', weight: 700, font: MONO, fill: COLORS.soft });
+      h.text(1270, 460, 'teammates . users', { size: 15, anchor: 'middle', fill: COLORS.faint });
+    }},
+
+  { kind: 'approval-queue', headline: 'step 0 . gated',
+    caption: 'the request to use ai enters a queue measured in weeks',
+    draw: (h) => {
+      h.rect(90, 350, 260, 130, { fill: COLORS.blue, strokeWidth: 2.2 });
+      h.text(220, 408, 'request:', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.text(220, 442, 'use claude', { size: 21, anchor: 'middle', weight: 700, font: MONO });
+      h.arrow(355, 415, 425, 415, { strokeWidth: 2, arrowSize: 12 });
+      // weeks strip
+      for (let k=0;k<7;k++) {
+        const x = 430 + k*130;
+        h.rect(x, 360, 120, 110, { fill: k < 6 ? COLORS.lightRed : COLORS.card, strokeWidth: 1.8 });
+        h.text(x+60, 425, k < 6 ? 'week ' + (k+1) : '...', { size: 16, anchor: 'middle', font: MONO, fill: k < 6 ? COLORS.ink : COLORS.soft });
+      }
+      h.text(800, 320, 'security review . legal . procurement', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      h.arrow(800, 500, 800, 560, { stroke: COLORS.faint, strokeWidth: 1.6, arrowSize: 11 });
+      h.text(800, 605, 'meanwhile the model you asked about gets superseded', { size: 17, anchor: 'middle', fill: COLORS.rose });
+    }},
+
+  { kind: 'wrong-dial', headline: 'step 0 . gated',
+    caption: 'leadership watches cost per token while the outcomes dial sits ignored',
+    draw: (h) => {
+      gauge(h, 450, 480, 260, 0.82, COLORS.rose);
+      h.text(450, 545, 'cost per token', { size: 22, anchor: 'middle', weight: 700 });
+      h.text(450, 580, 'watched daily', { size: 15, anchor: 'middle', fill: COLORS.soft });
+      stickman(h, 450, 620, 0.7);
+      gauge(h, 1150, 480, 260, 0.18, COLORS.emerald, { arcStroke: COLORS.faint });
+      h.text(1150, 545, 'outcomes', { size: 22, anchor: 'middle', weight: 700, fill: COLORS.soft });
+      h.text(1150, 580, 'nobody assigned', { size: 15, anchor: 'middle', fill: COLORS.faint });
+    }},
+]});
+
+// ============================================================
+// BEAT 3 — step 1 . assisted
+// ============================================================
+BEATS.push({ id: 3, section: 'step 1', title: 'assisted', vars: [
+
+  { kind: 'pair-boxes', headline: 'step 1 . assisted',
+    caption: 'one agent, one session, you read everything; your attention is the bottleneck',
+    draw: (h) => {
+      h.rect(250, 330, 320, 200, { fill: COLORS.card, strokeWidth: 2.4 });
+      h.text(410, 420, 'you', { size: 30, anchor: 'middle', weight: 700 });
+      h.text(410, 460, 'reads everything', { size: 18, anchor: 'middle', fill: COLORS.soft });
+      h.rect(1030, 330, 320, 200, { fill: COLORS.blue, strokeWidth: 2.4 });
+      h.text(1190, 420, 'one agent', { size: 26, anchor: 'middle', weight: 700, font: MONO });
+      h.text(1190, 460, 'waits for approval', { size: 18, anchor: 'middle', fill: COLORS.soft });
+      h.arrow(575, 385, 1025, 385, { strokeWidth: 2, arrowSize: 13 });
+      h.text(800, 362, 'prompt', { size: 18, anchor: 'middle', fill: COLORS.soft, font: MONO });
+      h.arrow(1025, 480, 575, 480, { strokeWidth: 2, arrowSize: 13 });
+      h.text(800, 520, 'every diff . every edit', { size: 18, anchor: 'middle', fill: COLORS.soft, font: MONO });
+      h.text(800, 665, '1 item shipped  .  30 min of your attention', { size: 21, anchor: 'middle', fill: COLORS.soft, font: MONO });
+    }},
+
+  { kind: 'cannot-look-away', headline: 'step 1 . assisted',
+    caption: 'low trust means your eyes never leave the screen while the agent works',
+    draw: (h) => {
+      h.rect(180, 280, 300, 180, { fill: COLORS.card, strokeWidth: 2.4 });
+      h.text(330, 375, 'you', { size: 26, anchor: 'middle', weight: 700 });
+      // the eye
+      h.path('M 560 370 Q 660 300 760 370 Q 660 440 560 370', { strokeWidth: 2.2 });
+      h.circle(660, 370, 44, { fill: COLORS.blue, strokeWidth: 2 });
+      // sight lines to agent
+      h.line(770, 350, 1010, 320, { stroke: COLORS.faint, strokeWidth: 1.2, strokeLineDash: [7,7] });
+      h.line(770, 390, 1010, 420, { stroke: COLORS.faint, strokeWidth: 1.2, strokeLineDash: [7,7] });
+      h.rect(1020, 280, 400, 180, { fill: COLORS.blue, strokeWidth: 2.4 });
+      h.text(1220, 360, 'agent working', { size: 22, anchor: 'middle', weight: 700, font: MONO });
+      h.text(1220, 400, 'edit . edit . edit', { size: 16, anchor: 'middle', fill: COLORS.soft, font: MONO });
+      // timeline strip: all watch
+      const labels = ['watch','watch','watch','watch','watch','approve'];
+      labels.forEach((t, i) => {
+        const x = 180 + i*212;
+        const last = i === labels.length-1;
+        h.rect(x, 560, 192, 80, { fill: last ? COLORS.softEmerald : COLORS.lightRed, strokeWidth: 1.8 });
+        h.text(x+96, 608, t, { size: 17, anchor: 'middle', font: MONO, fill: last ? COLORS.emerald : COLORS.rose });
+      });
+      h.text(180, 535, 'your next 30 minutes', { size: 15, fill: COLORS.soft });
+    }},
+
+  { kind: 'attention-1to1', headline: 'step 1 . assisted',
+    caption: 'session time and your attention are the same bar; the pairing is fully synchronous',
+    draw: (h) => {
+      h.text(190, 320, 'agent session', { size: 20, font: MONO });
+      h.rect(190, 340, 1100, 70, { fill: COLORS.blue, strokeWidth: 2.2 });
+      h.text(1310, 385, '30 min', { size: 18, font: MONO, fill: COLORS.soft });
+      h.text(190, 500, 'your attention', { size: 20, font: MONO });
+      h.rect(190, 520, 1100, 70, { fill: COLORS.lightRed, strokeWidth: 2.2, stroke: COLORS.rose });
+      h.text(1310, 565, '30 min', { size: 18, font: MONO, fill: COLORS.rose });
+      // 1:1 brackets
+      h.line(160, 375, 130, 375, { stroke: COLORS.faint, strokeWidth: 1.6 });
+      h.line(130, 375, 130, 555, { stroke: COLORS.faint, strokeWidth: 1.6 });
+      h.line(130, 555, 160, 555, { stroke: COLORS.faint, strokeWidth: 1.6 });
+      h.text(105, 475, '1:1', { size: 20, anchor: 'middle', font: MONO, fill: COLORS.soft });
+      h.text(740, 690, '1 item shipped', { size: 20, anchor: 'middle', font: MONO, fill: COLORS.soft });
+    }},
+
+  { kind: 'ping-pong', headline: 'step 1 . assisted',
+    caption: 'the loop is a conversation: prompt, edit, read, approve, repeat',
+    draw: (h) => {
+      const turns = [
+        { who:'you',    t:'prompt: fix the nav overlap',  y:150 },
+        { who:'claude', t:'edits 3 files',                y:255 },
+        { who:'you',    t:'reads the whole diff',         y:360 },
+        { who:'claude', t:'responds to review notes',     y:465 },
+        { who:'you',    t:'approve . merge',              y:570 },
+      ];
+      turns.forEach((turn) => {
+        const left = turn.who === 'you';
+        const x = left ? 220 : 860;
+        h.rect(x, turn.y, 520, 80, { fill: left ? COLORS.card : COLORS.blue, strokeWidth: 2 });
+        h.text(x+22, turn.y+50, turn.t, { size: 18, font: MONO });
+        h.text(left ? x-30 : x+550, turn.y+50, turn.who, { size: 16, anchor: left ? 'end' : 'start', fill: COLORS.soft });
+      });
+      h.arrow(1380, 610, 1440, 380, { stroke: COLORS.faint, strokeWidth: 1.6, curve: 60, arrowSize: 11 });
+      h.text(1465, 360, 'repeat', { size: 15, fill: COLORS.soft, font: MONO });
+    }},
+
+  { kind: 'between-meetings', headline: 'step 1 . the unlock',
+    caption: 'a change that used to fill an afternoon now fits between two meetings',
+    draw: (h) => {
+      // before column
+      h.text(400, 170, 'before', { size: 18, anchor: 'middle', fill: COLORS.soft });
+      h.rect(180, 190, 440, 480, { stroke: COLORS.faint, strokeWidth: 1.4 });
+      h.rect(200, 210, 400, 90, { fill: COLORS.card, strokeWidth: 1.6 });
+      h.text(400, 262, '10am standup', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      h.rect(200, 320, 400, 330, { fill: COLORS.lightRed, strokeWidth: 2 });
+      h.text(400, 470, 'the change', { size: 21, anchor: 'middle', weight: 700 });
+      h.text(400, 505, 'all afternoon', { size: 16, anchor: 'middle', fill: COLORS.rose });
+      h.arrow(680, 430, 880, 430, { strokeWidth: 2.4, arrowSize: 15 });
+      // after column
+      h.text(1180, 170, 'with one agent', { size: 18, anchor: 'middle', fill: COLORS.soft });
+      h.rect(960, 190, 440, 480, { stroke: COLORS.faint, strokeWidth: 1.4 });
+      h.rect(980, 210, 400, 130, { fill: COLORS.card, strokeWidth: 1.6 });
+      h.text(1180, 282, '10am standup', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      h.rect(980, 360, 400, 90, { fill: COLORS.softEmerald, strokeWidth: 2 });
+      h.text(1180, 412, 'the change', { size: 18, anchor: 'middle', weight: 700 });
+      h.check(1345, 405, 13);
+      h.rect(980, 470, 400, 180, { fill: COLORS.card, strokeWidth: 1.6 });
+      h.text(1180, 565, '1pm design review', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }},
+]});
+
+// ============================================================
+// BEAT 4 — the jump from 1 to 2 (trust)
+// ============================================================
+BEATS.push({ id: 4, section: 'bridge 1 to 2', title: 'the hardest jump', vars: [
+
+  { kind: 'trust-loop-pipeline', headline: 'the hardest jump',
+    caption: 'step 1 to 2 is a trust problem; auto mode plus a self verification loop lets you look away',
+    draw: (h) => {
+      h.rect(300, 325, 1005, 225, { stroke: COLORS.faint, strokeWidth: 1.6, strokeLineDash: [10, 8] });
+      h.text(802, 312, 'self verification loop', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      const stages = [
+        { t:'agent writes', c:COLORS.blue },
+        { t:'tests', c:COLORS.amber }, { t:'build', c:COLORS.amber },
+        { t:'lint', c:COLORS.amber }, { t:'e2e', c:COLORS.amber },
+        { t:'merge', c:COLORS.softEmerald },
+      ];
+      stages.forEach((s, i) => {
+        const x = 70 + i*250;
+        h.rect(x, 360, 210, 150, { fill: s.c, strokeWidth: 2 });
+        h.text(x+105, 442, s.t, { size: 21, anchor: 'middle', weight: 700, font: MONO });
+        if (i < stages.length-1) h.arrow(x+215, 435, x+245, 435, { strokeWidth: 2, arrowSize: 11 });
+      });
+      h.check(1425, 480, 14);
+      h.loopBack(1175, 552, 175, 515, 690, { stroke: COLORS.rose, strokeWidth: 1.8 });
+      h.text(675, 660, 'fail, fix, rerun', { size: 17, anchor: 'middle', fill: COLORS.rose, font: MONO });
+    }},
+
+  { kind: 'four-unlocks', headline: 'four things unlock step 2',
+    caption: 'more than one agent, a verification loop you trust, auto mode, automated review',
+    draw: (h) => {
+      const cards = [
+        { t:'run >1 agent',           sub:'worktrees keep them apart' },
+        { t:'self verification loop', sub:'tests . build . lint . e2e' },
+        { t:'auto mode',              sub:'no blocking permission prompts' },
+        { t:'automated code review',  sub:'claude reviews claude first' },
+      ];
+      cards.forEach((c, i) => {
+        const x = 150 + (i%2)*700, y = 170 + Math.floor(i/2)*280;
+        h.rect(x, y, 600, 220, { fill: COLORS.card, strokeWidth: 2.2 });
+        h.text(x+300, y+95, c.t, { size: 24, anchor: 'middle', weight: 700, font: MONO });
+        h.text(x+300, y+140, c.sub, { size: 16, anchor: 'middle', fill: COLORS.soft });
+        h.check(x+300, y+180, 15);
+      });
+    }},
+
+  { kind: 'trust-dial', headline: 'the hardest jump',
+    caption: 'the verification loop is what moves the needle from read everything to look away',
+    draw: (h) => {
+      h.path('M 380 520 A 420 420 0 0 1 1220 520', { stroke: COLORS.faint, strokeWidth: 3 });
+      h.text(330, 570, 'read', { size: 19, anchor: 'middle', fill: COLORS.rose });
+      h.text(330, 600, 'everything', { size: 19, anchor: 'middle', fill: COLORS.rose });
+      h.text(1270, 570, 'look', { size: 19, anchor: 'middle', fill: COLORS.emerald });
+      h.text(1270, 600, 'away', { size: 19, anchor: 'middle', fill: COLORS.emerald });
+      const ang = Math.PI * 0.28;
+      h.line(800, 520, 800 + 350*Math.cos(ang), 520 - 350*Math.sin(ang), { stroke: COLORS.emerald, strokeWidth: 5, roughness: 1.1 });
+      h.circle(800, 520, 18, { fill: COLORS.emerald, stroke: COLORS.emerald });
+      h.rect(560, 610, 480, 80, { fill: COLORS.amber, strokeWidth: 2 });
+      h.text(800, 658, 'tests . build . lint . e2e', { size: 19, anchor: 'middle', weight: 700, font: MONO });
+      h.arrow(920, 605, 990, 480, { stroke: COLORS.emerald, strokeWidth: 1.8, curve: 40, arrowSize: 12 });
+    }},
+
+  { kind: 'eye-replaced', headline: 'replace your eyes with a loop',
+    caption: 'the checks that used to be you reading become checks the agent runs on itself',
+    draw: (h) => {
+      // before: you watching
+      h.text(400, 165, 'before', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.rect(150, 190, 500, 380, { stroke: COLORS.faint, strokeWidth: 1.4 });
+      h.rect(190, 240, 180, 120, { fill: COLORS.card, strokeWidth: 2 });
+      h.text(280, 308, 'you', { size: 21, anchor: 'middle', weight: 700 });
+      h.path('M 385 300 Q 415 280 445 300 Q 415 320 385 300', { strokeWidth: 1.8, stroke: COLORS.rose });
+      h.rect(430, 240, 180, 120, { fill: COLORS.blue, strokeWidth: 2 });
+      h.text(520, 308, 'agent', { size: 20, anchor: 'middle', weight: 700, font: MONO });
+      h.text(400, 440, 'every keystroke reviewed', { size: 16, anchor: 'middle', fill: COLORS.rose });
+      h.cross(400, 500, 15);
+      h.arrow(690, 380, 870, 380, { strokeWidth: 2.4, arrowSize: 15 });
+      // after: badges watch
+      h.text(1180, 165, 'after', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.rect(910, 190, 540, 380, { stroke: COLORS.faint, strokeWidth: 1.4 });
+      h.rect(960, 240, 200, 120, { fill: COLORS.blue, strokeWidth: 2 });
+      h.text(1060, 308, 'agent', { size: 20, anchor: 'middle', weight: 700, font: MONO });
+      const badges = ['tests', 'build', 'lint', 'e2e'];
+      badges.forEach((b, i) => {
+        const y = 225 + i*85;
+        h.rect(1230, y, 170, 60, { fill: COLORS.amber, strokeWidth: 1.6 });
+        h.text(1300, y+38, b, { size: 16, anchor: 'middle', font: MONO });
+        h.check(1430, y+30, 11);
+        h.arrow(1165, 300, 1225, y+30, { stroke: COLORS.faint, strokeWidth: 1.2, curve: 12, arrowSize: 8 });
+      });
+      h.text(1180, 620, 'you see the final diff only', { size: 16, anchor: 'middle', fill: COLORS.emerald });
+    }},
+
+  { kind: 'auto-mode', headline: 'stop approving every command',
+    caption: 'permission prompts serialize you back into the loop; auto mode removes the wall',
+    draw: (h) => {
+      h.text(400, 165, 'default', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      const prompts = ['allow bash?', 'allow edit?', 'allow tests?'];
+      prompts.forEach((p, i) => {
+        const y = 210 + i*130;
+        h.rect(200, y, 400, 90, { fill: COLORS.lightRed, strokeWidth: 2 });
+        h.text(380, y+52, p, { size: 19, anchor: 'middle', font: MONO });
+        h.text(400, y+52, '', { size: 15 });
+        h.cross(555, y+45, 12);
+      });
+      h.text(400, 650, 'agent blocked on you 3x per task', { size: 16, anchor: 'middle', fill: COLORS.rose });
+      h.arrow(680, 420, 860, 420, { strokeWidth: 2.4, arrowSize: 15 });
+      h.text(1180, 165, 'auto mode', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.rect(920, 250, 520, 120, { fill: COLORS.softEmerald, strokeWidth: 2.2 });
+      h.text(1180, 318, 'auto mode: on', { size: 22, anchor: 'middle', weight: 700, font: MONO });
+      h.arrow(950, 480, 1410, 480, { stroke: COLORS.emerald, strokeWidth: 2.4, arrowSize: 15 });
+      h.text(1180, 530, 'start to merge, no stops', { size: 17, anchor: 'middle', fill: COLORS.emerald });
+      h.text(1180, 620, 'guardrails move into the verification loop', { size: 15, anchor: 'middle', fill: COLORS.soft });
+    }},
+]});
+
+// ============================================================
+// BEAT 5 — step 2 . parallel
+// ============================================================
+BEATS.push({ id: 5, section: 'step 2', title: 'parallel', vars: [
+
+  { kind: 'fanout-worktrees', headline: 'step 2 . parallel',
+    caption: '5 to 10 agents on isolated worktrees; you review final diffs, not keystrokes',
+    draw: (h) => {
+      h.rect(620, 120, 360, 110, { fill: COLORS.yellow, strokeWidth: 2.4 });
+      h.text(800, 170, 'you', { size: 26, anchor: 'middle', weight: 700 });
+      h.text(800, 206, 'reviews final diffs', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      const pass = [true, true, true, true, false, true, true, true];
+      pass.forEach((ok, i) => {
+        const x = 102 + i*178, cx = x + 75;
+        h.arrow(800, 232, cx, 395, { strokeWidth: 1.5, curve: (cx-800)*0.03, arrowSize: 9 });
+        h.rect(x, 400, 150, 130, { fill: COLORS.blue, strokeWidth: 2 });
+        h.text(cx, 458, 'agent', { size: 18, anchor: 'middle', weight: 700, font: MONO });
+        h.text(cx, 488, 'wt-' + (i+1), { size: 14, anchor: 'middle', fill: COLORS.soft, font: MONO });
+        if (ok) h.check(cx, 575, 13); else h.cross(cx, 575, 13);
+      });
+      h.text(800, 690, '8 items  .  the same 30 min', { size: 21, anchor: 'middle', fill: COLORS.soft, font: MONO });
+    }},
+
+  { kind: 'lanes', headline: 'step 2 . parallel',
+    caption: 'each agent runs in its own lane; you hop between them, steering not typing',
+    draw: (h) => {
+      const lanes = [
+        { p: 0.85, task:'fix nav overlap' }, { p: 0.55, task:'og tags' },
+        { p: 0.95, task:'video sort bug' },  { p: 0.35, task:'mobile padding' },
+        { p: 0.70, task:'dead links' },      { p: 0.45, task:'search empty state' },
+      ];
+      lanes.forEach((l, i) => {
+        const y = 160 + i*95;
+        h.text(140, y+38, 'wt-' + (i+1), { size: 16, font: MONO, fill: COLORS.soft });
+        h.line(240, y+30, 1360, y+30, { stroke: COLORS.faint, strokeWidth: 1 });
+        h.rect(240, y, 1120*l.p, 60, { fill: COLORS.blue, strokeWidth: 1.6 });
+        h.text(260, y+38, l.task, { size: 15, font: MONO });
+        if (l.p > 0.9) h.check(1400, y+30, 13);
+      });
+      // you hopping between lanes
+      const hops = [[1180, 190], [860, 380], [1050, 570]];
+      hops.forEach((p, i) => {
+        h.circle(p[0], p[1], 34, { fill: COLORS.yellow, strokeWidth: 2 });
+        if (i < hops.length-1) h.arrow(p[0], p[1]+20, hops[i+1][0], hops[i+1][1]-22, { stroke: COLORS.yellowStroke, strokeWidth: 1.4, curve: 40, arrowSize: 10 });
+      });
+      h.text(1180, 145, 'you', { size: 15, anchor: 'middle', fill: COLORS.yellowStroke });
+    }},
+
+  { kind: 'diff-inbox', headline: 'step 2 . parallel',
+    caption: 'verified diffs queue up for you like an inbox; the reading happens before you arrive',
+    draw: (h) => {
+      // stacked diff cards
+      for (let i=4;i>=0;i--) {
+        h.rect(180 + i*14, 240 + i*14, 560, 260, { fill: COLORS.paper, strokeWidth: 1.6 });
+      }
+      h.rect(180, 240, 560, 260, { fill: COLORS.card, strokeWidth: 2.2 });
+      h.text(220, 295, 'diff . wt-3', { size: 19, font: MONO });
+      h.text(220, 345, '+ 41  - 12', { size: 17, font: MONO, fill: COLORS.emerald });
+      h.text(220, 390, 'tests pass . lint pass . e2e pass', { size: 15, font: MONO, fill: COLORS.soft });
+      h.check(660, 290, 14);
+      h.text(460, 590, '8 diffs waiting, all pre-verified', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      h.arrow(790, 380, 990, 380, { strokeWidth: 2.2, arrowSize: 14 });
+      h.rect(1000, 290, 400, 180, { fill: COLORS.yellow, strokeWidth: 2.4 });
+      h.text(1200, 370, 'you', { size: 24, anchor: 'middle', weight: 700 });
+      h.text(1200, 410, 'approve . request changes', { size: 15, anchor: 'middle', fill: COLORS.soft });
+    }},
+
+  { kind: 'backlog-melts', headline: 'step 2 . parallel',
+    caption: 'the maintenance backlog shrinks across one orchestrated afternoon',
+    draw: (h) => {
+      const points = [
+        { t:'1pm', items:12 }, { t:'2pm', items:8 }, { t:'3pm', items:4 }, { t:'5pm', items:0 },
+      ];
+      points.forEach((p, i) => {
+        const x = 230 + i*330;
+        const bh = Math.max(p.items * 36, 8);
+        if (p.items > 0) {
+          h.rect(x, 580 - bh, 180, bh, { fill: COLORS.lightRed, strokeWidth: 2, stroke: COLORS.rose });
+          h.text(x+90, 580 - bh - 18, String(p.items), { size: 22, anchor: 'middle', weight: 700, font: MONO, fill: COLORS.rose });
+        } else {
+          h.check(x+90, 550, 20);
+          h.text(x+90, 500, '0', { size: 22, anchor: 'middle', weight: 700, font: MONO, fill: COLORS.emerald });
+        }
+        h.text(x+90, 630, p.t, { size: 18, anchor: 'middle', font: MONO, fill: COLORS.soft });
+      });
+      h.line(180, 585, 1450, 585, { stroke: COLORS.faint, strokeWidth: 1.6 });
+      h.text(815, 690, 'backlog items left . 8 agents running the whole time', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.text(815, 150, 'a backlog that took the team weeks', { size: 17, anchor: 'middle', fill: COLORS.soft });
+    }},
+
+  { kind: 'keystrokes-vs-diffs', headline: 'step 2 . what you look at',
+    caption: 'step 1 you watched keystrokes; step 2 you read one finished diff per task',
+    draw: (h) => {
+      h.text(430, 165, 'step 1: the stream', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.rect(180, 190, 500, 420, { stroke: COLORS.faint, strokeWidth: 1.4 });
+      for (let i=0;i<11;i++) {
+        const w = 300 + ((i*137) % 140);
+        h.line(220, 230 + i*34, 220 + w, 230 + i*34, { stroke: COLORS.rose, strokeWidth: 1.2 });
+      }
+      h.text(430, 650, 'every intermediate edit', { size: 15, anchor: 'middle', fill: COLORS.rose });
+      h.arrow(720, 400, 880, 400, { strokeWidth: 2.4, arrowSize: 15 });
+      h.text(1170, 165, 'step 2: the result', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.rect(920, 190, 500, 420, { stroke: COLORS.faint, strokeWidth: 1.4 });
+      h.rect(970, 240, 400, 320, { fill: COLORS.card, strokeWidth: 2.2 });
+      h.text(1000, 295, 'final diff', { size: 19, font: MONO });
+      h.text(1000, 345, '+ 108  - 44', { size: 17, font: MONO, fill: COLORS.emerald });
+      h.text(1000, 395, 'verified by the loop', { size: 15, font: MONO, fill: COLORS.soft });
+      h.check(1170, 495, 16);
+      h.text(1170, 650, 'one read per task', { size: 15, anchor: 'middle', fill: COLORS.emerald });
+    }},
+]});
+
+// ============================================================
+// BEAT 6 — the jump from 2 to 3 (context + routines)
+// ============================================================
+BEATS.push({ id: 6, section: 'bridge 2 to 3', title: 'context and routines', vars: [
+
+  { kind: 'four-unlocks-23', headline: 'four things unlock step 3',
+    caption: 'context access, cross-team agency, loops and routines, claude kicking off claude',
+    draw: (h) => {
+      const cards = [
+        { t:'claude pulls context',    sub:'reads code, wikis, discussions itself' },
+        { t:'agency across teams',     sub:'agents touch code other teams own' },
+        { t:'loops and routines',      sub:'work broken into repeatable units' },
+        { t:'claude kicks off claude', sub:'agents start agents, not you' },
+      ];
+      cards.forEach((c, i) => {
+        const x = 150 + (i%2)*700, y = 170 + Math.floor(i/2)*280;
+        h.rect(x, y, 600, 220, { fill: COLORS.card, strokeWidth: 2.2 });
+        h.text(x+300, y+95, c.t, { size: 23, anchor: 'middle', weight: 700, font: MONO });
+        h.text(x+300, y+140, c.sub, { size: 16, anchor: 'middle', fill: COLORS.soft });
+        h.check(x+300, y+180, 15);
+      });
+    }},
+
+  { kind: 'context-pipes', headline: 'let claude pull its own context',
+    caption: 'the missing context you used to paste in becomes sources claude reads itself',
+    draw: (h) => {
+      const sources = ['the codebase', 'the wiki', 'discussions'];
+      sources.forEach((s, i) => {
+        const y = 220 + i*160;
+        h.rect(160, y, 340, 110, { fill: COLORS.violet, strokeWidth: 2 });
+        h.text(330, y+62, s, { size: 20, anchor: 'middle', weight: 700, font: MONO });
+        h.arrow(505, y+55, 660, 430, { strokeWidth: 2, curve: (430 - y - 55)*0.12, arrowSize: 12 });
+      });
+      h.rect(670, 330, 380, 200, { fill: COLORS.blue, strokeWidth: 2.4 });
+      h.text(860, 420, 'claude', { size: 26, anchor: 'middle', weight: 700, font: MONO });
+      h.text(860, 460, 'asks before it acts', { size: 16, anchor: 'middle', fill: COLORS.soft });
+      h.arrow(1055, 430, 1210, 430, { strokeWidth: 2.2, arrowSize: 14 });
+      h.rect(1220, 350, 260, 160, { fill: COLORS.softEmerald, strokeWidth: 2.2 });
+      h.text(1350, 425, 'the right', { size: 20, anchor: 'middle', weight: 700 });
+      h.text(1350, 458, 'change', { size: 20, anchor: 'middle', weight: 700 });
+      h.text(860, 640, 'the question moves from did you read the code to what context was missing', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }},
+
+  { kind: 'loops-calendar', headline: 'break the work into routines',
+    caption: 'one-off tasks become recurring loops pinned to a schedule',
+    draw: (h) => {
+      // messy one-off pile
+      h.text(330, 180, 'one-off asks', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      const pile = [[210, 230, -1], [330, 260, 1], [250, 330, -1], [380, 350, 1], [290, 420, -1]];
+      pile.forEach((p) => {
+        h.rect(p[0], p[1], 170, 60, { fill: COLORS.lightRed, strokeWidth: 1.6 });
+      });
+      h.text(330, 540, 'ad hoc . forgotten . repeated', { size: 15, anchor: 'middle', fill: COLORS.rose });
+      h.arrow(560, 360, 700, 360, { strokeWidth: 2.4, arrowSize: 15 });
+      // calendar strip with loops
+      h.text(1080, 180, 'routines on a schedule', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      const days = ['mon','tue','wed','thu','fri'];
+      days.forEach((d, i) => {
+        const x = 730 + i*145;
+        h.rect(x, 230, 130, 330, { stroke: COLORS.faint, strokeWidth: 1.4 });
+        h.text(x+65, 265, d, { size: 15, anchor: 'middle', font: MONO, fill: COLORS.soft });
+        loopCircle(h, x+65, 380, 34, COLORS.emerald);
+        if (i % 2 === 0) loopCircle(h, x+65, 490, 34, COLORS.emerald);
+      });
+      h.text(1080, 630, 'same job, every day, without being asked', { size: 16, anchor: 'middle', fill: COLORS.emerald });
+    }},
+
+  { kind: 'claude-kicks-claude', headline: 'claude kicks off claude',
+    caption: 'the chain starts from a schedule or a signal, not from you',
+    draw: (h) => {
+      chip(h, 620, 130, 360, 90, 'cron . slack signal', { fill: COLORS.teal });
+      h.arrow(800, 225, 800, 290, { strokeWidth: 2, arrowSize: 12 });
+      h.text(860, 265, 'not you', { size: 16, fill: COLORS.emerald, font: MONO });
+      h.rect(650, 300, 300, 110, { fill: COLORS.blue, strokeWidth: 2.4 });
+      h.text(800, 362, 'claude', { size: 22, anchor: 'middle', weight: 700, font: MONO });
+      for (let k=0;k<3;k++) {
+        const x = 380 + k*300;
+        h.arrow(800, 415, x+110, 490, { strokeWidth: 1.6, curve: (x+110-800)*0.05, arrowSize: 10 });
+        h.rect(x, 495, 220, 90, { fill: COLORS.blue, strokeWidth: 1.8 });
+        h.text(x+110, 547, 'claude', { size: 18, anchor: 'middle', font: MONO });
+      }
+      stickman(h, 1310, 330, 0.8);
+      h.text(1310, 490, 'you: elsewhere', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }},
+
+  { kind: 'cross-team', headline: 'agents cross team lines',
+    caption: 'autonomy stalls if agents can only touch code your team owns',
+    draw: (h) => {
+      const teams = [
+        { t:'your team', x:140 }, { t:'platform team', x:640 }, { t:'infra team', x:1140 },
+      ];
+      teams.forEach((tm) => {
+        h.rect(tm.x, 240, 420, 340, { stroke: COLORS.faint, strokeWidth: 1.6, strokeLineDash: [10,8] });
+        h.text(tm.x+210, 285, tm.t, { size: 17, anchor: 'middle', fill: COLORS.soft });
+        h.rect(tm.x+110, 380, 200, 90, { fill: COLORS.card, strokeWidth: 1.8 });
+        h.text(tm.x+210, 432, 'code', { size: 17, anchor: 'middle', font: MONO, fill: COLORS.soft });
+      });
+      h.arrow(250, 620, 460, 470, { stroke: COLORS.emerald, strokeWidth: 2.2, curve: -40, arrowSize: 13 });
+      h.arrow(560, 430, 745, 430, { stroke: COLORS.emerald, strokeWidth: 2.2, arrowSize: 13 });
+      h.arrow(1060, 430, 1245, 430, { stroke: COLORS.emerald, strokeWidth: 2.2, arrowSize: 13 });
+      h.rect(130, 620, 220, 80, { fill: COLORS.blue, strokeWidth: 2 });
+      h.text(240, 668, 'agent', { size: 19, anchor: 'middle', weight: 700, font: MONO });
+      h.check(475, 350, 13); h.check(975, 350, 13); h.check(1475, 350, 13);
+      h.text(800, 700, 'one fix often spans three territories', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }},
+]});
+
+// ============================================================
+// BEAT 7 — step 3 . loops that create work
+// ============================================================
+BEATS.push({ id: 7, section: 'step 3', title: 'loops that create work', vars: [
+
+  { kind: 'cron-slack-backlog', headline: 'step 3 . loops that create work',
+    caption: 'cron routines in the cloud find the work overnight and post it to slack',
+    draw: (h) => {
+      h.circle(210, 300, 120, { strokeWidth: 2.2 });
+      h.text(210, 296, 'cron', { size: 22, anchor: 'middle', weight: 700, font: MONO });
+      h.text(210, 326, 'daily', { size: 15, anchor: 'middle', fill: COLORS.soft });
+      const rows = [
+        { routine:'ux-friction-scout',        channel:'#acs-friction', y:160 },
+        { routine:'gap-scout',                channel:'#acs-gaps',     y:300 },
+        { routine:'youtube-outlier-research', channel:'#yt-outlier',   y:440 },
+      ];
+      rows.forEach((r) => {
+        h.arrow(270, 300, 375, r.y + 50, { strokeWidth: 1.6, curve: (r.y - 250)*0.1, arrowSize: 10 });
+        h.rect(380, r.y, 400, 100, { fill: COLORS.violet, strokeWidth: 2 });
+        h.text(580, r.y + 58, r.routine, { size: 19, anchor: 'middle', weight: 700, font: MONO });
+        h.arrow(785, r.y + 50, 895, r.y + 50, { strokeWidth: 1.8, arrowSize: 11 });
+        h.rect(900, r.y, 330, 100, { fill: COLORS.teal, strokeWidth: 2 });
+        h.text(1065, r.y + 58, r.channel, { size: 19, anchor: 'middle', weight: 700, font: MONO });
+        h.arrow(1235, r.y + 50, 1325, r.y + 50 > 350 ? 470 : (r.y + 50 < 250 ? 230 : 350), { strokeWidth: 1.6, arrowSize: 10 });
+      });
+      h.rect(1330, 160, 190, 380, { fill: COLORS.card, strokeWidth: 2.2 });
+      h.text(1425, 358, 'backlog', { size: 22, anchor: 'middle', weight: 700 });
+      h.text(580, 600, '3 of 15 routines in the fleet', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }},
+
+  { kind: 'night-shift', headline: 'step 3 . the night shift',
+    caption: 'the scouts fire before you wake; the findings are on your phone at breakfast',
+    draw: (h) => {
+      // night timeline
+      h.line(160, 260, 1120, 260, { stroke: COLORS.faint, strokeWidth: 2 });
+      h.circle(200, 160, 60, { stroke: COLORS.soft, strokeWidth: 2 });
+      h.circle(220, 150, 48, { stroke: COLORS.paper, fill: COLORS.paper, strokeWidth: 0.5 });
+      const fires = [
+        { t:'2am', name:'gap-scout',         x:320 },
+        { t:'5am', name:'ux-friction-scout', x:640 },
+        { t:'6am', name:'yt-outlier',        x:960 },
+      ];
+      fires.forEach((f) => {
+        h.line(f.x, 250, f.x, 272, { strokeWidth: 2 });
+        h.text(f.x, 235, f.t, { size: 15, anchor: 'middle', font: MONO, fill: COLORS.soft });
+        h.rect(f.x-130, 300, 260, 80, { fill: COLORS.violet, strokeWidth: 1.8 });
+        h.text(f.x, 347, f.name, { size: 16, anchor: 'middle', font: MONO });
+        h.arrow(f.x+40, 385, 1230, 520, { stroke: COLORS.faint, strokeWidth: 1.3, curve: 40, arrowSize: 9 });
+      });
+      // you asleep
+      stickman(h, 250, 520, 0.9);
+      h.text(330, 500, 'z z z', { size: 20, font: MONO, fill: COLORS.soft });
+      // phone with findings
+      phoneGlyph(h, 1180, 420, 280, 320);
+      const notes = ['3 frictions found', '2 content gaps', '1 outlier format'];
+      notes.forEach((n, i) => {
+        h.rect(1200, 460 + i*80, 240, 60, { fill: COLORS.teal, strokeWidth: 1.4 });
+        h.text(1320, 497 + i*80, n, { size: 14, anchor: 'middle', font: MONO });
+      });
+      h.text(1320, 400, '7am', { size: 16, anchor: 'middle', font: MONO, fill: COLORS.soft });
+    }},
+
+  { kind: 'fleet-grid', headline: 'step 3 . the fleet',
+    caption: '15 routines run on cron in the cloud; each one is a job i never kick off manually',
+    draw: (h) => {
+      const names = [
+        'ux-friction-scout', 'gap-scout', 'opportunity-scout', 'interesting-finds', 'question-round',
+        'retention-report', 'landing-optimiser', 'cheatsheet-updater', 'campaign-report', 'video-rotation',
+        'discovery-report', 'yt-outlier-research', 'yt-perf-audit', 'gmail-triage', 'oakhouse-watcher',
+      ];
+      names.forEach((n, i) => {
+        const x = 90 + (i%5)*290, y = 200 + Math.floor(i/5)*130;
+        h.rect(x, y, 260, 100, { fill: COLORS.violet, strokeWidth: 1.8 });
+        h.text(x+130, y+58, n, { size: 14, anchor: 'middle', font: MONO });
+      });
+      h.text(800, 160, 'every day . anthropic cloud . zero prompts from me', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.text(800, 660, '15 routines . 7 slack channels fed', { size: 18, anchor: 'middle', font: MONO, fill: COLORS.soft });
+    }},
+
+  { kind: 'scout-anatomy', headline: 'anatomy of one scout',
+    caption: 'ux-friction-scout reads the live product, finds friction and files it, daily',
+    draw: (h) => {
+      const boxes = [
+        { t:'the live app',  sub:'agenticcoding.school', c:COLORS.card },
+        { t:'ux-friction-scout', sub:'runs on cron, in the cloud', c:COLORS.violet },
+        { t:'3 frictions', sub:'ranked, with repro steps', c:COLORS.amber },
+        { t:'#acs-friction', sub:'posted to slack', c:COLORS.teal },
+        { t:'backlog', sub:"tomorrow's agent work", c:COLORS.softEmerald },
+      ];
+      boxes.forEach((b, i) => {
+        const x = 65 + i*305;
+        h.rect(x, 360, 250, 160, { fill: b.c, strokeWidth: 2.2 });
+        h.text(x+125, 430, b.t, { size: 18, anchor: 'middle', weight: 700, font: MONO });
+        h.text(x+125, 468, b.sub, { size: 13, anchor: 'middle', fill: COLORS.soft });
+        if (i < boxes.length-1) h.arrow(x+255, 440, x+300, 440, { strokeWidth: 2, arrowSize: 12 });
+      });
+      loopCircle(h, 190, 240, 40, COLORS.emerald);
+      h.text(250, 248, 'every day', { size: 15, font: MONO, fill: COLORS.emerald });
+    }},
+
+  { kind: 'conveyor', headline: 'step 3 . the work conveyor',
+    caption: 'scouts drop findings onto the belt; the backlog fills itself',
+    draw: (h) => {
+      // scouts above
+      const scouts = [
+        { n:'friction-scout', x:250 }, { n:'gap-scout', x:650 }, { n:'outlier-scout', x:1050 },
+      ];
+      scouts.forEach((s) => {
+        h.rect(s.x-140, 170, 280, 80, { fill: COLORS.violet, strokeWidth: 1.8 });
+        h.text(s.x, 218, s.n, { size: 16, anchor: 'middle', font: MONO });
+        h.arrow(s.x, 255, s.x, 380, { strokeWidth: 1.8, arrowSize: 12 });
+      });
+      // belt
+      h.line(140, 400, 1260, 400, { strokeWidth: 2.4 });
+      h.line(140, 470, 1260, 470, { strokeWidth: 2.4 });
+      for (let k=0;k<8;k++) h.circle(210 + k*140, 500, 40, { strokeWidth: 1.6, stroke: COLORS.faint });
+      // items on belt
+      const items = ['bug', 'gap', 'idea', 'friction', 'fix'];
+      items.forEach((t, i) => {
+        h.rect(200 + i*210, 405, 150, 58, { fill: COLORS.amber, strokeWidth: 1.6 });
+        h.text(275 + i*210, 441, t, { size: 15, anchor: 'middle', font: MONO });
+      });
+      h.arrow(1270, 435, 1330, 435, { strokeWidth: 2, arrowSize: 12 });
+      h.rect(1340, 320, 180, 240, { fill: COLORS.card, strokeWidth: 2.2 });
+      h.text(1430, 445, 'backlog', { size: 19, anchor: 'middle', weight: 700 });
+      h.text(700, 640, 'filled overnight, cleared by the step 2 fan-out', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }},
+]});
+
+// ============================================================
+// BEAT 8 — step 4 . loops that close work
+// ============================================================
+BEATS.push({ id: 8, section: 'step 4', title: 'loops that close work', vars: [
+
+  { kind: 'close-pipeline', headline: 'step 4 . loops that close work',
+    caption: 'claude fixes, opens the pr and sends a screenshot; you steer by exception from your phone',
+    draw: (h) => {
+      const boxes = [
+        { t:'backlog',     sub:'from the scouts',      c:COLORS.card },
+        { t:'agent fixes', sub:'worktree + verify',    c:COLORS.blue },
+        { t:'open pr',     sub:'claude/* branch',      c:COLORS.violet },
+        { t:'slack post',  sub:'screenshot attached',  c:COLORS.teal },
+        { t:'your phone',  sub:'monitor by exception', c:COLORS.softEmerald },
+      ];
+      boxes.forEach((b, i) => {
+        const x = 65 + i*305;
+        h.rect(x, 330, 250, 150, { fill: b.c, strokeWidth: 2.2 });
+        h.text(x+125, 398, b.t, { size: 21, anchor: 'middle', weight: 700, font: MONO });
+        h.text(x+125, 435, b.sub, { size: 15, anchor: 'middle', fill: COLORS.soft });
+        if (i < boxes.length-1) h.arrow(x+255, 405, x+300, 405, { strokeWidth: 2, arrowSize: 12 });
+      });
+      h.loopBack(1410, 482, 190, 482, 660, { stroke: COLORS.faint, strokeWidth: 1.8 });
+      h.text(800, 600, 'next item', { size: 17, anchor: 'middle', fill: COLORS.soft, font: MONO });
+    }},
+
+  { kind: 'two-gears', headline: 'step 4 . the two loops',
+    caption: 'one loop creates work, one loop closes it; the backlog is where they mesh',
+    draw: (h) => {
+      loopCircle(h, 420, 420, 190, '#b197fc');
+      h.text(420, 400, 'create', { size: 24, anchor: 'middle', weight: 700 });
+      h.text(420, 440, 'scouts find work', { size: 15, anchor: 'middle', fill: COLORS.soft });
+      loopCircle(h, 1180, 420, 190, COLORS.emerald);
+      h.text(1180, 400, 'close', { size: 24, anchor: 'middle', weight: 700 });
+      h.text(1180, 440, 'fix . pr . verify . ship', { size: 15, anchor: 'middle', fill: COLORS.soft });
+      h.rect(680, 350, 240, 140, { fill: COLORS.card, strokeWidth: 2.4 });
+      h.text(800, 415, 'backlog', { size: 21, anchor: 'middle', weight: 700 });
+      h.arrow(590, 330, 690, 370, { stroke: '#b197fc', strokeWidth: 1.8, curve: 20, arrowSize: 11 });
+      h.arrow(925, 400, 1010, 380, { stroke: COLORS.emerald, strokeWidth: 1.8, curve: -15, arrowSize: 11 });
+      h.text(800, 660, 'neither loop needs you to turn', { size: 17, anchor: 'middle', fill: COLORS.soft });
+    }},
+
+  { kind: 'phone-morning', headline: 'step 4 . the phone view',
+    caption: 'the work happened overnight; what reaches you is screenshots and merge notices',
+    draw: (h) => {
+      phoneGlyph(h, 560, 140, 480, 580);
+      const notes = [
+        { t:'pr #142 merged', ok:true }, { t:'friction fix live + screenshot', ok:true },
+        { t:'cheatsheet updated', ok:true }, { t:'1 e2e flake: needs you', ok:false },
+      ];
+      notes.forEach((n, i) => {
+        h.rect(590, 210 + i*120, 420, 90, { fill: n.ok ? COLORS.teal : COLORS.lightRed, strokeWidth: 1.6 });
+        h.text(780, 262 + i*120, n.t, { size: 15, anchor: 'middle', font: MONO });
+        if (n.ok) h.check(620, 255 + i*120, 11); else h.cross(620, 255 + i*120, 11);
+      });
+      h.text(800, 100, '7:04 am', { size: 16, anchor: 'middle', font: MONO, fill: COLORS.soft });
+      h.arrow(1090, 580, 1240, 580, { stroke: COLORS.rose, strokeWidth: 1.8, arrowSize: 12 });
+      h.text(1330, 588, 'the one that', { size: 15, anchor: 'middle', fill: COLORS.rose });
+      h.text(1330, 612, 'needs you', { size: 15, anchor: 'middle', fill: COLORS.rose });
+      h.text(370, 400, '3 of 4 never', { size: 16, anchor: 'middle', fill: COLORS.emerald });
+      h.text(370, 428, 'needed you', { size: 16, anchor: 'middle', fill: COLORS.emerald });
+    }},
+
+  { kind: 'exception-routing', headline: 'step 4 . monitor by exception',
+    caption: 'verified work ships itself; only the failures route to a human',
+    draw: (h) => {
+      for (let i=0;i<10;i++) {
+        const y = 170 + i*44;
+        h.circle(180, y, 22, { fill: COLORS.blue, strokeWidth: 1.2 });
+        h.line(200, y, 592, 380 + (y-390)*0.08, { stroke: COLORS.faint, strokeWidth: 1 });
+      }
+      h.text(180, 640, '10 finished tasks', { size: 15, anchor: 'middle', fill: COLORS.soft });
+      // diamond
+      h.path('M 600 380 L 720 280 L 840 380 L 720 480 Z', { strokeWidth: 2.2, fill: COLORS.amber, fillStyle: 'solid' });
+      h.text(720, 388, 'verified?', { size: 18, anchor: 'middle', weight: 700, font: MONO });
+      // pass route
+      h.arrow(845, 370, 1010, 330, { stroke: COLORS.emerald, strokeWidth: 2.2, curve: -20, arrowSize: 13 });
+      h.rect(1020, 270, 420, 120, { fill: COLORS.softEmerald, strokeWidth: 2.2 });
+      h.text(1230, 325, 'auto-merged', { size: 21, anchor: 'middle', weight: 700, font: MONO });
+      h.text(1230, 360, '9 of 10', { size: 16, anchor: 'middle', fill: COLORS.emerald, font: MONO });
+      // exception route
+      h.arrow(790, 450, 1010, 540, { stroke: COLORS.rose, strokeWidth: 2.2, curve: 25, arrowSize: 13 });
+      h.rect(1020, 490, 420, 120, { fill: COLORS.lightRed, strokeWidth: 2.2 });
+      h.text(1230, 545, 'your phone', { size: 21, anchor: 'middle', weight: 700, font: MONO });
+      h.text(1230, 580, '1 of 10 . the exception', { size: 16, anchor: 'middle', fill: COLORS.rose, font: MONO });
+    }},
+
+  { kind: 'flywheel-intent', headline: 'step 4 . you hold one lever',
+    caption: 'the flywheel spins on its own; your only input is which way it points',
+    draw: (h) => {
+      const cx = 720, cy = 430, R = 240;
+      const stops = ['scout', 'backlog', 'fix', 'pr', 'verify', 'ship'];
+      stops.forEach((s, i) => {
+        const a = -Math.PI/2 + i*(Math.PI*2/6);
+        const x = cx + R*Math.cos(a), y = cy + R*Math.sin(a);
+        h.rect(x-85, y-38, 170, 76, { fill: i === 5 ? COLORS.softEmerald : COLORS.card, strokeWidth: 1.8 });
+        h.text(x, y+8, s, { size: 17, anchor: 'middle', weight: 700, font: MONO });
+        const a2 = -Math.PI/2 + (i+0.5)*(Math.PI*2/6);
+        const m1x = cx + R*Math.cos(a+0.32), m1y = cy + R*Math.sin(a+0.32);
+        const m2x = cx + R*Math.cos(a2+0.18), m2y = cy + R*Math.sin(a2+0.18);
+        h.arrow(m1x, m1y, m2x, m2y, { stroke: COLORS.faint, strokeWidth: 1.4, curve: 10, arrowSize: 9 });
+      });
+      stickman(h, 1330, 300, 0.9);
+      h.arrow(1300, 430, 985, 430, { stroke: COLORS.yellowStroke, strokeWidth: 2.4, arrowSize: 14 });
+      h.text(1330, 480, 'intent', { size: 18, anchor: 'middle', fill: COLORS.yellowStroke, font: MONO });
+    }},
+]});
+
+// ============================================================
+// BEAT 9 — the jump from 3 to 4 (automate whole domains)
+// ============================================================
+BEATS.push({ id: 9, section: 'bridge 3 to 4', title: 'automate whole domains', vars: [
+
+  { kind: 'task-vs-domain', headline: 'stop automating tasks',
+    caption: 'the unit of automation grows from one task to a whole category of work',
+    draw: (h) => {
+      h.text(370, 200, 'step 3 automates a task', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.rect(270, 350, 200, 90, { fill: COLORS.blue, strokeWidth: 2.2 });
+      h.text(370, 402, 'fix one bug', { size: 17, anchor: 'middle', font: MONO });
+      h.arrow(560, 395, 700, 395, { strokeWidth: 2.4, arrowSize: 15 });
+      h.text(1090, 200, 'step 4 automates a domain', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.rect(740, 240, 700, 400, { stroke: COLORS.emerald, strokeWidth: 2, strokeLineDash: [12,9] });
+      h.text(1090, 290, 'code migration', { size: 21, anchor: 'middle', weight: 700, font: MONO });
+      for (let i=0;i<12;i++) {
+        const x = 790 + (i%4)*155, y = 330 + Math.floor(i/4)*90;
+        h.rect(x, y, 130, 62, { fill: COLORS.blue, strokeWidth: 1.4 });
+        h.text(x+65, y+38, 'repo ' + (i+1), { size: 13, anchor: 'middle', font: MONO, fill: COLORS.soft });
+      }
+      h.text(1090, 690, 'one workflow, every instance of the problem', { size: 16, anchor: 'middle', fill: COLORS.emerald });
+    }},
+
+  { kind: 'four-domains', headline: 'the domains boris names',
+    caption: 'migration, fuzzing, feature-building, feedback remediation, each as a standing workflow',
+    draw: (h) => {
+      const cards = [
+        { t:'code migration',       sub:'discover . transform . verify' },
+        { t:'fuzzing',              sub:'generate . crash . reduce' },
+        { t:'feature-building',     sub:'spec . build . review' },
+        { t:'feedback remediation', sub:'triage . fix . reply' },
+      ];
+      cards.forEach((c, i) => {
+        const x = 150 + (i%2)*700, y = 170 + Math.floor(i/2)*280;
+        h.rect(x, y, 600, 220, { fill: COLORS.card, strokeWidth: 2.2 });
+        h.text(x+300, y+80, c.t, { size: 23, anchor: 'middle', weight: 700, font: MONO });
+        const stages = c.sub.split(' . ');
+        stages.forEach((s, k) => {
+          const sx = x + 65 + k*165;
+          h.rect(sx, y+115, 140, 60, { fill: COLORS.violet, strokeWidth: 1.4 });
+          h.text(sx+70, y+152, s, { size: 13, anchor: 'middle', font: MONO });
+          if (k < 2) h.arrow(sx+143, y+145, sx+162, y+145, { strokeWidth: 1.4, arrowSize: 8 });
+        });
+      });
+    }},
+
+  { kind: 'quarter-to-workflow', headline: 'the unlock at step 4',
+    caption: 'the quarter-long migration becomes a workflow you kick off and check on',
+    draw: (h) => {
+      h.text(400, 190, 'before', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      const months = ['oct', 'nov', 'dec'];
+      months.forEach((m, i) => {
+        const x = 160 + i*170;
+        h.rect(x, 230, 150, 340, { fill: COLORS.lightRed, strokeWidth: 1.8 });
+        h.text(x+75, 265, m, { size: 16, anchor: 'middle', font: MONO });
+        for (let k=0;k<6;k++) h.line(x+25, 300 + k*42, x+125, 300 + k*42, { stroke: COLORS.rose, strokeWidth: 1 });
+      });
+      h.text(400, 630, 'a team\'s whole quarter', { size: 16, anchor: 'middle', fill: COLORS.rose });
+      h.arrow(720, 400, 860, 400, { strokeWidth: 2.4, arrowSize: 15 });
+      h.text(1170, 190, 'after', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      h.rect(940, 300, 460, 110, { fill: COLORS.softEmerald, strokeWidth: 2.4 });
+      h.text(1170, 348, 'kick off: migration', { size: 20, anchor: 'middle', weight: 700, font: MONO });
+      h.text(1170, 383, 'one command', { size: 14, anchor: 'middle', fill: COLORS.soft });
+      const checks = ['week 1', 'week 2', 'week 3'];
+      checks.forEach((c, i) => {
+        const x = 985 + i*140;
+        h.circle(x, 500, 30, { fill: COLORS.card, strokeWidth: 1.6 });
+        h.check(x, 500, 10);
+        h.text(x, 560, c, { size: 13, anchor: 'middle', font: MONO, fill: COLORS.soft });
+      });
+      h.text(1170, 630, 'you check in, it keeps going', { size: 16, anchor: 'middle', fill: COLORS.emerald });
+    }},
+
+  { kind: 'agent-sdk', headline: 'agents become code',
+    caption: 'the agent sdk turns a fleet into a for-loop you can schedule and version',
+    draw: (h) => {
+      h.rect(160, 240, 560, 380, { fill: COLORS.paper, strokeWidth: 2.2 });
+      const code = [
+        'for (const repo of repos) {',
+        '  agent.run({',
+        '    task: migrate,',
+        '    verify: [tests, e2e],',
+        '    onFail: escalate,',
+        '  })',
+        '}',
+      ];
+      code.forEach((l, i) => h.text(200, 300 + i*45, l, { size: 18, font: MONO, fill: i === 0 || i === 6 ? COLORS.ink : COLORS.soft }));
+      h.arrow(760, 430, 900, 430, { strokeWidth: 2.4, arrowSize: 15 });
+      for (let r=0;r<5;r++) for (let c=0;c<8;c++) {
+        h.rect(930 + c*68, 270 + r*68, 52, 52, { fill: COLORS.blue, strokeWidth: 1, stroke: COLORS.faint });
+      }
+      h.text(1200, 660, 'a fleet, spawned programmatically', { size: 16, anchor: 'middle', fill: COLORS.soft });
+    }},
+
+  { kind: 'wall-of-green', headline: 'monitoring at 1000 agents',
+    caption: 'you stop reading work and start reading exceptions',
+    draw: (h) => {
+      let bad = 0;
+      for (let r=0;r<6;r++) for (let c=0;c<14;c++) {
+        const idx = r*14+c;
+        const isBad = idx === 23 || idx === 61;
+        const x = 200 + c*80, y = 200 + r*72;
+        h.circle(x, y, 30, { fill: isBad ? COLORS.lightRed : COLORS.softEmerald, strokeWidth: 1, stroke: isBad ? COLORS.rose : COLORS.faint });
+        if (isBad) {
+          bad++;
+          h.circle(x, y, 58, { stroke: COLORS.rose, strokeWidth: 2 });
+        }
+      }
+      h.arrow(880, 370, 1330, 500, { stroke: COLORS.rose, strokeWidth: 1.8, curve: 40, arrowSize: 12 });
+      h.arrow(1000, 630, 1330, 540, { stroke: COLORS.rose, strokeWidth: 1.8, curve: -25, arrowSize: 12 });
+      h.rect(1340, 480, 160, 90, { fill: COLORS.card, strokeWidth: 2 });
+      h.text(1420, 532, 'you', { size: 20, anchor: 'middle', weight: 700 });
+      h.text(800, 700, '84 running . 2 need a human', { size: 17, anchor: 'middle', font: MONO, fill: COLORS.soft });
+    }},
+]});
+
+// ============================================================
+// BEAT 10 — the scoreboard
+// ============================================================
+BEATS.push({ id: 10, section: 'payoff', title: 'the scoreboard', vars: [
+
+  { kind: 'bars', headline: 'the scoreboard',
+    caption: 'shipped output climbs at every step while minutes of your attention fall to zero',
+    draw: (h) => {
+      const groups = [
+        { label:'step 1',   y:160, items:1,  itemText:'1 shipped',  mins:30 },
+        { label:'step 2',   y:340, items:8,  itemText:'8 shipped',  mins:30 },
+        { label:'step 3+4', y:520, items:20, itemText:'20 shipped', mins:0 },
+      ];
+      groups.forEach((g) => {
+        h.text(90, g.y + 30, g.label, { size: 22, weight: 700, font: MONO });
+        const iw = g.items * 30;
+        h.rect(320, g.y, iw, 38, { fill: COLORS.softEmerald, stroke: COLORS.emerald, strokeWidth: 2 });
+        h.text(320 + iw + 20, g.y + 27, g.itemText, { size: 19, fill: COLORS.emerald, font: MONO });
+        if (g.mins > 0) {
+          const mw = g.mins * 10;
+          h.rect(320, g.y + 55, mw, 38, { fill: COLORS.lightRed, stroke: COLORS.rose, strokeWidth: 2 });
+          h.text(320 + mw + 20, g.y + 82, g.mins + ' min of you', { size: 19, fill: COLORS.rose, font: MONO });
+        } else {
+          h.check(335, g.y + 74, 13);
+          h.text(365, g.y + 82, '~0 min of you', { size: 19, fill: COLORS.emerald, font: MONO });
+        }
+      });
+      h.arrow(925, 539, 1050, 539, { stroke: COLORS.emerald, strokeWidth: 2, arrowSize: 12 });
+      h.text(1070, 546, 'still climbing', { size: 19, fill: COLORS.emerald, font: MONO });
+    }},
+
+  { kind: 'crossing-curves', headline: 'the scoreboard',
+    caption: 'output and attention cross somewhere around step 2; after that they never meet again',
+    draw: (h) => {
+      h.line(200, 620, 1440, 620, { stroke: COLORS.faint, strokeWidth: 2 });
+      h.line(200, 620, 200, 160, { stroke: COLORS.faint, strokeWidth: 2 });
+      const xs = [340, 660, 980, 1300];
+      xs.forEach((x, i) => {
+        h.line(x, 612, x, 628, { strokeWidth: 2 });
+        h.text(x, 665, 'step ' + (i+1), { size: 16, anchor: 'middle', font: MONO, fill: COLORS.soft });
+      });
+      // output curve up
+      h.path('M 340 560 Q 660 540 980 380 Q 1180 280 1300 210', { stroke: COLORS.emerald, strokeWidth: 3 });
+      xs.forEach((x, i) => h.circle(x, [560, 505, 380, 210][i], 18, { fill: COLORS.emerald, stroke: COLORS.emerald }));
+      h.text(1350, 200, 'shipped', { size: 18, fill: COLORS.emerald });
+      // attention curve down
+      h.path('M 340 220 Q 660 240 980 480 Q 1180 570 1300 595', { stroke: COLORS.rose, strokeWidth: 3 });
+      xs.forEach((x, i) => h.circle(x, [220, 260, 480, 595][i], 18, { fill: COLORS.rose, stroke: COLORS.rose }));
+      h.text(1350, 600, 'your minutes', { size: 18, fill: COLORS.rose });
+    }},
+
+  { kind: 'table-strip', headline: 'the scoreboard',
+    caption: 'the same afternoon of yours buys 10x more at every step',
+    draw: (h) => {
+      const cols = [
+        { s:'step 1', shipped:'1' },
+        { s:'step 2', shipped:'8' },
+        { s:'step 3', shipped:'50' },
+        { s:'step 4', shipped:'500' },
+      ];
+      h.text(230, 330, 'shipped', { size: 19, font: MONO, fill: COLORS.soft, anchor: 'end' });
+      cols.forEach((c, i) => {
+        const x = 320 + i*290;
+        const last = i === cols.length-1;
+        h.text(x+120, 200, c.s, { size: 20, anchor: 'middle', font: MONO });
+        h.rect(x, 240, 240, 140, { fill: last ? COLORS.softEmerald : COLORS.card, strokeWidth: 2 });
+        h.text(x+120, 325, c.shipped, { size: 38, anchor: 'middle', weight: 700, font: MONO, fill: last ? COLORS.emerald : COLORS.ink });
+      });
+      h.text(230, 500, 'min of you', { size: 19, font: MONO, fill: COLORS.soft, anchor: 'end' });
+      h.rect(320, 430, 1110, 130, { fill: COLORS.card, strokeWidth: 2 });
+      h.text(875, 505, 'the same 30 min', { size: 26, anchor: 'middle', weight: 700, font: MONO });
+      h.arrow(320, 640, 1440, 640, { stroke: COLORS.emerald, strokeWidth: 2, arrowSize: 13 });
+      h.text(880, 680, 'shipped climbs . your time does not', { size: 17, anchor: 'middle', fill: COLORS.emerald });
+    }},
+
+  { kind: 'attention-shift', headline: 'where your 30 minutes go',
+    caption: 'the same half hour shifts from watching to reviewing to steering',
+    draw: (h) => {
+      const rows = [
+        { label:'step 1',   segs:[{ t:'watching the agent type', w:1.0, c:COLORS.lightRed, tc:COLORS.rose }] },
+        { label:'step 2',   segs:[{ t:'reviewing diffs', w:0.6, c:COLORS.amber, tc:COLORS.ink }, { t:'steering', w:0.4, c:COLORS.violet, tc:COLORS.ink }] },
+        { label:'step 3+4', segs:[{ t:'exceptions', w:0.12, c:COLORS.softEmerald, tc:COLORS.emerald }, { t:'your actual job', w:0.88, c:COLORS.card, tc:COLORS.soft }] },
+      ];
+      rows.forEach((r, i) => {
+        const y = 200 + i*170;
+        h.text(120, y+50, r.label, { size: 20, font: MONO });
+        let x = 320;
+        r.segs.forEach((s) => {
+          const w = 1120 * s.w;
+          h.rect(x, y, w, 80, { fill: s.c, strokeWidth: 1.8 });
+          if (w > 170) h.text(x + w/2, y+48, s.t, { size: 16, anchor: 'middle', fill: s.tc });
+          else h.text(x + w/2, y-16, s.t, { size: 14, anchor: 'middle', fill: s.tc });
+          x += w;
+        });
+      });
+    }},
+
+  { kind: 'day-strips', headline: 'your day, before and after',
+    caption: 'step 1 fills the day with supervision; step 3 gives the day back',
+    draw: (h) => {
+      const hours = ['9', '10', '11', '12', '1', '2', '3', '4'];
+      h.text(430, 170, 'step 1 day', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      hours.forEach((t, i) => {
+        const y = 200 + i*62;
+        h.text(230, y+38, t, { size: 14, font: MONO, fill: COLORS.faint, anchor: 'end' });
+        h.rect(250, y, 360, 52, { fill: COLORS.lightRed, strokeWidth: 1.4 });
+        if (i === 3) h.text(430, y+33, 'lunch', { size: 13, anchor: 'middle', fill: COLORS.soft });
+        else h.text(430, y+33, 'watching claude', { size: 13, anchor: 'middle', fill: COLORS.rose });
+      });
+      h.arrow(680, 420, 830, 420, { strokeWidth: 2.4, arrowSize: 15 });
+      h.text(1090, 170, 'step 3 day', { size: 17, anchor: 'middle', fill: COLORS.soft });
+      hours.forEach((t, i) => {
+        const y = 200 + i*62;
+        h.text(890, y+38, t, { size: 14, font: MONO, fill: COLORS.faint, anchor: 'end' });
+        const check = (i === 0 || i === 4 || i === 7);
+        h.rect(910, y, 360, 52, { fill: check ? COLORS.softEmerald : COLORS.card, strokeWidth: 1.4 });
+        h.text(1090, y+33, check ? 'slack check . 5 min' : 'deep work', { size: 13, anchor: 'middle', fill: check ? COLORS.emerald : COLORS.soft });
+      });
+    }},
+]});
+
+// ==== RENDER ====
+const grid = document.getElementById('grid');
+const state = JSON.parse(localStorage.getItem('five-levels-picker') || '{}');
+// state: { "<beatId>:<kind>": { selected: true, headline, caption } }
+
+function key(beat, v) { return beat.id + ':' + v.kind; }
+function save() { localStorage.setItem('five-levels-picker', JSON.stringify(state)); }
+function updateCount() {
+  const n = Object.values(state).filter(s => s.selected).length;
+  document.getElementById('selCount').textContent = n;
+}
+
+BEATS.forEach((beat) => {
+  const topic = document.createElement('div');
+  topic.className = 'topic';
+  topic.innerHTML = `<div class="topic-head">
+    <span class="topic-num">${String(beat.id).padStart(2,'0')}</span>
+    <span class="topic-title">${beat.title}</span>
+    <span class="topic-section">${beat.section}</span>
+  </div>`;
+  const wrap = document.createElement('div');
+  wrap.className = 'variations';
+  beat.vars.forEach((v) => {
+    const k = key(beat, v);
+    const st = state[k] || {};
+    const card = document.createElement('div');
+    card.className = 'var-card' + (st.selected ? ' selected' : '');
+    const slideDiv = document.createElement('div');
+    slideDiv.className = 'slide';
+    const svg = el('svg', { viewBox: '0 0 1600 900', preserveAspectRatio: 'xMidYMid meet' });
+    slideDiv.appendChild(svg);
+    const rc = rough.svg(svg);
+    try { v.draw(H(svg, rc)); } catch (e) {
+      const t = el('text', { x: 800, y: 450, 'text-anchor': 'middle', fill: '#ff6b6b', 'font-size': 30 });
+      t.textContent = 'draw error: ' + e.message; svg.appendChild(t);
+    }
+    const meta = document.createElement('div');
+    meta.className = 'var-meta';
+    meta.innerHTML = `<div class="head"><span class="label">${v.kind}</span></div>`;
+    const hInput = document.createElement('input');
+    hInput.value = st.headline || v.headline;
+    const cInput = document.createElement('textarea');
+    cInput.value = st.caption || v.caption;
+    const btn = document.createElement('button');
+    btn.className = 'select-btn';
+    btn.textContent = st.selected ? 'selected ✓' : 'select';
+    const toggle = () => {
+      const cur = state[k] || {};
+      cur.selected = !cur.selected;
+      cur.headline = hInput.value; cur.caption = cInput.value;
+      state[k] = cur; save();
+      card.classList.toggle('selected', cur.selected);
+      btn.textContent = cur.selected ? 'selected ✓' : 'select';
+      updateCount();
+    };
+    btn.addEventListener('click', toggle);
+    slideDiv.addEventListener('click', toggle);
+    const persist = () => {
+      const cur = state[k] || {};
+      cur.headline = hInput.value; cur.caption = cInput.value;
+      state[k] = cur; save();
+    };
+    hInput.addEventListener('input', persist);
+    cInput.addEventListener('input', persist);
+    meta.appendChild(hInput); meta.appendChild(cInput); meta.appendChild(btn);
+    card.appendChild(slideDiv); card.appendChild(meta);
+    wrap.appendChild(card);
+  });
+  topic.appendChild(wrap);
+  grid.appendChild(topic);
+});
+updateCount();
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  Object.keys(state).forEach(k => state[k].selected = false);
+  save(); updateCount();
+  document.querySelectorAll('.var-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.select-btn').forEach(b => b.textContent = 'select');
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const picks = [];
+  BEATS.forEach((beat) => beat.vars.forEach((v) => {
+    const st = state[key(beat, v)];
+    if (st && st.selected) picks.push({
+      beat: beat.id, beatTitle: beat.title, section: beat.section,
+      kind: v.kind, headline: st.headline || v.headline, caption: st.caption || v.caption,
+    });
+  }));
+  navigator.clipboard.writeText(JSON.stringify(picks, null, 2)).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1400);
+  });
+});
+</script>
+</body>
+</html>
