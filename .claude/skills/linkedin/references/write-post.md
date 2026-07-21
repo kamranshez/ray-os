@@ -1,124 +1,41 @@
 # Writing LinkedIn Posts (text format)
 
-For carousel posts, use `carousel.md` instead. The principles below still apply — apply them to the cover and content slides — but the rendering flow is different.
+For carousel posts, use `carousel.md` instead.
 
-The goal every time is to write **10 different posts** for Ray to choose from. Each one uses a different combination of format pattern + emotional triggers so he gets real variety, not 10 versions of the same angle.
+Every text post is drafted in the **Stanislav template** — one fixed skeleton, defined in `references/viral-playbook.md`. Read that file first, every time. Do not invent new structures; generate variations INSIDE the skeleton.
 
 ## Before Writing
 
-1. Read `references/viral-playbook.md` — **especially the 8 format patterns at the top.** This is the core framework, not optional guidance.
-2. Read every file in `references/viral-examples/` (most recent month folder first) — these are real top-performing LinkedIn posts in Ray's niche, captured to keep the style guide grounded in what's currently working.
-3. Read 3-5 recent files in `references/post-history/` to understand Ray's voice and what's already been done. Don't recycle hooks or angles he's used in the last month.
-4. **Quiz Ray on his earned authority on this topic — see next section.** Do this even when the topic seems clear. The viral version of the draft is usually one Ray-specific number or scene short of where the first pass lands.
+1. Read `references/viral-playbook.md` — the skeleton, the variation axes, the house rules.
+2. Read 3-5 recent files in `references/post-history/` — voice calibration and dedupe. Don't recycle hooks or stories used in the last month.
+3. Gather the facts: pull real numbers from the source (stars, views, pricing, years, benchmarks). Never fabricate a number. If the source has no numbers, it's probably not a post.
 
-## The Earned-Authority Quiz (format pattern 3)
+## The Framing Checkpoint (one line, before the batch)
 
-**Before drafting any variation, ask Ray these three questions** via AskUserQuestion. Skip only if the topic is purely opinion-based (rare) or if Ray has already volunteered the relevant facts in his prompt.
+State the frame in one or two lines and confirm with Ray before generating:
 
-1. **"What have you personally done that's relevant to this topic — specific runs, experiments, numbers, or stories?"**
-   You're looking for: hours, token counts, dollar amounts, repos refactored, leads pulled, error rates, tests run, screen recordings made, etc.
+> "Hook number: [87 years / 21.2M views / ...]. Angle for the why-it-matters paragraph: [X]. Drafting the batch now unless you want a different lead."
 
-2. **"What's the most counterintuitive thing you've learned about this that doesn't show up in the discourse?"**
-   You're looking for: a contrarian take grounded in his actual experience, not just a hot take.
+One sentence of confirmation beats three rounds of re-rendering. Skip only when Ray's prompt already pins these down.
 
-3. **"What's the most concrete recent stat or scene you can offer?"**
-   You're looking for: a specific scene Ray witnessed (e.g. "I opened my Sentry dashboard last Monday and 30 issues were already closed"), or a specific number ("4.1M tokens on one loop").
+## The Batch
 
-4. **"When did this happen, and what did you NOT have at the time?"**
-   You're looking for: the timeline. Don't collapse past and present. If Ray's credibility comes from something years ago (e.g. "Anki got me into Cambridge"), the tool he's posting about almost certainly didn't exist then. Get this right or the post implies a false claim (drafted: "Anki + Claude Code got me into Cambridge" — but Ray graduated 4 years ago, before Claude Code existed). **An honest timeline is usually stronger authority, not weaker:** "I did all of this by hand back then, the tool didn't exist" sets up the contrast the post needs and signals depth. Always separate "what earned the credibility" from "what's new now."
+Generate **10 variations, all in the Stanislav skeleton.** Do not vary the structure — vary the axes listed in `viral-playbook.md`: hook line, scene-setting details, spec-bullet selection, why-it-matters angle, closer. Label each variation by what varies ("views-led hook, industry angle, no closer").
 
-Weave the answers into multiple variations. At least 3 of the 10 drafts should anchor on Ray's own evidence (self-anchored), not on quotes from Boris / Anthropic / external authority (authority-anchored). Both types are valid — but Ray's self-anchored posts are his unique moat (see the "Strategic angle for Ray specifically" section in `viral-playbook.md`).
+Before including each variation, check:
 
-## The Framing Checkpoint (do this before drafting 10)
+1. Hook line ends in a colon and carries a real number.
+2. Spec block uses → bullets and only sourced numbers.
+3. 150-250 words including the P.S.
+4. P.S. funnel slot present (default line, or a topic-matched Agentic Coding School pointer).
+5. House rules: no em/en dashes, sentence case, authors credited, no DM CTAs.
+6. Would Ray say this at a dinner with smart people? Is it true to his actual experience?
 
-Generating 10 full drafts on the wrong frame wastes a whole cycle. Before writing them, state the **angle/spine** in one or two lines and confirm it with Ray:
+Cut and redraft any variation that fails.
 
-> "Here's the angle I'll take across all 10: [e.g. 'this is a hidden unlock almost nobody has found yet,' not 'most people are doing Anki wrong']. The true contrast is [X]. Does this framing land before I draft?"
+## Output Format
 
-This is most important for **novel/hidden topics**, where the obvious "Most people X" framing is often a false premise (see Pattern 1's precondition in `viral-playbook.md`). One sentence of confirmation here beats three rounds of re-rendering. Skip only when the frame is obvious and uncontested.
-
-## The Writing Process
-
-For each of the 10 posts:
-
-### Step 1: Pick a format pattern (one per post, format pattern 8)
-
-From `viral-playbook.md` and the example posts in `viral-examples/`:
-
-- **Contrast hook** ("Most people X. Smart group Y.") — Jahanzaib, Adam, Nate variations
-- **Tier map** ("X has 3 levels of Y") — Charlie, Nate, Adam
-- **"X is a lie" + earned proof** — Luís Rodrigues vibe-coding
-- **Confession** ("I don't open Claude Code most days") — implied in several
-- **Tactical reveal** ("I run loops on Slack channels") — Luís voice agent
-- **Changelog / "what shipped while I slept"** — Anthropic official, Luís voice agent hybrid
-- **Decision rule** ("If X → A. If Y → B. If Z → C.") — Charlie Hills
-- **Aphorism + body** ("Loops without an oracle compound slop")
-
-Pick a different pattern for each of the 10 drafts. Variety here is the whole point of generating 10.
-
-### Step 2: Pick an emotional architecture
-
-From the 6 triggers in `viral-playbook.md`:
-- **Primary trigger** (the hook — what makes them stop scrolling)
-- **Secondary trigger** (the body — what makes them engage)
-
-Use a different primary trigger for each draft. With 6 triggers + 8 patterns, there are more than 10 distinct combinations available.
-
-### Step 3: Write for feeling, not information
-
-Ask yourself: "What will the reader *feel* after reading this?" If the answer is "informed," rewrite it. The answer should be one of: seen, challenged, curious, aspirational, tribal, uncomfortable-in-a-good-way.
-
-### Step 3.5: Idea-led, not description-led (the dealbreaker gate)
-
-The most common failure mode for tactical / workflow / tool posts: the post just **describes what Ray does** ("I point Claude Code at my Anki deck, it makes cards, reads my history, reprioritizes"). That reads as a feature list. The reader finishes and thinks "neat," not "huh, I'd never thought of it that way."
-
-Every post must **lead with a transferable idea** — a principle, a reframe, or a non-obvious truth the reader learns *even if they never touch the tool*. The workflow is the *evidence* for the idea, not the point of the post.
-
-- ❌ Description-led: "Claude Code reads my review history and finds the cards I keep failing."
-- ✅ Idea-led: "A card you keep failing isn't a hard card. It's a missing card." (then the workflow as proof)
-- ❌ Description-led: "It can turn any lecture into 50 flashcards in two minutes."
-- ✅ Idea-led: "When creation gets free, the value moves to curation." (then the workflow as proof)
-
-Test each draft: strip out the tool entirely. Is there still an idea worth reading? If not, the post is a demo, not a take. Rewrite it around the idea.
-
-### Step 4: Apply the format patterns
-
-Run each draft through the 8 format patterns from `viral-playbook.md`:
-
-1. Does the hook lead with contrast, not a feature announcement?
-2. Is the structure repostable (tier map / decision rule / recipe), or just an essay?
-3. Is Ray's earned authority frontloaded?
-4. Does it close with a tactical → emotional twist, not just an insight statement?
-5. Is every claim quantified? (Hunt for qualifiers: "around", "a couple", "many", "a lot" — replace with numbers.)
-6. Does it close with a decision rule or memorable kicker? (Optional — but strong.)
-7. Are arrows (→) used instead of bullets / sentences for lists?
-8. Is the post executing ONE pattern cleanly, not mixing three?
-
-Cut or rewrite drafts that fail #1, #3, or #5. The other patterns are amplifiers; these three are dealbreakers.
-
-### Step 5: Run the authenticity filter
-
-Before including each post, check:
-1. Is this true based on Ray's actual experience?
-2. Would Ray say this at a dinner with smart people?
-3. Is the emotional intensity proportional to the claim?
-4. Does it serve the reader, not just engagement?
-
-If it fails any test, rewrite or cut it.
-
-## Writing Rules
-
-### Voice
-- Ray's voice: casual, opinionated, grounded in real experience
-- Sentence-case capitalization always
-- Short sentences that stack. Conversational rhythm.
-- The reader should feel like a smart friend is telling them something they need to hear
-- **No em or en dashes** in any post. Use commas, periods, or sentence breaks.
-- **No DM keyword CTAs** ("Comment 'X' and I'll send you the guide"). Not Ray's house style.
-
-### Output Format
-
-After writing all 10 posts, generate an HTML preview so Ray can see them styled as real LinkedIn posts with copy buttons.
+After writing the batch, generate an HTML preview so Ray can see them styled as real LinkedIn posts with copy buttons.
 
 1. Write a JSON file to `/tmp/linkedin-posts.json`:
 
@@ -127,37 +44,34 @@ After writing all 10 posts, generate an HTML preview so Ray can see them styled 
     "posts": [
         {
             "number": 1,
-            "triggers": "Productive Discomfort + Aspiration",
-            "pattern": "Contrast hook",
+            "triggers": "stars-led hook, engineer angle, Your thoughts? closer",
             "body": "The full post text here..."
         }
     ]
 }
 ```
 
-(The `pattern` field is optional but helpful — it makes it easy to track which format patterns landed best across batches.)
+(The `triggers` field is the variation label — the preview renders it above each post.)
 
 2. Run the preview script:
 ```bash
 python scripts/preview-posts.py /tmp/linkedin-posts.json --output /tmp/linkedin-preview.html --open
 ```
 
-This opens an HTML page styled like LinkedIn's feed with all 10 variations and a copy button on each. Ray picks the one he wants to use.
-
 Do NOT also output the raw post text in the conversation — the HTML preview is the deliverable.
+
+## If Ray edits or rewrites a draft
+
+Diff his version against yours and append the lesson to the "Learning loop" section of `viral-playbook.md` before the session ends. His edits outrank everything else in that file.
 
 ## After Ray Picks
 
-1. Save the chosen post(s) to `references/post-history/YYYY-MM-DD_slug.md`:
+1. Save the chosen post to `references/post-history/YYYY-MM-DD_slug.md`:
 
 ```yaml
 ---
 date: YYYY-MM-DD
 hook: "First line of the post"
-triggers:
-  primary: productive discomfort
-  secondary: aspiration
-pattern: contrast hook       # which of the 8 format patterns this post used
 media: text only             # or "carousel (N slides)" / "video"
 status: draft
 engagement:

@@ -12,6 +12,15 @@
 # Keep this list lean: remove entries once they're done rather than letting
 # completed items accumulate.
 
+- task: Post Jacobian conjecture / Fable / Thiel draft
+  description: >
+    Draft ready in references/post-history/2026-07-21_jacobian-conjecture-fable-thiel.md.
+    Once posted, flip status to posted, add the LinkedIn URL, and schedule an
+    engagement check ~48h later.
+  due: 2026-07-22
+  status: pending
+  related_post: references/post-history/2026-07-21_jacobian-conjecture-fable-thiel.md
+
 - task: Check engagement on Boris steps post
   description: >
     Pull reactions/comments/reposts/impressions for the Boris "steps of agentic

@@ -1,17 +1,16 @@
 # Carousel Posts
 
-For when the user wants a multi-slide LinkedIn carousel instead of a text-only post. Same niche-applied insight, packaged as a swipeable PNG deck (Nate Herk / X-card aesthetic). Carousels in Ray's niche skew heavily toward higher reactions and reposts than text posts (see `viral-examples/2026-06/` — Anthropic carousel: 2,523 reactions, Charly's Zero Trust: 491/82, Nate's 5-tier: 257/20).
+For when the user wants a multi-slide LinkedIn carousel instead of a text-only post. Same niche-applied insight, packaged as a swipeable PNG deck (Nate Herk / X-card aesthetic). Carousels in Ray's niche have historically skewed toward higher reactions and reposts than text posts (Anthropic carousel: 2,523 reactions; Charly's Zero Trust: 491/82; Nate's 5-tier: 257/20).
 
-## Before generating: still apply the 8 format patterns
+## Before generating: the template rules still apply
 
-Carousels do NOT exempt you from the writing rules in `viral-playbook.md`:
+Carousels do NOT exempt you from `viral-playbook.md` (the Stanislav template guide):
 
-- The cover slide IS the hook — same rules as a text post hook (lead with contrast, not a feature; quantify, kill qualifiers)
-- The content slides ARE the body — one idea per slide, arrows over bullets, no qualifiers
-- The final content slide should be the twist (tactical → emotional) or the decision rule
+- The cover slide IS the hook — same rules as a text post hook: a real number, shock or superlative, no vague claims
+- The content slides ARE the spec block — one idea per slide, numbers everywhere, no qualifiers
+- The last content slide is the "why it matters" payoff
 - The CTA slide is the ask, not the conclusion
-
-Also still run the **earned-authority quiz** before drafting the deck. The cover line lands harder when it's backed by something Ray has personally done — not a generic claim. (See `write-post.md` step "Quiz Ray on earned authority".)
+- All house rules apply (no em/en dashes, never fabricate a number, credit authors)
 
 ## Style at a glance
 
@@ -87,12 +86,12 @@ uv run /Users/ray/Desktop/ray-os/.claude/skills/linkedin/scripts/prep-carousel-p
 
 ## Writing good slides
 
-- **Cover headline**: 6–12 words, declarative claim or surprise. Same energy as a YouTube title. Apply pattern 1 (lead with contrast) from `viral-playbook.md`.
+- **Cover headline**: 6–12 words, declarative claim or surprise, ideally carrying the story's key number. Same energy as a YouTube title.
 - **Content headline**: one idea per slide. If you wrote a list, each item is one slide.
-- **Content subtitle**: 1–2 sentences. Concrete, not abstract. The headline says *what*, the subtitle says *why* or *how*. Numbers over qualifiers (pattern 5).
+- **Content subtitle**: 1–2 sentences. Concrete, not abstract. The headline says *what*, the subtitle says *why* or *how*. Numbers over qualifiers.
 - **No em or en dashes** in any text — use commas, periods, or sentence breaks instead. (Ray's house style.)
 - **Don't repeat the headline in the subtitle**. They should complement, not echo.
-- Last content slide should pivot to a payoff/insight (pattern 4 — twist ending); the CTA slide is the ask, not the conclusion.
+- Last content slide is the "why it matters" payoff; the CTA slide is the ask, not the conclusion.
 
 ## Length guide
 
