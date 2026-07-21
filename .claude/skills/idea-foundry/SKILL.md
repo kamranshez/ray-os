@@ -3,7 +3,7 @@ name: idea-foundry
 description: >-
   Mine 60 to 150 fresh ideas on any topic, concept, project, video, class, or
   research question by fanning out ~20 parallel agents across web search
-  (Exa), X discourse (via the x-search skill), and 8 pure-reasoning angles
+  (Exa), X discourse (via the rapidapi-twitter MCP), and 8 pure-reasoning angles
   (economics, analogies, failure modes, cross-domain, dark side, first
   principles, anti-patterns, provocations). Synthesizes the raw pool, dedups,
   ranks by novelty, and renders to a self-contained dark-theme HTML idea
@@ -47,7 +47,7 @@ Before doing anything else, tell the user:
 > This will spawn about 22 agents in parallel, costing roughly 1.5M output tokens and running for around 25 minutes. The output is a curated HTML idea bank with 60 to 150 ranked ideas you can filter and select from. Want me to launch it?
 
 Wait for confirmation. If the user wants a cheaper variant, offer:
-- "lite" (drop the 4 x-search agents and the 8 reasoning agents, run only the 8 Exa angles; ~10 min, ~600k tokens)
+- "lite" (drop the 4 X-search agents and the 8 reasoning agents, run only the 8 Exa angles; ~10 min, ~600k tokens)
 - "no web" (drop the 8 Exa angles; useful when the topic is private or when fresh web signal does not matter)
 
 Pass these by overriding `xQueries: []` or `extraExaAngles: []` etc. in the workflow args, or by editing the workflow inline.
@@ -60,7 +60,7 @@ Ask only the questions you cannot answer from the conversation context. Required
 - **slug** (string) — short kebab-case identifier used in output filename. Default: derive from topic. Example: "agentic-loops", "thumbnail-design".
 - **purpose** (string) — one sentence on why the user wants these ideas. Shapes the synthesis voice and ranking. Example: "Ray is planning a 6-video YouTube series on this", "Ray is deciding whether to build a SaaS in this space".
 - **alreadyCovered** (string) — bullet list of concepts the user has already covered or wants explicitly excluded. Critical for avoiding obvious-to-them ideas. If unsure, ask: "what should I avoid regenerating?" If the user is mining for a class or project that has existing files, OFFER to read those files yourself and build the exclusion list. For class projects in `projects/agentic-coding-school/to-film/`, scan the .md files and bullet their existing themes.
-- **recentDate** (YYYY-MM-DD) — used as the `--since` cutoff for x-search. Default: 14 days before today. Compute from `currentDate` in the user's CLAUDE.md / memory if available, otherwise ask.
+- **recentDate** (YYYY-MM-DD) — used as the `since:` cutoff in the X search queries. Default: 14 days before today. Compute from `currentDate` in the user's CLAUDE.md / memory if available, otherwise ask.
 - **outputPath** (string) — defaults to `/tmp/<slug>-ideas.html`. Offer to write directly into a project folder if one is obvious (e.g. the class folder's `_inbox/`).
 
 Optional (skip if no signal):

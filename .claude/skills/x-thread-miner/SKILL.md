@@ -32,7 +32,7 @@ artifact the user can browse, pin, and export from.
 ## The flow
 
 1. **Quiz** — ask what to fetch and how deep.
-2. **Fetch** — paginated, ranked-by-reach harvest of replies + quotes (+ deep layer).
+2. **Fetch** — parallel subagents harvest replies + quotes (+ deep layer) via the rapidapi-twitter MCP.
 3. **Mine outliers** — bundled Workflow does extract → adversarially verify → cluster + synthesize.
 4. **Render HTML** — bundled Python builder turns the workflow result into an interactive artifact with pin tray, persistence, copy-to-clipboard, and Markdown export.
 5. **Report back** — open in Chrome, summarize the headline outliers.
@@ -55,35 +55,91 @@ Ask these in one call:
 If the user already specified mode in their message, skip that question and
 confirm depth only.
 
-## Step 2 — Fetch
+## Step 2 — Fetch via the rapidapi-twitter MCP
 
-```bash
-python3 <skill-dir>/scripts/fetch_engagement.py \
-  --tweet "<url-or-id>" [--tweet "<another>"] \
-  --mode {replies|quotes|both} \
-  [--deep N] \
-  --out "<output-dir>"
+Fetching runs through the `rapidapi-twitter` MCP server, one **fetch subagent
+per anchor tweet**, in parallel. Don't fetch in your own context: a single
+anchor can be hundreds of tweets of raw JSON, and you need context left for
+the synthesis. The subagents write files; you never see the raw pages.
+
+### The tools
+
+They're deferred, so each subagent must load them first in **one** call:
+
+```
+ToolSearch with query: select:mcp__rapidapi-twitter__Tweet_info,mcp__rapidapi-twitter__Latest_replies,mcp__rapidapi-twitter__Search
 ```
 
-- `--mode` comes from the quiz answer.
-- `--deep N` only when the user chose Deep (N = how many top quote tweets to
-  dig under; 15–22 is a good range).
-- The key is read from `$RAPIDAPI_KEY` or `~/.rapidapi_key` automatically. If
-  the script reports no key, ask the user to put their RapidAPI key in
-  `~/.rapidapi_key` (kept out of the skill on purpose so it never syncs to git).
-- If the sandbox blocks network ("failed to change group id" or similar),
-  rerun with the sandbox off.
+| Need | Tool | Params |
+|---|---|---|
+| Anchor tweet text + counts | `Tweet_info` | `id` |
+| Replies to a tweet | `Latest_replies` | `id`, `cursor` |
+| Quote tweets | `Search` | `query: "quoted_tweet_id:<id>"`, `search_type: "Latest"`, `cursor` |
+| Anchor + replies in one shot | `Tweet_thread` | `id`, `cursor` |
+| Who retweeted (accounts only, no text) | `Retweets` | `id` |
 
-Outputs land in `--out`:
-- `data/<author>_<id>.json` — anchor + replies + quotes per anchor tweet.
-- `data/quote_replies/*.json` — the deep layer, if `--deep` was used.
-- `surfaced.md` — top tweets ranked by author reach (still produced; useful
-  for a quick sanity check before the workflow runs).
-- `summary.json` — counts per anchor.
+The quote-tweet path is the non-obvious one: there is no quotes endpoint, so
+quotes come from `Search` with the `quoted_tweet_id:` operator. `search_type`
+must be `Latest` — `Top` silently drops most of them.
 
-For multi-tweet runs, the fetch can be slow (deep + many anchors = a few
-minutes). Run it via Bash `run_in_background: true` so the user can keep
-chatting; you'll be notified on completion.
+Pagination: pass the response's `next_cursor` back as `cursor`. Stop when
+`next_cursor` is absent, repeats, or the page's `timeline` is empty. 5 pages
+per stream is the default; the user asking for exhaustive coverage means 10.
+
+Credentials live in the MCP server config at user scope. There is no
+`~/.rapidapi_key` file and no `$RAPIDAPI_KEY` to set. If the tools return auth
+or subscription errors, surface that verbatim rather than working around it.
+
+### Spawning the fetchers
+
+One `Agent` call per anchor tweet, all in a single message so they run
+concurrently. Give each subagent this contract:
+
+> Fetch X engagement for tweet `<id>` and write it to disk. Load the MCP tools
+> with a single ToolSearch call (see above). Call `Tweet_info` for the anchor.
+> Then, per the mode: `Latest_replies` for replies, `Search` with
+> `quoted_tweet_id:<id>` + `search_type: Latest` for quotes. Paginate to
+> `<N>` pages each via `next_cursor`. Drop tweets with empty text, dedupe by
+> `tweet_id`.
+>
+> Write `<out>/data/<screen_name>_<id>.json` with exactly this shape:
+>
+> ```json
+> {
+>   "anchor": {"id": "...", "author": "...", "text": "...", "likes": 0,
+>              "replies_count": 0, "quotes_count": 0, "views": 0},
+>   "replies": [ <normalized>, ... ],
+>   "quotes":  [ <normalized>, ... ]
+> }
+> ```
+>
+> Each normalized tweet is:
+> `{tweet_id, screen_name, name, followers, verified, created_at, text,
+>   favorites, replies, retweets, quotes, views, in_reply_to}`
+> — read `followers` from the result's `user_info.followers_count`.
+>
+> Return only counts: `{author, replies: N, quotes: N, file}`. Do NOT return
+> tweet text.
+
+**Why the exact shape matters:** the mining workflow in Step 3 and the HTML
+builder both read these files. A subagent that invents its own field names
+breaks the pipeline silently.
+
+### Deep layer (only if the user chose Deep)
+
+After the anchor fetchers finish, pick the top N quote tweets (N = 15 to 22)
+that have `replies > 0` and `followers > 1000`, and spawn a second wave of
+subagents calling `Latest_replies` on each quote tweet id. Each writes
+`<out>/data/quote_replies/<quote_id>.json` shaped
+`{"quote": <normalized>, "replies": [<normalized>, ...]}`.
+
+### Finally
+
+Write `<out>/summary.json` yourself from the counts the subagents returned:
+`{"<author>_<id>": {"replies": N, "quotes": N}, ...}`. Sanity-check it before
+moving on. If an anchor came back with 0 replies and 0 quotes, that anchor
+either has no engagement or the id was wrong. Say so rather than proceeding
+with a hollow dataset.
 
 ## Step 3 — Mine outliers via the bundled Workflow
 
@@ -93,7 +149,7 @@ Once fetching finishes, invoke the bundled workflow:
 Workflow({
   scriptPath: "<skill-dir>/scripts/mine_outliers.workflow.js",
   args: {
-    dataDir: "<absolute path to the --out dir from Step 2>",
+    dataDir: "<absolute path to the output dir from Step 2>",
     topic: "<short description of what the user is researching>",
     consensusThesis: "<optional: the obvious take to filter out; otherwise inferred>",
   }
@@ -185,17 +241,20 @@ from there.
   verify step exists to keep noise out: the default is to reject anything
   that's just a rephrasing of the consensus.
 - **When to skip the workflow**: if the user explicitly asks for a quick
-  surface read (e.g. "just give me the top replies by reach"), skip Steps 3–4
-  and just read `surfaced.md` directly. The workflow is for when the user
-  wants insight, not headlines.
+  surface read (e.g. "just give me the top replies by reach"), skip Steps 3–4.
+  Ask the fetch subagent to also return the 15 highest-reach tweets inline, or
+  sort the anchor JSON yourself with a one-liner. The workflow is for when the
+  user wants insight, not headlines.
 - **Iteration**: if the workflow's consensus_thesis came out wrong, re-invoke
   with an explicit `args.consensusThesis` and the resume option to cache
   unchanged steps. (See the Workflow tool's resume flag.)
-- **Endpoints reference**: for the exact API endpoints, fields, pagination,
-  and the quote-tweet trick (`search.php?query=quoted_tweet_id:<id>`), see
-  `references/endpoints.md`. The fetcher handles all of it, but the
-  reference is there for endpoints the script doesn't wrap (trends,
-  community posts, user timelines, etc.).
+- **Endpoints reference**: `references/endpoints.md` documents the underlying
+  API's response fields, pagination envelope, and gotchas (`views` is a
+  string, `media` is sometimes a list, retweets never appear in search
+  results). Each MCP tool wraps one of those endpoints, so the field notes
+  still apply. The server also exposes tools this skill doesn't use — Trends,
+  User_timeline, Comunity_Posts, Users_Media, Following, Followers,
+  List_timeline — worth reaching for when a question outgrows reply mining.
 - **Non-English content**: the extraction agents are instructed to translate
   JP/CN/KR/etc. tweets in their head before deciding outlier-ness. Don't
   skip them — the non-English wave is often where independent confirmation

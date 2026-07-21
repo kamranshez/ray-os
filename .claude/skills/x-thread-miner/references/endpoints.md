@@ -1,14 +1,23 @@
 # twitter-api45 endpoint reference
 
-RapidAPI host: `twitter-api45.p.rapidapi.com`. Every request needs two headers:
+RapidAPI host: `twitter-api45.p.rapidapi.com`, reached through the
+`rapidapi-twitter` MCP server (user scope). Each endpoint below is exposed as an
+MCP tool named `mcp__rapidapi-twitter__<Tool>`; the tools are deferred, so load
+them with a single `ToolSearch` call before use. Auth headers are handled by the
+server config — there is no key to read from the environment.
 
-```
-x-rapidapi-host: twitter-api45.p.rapidapi.com
-x-rapidapi-key: <key from $RAPIDAPI_KEY or ~/.rapidapi_key>
-```
+Endpoint to tool mapping for the ones this skill uses:
 
-The bundled `fetch_engagement.py` wraps everything you normally need. This file is
-for the cases where you want an endpoint the script doesn't cover.
+| Endpoint | MCP tool |
+|---|---|
+| `tweet.php` | `Tweet_info` |
+| `latest_replies.php` | `Latest_replies` |
+| `tweet_thread.php` | `Tweet_thread` |
+| `search.php` | `Search` |
+| `retweets.php` | `Retweets` |
+
+This file documents response fields, pagination, and gotchas. Reach for it when
+you need an endpoint the skill's Step 2 contract doesn't spell out.
 
 ## Gotcha
 
