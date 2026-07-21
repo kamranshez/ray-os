@@ -8,8 +8,8 @@ engagement:
   reactions: 9
   comments: 2
   reposts: 2
-  impressions: 1545
-  last_checked: 2026-07-20
+  impressions: 1548
+  last_checked: 2026-07-21
 url: https://www.linkedin.com/feed/update/urn:li:activity:7432426590422343680/
 notes: Based on remote control video (y3xzYwxQuHc). Covers claude rc, phone control, security/sandbox angle, Hetzner server tip. Decent engagement but slightly below COBOL post — longer/more technical posts may lose some readers.
 ---

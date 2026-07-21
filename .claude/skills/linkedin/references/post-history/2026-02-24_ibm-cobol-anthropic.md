@@ -8,8 +8,8 @@ engagement:
   reactions: 11
   comments: 3
   reposts: 0
-  impressions: 1031
-  last_checked: 2026-07-20
+  impressions: 1033
+  last_checked: 2026-07-21
 url: https://www.linkedin.com/feed/update/urn:li:activity:7431926133006426112/
 notes: Best performer of recent batch. News + Insight with personal/casual hook outperforms tutorial-style.
 ---

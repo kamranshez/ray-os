@@ -4,11 +4,11 @@ hook: "Boris Cherny, the creator of Claude Code, just mapped the steps of agenti
 media: video
 status: posted
 engagement:
-  reactions: null
-  comments: null
-  reposts: null
-  impressions: null
-  last_checked: null
+  reactions: 7
+  comments: 0
+  reposts: 0
+  impressions: 401
+  last_checked: 2026-07-21
 url: https://www.linkedin.com/feed/update/urn:li:activity:7484064162667577344/
 notes: Text post built from the Boris "Steps of AI Adoption" framework video. Spine = 4-step ladder (Assisted/Parallel/Supervised autonomy/AI-native), roles pair programmer -> VP. Ray's systems reframe woven through each step ("Claude checks its own work because you set the systems up"). Proof anchor = Percy coordinating 10 bots on Sentry issues (step 4). YouTube link goes as first comment.
 ---
