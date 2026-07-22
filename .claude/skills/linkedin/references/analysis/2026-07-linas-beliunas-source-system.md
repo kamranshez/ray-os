@@ -4,7 +4,7 @@ aliases: [Linas Beliunas source system]
 date: 2026-07-18
 ---
 
-Reverse-engineering of Linas Beliunas's LinkedIn content machine (fintech/AI creator, funnels to linas.substack.com), from a 30-post live-feed capture on 2026-07-18 (full dump: [[2026-07-linas-beliunas-feed]]). Companion to [[2026-07-stanislav-beliaev-source-system]]; both feed `routines/linkedin-source-scout.md`.
+Reverse-engineering of Linas Beliunas's LinkedIn content machine (fintech/AI creator, funnels to linas.substack.com), from a 30-post live-feed capture on 2026-07-18 (full dump: [[2026-07-linas-beliunas-feed]]). Historical reference only. Ray's posts use the Stanislav skeleton exclusively ([[2026-07-stanislav-beliaev-source-system]]). This note does NOT feed `routines/linkedin-source-scout.md`; Templates A and B below are Linas's, not Ray's, and must never be used to draft.
 
 ## The system in one line
 

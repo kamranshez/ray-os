@@ -17,7 +17,7 @@
 5. Update each post file's frontmatter with the new engagement numbers
 6. Check for any posts on LinkedIn that aren't tracked in `post-history/` — offer to add them
 7. Present a summary table to the user showing all posts and their current metrics
-8. Note any patterns (e.g., which archetypes get more impressions, what hooks drive comments)
+8. Note any patterns by variation axis (hook number type, scene-setting choice, spec-bullet mix, why-it-matters angle, closer) as defined in `references/viral-playbook.md`. Do not use archetype labels; that taxonomy is retired.
 
 ## Also Check
 

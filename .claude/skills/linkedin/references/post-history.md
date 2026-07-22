@@ -1,3 +1,5 @@
+> **ARCHIVE ONLY, SUPERSEDED.** This predates the Stanislav template and is NOT how Ray's posts are written. Do not use as a structural reference. See `references/viral-playbook.md` for the live skeleton and `references/write-post.md` for the current frontmatter schema.
+
 # LinkedIn Post History
 
 Track all generated posts and their performance to learn what works.

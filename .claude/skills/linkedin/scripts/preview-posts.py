@@ -10,7 +10,7 @@ Input JSON format:
     "posts": [
         {
             "number": 1,
-            "triggers": "Productive Discomfort + Aspiration",
+            "triggers": "stars-led hook, engineer angle, Your thoughts? closer",
             "body": "The full post text..."
         },
         ...
@@ -71,6 +71,7 @@ def build_post_card(post: dict, index: int) -> str:
                 <span class="post-triggers">{triggers}</span>
                 <span class="char-count" id="count-{number}" data-n="{char_count}">{char_count} chars</span>
             </div>
+            <span class="chips" id="chips-{number}"></span>
             <button class="copy-btn" onclick="copyPost(this, '{body_id}')">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
@@ -299,6 +300,26 @@ def generate_html(posts: list[dict]) -> str:
     .char-count.warn {{ color: #b45309; font-weight: 600; }}
     .char-count.over {{ color: #c11; font-weight: 700; }}
 
+    .chips {{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 8px;
+        padding: 0 4px;
+    }}
+
+    .chip {{
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        padding: 2px 7px;
+        border-radius: 10px;
+        text-transform: uppercase;
+    }}
+
+    .chip.pass {{ background: #e6f4ea; color: #0a6b35; }}
+    .chip.fail {{ background: #fde8e8; color: #b3261e; }}
+
     .post-actions {{
         display: flex;
         justify-content: space-around;
@@ -373,10 +394,33 @@ function updateCount(n) {{
     var el = document.getElementById('count-' + n);
     if (!body || !el) return;
     var len = body.innerText.length;
-    el.textContent = len + ' chars';
+    var text = body.innerText;
+    var words = text.split(/\\s+/).filter(Boolean).length;
+    el.textContent = len + ' chars · ' + words + ' words';
     el.classList.remove('warn', 'over');
-    if (len > 3000) el.classList.add('over');
+    if (len > 3000 || words < 150 || words > 250) el.classList.add('over');
     else if (len > 1300) el.classList.add('warn');
+    renderChips(n, text, words);
+}}
+
+// Skeleton conformance chips. Mirrors the gate in references/write-post.md.
+function renderChips(n, text, words) {{
+    var box = document.getElementById('chips-' + n);
+    if (!box) return;
+    var lines = text.split('\\n').filter(function (l) {{ return l.trim().length; }});
+    var hook = lines.length ? lines[0].trim() : '';
+    var checks = [
+        ['colon hook', hook.slice(-1) === ':'],
+        ['digit in hook', /[0-9]/.test(hook)],
+        ['arrow specs', text.indexOf('→') !== -1 || text.indexOf('-> ') !== -1],
+        ['url', /https?:\\/\\//.test(text)],
+        ['P.S.', text.indexOf('P.S.') !== -1],
+        ['no em/en dash', !/[—–]/.test(text)],
+        [words + ' words', words >= 150 && words <= 250]
+    ];
+    box.innerHTML = checks.map(function (c) {{
+        return '<span class="chip ' + (c[1] ? 'pass' : 'fail') + '">' + (c[1] ? '✓ ' : '✗ ') + c[0] + '</span>';
+    }}).join('');
 }}
 
 function copyPost(btn, bodyId) {{

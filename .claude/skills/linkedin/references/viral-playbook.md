@@ -1,19 +1,19 @@
 # The Stanislav Template
 
-Every Ray text post uses ONE fixed skeleton, reverse-engineered from Stanislav Beliaev's feed (GetFluently CTO, 174-3,299 reactions per post at near-invariant format). The moat is not writing quality, it is a fixed template + real numbers + relentless cadence. Full source analysis: `socials/linkedin/analysis/2026-07-stanislav-beliaev-source-system.md`.
+Every Ray text post uses ONE fixed skeleton, reverse-engineered from Stanislav Beliaev's feed (GetFluently CTO, 174-3,299 reactions per post at near-invariant format). The moat is not writing quality, it is a fixed template + real numbers + relentless cadence. Full source analysis: `references/analysis/2026-07-stanislav-beliaev-source-system.md`.
 
 Do not invent new structures per post. Variation happens INSIDE the skeleton (see "What to vary"), never to the skeleton itself.
 
 ## The skeleton
 
-1. **Hook line ending in a colon** — news + superlative/shock, with a real number in it whenever possible. ("This repo just hit 87k+ stars:", "China open-sourced a model that runs on one GPU:", "An 87-year-old math conjecture just fell:")
+1. **Hook line ending in a colon**, news plus superlative or shock, and it MUST contain a digit. If the source gives you four numbers, lead with the most surprising one. A hook with no digit is a discard, not a draft. ("This repo just hit 87k+ stars:", "A 480B model now runs on one GPU:", "An 87-year-old math conjecture just fell:")
 2. **1-3 short scene-setting lines** — plain language, punchy. ("One camera. No LiDAR. No calibration rig.")
 3. **Name reveal** — "It's called <Name>." (or for news/people stories, the equivalent one-line reveal of who/what)
 4. **Spec block** — arrow bullets (→) for specs/benchmarks/numbers, hyphen bullets for feature lists. Numbers everywhere: stars, FPS, %, $/M tokens, views, years. A post without numbers is a discard.
 5. **One "why it matters" paragraph** — Ray's interpretation, 2-4 sentences max.
 6. **Link line** — "Link to the repo:" / "Clip and original post:" + the RAW url (Ray shortens to lnkd.in when posting).
 7. **Optional closer** — "Your thoughts?" or a one-line kicker. Skip when the why-it-matters paragraph already lands.
-8. **P.S. funnel, every post** — default: `P.S. I teach engineers to code with AI agents - 350+ videos at agenticcoding.school`. When a specific Agentic Coding School class/video matches the topic, point the P.S. there instead. One P.S. per post, always present.
+8. **P.S. funnel, every post** — default: `P.S. I teach engineers to code with AI agents - 350+ videos at agenticcoding.school`. When a specific Agentic Coding School class/video matches the topic, point the P.S. there instead. One P.S. per post, always present. The separator is a plain ASCII hyphen and it is exempt from the no-dashes house rule below, which bans em (—) and en (–) dashes only. Reproduce this line byte for byte. Draft with the bare domain; the lnkd.in short form in post-history is what LinkedIn produces after Ray shortens on posting, never draft it that way.
 
 Length: **150-250 words** including the P.S.
 
@@ -33,13 +33,13 @@ The skeleton is fixed; these axes are not. A batch of variations = same story, d
 - **Model/vendor launch** — pricing, tokens/sec, benchmark numbers; add a short caveats line when claims are vendor-sourced.
 - **Talk/quote/viral X post** — the quote or claim IS the hook material; view counts are numbers too. CREDIT the author by name/handle (unlike Stanislav).
 - **Reddit thread** — "A senior engineer on Reddit explained..." Credit the subreddit, link the thread.
-- **Personal story** — ~1-in-8 posts. Stanislav's single best performer (3,299 reactions) was his rejection-arc story, not a content post. Same skeleton energy: numbers, short lines, one arc.
+- **Personal story**, roughly 1 in 8 posts. Same skeleton, not a looser version of it: all 8 elements still apply. The link line points at the thing being discussed (the class, the video, the landing page) with a raw url. The name reveal is the project or the moment. Note: the 3,299-reaction post often cited as Stanislav's best personal performer does not appear in the live feed capture, where that number belongs to a content post. Treat the 1-in-8 personal slot as Ray's own hypothesis, not a copied pattern.
 
 ## House rules (apply to every post, no exceptions)
 
 - **No em or en dashes.** Use commas, periods, or sentence breaks.
 - Sentence-case capitalization. Short sentences that stack.
-- **Never fabricate a number.** Every stat comes from the source; community-reported claims say so ("community reports of...").
+- **Never fabricate a fact, numeric or not.** Every stat comes from the source; community-reported and self-reported claims say so ("community reports of...", "these are the maintainers' own benchmarks"). This covers prose as well as the spec block. Do not derive new numbers by arithmetic from sourced ones. Do not invent product facts, durations, trends, adoption claims, or superlatives ("fastest", "most teams", "keeps falling"). Never write a number about Ray, his audience, or his setup unless he gave it to you in this session.
 - Credit viral-artifact authors by handle.
 - No DM keyword CTAs ("Comment 'X' and I'll send the guide").
 - Feature/launch posts lead with the feature, not meta/expose angles.

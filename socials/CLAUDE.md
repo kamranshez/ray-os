@@ -15,9 +15,8 @@ socials/
 │   ├── videos/         — Video scripts and images
 │   ├── improvements.md — Active production improvements (living doc)
 │   └── transcripts/    — Downloaded transcripts organized by channel
-└── linkedin/
-    ├── analysis/       — Feed analysis and viral post research
-    └── (posts/ planned — not yet created)
+└── linkedin/          — see CLAUDE.md there; all LinkedIn content and research
+                         moved into .claude/skills/linkedin/references/
 ```
 
 ## Conventions

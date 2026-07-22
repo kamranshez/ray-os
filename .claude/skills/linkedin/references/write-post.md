@@ -7,7 +7,7 @@ Every text post is drafted in the **Stanislav template** — one fixed skeleton,
 ## Before Writing
 
 1. Read `references/viral-playbook.md` — the skeleton, the variation axes, the house rules.
-2. Read 3-5 recent files in `references/post-history/` — voice calibration and dedupe. Don't recycle hooks or stories used in the last month.
+2. Read 3-5 recent files in `references/post-history/`, for dedupe: don't recycle hooks or stories used in the last month. For VOICE, use only files carrying `template: stanislav` in frontmatter. If none do yet (the tag starts from the first post written under this template), skip voice calibration entirely and take structure from the skeleton alone. Do not calibrate on untagged files; they predate the template and will pull you off it.
 3. Gather the facts: pull real numbers from the source (stars, views, pricing, years, benchmarks). Never fabricate a number. If the source has no numbers, it's probably not a post.
 
 ## The Framing Checkpoint (one line, before the batch)
@@ -22,16 +22,9 @@ One sentence of confirmation beats three rounds of re-rendering. Skip only when 
 
 Generate **10 variations, all in the Stanislav skeleton.** Do not vary the structure — vary the axes listed in `viral-playbook.md`: hook line, scene-setting details, spec-bullet selection, why-it-matters angle, closer. Label each variation by what varies ("views-led hook, industry angle, no closer").
 
-Before including each variation, check:
+Before including each variation, run **every item in `references/post-gate.md`**. That file is the single source of truth for the gate and the cloud routine runs the same one, so do not restate the checks here and do not improvise your own.
 
-1. Hook line ends in a colon and carries a real number.
-2. Spec block uses → bullets and only sourced numbers.
-3. 150-250 words including the P.S.
-4. P.S. funnel slot present (default line, or a topic-matched Agentic Coding School pointer).
-5. House rules: no em/en dashes, sentence case, authors credited, no DM CTAs.
-6. Would Ray say this at a dinner with smart people? Is it true to his actual experience?
-
-Cut and redraft any variation that fails.
+Cut and redraft any variation that fails. Report the gate as a one-line result per variation so it leaves evidence.
 
 ## Output Format
 
@@ -55,10 +48,12 @@ After writing the batch, generate an HTML preview so Ray can see them styled as 
 
 2. Run the preview script:
 ```bash
-python scripts/preview-posts.py /tmp/linkedin-posts.json --output /tmp/linkedin-preview.html --open
+python3 /Users/ray/Desktop/ray-os/.claude/skills/linkedin/scripts/preview-posts.py /tmp/linkedin-posts.json --output /tmp/linkedin-preview.html --open
 ```
 
 Do NOT also output the raw post text in the conversation — the HTML preview is the deliverable.
+
+Every variation must show all green chips in the preview (colon hook, digit in hook, arrow bullets, url, P.S., no em/en dashes, word count in range). Redraft any that do not.
 
 ## If Ray edits or rewrites a draft
 
@@ -71,6 +66,8 @@ Diff his version against yours and append the lesson to the "Learning loop" sect
 ```yaml
 ---
 date: YYYY-MM-DD
+template: stanislav
+variation: "stars-led hook, engineer angle, Your thoughts? closer"
 hook: "First line of the post"
 media: text only             # or "carousel (N slides)" / "video"
 status: draft
