@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "1d966b2156b2cc4f",
+        "id": "77fba8b0808a170a",
         "type": "tabs",
         "children": [
           {
-            "id": "53399ec1d0714da6",
+            "id": "403b90d82a48fb71",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -178,7 +178,7 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "53399ec1d0714da6",
+  "active": "403b90d82a48fb71",
   "lastOpenFiles": [
     "socials/youtube/videos/decision-surfaces.md",
     "images/decision-surfaces-victor-cheap-representations-10.png",

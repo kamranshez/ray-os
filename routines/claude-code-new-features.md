@@ -68,7 +68,11 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 # per-model suffixes. v2.1.215 adds async `Xj(` / `WVn(` reads, structured
 # config helpers `$bt(` / `mO(`, direct client-data `XUi(` reads, `Zyc(` as
 # an env/client-data/boolean-gate bridge, `dge(`/`Uhe(`/`u3i(` wrappers, and `QHi(`
-# for per-model suffixes. Keep those aliases for cross-version diffs.
+# for per-model suffixes. v2.1.217 uses `Ke(` as the cached/stale value reader,
+# `x_e(` as its refresh-aware wrapper, `WO(` for dynamic config, `n_e(`/`VJn(`
+# for async/deprecated reads, `Sq(`/`rGi(` for blocking security gates, and
+# React wrapper `X6t(`; model-suffixed keys now pass through `jFi(`. Keep those
+# aliases for cross-version diffs.
 # Telemetry `j(`→`G(`→`j(`/`f_(` (v2.1.195)→`G(` (v2.1.199)→`M(` (v2.1.208)
 # (with event wrappers `N(`, `bb(`, `I0(`, `QEu(`, and `Qxc(` in v2.1.210), then
 # `M(` with async/event wrappers `Pb(`, `V0(`, `MHc(`, and `hwu(` in v2.1.211. We match
@@ -78,10 +82,10 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 # gate helper was renamed again — grep `("tengu_` in the strings to find the new
 # 1-2 char prefix whose call sites take a bare default (`!0`/`!1`/`null`/number), and
 # add it to the gates alternation below (telemetry prefixes take an `{...}` object).
-gate_helpers=r'(?:et|Xj|WVn|\$bt|mO|XUi|Zyc|dge|Uhe|u3i|uge|fO|Nbt|n3i|Jj|Bhe|qVn|Fme|uM|pme|Vgt|hj|c1i|Eqn|Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)'
+gate_helpers=r'(?:Ke|x_e|WO|n_e|VJn|Sq|rGi|X6t|zJn|et|Xj|WVn|\$bt|mO|XUi|Zyc|dge|Uhe|u3i|uge|fO|Nbt|n3i|Jj|Bhe|qVn|Fme|uM|pme|Vgt|hj|c1i|Eqn|Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)'
 gate_call=r'(?<![\w$])'+gate_helpers
 gates=set(re.findall(gate_call+r'(?:\?\.)?\("(tengu_[a-zA-Z0-9_]+)"',strings))
-gates.update(re.findall(gate_call+r'(?:\?\.)?\((?:QHi|YHi|Jwi|bvi)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gates.update(re.findall(gate_call+r'(?:\?\.)?\((?:jFi|QHi|YHi|Jwi|bvi)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 # Config keys are sometimes hoisted to a minified variable before being passed to
 # a GrowthBook wrapper (for example `var Yau="tengu_review_bughunter_config";
 # ... fO(Yau,...)`). Resolve those indirections so a helper rename cannot look like DCE.
