@@ -12,12 +12,11 @@
 # Keep this list lean: remove entries once they're done rather than letting
 # completed items accumulate.
 
-- task: Post Jacobian conjecture / Fable / Thiel draft
+- task: Check engagement on Jacobian / Fable / Thiel post
   description: >
-    Draft ready in references/post-history/2026-07-21_jacobian-conjecture-fable-thiel.md.
-    Once posted, flip status to posted, add the LinkedIn URL, and schedule an
-    engagement check ~48h later.
-  due: 2026-07-22
+    Recheck reactions/comments/reposts/impressions around 48h after posting for
+    references/post-history/2026-07-21_jacobian-conjecture-fable-thiel.md.
+  due: 2026-07-23
   status: pending
   related_post: references/post-history/2026-07-21_jacobian-conjecture-fable-thiel.md
 

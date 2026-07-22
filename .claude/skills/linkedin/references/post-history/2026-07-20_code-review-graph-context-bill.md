@@ -4,11 +4,11 @@ hook: "This repo just crossed 20,000 stars by attacking the most expensive thing
 media: image
 status: posted
 engagement:
-  reactions: 3
+  reactions: 4
   comments: 1
   reposts: 0
-  impressions: 286
-  last_checked: 2026-07-21
+  impressions: 349
+  last_checked: 2026-07-22
 url: https://www.linkedin.com/feed/update/urn:li:activity:7484856071359057920/
 notes: Backfilled from Ray's activity feed on 2026-07-21; hook, metrics, permalink, and activity-ID-derived date verified.
 ---

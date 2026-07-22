@@ -11,7 +11,7 @@ engagement:
   comments: 1
   reposts: 0
   impressions: 1373
-  last_checked: 2026-07-21
+  last_checked: 2026-07-22
 url: https://www.linkedin.com/feed/update/urn:li:activity:7448285193423044608/
 video: null
 notes: Post 9 chosen from /monitor batch. Aspiration-led angle — "walking away from production logs" as the emotional hook. Found already live during the 2026-05-22 performance check (posted ~mid-April with a video attached); status flipped draft to posted.

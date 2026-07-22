@@ -10,8 +10,8 @@ engagement:
   reactions: 11
   comments: 0
   reposts: 0
-  impressions: 923
-  last_checked: 2026-07-21
+  impressions: 924
+  last_checked: 2026-07-22
 url: https://www.linkedin.com/feed/update/urn:li:activity:7448159501817606144/
 video: null
 notes: Post 4 chosen from /advisor batch. Leads with Mythos, explains /advisor as quality gate. Paired with video clip.
