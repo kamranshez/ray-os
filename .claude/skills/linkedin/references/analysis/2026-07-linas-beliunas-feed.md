@@ -758,7 +758,7 @@ Pure signal. From the people who are building Claude.
 - **Type:** Original
 - **Engagement:** 900 reactions · 167 comments · 55 reposts
 - **Media:** image
-- **Image alt text:** Nailed it! This perfectly sums up startups before & after AI.    AI has collapsed the cost of starting. You can now go from an idea to landing page, app, logo, demo video, waitlist, and Product Hunt launch in a weekend.    And the market is now flooded with things that look built, but were never really executed.    → 10 wrappers solving the same tiny workflow  → Founders selling tools to other founders testing tools  → Apps with polished UI and no distribution muscle  → Demos that impress builders but confuse regular users  → Products shipped before the problem was understood    Ideas are now free.  Prompts are free.  Mockups are free.  MVPs are getting close to free.    But what is still expensive & now matters more than ever is:    Taste. Distribution. Trust. Retention. Support. Knowing which problem is worth 3 years of your life.    Before AI, people had ideas they couldn’t build.    After AI, people are building things nobody asked for.
+- **Image alt text:** Nailed it! This perfectly sums up startups before & after AI.    AI has collapsed the cost of starting. You can now go from an idea to landing page, app, logo, demo video, waitlist, and Product Hunt launch in a weekend.    And the market is now flooded with things that look built, but were never really executed.    → 10 wrappers solving the same tiny workflow  → Founders selling tools to other founders testing tools  → Apps with polished UI and no distribution muscle  → Demos that impress builders but confuse regular users  → Products shipped before the problem was understood    Ideas are now free.  Prompts are free.  Mockups are free.  MVPs are getting close to free.    But what is still expensive & now matters more than ever is:    Taste.Distribution.Trust.Retention.Support.Knowing which problem is worth 3 years of your life.    Before AI, people had ideas they couldn’t build.    After AI, people are building things nobody asked for.
 - **Links:** https://linas.substack.com/ , https://lnkd.in/dv7-ZRVc
 
 **Full text:**
@@ -782,7 +782,7 @@ MVPs are getting close to free.
 
 But what is still expensive & now matters more than ever is:
 
-Taste. Distribution. Trust. Retention. Support. Knowing which problem is worth 3 years of your life.
+Taste.Distribution.Trust.Retention.Support.Knowing which problem is worth 3 years of your life.
 
 Before AI, people had ideas they couldn’t build.
 

@@ -7,15 +7,6 @@ description: All LinkedIn tasks — writing posts (text or carousel), checking p
 
 Single master skill for everything LinkedIn — writing (text or carousel), checking performance, and browsing.
 
-## Step 0: Always read `todos.yaml` first
-
-**On every invocation of this skill, before doing anything else, read `todos.yaml` in this skill directory.** It tracks drafts waiting to be posted, posts needing engagement checks, and other LinkedIn follow-ups.
-
-- If any entries are overdue or due today, surface them to the user before taking their current request: *"Heads up — you have N LinkedIn drafts/follow-ups waiting: [list]. Want to handle those first, or continue with [current request]?"*
-- If nothing is due, proceed silently with the user's request.
-- When you complete a todo (post a draft, check engagement, etc.), update its `status` to `done` or remove it. Do not let completed entries pile up.
-- When you create a new draft, add an unposted post, or need a follow-up, add a new entry to `todos.yaml` — not to any global todos file. LinkedIn todos live inside this skill.
-
 ## Routing
 
 Once todos are handled, figure out which sub-flow the request needs. If Ray's message doesn't already make it obvious, ask:
