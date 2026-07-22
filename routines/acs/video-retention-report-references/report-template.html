@@ -1,0 +1,178 @@
+<!--
+  ACS VIDEO REPORT — dashboard shell
+  =================================
+  Belongs to routines/acs/video-retention-report.md. Nothing else uses it, so
+  change it freely when that routine changes. Filled copies go to
+  /tmp/acs-video-report-<YYYY-MM-DD>.html — never overwrite this file.
+
+  HOW TO USE (STEP 6 of the routine):
+  1. Read this file, replace the {{PLACEHOLDER}} tokens:
+       {{TITLE}}     - "ACS Video Report"
+       {{SUBTITLE}}  - "What members actually watched in the class player, 7 days to <date>"
+       {{DATE}}      - YYYY-MM-DD
+       {{SOURCE}}    - "PostHog project 236619 &middot; routines/acs/video-retention-report.md"
+       {{BODY}}      - the six sections below, built by the generator script
+  2. Strip this comment block and the SECTION SKELETON comment.
+  3. Keep everything inline. No external CSS/JS/fonts — the file has to open
+     from a Slack download with no network.
+
+  BUILD IT WITH A SCRIPT, NOT BY HAND. Put the query results in a list of
+  tuples and let Python compute every percentage, delta, mover and cliff.
+  Forty hand-written table rows reliably disagree with the Slack message.
+
+  COMPONENTS
+    .sec / .kicker / h2      - section wrapper, small uppercase label, heading
+    .callout[.good|.warn]    - note box; .good for the headline sentence
+    .stats > .stat           - the four-tile stat row (lab / big / sub)
+    .tablewrap > table       - ALWAYS wrap tables; td.r right-aligns numbers
+    td.up / td.down / .muted - green rise, red fall, grey neutral
+    .rbar > .rb              - the nine-bar retention strip, one span per
+                               checkpoint, --h = height %, --o = opacity,
+                               title= carries the exact number on hover
+    .cols3 > .col            - side-by-side rising / falling mover lists
+    ol.ranked                - numbered findings
+    .pill                    - inline tag, used for the class slug
+    strong.num               - highlighted number inside prose
+
+  Slack does not render HTML. Always send as a FILE UPLOAD, never paste.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  :root {
+    --bg: #101216; --panel: #181b21; --panel2: #1e2229;
+    --text: #e6e8ec; --muted: #9aa3b2; --line: #2a2f38;
+    --accent: #6ea8fe; --good: #4ade80; --warn: #fbbf24; --bad: #f87171;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f7f8fa; --panel: #ffffff; --panel2: #f1f3f6;
+      --text: #1b1e24; --muted: #5b6472; --line: #dfe3ea;
+      --accent: #2563eb; --good: #15803d; --warn: #b45309; --bad: #b91c1c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
+  header { border-bottom: 1px solid var(--line); padding-bottom: 24px; margin-bottom: 32px; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 8px; letter-spacing: -0.02em; }
+  .subtitle { color: var(--muted); font-size: 17px; margin: 0 0 14px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: 13px; }
+  .meta b { color: var(--text); font-weight: 600; }
+  .kicker {
+    text-transform: uppercase; letter-spacing: 0.09em; font-size: 12px;
+    font-weight: 700; color: var(--accent); margin: 0 0 4px;
+  }
+  .sec { margin: 40px 0; }
+  h2 { font-size: 21px; margin: 0 0 14px; letter-spacing: -0.01em; }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 0 0 12px; }
+  a { color: var(--accent); }
+  code {
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 0.88em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .callout {
+    background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+    border-radius: 8px; padding: 14px 16px; margin: 16px 0;
+  }
+  .callout.good { border-left-color: var(--good); }
+  .callout.warn { border-left-color: var(--warn); }
+  .callout.bad  { border-left-color: var(--bad); }
+  .callout > :last-child { margin-bottom: 0; }
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; margin: 16px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td.wrapcell { white-space: normal; min-width: 220px; }
+  th { background: var(--panel2); font-weight: 600; position: sticky; top: 0; }
+  tr:last-child td { border-bottom: none; }
+  td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+  .cols3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 16px 0; }
+  .cols3 .col { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+  .cols3 h3 { margin-top: 0; }
+  .cols3 ul { margin: 0; padding-left: 18px; }
+  .cols3 li { margin-bottom: 8px; }
+  ol.ranked { padding-left: 22px; }
+  ol.ranked > li { margin-bottom: 12px; }
+  .pill {
+    display: inline-block; background: var(--panel2); border: 1px solid var(--line);
+    border-radius: 999px; padding: 1px 10px; font-size: 12px; color: var(--muted);
+  }
+  .num { color: var(--accent); font-variant-numeric: tabular-nums; }
+  footer { margin-top: 56px; border-top: 1px solid var(--line); padding-top: 16px; color: var(--muted); font-size: 13px; }
+
+  /* --- ACS video report specifics ------------------------------------- */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 18px 0; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+  .stat .lab { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .07em; }
+  .stat .big { display: block; font-size: 28px; font-weight: 650; letter-spacing: -0.02em; margin: 2px 0; font-variant-numeric: tabular-nums; }
+  .stat .sub { display: block; color: var(--muted); font-size: 12px; }
+  .rbar { display: inline-flex; align-items: flex-end; gap: 2px; height: 26px; }
+  .rbar .rb { width: 7px; height: var(--h); background: var(--accent); opacity: var(--o); border-radius: 2px 2px 0 0; }
+  td.up, li .up { color: var(--good); }
+  td.down { color: var(--bad); }
+  td.flat, .muted { color: var(--muted); }
+  ol.ranked .pill { vertical-align: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="kicker">Agentic Coding School</p>
+    <h1>{{TITLE}}</h1>
+    <p class="subtitle">{{SUBTITLE}}</p>
+    <div class="meta">
+      <span>Date <b>{{DATE}}</b></span>
+      <span>Source <b>{{SOURCE}}</b></span>
+    </div>
+  </header>
+
+  <main>
+    {{BODY}}
+    <!-- SECTION SKELETON (delete when filling) — the six sections, in order:
+
+    1. This week at a glance
+       <section class="sec">
+         <h2>This week at a glance</h2>
+         <div class="callout good"><p><strong>{one sentence: members, plays, WoW, finishes}</strong> {finish rate + delta}</p></div>
+         <div class="stats">
+           <div class="stat"><span class="lab">Members watching</span><span class="big">216</span><span class="sub">+0% vs last week</span></div>
+           ... plays, finish rate, videos watched ...
+         </div>
+       </section>
+
+    2. What got watched — every video with 10+ viewers
+       Columns: # | Video | Class pill | Viewers | Last wk | Change (td.up/.down) | Finished | Retention shape
+       Retention cell: <span class="rbar">
+         <span class="rb" style="--h:72%;--o:0.80" title="10% mark: 72% still watching"></span>
+         ... nine of these, 10% through 90% ...
+       </span>
+
+    3. Movers — <div class="cols3"> with a Rising col and a Falling col, each an <ol class="ranked">.
+       Say "up from 3" in words, not just a percentage.
+
+    4. Where people bail — <ol class="ranked">, top 3 cliffs only, each naming the
+       video, the checkpoint, the pp drop AND the human count ("about 12 people a week").
+
+    5. By class — table: Class | Members | Plays | Last wk | Change, then a
+       <div class="callout"> reading the shape of it in one paragraph.
+
+    6. Notes — <ul> of caveats: unnamed videos, filters extended, retention cap,
+       plays-vs-viewers distinction.
+    -->
+  </main>
+
+  <footer>
+    Generated by Claude · canonical copy: {{SOURCE}}
+  </footer>
+</div>
+</body>
+</html>
