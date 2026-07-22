@@ -21,6 +21,15 @@
   status: pending
   related_post: references/post-history/2026-07-21_jacobian-conjecture-fable-thiel.md
 
+- task: Check engagement on OpenAI/Hugging Face exploit-chain post
+  description: >
+    Pull reactions/comments/reposts/impressions for the OpenAI/Hugging Face
+    exploit-chain text post and backfill the engagement block in
+    references/post-history/2026-07-22_openai-huggingface-exploit-chain.md.
+  due: 2026-07-25
+  status: pending
+  related_post: references/post-history/2026-07-22_openai-huggingface-exploit-chain.md
+
 - task: Check engagement on Boris steps post
   description: >
     Pull reactions/comments/reposts/impressions for the Boris "steps of agentic
