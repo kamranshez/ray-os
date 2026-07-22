@@ -1,6 +1,6 @@
 # The pre-post gate
 
-The single checklist every LinkedIn draft passes before it is shown to Ray or posted to Slack. Both the interactive skill (`references/write-post.md`) and the unattended cloud routine (`routines/linkedin-source-scout.md`) run THIS file. Do not keep a second copy anywhere.
+The single checklist every LinkedIn draft passes before it is shown to Ray or posted to Slack. Both the writing flow (`write-post.md`) and the source scout (`source-scout.md`, run daily by the cloud and on demand by Ray) run THIS file. Do not keep a second copy anywhere.
 
 The skeleton it enforces lives in `references/viral-playbook.md`. Read that first; this file only checks the output.
 
@@ -24,4 +24,4 @@ Cut and redraft anything that fails. Report the check as a one-line result per d
 
 ## Glyphs
 
-The interactive skill drafts with the unicode arrow `→`. The cloud routine drafts with ASCII `-> ` so the text survives Slack and copy-paste. Both are valid arrow bullets for item 3. Feature bullets are always a plain hyphen `- `.
+The writing flow drafts with the unicode arrow `→`. The scout drafts with ASCII `-> ` so the text survives Slack and copy-paste, whichever caller ran it. Both are valid arrow bullets for item 3. Feature bullets are always a plain hyphen `- `.

@@ -4,7 +4,7 @@ aliases: [Stanislav Beliaev source system]
 date: 2026-07-18
 ---
 
-Reverse-engineering of Stanislav Beliaev's LinkedIn content machine (Co-Founder/CTO GetFluently.App, YC W24, ex-Nvidia -- linkedin.com/in/stasbel), from a saved copy of his activity feed (9 posts, Jul 3-17 2026). Feeds the [[linkedin-source-scout]] routine (`routines/linkedin-source-scout.md`).
+Reverse-engineering of Stanislav Beliaev's LinkedIn content machine (Co-Founder/CTO GetFluently.App, YC W24, ex-Nvidia -- linkedin.com/in/stasbel), from a saved copy of his activity feed (9 posts, Jul 3-17 2026). Feeds the source scout ([[source-scout]], `.claude/skills/linkedin/references/source-scout.md`).
 
 ## The system in one line
 
@@ -52,6 +52,6 @@ Length ~150-250 words. Engagement observed: 174 to 3,299 reactions per post.
 - The moat is not writing quality, it is **source monitoring + a fixed template + relentless cadence**. Each post is ~30 min of human effort at most; his inputs are public and automatable.
 - Ray's equivalents: GitHub trending (agentic-coding tools), HN front page / Show HN, model vendor launch blogs, viral X posts. Funnel P.S. slot = Agentic Coding School.
 - Content posts feed reach; the rare personal-story post is the engagement outlier. Keep a ~1-in-8 personal slot.
-- Implemented as the daily cloud routine `routines/linkedin-source-scout.md` posting draft candidates to Slack #li-source-scout.
+- Implemented as the `linkedin` skill's source scout (`references/source-scout.md`), run daily by a cloud routine and on demand by Ray, posting draft candidates to Slack #li-source-scout.
 
 Full extracted posts (all 9, verbatim, with engagement): captured 2026-07-18 from the saved HTML; source file `/Users/ray/Downloads/(1) Activity _ Stanislav Beliaev _ LinkedIn.html`.
