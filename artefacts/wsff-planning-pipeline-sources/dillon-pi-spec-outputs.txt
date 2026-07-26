@@ -1,0 +1,3126 @@
+########## ASSISTANT entry 2295 (4207 chars) ##########
+## 1. Route the Link Catalog through its Durable Object
+
+**Recommendation strength:** Strong  
+**Category:** ports & adapters
+
+**Files**
+- `apps/mulroy.link/link-manager/src/index.ts`
+- `apps/mulroy.link/link-manager/src/services.ts`
+- `apps/mulroy.link/link-manager/src/link-catalog/LinkCatalogDurableObject.ts`
+- `docs/adr/0001-effect-rpc-over-durable-object-fetch.md`
+
+**Problem**  
+The Link Catalog interface says Durable Object, but production composition uses an in-memory implementation and the Durable Object is effectively bound but not called.
+
+**Solution**  
+Make the Worker’s Link Catalog adapter call the named Durable Object over ADR-owned Effect RPC `fetch`, while tests keep a memory adapter at the same seam.
+
+**Benefits**
+- **locality:** deployment truth in one module
+- **leverage:** one Link Catalog interface
+- tests hit deployed seam
+- ADR stops drifting
+
+**ADR conflict**  
+Current code exposes Alchemy RPC methods on the Durable Object, while ADR-0001 says Effect RPC over Durable Object `fetch`. This is worth reopening or enforcing because the Worker path currently bypasses the Durable Object entirely.
+
+---
+
+## 2. Deepen the Alias mutation module
+
+**Recommendation strength:** Strong  
+**Category:** in-process
+
+**Files**
+- `apps/mulroy.link/link-manager/src/link-catalog/store/LinkCatalogStore.ts`
+- `apps/mulroy.link/link-manager/src/link-catalog/LinkCatalogOrchestration.ts`
+- `apps/mulroy.link/link-manager/src/link-catalog/LinkCatalogDurableObject.ts`
+- `apps/mulroy.link/link-manager/src/public-redirect-index/PublicRedirectIndex.ts`
+
+**Problem**  
+`LinkCatalogStore` is shallow at the mutation seam because callers must understand `AliasMutation`, rollback, Public Redirect Index failure ordering, and compensation behavior.
+
+**Solution**  
+Move Store mutation, Public Redirect Index coordination, rollback, and serialization into one deep Link Catalog mutation module inside the Durable Object.
+
+**Benefits**
+- **locality:** consistency rules concentrate
+- **leverage:** one mutation path
+- interface hides rollback
+- tests assert outcomes instead of orchestration internals
+
+---
+
+## 3. Replace the fake SQL seam with a SQL executor module
+
+**Recommendation strength:** Worth exploring  
+**Category:** local-substitutable
+
+**Files**
+- `apps/mulroy.link/link-manager/src/link-catalog/store/LinkCatalogStore.ts`
+- `apps/mulroy.link/link-manager/src/link-catalog/store/LinkCatalogStore.test.ts`
+- `repos/executor/packages/core/sdk/src/fuma-runtime.ts`
+- `repos/alchemy/packages/alchemy/src/SQLite/libSQL.ts`
+
+**Problem**  
+The storage seam is shallow: the test adapter must know nearly every SQL statement, constraint, row shape, and rollback rule. The fake storage is becoming a second implementation of SQLite semantics.
+
+**Solution**  
+Give `LinkCatalogStore` a smaller SQL executor module that owns active-transaction routing and storage-error mapping, mirroring Executor’s `FumaClient` and Alchemy’s SQLite adapters.
+
+**Benefits**
+- **locality:** SQL defects map once
+- **leverage:** transaction module reused
+- tests shrink dramatically
+- adapter seam becomes real
+
+---
+
+## 4. Delete duplicate in-memory Link Catalog implementations
+
+**Recommendation strength:** Worth exploring  
+**Category:** mock
+
+**Files**
+- `apps/mulroy.link/link-manager/src/services.ts`
+- `apps/mulroy.link/link-manager/src/index.test.ts`
+- `apps/mulroy.link/link-manager/src/link-catalog/LinkCatalogOrchestration.test.ts`
+- `apps/mulroy.link/link-manager/src/public-redirect-index/PublicRedirectIndex.ts`
+
+**Problem**  
+The memory modules duplicate Alias creation, Retarget, audit, rollback, and index-write rules. Tests can pass while the Durable Object path drifts.
+
+**Solution**  
+Keep exactly one memory adapter at the Link Catalog seam and delete the extra in-memory implementation paths.
+
+**Benefits**
+- **locality:** rules stop forking
+- **leverage:** tests share seam
+- deletion removes drift
+- memory stays adapter-sized
+
+---
+
+## Top recommendation
+
+Start with **Route the Link Catalog through its Durable Object**.
+
+It fixes the largest locality break: the deployed Worker, ADR, Durable Object, and tests currently disagree about where the authoritative Link Catalog interface lives.
+
+########## ASSISTANT entry 2297 (8143 chars) ##########
+Below are **sketches**, not final interfaces.
+
+---
+
+## 1. Route the Link Catalog through its Durable Object
+
+### Seam
+
+```ts
+// Link Catalog seam consumed by HTTP handlers
+type LinkCatalog = {
+  createAlias(input: CreateAliasInput): Effect<AliasResult, LinkCatalogError>
+  retargetAlias(input: RetargetAliasInput): Effect<AliasResult, LinkCatalogError>
+  getLink(slug: string): Effect<Option<Link>, LinkLookupError>
+  health: Effect<{ status: "available" }>
+}
+```
+
+### Adapters
+
+```ts
+// production adapter
+const LinkCatalogDurableObjectAdapter = (namespace: LinkCatalogNamespace): LinkCatalog => ({
+  createAlias: (input) =>
+    EffectRpcClient.call(namespace.getByName("global").fetch, "createAlias", input),
+
+  retargetAlias: (input) =>
+    EffectRpcClient.call(namespace.getByName("global").fetch, "retargetAlias", input),
+
+  getLink: (slug) =>
+    EffectRpcClient.call(namespace.getByName("global").fetch, "getLink", { slug }),
+
+  health: EffectRpcClient.call(namespace.getByName("global").fetch, "health", {}),
+})
+
+// test adapter
+const LinkCatalogMemoryAdapter = makeMemoryLinkCatalog()
+```
+
+### Callstack
+
+```ts
+OperatorHandlers
+  -> LinkCatalog.createAlias(...)
+    -> production: Durable Object fetch + Effect RPC
+      -> LinkCatalogDurableObject
+        -> Link Catalog mutation module
+        -> SQL Store
+        -> Public Redirect Index
+```
+
+### Deepening
+
+Before:
+
+```ts
+Worker fetch
+  -> makeInMemoryServicesContext()
+  -> memory Link Catalog
+```
+
+After:
+
+```ts
+Worker fetch
+  -> LinkCatalogDurableObjectAdapter
+  -> Durable Object fetch
+  -> authoritative Link Catalog implementation
+```
+
+---
+
+## 2. Deepen the Alias mutation module
+
+### Current shallow seam
+
+```ts
+type LinkCatalogStore = {
+  createAlias(input): Effect<AliasMutation, StoreWriteError | SlugConflictError>
+  retargetAlias(input): Effect<AliasMutation, StoreWriteError | LinkNotFoundError>
+  rollbackAliasMutation(mutation): Effect<void, StoreRollbackError>
+}
+```
+
+Caller must know:
+
+```ts
+const mutation = yield* store.createAlias(input)
+
+if (mutation.outcome === "changed") {
+  yield* redirectIndex.putDestination(...)
+    .pipe(Effect.catch(() => store.rollbackAliasMutation(mutation)))
+}
+```
+
+That means rollback and Public Redirect Index ordering leak across the seam.
+
+### Deeper module
+
+```ts
+type LinkCatalogMutations = {
+  createAlias(input: CreateAliasInput): Effect<
+    { outcome: "created" | "unchanged"; alias: AliasLink },
+    SlugConflictError | AliasMutationError
+  >
+
+  retargetAlias(input: RetargetAliasInput): Effect<
+    { outcome: "retargeted" | "unchanged"; alias: AliasLink },
+    LinkNotFoundError | AliasRequiredError | AliasMutationError
+  >
+}
+```
+
+### Implementation owns internals
+
+```ts
+const makeLinkCatalogMutations = ({
+  store,
+  redirectIndex,
+  lock,
+}: {
+  store: SqlLinkCatalogStore
+  redirectIndex: PublicRedirectIndex
+  lock: Semaphore
+}): LinkCatalogMutations => ({
+  createAlias: (input) =>
+    lock.withPermits(1)(
+      store.transaction(
+        Effect.gen(function* () {
+          const mutation = yield* store.createAliasRow(input)
+          if (mutation.outcome === "unchanged") {
+            return { outcome: "unchanged", alias: mutation.current }
+          }
+
+          yield* redirectIndex.putDestination(
+            mutation.current.slug,
+            mutation.current.destination,
+          ).pipe(
+            Effect.catch((cause) =>
+              store.restoreAliasMutation(mutation).pipe(
+                Effect.andThen(Effect.fail(new AliasMutationError({ cause }))),
+              ),
+            ),
+          )
+
+          return { outcome: "created", alias: mutation.current }
+        }),
+      ),
+    ),
+})
+```
+
+### Callstack
+
+```ts
+Durable Object RPC
+  -> LinkCatalogMutations.createAlias
+    -> lock
+    -> SQL Store mutation
+    -> Public Redirect Index write
+    -> rollback/repair on failure
+```
+
+### Deepening
+
+`AliasMutation` becomes an implementation detail, not part of the Store-facing caller interface.
+
+---
+
+## 3. Replace fake SQL seam with SQL executor module
+
+### Current shallow seam
+
+```ts
+type LinkCatalogDurableObjectStorage = {
+  sql: {
+    exec(query: string, ...bindings: SqlValue[]): Effect<Cursor<Row>, unknown>
+  }
+  transaction<A>(closure: (tx: Tx) => Effect<A>): Effect<A, unknown>
+}
+```
+
+Tests must fake:
+
+```ts
+if (query.startsWith("SELECT LINKS.SLUG")) ...
+if (query.startsWith("INSERT INTO LINKS")) ...
+if (query.startsWith("UPDATE LINKS SET DESTINATION")) ...
+```
+
+That is a shallow adapter.
+
+### Deeper SQL executor module
+
+```ts
+type LinkCatalogSqlExecutor = {
+  all<Row>(statement: SqlStatement<Row>): Effect<ReadonlyArray<Row>, SqlError>
+  one<Row>(statement: SqlStatement<Row>): Effect<Option<Row>, SqlError>
+  run(statement: SqlStatement<never>): Effect<void, SqlError>
+
+  transaction<A, E>(
+    effect: Effect<A, E, LinkCatalogSqlExecutor>,
+  ): Effect<A, E | SqlError>
+}
+```
+
+### Statement module
+
+```ts
+type SqlStatement<Row> = {
+  text: string
+  bindings: ReadonlyArray<SqlValue>
+  decode?: Schema<Row>
+}
+
+const SelectAliasBySlug = (slug: LinkSlug): SqlStatement<SelectedAliasLinkRow> => ({
+  text: `SELECT ... WHERE links.slug = ?`,
+  bindings: [slug],
+  decode: SelectedAliasLinkRow,
+})
+```
+
+### Store implementation
+
+```ts
+const makeSqlLinkCatalogStore = (sql: LinkCatalogSqlExecutor): SqlLinkCatalogStore => ({
+  getLink: (slug) =>
+    sql.one(SelectAliasBySlug(slug)).pipe(
+      Effect.map(Option.map(aliasLinkFromRow)),
+      Effect.mapError((cause) => new LinkCatalogStoreReadError({ slug, cause })),
+    ),
+
+  createAliasRow: (input) =>
+    sql.transaction(
+      Effect.gen(function* () {
+        const existing = yield* getExistingAlias(input.slug)
+        if (Option.isSome(existing)) ...
+        yield* sql.run(InsertAlias(input))
+        return yield* selectRequiredAlias(input.slug)
+      }),
+    ),
+})
+```
+
+### Adapters
+
+```ts
+const DurableObjectSqlExecutorAdapter = (storage: DurableObjectStorage): LinkCatalogSqlExecutor =>
+  ...
+
+const TestSqlExecutorAdapter = makeRealSqliteTestExecutor()
+// or a tiny result-based adapter, not a SQL parser
+```
+
+### Callstack
+
+```ts
+LinkCatalogMutations
+  -> SqlLinkCatalogStore
+    -> LinkCatalogSqlExecutor
+      -> production: Durable Object SQLite adapter
+      -> test: SQLite/test adapter
+```
+
+---
+
+## 4. Delete duplicate in-memory Link Catalog implementations
+
+### Current shape
+
+```ts
+makeLinkCatalogLive       // memory implementation #1
+makeInMemoryServicesContext // memory implementation #2
+LinkCatalogStore + Orchestrator // durable implementation #3
+```
+
+Each repeats:
+
+```ts
+parse slug
+parse destination
+detect unchanged
+create audit
+retarget audit
+write Public Redirect Index
+rollback on failure
+```
+
+### Deeper shape
+
+One Link Catalog seam:
+
+```ts
+type LinkCatalog = {
+  createAlias(input: RawCreateAliasInput): Effect<AliasResult, LinkCatalogError>
+  retargetAlias(input: RawRetargetAliasInput): Effect<AliasResult, LinkCatalogError>
+  getLink(slug: string): Effect<Option<Link>, LinkLookupError>
+}
+```
+
+Two adapters only:
+
+```ts
+const LinkCatalogDurableObjectAdapter: LinkCatalog = ...
+const LinkCatalogMemoryAdapter: LinkCatalog = ...
+```
+
+### Shared domain implementation behind memory adapter
+
+```ts
+const makeMemoryLinkCatalog = ({
+  now,
+  redirectIndex,
+}: {
+  now: Effect<string>
+  redirectIndex: PublicRedirectIndex
+}): LinkCatalog =>
+  makeLinkCatalogFromStore({
+    store: makeMemoryLinkCatalogStore({ now }),
+    redirectIndex,
+  })
+```
+
+### Durable adapter uses same module shape
+
+```ts
+const makeDurableObjectLinkCatalog = ({
+  sql,
+  redirectIndex,
+}: {
+  sql: LinkCatalogSqlExecutor
+  redirectIndex: PublicRedirectIndex
+}): LinkCatalog =>
+  makeLinkCatalogFromStore({
+    store: makeSqlLinkCatalogStore(sql),
+    redirectIndex,
+  })
+```
+
+### Callstack
+
+```ts
+Tests
+  -> LinkCatalogMemoryAdapter
+    -> shared Link Catalog rules
+    -> memory Store
+
+Production
+  -> LinkCatalogDurableObjectAdapter
+    -> Durable Object fetch
+    -> shared Link Catalog rules
+    -> SQL Store
+```
+
+### Deletion test
+
+Deleting the duplicate memory modules should not delete behavior. It should delete drift. The behavior reappears in one deep Link Catalog implementation with two adapters.
+
+########## ASSISTANT entry 2299 (12511 chars) ##########
+Agreed. Revised sketches with those changes.
+
+---
+
+## 1. Link Catalog Durable Object seam
+
+```ts
+export class LinkCatalog extends Context.Service<LinkCatalog, {
+  createAlias(input: RawCreateAliasInput): Effect<AliasResult, LinkCatalogError>
+  retargetAlias(input: RawRetargetAliasInput): Effect<AliasResult, LinkCatalogError>
+  getLink(slug: string): Effect<Option<Link>, LinkLookupError>
+  health: Effect<{ status: "available" }>
+}>()("link-manager/LinkCatalog") {}
+```
+
+### Production adapter
+
+```ts
+export class LinkCatalogDurableObjectClient
+  extends Context.Service<LinkCatalogDurableObjectClient, {
+    fetch(request: Request): Effect<Response, LinkCatalogClientError>
+  }>()("link-manager/LinkCatalogDurableObjectClient") {}
+
+export const LinkCatalog.layerDurableObject = Layer.effect(
+  LinkCatalog,
+  Effect.gen(function* () {
+    const client = yield* LinkCatalogDurableObjectClient
+
+    return LinkCatalog.of({
+      createAlias: (input) =>
+        LinkCatalogRpcClient.createAlias(input).pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+
+      retargetAlias: (input) =>
+        LinkCatalogRpcClient.retargetAlias(input).pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+
+      getLink: (slug) =>
+        LinkCatalogRpcClient.getLink({ slug }).pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+
+      health: LinkCatalogRpcClient.health.pipe(
+        Effect.provideService(LinkCatalogDurableObjectClient, client),
+      ),
+    })
+  }),
+)
+```
+
+### Callstack
+
+```ts
+OperatorHandlers
+  -> yield* LinkCatalog
+  -> catalog.createAlias(...)
+  -> LinkCatalog.layerDurableObject
+  -> Durable Object fetch
+  -> Effect RPC server
+  -> LinkCatalogDurableObject runtime
+```
+
+---
+
+## 2. Deepen Alias mutation with specific compensation combinators
+
+Instead of:
+
+```ts
+rollbackAliasMutation(mutation)
+```
+
+Prefer specific Store combinators:
+
+```ts
+export class LinkCatalogStore extends Context.Service<LinkCatalogStore, {
+  insertAlias(input: InsertAliasInput): Effect<
+    InsertAliasResult,
+    SlugConflictError | LinkCatalogStoreWriteError
+  >
+
+  updateAliasDestination(input: UpdateAliasDestinationInput): Effect<
+    UpdateAliasDestinationResult,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogStoreWriteError
+  >
+
+  deleteAlias(slug: LinkSlug): Effect<void, LinkCatalogStoreWriteError>
+
+  restoreAliasSnapshot(snapshot: AliasLink): Effect<void, LinkCatalogStoreWriteError>
+
+  getLink(slug: LinkSlug): Effect<Option<Link>, LinkCatalogStoreReadError>
+}>()("link-manager/LinkCatalogStore") {}
+```
+
+### Mutation result carries explicit compensation
+
+```ts
+type InsertAliasResult =
+  | {
+      outcome: "inserted"
+      alias: AliasLink
+      compensate: "delete_inserted_alias"
+    }
+  | {
+      outcome: "unchanged"
+      alias: AliasLink
+    }
+
+type UpdateAliasDestinationResult =
+  | {
+      outcome: "updated"
+      previous: AliasLink
+      alias: AliasLink
+      compensate: "restore_previous_alias"
+    }
+  | {
+      outcome: "unchanged"
+      alias: AliasLink
+    }
+```
+
+### Deep mutation module using services
+
+```ts
+export class LinkCatalogMutations extends Context.Service<LinkCatalogMutations, {
+  createAlias(input: CreateAliasInput): Effect<
+    { outcome: "created" | "unchanged"; alias: AliasLink },
+    SlugConflictError | AliasMutationError
+  >
+
+  retargetAlias(input: RetargetAliasInput): Effect<
+    { outcome: "retargeted" | "unchanged"; alias: AliasLink },
+    LinkNotFoundError | AliasRequiredError | AliasMutationError
+  >
+}>()("link-manager/LinkCatalogMutations") {
+  static readonly layer = Layer.effect(
+    LinkCatalogMutations,
+    Effect.gen(function* () {
+      const lock = yield* Semaphore.make(1)
+
+      return LinkCatalogMutations.of({
+        createAlias: (input) =>
+          lock.withPermits(1)(createAliasWorkflow(input)),
+
+        retargetAlias: (input) =>
+          lock.withPermits(1)(retargetAliasWorkflow(input)),
+      })
+    }),
+  )
+}
+```
+
+### Workflows use `yield* Service`
+
+```ts
+const createAliasWorkflow = Effect.fn("createAliasWorkflow")(function* (
+  input: CreateAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const result = yield* store.insertAlias(input)
+
+  if (result.outcome === "unchanged") {
+    return { outcome: "unchanged" as const, alias: result.alias }
+  }
+
+  yield* index.putDestination(result.alias.slug, result.alias.destination).pipe(
+    Effect.catch((cause) =>
+      store.deleteAlias(result.alias.slug).pipe(
+        Effect.andThen(
+          Effect.fail(new AliasMutationError({
+            operation: "create_alias",
+            slug: result.alias.slug,
+            destination: result.alias.destination,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+
+  return { outcome: "created" as const, alias: result.alias }
+})
+
+const retargetAliasWorkflow = Effect.fn("retargetAliasWorkflow")(function* (
+  input: RetargetAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const result = yield* store.updateAliasDestination(input)
+
+  if (result.outcome === "unchanged") {
+    return { outcome: "unchanged" as const, alias: result.alias }
+  }
+
+  yield* index.putDestination(result.alias.slug, result.alias.destination).pipe(
+    Effect.catch((cause) =>
+      store.restoreAliasSnapshot(result.previous).pipe(
+        Effect.andThen(
+          Effect.fail(new AliasMutationError({
+            operation: "retarget_alias",
+            slug: result.alias.slug,
+            destination: result.alias.destination,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+
+  return { outcome: "retargeted" as const, alias: result.alias }
+})
+```
+
+### Callstack
+
+```ts
+Durable Object RPC
+  -> LinkCatalogMutations.createAlias
+    -> yield* LinkCatalogStore
+      -> insertAlias
+    -> yield* PublicRedirectIndexService
+      -> putDestination
+    -> on failure:
+      -> deleteAlias
+```
+
+```ts
+Durable Object RPC
+  -> LinkCatalogMutations.retargetAlias
+    -> yield* LinkCatalogStore
+      -> updateAliasDestination
+    -> yield* PublicRedirectIndexService
+      -> putDestination
+    -> on failure:
+      -> restoreAliasSnapshot
+```
+
+---
+
+## 3. SQL executor module
+
+### SQL executor seam
+
+```ts
+export class LinkCatalogSqlExecutor extends Context.Service<LinkCatalogSqlExecutor, {
+  all<Row>(statement: LinkCatalogSqlStatement<Row>): Effect<ReadonlyArray<Row>, LinkCatalogSqlError>
+  one<Row>(statement: LinkCatalogSqlStatement<Row>): Effect<Option<Row>, LinkCatalogSqlError>
+  run(statement: LinkCatalogSqlStatement<never>): Effect<void, LinkCatalogSqlError>
+
+  transaction<A, E, R>(
+    effect: Effect<A, E, R>,
+  ): Effect<A, E | LinkCatalogSqlError, Exclude<R, LinkCatalogSqlExecutor>>
+}>()("link-manager/LinkCatalogSqlExecutor") {}
+```
+
+### SQL statement module
+
+```ts
+type LinkCatalogSqlStatement<Row> = {
+  sql: string
+  bindings: ReadonlyArray<SqlStorageValue>
+  decode?: Schema.Schema<Row>
+}
+
+const SelectAliasBySlug = (slug: LinkSlug): LinkCatalogSqlStatement<SelectedAliasLinkRow> => ({
+  sql: `SELECT ... WHERE links.slug = ?`,
+  bindings: [slug],
+  decode: SelectedAliasLinkRow,
+})
+
+const InsertAlias = (input: InsertAliasRowInput): LinkCatalogSqlStatement<never> => ({
+  sql: `INSERT INTO links (...) VALUES (...)`,
+  bindings: [
+    input.slug,
+    input.destination,
+    input.createdAt,
+    input.updatedAt,
+    input.createdByOperatorId,
+    input.updatedByOperatorId,
+  ],
+})
+```
+
+### Store implementation uses `yield* LinkCatalogSqlExecutor`
+
+```ts
+const selectAliasLink = Effect.fn("selectAliasLink")(function* (slug: LinkSlug) {
+  const sql = yield* LinkCatalogSqlExecutor
+
+  const row = yield* sql.one(SelectAliasBySlug(slug))
+  return Option.map(row, aliasLinkFromRow)
+})
+
+const insertAlias = Effect.fn("insertAlias")(function* (
+  input: InsertAliasInput,
+) {
+  const sql = yield* LinkCatalogSqlExecutor
+
+  return yield* sql.transaction(
+    Effect.gen(function* () {
+      const existing = yield* selectAliasLink(input.slug)
+
+      if (Option.isSome(existing)) {
+        if (existing.value.destination === input.destination) {
+          return {
+            outcome: "unchanged" as const,
+            alias: existing.value,
+          }
+        }
+
+        return yield* new SlugConflictError(input.slug)
+      }
+
+      const operatorId = yield* insertOrSelectOperator(input.operator)
+      const now = yield* nowIso
+
+      yield* sql.run(InsertAlias({
+        slug: input.slug,
+        destination: input.destination,
+        createdAt: now,
+        updatedAt: now,
+        createdByOperatorId: operatorId,
+        updatedByOperatorId: operatorId,
+      }))
+
+      const alias = yield* selectRequiredAliasLink(input.slug)
+
+      return {
+        outcome: "inserted" as const,
+        alias,
+        compensate: "delete_inserted_alias" as const,
+      }
+    }),
+  )
+})
+```
+
+### Store layer
+
+```ts
+export class LinkCatalogStore extends Context.Service<LinkCatalogStore, LinkCatalogStoreShape>()(
+  "link-manager/LinkCatalogStore",
+) {
+  static readonly layer = Layer.succeed(LinkCatalogStore, LinkCatalogStore.of({
+    insertAlias,
+    updateAliasDestination,
+    deleteAlias,
+    restoreAliasSnapshot,
+    getLink,
+  }))
+}
+```
+
+### Adapters
+
+```ts
+export const LinkCatalogSqlExecutorDurableObjectLayer = Layer.effect(
+  LinkCatalogSqlExecutor,
+  Effect.gen(function* () {
+    const state = yield* DurableObjectState
+    return makeDurableObjectSqlExecutor(state.storage.sql)
+  }),
+)
+
+export const LinkCatalogSqlExecutorTestLayer = Layer.effect(
+  LinkCatalogSqlExecutor,
+  makeSqliteTestExecutor,
+)
+```
+
+---
+
+## 4. Delete duplicate in-memory Link Catalog implementations
+
+### One Link Catalog seam
+
+```ts
+export class LinkCatalog extends Context.Service<LinkCatalog, {
+  createAlias(input: RawCreateAliasInput): Effect<AliasResult, LinkCatalogError>
+  retargetAlias(input: RawRetargetAliasInput): Effect<AliasResult, LinkCatalogError>
+  getLink(slug: string): Effect<Option<Link>, LinkLookupError>
+  health: Effect<{ status: "available" }>
+}>()("link-manager/LinkCatalog") {}
+```
+
+### One domain implementation
+
+```ts
+export const LinkCatalogLive = Layer.effect(
+  LinkCatalog,
+  Effect.gen(function* () {
+    const mutations = yield* LinkCatalogMutations
+    const store = yield* LinkCatalogStore
+
+    return LinkCatalog.of({
+      createAlias: (input) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(input.slug)
+          const destination = yield* parseDestinationUrl(input.destination)
+
+          return yield* mutations.createAlias({
+            slug,
+            destination,
+            operator: input.operator,
+          })
+        }),
+
+      retargetAlias: (input) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(input.slug)
+          const destination = yield* parseDestinationUrl(input.destination)
+
+          return yield* mutations.retargetAlias({
+            slug,
+            destination,
+            operator: input.operator,
+          })
+        }),
+
+      getLink: (slugInput) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(slugInput)
+          return yield* store.getLink(slug)
+        }),
+
+      health: Effect.succeed({ status: "available" as const }),
+    })
+  }),
+)
+```
+
+### Durable Object composition
+
+```ts
+const LinkCatalogDurableObjectLive = LinkCatalogLive.pipe(
+  Layer.provide(LinkCatalogMutations.layer),
+  Layer.provide(LinkCatalogStore.layer),
+  Layer.provide(LinkCatalogSqlExecutorDurableObjectLayer),
+  Layer.provide(PublicRedirectIndexService.layer),
+)
+```
+
+### Memory composition
+
+```ts
+const LinkCatalogMemoryLive = LinkCatalogLive.pipe(
+  Layer.provide(LinkCatalogMutations.layer),
+  Layer.provide(LinkCatalogStoreMemory.layer),
+  Layer.provide(PublicRedirectIndexService.layerMemory),
+)
+```
+
+### Worker composition
+
+```ts
+// production
+const WorkerLive = HttpHandlers.pipe(
+  Layer.provide(LinkCatalog.layerDurableObject),
+)
+
+// tests
+const TestLive = HttpHandlers.pipe(
+  Layer.provide(LinkCatalogMemoryLive),
+)
+```
+
+### Deletion target
+
+Delete these as separate rule implementations:
+
+```ts
+makeLinkCatalogLive
+makeInMemoryServicesContext // at least its duplicated Link Catalog rules
+```
+
+Replace with:
+
+```ts
+makeTestServicesContext({
+  linkCatalogLayer: LinkCatalogMemoryLive,
+  accessLayer,
+  nowLayer,
+})
+```
+
+This keeps memory as an adapter and moves behavior behind one deep Link Catalog implementation.
+
+########## ASSISTANT entry 2301 (8635 chars) ##########
+Agreed. Revised model: **no mutation/outcome type**, no generic compensation object, no snapshot vocabulary.
+
+---
+
+## 1. Durable Object adapter without per-method `provideService`
+
+Use an intermediate RPC client module whose implementation closes over the Durable Object client once.
+
+```ts
+export class LinkCatalogRpc extends Context.Service<LinkCatalogRpc, {
+  createAlias(input: CreateAliasInput): Effect<AliasLink, LinkCatalogRpcError>
+  retargetAlias(input: RetargetAliasInput): Effect<AliasLink, LinkCatalogRpcError>
+  getLink(slug: LinkSlug): Effect<Option<Link>, LinkCatalogRpcError>
+  health: Effect<{ status: "available" }, LinkCatalogRpcError>
+}>()("link-manager/LinkCatalogRpc") {
+  static readonly layer = Layer.effect(
+    LinkCatalogRpc,
+    Effect.gen(function* () {
+      const doClient = yield* LinkCatalogDurableObjectClient
+
+      return LinkCatalogRpc.of({
+        createAlias: (input) => rpcFetch(doClient, "createAlias", input),
+        retargetAlias: (input) => rpcFetch(doClient, "retargetAlias", input),
+        getLink: (slug) => rpcFetch(doClient, "getLink", { slug }),
+        health: rpcFetch(doClient, "health", {}),
+      })
+    }),
+  )
+}
+```
+
+Then the application-facing Link Catalog adapter is tiny:
+
+```ts
+export const LinkCatalogDurableObjectLayer = Layer.effect(
+  LinkCatalog,
+  Effect.gen(function* () {
+    const rpc = yield* LinkCatalogRpc
+
+    return LinkCatalog.of({
+      createAlias: rpc.createAlias,
+      retargetAlias: rpc.retargetAlias,
+      getLink: (slugInput) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(slugInput)
+          return yield* rpc.getLink(slug)
+        }),
+      health: rpc.health,
+    })
+  }),
+).pipe(
+  Layer.provide(LinkCatalogRpc.layer),
+)
+```
+
+Callstack:
+
+```ts
+OperatorHandlers
+  -> yield* LinkCatalog
+  -> catalog.createAlias(...)
+  -> LinkCatalogRpc
+  -> Durable Object fetch
+  -> Effect RPC handler inside Durable Object
+```
+
+---
+
+## 2. Drop mutation/outcome model; use normal CRUD Store operations
+
+Store interface becomes boring:
+
+```ts
+export class LinkCatalogStore extends Context.Service<LinkCatalogStore, {
+  insertAlias(input: InsertAliasInput): Effect<
+    AliasLink,
+    SlugConflictError | LinkCatalogStoreWriteError
+  >
+
+  updateAliasDestination(input: UpdateAliasDestinationInput): Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogStoreWriteError
+  >
+
+  deleteAlias(slug: LinkSlug): Effect<void, LinkCatalogStoreWriteError>
+
+  replaceAlias(alias: AliasLink): Effect<void, LinkCatalogStoreWriteError>
+
+  getLink(slug: LinkSlug): Effect<Option<Link>, LinkCatalogStoreReadError>
+}>()("link-manager/LinkCatalogStore") {}
+```
+
+`replaceAlias(alias)` is the specific rollback/repair combinator for Retarget. It is CRUD-shaped: replace current row with this full Alias row.
+
+No:
+
+```ts
+AliasMutation
+ChangedAliasMutation
+rollbackAliasMutation(...)
+outcome: "changed" | "unchanged"
+compensate: ...
+snapshot
+```
+
+---
+
+## 3. Caller orchestrates compensation explicitly
+
+```ts
+export class LinkCatalogWrites extends Context.Service<LinkCatalogWrites, {
+  createAlias(input: CreateAliasInput): Effect<
+    AliasLink,
+    SlugConflictError | LinkCatalogWriteError
+  >
+
+  retargetAlias(input: RetargetAliasInput): Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogWriteError
+  >
+}>()("link-manager/LinkCatalogWrites") {
+  static readonly layer = Layer.effect(
+    LinkCatalogWrites,
+    Effect.gen(function* () {
+      const lock = yield* Semaphore.make(1)
+
+      return LinkCatalogWrites.of({
+        createAlias: (input) => lock.withPermits(1)(createAliasWrite(input)),
+        retargetAlias: (input) => lock.withPermits(1)(retargetAliasWrite(input)),
+      })
+    }),
+  )
+}
+```
+
+### Create Alias
+
+```ts
+const createAliasWrite = Effect.fn("createAliasWrite")(function* (
+  input: CreateAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const alias = yield* store.insertAlias(input)
+
+  return yield* index.putDestination(alias.slug, alias.destination).pipe(
+    Effect.as(alias),
+    Effect.catch((cause) =>
+      store.deleteAlias(alias.slug).pipe(
+        Effect.andThen(
+          Effect.fail(new LinkCatalogWriteError({
+            operation: "create_alias",
+            slug: alias.slug,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+})
+```
+
+### Retarget Alias
+
+```ts
+const retargetAliasWrite = Effect.fn("retargetAliasWrite")(function* (
+  input: RetargetAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const previous = yield* store.getLink(input.slug).pipe(
+    Effect.flatMap(Option.match({
+      onNone: () => new LinkNotFoundError(input.slug),
+      onSome: Effect.succeed,
+    })),
+    Effect.flatMap((link) =>
+      link.kind === "alias"
+        ? Effect.succeed(link)
+        : new AliasRequiredError(input.slug),
+    ),
+  )
+
+  const alias = yield* store.updateAliasDestination(input)
+
+  return yield* index.putDestination(alias.slug, alias.destination).pipe(
+    Effect.as(alias),
+    Effect.catch((cause) =>
+      store.replaceAlias(previous).pipe(
+        Effect.andThen(
+          Effect.fail(new LinkCatalogWriteError({
+            operation: "retarget_alias",
+            slug: alias.slug,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+})
+```
+
+Callstack:
+
+```ts
+LinkCatalogWrites.createAlias
+  -> store.insertAlias
+  -> index.putDestination
+  -> on index failure: store.deleteAlias
+```
+
+```ts
+LinkCatalogWrites.retargetAlias
+  -> store.getLink        // capture previous Alias
+  -> store.updateAliasDestination
+  -> index.putDestination
+  -> on index failure: store.replaceAlias(previous)
+```
+
+---
+
+## 4. SQL executor uses `yield* Service`
+
+```ts
+export class LinkCatalogSqlExecutor extends Context.Service<LinkCatalogSqlExecutor, {
+  all<Row>(statement: LinkCatalogSql<Row>): Effect<ReadonlyArray<Row>, LinkCatalogSqlError>
+  one<Row>(statement: LinkCatalogSql<Row>): Effect<Option<Row>, LinkCatalogSqlError>
+  run(statement: LinkCatalogSql<never>): Effect<void, LinkCatalogSqlError>
+
+  transaction<A, E, R>(
+    effect: Effect<A, E, R>,
+  ): Effect<A, E | LinkCatalogSqlError, Exclude<R, LinkCatalogSqlExecutor>>
+}>()("link-manager/LinkCatalogSqlExecutor") {}
+```
+
+Statement shape:
+
+```ts
+type LinkCatalogSql<Row> = {
+  sql: string
+  bindings: ReadonlyArray<SqlStorageValue>
+  decode?: Schema.Schema<Row>
+}
+```
+
+Store functions:
+
+```ts
+const selectAlias = Effect.fn("selectAlias")(function* (slug: LinkSlug) {
+  const sql = yield* LinkCatalogSqlExecutor
+  const row = yield* sql.one(SelectAliasBySlug(slug))
+  return Option.map(row, aliasLinkFromRow)
+})
+
+const insertAlias = Effect.fn("insertAlias")(function* (
+  input: InsertAliasInput,
+) {
+  const sql = yield* LinkCatalogSqlExecutor
+
+  return yield* sql.transaction(
+    Effect.gen(function* () {
+      const existing = yield* selectAlias(input.slug)
+
+      if (Option.isSome(existing)) {
+        return yield* new SlugConflictError(input.slug)
+      }
+
+      const operatorId = yield* insertOrSelectOperator(input.operator)
+      const now = yield* nowIso
+
+      yield* sql.run(InsertAliasRow({
+        slug: input.slug,
+        destination: input.destination,
+        createdAt: now,
+        updatedAt: now,
+        createdByOperatorId: operatorId,
+        updatedByOperatorId: operatorId,
+      }))
+
+      return yield* selectRequiredAlias(input.slug)
+    }),
+  )
+})
+```
+
+Layer:
+
+```ts
+export const LinkCatalogStoreLayer = Layer.succeed(
+  LinkCatalogStore,
+  LinkCatalogStore.of({
+    insertAlias,
+    updateAliasDestination,
+    deleteAlias,
+    replaceAlias,
+    getLink,
+  }),
+)
+```
+
+---
+
+## 5. Final composition shape
+
+### Durable Object
+
+```ts
+const LinkCatalogDurableObjectLive = LinkCatalogLive.pipe(
+  Layer.provide(LinkCatalogWrites.layer),
+  Layer.provide(LinkCatalogStoreLayer),
+  Layer.provide(LinkCatalogSqlExecutorDurableObjectLayer),
+  Layer.provide(PublicRedirectIndexService.layer),
+)
+```
+
+### Memory tests
+
+```ts
+const LinkCatalogMemoryLive = LinkCatalogLive.pipe(
+  Layer.provide(LinkCatalogWrites.layer),
+  Layer.provide(LinkCatalogStoreMemoryLayer),
+  Layer.provide(PublicRedirectIndexService.layerMemory),
+)
+```
+
+### Production Worker
+
+```ts
+const WorkerLive = HttpHandlers.pipe(
+  Layer.provide(LinkCatalogDurableObjectLayer),
+)
+```
+
+This keeps the deep module as:
+
+```ts
+HTTP handlers
+  -> LinkCatalog
+  -> production adapter: Durable Object RPC
+  -> Durable Object implementation
+  -> LinkCatalogWrites
+  -> LinkCatalogStore
+  -> LinkCatalogSqlExecutor
+```
+
+And memory stays one adapter at the same seam.
+
+########## ASSISTANT entry 2303 (1341 chars) ##########
+Agreed — drop the extra RPC module. Keep the direct Durable Object adapter and use `provideService`.
+
+```ts
+export const LinkCatalogDurableObjectLayer = Layer.effect(
+  LinkCatalog,
+  Effect.gen(function* () {
+    const client = yield* LinkCatalogDurableObjectClient
+
+    return LinkCatalog.of({
+      createAlias: (input) =>
+        LinkCatalogRpcClient.createAlias(input).pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+
+      retargetAlias: (input) =>
+        LinkCatalogRpcClient.retargetAlias(input).pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+
+      getLink: (slugInput) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(slugInput)
+
+          return yield* LinkCatalogRpcClient.getLink({ slug }).pipe(
+            Effect.provideService(LinkCatalogDurableObjectClient, client),
+          )
+        }),
+
+      health: LinkCatalogRpcClient.health.pipe(
+        Effect.provideService(LinkCatalogDurableObjectClient, client),
+      ),
+    })
+  }),
+)
+```
+
+So final shape stays:
+
+```ts
+HTTP handlers
+  -> LinkCatalog
+  -> LinkCatalogDurableObjectLayer
+  -> LinkCatalogRpcClient.* with provideService(client)
+  -> Durable Object fetch
+  -> LinkCatalogLive inside Durable Object
+```
+
+No intermediate `LinkCatalogRpc` service.
+
+########## ASSISTANT entry 2305 (1809 chars) ##########
+Yes — better. Keep `provideService`, but hide it in method factories.
+
+```ts
+const makeCreateAlias =
+  (client: LinkCatalogDurableObjectClient.Service) =>
+  (input: CreateAliasInput) =>
+    LinkCatalogRpcClient.createAlias(input).pipe(
+      Effect.provideService(LinkCatalogDurableObjectClient, client),
+    )
+
+const makeRetargetAlias =
+  (client: LinkCatalogDurableObjectClient.Service) =>
+  (input: RetargetAliasInput) =>
+    LinkCatalogRpcClient.retargetAlias(input).pipe(
+      Effect.provideService(LinkCatalogDurableObjectClient, client),
+    )
+
+const makeGetLink =
+  (client: LinkCatalogDurableObjectClient.Service) =>
+  (slugInput: string) =>
+    Effect.gen(function* () {
+      const slug = yield* parseLinkSlug(slugInput)
+
+      return yield* LinkCatalogRpcClient.getLink({ slug }).pipe(
+        Effect.provideService(LinkCatalogDurableObjectClient, client),
+      )
+    })
+
+const makeHealth = (client: LinkCatalogDurableObjectClient.Service) =>
+  LinkCatalogRpcClient.health.pipe(
+    Effect.provideService(LinkCatalogDurableObjectClient, client),
+  )
+```
+
+Layer:
+
+```ts
+export const LinkCatalogDurableObjectLayer = Layer.effect(
+  LinkCatalog,
+  Effect.gen(function* () {
+    const client = yield* LinkCatalogDurableObjectClient
+
+    return LinkCatalog.of({
+      createAlias: makeCreateAlias(client),
+      retargetAlias: makeRetargetAlias(client),
+      getLink: makeGetLink(client),
+      health: makeHealth(client),
+    })
+  }),
+)
+```
+
+This keeps the layer readable:
+
+```ts
+const client = yield* LinkCatalogDurableObjectClient
+
+return LinkCatalog.of({
+  createAlias: makeCreateAlias(client),
+  retargetAlias: makeRetargetAlias(client),
+  getLink: makeGetLink(client),
+  health: makeHealth(client),
+})
+```
+
+And keeps each method independently testable without introducing another service seam.
+
+########## ASSISTANT entry 2307 (12979 chars) ##########
+## Tech spec: deepen Link Catalog modules
+
+Goal: make **Link Catalog** a deep module with one small interface, one production Durable Object adapter, one memory adapter, and CRUD-shaped Store operations. Drop the current `AliasMutation` / `outcome` model.
+
+---
+
+# 1. Application-facing Link Catalog seam
+
+This is the interface HTTP handlers use.
+
+```ts
+export class LinkCatalog extends Context.Service<LinkCatalog, {
+  createAlias(input: {
+    slug: string
+    destination: string
+    operator: OperatorIdentity
+  }): Effect.Effect<AliasLink, LinkCatalogCreateError>
+
+  retargetAlias(input: {
+    slug: string
+    destination: string
+    operator: OperatorIdentity
+  }): Effect.Effect<AliasLink, LinkCatalogRetargetError>
+
+  getLink(slug: string): Effect.Effect<
+    Option.Option<Link>,
+    InvalidSlugError | ReservedSlugError | LinkCatalogReadError
+  >
+
+  health: Effect.Effect<{ status: "available" }>
+}>()("link-manager/LinkCatalog") {}
+```
+
+Handlers stay boring:
+
+```ts
+const catalog = yield* LinkCatalog
+const alias = yield* catalog.createAlias({
+  slug: params.slug,
+  destination,
+  operator,
+})
+```
+
+---
+
+# 2. Worker production adapter: Durable Object over Effect RPC fetch
+
+No extra wrapper module. Use `provideService` directly.
+
+```ts
+export class LinkCatalogDurableObjectClient
+  extends Context.Service<LinkCatalogDurableObjectClient, {
+    fetch(request: Request): Effect.Effect<Response, LinkCatalogRpcError>
+  }>()("link-manager/LinkCatalogDurableObjectClient") {}
+```
+
+```ts
+export const LinkCatalogDurableObjectLayer = Layer.effect(
+  LinkCatalog,
+  Effect.gen(function* () {
+    const client = yield* LinkCatalogDurableObjectClient
+
+    return LinkCatalog.of({
+      createAlias: (input) =>
+        LinkCatalogRpcClient.createAlias(input).pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+
+      retargetAlias: (input) =>
+        LinkCatalogRpcClient.retargetAlias(input).pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+
+      getLink: (slugInput) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(slugInput)
+          return yield* LinkCatalogRpcClient.getLink({ slug }).pipe(
+            Effect.provideService(LinkCatalogDurableObjectClient, client),
+          )
+        }),
+
+      health: LinkCatalogRpcClient.health.pipe(
+        Effect.provideService(LinkCatalogDurableObjectClient, client),
+      ),
+    })
+  }),
+)
+```
+
+Worker callstack:
+
+```ts
+OperatorHandlers
+  -> LinkCatalog
+  -> LinkCatalogDurableObjectLayer
+  -> Effect RPC over Durable Object fetch
+  -> LinkCatalog Durable Object
+```
+
+This aligns the deployed seam with ADR-0001.
+
+---
+
+# 3. Durable Object implementation
+
+The Durable Object hosts the real Link Catalog implementation.
+
+```ts
+const makeLinkCatalogDurableObject = Effect.gen(function* () {
+  const catalog = yield* LinkCatalog
+
+  return {
+    createAlias: catalog.createAlias,
+    retargetAlias: catalog.retargetAlias,
+    getLink: catalog.getLink,
+    health: catalog.health,
+
+    // Effect RPC fetch surface owns public DO traffic.
+    fetch: LinkCatalogRpcServer.fetch,
+  }
+})
+```
+
+Composition:
+
+```ts
+const LinkCatalogDurableObjectLive = LinkCatalogLive.pipe(
+  Layer.provide(LinkCatalogWrites.layer),
+  Layer.provide(LinkCatalogStore.layer),
+  Layer.provide(LinkCatalogSqlExecutorDurableObjectLayer),
+  Layer.provide(PublicRedirectIndexService.layer),
+)
+```
+
+---
+
+# 4. LinkCatalogLive: shared domain implementation
+
+This module parses external inputs, then delegates to write/read modules.
+
+```ts
+export const LinkCatalogLive = Layer.effect(
+  LinkCatalog,
+  Effect.gen(function* () {
+    const writes = yield* LinkCatalogWrites
+    const store = yield* LinkCatalogStore
+
+    return LinkCatalog.of({
+      createAlias: (input) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(input.slug)
+          const destination = yield* parseDestinationUrl(input.destination)
+
+          return yield* writes.createAlias({
+            slug,
+            destination,
+            operator: input.operator,
+          })
+        }),
+
+      retargetAlias: (input) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(input.slug)
+          const destination = yield* parseDestinationUrl(input.destination)
+
+          return yield* writes.retargetAlias({
+            slug,
+            destination,
+            operator: input.operator,
+          })
+        }),
+
+      getLink: (slugInput) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(slugInput)
+          return yield* store.getLink(slug)
+        }),
+
+      health: Effect.succeed({ status: "available" as const }),
+    })
+  }),
+)
+```
+
+---
+
+# 5. Link Catalog writes: orchestration module
+
+No mutation/outcome model. The write module performs normal CRUD calls and explicit compensation.
+
+```ts
+export class LinkCatalogWrites extends Context.Service<LinkCatalogWrites, {
+  createAlias(input: CreateAliasInput): Effect.Effect<
+    AliasLink,
+    SlugConflictError | LinkCatalogWriteError
+  >
+
+  retargetAlias(input: RetargetAliasInput): Effect.Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogWriteError
+  >
+}>()("link-manager/LinkCatalogWrites") {
+  static readonly layer = Layer.effect(
+    LinkCatalogWrites,
+    Effect.gen(function* () {
+      const lock = yield* Semaphore.make(1)
+
+      return LinkCatalogWrites.of({
+        createAlias: (input) => lock.withPermits(1)(createAliasWrite(input)),
+        retargetAlias: (input) => lock.withPermits(1)(retargetAliasWrite(input)),
+      })
+    }),
+  )
+}
+```
+
+## Create Alias
+
+```ts
+const createAliasWrite = Effect.fn("createAliasWrite")(function* (
+  input: CreateAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const alias = yield* store.insertAlias(input)
+
+  return yield* index.putDestination(alias.slug, alias.destination).pipe(
+    Effect.as(alias),
+    Effect.catch((cause) =>
+      store.deleteAlias(alias.slug).pipe(
+        Effect.andThen(
+          Effect.fail(new LinkCatalogWriteError({
+            operation: "create_alias",
+            slug: alias.slug,
+            destination: alias.destination,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+})
+```
+
+## Retarget Alias
+
+```ts
+const retargetAliasWrite = Effect.fn("retargetAliasWrite")(function* (
+  input: RetargetAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const previous = yield* store.getAlias(input.slug)
+
+  const alias = yield* store.updateAliasDestination(input)
+
+  return yield* index.putDestination(alias.slug, alias.destination).pipe(
+    Effect.as(alias),
+    Effect.catch((cause) =>
+      store.replaceAlias(previous).pipe(
+        Effect.andThen(
+          Effect.fail(new LinkCatalogWriteError({
+            operation: "retarget_alias",
+            slug: alias.slug,
+            destination: alias.destination,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+})
+```
+
+Callstacks:
+
+```ts
+createAlias
+  -> store.insertAlias
+  -> index.putDestination
+  -> on failure: store.deleteAlias
+```
+
+```ts
+retargetAlias
+  -> store.getAlias
+  -> store.updateAliasDestination
+  -> index.putDestination
+  -> on failure: store.replaceAlias(previous)
+```
+
+---
+
+# 6. LinkCatalogStore: CRUD-shaped persistence seam
+
+The Store interface should not expose mutation semantics.
+
+```ts
+export class LinkCatalogStore extends Context.Service<LinkCatalogStore, {
+  insertAlias(input: InsertAliasInput): Effect.Effect<
+    AliasLink,
+    SlugConflictError | LinkCatalogStoreWriteError
+  >
+
+  updateAliasDestination(input: UpdateAliasDestinationInput): Effect.Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogStoreWriteError
+  >
+
+  deleteAlias(slug: LinkSlug): Effect.Effect<void, LinkCatalogStoreWriteError>
+
+  replaceAlias(alias: AliasLink): Effect.Effect<void, LinkCatalogStoreWriteError>
+
+  getAlias(slug: LinkSlug): Effect.Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogStoreReadError
+  >
+
+  getLink(slug: LinkSlug): Effect.Effect<
+    Option.Option<Link>,
+    LinkCatalogStoreReadError
+  >
+}>()("link-manager/LinkCatalogStore") {}
+```
+
+Delete:
+
+```ts
+AliasMutation
+ChangedAliasMutation
+rollbackAliasMutation(...)
+outcome: "changed" | "unchanged"
+```
+
+Semantics:
+
+```ts
+insertAlias:
+  - no row => insert and return AliasLink
+  - same slug + same destination => return existing AliasLink
+  - same slug + different destination => SlugConflictError
+
+updateAliasDestination:
+  - no row => LinkNotFoundError
+  - non-alias row => AliasRequiredError
+  - same destination => return existing AliasLink
+  - different destination => update and return AliasLink
+```
+
+---
+
+# 7. SQL executor module
+
+Small seam around Durable Object SQLite.
+
+```ts
+export class LinkCatalogSqlExecutor
+  extends Context.Service<LinkCatalogSqlExecutor, {
+    all<Row>(
+      statement: LinkCatalogSql<Row>,
+    ): Effect.Effect<ReadonlyArray<Row>, LinkCatalogSqlError>
+
+    one<Row>(
+      statement: LinkCatalogSql<Row>,
+    ): Effect.Effect<Option.Option<Row>, LinkCatalogSqlError>
+
+    run(
+      statement: LinkCatalogSql<never>,
+    ): Effect.Effect<void, LinkCatalogSqlError>
+
+    transaction<A, E, R>(
+      effect: Effect.Effect<A, E, R>,
+    ): Effect.Effect<A, E | LinkCatalogSqlError, Exclude<R, LinkCatalogSqlExecutor>>
+  }>()("link-manager/LinkCatalogSqlExecutor") {}
+```
+
+Statement type:
+
+```ts
+type LinkCatalogSql<Row> = {
+  sql: string
+  bindings: ReadonlyArray<SqlStorageValue>
+  decode?: Schema.Schema<Row>
+}
+```
+
+Example statements:
+
+```ts
+const SelectAliasBySlug = (slug: LinkSlug): LinkCatalogSql<SelectedAliasLinkRow> => ({
+  sql: `SELECT ... WHERE links.slug = ?`,
+  bindings: [slug],
+  decode: SelectedAliasLinkRow,
+})
+
+const InsertAliasRow = (input: InsertAliasRowInput): LinkCatalogSql<never> => ({
+  sql: `INSERT INTO links (...) VALUES (?, ?, ?, ?, ?, ?)`,
+  bindings: [
+    input.slug,
+    input.destination,
+    input.createdAt,
+    input.updatedAt,
+    input.createdByOperatorId,
+    input.updatedByOperatorId,
+  ],
+})
+```
+
+Store implementation uses `yield* LinkCatalogSqlExecutor`:
+
+```ts
+const selectAlias = Effect.fn("selectAlias")(function* (slug: LinkSlug) {
+  const sql = yield* LinkCatalogSqlExecutor
+  const row = yield* sql.one(SelectAliasBySlug(slug))
+  return Option.map(row, aliasLinkFromRow)
+})
+```
+
+---
+
+# 8. SQL executor adapters
+
+## Durable Object adapter
+
+```ts
+export const LinkCatalogSqlExecutorDurableObjectLayer = Layer.effect(
+  LinkCatalogSqlExecutor,
+  Effect.gen(function* () {
+    const state = yield* DurableObjectState
+
+    return makeDurableObjectSqlExecutor(state.storage.sql, state.storage.transaction)
+  }),
+)
+```
+
+## Test adapter
+
+Prefer a real SQLite/test adapter or a small statement-result adapter. Avoid a fake that parses every SQL string and reimplements constraints.
+
+```ts
+export const LinkCatalogSqlExecutorTestLayer = Layer.effect(
+  LinkCatalogSqlExecutor,
+  makeSqliteTestExecutor,
+)
+```
+
+---
+
+# 9. Memory adapter
+
+Memory should be one adapter at the Link Catalog seam, not a second set of domain rules.
+
+```ts
+const LinkCatalogMemoryLive = LinkCatalogLive.pipe(
+  Layer.provide(LinkCatalogWrites.layer),
+  Layer.provide(LinkCatalogStoreMemory.layer),
+  Layer.provide(PublicRedirectIndexService.layerMemory),
+)
+```
+
+Memory Store satisfies the same CRUD interface:
+
+```ts
+export const LinkCatalogStoreMemory = Layer.effect(
+  LinkCatalogStore,
+  Effect.gen(function* () {
+    const links = yield* Ref.make(new Map<LinkSlug, AliasLink>())
+    const now = yield* LinkManagerNow
+
+    return LinkCatalogStore.of({
+      insertAlias,
+      updateAliasDestination,
+      deleteAlias,
+      replaceAlias,
+      getAlias,
+      getLink,
+    })
+  }),
+)
+```
+
+Delete duplicated rule implementations from:
+
+```ts
+makeLinkCatalogLive
+makeInMemoryServicesContext
+```
+
+Replace with test composition:
+
+```ts
+const TestLive = HttpHandlers.pipe(
+  Layer.provide(LinkCatalogMemoryLive),
+  Layer.provide(testAccessLayer),
+  Layer.provide(testNowLayer),
+)
+```
+
+---
+
+# 10. Final module graph
+
+```ts
+HTTP handlers
+  -> LinkCatalog interface
+    -> production adapter: Durable Object fetch
+      -> LinkCatalogLive
+        -> LinkCatalogWrites
+          -> LinkCatalogStore
+            -> LinkCatalogSqlExecutor
+          -> PublicRedirectIndexService
+```
+
+Tests:
+
+```ts
+HTTP handlers
+  -> LinkCatalog interface
+    -> memory adapter
+      -> LinkCatalogLive
+        -> LinkCatalogWrites
+          -> LinkCatalogStoreMemory
+          -> PublicRedirectIndexService.layerMemory
+```
+
+Main depth wins:
+
+- **LinkCatalog** becomes the stable test surface.
+- **LinkCatalogStore** becomes CRUD-shaped.
+- **LinkCatalogWrites** owns ordering and compensation.
+- **LinkCatalogSqlExecutor** owns SQL execution and transaction mechanics.
+- Durable Object composition becomes the production adapter, not dead infrastructure.
+
+########## ASSISTANT entry 2309 (874 chars) ##########
+Better names, using your domain vocabulary:
+
+1. **`LinkCatalogCommands`** — best fit if this module owns state-changing Link Catalog operations.
+2. **`LinkCatalogOperations`** — broader, but less precise.
+3. **`LinkCatalogWriter`** — okay, but implementation-flavored.
+4. **`LinkCatalogCoordinator`** — good if you want to emphasize Store + Public Redirect Index coordination.
+5. **`LinkCatalogMaintenance`** — too vague unless this grows beyond create/Retarget.
+
+My pick: **`LinkCatalogCommands`**.
+
+It reads naturally:
+
+```ts
+const commands = yield* LinkCatalogCommands
+
+yield* commands.createAlias(...)
+yield* commands.retargetAlias(...)
+```
+
+And the callstack becomes:
+
+```ts
+LinkCatalog
+  -> LinkCatalogCommands
+    -> LinkCatalogStore
+    -> PublicRedirectIndex
+```
+
+It also avoids “writes,” which is storage-oriented, and keeps the module named after Operator intent.
+
+########## ASSISTANT entry 2311 (12401 chars) ##########
+## Tech spec: deepen Link Catalog with `LinkCatalogCoordinator`
+
+Goal: make **Link Catalog** a deep module with:
+- one application-facing `LinkCatalog` interface
+- one production Durable Object adapter
+- one memory adapter
+- CRUD-shaped Store operations
+- `LinkCatalogCoordinator` owning Store + Public Redirect Index ordering
+
+Drop:
+
+```ts
+AliasMutation
+ChangedAliasMutation
+rollbackAliasMutation(...)
+outcome: "changed" | "unchanged"
+```
+
+---
+
+# 1. Application-facing Link Catalog seam
+
+```ts
+export class LinkCatalog extends Context.Service<LinkCatalog, {
+  createAlias(input: {
+    slug: string
+    destination: string
+    operator: OperatorIdentity
+  }): Effect.Effect<AliasLink, LinkCatalogCreateError>
+
+  retargetAlias(input: {
+    slug: string
+    destination: string
+    operator: OperatorIdentity
+  }): Effect.Effect<AliasLink, LinkCatalogRetargetError>
+
+  getLink(slug: string): Effect.Effect<
+    Option.Option<Link>,
+    InvalidSlugError | ReservedSlugError | LinkCatalogReadError
+  >
+
+  health: Effect.Effect<{ status: "available" }>
+}>()("link-manager/LinkCatalog") {}
+```
+
+Handlers only depend on `LinkCatalog`.
+
+---
+
+# 2. Production adapter: Durable Object over Effect RPC fetch
+
+```ts
+export class LinkCatalogDurableObjectClient
+  extends Context.Service<LinkCatalogDurableObjectClient, {
+    fetch(request: Request): Effect.Effect<Response, LinkCatalogRpcError>
+  }>()("link-manager/LinkCatalogDurableObjectClient") {}
+```
+
+```ts
+export const LinkCatalogDurableObjectLayer = Layer.effect(
+  LinkCatalog,
+  Effect.gen(function* () {
+    const client = yield* LinkCatalogDurableObjectClient
+
+    return LinkCatalog.of({
+      createAlias: (input) =>
+        LinkCatalogRpcClient.createAlias(input).pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+
+      retargetAlias: (input) =>
+        LinkCatalogRpcClient.retargetAlias(input).pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+
+      getLink: (slugInput) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(slugInput)
+          return yield* LinkCatalogRpcClient.getLink({ slug }).pipe(
+            Effect.provideService(LinkCatalogDurableObjectClient, client),
+          )
+        }),
+
+      health: LinkCatalogRpcClient.health.pipe(
+        Effect.provideService(LinkCatalogDurableObjectClient, client),
+      ),
+    })
+  }),
+)
+```
+
+Callstack:
+
+```ts
+OperatorHandlers
+  -> LinkCatalog
+  -> LinkCatalogDurableObjectLayer
+  -> Effect RPC over Durable Object fetch
+  -> Link Catalog Durable Object
+```
+
+---
+
+# 3. Durable Object implementation
+
+```ts
+const makeLinkCatalogDurableObject = Effect.gen(function* () {
+  const catalog = yield* LinkCatalog
+
+  return {
+    createAlias: catalog.createAlias,
+    retargetAlias: catalog.retargetAlias,
+    getLink: catalog.getLink,
+    health: catalog.health,
+
+    fetch: LinkCatalogRpcServer.fetch,
+  }
+})
+```
+
+Composition:
+
+```ts
+const LinkCatalogDurableObjectLive = LinkCatalogLive.pipe(
+  Layer.provide(LinkCatalogCoordinator.layer),
+  Layer.provide(LinkCatalogStore.layer),
+  Layer.provide(LinkCatalogSqlExecutorDurableObjectLayer),
+  Layer.provide(PublicRedirectIndexService.layer),
+)
+```
+
+---
+
+# 4. `LinkCatalogLive`: shared domain implementation
+
+`LinkCatalogLive` parses raw HTTP-facing values, then delegates coordination.
+
+```ts
+export const LinkCatalogLive = Layer.effect(
+  LinkCatalog,
+  Effect.gen(function* () {
+    const coordinator = yield* LinkCatalogCoordinator
+    const store = yield* LinkCatalogStore
+
+    return LinkCatalog.of({
+      createAlias: (input) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(input.slug)
+          const destination = yield* parseDestinationUrl(input.destination)
+
+          return yield* coordinator.createAlias({
+            slug,
+            destination,
+            operator: input.operator,
+          })
+        }),
+
+      retargetAlias: (input) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(input.slug)
+          const destination = yield* parseDestinationUrl(input.destination)
+
+          return yield* coordinator.retargetAlias({
+            slug,
+            destination,
+            operator: input.operator,
+          })
+        }),
+
+      getLink: (slugInput) =>
+        Effect.gen(function* () {
+          const slug = yield* parseLinkSlug(slugInput)
+          return yield* store.getLink(slug)
+        }),
+
+      health: Effect.succeed({ status: "available" as const }),
+    })
+  }),
+)
+```
+
+---
+
+# 5. `LinkCatalogCoordinator`
+
+Owns:
+- mutation serialization
+- Store write ordering
+- Public Redirect Index write ordering
+- explicit compensation
+
+```ts
+export class LinkCatalogCoordinator extends Context.Service<LinkCatalogCoordinator, {
+  createAlias(input: CreateAliasInput): Effect.Effect<
+    AliasLink,
+    SlugConflictError | LinkCatalogCoordinationError
+  >
+
+  retargetAlias(input: RetargetAliasInput): Effect.Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogCoordinationError
+  >
+}>()("link-manager/LinkCatalogCoordinator") {
+  static readonly layer = Layer.effect(
+    LinkCatalogCoordinator,
+    Effect.gen(function* () {
+      const lock = yield* Semaphore.make(1)
+
+      return LinkCatalogCoordinator.of({
+        createAlias: (input) => lock.withPermits(1)(createAliasCoordination(input)),
+        retargetAlias: (input) => lock.withPermits(1)(retargetAliasCoordination(input)),
+      })
+    }),
+  )
+}
+```
+
+## Create Alias coordination
+
+```ts
+const createAliasCoordination = Effect.fn("createAliasCoordination")(function* (
+  input: CreateAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const alias = yield* store.insertAlias(input)
+
+  return yield* index.putDestination(alias.slug, alias.destination).pipe(
+    Effect.as(alias),
+    Effect.catch((cause) =>
+      store.deleteAlias(alias.slug).pipe(
+        Effect.andThen(
+          Effect.fail(new LinkCatalogCoordinationError({
+            operation: "create_alias",
+            slug: alias.slug,
+            destination: alias.destination,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+})
+```
+
+## Retarget coordination
+
+```ts
+const retargetAliasCoordination = Effect.fn("retargetAliasCoordination")(function* (
+  input: RetargetAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const previous = yield* store.getAlias(input.slug)
+  const alias = yield* store.updateAliasDestination(input)
+
+  return yield* index.putDestination(alias.slug, alias.destination).pipe(
+    Effect.as(alias),
+    Effect.catch((cause) =>
+      store.replaceAlias(previous).pipe(
+        Effect.andThen(
+          Effect.fail(new LinkCatalogCoordinationError({
+            operation: "retarget_alias",
+            slug: alias.slug,
+            destination: alias.destination,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+})
+```
+
+Callstacks:
+
+```ts
+createAlias
+  -> store.insertAlias
+  -> index.putDestination
+  -> on index failure: store.deleteAlias
+```
+
+```ts
+retargetAlias
+  -> store.getAlias
+  -> store.updateAliasDestination
+  -> index.putDestination
+  -> on index failure: store.replaceAlias(previous)
+```
+
+---
+
+# 6. `LinkCatalogStore`: CRUD-shaped persistence seam
+
+```ts
+export class LinkCatalogStore extends Context.Service<LinkCatalogStore, {
+  insertAlias(input: InsertAliasInput): Effect.Effect<
+    AliasLink,
+    SlugConflictError | LinkCatalogStoreWriteError
+  >
+
+  updateAliasDestination(input: UpdateAliasDestinationInput): Effect.Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogStoreWriteError
+  >
+
+  deleteAlias(slug: LinkSlug): Effect.Effect<void, LinkCatalogStoreWriteError>
+
+  replaceAlias(alias: AliasLink): Effect.Effect<void, LinkCatalogStoreWriteError>
+
+  getAlias(slug: LinkSlug): Effect.Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogStoreReadError
+  >
+
+  getLink(slug: LinkSlug): Effect.Effect<
+    Option.Option<Link>,
+    LinkCatalogStoreReadError
+  >
+}>()("link-manager/LinkCatalogStore") {}
+```
+
+Semantics:
+
+```ts
+insertAlias:
+  no row -> insert and return AliasLink
+  same slug + same destination -> return existing AliasLink
+  same slug + different destination -> SlugConflictError
+
+updateAliasDestination:
+  no row -> LinkNotFoundError
+  non-Alias row -> AliasRequiredError
+  same destination -> return existing AliasLink
+  different destination -> update and return AliasLink
+
+deleteAlias:
+  deletes Alias row by Link Slug
+
+replaceAlias:
+  replaces current Alias row with full AliasLink
+```
+
+---
+
+# 7. SQL executor module
+
+```ts
+export class LinkCatalogSqlExecutor
+  extends Context.Service<LinkCatalogSqlExecutor, {
+    all<Row>(
+      statement: LinkCatalogSql<Row>,
+    ): Effect.Effect<ReadonlyArray<Row>, LinkCatalogSqlError>
+
+    one<Row>(
+      statement: LinkCatalogSql<Row>,
+    ): Effect.Effect<Option.Option<Row>, LinkCatalogSqlError>
+
+    run(
+      statement: LinkCatalogSql<never>,
+    ): Effect.Effect<void, LinkCatalogSqlError>
+
+    transaction<A, E, R>(
+      effect: Effect.Effect<A, E, R>,
+    ): Effect.Effect<A, E | LinkCatalogSqlError, Exclude<R, LinkCatalogSqlExecutor>>
+  }>()("link-manager/LinkCatalogSqlExecutor") {}
+```
+
+Statement shape:
+
+```ts
+type LinkCatalogSql<Row> = {
+  sql: string
+  bindings: ReadonlyArray<SqlStorageValue>
+  decode?: Schema.Schema<Row>
+}
+```
+
+Example:
+
+```ts
+const SelectAliasBySlug = (slug: LinkSlug): LinkCatalogSql<SelectedAliasLinkRow> => ({
+  sql: `SELECT ... WHERE links.slug = ?`,
+  bindings: [slug],
+  decode: SelectedAliasLinkRow,
+})
+```
+
+Store implementation uses the SQL executor service:
+
+```ts
+const selectAlias = Effect.fn("selectAlias")(function* (slug: LinkSlug) {
+  const sql = yield* LinkCatalogSqlExecutor
+  const row = yield* sql.one(SelectAliasBySlug(slug))
+  return Option.map(row, aliasLinkFromRow)
+})
+```
+
+---
+
+# 8. SQL executor adapters
+
+## Durable Object SQLite adapter
+
+```ts
+export const LinkCatalogSqlExecutorDurableObjectLayer = Layer.effect(
+  LinkCatalogSqlExecutor,
+  Effect.gen(function* () {
+    const state = yield* DurableObjectState
+    return makeDurableObjectSqlExecutor(state.storage.sql, state.storage.transaction)
+  }),
+)
+```
+
+## Test adapter
+
+Prefer a real SQLite/test adapter or a statement-result adapter. Avoid reimplementing SQLite by parsing every SQL string.
+
+```ts
+export const LinkCatalogSqlExecutorTestLayer = Layer.effect(
+  LinkCatalogSqlExecutor,
+  makeSqliteTestExecutor,
+)
+```
+
+---
+
+# 9. Memory adapter
+
+Memory is one adapter at the same seam.
+
+```ts
+const LinkCatalogMemoryLive = LinkCatalogLive.pipe(
+  Layer.provide(LinkCatalogCoordinator.layer),
+  Layer.provide(LinkCatalogStoreMemory.layer),
+  Layer.provide(PublicRedirectIndexService.layerMemory),
+)
+```
+
+Memory Store satisfies the same Store interface:
+
+```ts
+export const LinkCatalogStoreMemory = Layer.effect(
+  LinkCatalogStore,
+  Effect.gen(function* () {
+    const links = yield* Ref.make(new Map<LinkSlug, AliasLink>())
+
+    return LinkCatalogStore.of({
+      insertAlias,
+      updateAliasDestination,
+      deleteAlias,
+      replaceAlias,
+      getAlias,
+      getLink,
+    })
+  }),
+)
+```
+
+Delete duplicated Link Catalog rule implementations from:
+
+```ts
+makeLinkCatalogLive
+makeInMemoryServicesContext
+```
+
+Replace with one test composition:
+
+```ts
+const TestLive = HttpHandlers.pipe(
+  Layer.provide(LinkCatalogMemoryLive),
+  Layer.provide(testAccessLayer),
+  Layer.provide(testNowLayer),
+)
+```
+
+---
+
+# 10. Final call graph
+
+Production:
+
+```ts
+HTTP handlers
+  -> LinkCatalog
+    -> LinkCatalogDurableObjectLayer
+      -> Effect RPC over Durable Object fetch
+        -> LinkCatalogLive
+          -> LinkCatalogCoordinator
+            -> LinkCatalogStore
+              -> LinkCatalogSqlExecutor
+            -> PublicRedirectIndexService
+```
+
+Tests:
+
+```ts
+HTTP handlers
+  -> LinkCatalog
+    -> LinkCatalogMemoryLive
+      -> LinkCatalogLive
+        -> LinkCatalogCoordinator
+          -> LinkCatalogStoreMemory
+          -> PublicRedirectIndexService.layerMemory
+```
+
+Depth wins:
+- `LinkCatalog` is the stable test surface.
+- `LinkCatalogCoordinator` owns cross-module ordering.
+- `LinkCatalogStore` is CRUD-shaped.
+- `LinkCatalogSqlExecutor` owns SQL and transaction mechanics.
+- Durable Object integration becomes real production composition.
+
+########## ASSISTANT entry 2313 (2431 chars) ##########
+Already encoded in `AGENTS.md`:
+
+> Use Effect-style layer names on service classes and modules: `layer` is the default production implementation; `layerFromEnv` is for production/dev/test implementations built from environment variables plus Effect config; `layerMemory` is the in-memory test/development implementation.
+
+So in the spec, rename:
+
+```ts
+LinkCatalogLive
+LinkCatalogDurableObjectLive
+LinkCatalogMemoryLive
+TestLive
+```
+
+to:
+
+```ts
+LinkCatalog.layer
+LinkCatalogDurableObject.layer
+LinkCatalog.layerMemory
+testLayer // or linkManagerTestLayer
+```
+
+Example final naming:
+
+```ts
+export class LinkCatalog extends Context.Service<LinkCatalog, LinkCatalogShape>()(
+  "link-manager/LinkCatalog",
+) {
+  static readonly layer = Layer.effect(
+    LinkCatalog,
+    Effect.gen(function* () {
+      const coordinator = yield* LinkCatalogCoordinator
+      const store = yield* LinkCatalogStore
+      // ...
+    }),
+  )
+
+  static readonly layerDurableObject = Layer.effect(
+    LinkCatalog,
+    Effect.gen(function* () {
+      const client = yield* LinkCatalogDurableObjectClient
+      // RPC adapter
+    }),
+  )
+
+  static readonly layerMemory = LinkCatalog.layer.pipe(
+    Layer.provide(LinkCatalogCoordinator.layer),
+    Layer.provide(LinkCatalogStore.layerMemory),
+    Layer.provide(PublicRedirectIndexService.layerMemory),
+  )
+}
+```
+
+Durable Object composition:
+
+```ts
+const linkCatalogDurableObjectLayer = LinkCatalog.layer.pipe(
+  Layer.provide(LinkCatalogCoordinator.layer),
+  Layer.provide(LinkCatalogStore.layer),
+  Layer.provide(LinkCatalogSqlExecutor.layer),
+  Layer.provide(PublicRedirectIndexService.layer),
+)
+```
+
+SQL executor:
+
+```ts
+export class LinkCatalogSqlExecutor extends Context.Service<
+  LinkCatalogSqlExecutor,
+  LinkCatalogSqlExecutorShape
+>()("link-manager/LinkCatalogSqlExecutor") {
+  static readonly layer = Layer.effect(/* Durable Object SQLite */)
+  static readonly layerMemory = Layer.effect(/* test SQLite or memory adapter */)
+}
+```
+
+Store:
+
+```ts
+export class LinkCatalogStore extends Context.Service<LinkCatalogStore, LinkCatalogStoreShape>()(
+  "link-manager/LinkCatalogStore",
+) {
+  static readonly layer = Layer.succeed(/* SQL-backed implementation */)
+  static readonly layerMemory = Layer.effect(/* Ref-backed adapter */)
+}
+```
+
+So: **no `Live` suffix**. Production is always `Service.layer`; alternatives are named by source/purpose: `layerMemory`, `layerFromEnv`, `layerDurableObject`, etc.
+
+########## ASSISTANT entry 2315 (13063 chars) ##########
+## Tech spec: deepen Link Catalog with `LinkCatalogCoordinator`
+
+Naming convention:
+
+```ts
+Service.layer        // default production implementation
+Service.layerMemory  // in-memory test/development adapter
+Service.layerFromEnv // env/config-based adapter when needed
+```
+
+No `Live` suffix.
+
+---
+
+## 1. Application-facing Link Catalog seam
+
+```ts
+export class LinkCatalog extends Context.Service<LinkCatalog, {
+  createAlias(input: {
+    slug: string
+    destination: string
+    operator: OperatorIdentity
+  }): Effect.Effect<AliasLink, LinkCatalogCreateError>
+
+  retargetAlias(input: {
+    slug: string
+    destination: string
+    operator: OperatorIdentity
+  }): Effect.Effect<AliasLink, LinkCatalogRetargetError>
+
+  getLink(slug: string): Effect.Effect<
+    Option.Option<Link>,
+    InvalidSlugError | ReservedSlugError | LinkCatalogReadError
+  >
+
+  health: Effect.Effect<{ status: "available" }>
+}>()("link-manager/LinkCatalog") {
+  static readonly layer = Layer.effect(
+    LinkCatalog,
+    Effect.gen(function* () {
+      const coordinator = yield* LinkCatalogCoordinator
+      const store = yield* LinkCatalogStore
+
+      return LinkCatalog.of({
+        createAlias: (input) =>
+          Effect.gen(function* () {
+            const slug = yield* parseLinkSlug(input.slug)
+            const destination = yield* parseDestinationUrl(input.destination)
+
+            return yield* coordinator.createAlias({
+              slug,
+              destination,
+              operator: input.operator,
+            })
+          }),
+
+        retargetAlias: (input) =>
+          Effect.gen(function* () {
+            const slug = yield* parseLinkSlug(input.slug)
+            const destination = yield* parseDestinationUrl(input.destination)
+
+            return yield* coordinator.retargetAlias({
+              slug,
+              destination,
+              operator: input.operator,
+            })
+          }),
+
+        getLink: (slugInput) =>
+          Effect.gen(function* () {
+            const slug = yield* parseLinkSlug(slugInput)
+            return yield* store.getLink(slug)
+          }),
+
+        health: Effect.succeed({ status: "available" as const }),
+      })
+    }),
+  )
+
+  static readonly layerDurableObject = Layer.effect(
+    LinkCatalog,
+    Effect.gen(function* () {
+      const client = yield* LinkCatalogDurableObjectClient
+
+      return LinkCatalog.of({
+        createAlias: (input) =>
+          LinkCatalogRpcClient.createAlias(input).pipe(
+            Effect.provideService(LinkCatalogDurableObjectClient, client),
+          ),
+
+        retargetAlias: (input) =>
+          LinkCatalogRpcClient.retargetAlias(input).pipe(
+            Effect.provideService(LinkCatalogDurableObjectClient, client),
+          ),
+
+        getLink: (slugInput) =>
+          Effect.gen(function* () {
+            const slug = yield* parseLinkSlug(slugInput)
+            return yield* LinkCatalogRpcClient.getLink({ slug }).pipe(
+              Effect.provideService(LinkCatalogDurableObjectClient, client),
+            )
+          }),
+
+        health: LinkCatalogRpcClient.health.pipe(
+          Effect.provideService(LinkCatalogDurableObjectClient, client),
+        ),
+      })
+    }),
+  )
+
+  static readonly layerMemory = LinkCatalog.layer.pipe(
+    Layer.provide(LinkCatalogCoordinator.layer),
+    Layer.provide(LinkCatalogStore.layerMemory),
+    Layer.provide(PublicRedirectIndexService.layerMemory),
+  )
+}
+```
+
+Handlers only depend on:
+
+```ts
+const catalog = yield* LinkCatalog
+```
+
+---
+
+## 2. Durable Object client seam
+
+```ts
+export class LinkCatalogDurableObjectClient
+  extends Context.Service<LinkCatalogDurableObjectClient, {
+    fetch(request: Request): Effect.Effect<Response, LinkCatalogRpcError>
+  }>()("link-manager/LinkCatalogDurableObjectClient") {
+  static readonly layer = Layer.effect(
+    LinkCatalogDurableObjectClient,
+    Effect.gen(function* () {
+      const namespace = yield* LinkCatalogDurableObjectNamespace
+      const stub = namespace.getByName("global")
+
+      return LinkCatalogDurableObjectClient.of({
+        fetch: (request) =>
+          Effect.tryPromise({
+            try: () => stub.fetch(request),
+            catch: (cause) => new LinkCatalogRpcError({ cause }),
+          }),
+      })
+    }),
+  )
+}
+```
+
+Production Worker composition:
+
+```ts
+const workerLayer = HttpHandlers.layer.pipe(
+  Layer.provide(LinkCatalog.layerDurableObject),
+  Layer.provide(LinkCatalogDurableObjectClient.layer),
+)
+```
+
+Callstack:
+
+```ts
+OperatorHandlers
+  -> LinkCatalog
+  -> LinkCatalog.layerDurableObject
+  -> Effect RPC over Durable Object fetch
+  -> Link Catalog Durable Object
+```
+
+---
+
+## 3. Durable Object implementation
+
+```ts
+const makeLinkCatalogDurableObject = Effect.gen(function* () {
+  const catalog = yield* LinkCatalog
+
+  return {
+    createAlias: catalog.createAlias,
+    retargetAlias: catalog.retargetAlias,
+    getLink: catalog.getLink,
+    health: catalog.health,
+
+    fetch: LinkCatalogRpcServer.fetch,
+  }
+})
+```
+
+Durable Object composition:
+
+```ts
+const linkCatalogDurableObjectLayer = LinkCatalog.layer.pipe(
+  Layer.provide(LinkCatalogCoordinator.layer),
+  Layer.provide(LinkCatalogStore.layer),
+  Layer.provide(LinkCatalogSqlExecutor.layer),
+  Layer.provide(PublicRedirectIndexService.layer),
+)
+```
+
+---
+
+## 4. `LinkCatalogCoordinator`
+
+Owns:
+- mutation serialization
+- Store write ordering
+- Public Redirect Index write ordering
+- explicit compensation
+
+```ts
+export class LinkCatalogCoordinator extends Context.Service<LinkCatalogCoordinator, {
+  createAlias(input: CreateAliasInput): Effect.Effect<
+    AliasLink,
+    SlugConflictError | LinkCatalogCoordinationError
+  >
+
+  retargetAlias(input: RetargetAliasInput): Effect.Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogCoordinationError
+  >
+}>()("link-manager/LinkCatalogCoordinator") {
+  static readonly layer = Layer.effect(
+    LinkCatalogCoordinator,
+    Effect.gen(function* () {
+      const lock = yield* Semaphore.make(1)
+
+      return LinkCatalogCoordinator.of({
+        createAlias: (input) => lock.withPermits(1)(createAliasCoordination(input)),
+        retargetAlias: (input) => lock.withPermits(1)(retargetAliasCoordination(input)),
+      })
+    }),
+  )
+}
+```
+
+### Create Alias coordination
+
+```ts
+const createAliasCoordination = Effect.fn("createAliasCoordination")(function* (
+  input: CreateAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const alias = yield* store.insertAlias(input)
+
+  return yield* index.putDestination(alias.slug, alias.destination).pipe(
+    Effect.as(alias),
+    Effect.catch((cause) =>
+      store.deleteAlias(alias.slug).pipe(
+        Effect.andThen(
+          Effect.fail(new LinkCatalogCoordinationError({
+            operation: "create_alias",
+            slug: alias.slug,
+            destination: alias.destination,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+})
+```
+
+### Retarget coordination
+
+```ts
+const retargetAliasCoordination = Effect.fn("retargetAliasCoordination")(function* (
+  input: RetargetAliasInput,
+) {
+  const store = yield* LinkCatalogStore
+  const index = yield* PublicRedirectIndexService
+
+  const previous = yield* store.getAlias(input.slug)
+  const alias = yield* store.updateAliasDestination(input)
+
+  return yield* index.putDestination(alias.slug, alias.destination).pipe(
+    Effect.as(alias),
+    Effect.catch((cause) =>
+      store.replaceAlias(previous).pipe(
+        Effect.andThen(
+          Effect.fail(new LinkCatalogCoordinationError({
+            operation: "retarget_alias",
+            slug: alias.slug,
+            destination: alias.destination,
+            cause,
+          })),
+        ),
+      ),
+    ),
+  )
+})
+```
+
+---
+
+## 5. `LinkCatalogStore`: CRUD-shaped persistence seam
+
+```ts
+export class LinkCatalogStore extends Context.Service<LinkCatalogStore, {
+  insertAlias(input: InsertAliasInput): Effect.Effect<
+    AliasLink,
+    SlugConflictError | LinkCatalogStoreWriteError
+  >
+
+  updateAliasDestination(input: UpdateAliasDestinationInput): Effect.Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogStoreWriteError
+  >
+
+  deleteAlias(slug: LinkSlug): Effect.Effect<void, LinkCatalogStoreWriteError>
+
+  replaceAlias(alias: AliasLink): Effect.Effect<void, LinkCatalogStoreWriteError>
+
+  getAlias(slug: LinkSlug): Effect.Effect<
+    AliasLink,
+    LinkNotFoundError | AliasRequiredError | LinkCatalogStoreReadError
+  >
+
+  getLink(slug: LinkSlug): Effect.Effect<
+    Option.Option<Link>,
+    LinkCatalogStoreReadError
+  >
+}>()("link-manager/LinkCatalogStore") {
+  static readonly layer = Layer.succeed(
+    LinkCatalogStore,
+    LinkCatalogStore.of({
+      insertAlias,
+      updateAliasDestination,
+      deleteAlias,
+      replaceAlias,
+      getAlias,
+      getLink,
+    }),
+  )
+
+  static readonly layerMemory = Layer.effect(
+    LinkCatalogStore,
+    Effect.gen(function* () {
+      const links = yield* Ref.make(new Map<LinkSlug, AliasLink>())
+
+      return LinkCatalogStore.of({
+        insertAlias: memoryInsertAlias(links),
+        updateAliasDestination: memoryUpdateAliasDestination(links),
+        deleteAlias: memoryDeleteAlias(links),
+        replaceAlias: memoryReplaceAlias(links),
+        getAlias: memoryGetAlias(links),
+        getLink: memoryGetLink(links),
+      })
+    }),
+  )
+}
+```
+
+Delete from current model:
+
+```ts
+AliasMutation
+ChangedAliasMutation
+rollbackAliasMutation(...)
+outcome: "changed" | "unchanged"
+```
+
+Semantics:
+
+```ts
+insertAlias:
+  no row -> insert and return AliasLink
+  same slug + same destination -> return existing AliasLink
+  same slug + different destination -> SlugConflictError
+
+updateAliasDestination:
+  no row -> LinkNotFoundError
+  non-Alias row -> AliasRequiredError
+  same destination -> return existing AliasLink
+  different destination -> update and return AliasLink
+
+deleteAlias:
+  deletes Alias row by Link Slug
+
+replaceAlias:
+  replaces current Alias row with full AliasLink
+```
+
+---
+
+## 6. SQL executor module
+
+```ts
+export class LinkCatalogSqlExecutor
+  extends Context.Service<LinkCatalogSqlExecutor, {
+    all<Row>(
+      statement: LinkCatalogSql<Row>,
+    ): Effect.Effect<ReadonlyArray<Row>, LinkCatalogSqlError>
+
+    one<Row>(
+      statement: LinkCatalogSql<Row>,
+    ): Effect.Effect<Option.Option<Row>, LinkCatalogSqlError>
+
+    run(
+      statement: LinkCatalogSql<never>,
+    ): Effect.Effect<void, LinkCatalogSqlError>
+
+    transaction<A, E, R>(
+      effect: Effect.Effect<A, E, R>,
+    ): Effect.Effect<A, E | LinkCatalogSqlError, Exclude<R, LinkCatalogSqlExecutor>>
+  }>()("link-manager/LinkCatalogSqlExecutor") {
+  static readonly layer = Layer.effect(
+    LinkCatalogSqlExecutor,
+    Effect.gen(function* () {
+      const state = yield* DurableObjectState
+      return makeDurableObjectSqlExecutor(state.storage.sql, state.storage.transaction)
+    }),
+  )
+
+  static readonly layerMemory = Layer.effect(
+    LinkCatalogSqlExecutor,
+    makeSqliteTestExecutor,
+  )
+}
+```
+
+Statement shape:
+
+```ts
+type LinkCatalogSql<Row> = {
+  sql: string
+  bindings: ReadonlyArray<SqlStorageValue>
+  decode?: Schema.Schema<Row>
+}
+```
+
+Example:
+
+```ts
+const SelectAliasBySlug = (slug: LinkSlug): LinkCatalogSql<SelectedAliasLinkRow> => ({
+  sql: `SELECT ... WHERE links.slug = ?`,
+  bindings: [slug],
+  decode: SelectedAliasLinkRow,
+})
+```
+
+Store implementation uses the SQL executor service:
+
+```ts
+const selectAlias = Effect.fn("selectAlias")(function* (slug: LinkSlug) {
+  const sql = yield* LinkCatalogSqlExecutor
+  const row = yield* sql.one(SelectAliasBySlug(slug))
+  return Option.map(row, aliasLinkFromRow)
+})
+```
+
+---
+
+## 7. Memory composition
+
+Memory is one adapter at the same seam.
+
+```ts
+const linkCatalogMemoryLayer = LinkCatalog.layer.pipe(
+  Layer.provide(LinkCatalogCoordinator.layer),
+  Layer.provide(LinkCatalogStore.layerMemory),
+  Layer.provide(PublicRedirectIndexService.layerMemory),
+)
+```
+
+Test handler composition:
+
+```ts
+const testLayer = HttpHandlers.layer.pipe(
+  Layer.provide(linkCatalogMemoryLayer),
+  Layer.provide(testAccessLayer),
+  Layer.provide(testNowLayer),
+)
+```
+
+Delete duplicated Link Catalog rule implementations from:
+
+```ts
+makeLinkCatalogLive
+makeInMemoryServicesContext
+```
+
+---
+
+## 8. Final call graph
+
+Production:
+
+```ts
+HTTP handlers
+  -> LinkCatalog
+    -> LinkCatalog.layerDurableObject
+      -> Effect RPC over Durable Object fetch
+        -> LinkCatalog.layer
+          -> LinkCatalogCoordinator
+            -> LinkCatalogStore
+              -> LinkCatalogSqlExecutor
+            -> PublicRedirectIndexService
+```
+
+Tests:
+
+```ts
+HTTP handlers
+  -> LinkCatalog
+    -> linkCatalogMemoryLayer
+      -> LinkCatalog.layer
+        -> LinkCatalogCoordinator
+          -> LinkCatalogStore.layerMemory
+          -> PublicRedirectIndexService.layerMemory
+```
+
+Depth wins:
+- `LinkCatalog` is the stable test surface.
+- `LinkCatalogCoordinator` owns cross-module ordering.
+- `LinkCatalogStore` is CRUD-shaped.
+- `LinkCatalogSqlExecutor` owns SQL and transaction mechanics.
+- Durable Object integration becomes real production composition.
+
