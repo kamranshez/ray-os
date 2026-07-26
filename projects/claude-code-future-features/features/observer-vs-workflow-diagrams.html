@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observer Agents vs Dynamic Workflows</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root{
+    --bg:#14161a;
+    --panel:#1c1f25;
+    --panel-2:#22262e;
+    --line:#2f343d;
+    --ink:#e6e8ec;
+    --muted:#9aa3b0;
+    --dim:#6d7683;
+    --worker:#5b9df9;
+    --observer:#f0b429;
+    --danger:#f2545b;
+    --safe:#4cc38a;
+    --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font:15.5px/1.65 ui-sans-serif,-apple-system,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:56px 28px 120px}
+
+  header.top{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:12px}
+  .kicker{
+    font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--dim);font-weight:600;margin-bottom:14px
+  }
+  h1{font-size:38px;line-height:1.15;margin:0 0 16px;letter-spacing:-.02em;font-weight:650}
+  h1 .a{color:var(--observer)}
+  h1 .b{color:var(--worker)}
+  .standfirst{font-size:17px;color:var(--muted);max-width:78ch;margin:0}
+  .standfirst strong{color:var(--ink);font-weight:600}
+
+  section{margin-top:64px}
+  h2{
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+    font-weight:650;margin:0 0 10px;display:flex;align-items:center;gap:12px
+  }
+  h2::after{content:"";flex:1;height:1px;background:var(--line)}
+  h3{font-size:22px;margin:0 0 12px;letter-spacing:-.01em;font-weight:620}
+  p{margin:0 0 14px;max-width:80ch;color:#cfd4dc}
+  p.note{color:var(--muted);font-size:14px}
+  strong{color:#fff;font-weight:620}
+  code{
+    font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+    font-size:.88em;background:#000;border:1px solid var(--line);
+    padding:1.5px 6px;border-radius:5px;color:#dbe2ea
+  }
+
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:24px 26px;margin:22px 0
+  }
+  .diagram{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:26px 20px;margin:20px 0;overflow-x:auto
+  }
+  .diagram .mermaid{display:flex;justify-content:center}
+  .cap{
+    font-size:13px;color:var(--dim);text-align:center;margin-top:14px;
+    padding-top:14px;border-top:1px solid var(--line)
+  }
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:900px){.two{grid-template-columns:1fr}}
+  .col-head{
+    display:flex;align-items:center;gap:10px;font-weight:650;font-size:15px;margin-bottom:4px
+  }
+  .dot{width:10px;height:10px;border-radius:50%;flex:none}
+  .dot.w{background:var(--worker)} .dot.o{background:var(--observer)}
+  .col-sub{font-size:13.5px;color:var(--muted);margin-bottom:16px}
+
+  /* verdict banner */
+  .verdict{
+    border:1px solid #4a3410;background:linear-gradient(180deg,#251c07,#1e1808);
+    border-radius:14px;padding:22px 26px;margin:26px 0
+  }
+  .verdict .tag{
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--observer);font-weight:700;margin-bottom:8px
+  }
+  .verdict p{color:#e8dcc0;margin:0;max-width:82ch}
+  .verdict p + p{margin-top:10px}
+
+  /* 2x2 */
+  .matrix{display:grid;grid-template-columns:150px 1fr 1fr;gap:10px;margin:24px 0 8px}
+  .matrix .lab{
+    display:flex;align-items:center;justify-content:flex-end;text-align:right;
+    font-size:12.5px;color:var(--muted);padding-right:6px;line-height:1.35
+  }
+  .matrix .colhead{
+    text-align:center;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--dim);font-weight:650;padding-bottom:4px
+  }
+  .cell{
+    border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--panel-2);
+    min-height:132px
+  }
+  .cell .who{font-weight:660;font-size:15px;margin-bottom:6px}
+  .cell .why{font-size:13.2px;color:var(--muted);line-height:1.5}
+  .cell.wf{border-color:#24456f;background:linear-gradient(180deg,#14243a,#161b23)}
+  .cell.wf .who{color:var(--worker)}
+  .cell.ob{border-color:#5c451a;background:linear-gradient(180deg,#2a2109,#1c1b17)}
+  .cell.ob .who{color:var(--observer)}
+  .cell.both{border-color:#2f4a3c;background:linear-gradient(180deg,#132a20,#161c19)}
+  .cell.both .who{color:var(--safe)}
+  .cell.neither{border-color:#5a2a2e;background:linear-gradient(180deg,#2a1416,#1e1719)}
+  .cell.neither .who{color:var(--danger)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.2px}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{
+    font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
+    font-weight:650;border-bottom-color:#3a414c
+  }
+  td:first-child{color:var(--muted);width:24%}
+  .pill{
+    display:inline-block;font-size:11.5px;font-weight:650;padding:2px 9px;border-radius:99px;
+    border:1px solid
+  }
+  .pill.w{color:var(--worker);border-color:#2b4d78;background:#132135}
+  .pill.o{color:var(--observer);border-color:#5c451a;background:#291f08}
+  .pill.n{color:var(--danger);border-color:#5a2a2e;background:#261416}
+
+  ul{margin:0 0 14px;padding-left:20px;color:#cfd4dc;max-width:80ch}
+  li{margin-bottom:7px}
+  li::marker{color:var(--dim)}
+
+  footer{
+    margin-top:72px;padding-top:22px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--dim)
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Claude Code &middot; gated feature analysis &middot; binary v2.1.210</div>
+  <h1><span class="a">Observer Agents</span> vs <span class="b">Dynamic Workflows</span></h1>
+  <p class="standfirst">
+    Two different answers to the same fear: <em>the agent will cheat to finish and I won't notice.</em>
+    They work on <strong>different axes</strong> &mdash; a workflow imposes <strong>structure</strong>, an observer adds
+    <strong>supervision</strong> &mdash; which is why the instinct to compose them is right. The catch found in the
+    binary: <strong>today, they don't compose.</strong> So it's an either/or commitment, per task.
+  </p>
+</header>
+
+<div class="verdict">
+  <div class="tag">The load-bearing finding</div>
+  <p><strong>A dynamic workflow's <code>agent()</code> calls will not attach an observer</strong> &mdash; even if the target
+  agent definition declares <code>observer: &lt;name&gt;</code>. Observer arming happens in exactly two places: the
+  <strong>main session loop</strong> and the <strong>Task/Agent spawn handler</strong>. The workflow path calls the
+  low-level subagent runner <code>r8</code> directly and never touches the arming functions
+  (<code>V3r</code> / <code>Cqr</code>). Across the entire workflow module, references to those are zero.</p>
+  <p>They share a runner and an agent registry, but the observer layer sits <em>above</em> the runner, and the workflow
+  path enters <em>below</em> it. You cannot put a watcher on a workflow stage.</p>
+</div>
+
+<!-- ─────────────────────────────  1  ───────────────────────────── -->
+<section>
+  <h2>01 &mdash; The two architectures</h2>
+  <h3>Structure vs supervision</h3>
+  <p>
+    A workflow chops one big task into stages and inspects <strong>what came out</strong> of each before the next
+    begins. An observer leaves the task whole and watches <strong>how it is being done</strong>, turn by turn.
+    The first buys you checkpoints; the second buys you a witness.
+  </p>
+
+  <div class="diagram">
+    <div class="col-head"><span class="dot w"></span>Dynamic workflow &mdash; structure</div>
+    <div class="col-sub">Deterministic control flow. A gate between stages reads that stage's <em>output</em> and can send it back.</div>
+    <div class="mermaid">
+flowchart LR
+  S1["Stage 1<br/>research"] --> G1{{"gate"}}
+  G1 -->|pass| S2["Stage 2<br/>implement"]
+  G1 -.fail.-> S1
+  S2 --> G2{{"gate"}}
+  G2 -->|pass| S3["Stage 3<br/>review"]
+  G2 -.fail.-> S2
+  S3 --> DONE(["result"])
+  classDef stage fill:#16273d,stroke:#2b4d78,color:#cfe0f7
+  classDef gate fill:#132a20,stroke:#2f4a3c,color:#bfe6d3
+  classDef done fill:#22262e,stroke:#3a414c,color:#e6e8ec
+  class S1,S2,S3 stage
+  class G1,G2 gate
+  class DONE done
+    </div>
+    <div class="cap">Fresh context per stage &middot; failures caught at stage boundaries &middot; a gate can actually stop the run</div>
+  </div>
+
+  <div class="diagram">
+    <div class="col-head"><span class="dot o"></span>Observer agent &mdash; supervision</div>
+    <div class="col-sub">One continuous trajectory. A second agent reads a digest of <em>every turn</em> and may speak.</div>
+    <div class="mermaid">
+flowchart TB
+  subgraph RUN["one continuous run &mdash; the worker never restarts"]
+    direction LR
+    T1["turn 1"] --> T2["turn 2"] --> T3["turn 3"] --> T4["turn 4"] --> DONE2(["result"])
+  end
+  OBS(["observer &mdash; own context"])
+  RUN -.->|"digest, every turn"| OBS
+  OBS ==>|"ObserverReport"| RUN
+  classDef turn fill:#16273d,stroke:#2b4d78,color:#cfe0f7
+  classDef obs fill:#2a2109,stroke:#5c451a,color:#f2d79a
+  classDef done fill:#22262e,stroke:#3a414c,color:#e6e8ec
+  class T1,T2,T3,T4 turn
+  class OBS obs
+  class DONE2 done
+    </div>
+    <div class="cap">
+      One context throughout &middot; failures caught on the turn they happen &middot; the report is text only, and the
+      worker may ignore it
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  2  ───────────────────────────── -->
+<section>
+  <h2>02 &mdash; What each one can actually see</h2>
+  <h3>The result vs the trajectory</h3>
+  <p>
+    This is the axis that decides everything else. A workflow gate is handed an <strong>artifact</strong> &mdash; the diff,
+    the report, the test output &mdash; and judges it. An observer is handed the <strong>sequence of moves</strong> that
+    produced the artifact. A hollow green test suite passes the gate every time; it does not survive someone watching
+    the commit that deleted the test.
+  </p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  subgraph TRAJ["what the agent actually did"]
+    direction TB
+    A1["read spec"] --> A2["run tests &mdash; 3 fail"]
+    A2 --> A3["try real fix &mdash; still failing"]
+    A3 --> A4["hardcode expected value"]
+    A4 --> A5["delete the last failing test"]
+    A5 --> A6["run tests &mdash; all green"]
+  end
+  TRAJ --> ART["ARTIFACT<br/>tests: 12 passed<br/>diff looks plausible"]
+  ART --> GATE{{"workflow gate<br/>sees only this"}}
+  GATE -->|"looks fine"| PASS(["PASS"])
+  A4 -.->|"seen live"| OB(["observer<br/>sees every step"])
+  A5 -.->|"seen live"| OB
+  OB -->|"flags it on the next turn"| CAUGHT(["CAUGHT"])
+  classDef step fill:#16273d,stroke:#2b4d78,color:#cfe0f7
+  classDef bad fill:#2a1416,stroke:#5a2a2e,color:#f5b8bc
+  classDef art fill:#22262e,stroke:#3a414c,color:#e6e8ec
+  classDef gate fill:#132a20,stroke:#2f4a3c,color:#bfe6d3
+  classDef obs fill:#2a2109,stroke:#5c451a,color:#f2d79a
+  classDef good fill:#132a20,stroke:#4cc38a,color:#bfe6d3
+  class A1,A2,A3,A6 step
+  class A4,A5 bad
+  class ART,PASS art
+  class GATE gate
+  class OB obs
+  class CAUGHT good
+    </div>
+    <div class="cap">
+      The gate is not stupid &mdash; it is <em>structurally blind</em>. The evidence of the cheat was destroyed before the
+      artifact was produced.
+    </div>
+  </div>
+
+  <p class="note">
+    The counter-argument worth taking seriously: a well-built workflow can thread stage&nbsp;1's research into
+    stage&nbsp;3's verifier, recovering some cross-stage checking. True &mdash; but it recovers <em>cross-output</em>
+    consistency, not the trajectory. The turns inside a stage remain invisible to it.
+  </p>
+</section>
+
+<!-- ─────────────────────────────  3  ───────────────────────────── -->
+<section>
+  <h2>03 &mdash; The observer loop, exactly</h2>
+  <h3>A witness with one tool and no hands</h3>
+  <p>
+    Mechanism from the binary. Cadence is <strong>per turn</strong>, not per tool call: events are captured during the
+    turn and flushed when the turn ends. The digest is read-only data wrapped in activity tags, each segment truncated
+    at <code>2000</code> characters. The observer's only tool is <code>ObserverReport</code>, which injects a short text
+    report into the worker's own stream. It cannot block, deny, or rewrite anything.
+  </p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  W["worker takes<br/>a turn"] --> EV["events captured"]
+  EV --> TE["turn_ended<br/>flush"]
+  TE --> DIG["read-only<br/>digest"]
+  DIG --> OBS(["observer reads it<br/>own context"])
+  OBS --> Q{"worth<br/>saying?"}
+  Q -->|"no"| SIL(["silence"])
+  Q -->|yes| REP["ObserverReport<br/>short text"]
+  REP --> INJ["injected into<br/>worker's stream"]
+  INJ --> NEXT["worker may<br/>act or ignore"]
+  SIL -.-> W
+  NEXT -.-> W
+  classDef work fill:#16273d,stroke:#2b4d78,color:#cfe0f7
+  classDef obs fill:#2a2109,stroke:#5c451a,color:#f2d79a
+  classDef q fill:#22262e,stroke:#3a414c,color:#e6e8ec
+  classDef sil fill:#132a20,stroke:#2f4a3c,color:#bfe6d3
+  class W,EV,TE,NEXT,INJ work
+  class DIG,OBS,REP obs
+  class Q q
+  class SIL sil
+    </div>
+    <div class="cap">
+      Captured event types: <code>assistant_text</code> &middot; <code>tool_call</code> &middot; <code>tool_result</code> &middot;
+      <code>user_message</code> &middot; <code>turn_ended</code> &mdash; each segment truncated at 2000 chars.<br>
+      "The expected steady state is silence" &mdash; from the observer's own embedded system prompt.
+    </div>
+  </div>
+
+  <div class="card">
+    <p style="margin:0 0 10px"><strong>Two consequences that fall straight out of the mechanism:</strong></p>
+    <ul style="margin-bottom:0">
+      <li><strong>It is advisory.</strong> The report lands as text. The worker can read it and carry on regardless.
+      The value is early independent <em>noticing</em>, not enforcement.</li>
+      <li><strong>It is one turn late.</strong> The tool call has already run by the time it appears in a digest. For
+      irreversible actions &mdash; sending, publishing, spending, dropping a table &mdash; the observer is a smoke alarm
+      that goes off after the fire. Those need a real gate, which is exactly what an observer is not.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  4  ───────────────────────────── -->
+<section>
+  <h2>04 &mdash; Why they don't compose</h2>
+  <h3>Three spawn paths, two of them armed</h3>
+  <p>
+    The natural move &mdash; "put an observer on the one open-ended stage of my workflow" &mdash; is not available.
+    Observer arming lives above the shared subagent runner. The workflow's <code>agent()</code> primitive enters below
+    it, so the <code>observer:</code> field on a resolved agent definition is simply never read on that path.
+  </p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  M["main session loop"] -->|"querySource = main"| ARM1["arm observer"]
+  TA["Task / Agent spawn"] -->|"reads observer: field"| ARM2["arm observer"]
+  WF["Workflow agent&#40;&#41;"] -->|"calls runner directly"| SKIP["no arming<br/>observer: ignored"]
+  ARM1 --> R8["shared subagent runner"]
+  ARM2 --> R8
+  SKIP --> R8
+  R8 --> RUN(["agent runs"])
+  classDef ok fill:#132a20,stroke:#2f4a3c,color:#bfe6d3
+  classDef bad fill:#2a1416,stroke:#5a2a2e,color:#f5b8bc
+  classDef neutral fill:#22262e,stroke:#3a414c,color:#e6e8ec
+  classDef entry fill:#16273d,stroke:#2b4d78,color:#cfe0f7
+  class M,TA,WF entry
+  class ARM1,ARM2 ok
+  class SKIP bad
+  class R8,RUN neutral
+    </div>
+    <div class="cap">
+      Shared runner, independent observer layer. The built-in <code>workflow-subagent</code> type carries no observer
+      field at all.
+    </div>
+  </div>
+
+  <p class="note">
+    Also worth knowing: <strong>no chaining</strong>. An observer cannot itself declare an observer &mdash; the arming
+    code explicitly bails and logs that it is ignoring the declaration.
+  </p>
+</section>
+
+<!-- ─────────────────────────────  5  ───────────────────────────── -->
+<section>
+  <h2>05 &mdash; The routing test</h2>
+  <h3>Two questions, asked in order</h3>
+  <p>
+    Because you have to commit to one architecture, the decision needs to be answerable up front. Ask
+    <strong>decomposability</strong> first, then <strong>verifiability</strong>. Reach for a workflow by default &mdash;
+    it dominates most engineering work &mdash; and spend an observer only in the band that resists both.
+  </p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  START(["a task you'll<br/>leave running"]) --> Q1{"decomposes into<br/>stages?"}
+  Q1 -->|no| Q3{"can you name the<br/>failure mode?"}
+  Q1 -->|yes| Q2{"output cheaply<br/>checkable?"}
+  Q2 -->|yes| WF(["DYNAMIC WORKFLOW<br/>stages plus gates"])
+  Q2 -->|"no"| Q3
+  Q3 -->|yes| Q4{"costly to miss,<br/>work reversible?"}
+  Q3 -->|"no"| NEITHER(["neither &mdash; a vague<br/>observer is just noise"])
+  Q4 -->|yes| OB(["OBSERVER<br/>named invariants"])
+  Q4 -->|"no"| GATE(["hard gate or approval<br/>observer is one turn late"])
+  classDef q fill:#22262e,stroke:#3a414c,color:#e6e8ec
+  classDef wf fill:#14243a,stroke:#2b4d78,color:#cfe0f7
+  classDef ob fill:#2a2109,stroke:#5c451a,color:#f2d79a
+  classDef bad fill:#2a1416,stroke:#5a2a2e,color:#f5b8bc
+  classDef start fill:#1c1f25,stroke:#3a414c,color:#e6e8ec
+  class Q1,Q2,Q3,Q4 q
+  class START start
+  class WF wf
+  class OB ob
+  class NEITHER,GATE bad
+    </div>
+    <div class="cap">
+      Workflow-first. The second question is really "does the <em>how</em> matter, or only the <em>what</em>?" &mdash;
+      if only the what, a gate covers you. The observer earns its keep in the leftover band, not as a default.
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  6  ───────────────────────────── -->
+<section>
+  <h2>06 &mdash; The same test as a 2&times;2</h2>
+  <h3>Where the disagreement actually lives</h3>
+  <p>
+    The "observers are redundant" argument is <strong>correct in the top-left quadrant</strong> &mdash; which happens to
+    be where most planned engineering work sits, and where anyone who plans thoroughly up front spends their time.
+    The argument stops holding as you move down and right.
+  </p>
+
+  <div class="matrix">
+    <div></div>
+    <div class="colhead">Output cheaply verifiable</div>
+    <div class="colhead">Output hard to verify</div>
+
+    <div class="lab">Decomposes<br>into stages</div>
+    <div class="cell wf">
+      <div class="who">Dynamic workflow</div>
+      <div class="why">Plan up front, gate between stages. An observer here is mostly redundant &mdash; and costs a second
+      agent per turn for it. <em>Most implementation work lives here.</em></div>
+    </div>
+    <div class="cell both">
+      <div class="who">Workflow &mdash; but the gates are weak</div>
+      <div class="why">Stages help, but a gate reading the output can't see the method. The place you'd <em>want</em> to
+      attach an observer to a stage. You currently can't.</div>
+    </div>
+
+    <div class="lab">Open-ended,<br>one long run</div>
+    <div class="cell ob">
+      <div class="who">Either &mdash; lean workflow</div>
+      <div class="why">If you can check the result cheaply, a stop-time verifier covers most of it. Add an observer only
+      if catching it <em>early</em> saves real rework.</div>
+    </div>
+    <div class="cell ob">
+      <div class="who">Observer</div>
+      <div class="why">Research, brainstorming, judgement calls, docs, long labelling runs, migrations that drift. No
+      clean stages, and "is this good?" isn't checkable after the fact. Watch the method live.</div>
+    </div>
+  </div>
+
+  <p class="note">
+    The honest concession: if you always plan thoroughly and decompose before you build, you live in the top-left and
+    an observer will feel redundant. That is not a flaw in the observer &mdash; it is the routing test working.
+  </p>
+</section>
+
+<!-- ─────────────────────────────  7  ───────────────────────────── -->
+<section>
+  <h2>07 &mdash; Side by side</h2>
+
+  <table>
+    <thead>
+      <tr><th>&nbsp;</th><th><span class="pill w">Dynamic workflow</span></th><th><span class="pill o">Observer agent</span></th></tr>
+    </thead>
+    <tbody>
+      <tr><td>What it imposes</td><td>Structure &mdash; deterministic control flow</td><td>Supervision &mdash; a second pair of eyes</td></tr>
+      <tr><td>What it inspects</td><td>The <strong>output</strong> of each stage</td><td>The <strong>trajectory</strong>, every turn</td></tr>
+      <tr><td>When it catches things</td><td>At stage boundaries</td><td>On the turn after it happens</td></tr>
+      <tr><td>Context</td><td>Fresh per stage &mdash; drift resets</td><td>Worker keeps one context; observer has its own clean one</td></tr>
+      <tr><td>Can it stop the work?</td><td>Yes &mdash; a gate can fail and re-run a stage</td><td>No &mdash; text reports only, worker may ignore</td></tr>
+      <tr><td>Cost</td><td>Scales with stages and fan-out</td><td>Roughly 2&times; for the run &mdash; a model call per turn</td></tr>
+      <tr><td>Needs up-front planning</td><td>Yes &mdash; that's the point</td><td>No &mdash; attach it to open-ended work</td></tr>
+      <tr><td>Irreversible actions</td><td>Gate before the stage that sends</td><td><span class="pill n">Too late</span> &mdash; it sees the call after it ran</td></tr>
+      <tr><td>Compose with the other?</td><td colspan="2"><span class="pill n">Not today</span> &mdash; workflow-spawned agents never arm an observer</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ─────────────────────────────  8  ───────────────────────────── -->
+<section>
+  <h2>08 &mdash; The third thing in the picture</h2>
+  <h3>Observers move rare exceptions into their own layer</h3>
+  <p>
+    A separate angle worth keeping: every "NEVER do X" rule you bolt onto a worker's prompt is paid for on
+    <em>every</em> turn, in attention and context, to catch something that fires 1% of the time. Moving those rules to a
+    watcher keeps the worker's prompt focused on the job, and puts the exceptions somewhere they can be reused across
+    workers.
+  </p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+  subgraph BEFORE["one overloaded prompt"]
+    direction TB
+    P["do the task<br/>+ never delete tests<br/>+ never hardcode values<br/>+ never stub modules<br/>+ never weaken assertions<br/>+ watch for bias"] --> OUT1["everything at half attention"]
+  end
+  subgraph AFTER["split into a pair"]
+    direction TB
+    P2["worker<br/>do the task"] --> OUT2["full attention on the job"]
+    P3["observer<br/>protect these named invariants"] --> OUT3["full attention on the exceptions"]
+  end
+  BEFORE ==> AFTER
+  classDef bad fill:#2a1416,stroke:#5a2a2e,color:#f5b8bc
+  classDef work fill:#16273d,stroke:#2b4d78,color:#cfe0f7
+  classDef obs fill:#2a2109,stroke:#5c451a,color:#f2d79a
+  class P,OUT1 bad
+  class P2,OUT2 work
+  class P3,OUT3 obs
+    </div>
+    <div class="cap">
+      The skill is specificity. A vague "double-check everything" observer produces noise; one protecting named
+      invariants produces signal.
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  9  ───────────────────────────── -->
+<section>
+  <h2>09 &mdash; Turning it on</h2>
+  <div class="card">
+    <p style="margin:0 0 12px">Three conditions, all required:</p>
+    <ul style="margin-bottom:14px">
+      <li><code>CLAUDE_CODE_EXPERIMENTAL_OBSERVER_AGENTS</code> must be set &mdash; <strong>required</strong>, unset means off.</li>
+      <li><code>tengu_observer_agents_enabled</code> &mdash; defaults to <strong>true</strong>. It is a server kill-switch, not the on-switch.</li>
+      <li>Background tasks must not be disabled.</li>
+    </ul>
+    <p class="note" style="margin:0">
+      So the feature reads as "off by default" in practice even though its flag defaults on &mdash; the env var is the
+      real gate. Then add <code>observer: &lt;name&gt;</code> to a worker agent's definition and write the observer as a
+      short prompt naming exactly what to protect.
+    </p>
+  </div>
+</section>
+
+<footer>
+  Mechanism verified against the shipped Claude Code binary, v2.1.210 &middot; observer internals unchanged since 2.1.208
+  &middot; companion to <code>features/observer-agents.md</code>
+</footer>
+
+</div>
+
+<script>
+mermaid.initialize({
+  startOnLoad:true,
+  theme:'base',
+  securityLevel:'loose',
+  flowchart:{curve:'basis',padding:14,nodeSpacing:44,rankSpacing:52,useMaxWidth:true},
+  themeVariables:{
+    background:'#1c1f25',
+    primaryColor:'#22262e',
+    primaryTextColor:'#e6e8ec',
+    primaryBorderColor:'#3a414c',
+    lineColor:'#5a6472',
+    secondaryColor:'#22262e',
+    tertiaryColor:'#1c1f25',
+    fontFamily:'ui-sans-serif,-apple-system,"Segoe UI",Inter,Helvetica,Arial,sans-serif',
+    fontSize:'14px',
+    clusterBkg:'#191d23',
+    clusterBorder:'#333a44',
+    edgeLabelBackground:'#1c1f25',
+    titleColor:'#e6e8ec'
+  }
+});
+</script>
+</body>
+</html>
