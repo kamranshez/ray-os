@@ -58,10 +58,12 @@ from analyze import (  # noqa: E402  — the SAME known-word diff video mode use
     get_known_intervals,
     is_card_worthy,
     is_content_word,
+    is_proper_noun,
     kata_to_hira,
     load_mature_kanji_stems,
     strip_furigana,
     strip_html,
+    strip_speaker_labels,
     tokenize,
 )
 
@@ -161,10 +163,15 @@ def scan_note(note, fm, intervals, norm_intervals, mature_stems):
         for _s, lemma, normalized, _r, pos in tokenize(word)
     )
 
+    # Tokenize with any leading subtitle speaker label stripped — （幾島） is a name tag,
+    # not vocabulary, and it was being charged against the sentence's i-level. The card
+    # keeps the sentence verbatim; only the DIFF sees the stripped text.
     unknowns, seen = [], set()
-    for surface, lemma, normalized, reading, pos in tokenize(sentence):
+    for surface, lemma, normalized, reading, pos in tokenize(strip_speaker_labels(sentence)):
         if not is_content_word(pos) or not is_card_worthy(lemma) or lemma in seen:
             continue
+        if is_proper_noun(pos):
+            continue  # a name is context, not a word to learn — don't charge it as load
         if is_known(lemma, normalized):
             continue
         seen.add(lemma)

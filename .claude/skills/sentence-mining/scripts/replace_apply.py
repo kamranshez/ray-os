@@ -9,19 +9,28 @@ For each entry (with `explanation` filled by Claude):
     `previous_versions` field, newest block first, so every prior version is
     recoverable and the old media never becomes "unused"
   - overwrite sentence / sentence_audio / picture / explanation / explanation_audio
+  - CLEAR the source tool's leftover fields (definition, pitch_accent, frequency_*)
+    in the same write — parity with audiobook_apply, which has always done this
   - retag the i-level (i1/i2/… reflecting how many other words are new for Ray)
   - rehabilitate the card (de-leech, unsuspend, reset scheduling to NEW at the
     FRONT of the new queue — or due today with --due-now)
+  - ROUTE by the NEW sentence's i-level: changeDeck to main for a clean i+1,
+    to deferred otherwise. Guarded both ways — a card living outside the mining
+    decks is never yanked out of it, however --note-ids was pointed.
   - clear the input flag:1 (default) so the redone card just rejoins the study
     queue. --done-flag N flags it instead. If the deck's new/day limit is 0, the
     reset cards can't surface — the script detects this and warns (fix: raise the
     limit, Custom Study, or --due-now).
 
-Unfixable misses (no usable replacement in any corpus) are retired instead: tagged
-`not-worth-learning`, suspended, and cleared off flag:1 (--keep-misses to skip).
+`--due-now` applies only to cards routed to MAIN. A card being deferred is being
+deferred precisely so it does not come up today.
 
-`--dry-run` prints the old→new table and touches nothing (no downloads, no TTS,
-no Anki writes) — use it for the review gate / summary.
+Unfixable misses (no usable replacement in any corpus) are retired instead: tagged
+`not-worth-learning`, suspended, and cleared off flag:1. `--keep-misses` skips that
+and lists them as explicitly UNTOUCHED, with note ids.
+
+`--dry-run` prints the old→new table (with each card's routing destination) and
+touches nothing (no downloads, no TTS, no Anki writes) — use it for the review gate.
 """
 from __future__ import annotations
 
@@ -40,7 +49,9 @@ import analyze  # strip_html
 import generate_media_bank as gmb  # reuse gemini_tts + GEMINI_* config
 from _env import load_skill_env, require_healthy_gemini_key
 from _anki import anki_request, store_media
-from _config import load_config, deck_main, deck_deferred
+from _config import (
+    load_config, deck_main, deck_deferred, flag_ignored, flag_meaning,
+)
 from _style import refuse_if_bad_explanations
 
 
@@ -215,7 +226,56 @@ def warn_zero_new_limit(card_ids):
     return blocked
 
 
-def apply_entry(entry, fm, today, done_flag=0, position=0, due_now=False):
+def foreign_field_clears(entry, fm):
+    """Fields the note carries that this note type doesn't own — the Yomitan / audiobook
+    tool's leftovers (`definition` with an English gloss, `pitch_accent`, `frequency_*`).
+
+    `audiobook_apply` has always cleared these; `replace_apply` didn't, so every rescued
+    card needed a manual `updateNoteFields` pass afterwards (12 cards across two batches
+    on 2026-07-27). The draft's `old_fields_snapshot` is the note's COMPLETE field dict,
+    so this costs no extra AnkiConnect round trip — the clears merge into the write that
+    was happening anyway."""
+    snapshot = entry.get("old_fields_snapshot") or {}
+    mapped = set(fm.values())
+    return {k: "" for k, v in snapshot.items()
+            if k not in mapped and isinstance(v, str) and v.strip()}
+
+
+def route_for(entry):
+    """Where the card belongs AFTER the swap: main for a clean i+1, deferred otherwise.
+
+    Ray's rule (July 2026), and the same ROUTE table the rest of the skill uses. The
+    point of rescuing a card is to make it study-ready; one that came back still above
+    i+1 is later, not never."""
+    return "main" if entry.get("i_level") == "i1" else "deferred"
+
+
+def apply_route(entry, cfg, cards):
+    """changeDeck by the new sentence's i-level. Returns the route actually applied
+    ("main" / "deferred" / "kept" when the card lives outside the mining decks).
+
+    Guarded in BOTH directions: only a card already sitting in the main or deferred deck
+    is moved. `--note-ids` can point anywhere in the collection, and a rescue must never
+    yank a card out of an unrelated deck it was deliberately filed in."""
+    want = route_for(entry)
+    main, deferred = deck_main(cfg), deck_deferred(cfg)
+    target = main if want == "main" else deferred
+    if not cards or not target:
+        return "kept"
+    try:
+        info = anki_request("cardsInfo", cards=cards)
+    except Exception:  # noqa: BLE001
+        return "kept"
+    current = {c.get("deckName", "") for c in info}
+    if not current or not current <= {main, deferred}:
+        return "kept"  # lives outside the mining decks — leave it exactly where it is
+    if current == {target}:
+        return want    # already there
+    anki_request("changeDeck", cards=cards, deck=target)
+    return want
+
+
+def apply_entry(entry, fm, today, cfg, done_flag=0, position=0, due_now=False):
     nid = entry["note_id"]
     old = entry["old_fields_snapshot"]
     existing_prev = old.get(fm.get("previous_versions", ""), "")
@@ -231,28 +291,57 @@ def apply_entry(entry, fm, today, done_flag=0, position=0, due_now=False):
     # Archive only if the note type has a previous_versions field (optional, replace-only).
     if fm.get("previous_versions"):
         fields[fm["previous_versions"]] = new_prev
+    # Clear the source tool's leftover fields in the SAME write.
+    fields.update(foreign_field_clears(entry, fm))
     anki_request("updateNoteFields", note={"id": nid, "fields": fields})
     # Retag i-level; leave the flag and the kind tag (claude-sentence-*) untouched.
     anki_request("removeTags", notes=[nid], tags=I_TAGS)
     anki_request("addTags", notes=[nid], tags=entry["i_level"])
     # Fresh sentence on a struggled-with card → de-leech + reset scheduling, front of queue.
-    cards = rehabilitate(nid, position=position, due_now=due_now)
+    # `--due-now` is honoured only for cards routing to main: a deferred card is deferred
+    # precisely so it does NOT come up today (2026-07-27 — the run had to withhold
+    # --due-now entirely and then re-queue by hand to avoid exactly this).
+    route = route_for(entry)
+    cards = rehabilitate(nid, position=position, due_now=due_now and route == "main")
+    route = apply_route(entry, cfg, cards)
     # Clear the input flag (default) so the redone card just rejoins the study queue.
     # (--done-flag N to flag instead.)
     set_flag(nid, done_flag)
-    return cards
+    return cards, route
 
 
-def print_table(entries, misses):
+def print_table(entries, misses, cfg):
     print(f"\n{'WORD':<10} {'iLvl':<4}  OLD  →  NEW")
     print("─" * 90)
+    main, deferred = deck_main(cfg), deck_deferred(cfg)
     for e in entries:
+        dest = main if route_for(e) == "main" else deferred
         print(f"{e['word']:<10} {e['i_level']:<4}  {analyze.strip_html(e['old_sentence'])[:32]}")
         print(f"{'':<16}→ {e['new_sentence']}   « {e.get('translation','')[:40]} » [{e.get('title','')}]")
+        print(f"{'':<16}  ⇒ {dest}")
+    n_main = sum(1 for e in entries if route_for(e) == "main")
+    print(f"\nRouting: → {main} (i+1): {n_main}   → {deferred}: {len(entries) - n_main}")
+    print("  (a card sitting outside the mining decks is left where it is)")
     if misses:
         words = [m["word"] if isinstance(m, dict) else m for m in misses]
         print(f"\nMISSES (unfixable → will be tagged '{RETIRE_TAG}' + suspended): "
               f"{', '.join(words)}")
+
+
+def print_misses_kept(misses, fm):
+    """`--keep-misses` used to print bare words, and that silence has been mistaken for
+    "handled" — a kept miss is genuinely UNTOUCHED: same sentence, same flag, same deck.
+    Spell that out, with note ids, so the follow-up is actionable."""
+    print(f"\nMisses left UNTOUCHED ({len(misses)}) — still flagged, still in whatever "
+          f"deck they were in, sentence unchanged:")
+    for m in misses:
+        word = m.get("word", "") if isinstance(m, dict) else m
+        nid = m.get("note_id") if isinstance(m, dict) else None
+        tried = ", ".join(m.get("forms_tried", [])) if isinstance(m, dict) else ""
+        line = f"  · {word}" + (f"  nid:{nid}" if nid else "  (no note id in draft)")
+        print(line + (f"   [tried {tried}]" if tried else ""))
+    print("  Nothing was written for these. Route/re-flag them yourself, or re-run "
+          "without --keep-misses to retire them.")
 
 
 def deck_clause(cfg):
@@ -264,6 +353,14 @@ async def main_async(args):
     fm = cfg["field_map"]
 
     if args.rehab_flag is not None:  # de-leech + reset a whole flagged set
+        if flag_ignored(cfg, args.rehab_flag) and not args.force_ignored_flag:
+            sys.exit(
+                f"Refusing --rehab-flag {args.rehab_flag}: config.flags"
+                f"[\"{args.rehab_flag}\"] is marked ignore — "
+                f"{flag_meaning(cfg, args.rehab_flag) or 'no meaning recorded'}.\n"
+                f"These cards are not for mining. Pass --force-ignored-flag if you "
+                f"really mean to include them."
+            )
         nids = anki_request("findNotes", query=f"flag:{args.rehab_flag} {deck_clause(cfg)}")
         touched = []
         for i, nid in enumerate(nids):
@@ -287,7 +384,7 @@ async def main_async(args):
     ready = entries
 
     if args.dry_run:
-        print_table(ready, misses)
+        print_table(ready, misses, cfg)
         retire_note_n = 0 if args.keep_misses else len(misses)
         print(f"\n[dry-run] {len(ready)} card(s) would be replaced, "
               f"{retire_note_n} unfixable miss(es) would be retired. Nothing written.")
@@ -317,14 +414,16 @@ async def main_async(args):
         # Gemini RPM cap); Anki writes are serialized afterward to avoid write races.
         results = await asyncio.gather(
             *(process_one(e, workdir, sem) for e in ready), return_exceptions=True)
-        done, touched = [], []
+        done, touched, routed = [], [], {"main": [], "deferred": [], "kept": []}
         for e, r in zip(ready, results):
             if isinstance(r, Exception):
                 print(f"  ✗ {e['word']} — {r}", file=sys.stderr)
                 continue
             df = None if args.done_flag < 0 else args.done_flag
-            touched += apply_entry(e, fm, today, done_flag=df,
-                                   position=len(done), due_now=args.due_now)
+            cards, route = apply_entry(e, fm, today, cfg, done_flag=df,
+                                       position=len(done), due_now=args.due_now)
+            touched += cards
+            routed[route].append(e["word"])
             done.append(e)
             print(f"  ✓ {e['word']} → {e['new_sentence'][:48]}", file=sys.stderr)
 
@@ -337,6 +436,20 @@ async def main_async(args):
     else:
         flag_note = f"moved to flag {args.done_flag}, {sched_note}"
     print(f"\nReplaced {len(done)}/{len(ready)} cards in place ({flag_note}).")
+    print()
+    if routed["main"]:
+        print(f"  → {deck_main(cfg)} (i+1): {len(routed['main'])}")
+        print(f"      {'、'.join(routed['main'])}")
+    if routed["deferred"]:
+        print(f"  → {deck_deferred(cfg)} (above i+1 — learn later, nothing dropped): "
+              f"{len(routed['deferred'])}")
+        print(f"      {'、'.join(routed['deferred'])}")
+    if routed["kept"]:
+        print(f"  → left in place (outside the mining decks): {len(routed['kept'])}")
+        print(f"      {'、'.join(routed['kept'])}")
+    if args.due_now and routed["deferred"]:
+        print("  (--due-now applied to the main-deck cards only; a deferred card is "
+              "deferred precisely so it doesn't come up today)")
     if not args.due_now:
         warn_zero_new_limit(touched)
 
@@ -344,8 +457,7 @@ async def main_async(args):
     # they leave the fix queue. --keep-misses leaves them on the flag for a later pass.
     if misses:
         if args.keep_misses:
-            words = [m["word"] if isinstance(m, dict) else m for m in misses]
-            print(f"Misses (left on input flag): {', '.join(words)}")
+            print_misses_kept(misses, fm)
         else:
             retired = []
             for word, nid in _miss_items(misses, fm):
@@ -375,8 +487,12 @@ def main():
                          "(otherwise a reset-to-new card never surfaces). Trade-off: "
                          "skips the learning steps.")
     ap.add_argument("--keep-misses", action="store_true",
-                    help="Leave unfixable misses on the input flag. Default retires them: "
+                    help="Leave unfixable misses UNTOUCHED (same sentence, flag and deck) "
+                         "and list them with their note ids. Default retires them: "
                          f"tag '{RETIRE_TAG}', suspend, clear the flag.")
+    ap.add_argument("--force-ignored-flag", action="store_true",
+                    help="Proceed even when --rehab-flag N names a flag config.flags "
+                         "marks `ignore` (cards that are a record, not a mining queue).")
     args = ap.parse_args()
     if not args.draft and args.rehab_flag is None:
         ap.error("pass --draft <file> (optionally --dry-run) or --rehab-flag N")

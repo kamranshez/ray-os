@@ -37,6 +37,28 @@ reported as a genuine **miss**, not a no-op "replacement".
 Input selectors: `--flag N` (every card flagged N in the mining decks) · `--note-ids` ·
 `--words` (resolves each word's existing card; a word with no card is reported, not mined).
 
+> `--flag N` **refuses a flag `config.json` marks `ignore`** and prints its recorded meaning —
+> see the flag table in [SKILL.md](../SKILL.md#flag-colours-mean-things--read-them-before-selecting-cards).
+> Ray's flag:7 is a tutoring-lesson record, not a mining queue. `--force-ignored-flag`
+> overrides; only pass it if he says so outright.
+
+### The word field is searched in more than one form
+
+A word field carries whatever Ray typed while mining, so it routinely has a copula or an
+inflection on it — `おかど違いだ`, `爽快だ`, `猟奇的な`, `撒き散らしながら`, `突っ伏した`,
+`口下手ではありますが`. The corpora index none of those verbatim. The cascade therefore walks a
+short ladder per word — as written, then with trailing 助詞/助動詞 dropped, then deinflected to
+the dictionary form — and runs **all five tiers** on each form before moving on.
+
+Each entry records the `query_form` that actually found the sentence, and sets
+`word_form_differs: true` (plus a line on stderr) when it isn't what the card carries. **That's
+a curate decision**: the word field probably wants renaming to the form that exists.
+
+A genuine miss now prints every form it tried (`✗ おかど違いだ — tried おかど違いだ, おかど違い`),
+which makes the next move a one-line manual probe instead of a dead end. **The ladder does not
+reach kana→kanji spellings** — Sudachi normalizes おかど違い to 御かど違い, not お門違い — so that
+class stays a manual probe, just a visible one.
+
 ### Then curate
 
 Read `replace.json`. **Start with each entry's `ai_instructions`** — it overrides the ranking
@@ -75,16 +97,27 @@ Per card:
 - **archives** the current sentence into `previous_versions` (newest block first, dated), so
   every prior version is recoverable and the old media never becomes "unused"
 - overwrites `sentence`, `sentence_audio`, `picture`, `explanation`, `explanation_audio`
+- **clears any foreign fields** in the same write — anything on the note that `field_map`
+  doesn't own (`definition`, `pitch_accent`, `frequency_*`, whatever Yomitan or the
+  audiobook-viewer left behind). Same behavior `audiobook_apply` has always had
 - retags the i-level to reflect the **new** sentence's complexity
 - **rehabilitates** the card — de-leech, unsuspend, reset to new at the FRONT of the queue, zero
   the reps/lapses counters. See [pipeline.md §ROUTE](pipeline.md#6--route) for why each step is
   load-bearing.
+- **routes by the new sentence's i-level** — `changeDeck` to main for a clean i+1, to deferred
+  otherwise. Only moves a card that is *already* in one of the two mining decks, so
+  `--note-ids` pointed elsewhere never drags a card out of the deck it was filed in.
+  `--dry-run` shows each destination and the run reports the split
 - **clears flag:1** so the redone card just rejoins the study queue (`--done-flag N` to set a
   colored flag instead; `-1` to leave the input flag untouched)
 
+> **`--due-now` follows the routing** — it is applied only to cards going to the main deck.
+> A card being deferred is being deferred precisely so it does not come up today.
+
 **Unfixable misses are retired**: tagged `not-worth-learning`, suspended, cleared off flag:1 —
 so they leave the fix queue and `--flag 1` stops re-picking them every run. `--keep-misses`
-leaves them on the flag instead.
+leaves them **completely untouched** (same sentence, same flag, same deck) and prints each one
+with its note id and the forms the cascade tried, so it can't be mistaken for "handled".
 
 Re-running the same draft is safe (idempotency guard on the live sentence).
 

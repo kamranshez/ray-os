@@ -355,13 +355,24 @@ def score_candidate(ex, target_word, known, require_image=True):
     bare_token = target_word in word_list  # standalone, not glued into a compound
 
     # Count content words OTHER than the target that the learner doesn't yet know.
+    # Tokenize the sentence with any leading subtitle speaker label stripped — the label
+    # is not vocabulary, and the CARD still gets the sentence verbatim (see below, we
+    # store ex["sentence"], not this).
     extra_unknowns = []
-    for surface, lemma, normalized, reading, pos in analyze.tokenize(sentence):
+    for surface, lemma, normalized, reading, pos in analyze.tokenize(
+            analyze.strip_speaker_labels(sentence)):
         if not analyze.is_content_word(pos):
             continue
+        if analyze.is_proper_noun(pos):
+            continue  # a name is context, not a word to learn — don't charge it as load
         if not analyze.is_card_worthy(lemma):
             continue
         if target_word in (lemma, surface, normalized):
+            continue
+        # Parity with audiobook_scan.scan_note(): a token that is PART of the target is
+        # the target, not extra load. 門違い inside お門違い was counted as an extra
+        # unknown and pushed a clean sentence from i1 to i2 (July 2026).
+        if lemma in target_word or surface in target_word:
             continue
         if intervals.get(lemma, 0) >= threshold:
             continue
@@ -407,6 +418,77 @@ def score_examples(examples, word, known, exclude_norm, source, require_image=Tr
         })
     scored.sort(key=lambda c: c["rank"])
     return scored
+
+
+# ─────────────────────────── query forms (the inflection ladder) ─────────────────────
+
+# Grammatical tails: what a word field carries on top of the word itself.
+INFLECTION_POS = ("助詞", "助動詞")
+
+
+def query_forms(word):
+    """The search forms to try for a card's word field, in order, deduped.
+
+    A word field is whatever Ray typed while mining, so it routinely carries a copula or
+    an inflection the corpora never index verbatim: おかど違いだ, 爽快だ, 猟奇的な,
+    撒き散らしながら, 突っ伏した, 口下手ではありますが. Searching only the literal field
+    reported all of those as "no usable replacement in any tier" when the bare word was
+    one query away.
+
+    Three forms, in escalating aggressiveness:
+      1. the word exactly as written
+      2. the word with trailing 助詞/助動詞 dropped   (爽快だ → 爽快, 撒き散らしながら → 撒き散らし)
+      3. truncated at the FIRST 助詞/助動詞, with the last kept token deinflected via
+         dictionary_form()  (撒き散らしながら → 撒き散らす, 口下手ではありますが → 口下手),
+         plus normalized_form() when it differs (こもった → こもる, then 籠もる)
+
+    Form 3 truncates at the first grammatical token rather than reaching for a "content
+    head" anywhere in the string, which keeps it from proposing a mid-word fragment:
+    おかど違いだ tokenizes as お+かど+違い+だ, and a head-first rule would have searched
+    かど — a real, unrelated word that returns plenty of hits and would have swapped in a
+    sentence teaching the wrong thing.
+
+    This does NOT reach kana→kanji spellings. Sudachi normalizes おかど違い to 御かど違い,
+    not お門違い, so that jump stays a manual probe — which is why a miss now prints every
+    form it tried.
+    """
+    forms, seen = [], set()
+
+    def add(f):
+        f = (f or "").strip()
+        if f and f not in seen:
+            seen.add(f)
+            forms.append(f)
+
+    add(word)
+    try:
+        toks = analyze.tokenize(word)
+    except Exception:  # noqa: BLE001 — a tokenizer failure just means "search it verbatim"
+        return forms
+    if len(toks) < 2:
+        return forms
+
+    def is_tail(tok):
+        return any(tok[4].startswith(p) for p in INFLECTION_POS)
+
+    # 2 — drop the trailing grammatical tokens.
+    end = len(toks)
+    while end and is_tail(toks[end - 1]):
+        end -= 1
+    if end:
+        add("".join(t[0] for t in toks[:end]))
+
+    # 3 — cut at the first grammatical token and deinflect the last token kept.
+    head = 0
+    while head < len(toks) and not is_tail(toks[head]):
+        head += 1
+    if head:
+        prefix = "".join(t[0] for t in toks[:head - 1])
+        _surface, lemma, normalized, _reading, _pos = toks[head - 1]
+        add(prefix + (lemma or _surface))
+        if normalized and normalized != lemma:
+            add(prefix + normalized)
+    return forms
 
 
 # ───────────────────────────────── the cascade ───────────────────────────────────────
@@ -465,34 +547,49 @@ class Sources:
 
 
 def best_for_word(word, sources: Sources, exclude_sentence="", top=3):
-    """THE sentence engine. Walk the canonical source order, stopping at the first tier
-    that yields something usable for this learner, and return the top-N ranked picks.
+    """THE sentence engine. For each of the word's `query_forms`, walk the canonical
+    source order, stopping at the first TIER that yields something usable for this
+    learner — and if no tier does, retry the whole cascade on the next FORM.
+
+    Every returned candidate carries `query_form`: which spelling actually found it.
+    When that differs from the card's word field, the caller surfaces it (the word field
+    probably wants renaming).
 
     `exclude_sentence` is dropped from the results (replace mode passes the card's
     current sentence; new-card mining passes nothing). Empty list = a genuine miss —
-    no corpus has a clean, i+1-appropriate sentence for this word."""
+    no corpus has a clean, i+1-appropriate sentence for ANY form of this word. Callers
+    report the forms tried by calling `query_forms(word)` themselves."""
     ex_norm = norm(exclude_sentence)
     known = sources.known
-    scored = []
 
-    def tier(name, fetch, require_image=True):
-        nonlocal scored
+    for i, form in enumerate(query_forms(word)):
+        if i:
+            time.sleep(REQUEST_DELAY)  # a retry is another IK hit — apiv2 429s on bursts
+        scored = []
+
+        def tier(name, fetch, require_image=True):
+            nonlocal scored
+            if scored:
+                return
+            try:
+                scored = score_examples(fetch(), form, known, ex_norm, name,
+                                        require_image=require_image)
+            except Exception as e:  # noqa: BLE001 — a dead tier must not kill the cascade
+                print(f"  · {form} — {name} error: {e}", file=sys.stderr)
+
+        tier("immersionkit", lambda: ik_search(form))
+        if sources.nadeshiko_key:
+            tier("nadeshiko", lambda: nadeshiko_search(form, sources.nadeshiko_key))
+        if sources.ss_data:
+            tier("sentencesearch",
+                 lambda: sentencesearch_examples(form, sources.ss_data), require_image=False)
+        tier("kotu", lambda: kotu_search(form), require_image=False)
+        if sources.banks:
+            tier("bank", lambda: bank_examples(form, sources.banks))
+
         if scored:
-            return
-        try:
-            scored = score_examples(fetch(), word, known, ex_norm, name,
-                                    require_image=require_image)
-        except Exception as e:  # noqa: BLE001 — a dead tier must not kill the cascade
-            print(f"  · {word} — {name} error: {e}", file=sys.stderr)
+            for c in scored:
+                c["query_form"] = form
+            return scored[:top]
 
-    tier("immersionkit", lambda: ik_search(word))
-    if sources.nadeshiko_key:
-        tier("nadeshiko", lambda: nadeshiko_search(word, sources.nadeshiko_key))
-    if sources.ss_data:
-        tier("sentencesearch",
-             lambda: sentencesearch_examples(word, sources.ss_data), require_image=False)
-    tier("kotu", lambda: kotu_search(word), require_image=False)
-    if sources.banks:
-        tier("bank", lambda: bank_examples(word, sources.banks))
-
-    return scored[:top]
+    return []

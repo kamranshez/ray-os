@@ -39,10 +39,16 @@ PUNCT_ONLY = re.compile(r"^[!?！？。、,\.…\-—~〜]+$")
 SINGLE_KANA = re.compile(r"^[぀-ゟ゠-ヿー]$")
 KANA_ONLY_SHORT = re.compile(r"^[぀-ゟ゠-ヿー]{1,2}$")
 HAS_KANJI = re.compile(r"[一-鿿]")
+HAS_KANA = re.compile(r"[぀-ゟ゠-ヿ]")
 KANJI_RE = re.compile(r"[一-鿿々]+")
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
 FURIGANA_RE = re.compile(r"([一-龯々]+)\[([ぁ-ゖァ-ヺー]+)\]")
+
+# A leading Netflix-style speaker or sound label: （幾島）本日は… / ［幾島］本日は…
+# Capped at 20 inner chars and allows no nested bracket, so a genuine parenthetical
+# aside can't be mistaken for a label.
+SPEAKER_LABEL_RE = re.compile(r"^[（(［\[][^）)］\]（(［\[]{0,20}[）)］\]]")
 
 # Runtime config — populated by main() from config.json so the rest of the
 # module reads plain module globals (no threading config through every call).
@@ -62,6 +68,27 @@ def strip_html(s):
 def strip_furigana(s):
     # Anki furigana lives as `漢字[かんじ]`; drop the reading so the tokenizer sees clean text.
     return FURIGANA_RE.sub(r"\1", s)
+
+
+def strip_speaker_labels(s):
+    """Drop leading subtitle speaker/sound labels — `（幾島）本日は…` → `本日は…`.
+
+    Netflix JP subtitles prefix lines with the speaker in full-width parens, and Ray
+    mines Netflix. Left in, the label tokenizes as a real word and lands in the diff as
+    a bogus extra unknown (幾島 counted against 伝統's sentence, July 2026).
+
+    Feed this to the TOKENIZER only, never to the sentence written onto the card — the
+    label is part of the source line and the card should keep it verbatim.
+    """
+    out = (s or "").lstrip()
+    while True:
+        m = SPEAKER_LABEL_RE.match(out)
+        if not m:
+            return out
+        rest = out[m.end():].lstrip()
+        if not rest:
+            return out  # the whole line was bracketed — not a label, leave it alone
+        out = rest
 
 
 _sudachi_tokenizer = None
@@ -86,7 +113,16 @@ def tokenize(text):
       lemma      = dictionary_form()   (走った→走る; keeps surface orthography, kana stays kana)
       normalized = normalized_form()   (collapses spelling variants: こもる/籠る→籠もる)
       reading    = reading_form()      (katakana)
-      pos        = part_of_speech()[0] (top-level category, e.g. 名詞/動詞)
+      pos        = ",".join(part_of_speech())  — the FULL tag, e.g. 名詞,固有名詞,人名,一般,*,*
+
+    `pos` used to be `part_of_speech()[0]` (the top-level category alone). It carries the
+    whole tag now so callers can see the sub-categories — specifically 固有名詞, which is
+    how the diff tells a proper noun (幾島, a subtitle speaker label) from vocabulary. The
+    change is backward compatible by construction: every consumer tests `pos` with
+    `startswith`, and the full tag begins with the top-level category, so
+    `"名詞,固有名詞,人名".startswith("名詞")` still holds. The only places that need the
+    bare category are the ones that WRITE pos into candidate JSON — they take
+    `pos.split(",")[0]`, keeping references/transcript-schema.md accurate.
 
     The normalized form drives variant-aware known-word matching, replacing the
     old jamdict alt-form lookup. Using one in-process tokenizer for both the
@@ -101,7 +137,7 @@ def tokenize(text):
             m.dictionary_form(),
             m.normalized_form(),
             m.reading_form(),
-            m.part_of_speech()[0],
+            ",".join(m.part_of_speech()),
         ))
     return out
 
@@ -112,12 +148,29 @@ def is_content_word(pos):
     return any(pos.startswith(p) for p in CONTENT_POS_PREFIXES)
 
 
+def is_proper_noun(pos):
+    """Names of people, places and works — context in a sentence, never vocabulary.
+
+    Deliberately NOT folded into `is_content_word()`: that function also drives video
+    mode's card *generation*, and dropping proper nouns there would quietly change what
+    video mode proposes. This is applied only at the two extra-unknown COUNTING sites
+    (audiobook_scan / _sources), where a name inflates the reported i-level and can
+    push an otherwise-clean sentence out of i+1.
+    """
+    return "固有名詞" in pos
+
+
 def is_card_worthy(lemma):
     if not lemma:
         return False
     if PURE_DIGITS.match(lemma) or PURE_ASCII.match(lemma) or PUNCT_ONLY.match(lemma):
         return False
     if SINGLE_KANA.match(lemma):
+        return False
+    # No Japanese script at all → an emoji or stray symbol, not a word. Sudachi tags an
+    # unknown symbol as 名詞,普通名詞,サ変可能 (☺︎ did exactly that, July 2026), so POS
+    # can't catch it and this check has to. Safe globally: nothing scriptless is a card.
+    if not HAS_KANJI.search(lemma) and not HAS_KANA.search(lemma):
         return False
     if not HAS_KANJI.search(lemma) and KANA_ONLY_SHORT.match(lemma):
         return False
@@ -354,7 +407,9 @@ def analyze_one(transcript, source_id, source_url, intervals, norm_intervals, ma
                 "lemma": lemma,
                 "reading_kata": reading,
                 "reading_hira": kata_to_hira(reading),
-                "pos": pos,
+                # Bare top-level category — tokenize() returns the full tag now, but
+                # references/transcript-schema.md documents `pos` as 名詞/動詞/….
+                "pos": pos.split(",")[0],
             })
         annotated_sentences.append({
             "idx": idx,

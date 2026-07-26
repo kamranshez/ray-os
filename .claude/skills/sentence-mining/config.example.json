@@ -20,6 +20,13 @@
     "deferred": "Sentence Mining Deferred"
   },
 
+  "_comment_flags": "What each Anki flag colour means to YOU, and whether the mining modes may touch it. `ignore: true` makes a flag off-limits to `replace_search --flag N` and `replace_apply --rehab-flag N` unless --force-ignored-flag is passed — use it for flags that mark cards which must never be swept into a mining run. Leave this map empty ({}) if you have no flag conventions.",
+  "flags": {
+    "1": { "meaning": "triage — something is wrong; diagnose it", "ignore": false },
+    "2": { "meaning": "flesh out — bare card, needs building up", "ignore": false },
+    "7": { "meaning": "tutoring lessons — record only, never mine", "ignore": true }
+  },
+
   "known_words": {
     "interval_threshold": 21,
     "sources": [

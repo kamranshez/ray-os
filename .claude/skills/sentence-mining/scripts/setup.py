@@ -92,9 +92,17 @@ def probe(url):
 
 def validate(url):
     cfg = load_config(required=False)
-    problems = []
+    problems, notes = [], []
     if cfg is None:
-        return {"ok": False, "problems": ["config.json does not exist"]}
+        return {"ok": False, "problems": ["config.json does not exist"], "notes": []}
+
+    # Informational only — an empty map is a perfectly valid state ("no flag
+    # conventions"), but it's worth saying so, because `flags` is what stops a
+    # record-only flag colour (Ray's flag:7 tutoring cards) being swept into a run.
+    if not cfg.get("flags"):
+        notes.append("flags is empty — no flag colour meanings are recorded, so nothing "
+                     "protects a record-only flag from `replace_search --flag N`. See "
+                     "config.example.json.")
 
     fm = cfg.get("field_map", {})
     if not fm.get("word"):
@@ -123,7 +131,7 @@ def validate(url):
     except (urllib.error.URLError, TimeoutError, ConnectionError, RuntimeError) as e:
         problems.append(f"could not reach AnkiConnect to validate: {e}")
 
-    return {"ok": not problems, "problems": problems}
+    return {"ok": not problems, "problems": problems, "notes": notes}
 
 
 def main():

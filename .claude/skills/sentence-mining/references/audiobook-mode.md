@@ -91,8 +91,16 @@ easier sentence for the same word:
 
 ```bash
 python3 <skill-dir>/scripts/replace_search.py --note-ids <the i+3+ noteIds> --output <work>/rescue.json
-python3 <skill-dir>/scripts/replace_apply.py --draft <work>/rescue.json
+python3 <skill-dir>/scripts/replace_apply.py --draft <work>/rescue.json --keep-misses
 ```
+
+> **`--keep-misses` is NOT optional here.** Without it, `replace_apply` **retires** every
+> cascade miss — tags it `not-worth-learning` and **suspends** it — which is exactly what
+> audiobook mode forbids. The script isn't wrong; retiring is right for pure replace mode
+> (see [pipeline.md §ROUTE](pipeline.md#6--route)), and it has no way to know it was called
+> on audiobook cards. **You** have to know. It suspended three of Ray's cards this way in
+> July 2026 (飴き散らしながら, 飽き飽きしている, ザレ事) on a run whose whole purpose was
+> keeping cards he'd asked to keep.
 
 This routinely turns an i+3 card into a clean i+1. Real example — 天真爛漫, whose audiobook
 sentence carried two extra unknowns (襟足, ちょん切る):
@@ -102,22 +110,32 @@ audiobook:  私は天真爛漫で心配事といえば生活指導部に自慢�
 cascade:    母の死を乗り越えた明るく天真爛漫なアイドルを                                    (i1) ✓
 ```
 
-> **Two things `replace_apply` does NOT do for audiobook cards — do them yourself, right after:**
-> 1. **It leaves the tool's foreign fields** (`definition`, `pitch_accent`, `frequency_*`)
->    untouched — pure replace mode never had them. Clear them per rescued note:
->    `updateNoteFields` → `definition: ""` (etc.).
-> 2. **Route it by the NEW sentence's i-level** (Ray, July 2026) — the same ROUTE table as
->    everywhere else. A rescue that landed a clean i+1 belongs in the **main** deck; making
->    the card study-ready is the whole point of rescuing it. One that came back still above
->    i+1 gets `changeDeck` to the **deferred** deck. (`replace_apply` leaves every card in
->    the deck it found it in, so only the still-above-i+1 ones need a move.)
+> **`replace_apply` now finishes its own job on audiobook cards** (2026-07-27). It used to
+> leave three follow-ups to you; two are automatic now:
+> 1. **Foreign fields are cleared automatically.** `definition`, `pitch_accent`,
+>    `frequency_*` — anything on the note that the configured `field_map` doesn't own — is
+>    blanked in the *same* write as the sentence swap. (It reads the draft's
+>    `old_fields_snapshot`, so this costs no extra AnkiConnect call.) You had to do this by
+>    hand on 12 cards across two batches before it existed.
+> 2. **Routing by the NEW sentence's i-level is automatic** (Ray, July 2026) — the same
+>    ROUTE table as everywhere else. A rescue that landed a clean i+1 goes to the **main**
+>    deck; making the card study-ready is the whole point of rescuing it. One still above
+>    i+1 gets `changeDeck` to **deferred**. Guarded in both directions: a card sitting
+>    *outside* the mining decks is left exactly where it is, so `--note-ids` pointed at an
+>    unrelated deck can't yank a card out of it. `--dry-run` shows each destination, and the
+>    run reports the split (`→ <main> (i+1): N` / `→ <deferred>: N`).
+>    **`--due-now` follows the routing** — it is applied only to the cards going to main.
+> 3. **It still does not park the misses** — and that one is by design. `--keep-misses`
+>    leaves a miss exactly where it was: same sentence, same flag, same deck. It now *says*
+>    so, listing each miss with its note id and the forms the cascade tried, because silence
+>    there had already been mistaken for "handled". Route and re-flag those yourself.
 >
 > Don't try to reuse `audiobook_apply --only <rescued ids>` for this: that draft's `explanation`
-> was written for the *old* sentence, so it would re-TTS the wrong text. The manual two-step
-> (clear `definition` + `changeDeck` deferred) is the clean path.
+> was written for the *old* sentence, so it would re-TTS the wrong text.
 
-Cards the cascade **misses** (no easier sentence anywhere) keep their dense sentence and fall
-through to the deferred deck. That's the honest fallback, not the default.
+Cards the cascade **misses** (no easier sentence anywhere) keep their dense sentence. With
+`--keep-misses` they are left untouched — the script lists them, but moving them to deferred
+and clearing their flag is still **your** step.
 
 **Don't over-rescue.** Only i+3+ earns a replacement now — an i+2 book sentence is a feature (Ray
 read it), not a defect. If a batch is mostly i+1/i+2, expect *little* rescue, and that's correct.

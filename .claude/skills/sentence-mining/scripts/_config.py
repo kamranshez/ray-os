@@ -61,6 +61,15 @@ DEFAULTS: dict = {
         "index_dir": "~/Downloads/sentence-mining/banks/index",
     },
     "work_dir": "~/Downloads/sentence-mining",
+    # What each Anki flag colour MEANS to this user, and whether the mining modes are
+    # allowed to touch it. Ray's flag colours have carried meaning for a long time and
+    # nothing recorded it, so `--flag 7` (tutoring-lesson cards, record-only) would have
+    # been swept into a mining run like any other flag. `ignore: true` makes a flag
+    # off-limits to `replace_search --flag` / `replace_apply --rehab-flag` unless the
+    # caller passes --force-ignored-flag.
+    #
+    # An EMPTY map is a valid state: it just means "no flag conventions here".
+    "flags": {},
 }
 
 
@@ -122,3 +131,20 @@ def deck_main(cfg: dict) -> str:
 def deck_deferred(cfg: dict) -> str:
     """Deferred deck, falling back to the main deck when unset."""
     return cfg["decks"].get("deferred", "") or deck_main(cfg)
+
+
+def _flag_entry(cfg: dict, n) -> dict:
+    """The config block for flag N. Keys are JSON strings, callers pass ints."""
+    entry = (cfg.get("flags") or {}).get(str(n))
+    return entry if isinstance(entry, dict) else {}
+
+
+def flag_meaning(cfg: dict, n) -> str:
+    """What this user's flag N means, or "" when nothing is recorded for it."""
+    return _flag_entry(cfg, n).get("meaning", "") or ""
+
+
+def flag_ignored(cfg: dict, n) -> bool:
+    """True when flag N is off-limits to the mining modes (e.g. Ray's flag:7 tutoring
+    cards, which are a record and must never be swept into a run)."""
+    return bool(_flag_entry(cfg, n).get("ignore"))

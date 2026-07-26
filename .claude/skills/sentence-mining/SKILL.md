@@ -59,6 +59,24 @@ in one breath ("audiobook mode on the ryu cards"), that IS his answer — skip t
 | instructions | a note Ray typed into `ai_instructions` | do what the note says, **then clear it**  | [instructions-mode.md](references/instructions-mode.md) |
 | setup     | first run / no `config.json`   | write the per-user config                        | [setup.md](references/setup.md) |
 
+### Flag colours mean things — read them before selecting cards
+
+Ray's Anki flags are an input queue, not decoration, and they're recorded in
+`config.json` → `flags` (each with a `meaning` and an `ignore` bit). Every mode that
+selects by flag reads that map.
+
+| Flag | Meaning | Mineable? |
+|------|---------|-----------|
+| `flag:1` | **triage** — something is wrong with this card; diagnose it. Historically it has meant four different defects at once, so *look before assuming a sentence swap* | yes — replace mode's default input |
+| `flag:2` | **flesh out** — the card is bare and needs building up (explanation, audio, picture) | yes |
+| `flag:7` | **tutoring lessons** — a record of what came up in a lesson. Never mine these | **no** — `ignore: true` |
+
+`replace_search.py --flag N` and `replace_apply.py --rehab-flag N` **refuse** an
+`ignore` flag and print its recorded meaning. `--force-ignored-flag` overrides, and you
+should only pass it if Ray says so in that many words. This is what keeps the 8 flag:7
+cards (見据える, 移す, 遣って来る, 差し支えなければ, 労力, サバイバル, バーチャル,
+育む) out of every future run — they were nearly swept into one on 2026-07-27.
+
 **Offer instructions mode whenever there are outstanding notes**, even if Ray launched the
 skill for something else. It's one cheap query — `python3 scripts/instructions_scan.py` — and
 an unread instruction is Ray having typed something to you that nobody ever read.
