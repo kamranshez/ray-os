@@ -4,11 +4,11 @@ hook: "Everyone who decided to get Claude Code and Codex to work together is wat
 media: image
 status: posted
 engagement:
-  reactions: 0
+  reactions: 4
   comments: 0
   reposts: 0
-  impressions: 76
-  last_checked: 2026-07-22
+  impressions: 362
+  last_checked: 2026-07-26
 url: https://www.linkedin.com/feed/update/urn:li:activity:7485473956968300544/
 notes: Backfilled from Ray's activity feed on 2026-07-22; hook, metrics, permalink, and date verified.
 ---
