@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "77fba8b0808a170a",
+        "id": "ff01475aa2dc0b39",
         "type": "tabs",
         "children": [
           {
-            "id": "403b90d82a48fb71",
+            "id": "6a2e6052cb151cec",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -178,8 +178,14 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "403b90d82a48fb71",
+  "active": "6a2e6052cb151cec",
   "lastOpenFiles": [
+    "clippings/tw_future _of_software_development_retreat_ key_takeaways.pdf",
+    "decks/b2b-sales-techniques.md",
+    "decks/deck-note-type.md",
+    "socials/youtube/improvements.md",
+    "socials/CLAUDE.md",
+    "CLAUDE.md",
     "socials/youtube/videos/decision-surfaces.md",
     "images/decision-surfaces-victor-cheap-representations-10.png",
     "images/decision-surfaces-victor-cheap-representations-9.png",
@@ -220,11 +226,6 @@
     "artefacts/boundaryml-ai-that-works/_index.md",
     "socials/youtube/videos/uploaded/fable-exit-interview.md",
     "socials/youtube/videos/to-upload/five-jobs-for-your-best-model.md",
-    "artefacts/bitter-lesson-harness-audit.md",
-    "socials/youtube/videos/fable-exit-interview/handbook-v1/playbooks.md",
-    "socials/youtube/videos/fable-exit-interview/handbook-v1/danger-and-gotchas.md",
-    "socials/youtube/videos/fable-exit-interview/handbook-v1/README.md",
-    "socials/youtube/videos/handbook-v1/playbooks.md",
     "Untitled.canvas"
   ]
 }
