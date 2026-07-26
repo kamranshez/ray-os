@@ -77,7 +77,11 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 # `X7i(`/`sq(` as boolean/refresh-aware reads, `Bjt(` as its React hook,
 # `eXt(` as an env/client-data/gate bridge, `F7i(` as an injected reader,
 # `MWu(`/`cGu(` as structured hostname-list readers, and `i9i(` for per-model
-# suffixes.
+# suffixes. v2.1.220 returns to `Ke(` as the primary cached reader and adds
+# `ube(`/`MH(` as direct wrappers, `Aq(`/`rXi(` as boolean async reads,
+# `Fno(`/`Nye(` as async config reads, React hook `sWt(`, hostname-list
+# config wrappers `HYu(`/`aKu(`, shared env/client/gate bridge `SQt(`, and
+# injected subagent-steering reader `qJi(`, plus dynamic key builder `lqi(`.
 # Telemetry `j(`→`G(`→`j(`/`f_(` (v2.1.195)→`G(` (v2.1.199)→`M(` (v2.1.208)
 # (with event wrappers `N(`, `bb(`, `I0(`, `QEu(`, and `Qxc(` in v2.1.210), then
 # `M(` with async/event wrappers `Pb(`, `V0(`, `MHc(`, and `hwu(` in v2.1.211. We match
@@ -87,10 +91,10 @@ gb=find(cfg,"cachedGrowthBookFeatures") or {}
 # gate helper was renamed again — grep `("tengu_` in the strings to find the new
 # 1-2 char prefix whose call sites take a bare default (`!0`/`!1`/`null`/number), and
 # add it to the gates alternation below (telemetry prefixes take an `{...}` object).
-gate_helpers=r'(?:Je|Pye|vH|lye|bto|X7i|sq|Bjt|eXt|F7i|MWu|cGu|Ke|x_e|WO|n_e|VJn|Sq|rGi|X6t|zJn|et|Xj|WVn|\$bt|mO|XUi|Zyc|dge|Uhe|u3i|uge|fO|Nbt|n3i|Jj|Bhe|qVn|Fme|uM|pme|Vgt|hj|c1i|Eqn|Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)'
+gate_helpers=r'(?:Ke|ube|MH|Aq|rXi|Fno|Nye|sWt|HYu|aKu|SQt|qJi|Je|Pye|vH|lye|bto|X7i|sq|Bjt|eXt|F7i|MWu|cGu|x_e|WO|n_e|VJn|Sq|rGi|X6t|zJn|et|Xj|WVn|\$bt|mO|XUi|Zyc|dge|Uhe|u3i|uge|fO|Nbt|n3i|Jj|Bhe|qVn|Fme|uM|pme|Vgt|hj|c1i|Eqn|Ze|Xq|IPi|S6n|Xfe|dgt|vme|J1|Qe|ot|at|it|ct|bvi|e)'
 gate_call=r'(?<![\w$])'+gate_helpers
 gates=set(re.findall(gate_call+r'(?:\?\.)?\("(tengu_[a-zA-Z0-9_]+)"',strings))
-gates.update(re.findall(gate_call+r'(?:\?\.)?\((?:i9i|jFi|QHi|YHi|Jwi|bvi)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+gates.update(re.findall(gate_call+r'(?:\?\.)?\((?:lqi|i9i|jFi|QHi|YHi|Jwi|bvi)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 # Config keys are sometimes hoisted to a minified variable before being passed to
 # a GrowthBook wrapper (for example `var Yau="tengu_review_bughunter_config";
 # ... fO(Yau,...)`). Resolve those indirections so a helper rename cannot look like DCE.
@@ -99,7 +103,7 @@ gate_vars.update({name:flag for name,flag in re.findall(r"(?<![\w$])(?:var |let 
 gate_call_args=re.findall(gate_call+r'(?:\?\.)?\(([^)]{0,200})\)',strings)
 gate_var_reads={name for args in gate_call_args for name in re.findall(r'[A-Za-z_$][\w$]*',args)}
 gates.update(gate_vars[name] for name in gate_var_reads if name in gate_vars)
-telem=set(re.findall(r'(?:M|Pb|V0|MHc|hwu|j|f_|G|N|bb|I0|QEu|Qxc|\$Wt|a|l|U|B|qrr|w|re)\("(tengu_[a-zA-Z0-9_]+)"',strings))
+telem=set(re.findall(r'(?:M|lb|rk|Byn|Tru|zHd|Pb|V0|MHc|hwu|j|f_|G|N|bb|I0|QEu|Qxc|\$Wt|a|l|U|B|qrr|w|re)\("(tengu_[a-zA-Z0-9_]+)"',strings))
 present=set(re.findall(r'tengu_[a-zA-Z0-9_]+',strings))
 
 # Fail closed before reading/writing tracker state. A helper rename otherwise creates
