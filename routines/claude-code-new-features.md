@@ -41,7 +41,7 @@ Run this (it reads the live GrowthBook cache + the extracted strings and writes 
 ```bash
 mkdir -p ~/.claude/cache/cc-feature-tracker
 STRINGS=STRINGS_PATH VERSION="$(claude --version 2>/dev/null | head -1)" python3 - <<'PY'
-import json,os,re
+import hashlib,json,os,re
 strings=open(os.environ["STRINGS"],encoding="utf-8",errors="ignore").read()
 ver=os.environ.get("VERSION","unknown")
 # live per-account GrowthBook state
@@ -145,6 +145,10 @@ non_env_symbols={
     # Internal exported JS constant for the bundled Claude Code docs skill; it
     # is not read from process.env (confirmed from the 2.1.211 call site).
     "CLAUDE_CODE_SKILL_DESCRIPTION",
+    # Internal/test dispatch override name present in the 2.1.220 bundle, but
+    # absent from the production typed env schema. Its only read is through an
+    # empty internal override object, so setting process.env cannot affect it.
+    "CLAUDE_CODE_DISPATCH_V2S",
 }
 def concatenated_env_artifact(name):
     # Bun may glue a one- or two-character minified symbol onto a canonical env
@@ -172,6 +176,19 @@ for flag,val in gb.items():
 
 prev_path=os.path.expanduser("~/.claude/cache/cc-feature-tracker/snapshot-latest.json")
 prev=json.load(open(prev_path)) if os.path.isfile(prev_path) else None
+
+# Preserve the exact prior input before replacing the rolling snapshot. The
+# content hash makes this idempotent while retaining multiple same-version
+# GrowthBook refreshes for later independent flip verification.
+if prev:
+    archive_dir=os.path.expanduser("~/.claude/cache/cc-feature-tracker/snapshots")
+    os.makedirs(archive_dir,exist_ok=True)
+    prev_bytes=json.dumps(prev,indent=2,sort_keys=True).encode()
+    prev_hash=hashlib.sha256(prev_bytes).hexdigest()[:16]
+    prev_ver=re.sub(r'[^0-9A-Za-z._-]+','-',str(prev.get("version","unknown"))).strip('-')
+    archive_path=os.path.join(archive_dir,f"snapshot-{prev_ver}-{prev_hash}.json")
+    if not os.path.exists(archive_path):
+        open(archive_path,"wb").write(prev_bytes+b"\n")
 
 # always write the new snapshot
 open(prev_path,"w").write(json.dumps(snap,indent=2,sort_keys=True))
