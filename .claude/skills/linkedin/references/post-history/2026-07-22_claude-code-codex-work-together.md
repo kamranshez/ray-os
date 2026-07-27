@@ -7,8 +7,8 @@ engagement:
   reactions: 4
   comments: 0
   reposts: 0
-  impressions: 362
-  last_checked: 2026-07-26
+  impressions: 382
+  last_checked: 2026-07-27
 url: https://www.linkedin.com/feed/update/urn:li:activity:7485473956968300544/
 notes: Backfilled from Ray's activity feed on 2026-07-22; hook, metrics, permalink, and date verified.
 ---
