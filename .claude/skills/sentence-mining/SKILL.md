@@ -1,22 +1,23 @@
 ---
 name: sentence-mining
-description: Build and maintain Japanese sentence-mining cards for Anki, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. Five modes, and the skill ASKS which one you want on every launch. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + SudachiPy + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → find the best example sentence for each through one canonical cascade (Immersion Kit → Nadeshiko → sentencesearch → kotu → your locally-indexed subs2srs .apkg banks), re-ranked by your own i+1, with native audio and a screenshot where the source ships one. (3) Replace mode — fix existing cards whose example sentence is bad (too short, a fragment, incomprehensible): pull a better sentence through the same cascade, edit the card in place (archiving the old sentence to a previous_versions field), and rehabilitate the card so you re-learn it fresh. (4) Audiobook mode — adopt cards that an EXTERNAL audiobook miner (audiobook-viewer, tag:audiobook) pushed into Anki half-built: rewrite their explanations in house style so they lead with the word, generate the missing explanation TTS, strip the tool's leftover English `definition`/frequency fields, fix blank picture fields that make cards double-play audio on mobile, and auto-route every card by your i+1 diff — a card whose sentence is above i+1 is RESCUED with an easier sentence from the cascade, and only falls back to the deferred deck if the cascade finds nothing. Nothing is ever suspended or retired. (5) Instructions mode — sweep the whole collection for cards where you typed a note into the `ai_instructions` field while reviewing ("the explanation is too hard", "the audio sounds wrong", "add a picture"), act on each one, and then CLEAR the field so it can't re-fire. All modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL, (b) a list of Japanese words, (c) a request to improve/replace sentences on existing cards, (d) any mention of audiobook cards needing explanations, audio, or cleanup, or (e) any mention of AI instructions / notes left on cards. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "search the banks for X", "replace the sentence for <word>", "find a better sentence for X", "fix my flag:1 cards", "these sentences are too short/confusing", "write better explanations for my audiobook cards", "generate the audio for those explanations", "the cards I made audiobook mining", "clean up my audiobook cards", "this card is too hard, defer it", "check my ai_instructions", "act on the notes I left on my cards", "what did I flag for you", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
+description: Build and maintain Japanese sentence-mining cards for Anki, fully self-contained (no AnkiMorphs install required) and configurable per user via a one-time `/sentence-mining setup`. Six modes, and the skill ASKS which one you want on every launch. (1) Video mode — paste any Instagram reel, YouTube video/Short, TikTok, Twitter video, or local file → yt-dlp + AssemblyAI + SudachiPy + a built-in i+1 known-word diff produces draft cards. (2) Bank mode — give a list of target words → find the best example sentence for each through one canonical cascade (Immersion Kit → Nadeshiko → sentencesearch → kotu → your locally-indexed subs2srs .apkg banks), re-ranked by your own i+1, with native audio and a screenshot where the source ships one. (3) Replace mode — fix existing cards whose example sentence is bad (too short, a fragment, incomprehensible): pull a better sentence through the same cascade, edit the card in place (archiving the old sentence to a previous_versions field), and rehabilitate the card so you re-learn it fresh. (4) Leech mode — work the cards Anki flagged as leeches, but filtered by whether they are STILL failing: `tag:leech` is a scar Anki never removes, so most of a leech list is usually cards that recovered months ago (43 of Ray's 78 sat at 21-338 day intervals). Cards below the interval threshold get a fresh sentence through the cascade plus full rehabilitation (reps/lapses zeroed, due today); recovered cards just have the tag stripped with their scheduling untouched; words rarer than a JPDB frequency cutoff are deferred instead of re-mined, because fighting a word that barely appears is the expensive kind of failure; interference twins (two cards testing the same word) become a merge proposal; and cards with no usable sentence in any corpus are DELETED behind an explicit confirmation gate — the only destructive act in the skill. (5) Audiobook mode — adopt cards that an EXTERNAL audiobook miner (audiobook-viewer, tag:audiobook) pushed into Anki half-built: rewrite their explanations in house style so they lead with the word, generate the missing explanation TTS, strip the tool's leftover English `definition`/frequency fields, fix blank picture fields that make cards double-play audio on mobile, and auto-route every card by your i+1 diff — a card whose sentence is above i+1 is RESCUED with an easier sentence from the cascade, and only falls back to the deferred deck if the cascade finds nothing. Nothing is ever suspended or retired. (6) Instructions mode — sweep the whole collection for cards where you typed a note into the `ai_instructions` field while reviewing ("the explanation is too hard", "the audio sounds wrong", "add a picture"), act on each one, and then CLEAR the field so it can't re-fire. All modes push via AnkiConnect onto a note type and decks you choose at setup. Use proactively whenever input is (a) a Japanese-language video URL, (b) a list of Japanese words, (c) a request to improve/replace sentences on existing cards, (d) any mention of audiobook cards needing explanations, audio, or cleanup, or (e) any mention of AI instructions / notes left on cards. Trigger phrases include "mine this video", "make sentence cards from <url>", "turn this reel into cards", "mine these words", "find sentences for [w1, w2, …]", "i keep forgetting <word>", "pull cards from my <show> bank", "leech these", "do we have anything for leeches", "fix my leeches", "what leeches do I have", "search the banks for X", "replace the sentence for <word>", "find a better sentence for X", "fix my flag:1 cards", "these sentences are too short/confusing", "write better explanations for my audiobook cards", "generate the audio for those explanations", "the cards I made audiobook mining", "clean up my audiobook cards", "this card is too hard, defer it", "check my ai_instructions", "act on the notes I left on my cards", "what did I flag for you", "set up sentence mining", `/sentence-mining`, `/sentence-mining setup`, or any video URL paired with a mention of Anki / cards / morphs / i+1.
 ---
 
 # Sentence Mining
 
-**There is one pipeline. The five modes are five entry points into it.**
+**There is one pipeline. The six modes are six entry points into it.**
 
 They differ at exactly two stages — where the sentence comes from (SOURCE) and whether the
 card is added or updated (WRITE). Everything else is shared, and all of it is written down
 once, in **[references/pipeline.md](references/pipeline.md)**.
 
 ```
-     video         bank        replace      audiobook    instructions
-  a URL or file  a word list  bad sentence  external     a note Ray typed
-                              on my card    tool's cards  into a card
-        │             │            │             │             │
-        ▼             ▼            ▼             ▼             ▼
+     video     bank      replace     leech   audiobook  instructions
+   a URL or   a word      a bad    tag:leech external    a note Ray
+     file      list     sentence   + failing  tool's     typed into
+                                      now      cards       a card
+       │         │          │          │         │            │
+       ▼         ▼          ▼          ▼         ▼            ▼
     ┌────────────────────────────────────────────────────────────────┐
     │  1 SOURCE   ◀── the modes differ here                           │
     │  2 CURATE       ai_instructions first, then drop the junk       │
@@ -33,6 +34,12 @@ once, in **[references/pipeline.md](references/pipeline.md)**.
 
 **Nothing in this skill suspends a card or tags it `not-worth-learning`.** The known-word diff
 decides *sequencing* (see it later), never *worth* — see [pipeline.md §ROUTE](references/pipeline.md#6--route).
+
+**One deliberate exception: leech mode deletes.** A word with no usable sentence in *any*
+corpus, on a card that has already failed five or more times, is deleted rather than parked —
+Ray's call, July 2026. It is the only destructive act in the skill, it never fires without
+`--confirm-delete` after a human has read the batch table, and Anki logs the fields to
+`deleted.txt`. Everything else still holds: no suspends, no `not-worth-learning`.
 
 **Read [pipeline.md](references/pipeline.md) once you know the mode.** Then read that mode's
 reference, which is short and covers only its SOURCE/WRITE deltas and its own gotchas. If you
@@ -55,6 +62,7 @@ in one breath ("audiobook mode on the ryu cards"), that IS his answer — skip t
 | video     | URL or local file              | transcribe → i+1 diff → **new** cards            | [video-mode.md](references/video-mode.md) |
 | bank      | a list of words                | cascade → **new** cards                          | [bank-mode.md](references/bank-mode.md) |
 | replace   | `flag:1` / "find a better sentence" | swap in a better sentence, **in place**     | [replace-mode.md](references/replace-mode.md) |
+| leech     | `tag:leech` **that is still failing** | fresh sentence + full rehab; de-tag the recovered | [leech-mode.md](references/leech-mode.md) |
 | audiobook | cards tagged `audiobook`       | bring an external tool's cards up to house standard | [audiobook-mode.md](references/audiobook-mode.md) |
 | instructions | a note Ray typed into `ai_instructions` | do what the note says, **then clear it**  | [instructions-mode.md](references/instructions-mode.md) |
 | setup     | first run / no `config.json`   | write the per-user config                        | [setup.md](references/setup.md) |
@@ -89,6 +97,12 @@ cards sat with no explanation and no explanation audio until Ray happened to rev
 typed a note on it — and that note was on ONE card; the other 40 were silent. This check is
 the reader for the cards that never get a note.
 
+**And check the leech backlog, every launch** — `python3 scripts/leech_scan.py --summary` is
+one `cardsInfo` call (no known-word scan, no cascade). Surface it whenever `struggling > 0`.
+Nothing else in the skill looks at leeches, which is exactly how 78 of them accumulated
+unnoticed by July 2026 — 35 still failing daily, and 43 that had quietly recovered and were
+carrying a tag that no longer meant anything.
+
 ### Telling the modes apart
 
 **Create vs fix.** If the word has no card yet → **video** or **bank**. If the card already
@@ -107,7 +121,18 @@ forgetting 同期" with no card → bank. "The sentence on my 同期 card is a f
   fix is normalization + i+1 routing. Cards whose sentences turn out to be too hard get an
   easier one from the cascade — the same SOURCE stage, not a call into another mode.
 
-**Instructions vs everything else.** The other four modes are *you* deciding what's wrong with
+**Replace vs leech** — both swap a sentence on an existing card through the same cascade. The
+difference is *who noticed* and *what else happens*:
+- **replace** — Ray noticed, and said so with `flag:1`. One defect, one card at a time.
+- **leech** — *Anki* noticed, by counting lapses. Selection is automatic and the treatment is
+  heavier: full rehabilitation with `--due-now`, plus two dispositions replace mode doesn't
+  have — recovered cards get de-tagged and left alone, and unfixable ones get **deleted**.
+
+The trap: `tag:leech` on its own is the wrong selector. Anki never removes the tag, so most of
+a leech list can be cards that recovered months ago. Leech mode filters by *current interval*
+— see [leech-mode.md](references/leech-mode.md), which opens with exactly this.
+
+**Instructions vs everything else.** The other five modes are *you* deciding what's wrong with
 a card. Instructions mode is *Ray* telling you, in his own words, in the card itself. It's
 selected by the field, not by the defect — so it cuts across all the others: an
 `ai_instruction` can turn out to need a replace-mode sentence swap, an audiobook-style field
@@ -180,6 +205,7 @@ tokenizer the miner uses. See [known-words.md](references/known-words.md).
 | `find_sentences.py`      | 1 SOURCE     | *bank* — word list → cascade → new-card candidates (dedupes vs existing + known words) |
 | `replace_search.py`      | 1 SOURCE     | *replace* — resolve target cards (flag / note-ids / words) → cascade → replace-draft |
 | `audiobook_scan.py`      | 1 SOURCE     | *audiobook* — `--groups` buckets cards by book; `--query` diffs each card against the house standard + the i+1 set → draft with `defects[]` and a `main`/`rescue`/`deferred` route |
+| `leech_scan.py`          | 1 SOURCE     | *leech* — `--summary` is the launch check (counts only); the full run splits `tag:leech` into struggling vs recovered by **current interval**, diagnoses `defects[]`, and pulls a fresh sentence per struggling card through the cascade |
 | `instructions_scan.py`   | 1 SOURCE     | *instructions* — sweep the whole note type for a non-empty `ai_instructions` → draft with Ray's note + `facts[]` (a second opinion on it). The only thing that finds a note on an unflagged card |
 | `extract_bank.py`        | 1 SOURCE     | one-time — parse `.apkg` → local index JSON + media dir (feeds cascade tier 5) |
 | `search_banks.py`        | 1 SOURCE     | cascade **tier 5** only — within-bank ranking. *Not an entry point any more; reached through `_sources.py`.* |
@@ -188,6 +214,7 @@ tokenizer the miner uses. See [known-words.md](references/known-words.md).
 | `push.py`                | 5 WRITE      | AnkiConnect `addNotes` onto `config.note_type` via `config.field_map` |
 | `replace_apply.py`       | 4–6          | *replace* — stage media + TTS, archive the old sentence, overwrite fields, retag, rehabilitate, retire misses. `--dry-run` for the mandatory gate; `--rehab-flag N` to rehabilitate a batch with no field changes |
 | `audiobook_apply.py`     | 4–6          | *audiobook* — TTS the explanation, overwrite, clear the tool's foreign fields, `。` a blank picture, retag, route. `--dry-run`, `--only <ids>` |
+| `leech_apply.py`         | 4–7          | *leech* — de-tag the recovered (scheduling untouched), swap + rehabilitate the struggling (`--due-now` by default), then the **delete gate** for misses and twin losers. Imports `replace_apply`'s machinery rather than duplicating it. `--dry-run`, `--confirm-delete`, `--only` |
 | `instructions_apply.py`  | 4–6          | *instructions* — `retts` / `fields` / `route` / `none` per card, **then clear `ai_instructions`** so it can't re-fire. Keeps standing preferences. `--dry-run`, `--only`, `--clear-anyway` |
 | `queue_cards.py`         | 7 QUEUE      | make finished cards actually appear. `--due-now` (default choice) or `--raise-limit N`. Main deck only — refuses to queue deferred cards |
 | `audit_media.py`         | maintenance  | scan collection.media for extension/content mismatches; `--fix` corrects + updates every referencing note |
@@ -196,8 +223,8 @@ tokenizer the miner uses. See [known-words.md](references/known-words.md).
 
 - **[pipeline.md](references/pipeline.md)** — the 7 stages. Every shared rule lives here.
 - [video-mode.md](references/video-mode.md) · [bank-mode.md](references/bank-mode.md) ·
-  [replace-mode.md](references/replace-mode.md) · [audiobook-mode.md](references/audiobook-mode.md)
-  — the per-mode deltas.
+  [replace-mode.md](references/replace-mode.md) · [leech-mode.md](references/leech-mode.md) ·
+  [audiobook-mode.md](references/audiobook-mode.md) — the per-mode deltas.
 - [setup.md](references/setup.md) — the interview that writes `config.json`
 - [known-words.md](references/known-words.md) — how "known" is computed (replaces AnkiMorphs)
 - [note-type.md](references/note-type.md) — note-type fields and how `config.field_map` maps on

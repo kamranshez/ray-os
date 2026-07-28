@@ -70,6 +70,20 @@ DEFAULTS: dict = {
     #
     # An EMPTY map is a valid state: it just means "no flag conventions here".
     "flags": {},
+    # Leech mode's struggling/recovered cut. Anki tags a card `leech` at its deck's
+    # leechFails and never removes the tag, so `tag:leech` means "gave me trouble once",
+    # not "is failing now" — on Ray's collection 43 of 78 tagged cards had recovered to
+    # 21-338 day intervals. A card at or above this interval is treated as recovered:
+    # the tag is stripped and its scheduling is left completely alone.
+    "leech": {
+        "struggling_interval": 21,  # days; falls back to known_words.interval_threshold
+        # A struggling leech whose word is rarer than this JPDB lemma rank is NOT given a
+        # new sentence. Fighting a word that barely appears is the expensive kind of
+        # failure — 穏当 (rank 39k) had cost 19 lapses across 87 reps by July 2026. Skipped
+        # cards are deferred, never deleted: rare is "later", not "not worth learning".
+        # 0 / null disables the rule. Needs jpdb_priority_csv to be set.
+        "rare_rank_cutoff": 20000,
+    },
 }
 
 
@@ -131,6 +145,21 @@ def deck_main(cfg: dict) -> str:
 def deck_deferred(cfg: dict) -> str:
     """Deferred deck, falling back to the main deck when unset."""
     return cfg["decks"].get("deferred", "") or deck_main(cfg)
+
+
+def leech_interval(cfg: dict) -> int:
+    """Interval (days) at or above which a leech-tagged card counts as RECOVERED.
+
+    Defaults to the known-word maturity threshold so the collection has one idea of
+    "this has stuck" rather than two that can drift apart."""
+    fallback = cfg.get("known_words", {}).get("interval_threshold", 21)
+    return int((cfg.get("leech") or {}).get("struggling_interval") or fallback)
+
+
+def leech_rare_cutoff(cfg: dict) -> int:
+    """JPDB lemma rank above which leech mode defers a word instead of re-mining it.
+    0 = rule off."""
+    return int((cfg.get("leech") or {}).get("rare_rank_cutoff") or 0)
 
 
 def _flag_entry(cfg: dict, n) -> dict:

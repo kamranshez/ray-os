@@ -12,12 +12,17 @@ two stages that differ.
 
 ## Triggers
 
-- Ray pastes a list of Japanese words: "make cards", "mine these", "find sentences for", "leech these"
+- Ray pastes a list of Japanese words: "make cards", "mine these", "find sentences for"
 - Ray names one word he keeps forgetting
 - `/sentence-mining` with no URL and a list of words
 
 A URL instead → [video mode](video-mode.md). A word that **already has a card** →
 [replace mode](replace-mode.md) (the ask is a *better* sentence, not a new card).
+
+**"leech these" is NOT a bank-mode trigger** — it used to be listed here and it never worked.
+Every leech already has a card, and `find_sentences.py` skips any word that does, so the whole
+list came back as misses reading "already has a card". Leeches go to
+[leech mode](leech-mode.md).
 
 ---
 

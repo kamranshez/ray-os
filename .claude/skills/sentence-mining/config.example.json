@@ -1,6 +1,5 @@
 {
   "anki_connect_url": "http://localhost:8765",
-
   "note_type": "Japanese Sentence Mining",
   "field_map": {
     "word": "wordForm",
@@ -14,33 +13,46 @@
     "previous_versions": "previous_versions",
     "ai_instructions": "ai_instructions"
   },
-
   "decks": {
     "main": "Sentence Cards",
     "deferred": "Sentence Mining Deferred"
   },
-
   "_comment_flags": "What each Anki flag colour means to YOU, and whether the mining modes may touch it. `ignore: true` makes a flag off-limits to `replace_search --flag N` and `replace_apply --rehab-flag N` unless --force-ignored-flag is passed — use it for flags that mark cards which must never be swept into a mining run. Leave this map empty ({}) if you have no flag conventions.",
   "flags": {
-    "1": { "meaning": "triage — something is wrong; diagnose it", "ignore": false },
-    "2": { "meaning": "flesh out — bare card, needs building up", "ignore": false },
-    "7": { "meaning": "tutoring lessons — record only, never mine", "ignore": true }
+    "1": {
+      "meaning": "triage — something is wrong; diagnose it",
+      "ignore": false
+    },
+    "2": {
+      "meaning": "flesh out — bare card, needs building up",
+      "ignore": false
+    },
+    "7": {
+      "meaning": "tutoring lessons — record only, never mine",
+      "ignore": true
+    }
   },
-
   "known_words": {
     "interval_threshold": 21,
     "sources": [
-      { "query": "deck:\"Sentence Cards\"", "field": "sentence" },
-      { "query": "note:\"Core 2k/6k\"", "field": "Vocabulary-Kanji" }
+      {
+        "query": "deck:\"Sentence Cards\"",
+        "field": "sentence"
+      },
+      {
+        "query": "note:\"Core 2k/6k\"",
+        "field": "Vocabulary-Kanji"
+      }
     ]
   },
-
   "jpdb_priority_csv": "",
-
   "banks": {
     "source_dir": "~/Documents/sentence-banks",
     "index_dir": "~/Downloads/sentence-mining/banks/index"
   },
-
-  "work_dir": "~/Downloads/sentence-mining"
+  "work_dir": "~/Downloads/sentence-mining",
+  "_comment_leech": "Leech mode's struggling/recovered cut. Anki tags a card `leech` at the deck's leechFails and never removes it, so tag:leech means 'gave me trouble once', not 'is failing now'. A tagged card whose CURRENT interval is >= struggling_interval is treated as recovered: the tag is stripped and its scheduling is left alone. Defaults to known_words.interval_threshold.",
+  "leech": {
+    "struggling_interval": 21
+  }
 }
