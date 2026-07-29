@@ -1,0 +1,56 @@
+# Recap of bike trip/street interviews across America
+
+- URL: https://www.lesswrong.com/posts/Czob95kjXPEpKYTsJ/recap-of-bike-trip-street-interviews-across-america
+- Author: cguth7
+- Date: 2026-07-15
+- Karma: 153  Comments: 10  Words: 1700
+- Band: C  Tier: 1  Score: 20.6  Density: 4.24
+- Anchors: \bharness(es|ing)?\b, claude code
+
+---
+
+A ~month ago I left from Chicago to bike (and amtrak) to plzdontkillus in Berkeley. I've been [street interviewing/conversing](https://www.youtube.com/@charlieguthmann2531/videos) with a wide variety of people I ran into about AI futures and philosophy. I also have been [live streaming since I got to PDKU](https://www.twitch.tv/videos/2816929217), leaning more talking to young founders but a variety overall.  
+  
+I'll try to share what I've learned about the American public, persuasion, social media and the EA movement.
+
+###   
+**1\. Almost no one in "Normal America" has any idea what is going on.**
+
+They don't have a paid account, they don't know what Claude code is, they especially haven't heard the recent evals/metr graphs or even a vague sense of how cheap SWE has gotten/ how powerful these recent models with good harness/ context eng can be. This makes sense; most people don't know any coding, they don't know much math, they don't know what an api is, etc. So having a high fidelity understanding of AI might require months of pre understanding of math/stem/digital infra fundamentals. [This interview](https://www.youtube.com/watch?v=tnXWJG2RAbo) is with the city clerk of Danville Iowa, a town of ~900. Presumably this is approximately the most tech savvy person in the town. It should give you a sense of the upper end of world models about AI in Iowa. Overall, [this post claiming that this is now mostly politically and not technically bottlenecked](https://www.lesswrong.com/posts/EexsebbYhbe2gXkPP/the-current-bottleneck-is-political-will-not-research) is in my view completely on point. The actual political will is sooooooo far behind the "best" solutions. People need to know what "high thinking mode means" or what a "model" is or what a "harness" is, not whether or not our treaty with china should use x vs y chip tracking tech.
+
+###   
+**2\. Almost everyone is directionally concerned or becomes concerned once thinking about it a little bit.**
+
+Surprisingly, even though most people haven't used frontier models, they are already pretty willing to believe they aren't as smart as the best AI. In essence, most people I talked to think we have "agi" or are very close. Additionally, most people quite willing believe or already believed in "recusive self improvement" and/or that the intelligence ceiling is well above humans and that we will probably get their soon. They are also then willing to buy into that we will have "ASI" in the next 10-20 years. Once you walked them to this point, you can simply ask stuff like, "what do you think will happen once we have ASI" and the average person is like, yea that's gonna be pretty scary lol.
+
+To summarize, the arguments for more transparency, safety, or regulation are actually quite ***Overpowered*** to the average person conditional on having ~soonish timelines and actually being prompted to think about 10 years from now. Most people simply never think about what the future will look like in 10 years. Arguments of the form, ["yea this might kill us or spiral us into totalitarian techno feudalism but also we can't predict the future and it's gonna maybe make me live longer"](https://forum.effectivealtruism.org/posts/oFsEsECrHzW6KBXJW/why-i-reject-the-longtermist-argument-against-accelerating) are extremely rare and unpopular among the general public, though you see this very often on twitter. Again, all of this should push you even harder in the direction of ***"spread the word broadly, don't argue, just inform".***
+
+### 3\. **Belief that this might cause human extinction actually isn't that uncommon, mostly coming from sci-fi movies, but people are** ***still*** **most concerned about jobs and especially** ***loss of meaning.***
+
+*Sustainability and Water usage* are brought up a lot but people mostly don't actually seem to care that much about it, when called out and told that's not a huge concern, most people are like oh true that's believable, but they switch to a deeper concern (i.e. the source of the unpopularity of AI is actually something closer to a fear of change and the water stuff is a just a good normie meme for expressing this discomfort).  
+  
+If you ask people if they think AI might go rogue and kill us all soon (not even getting into bio/hacking/terrorism/etc.) they say stuff like "*yea that sounds possible".* This doesn't seem to elicit much emotions though.  
+  
+When you ask them *"imagine a world in which we have automated everything, we have great welfare/political system so everyone is taken care of, but no one needs you (and in fact you can still work, the robots will let you slot in, etc. just it won't change anything for anyone else)"* people mostly react quite viscerally and negatively. This is a little bit surprising to me? I would consider this situation quite good. But for most people I talked to this would literally be more upsetting than ***HUMAN EXTINCTION***. [This was a pretty average response](https://www.instagram.com/p/DZxmyVdu5mu/) to the question
+
+### 4\. The EA movement was pretty useless to me, the other community ([**Torchbearer community**](https://www.torchbearer.community/)) I was in was significantly more supportive, helpful, etc. despite having been in it for a few months and having been in the EA movement for ~8 years. This has basically solidified that I won't be broadly participating in EA anymore at least relating to AI safety stuff.
+
+  
+I'm broadly in agreement with [this post](https://forum.effectivealtruism.org/posts/dieuDkXYAveFsX48c/possible-mistake-eas-are-making-and-shout-out-to-pause-ai-uk), and obv glad it was posted but it's also a bit frustrating that it got 174 upvotes for saying we should work harder on advocacy when [My quick take saying I was biking across the country doing advocacy](https://forum.effectivealtruism.org/posts/weqxdvHxv7tXqDadp/charles_guthmann-s-shortform?commentId=MwFpfK5shGEFy6jh6) got essentially 0 support or engagement, not a single "good luck" (shout out the one person who upvoted it). I was spamming EAs on twitter asking for Re tweets and stuff like that and was basically ignored (shout out [miles brundage](https://x.com/Miles_Brundage/status/2067426942413103452)) . I totally can believe people are busy or my content was trash, and I'm only minor-ly salty. But just to be clear I have helped start 2 university groups, donated 1000s of $ and just broadly feel like I've put a lot of effort into trying to be part of this community. I didn't do it for something in return but at some point I have to admit the status incentives in this community aren't great and doing the things (I think) are high EV just usually leaves me feeling a bit let down if they don't happen to route through more legible EA status mechanisms.
+
+I usually just [loop](https://forum.effectivealtruism.org/posts/48mypEepqBqWibKtJ/?commentId=WQfiqqSpsjYBGqtKC) and [spiral](https://forum.effectivealtruism.org/posts/oeoMD6HRTZmmrFEkG/the-discovery-problem-why-ea-can-t-find-what-it-isn-t?commentId=LyuxZjg9A4apXBrzz) about this stuff but Torchbearer community is set up in a way that I can actually ask for support from people, people naturally have validated and supported me or even just felt open to giving constructive criticism. I'm left feeling more that in fact it is EA that is structured in a way that isn't great for me at least getting the types of support I need and I'd generally push most people in this community working on "generalist" AI safety to leave for greener pastures, though I don't have an exact sense of the best other communities.
+
+Just to hedge/clarify a little here, it's not like I thought hard about how to get the most out of the EA community or anything like that and broadly I'm pretty bad at playing the social media/network games effectively so probably I'm just complaining about being a suboptimal internet communicator.
+
+###   
+**5\. Social media is hard, Social media is bad, I'm bad at social media**
+
+To get attention it's lowkey hard there is a lot of competition unless you have a unique way to [ragebait people](https://www.instagram.com/p/DahK2iCuiGW/). The most viral short I have posted is just a green haired hipster saying they are not a tanky but like some things about china??? Anyway I average 200-2k views on the shorts I post. I think I could make them even shorter and more clickbaity and probably double that? Surprisingly the algo on insta doesn't seem to care that much about how many followers you have? Like it matters but you can def get decent views just on the content alone. I have 120k views on my insta in the last month and I literally made my account a month ago. At the same time it's extremely hard to think about the value of a view on your short for like a million different reasons to the point where I'm not going to even attempt to explain my thoughts there, but overall ***I wouldn't be surprised if I would have had more impact the last month by simply handing out flyers to people I ran into.***
+
+More than that, being at [pdku](https://portal.plzdontkillus.com/feed) the last 10 days has pushed me even harder into thinking social media is just obviously really really really bad for society. Giving literally everyone incentives to post whatever can siphon people's attention the most with no "elitist" oversight is a recipe for most people to consume slop. Unregulated social media newsfeeds is implicitly a choice about making our information streams garbage. Garbage in garbage out. Big brother yada yada, idc at this point, We are feeding utter garbage to 99% of the population and incentivizing all the journalists/educators/etc to make their content shittier and more garbage because we are all in a prisoners dillema to attention grab. I don't see how this is a good equilibrium for a democracy. Personally, I'd straight up basically ban most of this 2 sided market place content creation stuff over instagram and facebook or at least extremely heavily regulate what algorithms they are allowed to use, I really think it's that bad for society. To be clear I'm not saying people in xrisk/AIS should be defecting from this situation, just that it is a bad situation.
+
+### **6\. I'm not sure what my theory of change is or should be**
+
+My content is somewhat of a mix between All gas no breaks, destiny/charlie kirk, and (less technical/informed) rob miles. I go on the street and talk to people about their lives and what they think about AI progress and philosophy, and sometimes I argue with them and sometimes I just listen and sometimes I just explain misunderstandings they have. I'm not exactly sure who my target audience is and what I'm trying to convince them of. It would definitely be helpful to hone this in.  
+  
+**Thanks for reading and I'm always open to receiving criticism or advice (about post or esp my content).**

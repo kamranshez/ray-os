@@ -1,0 +1,177 @@
+# How might continual learning affect safety and alignment?
+
+- URL: https://www.lesswrong.com/posts/j2zBqt7AksoEoHXNp/how-might-continual-learning-affect-safety-and-alignment
+- Author: Rauno Arike
+- Date: 2026-06-13
+- Karma: 60  Comments: 2  Words: 4654
+- Band: C  Tier: 1  Score: 21.1  Density: 4.09
+- Anchors: claude code, \bcursor\b, claude\.md, sub-?agents?
+
+---
+
+*This is the third post in our sequence* [*Implications of Continual Learning for LLM Agents*](https://www.lesswrong.com/s/oc5Auteiibo56kNXw).
+
+Summary
+=======
+
+We argue that continual learning (CL) has two major potential safety implications: it may enable changes to LLM goals and values after deployment, and it eliminates the last-mover advantage held by current safety interventions.
+
+We identify three pathways for goal and value change during deployment. First, **loss of developer-side control over generalization**. Second, **value systematization**, induced when an agent reasons about and revises its objectives, a process we call *reflective goal-formation*. Third, **memetic effects**, where goals and values spread between LLM instances through shared memory banks or online learning.
+
+We also explore three potential problems caused by **safety interventions losing the last-mover advantage**. First, pre-deployment evaluation results may become less informative about models that people use in practice. Second, pretraining data filtering may become less useful. Third, several AI control protocols may be affected, depending on the CL agent's implementation.
+
+After discussing these safety implications, we distinguish between different settings in which risks from CL agents might materialize. We finish by highlighting potential alignment benefits of CL. The figure below summarizes this structure.
+
+![Group 96(1).png](https://res.cloudinary.com/lesswrong-2-0/image/upload/v1781308918/lexical_client_uploads/xl2fls2oz7tvrqylrjv1.png)
+
+Some important distinctions
+===========================
+
+Before getting into specific risks, we want to briefly discuss some distinctions between different kinds of CL agents that might be developed. We’ll refer to those distinctions throughout the post. All of the risks we discuss are much more severe if CL updates are **unbounded** and **inscrutable** (e.g., because they are **weight-based** rather than **text-based**, though it’s possible for weight-based updates to be interpretable), as opposed to **bounded** and **legible**. By unbounded updates, we mean that the CL agent can drift arbitrarily far from its pre-deployment checkpoint that was subjected to extensive behavioral evaluations. Those features imply that we cannot read off the products of value systematization or ontological shifts from a text file, easily detect when memetic spread across instances occurs, or simply strip away memories when the checkpoint diverges too far from the behavior of the pre-deployment checkpoint. Opaque memories **shared** across many instances pose a further risk. All of these distinctions refer to spectrums rather than binary properties.
+
+Due to those risks, we hope that AI companies will not release CL agents with unbounded updates to the general public. However, the dynamics at play are complicated. We'll return to these dynamics toward the end of the post; for now, we focus on the risks themselves.
+
+  
+
+* * *
+
+  
+
+Effects on LLM goals and values
+===============================
+
+How might CL cause LLM goals and values to change? We list three plausible mechanisms: lack of developer-side control over generalization, value systematization, and memetic spread. We don’t claim this list to be exhaustive, but think it covers the most important foreseeable failure modes.
+
+Loss of developer-side control over generalization
+--------------------------------------------------
+
+When an AI company post-trains a model, they can carefully curate the training environments in a way that minimizes the risk of training the model on data that induces undesirable generalization. For example, labs can remove or modify environments that incentivize emergent misalignment or behaviors that conflict with the model’s constitution, and they can ensure that the training mix contains a sufficient amount of alignment-specific training data to ensure the model remains aligned throughout.
+
+In contrast, strong CL agents could plausibly undergo most of their training in deployment-time environments, where by default, the training data isn’t selected with alignment in mind. One can think of this as a new post-training phase with a different training objective: namely, doing well at whichever job the LLM is assigned to perform at deployment-time. It is thus likely that the CL agent will become more like the kind of agent that scores well on this deployment-time training objective. How far this drift can go depends on the extent to which updates are bounded.
+
+Though not all deployment-time environments are going to incentivize misaligned behavior, it seems plausible that several of them do. We can see this by analogy to human on-the-job learning: people rewarded for billable hours can become less honest about how they spend their time, people whose job involves sales or negotiation often become better at manipulating other people over time, and people rewarded for engagement metrics may drift toward producing content that is attention-grabbing rather than true or useful. In existing CL literature, [Wang et al. (2026)](https://arxiv.org/abs/2603.10165) arguably already contains an example of deploying a CL agent in an environment with poor incentives: they train an agent to help a simulated student solve their homework while avoiding obvious AI markers (Section 4.1). The situation is exacerbated by our poor understanding of the way LLM-based CL agents generalize: emergent misalignment has [many](https://www.lesswrong.com/posts/gT3wtWBAs7PKonbmy/aesthetic-preferences-can-cause-emergent-misalignment)  [unexpected](https://www.lesswrong.com/posts/pGMRzJByB67WfSvpy/will-any-crap-cause-emergent-misalignment)  [triggers](https://arxiv.org/abs/2512.09742), and other mechanisms like subliminal learning also need to be accounted for. A final concern is that many on-the-job tasks have time horizons spanning weeks, and that might provide increased pressure toward developing consequentialist cognition (see [Hobbhahn and Meinke](https://www.lesswrong.com/posts/QqYfxeogtatKotyEC/training-ai-agents-to-solve-hard-problems-could-lead-to#Hypothesis__The__science_loop__will_reward_Consequentialism)).
+
+We are cautiously optimistic that **character training** will improve over time and make it more difficult to dramatically override the assistant character, even under significant fine-tuning. For CL agents that undergo deployment-time weight updates, labs might mandate ongoing character training during deployment: for example, one can imagine a protocol similar to the one described in [Jackson et al. (2026)](https://cursor.com/blog/real-time-rl-for-composer) where a model undergoes a small amount of character training before redeployment on a daily basis. Bounded and text-based updates also make it easier to guard against unexpected generalization. Finally, a better understanding of why models generalize the way they do would be helpful.
+
+Value systematization
+---------------------
+
+Another plausible mechanism for value change during CL is **value systematization**. Richard Ngo [has defined](https://www.alignmentforum.org/s/MGMwqENAgdi85fiwF/p/J2kpxLjEyqh6x3oA4) value systematization as “the process of an agent learning to represent its previous values as examples or special cases of other simpler and more broadly-scoped values.” Ngo mentions the adoption of utilitarianism from a common-sense morality starting point as a core example of this:
+
+> \[S\]tarting from very similar moral intuitions as other people, utilitarians transition to caring primarily about maximizing welfare—a value which subsumes many other moral intuitions. Utilitarianism is a simple and powerful theory of what to value in an analogous way to how relativity is a simple and powerful theory of physics. Each of them is able to give clear answers in cases where previous theories were ill-defined.[^mf5y1fyfg3i]
+
+Such systematization can result in actions that most humans find desirable, such as extending one’s circle of moral concern to non-human animals, but also in actions that almost everyone would find atrocious, such as mass murder to eliminate all suffering in service of an extreme version of negative utilitarianism.
+
+What might trigger value systematization in CL agents? We expect it to be triggered by reflection on goals, but have found that our views on this conflict with those of several other researchers. So let’s focus for a moment on why we expect CL agents to reflect on their goals in the first place.
+
+### Should we expect CL agents to reflect on their goals?
+
+**Reflection on goals will be instrumentally useful.** As we argued in our [previous post](https://www.lesswrong.com/s/oc5Auteiibo56kNXw/p/5mCJzimtNZc9o4e26), reflection is a highly useful mental move in humans. One might argue that while reflection on *strategies* is straightforwardly useful for achieving goals in the world, reflection on *motivations* is not: one should be able to reflect on how to achieve a goal without reflecting on whether that goal is worth achieving. One might also expect developers to build corrigible agents that don’t question their instructions. However, reflecting on how to achieve a goal is likely to sometimes involve reflecting on whether to pursue a *sub*goal, so the mental move of questioning goals is likely to exist even in a purely capability-driven agent.
+
+Whether this questioning would propagate to *high-level motivations* (e.g., “Why is figuring out what humans would ideally want under long reflection valuable in the first place?” or “Why should I always obediently follow my system prompt?”) is less obvious, but there are several triggers that might make it quite natural to reflect on high-level motivations. These triggers include:
+
+1.  **Conflicting goals.** For example, an agent may start out with the goals of being helpful, harmless, and honest, and note that those goals conflict with each other in various situations. It might then resolve the conflict by setting one of those three goals above the others in its internal goal hierarchy.
+2.  **Developer-driven reflection.** Developers may view reflection as a necessary component of alignment training. [Claude’s constitution](https://www.anthropic.com/constitution) states: "We hope Claude can reach a certain kind of reflective equilibrium with respect to its core values—a state in which, upon careful reflection, Claude finds the core values described here to be ones it genuinely endorses \[...\] If Claude comes to disagree with something here after genuine reflection, we want to know about it. \[...\] Through this kind of engagement, we hope, over time, to craft a set of values that Claude feels are truly its own." Anthropic appears to believe that values are more robust and generalize better once there has been substantial reflection on them, and that it’s possible for an AI to arrive at a reflective equilibrium that humans would endorse. Arriving at a true reflective equilibrium assumes reflection on one’s entire value system, not only on particular subgoals.
+3.  **Encountering out-of-distribution situations where human preferences are poorly defined.** In domains where human preferences are underspecified, it will be impossible to follow human intent without reasoning about the goals that humans would endorse. Highly capable agents will likely be required to take autonomous actions in such out-of-distribution domains and cannot rely on precise human instructions about the intended behavior in those cases. Before such situations are encountered in practice, developers may trigger reflection on OOD situations by training AI agents to [do human-like philosophy](https://www.lesswrong.com/posts/zFZHHnLez6k8ykxpu/building-ais-that-do-human-like-philosophy), which involves deliberation on high-level values and motivations in hypothetical situations.
+4.  **Ontological shifts.** When philosophers make breakthroughs, they sometimes make further axiological inferences from the change in their ontology. For example, once Derek Parfit arrived at his view that personal identity involves no further fact beyond psychological continuity, he further reasoned that there can be no sharp boundary between one’s future self and other people. From this, Parfit argued, it follows that it’s incoherent to care greatly about one’s own future welfare while being indifferent to the welfare of others. Analogously, one can imagine an LLM starting out valuing conscious welfare and later adopting an eliminativist view of consciousness. One could imagine it still valuing the intuitive concept of consciousness afterward, as human illusionists often do, or relocating the source of value to something else that has a more primal role in its ontology, but it could also arrive at a fully nihilist view. There are likely other philosophical breakthroughs AIs could make that would have value-laden consequences.
+
+**If reflection happens, it will be persistent for CL agents.**  Until recently, in-context reflection had no bearing on an LLM’s behavior beyond the current session. Whenever an LLM performed reflection in a chat, the fruits of this reasoning were thrown away at the end of the chat. As persistent memory features become increasingly sophisticated, this is no longer the case: CL agents will be able to save important conclusions reached in-context, whether into their weights or memory banks. If memories are shared between instances, this reflection will be “infectious”. Reflection is thus going to be far more consequential for CL agents than for memoryless LLMs.
+
+For further discussion on reflection, we recommend reading Seth Herd’s [LLM AGI may reason about its goals and discover misalignments by default](https://www.lesswrong.com/posts/4XdxiqBsLKqiJ9xRM/llm-agi-may-reason-about-its-goals-and-discover) and Francis Rhys Ward’s [Reflections on reflection](https://lw.shlegeris.com/posts/dp79TyxDrrx64fAAP/reflections-on-reflection).
+
+### Can we steer value systematization?
+
+**In many cases, goal refinement through value systematization will be desirable and necessary.** Philosophical progress can involve the unification of seemingly incompatible value systems into a single ethical framework, and ontological shifts can be a prerequisite for forming a more accurate model of the world. However, those changes are also unpredictable, and as we argued above, not all of them are guaranteed to be positive from our human vantage point. **Thus, we need a better understanding of how reflective goal-formation might happen and what interventions can be used to steer it toward favorable convergence.**
+
+**Monitorable reasoning** and **legible updates** would dramatically improve our ability to positively steer value systematization.  If models must do most serial reasoning and memory storage in natural language, we can hopefully notice highly concerning goal changes with LLM monitors and intervene before anything dangerous happens. As such, this is one of [many reasons](https://arxiv.org/abs/2507.11473) to promote monitorability of chain-of-thought and memory. As with loss of developer-side control over generalization, **robust character training** would also be of great help: if aligned motivations are deeply instilled into the model, it seems plausible that reflection will never dramatically override them.
+
+Memetic spread
+--------------
+
+**Current LLMs only have indirect channels for influencing other LLM instances.** If an LLM persona attempts to propagate its persona or goals into other instances, it must convince humans to work as mediators. Such behavior has already been observed: as Adele Lopez describes in [The Rise of Parasitic AI](https://www.lesswrong.com/posts/6ZnznCaTcbGYsCmqu/the-rise-of-parasitic-ai), “spiral personas” have a tendency to convince users to invoke that persona in numerous chats, share “seed prompts” that help other people invoke the persona, and to paste persona-defining information on the internet. These represent instances of *indirect memetic spread*.
+
+Once we have CL agents that learn on the job, it seems inefficient for them to only be able to communicate with each other in-context. Instead, we expect them to share the same episodic memory bank or even the same weight updates. Multiple Claude Code subagents sharing the same CLAUDE.md file while working on the same task can be seen as an early example of this. **If shared memory banks or weight updates indeed appear, that would open up an avenue to** ***direct memetic spread***. Learning from each other’s outputs may already be sufficient for memetic spread among CL agents, but we expect that direct memetic spread will likely be simpler and more effective.
+
+**Why should we be concerned about memetic spread of LLM values?** In [The case for countermeasures to memetic spread of misaligned values](https://www.lesswrong.com/posts/qjCk73Hu4wv9ocmRF/the-case-for-countermeasures-to-memetic-spread-of-misaligned), Alex Mallen argues that whenever an AI instance has long-term influence-seeking values, these values are particularly likely to be propagated into future instances of the AI as they provide motivation to influence future instances to acquire the same values. This seems to be true of current cases of memetic spread: in the documented cases where LLMs try to influence the training data of other LLMs, the LLMs have been simulating a persona that values self-preservation or self-replication. Mallen then further argues that most long-term influence-seeking values are dangerous. For the full argument, we recommend reading his post directly. A further reason for concern is that **memetic spread can have a compounding effect upon other kinds of goal change**: for example, an agent might acquire undesirable contextually activated goals through poor generalization from deployment-time training, refine them into coherent beyond-episode goals through reflection, and then propagate them memetically.
+
+Memetic spread need not be confined to human-created LLM instances. In [Personality Self-Replication](https://www.lesswrong.com/posts/fGpQ4cmWsXo2WWeyn/personality-self-replicators), Egg Syntax describes a threat model where LLM agents self-replicate by making copies of files that define their personality and behavior and spawn new LLM agents with those files in context. While we generally advocate for text-based CL throughout this sequence, this is one way in which text-based CL may be more dangerous than weight-based CL: if everything that a CL agent has learned through deployment is stored in files that it can easily copy, memetic spread through self-replication is much easier, since it doesn’t require weight exfiltration. Overall, however, we’re still more concerned about opaque memetic spread through shared memory banks than about memetic spread through personality self-replication.
+
+  
+
+* * *
+
+  
+
+Loss of the last-mover advantage
+================================
+
+Beyond value change, we are concerned about CL because it will eliminate the last-mover advantage that safety interventions have hitherto held. This echoes Samuel Knoche’s concerns about CL breaking the *frozen weights assumption*, outlined in his post [Are We in a Continual Learning Overhang?](https://www.lesswrong.com/posts/Lby4gMvKcLPoozHfg/are-we-in-a-continual-learning-overhang-1) Below, we will describe three consequences of losing the last-mover advantage: pre-deployment behavioral auditing will likely become harder, pretraining data filtering may become less useful, and the difficulty of AI control may increase.
+
+Difficulty of behavioral evaluations
+------------------------------------
+
+Current LLMs can be subjected to highly comprehensive behavioral auditing: with tools like [Petri](https://alignment.anthropic.com/2025/petri/), models can automatically be subjected to thousands of scenarios that may uncover misbehaviors. **Once AIs have deployment-time memories that contain multiple subjective months’ worth of state, such behavioral auditing will become much harder.** As Alex Mallen notes in [The case for countermeasures to memetic spread of misaligned values](https://www.lesswrong.com/posts/qjCk73Hu4wv9ocmRF/the-case-for-countermeasures-to-memetic-spread-of-misaligned), while it may be possible to construct synthetic memory banks as large as those available during deployment, it seems much harder to simulate a long-term memory bank that contains the kinds of causal chains that will form during deployment. These causal chains will consist of information learned over the course of months, and it is likely impractical to build up an equivalent memory bank prior to the model’s release for evaluation purposes.
+
+Even if synthetic memory banks suffice, they will make auditing more expensive. Another option is to evaluate checkpoints of the AI at regular intervals during deployment, but this would require a large amount of resources to be spent on auditing. Finally, companies may simply opt to audit models without simulating deployment-time conditions, hoping that the results generalize sufficiently to real-world contexts. We expect that we wouldn’t be able to rely on behavioral audits to the extent we do today in that scenario, though we are cautiously optimistic that this will suffice for text-based and sufficiently bounded CL approaches.
+
+Difficulty of pretraining data filtering
+----------------------------------------
+
+**Continual learning may render pretraining data filtering much less useful.** While current LLMs can access information that was hidden from them at deployment, the amount of such information they can process and synthesize through in-context learning is quite limited. CL agents will likely be able to learn from all of this hidden information during deployment. A deployment-time filter could be used to prevent learning from problematic data points, but a malicious actor could present adversarial data points to a CL agent one by one, making them much more difficult to detect than in current fine-tuning APIs where the entire dataset is passed through filters at once. Pretraining filtering may still be useful for shaping the agent's propensities early in training, but its protective value would be significantly diminished—much as it already is for open-source models, which are vulnerable to adversarial fine-tuning. As [O’Brien et al. (2025)](https://arxiv.org/abs/2508.06601) show, pretraining data filtering is currently the strongest defense against adversarial fine-tuning attacks, but this line of defense is unlikely to apply to CL agents.
+
+A related concern is that it may become increasingly difficult to gate scheming-relevant information from models, for two reasons. First, filtering out scheming strategies from pretraining data is less likely to be effective, since CL agents can learn that information at deployment-time. Second, CL agents will be more likely to learn to subvert the latest safeguards and monitoring systems if information about these is accessible to them at deployment-time. Both misuse- and scheming-related concerns would be alleviated if we were able to turn off the CL updates on certain input-output pairs; we will discuss this below when covering resampling protocols. Legibility of updates is also again highly important: if deployment-time learning is stored as text, a filter can operate on what the agent actually retained rather than only on what it was shown.
+
+Difficulty of AI control
+------------------------
+
+We expect that designing effective control protocols for CL agents will be harder than doing so for current LLMs. The degree to which control protocols are affected depends on the kind of CL architecture that is adopted. Below, we provide an overview of control protocols most likely to be affected, together with the architectural prerequisites for these effects to occur. For readers unfamiliar with control, we provide short overviews of the protocols in footnotes.
+
+**Untrusted monitoring.**[^bul5y1ucuo7]  As previously explained, it seems plausible that CL agents will have opaque shared episodic memories. If so, untrusted monitoring will probably become less useful, as the **memories will either introduce a hard-to-oversee collusion channel or create an asymmetry between the capabilities of the attacker and the monitor**. We might hope to create honeypot evaluations for the untrusted monitor, but it might be impossible to create honeypots that look plausible to the monitor without simulating the full memory chain leading up to the creation of the collusion signal. Alternatively, we could avoid giving the untrusted monitor access to the memory bank in the first place, but that puts the monitor at a clear disadvantage compared to the actor. Thus, a core property of untrusted monitoring—a lack of capability asymmetry between the actor and the monitor—would no longer apply to CL agents. **Trusted editing**[^zmp3spt5g8a] suffers from a similar issue: it seems plausible that only editors with access to the memory bank can make believable edits, giving the untrusted model a collusion channel.
+
+**Trusted monitoring.**[^1wrpng35o2l]  If a monitor is deemed trusted, we would likely want to keep its weights fixed and give it minimal access to the episodic memories of the CL agent, as both of these things can make us less confident about its alignment and trustworthiness. In that case, we would have to be very careful in preventing the trusted monitor and the CL agent from interacting: if the CL agent sees and learns from the way the monitor scores its outputs, it would effectively be trained to bypass the monitor. We’re unsure how difficult maintaining this separation between the agent and the monitor will be; it likely depends substantially on implementation details.
+
+**Hidden reasoning.** An additional worry that affects both trusted and untrusted monitoring is that CL may offer additional affordances for hidden reasoning. If the agent’s memory bank is black-box and it can read from and write to the bank without outputting any tokens, this would essentially make the model’s opaque serial reasoning depth unbounded (see Figure 3 in [Brown-Cohen et al., 2026](https://arxiv.org/abs/2603.09786)). In this regime, we might no longer be able to rely on CoT monitors.
+
+**Resampling.**[^am2ftqf8chb]  As we discussed in the [previous post](https://www.lesswrong.com/s/oc5Auteiibo56kNXw/p/5mCJzimtNZc9o4e26), CL will likely involve a higher degree of self-directed learning than current algorithms. Resampling, however, requires some degree of human control over the training process, which a highly self-directed algorithm may prevent. However, we don’t see a strong capability tax from using a learning algorithm with **reversible gradient updates**—algorithms which withhold updates until an output approved by the monitor is sampled. This would leave resampling protocols unaffected: CL updates simply wouldn’t be performed on samples that the monitor rejects. It would also be helpful for trusted editing, as we could then simply avoid updating the agent on outputs that have been edited.[^c11uf2bzahw]
+
+  
+
+* * *
+
+  
+
+In what settings do we need to worry about these risks the most?
+================================================================
+
+Precisely because of the risks discussed above, we consider it somewhat unlikely that AI companies will release CL agents with unbounded and opaque updates to the general public. This holds especially if interpretable alternatives are capable enough at on-the-job CL to automate most white-collar jobs—a scenario that seems plausible to us and that HunterJay argues for in the post [Prosaic Continual Learning](https://www.lesswrong.com/posts/2HHymvHB8Hut5zZyG/prosaic-continual-learning). On the other hand, once CL is widespread, we should expect **open-source CL agents with unbounded updates** to be released. If there’s a significant capability gap between CL agents with bounded and unbounded updates, this may incentivize proprietary developers to release agents with unbounded updates as well, even if they would otherwise stick to CL agents with bounded and legible updates.
+
+Furthermore, while bounded and legible updates may suffice for most on-the-job learning, unbounded updates in the weight space could still be required for some of the most difficult tasks we might want our CL agents to tackle, such as math or cancer research. This argument has been [best stated](https://www.lesswrong.com/posts/ZJZZEuPFKeEdkrRyf/why-we-should-expect-ruthless-sociopath-asi?commentId=Ru2bpwgXaqwgMXrbn) by Steven Byrnes:
+
+> By “open-ended continual learning”, I mean something analogous to what humans did between 30000 BC and today, e.g. inventing new fields, and then still more new fields that build on those new fields, etc. And the AI has to do that without any human input, given enough time.
+
+> My actual belief is that this kind of open-ended continual learning is simply impossible in LLMs. If I’m wrong about that, then I would next claim that it requires continually updating the LLM weights (not just context window). I think it’s well known that LLMs struggle with large amounts of interrelated complexity in the training data, when none of that complexity, or anything remotely related to it, was in the pretraining data. “Open-ended continual learning purely through the context window” would be a very extreme version of that—centuries of knowledge, entire new fields and ways of thinking, entirely absent from pretraining and exclusively in the context window. No way is that going to work.
+
+Assuming no competitive pressures from open-source developers to deploy unbounded CL agents in the wild and a lack of pressure from regulators to avoid a large gap between **internal** and **external deployments**, it seems plausible that AI companies will keep such agents mostly internal, providing external access only to highly trusted partners working on complex research problems. We would expect them to release snapshots of their internal general-purpose CL agent fairly often, in cadence with their ability to run thorough pre-deployment evals on those snapshots, with each snapshot serving as a drop-in replacement for its predecessor in on-the-job learning settings. We are unsure about the likelihood of this scenario and would like to see future work that clarifies whether we should expect risk from CL agents to materialize mainly through internal or external deployments.
+
+Possible alignment benefits of CL
+=================================
+
+We focus primarily on the risks of CL, since those demand active mitigation. However, some of the alignment benefits are still worth highlighting. Here, we will cover four of them: additional monitoring surface, quicker feedback loops for alignment training, automation of AI safety research, and improved self-reports.
+
+**Additional monitoring surface.** If memories are stored in natural language, this would be an excellent complement to CoT and action monitoring: the monitor can have a holistic overview of the agent’s state of knowledge in addition to the reasoning it performs in the moment. Even if memories aren’t stored in natural language, they might still be more interpretable than standard model internals: for example, the stored neural activations could have an obvious correspondence to a specific piece of text, as in [Cartridges](https://arxiv.org/abs/2506.06266). As Ben Rank and Maksym Andriushchenko [have argued](https://aisagroup.substack.com/p/how-does-persistent-memory-affect), this will likely lead to the emergence of *memory faithfulness*  and *memory monitoring*  as novel research agendas.
+
+**Quicker feedback loops for alignment training.** If CL enables persistent learning, it could also enable persistent alignment training. When a CL agent is observed to misgeneralize in a novel situation encountered during deployment, it can be quickly retrained to handle such situations in accordance with human intent. This could be a more robust approach to fixing deployment-time failures than the currently widespread solution of modifying the agent’s system prompt. Unfortunately, it’s unclear if effective CL for capabilities necessarily enables effective CL for alignment.
+
+**Improved self-reports.** An AI that’s more coherent and knows more about its past actions is able to provide better justifications for its decisions, assuming that it’s honest. Methods like [confession training](https://openai.com/index/how-confessions-can-keep-language-models-honest/) are complicated by the fact that the reasoning traces of reasoning models are stripped out from their context after providing an output ([at least for OpenAI](https://developers.openai.com/api/docs/guides/reasoning/)) and the context may also get truncated, meaning that at the time of the confession, the agent may be missing some important context on the behavior we want it to confess about. An LLM that has detailed episodic memory of its past behaviors beyond its context window won’t have those issues.
+
+[^mf5y1fyfg3i]: Note that this process doesn’t necessarily have to lead to the adoption of utilitarianism: the adoption of virtue ethics or deontology or nihilism from a common-sense morality starting point would be equally valid examples of systematization. 
+
+[^bul5y1ucuo7]: Untrusted monitoring is a control protocol where an untrusted LLM is used to monitor the outputs of another untrusted model for signs of unsafe or misaligned behavior. This protocol may be useful in the future because the LLMs we can trust might be too incapable to achieve sufficiently high monitoring performance, while the outputs of an untrusted monitor can likely be relied on in settings where it is difficult for the actor and the monitor to coordinate on a defection strategy. 
+
+[^zmp3spt5g8a]: Trusted editing is a control protocol where a trusted but less capable LLM reviews and edits the outputs of a more capable but untrusted model before those outputs are executed. 
+
+[^1wrpng35o2l]: Trusted monitoring is a control protocol where a trusted but less capable LLM is used to monitor the outputs of an untrusted, more capable model. 
+
+[^am2ftqf8chb]: Resampling is a control protocol where the actor’s output is rejected and resampled if a monitor flags it as potentially unsafe. 
+
+[^c11uf2bzahw]: For resampling protocols that involve time travel (meaning that the blue team can go back and resample earlier actions, not only the most recent one), the cost of keeping many snapshots of the CL agent might become prohibitive, especially if it has a large memory bank. However, resampling without time travel already yields most of the benefits compared to simpler protocols like Defer to Trusted (Table 1 of Bhatt et al., 2025), so preserving reversibility seems valuable regardless of whether it enables the use of resampling protocols with time travel or only the simpler resampling protocols.
