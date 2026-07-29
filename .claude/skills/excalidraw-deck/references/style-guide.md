@@ -16,8 +16,10 @@ this file is the judgment layer: what to draw, how big, what colour, and what NO
 9. Ground the diagram in the real source
 10. Helper API quick reference
 11. Diagram recipes
-12. No em or en dashes
-13. Validate + preview
+12. Authoring five variations
+13. Shorthands in the picker template
+14. No em or en dashes
+15. Validate + preview
 
 ---
 
@@ -165,7 +167,58 @@ across rounds (`5 -> 1 -> 0 -> 0`) ending in a stop condition; a **cost-bar comp
 (two horizontal bars, red "expensive" vs green "cheap", widths proportional to the
 real numbers).
 
-## 12. No em or en dashes
+## 12. Authoring five variations
+
+The picker exists so Ray can choose, which only works if the five options are actually
+different. Five rewordings of the same picture is a wasted sheet.
+
+**Vary the diagram type, not the label.** Pick five different visual arguments from this
+palette and map the idea onto each:
+
+| type | when it fits |
+|---|---|
+| before / after, two boxes | a change of state, an inversion, a claim replaced |
+| a chart with two curves | anything that happens over time or scale, crossovers, divergence |
+| a pipeline | an ordered process, a build, a workflow |
+| fan-out with badges | parallel work that gets judged |
+| a table or matrix of checks | methods against properties, tradeoffs |
+| ranked horizontal bars | a distribution, a breakdown, "which of these dominates" |
+| paired vertical bars | a before/after on real numbers |
+| a ring or loop | co-evolution, flywheels, anything that returns to its start |
+| venn / bullseye / triangle | overlap, gaps, "pick two of three" |
+| small multiples | the same shape three times with one thing changed |
+| a hero stat block | one number that carries the whole slide |
+| a container with an inner box | subset relationships, "X is a special case of Y" |
+
+Two practical rules:
+
+- **Use the real numbers wherever the source has them.** A variation that prints
+  `28.57 to 0.56` beats one that draws a generic tall-bar-short-bar. When the source only
+  publishes a figure with no values, draw the shape and print no numbers rather than
+  inventing plausible ones.
+- **Do not pad to five.** If a slide genuinely only supports three good treatments, ship
+  three; the checker warns below three so you notice, not so you fill.
+
+## 13. Shorthands in the picker template
+
+The picker template defines these on top of the base helpers. They exist because 70
+diagrams of `addRect(x, y, w, h, { fill, fillStyle: 'solid', strokeWidth: 2 })` is
+unreadable. Use them; they keep layout arithmetic visible.
+
+- `box(x, y, w, h, fill, opts)` — solid-filled rect, strokeWidth 2 by default.
+- `ctr(x, y, t, size, opts)` / `mctr(...)` — centred text, prose / mono.
+- `lft(x, y, t, size, opts)` / `rgt(...)` — start-anchored / end-anchored text.
+- `aR(x1, x2, y, opts)` — straight horizontal arrow. `aD(x, y1, y2, opts)` — vertical.
+- `rowX(i, n, w, g)` — x of box `i` in a centred row of `n` boxes width `w`, gap `g`.
+  This is the anti-overlap tool: `rowX` guarantees even spacing and centring, so a row of
+  stages is `const x = rowX(i, 5, 240, 45)` and never a hand-tuned constant.
+- `V(tag, headline, caption, draw)` — push one variation. The tag drives grouping.
+
+Note the arrow helpers always bow *upward* by `|curve| * 0.6`; a negative `curve` moves the
+control point left, positive moves it right. For a downward-bowing connector, route it with
+two `addLine` calls and put `addArrow` only on the final leg.
+
+## 14. No em or en dashes
 
 Standing rule for all of Ray's content: never use em dashes or en dashes in any text
 that appears in the deck (headlines, captions, labels). Use a period, a comma, or the
@@ -173,10 +226,22 @@ inline separator `  .  ` (space-dot-space) that the decks use between short clau
 e.g. `9 agents . ~900k tokens . ~50s`. (This guide uses dashes in its own prose, but
 the *deck content you generate* must not.)
 
-## 13. Validate + preview
+## 15. Validate + preview
 
 - After every edit, run `python3 scripts/check-deck.py <deck>.html` — it runs
-  `node --check` on the inline script and lists the slide headlines.
+  `node --check` on the inline script, then lists the slide headlines (linear deck) or the
+  variations grouped per slide with warnings for thin sets (picker).
 - Preview by serving the folder: `python3 -m http.server 8772` then open
   `http://localhost:8772/<deck>.html`. To see fresh edits, hard-reload
   (Cmd+Shift+R) — a plain reload can serve the stale cached page.
+- **Check the geometry programmatically when the deck is large.** You cannot eyeball 70
+  diagrams. Drive the served page with the Playwright MCP and walk every sheet, flagging
+  any element whose `getBBox()` leaves the safe area:
+
+  ```js
+  el.getBBox()  // -> {x, y, width, height} already in viewBox units
+  // flag: x < 6 | x + width > 1594 | y < 90 | y + height > 784
+  ```
+
+  In the picker all five variations are in the DOM at once, so one pass per sheet covers
+  them all. This catches overflowing labels and stray arrowheads that a spot check misses.

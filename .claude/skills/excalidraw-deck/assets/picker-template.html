@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>CONCEPT · variation picker</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  /* Excalidraw's actual fonts, from their public repo via jsdelivr */
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+</style>
+<script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
+<style>
+  :root {
+    --cream: #1c1c1c; --paper: #262626; --ink: #e8e8e8; --ink-soft: #9b9b9b;
+    --ink-faint: #555555; --rule: #3a3a3a;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--cream); color: var(--ink);
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Excalifont', cursive; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 4px 4px; z-index: 1;
+  }
+
+  /* ===== CONTACT SHEET ===== */
+  .board { position: fixed; inset: 0; display: flex; flex-direction: column;
+           padding: 16px 26px 8px; z-index: 5; }
+  header { flex: 0 0 auto; display: flex; align-items: baseline; gap: 18px; }
+  header .num { font-family: 'Cascadia Code', monospace; color: var(--ink-faint); font-size: 0.95rem; }
+  header h1 { margin: 0; font-size: 1.85rem; font-weight: 700; }
+  header .hint { margin-left: auto; color: var(--ink-faint); font-size: 0.9rem;
+                 font-family: 'Cascadia Code', monospace; }
+  .grid { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(6, 1fr);
+          gap: 14px 16px; align-content: center; padding: 12px 0; }
+  .tile { margin: 0; grid-column: span 2; display: flex; flex-direction: column;
+          border: 1.5px solid var(--rule); border-radius: 10px; background: #212121;
+          overflow: hidden; cursor: zoom-in; transition: border-color 120ms, transform 120ms; }
+  .tile:hover { border-color: #74b9e7; transform: translateY(-2px); }
+  .tile.picked { border-color: #5bd66f; box-shadow: 0 0 0 2px rgba(91,214,111,0.22); }
+  .tile svg { width: 100%; aspect-ratio: 16 / 9; display: block; }
+  .tile figcaption { padding: 7px 10px 9px; border-top: 1px solid var(--rule);
+                     display: flex; gap: 9px; align-items: center; }
+  .tile .tag { font-family: 'Cascadia Code', monospace; color: #f0a429; font-size: 0.92rem; flex: 0 0 auto; }
+  .tile .hl { font-size: 0.98rem; color: var(--ink); line-height: 1.15; flex: 1 1 auto; }
+  .tile .pick { flex: 0 0 auto; cursor: pointer; border: 1px solid var(--rule); background: transparent;
+                color: var(--ink-soft); border-radius: 6px; padding: 3px 10px; font-size: 0.85rem;
+                font-family: 'Cascadia Code', monospace; }
+  .tile .pick:hover { border-color: #5bd66f; color: #5bd66f; }
+  .tile.picked .pick { border-color: #5bd66f; color: #5bd66f; }
+  .grid .tile:nth-child(4) { grid-column: 2 / span 2; }
+  .grid .tile:nth-child(5) { grid-column: 4 / span 2; }
+  footer { flex: 0 0 auto; display: flex; gap: 14px; align-items: center;
+           padding: 4px 2px 0; color: var(--ink-faint); font-size: 0.92rem;
+           font-family: 'Cascadia Code', monospace; }
+  footer .picklist { color: #5bd66f; }
+
+  /* ===== ZOOM OVERLAY ===== */
+  .overlay { position: fixed; inset: 0; background: rgba(22,22,22,0.985); z-index: 20;
+             display: none; flex-direction: column; padding: 18px 30px 26px; cursor: zoom-out; }
+  .overlay.on { display: flex; }
+  .overlay svg { flex: 1 1 auto; min-height: 0; width: 100%; }
+  .overlay .cap { flex: 0 0 auto; text-align: center; padding-top: 4px; }
+  .overlay .cap h2 { margin: 0 0 6px; font-size: clamp(1.5rem, 2.6vw, 2.2rem); font-weight: 700; }
+  .overlay .cap p { margin: 0 auto; max-width: 1000px; color: var(--ink-soft);
+                    font-size: clamp(1rem, 1.5vw, 1.35rem); }
+  .overlay .obar { position: absolute; top: 16px; left: 30px; right: 30px; display: flex;
+                   align-items: center; gap: 16px; font-family: 'Cascadia Code', monospace;
+                   font-size: 0.95rem; color: var(--ink-faint); }
+  .overlay .obar .tag { color: #f0a429; }
+  .overlay .obar .opick { margin-left: auto; cursor: pointer; border: 1px solid var(--rule);
+                          background: transparent; color: var(--ink-soft); border-radius: 6px;
+                          padding: 4px 14px; font-family: inherit; font-size: 0.9rem; }
+  .overlay .obar .opick.on { border-color: #5bd66f; color: #5bd66f; }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <header>
+    <span class="num" id="gnum"></span>
+    <h1 id="gtitle"></h1>
+    <span class="hint">arrows change slide  .  click a card to zoom  .  1-5 to zoom  .  p to pick</span>
+  </header>
+  <div class="grid" id="grid"></div>
+  <footer>
+    <span>picked:</span><span class="picklist" id="picklist">nothing yet</span>
+  </footer>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="obar">
+    <span class="tag" id="otag"></span><span id="ocount"></span>
+    <button class="opick" id="opick">pick this one</button>
+  </div>
+  <svg id="osvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="cap"><h2 id="oheadline"></h2><p id="ocaption"></p></div>
+</div>
+
+<script>
+(() => {
+  const COLORS = {
+    ink: '#e8e8e8', soft: '#9b9b9b', faint: '#555555', card: '#323232',
+    yellow: '#4d4526', blue: '#1f3a4d', green: '#234a2c', pink: '#4d2a39',
+    amber: '#523a23', paper: '#262626', emerald: '#5bd66f', rose: '#ff6b6b',
+    lightRed: '#4d2626', softEmerald: '#234a2c', violet: '#352c4d', teal: '#1d4642',
+    blueStroke: '#74b9e7', yellowStroke: '#f0a429',
+  };
+  const MONO = "'Cascadia Code', ui-monospace, monospace";
+
+  let TEXT_SCALE = 1, MONO_SCALE = 1;
+
+  let svg = document.getElementById('osvg');
+  let rc = rough.svg(svg);
+  const clearSvg = (s) => { while (s.firstChild) s.removeChild(s.firstChild); };
+
+  const addRect = (x, y, w, h, opts={}) => {
+    const node = rc.rectangle(x, y, w, h, {
+      stroke: COLORS.ink, strokeWidth: 1.6, roughness: 2.0, bowing: 1.6,
+      fill: opts.fill, fillStyle: opts.fillStyle || 'solid', fillWeight: 1, hachureGap: 6, ...opts
+    });
+    svg.appendChild(node); return node;
+  };
+  const addLine = (x1,y1,x2,y2, opts={}) => {
+    const node = rc.line(x1,y1,x2,y2, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.5, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addCircle = (cx,cy,d, opts={}) => {
+    const node = rc.circle(cx,cy,d, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addEllipse = (cx,cy,w,h, opts={}) => {
+    const node = rc.ellipse(cx,cy,w,h, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.8, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addPath = (path, opts={}) => {
+    const node = rc.path(path, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addText = (x,y, text, opts={}) => {
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('font-family', opts.font || "'Excalifont', cursive");
+    const isMono = (opts.font || '').indexOf('Cascadia') !== -1;
+    t.setAttribute('font-size', (opts.size || 24) * (isMono ? MONO_SCALE : TEXT_SCALE));
+    t.setAttribute('fill', opts.fill || COLORS.ink);
+    t.setAttribute('text-anchor', opts.anchor || 'start');
+    if (opts.weight) t.setAttribute('font-weight', opts.weight);
+    if (opts.style) t.setAttribute('font-style', opts.style);
+    t.textContent = text; svg.appendChild(t); return t;
+  };
+  const addArrow = (x1,y1,x2,y2, opts={}) => {
+    const curve = opts.curve != null ? opts.curve : 30;
+    const cx = (x1+x2)/2 + curve; const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+    addPath(`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`, opts);
+    const angle = Math.atan2(y2-cy, x2-cx); const ah = opts.arrowSize || 14;
+    addLine(x2,y2, x2 - ah*Math.cos(angle - Math.PI/7), y2 - ah*Math.sin(angle - Math.PI/7), opts);
+    addLine(x2,y2, x2 - ah*Math.cos(angle + Math.PI/7), y2 - ah*Math.sin(angle + Math.PI/7), opts);
+  };
+  const addCheck = (cx, cy, size=18, color=COLORS.emerald) => {
+    addPath(`M ${cx-size*0.6} ${cy} L ${cx-size*0.1} ${cy+size*0.5} L ${cx+size*0.7} ${cy-size*0.6}`, {
+      stroke: color, strokeWidth: 3.5, roughness: 1.2
+    });
+  };
+  const addCross = (cx, cy, size=18, color=COLORS.rose) => {
+    addLine(cx-size*0.6, cy-size*0.6, cx+size*0.6, cy+size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+    addLine(cx-size*0.6, cy+size*0.6, cx+size*0.6, cy-size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+  };
+
+  // ===== local shorthands =====
+  const box  = (x,y,w,h,fill,opts) => addRect(x,y,w,h, { fill, fillStyle:'solid', strokeWidth:2, ...(opts||{}) });
+  const ctr  = (x,y,t,size,opts) => addText(x,y,t, { size, anchor:'middle', ...(opts||{}) });
+  const mctr = (x,y,t,size,opts) => addText(x,y,t, { size, anchor:'middle', font:MONO, ...(opts||{}) });
+  const lft  = (x,y,t,size,opts) => addText(x,y,t, { size, ...(opts||{}) });
+  const rgt  = (x,y,t,size,opts) => addText(x,y,t, { size, anchor:'end', ...(opts||{}) });
+  const aR   = (x1,x2,y,opts) => addArrow(x1,y,x2,y, { curve:0, strokeWidth:2, arrowSize:12, ...(opts||{}) });
+  const aD   = (x,y1,y2,opts) => addArrow(x,y1,x,y2, { curve:0, strokeWidth:2, arrowSize:12, ...(opts||{}) });
+  const rowX = (i,n,w,g) => (1600 - (n*w + (n-1)*g))/2 + i*(w+g);
+
+  const slides = [];
+  const V = (tag, headline, caption, draw) => slides.push({
+    tag, group: parseInt(tag, 10), letter: tag.replace(/[0-9]+/, ''), headline, caption, draw
+  });
+
+  // ============================================================
+  // Each V(...) is ONE variation. The tag is <group number><letter>:
+  // '1A'..'1E' are five different ways to draw concept slide 1.
+  // Variations must differ in DIAGRAM TYPE, not in wording. The ten below
+  // are the stock recipes; replace their labels, keep their shapes.
+  // ============================================================
+
+  // ---------- 1. THE PROBLEM ----------
+  V('1A', 'before and after',
+    'two states with one arrow across; red problem on the left, green payoff on the right', () => {
+    box(150, 300, 480, 260, COLORS.lightRed, { strokeWidth: 2.4 });
+    ctr(390, 405, 'the old way', 30, { weight: 700 });
+    ctr(390, 452, 'slow . manual . fragile', 20, { fill: COLORS.soft });
+    addCross(390, 510, 22, COLORS.rose);
+    aR(640, 950, 430, { strokeWidth: 2.4, arrowSize: 16 });
+    box(970, 300, 480, 260, COLORS.softEmerald, { strokeWidth: 2.4 });
+    ctr(1210, 405, 'the new way', 30, { weight: 700 });
+    ctr(1210, 452, 'one clean step', 20, { fill: COLORS.soft });
+    addCheck(1210, 505, 22, COLORS.emerald);
+  });
+
+  V('1B', 'two curves that cross',
+    'the same before and after told as a trend, with the crossover marked', () => {
+    addLine(210, 700, 1400, 700, { stroke: COLORS.faint });
+    addLine(210, 700, 210, 190, { stroke: COLORS.faint });
+    rgt(190, 200, 'cost', 17, { fill: COLORS.soft });
+    lft(1000, 745, 'time  .  scale  .  capability', 17, { fill: COLORS.soft });
+    addPath('M 240 250 Q 700 420 1300 610', { stroke: COLORS.emerald, strokeWidth: 3 });
+    addPath('M 240 620 Q 700 480 1300 250', { stroke: COLORS.rose, strokeWidth: 3 });
+    lft(1320, 620, 'this half', 21, { fill: COLORS.emerald, font: MONO });
+    lft(1320, 250, 'that half', 21, { fill: COLORS.rose, font: MONO });
+    addCircle(790, 448, 26, { stroke: COLORS.ink, strokeWidth: 2 });
+    ctr(950, 315, 'the crossover', 20, { fill: COLORS.soft });
+    addArrow(910, 330, 812, 435, { curve: -20, strokeWidth: 1.6, arrowSize: 10, stroke: COLORS.soft });
+  });
+
+  V('1C', 'the bottleneck',
+    'cheap work fans into one stage that cannot keep up; the neck is the red box', () => {
+    box(160, 340, 260, 180, COLORS.blue);
+    mctr(290, 415, 'produce', 24, { weight: 700 });
+    ctr(290, 452, 'cheap now', 18, { fill: COLORS.soft });
+    [370, 415, 460, 505].forEach(y => aR(420, 560, y, { strokeWidth: 1.6, arrowSize: 10 }));
+    box(560, 280, 420, 300, COLORS.lightRed, { strokeWidth: 2.6 });
+    mctr(770, 410, 'the neck', 30, { weight: 700 });
+    ctr(770, 458, 'what it actually costs', 20, { fill: COLORS.soft });
+    aR(980, 1120, 430);
+    box(1120, 340, 280, 180, COLORS.softEmerald);
+    mctr(1260, 440, 'done', 24, { weight: 700 });
+  });
+
+  V('1D', 'the claim, crossed out',
+    'an assumption on top with a cross, the correction underneath in red', () => {
+    addCross(230, 280, 30, COLORS.rose);
+    box(320, 190, 1010, 180, COLORS.card);
+    ctr(825, 268, 'the thing everyone assumes', 30);
+    ctr(825, 315, 'stated in one line', 30);
+    lft(320, 415, 'the old assumption', 18, { fill: COLORS.soft });
+    aD(825, 440, 500, { strokeWidth: 2.4, arrowSize: 15 });
+    box(320, 510, 1010, 180, COLORS.lightRed, { strokeWidth: 2.6 });
+    ctr(825, 588, 'what is actually true', 30);
+    ctr(825, 635, 'stated in one line', 30);
+    lft(320, 730, 'now', 18, { fill: COLORS.soft });
+  });
+
+  V('1E', 'the split moved',
+    'two stacked columns showing the same total divided differently', () => {
+    const col = (x, label, topFrac) => {
+      const H = 400, top = 210, gh = Math.round(H*topFrac);
+      box(x, top, 280, gh, COLORS.blue);
+      mctr(x+140, top+gh/2+9, 'part one', 24, { weight: 700 });
+      box(x, top+gh, 280, H-gh, COLORS.lightRed);
+      mctr(x+140, top+gh+(H-gh)/2+9, 'part two', 24, { weight: 700 });
+      ctr(x+140, 675, label, 28, { weight: 700 });
+    };
+    col(430, 'then', 0.72);
+    col(890, 'now', 0.26);
+    lft(150, 380, 'where the', 19, { fill: COLORS.soft });
+    lft(150, 408, 'effort sits', 19, { fill: COLORS.soft });
+  });
+
+  // ---------- 2. THE MECHANISM ----------
+  V('2A', 'a pipeline',
+    'ordered stages left to right, arrows in the gaps, the payoff stage green', () => {
+    const st = [['gather', COLORS.blue], ['process', COLORS.violet], ['verify', COLORS.amber], ['ship', COLORS.softEmerald]];
+    st.forEach((s,i) => {
+      const x = rowX(i,4,290,50);
+      box(x, 320, 290, 190, s[1]);
+      ctr(x+145, 400, s[0], 26, { weight: 700, font: MONO });
+      ctr(x+145, 444, 'what it does', 19, { fill: COLORS.soft });
+      if (i < 3) aR(x+290, x+340, 415, { strokeWidth: 1.8, arrowSize: 11 });
+    });
+  });
+
+  V('2B', 'fan out, then judge',
+    'one orchestrator splits the work; each worker returns a single pass or fail', () => {
+    box(620, 110, 360, 120, COLORS.yellow, { strokeWidth: 2.4 });
+    mctr(800, 165, 'orchestrator', 26, { weight: 700 });
+    ctr(800, 202, 'splits the work', 18, { fill: COLORS.soft });
+    const pass = [true, true, false, true, true];
+    [120, 420, 720, 1020, 1320].forEach((X, i) => {
+      const cx = X + 100;
+      addArrow(800, 232, cx, 360, { stroke: COLORS.ink, strokeWidth: 1.6, curve: (cx-800)*0.035, arrowSize: 9 });
+      box(X, 365, 200, 150, COLORS.blue);
+      mctr(cx, 430, 'worker', 20, { weight: 700 });
+      mctr(cx, 463, 'task ' + (i+1), 17, { fill: COLORS.soft });
+      if (pass[i]) { addCheck(cx-44, 590, 14, COLORS.emerald); lft(cx-14, 598, 'pass', 19, { fill: COLORS.emerald, weight: 700, font: MONO }); }
+      else { addCross(cx-44, 590, 14, COLORS.rose); lft(cx-14, 598, 'fail', 19, { fill: COLORS.rose, weight: 700, font: MONO }); }
+    });
+  });
+
+  V('2C', 'a loop that closes',
+    'four steps in a strip with a return arrow underneath and the stop condition named', () => {
+    ['step one', 'step two', 'step three', 'step four'].forEach((t,i) => {
+      const x = rowX(i,4,300,55);
+      box(x, 330, 300, 170, i===3 ? COLORS.softEmerald : COLORS.blue);
+      ctr(x+150, 412, t.split(' ')[0], 24, { weight: 700 });
+      ctr(x+150, 450, t.split(' ')[1], 21, { fill: COLORS.soft });
+      if (i < 3) aR(x+300, x+355, 415, { strokeWidth: 1.8, arrowSize: 11 });
+    });
+    const xa = rowX(0,4,300,55), xb = rowX(3,4,300,55);
+    addLine(xb+150, 500, xb+150, 620, { stroke: COLORS.soft, strokeWidth: 2 });
+    addLine(xb+150, 620, xa+150, 620, { stroke: COLORS.soft, strokeWidth: 2 });
+    addArrow(xa+150, 620, xa+150, 505, { curve: 0, strokeWidth: 2, arrowSize: 12, stroke: COLORS.soft });
+    mctr(800, 660, 'until the stop condition', 21, { fill: COLORS.soft });
+  });
+
+  V('2D', 'the numbers, before and after',
+    'paired bars per metric, widths proportional to the real values, value printed on top', () => {
+    addLine(200, 690, 1400, 690, { stroke: COLORS.faint });
+    [[520, 'metric one', [28.57, 0.56], [COLORS.lightRed, COLORS.softEmerald]],
+     [1080, 'metric two', [40.22, 60.53], [COLORS.card, COLORS.softEmerald]]].forEach(g => {
+      g[2].forEach((v,i) => {
+        const h = v*6.6, x = g[0] - 165 + i*200;
+        box(x, 690-h, 130, h, g[3][i]);
+        mctr(x+65, 690-h-18, v.toFixed(2), 22, { weight: 700 });
+        ctr(x+65, 718, i===0 ? 'before' : 'after', 17, { fill: COLORS.soft });
+      });
+      ctr(g[0], 758, g[1], 24, { weight: 700 });
+    });
+  });
+
+  V('2E', 'the matrix',
+    'options down the side, properties across the top, a check or a cross in every cell', () => {
+    [290, 410, 530, 650].forEach(y => addLine(150, y, 1395, y, { stroke: COLORS.faint }));
+    [590, 855, 1125, 1395].forEach(x => addLine(x, 230, x, 650, { stroke: COLORS.faint }));
+    ['property a', 'property b', 'property c'].forEach((t,i) =>
+      ctr([722, 990, 1260][i], 275, t, 22, { fill: COLORS.soft }));
+    [['option one',[1,0,1]], ['option two',[1,1,0]], ['option three',[0,1,1]]].forEach((r,i) => {
+      const y = 350 + i*120;
+      lft(170, y+10, r[0], 25, { font: MONO });
+      [722, 990, 1260].forEach((x,j) => {
+        if (r[1][j]) addCheck(x, y, 20, COLORS.emerald); else addCross(x, y, 20, COLORS.rose);
+      });
+    });
+  });
+
+  // ============== CONTACT SHEET ==============
+  // One entry per concept slide, in narrative order. TITLES.length is the
+  // number of contact sheets; each sheet shows every variation whose tag
+  // starts with that number.
+  const TITLES = [
+    'the problem',
+    'the mechanism',
+  ];
+  const NGROUPS = TITLES.length;
+  const picks = {};
+  let group = 1, zoomIdx = -1;
+
+  const renderInto = (el, slide) => {
+    svg = el; rc = rough.svg(el); clearSvg(el);
+    TEXT_SCALE = slide.scale != null ? slide.scale : 1;
+    MONO_SCALE = slide.monoScale != null ? slide.monoScale : 1;
+    slide.draw();
+  };
+  const inGroup = (g) => slides.filter(s => s.group === g);
+
+  const drawPicks = () => {
+    const list = [];
+    for (let g = 1; g <= NGROUPS; g++) if (picks[g]) list.push(picks[g]);
+    document.getElementById('picklist').textContent = list.length ? list.join('  ') : 'nothing yet';
+  };
+  const togglePick = (s) => {
+    picks[s.group] = picks[s.group] === s.tag ? null : s.tag;
+    buildGrid(); drawPicks();
+    if (zoomIdx >= 0) document.getElementById('opick').classList.toggle('on', picks[s.group] === s.tag);
+  };
+
+  const openZoom = (i) => {
+    const list = inGroup(group);
+    if (i < 0 || i >= list.length) return;
+    zoomIdx = i;
+    const s = list[i];
+    renderInto(document.getElementById('osvg'), s);
+    document.getElementById('otag').textContent = s.tag;
+    document.getElementById('ocount').textContent = 'variation ' + (i+1) + ' of ' + list.length;
+    document.getElementById('oheadline').textContent = s.headline;
+    document.getElementById('ocaption').textContent = s.caption;
+    document.getElementById('opick').classList.toggle('on', picks[s.group] === s.tag);
+    document.getElementById('overlay').classList.add('on');
+  };
+  const closeZoom = () => { zoomIdx = -1; document.getElementById('overlay').classList.remove('on'); };
+
+  function buildGrid() {
+    document.getElementById('gnum').textContent = 'slide ' + group + ' / ' + NGROUPS;
+    document.getElementById('gtitle').textContent = TITLES[group-1];
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    inGroup(group).forEach((s, i) => {
+      const fig = document.createElement('figure');
+      fig.className = 'tile' + (picks[s.group] === s.tag ? ' picked' : '');
+      const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      el.setAttribute('viewBox', '0 0 1600 900');
+      el.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      fig.appendChild(el);
+      const cap = document.createElement('figcaption');
+      const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = s.tag;
+      const hl = document.createElement('span'); hl.className = 'hl'; hl.textContent = s.headline;
+      const btn = document.createElement('button'); btn.className = 'pick';
+      btn.textContent = picks[s.group] === s.tag ? 'picked' : 'pick';
+      btn.addEventListener('click', (e) => { e.stopPropagation(); togglePick(s); });
+      cap.appendChild(tag); cap.appendChild(hl); cap.appendChild(btn);
+      fig.appendChild(cap);
+      grid.appendChild(fig);
+      renderInto(el, s);
+      fig.addEventListener('click', () => openZoom(i));
+    });
+  }
+
+  const goGroup = (g) => {
+    if (g < 1 || g > NGROUPS) return;
+    group = g; closeZoom(); buildGrid();
+  };
+
+  buildGrid(); drawPicks();
+  document.getElementById('overlay').addEventListener('click', (e) => {
+    if (e.target.id !== 'opick') closeZoom();
+  });
+  document.getElementById('opick').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const list = inGroup(group);
+    if (zoomIdx >= 0) togglePick(list[zoomIdx]);
+  });
+  document.addEventListener('keydown', (e) => {
+    const list = inGroup(group);
+    if (e.key === 'Escape') { closeZoom(); return; }
+    if (zoomIdx >= 0) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); openZoom(zoomIdx + 1 < list.length ? zoomIdx + 1 : 0); return; }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); openZoom(zoomIdx - 1 >= 0 ? zoomIdx - 1 : list.length - 1); return; }
+      if (e.key === 'p' || e.key === 'P') { togglePick(list[zoomIdx]); return; }
+    } else {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goGroup(group + 1); return; }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); goGroup(group - 1); return; }
+    }
+    if (e.key >= '1' && e.key <= '5') { e.preventDefault(); openZoom(parseInt(e.key, 10) - 1); }
+  });
+})();
+</script>
+</body>
+</html>
