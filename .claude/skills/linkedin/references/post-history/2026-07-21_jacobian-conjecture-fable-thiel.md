@@ -4,11 +4,11 @@ hook: 'Peter Thiel: "It seems much worse for the math people than the word peopl
 media: video
 status: posted
 engagement:
-  reactions: 7
+  reactions: 9
   comments: 0
   reposts: 1
-  impressions: 1363
-  last_checked: 2026-07-27
+  impressions: 1443
+  last_checked: 2026-07-29
 url: https://www.linkedin.com/feed/update/urn:li:activity:7485205594765848576/
 notes: >
   Final posted version verified from Ray's activity feed on 2026-07-22. The live
