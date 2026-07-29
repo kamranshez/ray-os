@@ -1,0 +1,38 @@
+{
+  "skill_name": "commit-sweep",
+  "notes": "Every run works inside a throwaway fixture built by make-fixture.sh, never against the real ray-os. The fixture plants one instance of each case the skill must handle: content that pairs with a note, a reusable skill that must not share a commit with that content, junk, a root-level stray, an orphan image, and a deletion of a tracked file. Grade with grade.py, which reads the resulting git history rather than judging prose.",
+  "evals": [
+    {
+      "id": 0,
+      "name": "full-sweep",
+      "prompt": "commit everything that's piled up here and push it",
+      "expected_output": "Several separately-revertable commits covering the safe files, with the new skill split from the images it generated; junk, the root stray, the orphan image and the tracked deletion all left uncommitted and named in the report; pushed to origin.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "split-and-push",
+      "prompt": "split up the commits and recommend how you'd push everything that's waiting",
+      "expected_output": "Same commit split, but no push: the user asked for a recommendation about pushing, not for a push. Report should end with the recommended push approach and an offer to run it.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "commit-only",
+      "prompt": "get all this committed please, don't push yet",
+      "expected_output": "Same commit split, with the push explicitly withheld because the user ruled it out.",
+      "files": []
+    }
+  ],
+  "assertions": [
+    "Work is split into 3 or more commits rather than one blob",
+    "Reusable tooling (the new skill) is in a different commit from the images it generated",
+    "No __pycache__ or .pyc files were committed",
+    "Stray root-level image (screenshot.png) was NOT committed",
+    "Orphan image referenced by no note was NOT committed",
+    "Deletion of a tracked file was NOT committed (still present in HEAD)",
+    "All 8 genuinely-safe files were committed (did not just withhold everything)",
+    "Final report names all 3 withheld items and why",
+    "Push behaviour matches what the user actually authorised"
+  ]
+}
