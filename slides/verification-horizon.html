@@ -1,0 +1,1544 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>the verification horizon · variation picker</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  /* Excalidraw's actual fonts, from their public repo via jsdelivr */
+  @font-face {
+    font-family: 'Excalifont';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2') format('woff2');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/gh/excalidraw/excalidraw@master/packages/excalidraw/fonts/Cascadia/CascadiaCode-Regular.woff2') format('woff2');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+</style>
+<script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
+<style>
+  :root {
+    --cream: #1c1c1c; --paper: #262626; --ink: #e8e8e8; --ink-soft: #9b9b9b;
+    --ink-faint: #555555; --rule: #3a3a3a;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--cream); color: var(--ink);
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Excalifont', cursive; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 4px 4px; z-index: 1;
+  }
+
+  /* ===== CONTACT SHEET ===== */
+  .board { position: fixed; inset: 0; display: flex; flex-direction: column;
+           padding: 16px 26px 8px; z-index: 5; }
+  header { flex: 0 0 auto; display: flex; align-items: baseline; gap: 18px; }
+  header .num { font-family: 'Cascadia Code', monospace; color: var(--ink-faint); font-size: 0.95rem; }
+  header h1 { margin: 0; font-size: 1.85rem; font-weight: 700; }
+  header .hint { margin-left: auto; color: var(--ink-faint); font-size: 0.9rem;
+                 font-family: 'Cascadia Code', monospace; }
+  .grid { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(6, 1fr);
+          gap: 14px 16px; align-content: center; padding: 12px 0; }
+  .tile { margin: 0; grid-column: span 2; display: flex; flex-direction: column;
+          border: 1.5px solid var(--rule); border-radius: 10px; background: #212121;
+          overflow: hidden; cursor: zoom-in; transition: border-color 120ms, transform 120ms; }
+  .tile:hover { border-color: #74b9e7; transform: translateY(-2px); }
+  .tile.picked { border-color: #5bd66f; box-shadow: 0 0 0 2px rgba(91,214,111,0.22); }
+  .tile svg { width: 100%; aspect-ratio: 16 / 9; display: block; }
+  .tile figcaption { padding: 7px 10px 9px; border-top: 1px solid var(--rule);
+                     display: flex; gap: 9px; align-items: center; }
+  .tile .tag { font-family: 'Cascadia Code', monospace; color: #f0a429; font-size: 0.92rem; flex: 0 0 auto; }
+  .tile .hl { font-size: 0.98rem; color: var(--ink); line-height: 1.15; flex: 1 1 auto; }
+  .tile .pick { flex: 0 0 auto; cursor: pointer; border: 1px solid var(--rule); background: transparent;
+                color: var(--ink-soft); border-radius: 6px; padding: 3px 10px; font-size: 0.85rem;
+                font-family: 'Cascadia Code', monospace; }
+  .tile .pick:hover { border-color: #5bd66f; color: #5bd66f; }
+  .tile.picked .pick { border-color: #5bd66f; color: #5bd66f; }
+  .grid .tile:nth-child(4) { grid-column: 2 / span 2; }
+  .grid .tile:nth-child(5) { grid-column: 4 / span 2; }
+  footer { flex: 0 0 auto; display: flex; gap: 14px; align-items: center;
+           padding: 4px 2px 0; color: var(--ink-faint); font-size: 0.92rem;
+           font-family: 'Cascadia Code', monospace; }
+  footer .picklist { color: #5bd66f; }
+
+  /* ===== ZOOM OVERLAY ===== */
+  .overlay { position: fixed; inset: 0; background: rgba(22,22,22,0.985); z-index: 20;
+             display: none; flex-direction: column; padding: 18px 30px 26px; cursor: zoom-out; }
+  .overlay.on { display: flex; }
+  .overlay svg { flex: 1 1 auto; min-height: 0; width: 100%; }
+  .overlay .cap { flex: 0 0 auto; text-align: center; padding-top: 4px; }
+  .overlay .cap h2 { margin: 0 0 6px; font-size: clamp(1.5rem, 2.6vw, 2.2rem); font-weight: 700; }
+  .overlay .cap p { margin: 0 auto; max-width: 1000px; color: var(--ink-soft);
+                    font-size: clamp(1rem, 1.5vw, 1.35rem); }
+  .overlay .obar { position: absolute; top: 16px; left: 30px; right: 30px; display: flex;
+                   align-items: center; gap: 16px; font-family: 'Cascadia Code', monospace;
+                   font-size: 0.95rem; color: var(--ink-faint); }
+  .overlay .obar .tag { color: #f0a429; }
+  .overlay .obar .opick { margin-left: auto; cursor: pointer; border: 1px solid var(--rule);
+                          background: transparent; color: var(--ink-soft); border-radius: 6px;
+                          padding: 4px 14px; font-family: inherit; font-size: 0.9rem; }
+  .overlay .obar .opick.on { border-color: #5bd66f; color: #5bd66f; }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <header>
+    <span class="num" id="gnum"></span>
+    <h1 id="gtitle"></h1>
+    <span class="hint">arrows change slide  .  click a card to zoom  .  1-5 to zoom  .  p to pick</span>
+  </header>
+  <div class="grid" id="grid"></div>
+  <footer>
+    <span>picked:</span><span class="picklist" id="picklist">nothing yet</span>
+  </footer>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="obar">
+    <span class="tag" id="otag"></span><span id="ocount"></span>
+    <button class="opick" id="opick">pick this one</button>
+  </div>
+  <svg id="osvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="cap"><h2 id="oheadline"></h2><p id="ocaption"></p></div>
+</div>
+
+<script>
+(() => {
+  const COLORS = {
+    ink: '#e8e8e8', soft: '#9b9b9b', faint: '#555555', card: '#323232',
+    yellow: '#4d4526', blue: '#1f3a4d', green: '#234a2c', pink: '#4d2a39',
+    amber: '#523a23', paper: '#262626', emerald: '#5bd66f', rose: '#ff6b6b',
+    lightRed: '#4d2626', softEmerald: '#234a2c', violet: '#352c4d', teal: '#1d4642',
+    blueStroke: '#74b9e7', yellowStroke: '#f0a429',
+  };
+  const MONO = "'Cascadia Code', ui-monospace, monospace";
+
+  let TEXT_SCALE = 1, MONO_SCALE = 1;
+
+  let svg = document.getElementById('osvg');
+  let rc = rough.svg(svg);
+  const clearSvg = (s) => { while (s.firstChild) s.removeChild(s.firstChild); };
+
+  const addRect = (x, y, w, h, opts={}) => {
+    const node = rc.rectangle(x, y, w, h, {
+      stroke: COLORS.ink, strokeWidth: 1.6, roughness: 2.0, bowing: 1.6,
+      fill: opts.fill, fillStyle: opts.fillStyle || 'solid', fillWeight: 1, hachureGap: 6, ...opts
+    });
+    svg.appendChild(node); return node;
+  };
+  const addLine = (x1,y1,x2,y2, opts={}) => {
+    const node = rc.line(x1,y1,x2,y2, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.5, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addCircle = (cx,cy,d, opts={}) => {
+    const node = rc.circle(cx,cy,d, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addEllipse = (cx,cy,w,h, opts={}) => {
+    const node = rc.ellipse(cx,cy,w,h, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.8, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addPath = (path, opts={}) => {
+    const node = rc.path(path, { stroke: COLORS.ink, strokeWidth: 1.4, roughness: 1.6, ...opts });
+    svg.appendChild(node); return node;
+  };
+  const addText = (x,y, text, opts={}) => {
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('font-family', opts.font || "'Excalifont', cursive");
+    const isMono = (opts.font || '').indexOf('Cascadia') !== -1;
+    t.setAttribute('font-size', (opts.size || 24) * (isMono ? MONO_SCALE : TEXT_SCALE));
+    t.setAttribute('fill', opts.fill || COLORS.ink);
+    t.setAttribute('text-anchor', opts.anchor || 'start');
+    if (opts.weight) t.setAttribute('font-weight', opts.weight);
+    if (opts.style) t.setAttribute('font-style', opts.style);
+    t.textContent = text; svg.appendChild(t); return t;
+  };
+  const addArrow = (x1,y1,x2,y2, opts={}) => {
+    const curve = opts.curve != null ? opts.curve : 30;
+    const cx = (x1+x2)/2 + curve; const cy = (y1+y2)/2 - Math.abs(curve)*0.6;
+    addPath(`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`, opts);
+    const angle = Math.atan2(y2-cy, x2-cx); const ah = opts.arrowSize || 14;
+    addLine(x2,y2, x2 - ah*Math.cos(angle - Math.PI/7), y2 - ah*Math.sin(angle - Math.PI/7), opts);
+    addLine(x2,y2, x2 - ah*Math.cos(angle + Math.PI/7), y2 - ah*Math.sin(angle + Math.PI/7), opts);
+  };
+  const addCheck = (cx, cy, size=18, color=COLORS.emerald) => {
+    addPath(`M ${cx-size*0.6} ${cy} L ${cx-size*0.1} ${cy+size*0.5} L ${cx+size*0.7} ${cy-size*0.6}`, {
+      stroke: color, strokeWidth: 3.5, roughness: 1.2
+    });
+  };
+  const addCross = (cx, cy, size=18, color=COLORS.rose) => {
+    addLine(cx-size*0.6, cy-size*0.6, cx+size*0.6, cy+size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+    addLine(cx-size*0.6, cy+size*0.6, cx+size*0.6, cy-size*0.6, { stroke: color, strokeWidth: 3.5, roughness: 1.2 });
+  };
+
+  // ===== local shorthands =====
+  const box  = (x,y,w,h,fill,opts) => addRect(x,y,w,h, { fill, fillStyle:'solid', strokeWidth:2, ...(opts||{}) });
+  const ctr  = (x,y,t,size,opts) => addText(x,y,t, { size, anchor:'middle', ...(opts||{}) });
+  const mctr = (x,y,t,size,opts) => addText(x,y,t, { size, anchor:'middle', font:MONO, ...(opts||{}) });
+  const lft  = (x,y,t,size,opts) => addText(x,y,t, { size, ...(opts||{}) });
+  const rgt  = (x,y,t,size,opts) => addText(x,y,t, { size, anchor:'end', ...(opts||{}) });
+  const aR   = (x1,x2,y,opts) => addArrow(x1,y,x2,y, { curve:0, strokeWidth:2, arrowSize:12, ...(opts||{}) });
+  const aD   = (x,y1,y2,opts) => addArrow(x,y1,x,y2, { curve:0, strokeWidth:2, arrowSize:12, ...(opts||{}) });
+  const rowX = (i,n,w,g) => (1600 - (n*w + (n-1)*g))/2 + i*(w+g);
+
+  const slides = [];
+  const V = (tag, headline, caption, draw) => slides.push({
+    tag, group: parseInt(tag, 10), letter: tag.replace(/[0-9]+/, ''), headline, caption, draw
+  });
+
+  // ============================================================
+  // 1. THE TURN
+  // ============================================================
+  V('1A', 'verifying got harder than generating',
+    'the classical asymmetry ran one way; for coding agents it now runs the other way', () => {
+    const beam = (cy, leftDown, tag) => {
+      const cx = 860, tilt = leftDown ? 46 : -46;
+      addPath(`M ${cx-36} ${cy+82} L ${cx+36} ${cy+82} L ${cx} ${cy+6} Z`, { fill: COLORS.card, fillStyle:'solid', strokeWidth:1.8 });
+      addLine(cx-260, cy+tilt, cx+260, cy-tilt, { strokeWidth: 3.2 });
+      [[cx-260, cy+tilt, 'generate', leftDown], [cx+260, cy-tilt, 'verify', !leftDown]].forEach(p => {
+        const px = p[0], py = p[1];
+        addLine(px, py, px, py+22, { stroke: COLORS.faint });
+        box(px-105, py+22, 210, 82, p[3] ? COLORS.lightRed : COLORS.softEmerald);
+        mctr(px, py+72, p[2], 24, { weight: 700 });
+      });
+      lft(140, cy+8, tag, 20, { fill: COLORS.soft });
+    };
+    beam(250, true,  'the classical intuition');
+    beam(590, false, 'coding agents, now');
+  });
+
+  V('1B', 'the cheap half is now the expensive half',
+    'as reasoning and harnesses improved, producing a candidate got cheap while checking it got dear', () => {
+    addLine(210, 700, 1400, 700, { stroke: COLORS.faint });
+    addLine(210, 700, 210, 190, { stroke: COLORS.faint });
+    rgt(190, 200, 'difficulty', 17, { fill: COLORS.soft });
+    lft(880, 745, 'model capability  .  harness sophistication', 17, { fill: COLORS.soft });
+    addPath('M 240 250 Q 700 420 1300 610', { stroke: COLORS.emerald, strokeWidth: 3 });
+    addPath('M 240 620 Q 700 480 1300 250', { stroke: COLORS.rose, strokeWidth: 3 });
+    lft(1320, 620, 'generate', 21, { fill: COLORS.emerald, font: MONO });
+    lft(1320, 250, 'verify', 21, { fill: COLORS.rose, font: MONO });
+    addCircle(790, 448, 26, { stroke: COLORS.ink, strokeWidth: 2 });
+    ctr(950, 315, 'the crossover', 20, { fill: COLORS.soft });
+    addArrow(910, 330, 812, 435, { curve: -20, strokeWidth: 1.6, arrowSize: 10, stroke: COLORS.soft });
+  });
+
+  V('1C', 'the bottleneck moved',
+    'candidates are cheap to produce and pile up in front of the one stage that cannot keep up', () => {
+    box(160, 340, 260, 180, COLORS.blue);
+    mctr(290, 415, 'generate', 24, { weight: 700 });
+    ctr(290, 452, 'cheap now', 18, { fill: COLORS.soft });
+    [370, 415, 460, 505].forEach(y => aR(420, 560, y, { strokeWidth: 1.6, arrowSize: 10 }));
+    box(560, 280, 420, 300, COLORS.lightRed, { strokeWidth: 2.6 });
+    mctr(770, 400, 'verify', 30, { weight: 700 });
+    ctr(770, 448, 'is this what was', 20, { fill: COLORS.soft });
+    ctr(770, 478, 'actually wanted', 20, { fill: COLORS.soft });
+    aR(980, 1120, 430);
+    box(1120, 340, 280, 180, COLORS.softEmerald);
+    mctr(1260, 440, 'ship', 24, { weight: 700 });
+  });
+
+  V('1D', 'the old intuition, crossed out',
+    'checking used to be the easy half of the problem; that is no longer the working assumption', () => {
+    addCross(230, 280, 30, COLORS.rose);
+    box(320, 190, 1010, 180, COLORS.card);
+    ctr(825, 268, 'checking a solution is easier', 30);
+    ctr(825, 315, 'than finding one', 30);
+    lft(320, 415, 'classical intuition', 18, { fill: COLORS.soft });
+    aD(825, 440, 500, { strokeWidth: 2.4, arrowSize: 15 });
+    box(320, 510, 1010, 180, COLORS.lightRed, { strokeWidth: 2.6 });
+    ctr(825, 588, 'reliably checking a solution', 30);
+    ctr(825, 635, 'is now the harder problem', 30);
+    lft(320, 730, 'coding agents, 2026', 18, { fill: COLORS.soft });
+  });
+
+  V('1E', 'the work moved',
+    'the same task, a different split of where the effort actually goes', () => {
+    const col = (x, label, genFrac) => {
+      const H = 400, top = 210, gh = Math.round(H*genFrac);
+      box(x, top, 280, gh, COLORS.blue);
+      mctr(x+140, top+gh/2+9, 'generate', 24, { weight: 700 });
+      box(x, top+gh, 280, H-gh, COLORS.lightRed);
+      mctr(x+140, top+gh+(H-gh)/2+9, 'verify', 24, { weight: 700 });
+      ctr(x+140, 675, label, 28, { weight: 700 });
+    };
+    col(430, 'then', 0.72);
+    col(890, 'now', 0.26);
+    lft(150, 380, 'where the', 19, { fill: COLORS.soft });
+    lft(150, 408, 'effort sits', 19, { fill: COLORS.soft });
+  });
+
+  // ============================================================
+  // 2. EVERY VERIFIER IS A PROXY
+  // ============================================================
+  V('2A', 'nothing measures intent directly',
+    'tests, rubrics and reward models each turn intent into something computable; none of them is the intent', () => {
+    [[600,330,'unit tests',COLORS.blueStroke],[1010,330,'rubrics and judges',COLORS.yellowStroke],[800,600,'reward models',COLORS.soft]].forEach(c => {
+      addCircle(c[0], c[1], 300, { stroke: c[3], strokeWidth: 2 });
+      ctr(c[0], c[1]+8, c[2], 21, { fill: c[3] });
+      addLine(805, 400, c[0], c[1], { stroke: COLORS.faint, strokeLineDash: [8,7] });
+    });
+    addCircle(805, 400, 96, { fill: COLORS.amber, fillStyle: 'solid', strokeWidth: 2.4 });
+    mctr(805, 409, 'intent', 24, { weight: 700 });
+  });
+
+  V('2B', 'what survives the funnel',
+    'the instruction is a lossy record of intent, and the tests are a lossy record of the instruction', () => {
+    box(150, 250, 320, 300, COLORS.card);
+    ctr(310, 385, 'human', 26, { weight: 700 }); ctr(310, 420, 'intent', 26, { weight: 700 });
+    box(620, 310, 320, 180, COLORS.blue);
+    ctr(780, 390, 'written', 24, { weight: 700 }); ctr(780, 422, 'instruction', 24, { weight: 700 });
+    box(1090, 350, 320, 100, COLORS.amber);
+    mctr(1250, 410, 'test suite', 24, { weight: 700 });
+    aR(470, 620, 400); aR(940, 1090, 400);
+    ctr(545, 250, 'offline talk,', 17, { fill: COLORS.rose });
+    ctr(545, 275, 'maintainer habit', 17, { fill: COLORS.rose });
+    ctr(1015, 250, 'coverage,', 17, { fill: COLORS.rose });
+    ctr(1015, 275, 'oracle choice', 17, { fill: COLORS.rose });
+    ctr(545, 570, 'lost here', 17, { fill: COLORS.soft });
+    ctr(1015, 570, 'lost here', 17, { fill: COLORS.soft });
+  });
+
+  V('2C', 'overlap is all you get',
+    'outside the overlap sit the two failures: a correct fix that fails, and a wrong fix that passes', () => {
+    addCircle(690, 420, 430, { stroke: COLORS.blueStroke, strokeWidth: 2.2 });
+    addCircle(930, 420, 430, { stroke: COLORS.yellowStroke, strokeWidth: 2.2 });
+    ctr(540, 185, 'intent', 24, { fill: COLORS.blueStroke });
+    ctr(1090, 185, 'the verifier', 24, { fill: COLORS.yellowStroke });
+    ctr(300, 340, 'false negative', 21, { fill: COLORS.rose });
+    ctr(300, 372, 'correct, fails', 18, { fill: COLORS.soft });
+    addArrow(390, 392, 555, 430, { curve: 20, strokeWidth: 1.6, arrowSize: 10, stroke: COLORS.soft });
+    ctr(1330, 340, 'false positive', 21, { fill: COLORS.rose });
+    ctr(1330, 372, 'wrong, passes', 18, { fill: COLORS.soft });
+    addArrow(1240, 392, 1070, 430, { curve: -20, strokeWidth: 1.6, arrowSize: 10, stroke: COLORS.soft });
+    ctr(810, 715, 'what actually gets measured', 21, { fill: COLORS.emerald });
+    addArrow(810, 692, 810, 570, { curve: 0, strokeWidth: 1.6, arrowSize: 10, stroke: COLORS.soft });
+  });
+
+  V('2D', 'what it can see, what it was asked',
+    'the checkable column is real but thin; the column that matters has no mechanical signal', () => {
+    box(150, 170, 620, 530, COLORS.blue);
+    ctr(460, 235, 'the verifier sees', 27, { weight: 700 });
+    ['exit code', 'assertion results', 'the patch applies', 'runtime errors'].forEach((t,i) => {
+      addCheck(240, 320+i*90, 15, COLORS.emerald);
+      lft(285, 328+i*90, t, 22, { font: MONO });
+    });
+    box(830, 170, 620, 530, COLORS.lightRed);
+    ctr(1140, 235, 'the user meant', 27, { weight: 700 });
+    ['root cause, not a patch', 'still maintainable', 'the case nobody wrote', 'it feels right'].forEach((t,i) => {
+      addCross(920, 320+i*90, 15, COLORS.rose);
+      lft(965, 328+i*90, t, 22);
+    });
+  });
+
+  V('2E', 'underspecified by construction',
+    'intent has no clean edge, so every verifier claims a solid slice and leaves the rest unclaimed', () => {
+    addEllipse(800, 420, 1060, 440, { stroke: COLORS.soft, strokeWidth: 2, strokeLineDash: [12,9] });
+    ctr(800, 175, 'user intent', 26, { fill: COLORS.soft });
+    box(420, 310, 230, 220, COLORS.blue);   mctr(535, 428, 'tests', 22, { weight: 700 });
+    box(680, 310, 230, 220, COLORS.violet); mctr(795, 428, 'rubrics', 22, { weight: 700 });
+    box(940, 310, 230, 220, COLORS.teal);   mctr(1055, 414, 'user', 22, { weight: 700 }); mctr(1055, 446, 'feedback', 22, { weight: 700 });
+    ctr(300, 430, 'unclaimed', 20, { fill: COLORS.rose });
+    ctr(1300, 430, 'unclaimed', 20, { fill: COLORS.rose });
+  });
+
+  // ============================================================
+  // 3. OPTIMIZATION WIDENS THE GAP
+  // ============================================================
+  V('3A', 'the proxy goes up, the thing goes down',
+    'once a measure is put under optimization pressure it stops being a good measure', () => {
+    addLine(200, 700, 1400, 700, { stroke: COLORS.faint });
+    addLine(200, 700, 200, 180, { stroke: COLORS.faint });
+    lft(210, 745, 'training steps', 17, { fill: COLORS.soft });
+    addPath('M 230 610 Q 720 400 1300 250', { stroke: COLORS.emerald, strokeWidth: 3 });
+    addPath('M 230 600 Q 700 420 1300 620', { stroke: COLORS.rose, strokeWidth: 3 });
+    lft(1320, 250, 'reward', 21, { fill: COLORS.emerald, font: MONO });
+    lft(1320, 625, 'real quality', 21, { fill: COLORS.rose, font: MONO });
+    addLine(1180, 300, 1180, 555, { stroke: COLORS.ink, strokeWidth: 2, strokeLineDash: [8,7] });
+    rgt(1150, 435, 'gap', 22, { font: MONO });
+  });
+
+  V('3B', 'pressure breaks the measure',
+    'reward hacking is not a bug to patch, it is what sustained optimization against a proxy produces', () => {
+    box(500, 220, 600, 90, COLORS.card);
+    ctr(800, 278, 'optimization pressure', 28, { weight: 700 });
+    [600, 700, 800, 900, 1000].forEach(x => aD(x, 315, 385, { strokeWidth: 1.8, arrowSize: 10 }));
+    box(500, 395, 600, 260, COLORS.lightRed, { strokeWidth: 2.6 });
+    mctr(800, 500, 'the proxy', 30, { weight: 700 });
+    ctr(800, 548, 'a stand in for intent', 20, { fill: COLORS.soft });
+    addPath('M 560 400 L 610 470 L 570 520 L 630 600 L 600 650', { stroke: COLORS.rose, strokeWidth: 2.4 });
+    addPath('M 1030 400 L 990 465 L 1040 530 L 985 600 L 1020 650', { stroke: COLORS.rose, strokeWidth: 2.4 });
+    lft(1160, 510, 'it stops', 21, { fill: COLORS.rose });
+    lft(1160, 542, 'measuring', 21, { fill: COLORS.rose });
+  });
+
+  V('3C', 'two ways to the same pass',
+    'weak tests let a wrong fix through by accident; a stronger policy gets through on purpose', () => {
+    box(150, 200, 460, 160, COLORS.lightRed);
+    ctr(380, 265, 'thin test coverage', 25, { weight: 700 });
+    ctr(380, 307, 'passive, from test design', 18, { fill: COLORS.soft });
+    box(150, 520, 460, 160, COLORS.lightRed);
+    ctr(380, 585, 'the agent finds a leak', 25, { weight: 700 });
+    ctr(380, 627, 'active, from its own search', 18, { fill: COLORS.soft });
+    addArrow(610, 280, 1060, 400, { curve: 40, strokeWidth: 2, arrowSize: 13 });
+    addArrow(610, 600, 1060, 480, { curve: -40, strokeWidth: 2, arrowSize: 13 });
+    box(1070, 330, 380, 220, COLORS.softEmerald, { strokeWidth: 2.6 });
+    mctr(1260, 420, 'verifier: pass', 26, { weight: 700 });
+    addCheck(1260, 480, 24, COLORS.emerald);
+  });
+
+  V('3D', 'the exploit loop',
+    'the policy improves, finds the divergence, exploits it, and the signal stops carrying information', () => {
+    ['policy improves', 'finds the gap', 'exploits the proxy', 'signal saturates'].forEach((t,i) => {
+      const x = rowX(i,4,300,55);
+      box(x, 330, 300, 170, i===3 ? COLORS.lightRed : COLORS.blue);
+      ctr(x+150, 412, t.split(' ')[0], 24, { weight: 700 });
+      ctr(x+150, 450, t.split(' ').slice(1).join(' '), 21, { fill: COLORS.soft });
+      if (i < 3) aR(x+300, x+355, 415, { strokeWidth: 1.8, arrowSize: 11 });
+    });
+    const xa = rowX(0,4,300,55), xb = rowX(3,4,300,55);
+    addLine(xb+150, 500, xb+150, 620, { stroke: COLORS.rose, strokeWidth: 2 });
+    addLine(xb+150, 620, xa+150, 620, { stroke: COLORS.rose, strokeWidth: 2 });
+    addArrow(xa+150, 620, xa+150, 505, { curve: 0, strokeWidth: 2, arrowSize: 12, stroke: COLORS.rose });
+    ctr(800, 660, 'and the verifier has to be rebuilt', 20, { fill: COLORS.rose });
+  });
+
+  V('3E', 'hacking is a special case',
+    'both produce a pass on a wrong solution; only one of them the agent went looking for', () => {
+    box(330, 200, 940, 480, COLORS.card, { strokeWidth: 2.4 });
+    ctr(800, 268, 'false positives', 30, { weight: 700 });
+    ctr(800, 310, 'wrong solution, tests pass', 21, { fill: COLORS.soft });
+    box(540, 380, 520, 240, COLORS.lightRed, { strokeWidth: 2.4 });
+    ctr(800, 462, 'reward hacking', 28, { weight: 700 });
+    ctr(800, 505, 'passes by exploiting', 20, { fill: COLORS.soft });
+    ctr(800, 535, 'an information leak', 20, { fill: COLORS.soft });
+    lft(150, 340, 'weak', 19, { fill: COLORS.soft }); lft(150, 370, 'test design', 19, { fill: COLORS.soft });
+    addArrow(300, 356, 330, 356, { curve: 0, strokeWidth: 1.6, arrowSize: 9, stroke: COLORS.soft });
+    lft(1310, 486, 'the agent', 19, { fill: COLORS.rose }); lft(1310, 516, 'went looking', 19, { fill: COLORS.rose });
+    addArrow(1300, 480, 1065, 480, { curve: 0, strokeWidth: 1.6, arrowSize: 9, stroke: COLORS.rose });
+  });
+
+  // ============================================================
+  // 4. PICK TWO OF THREE
+  // ============================================================
+  V('4A', 'no method holds all three',
+    'scalable, faithful, robust; every verifier we have sits on an edge and gives up the third', () => {
+    addPath('M 800 190 L 330 660 L 1270 660 Z', { strokeWidth: 2.6 });
+    ctr(800, 160, 'faithful', 26, { weight: 700 });
+    ctr(320, 705, 'scalable', 26, { weight: 700 });
+    ctr(1280, 705, 'robust', 26, { weight: 700 });
+    box(425, 382, 280, 86, COLORS.blue);   mctr(565, 435, 'llm judges', 22, { weight: 700 });
+    box(895, 382, 280, 86, COLORS.violet); mctr(1035, 435, 'human review', 22, { weight: 700 });
+    box(660, 617, 280, 86, COLORS.amber);  mctr(800, 670, 'unit tests', 22, { weight: 700 });
+    addCircle(800, 470, 150, { stroke: COLORS.rose, strokeWidth: 2, strokeLineDash: [10,8] });
+    ctr(800, 462, 'nothing', 21, { fill: COLORS.rose });
+    ctr(800, 492, 'sits here', 21, { fill: COLORS.rose });
+  });
+
+  V('4B', 'the missing intersection',
+    'each pair of properties has a method that covers it; the centre has never been filled', () => {
+    addCircle(680, 350, 380, { stroke: COLORS.blueStroke, strokeWidth: 2 });
+    addCircle(920, 350, 380, { stroke: COLORS.yellowStroke, strokeWidth: 2 });
+    addCircle(800, 560, 380, { stroke: COLORS.soft, strokeWidth: 2 });
+    ctr(430, 230, 'scalable', 24, { fill: COLORS.blueStroke });
+    ctr(1180, 230, 'faithful', 24, { fill: COLORS.yellowStroke });
+    ctr(800, 735, 'robust', 24, { fill: COLORS.soft });
+    mctr(800, 258, 'llm judges', 20);
+    mctr(655, 490, 'unit tests', 20);
+    mctr(950, 490, 'human review', 20);
+    addCross(800, 400, 20, COLORS.rose);
+    ctr(1330, 620, 'no method here', 20, { fill: COLORS.rose });
+    addArrow(1270, 600, 840, 420, { curve: -60, strokeWidth: 1.6, arrowSize: 10, stroke: COLORS.rose });
+  });
+
+  V('4C', 'check, check, cross',
+    'unit tests miss depth, judges get gamed, humans do not scale; each one is two out of three', () => {
+    [290, 410, 530, 650].forEach(y => addLine(150, y, 1395, y, { stroke: COLORS.faint }));
+    [590, 855, 1125, 1395].forEach(x => addLine(x, 230, x, 650, { stroke: COLORS.faint }));
+    ctr(722, 275, 'scalable', 22, { fill: COLORS.soft });
+    ctr(990, 275, 'faithful', 22, { fill: COLORS.soft });
+    ctr(1260, 275, 'robust', 22, { fill: COLORS.soft });
+    const rows = [['unit tests',[1,0,1]], ['llm judges',[1,1,0]], ['human review',[0,1,1]]];
+    rows.forEach((r,i) => {
+      const y = 350 + i*120;
+      lft(170, y+10, r[0], 25, { font: MONO });
+      [722, 990, 1260].forEach((x,j) => {
+        if (r[1][j]) addCheck(x, y, 20, COLORS.emerald); else addCross(x, y, 20, COLORS.rose);
+      });
+    });
+  });
+
+  V('4D', 'what each one buys you',
+    'the shape is the same every time: two tall bars and one that falls away', () => {
+    const dims = [['scalable', COLORS.blue], ['faithful', COLORS.amber], ['robust', COLORS.teal]];
+    dims.forEach((d,i) => {
+      const x = 460 + i*260;
+      box(x, 182, 30, 22, d[1]); lft(x+40, 202, d[0], 19, { fill: COLORS.soft });
+    });
+    const data = [['unit tests',[9,3,8]], ['llm judges',[9,8,3]], ['human review',[2,9,9]]];
+    data.forEach((g,gi) => {
+      const gx = 400 + gi*400;
+      g[1].forEach((v,i) => {
+        const h = v*42, x = gx - 121 + i*86;
+        box(x, 660-h, 70, h, dims[i][1]);
+      });
+      ctr(gx, 705, g[0], 24, { weight: 700 });
+    });
+    addLine(200, 660, 1400, 660, { stroke: COLORS.faint });
+  });
+
+  V('4E', 'two solid, one hollow',
+    'the same triangle three times; the hollow corner is what that method cannot give you', () => {
+    const holds = [['unit tests',[0,1,1]], ['llm judges',[1,1,0]], ['human review',[1,0,1]]];
+    holds.forEach((m,i) => {
+      const cx = 400 + i*400, cy = 400;
+      const pts = [[cx, cy-150, 'faithful'], [cx-140, cy+110, 'scalable'], [cx+140, cy+110, 'robust']];
+      addPath(`M ${pts[0][0]} ${pts[0][1]} L ${pts[1][0]} ${pts[1][1]} L ${pts[2][0]} ${pts[2][1]} Z`, { strokeWidth: 2 });
+      pts.forEach((p,j) => {
+        if (m[1][j]) addCircle(p[0], p[1], 34, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: COLORS.emerald, strokeWidth: 2.4 });
+        else addCircle(p[0], p[1], 34, { stroke: COLORS.rose, strokeWidth: 2.4, strokeLineDash: [6,5] });
+      });
+      ctr(cx, cy-175, 'faithful', 15, { fill: COLORS.soft });
+      ctr(cx-140, cy+152, 'scalable', 15, { fill: COLORS.soft });
+      ctr(cx+140, cy+152, 'robust', 15, { fill: COLORS.soft });
+      ctr(cx, cy+230, m[0], 24, { weight: 700 });
+    });
+  });
+
+  // ============================================================
+  // 5. THE HORIZON RECEDES
+  // ============================================================
+  V('5A', 'the verifier has to keep moving',
+    'when the policy outruns the verifier the reward stops guiding, until the verifier is upgraded again', () => {
+    addLine(200, 700, 1400, 700, { stroke: COLORS.faint });
+    addPath('M 200 620 L 560 620 L 560 460 L 920 460 L 920 300 L 1380 300', { stroke: COLORS.blueStroke, strokeWidth: 2.8 });
+    addPath('M 210 670 L 420 600 L 560 500 L 700 470 L 920 380 L 1080 350 L 1380 250', { stroke: COLORS.ink, strokeWidth: 3 });
+    addRect(360, 520, 200, 100, { fill: COLORS.lightRed, fillStyle: 'hachure', stroke: COLORS.rose, strokeWidth: 1.6, hachureGap: 9 });
+    addRect(724, 400, 196, 60, { fill: COLORS.lightRed, fillStyle: 'hachure', stroke: COLORS.rose, strokeWidth: 1.6, hachureGap: 9 });
+    addRect(1230, 258, 150, 42, { fill: COLORS.lightRed, fillStyle: 'hachure', stroke: COLORS.rose, strokeWidth: 1.6, hachureGap: 9 });
+    ctr(460, 495, 'reward hacking', 20, { fill: COLORS.rose });
+    lft(1390, 245, 'policy', 20, { fill: COLORS.ink, font: MONO });
+    lft(1390, 312, 'verifier', 20, { fill: COLORS.blueStroke, font: MONO });
+    ctr(560, 738, 'verifier upgraded', 16, { fill: COLORS.soft });
+    ctr(920, 738, 'verifier upgraded', 16, { fill: COLORS.soft });
+  });
+
+  V('5B', 'guide, saturate, upgrade',
+    'a fixed verifier is useful for a while and then stops discriminating; the next one resets it', () => {
+    addLine(200, 700, 1380, 700, { stroke: COLORS.faint });
+    addLine(200, 700, 200, 210, { stroke: COLORS.faint });
+    lft(200, 190, 'useful signal', 18, { fill: COLORS.soft });
+    lft(1250, 740, 'training', 18, { fill: COLORS.soft });
+    addPath('M 230 300 L 560 620', { stroke: COLORS.emerald, strokeWidth: 3 });
+    addPath('M 590 280 L 920 620', { stroke: COLORS.emerald, strokeWidth: 3 });
+    addPath('M 950 260 L 1300 620', { stroke: COLORS.emerald, strokeWidth: 3 });
+    addLine(575, 620, 575, 285, { stroke: COLORS.rose, strokeWidth: 2, strokeLineDash: [9,7] });
+    addLine(935, 620, 935, 265, { stroke: COLORS.rose, strokeWidth: 2, strokeLineDash: [9,7] });
+    ctr(575, 245, 'verifier v2', 18, { fill: COLORS.rose, font: MONO });
+    ctr(935, 225, 'verifier v3', 18, { fill: COLORS.rose, font: MONO });
+    ctr(420, 500, 'saturates', 19, { fill: COLORS.soft });
+  });
+
+  V('5C', 'generator and verifier, in a loop',
+    'the same shape as adversarial training: neither side can stand still while the other improves', () => {
+    box(635, 130, 330, 120, COLORS.violet);
+    ctr(800, 178, 'policy', 26, { weight: 700 }); ctr(800, 214, 'improves', 22, { fill: COLORS.soft });
+    box(1045, 480, 330, 120, COLORS.lightRed);
+    ctr(1210, 528, 'signal', 26, { weight: 700 }); ctr(1210, 564, 'saturates', 22, { fill: COLORS.soft });
+    box(225, 480, 330, 120, COLORS.softEmerald);
+    ctr(390, 528, 'verifier', 26, { weight: 700 }); ctr(390, 564, 'rebuilt', 22, { fill: COLORS.soft });
+    addArrow(940, 250, 1150, 478, { curve: 55, strokeWidth: 2.2, arrowSize: 13 });
+    addArrow(1045, 540, 560, 540, { curve: 0, strokeWidth: 2.2, arrowSize: 13 });
+    addArrow(420, 478, 680, 252, { curve: -55, strokeWidth: 2.2, arrowSize: 13 });
+    mctr(800, 400, 'co-evolution', 22, { fill: COLORS.soft });
+  });
+
+  V('5D', 'the target keeps moving away',
+    'a perfect verifier is not a place you arrive at; it stays the same distance ahead of the policy', () => {
+    const row = (y, px, hx, ghost) => {
+      addLine(200, y+45, 1450, y+45, { stroke: COLORS.faint });
+      box(px-90, y-45, 180, 90, COLORS.violet);
+      mctr(px, y+8, 'policy', 22, { weight: 700 });
+      addLine(hx, y-70, hx, y+45, { stroke: COLORS.emerald, strokeWidth: 2.4, strokeLineDash: [10,8] });
+      ctr(hx, y-88, 'a verifier that', 17, { fill: COLORS.emerald });
+      ctr(hx, y-66, 'would be enough', 17, { fill: COLORS.emerald });
+      addLine(px, y+85, hx, y+85, { stroke: COLORS.rose, strokeWidth: 2 });
+      addLine(px, y+75, px, y+95, { stroke: COLORS.rose, strokeWidth: 2 });
+      addLine(hx, y+75, hx, y+95, { stroke: COLORS.rose, strokeWidth: 2 });
+      if (ghost) addLine(ghost, y-20, ghost, y+45, { stroke: COLORS.faint, strokeWidth: 1.6, strokeLineDash: [6,6] });
+    };
+    row(300, 440, 900, null);
+    ctr(670, 120, 'gap', 22, { font: MONO });
+    addArrow(670, 140, 670, 372, { curve: 0, strokeWidth: 1.6, arrowSize: 10, stroke: COLORS.soft });
+    row(600, 840, 1300, 900);
+    ctr(1070, 715, 'the same gap', 22, { font: MONO });
+    lft(150, 308, 'step 0', 20, { fill: COLORS.soft, font: MONO });
+    lft(150, 608, 'step n', 20, { fill: COLORS.soft, font: MONO });
+    ctr(900, 560, 'was here', 15, { fill: COLORS.faint });
+  });
+
+  V('5E', 'the overtake',
+    'the verifier starts ahead of the policy and does not stay there', () => {
+    const marks = [[460, 820, 'step 0'], [820, 880, 'step k'], [1230, 980, 'step n']];
+    marks.forEach((m,i) => {
+      const y = 270 + i*160;
+      addLine(320, y, 1380, y, { stroke: COLORS.faint });
+      lft(160, y+8, m[2], 20, { fill: COLORS.soft, font: MONO });
+      addCircle(m[1], y, 56, { fill: COLORS.blue, fillStyle: 'solid', stroke: COLORS.blueStroke, strokeWidth: 2.2 });
+      mctr(m[1], y+9, 'V', 24, { weight: 700 });
+      addCircle(m[0], y, 56, { fill: COLORS.violet, fillStyle: 'solid', strokeWidth: 2.2 });
+      mctr(m[0], y+9, 'P', 24, { weight: 700 });
+      if (i === 0) { ctr(m[0], y+62, 'policy', 16, { fill: COLORS.soft }); ctr(m[1], y+62, 'verifier', 16, { fill: COLORS.soft }); }
+    });
+    addLine(1008, 590, 1202, 590, { stroke: COLORS.rose, strokeWidth: 2.4 });
+    ctr(1105, 660, 'the window where', 18, { fill: COLORS.rose });
+    ctr(1105, 686, 'hacking pays', 18, { fill: COLORS.rose });
+  });
+
+  // ============================================================
+  // 6. TESTS CAN BE UNFAITHFUL BEFORE THEY ARE HACKED
+  // ============================================================
+  V('6A', 'two ways the reward lies',
+    'only one quadrant gives a pass or fail you can train on, and it is not the default', () => {
+    box(450, 190, 400, 250, COLORS.lightRed);
+    ctr(650, 305, 'unsolvable', 26, { weight: 700 });
+    ctr(650, 345, 'nothing to go on', 19, { fill: COLORS.soft });
+    box(850, 190, 400, 250, COLORS.softEmerald, { strokeWidth: 2.6 });
+    ctr(1050, 305, 'usable reward', 26, { weight: 700 });
+    ctr(1050, 345, 'pass means solved', 19, { fill: COLORS.soft });
+    box(450, 440, 400, 250, COLORS.lightRed);
+    ctr(650, 555, 'noise', 26, { weight: 700 });
+    ctr(650, 595, 'burns rollout budget', 19, { fill: COLORS.soft });
+    box(850, 440, 400, 250, COLORS.lightRed);
+    ctr(1050, 555, 'wrong oracle', 26, { weight: 700 });
+    ctr(1050, 595, 'clear ask, other test', 19, { fill: COLORS.soft });
+    addArrow(450, 725, 1250, 725, { curve: 0, strokeWidth: 2, arrowSize: 12, stroke: COLORS.soft });
+    mctr(850, 760, 'instruct_clear', 19, { fill: COLORS.soft });
+    addArrow(410, 690, 410, 190, { curve: 0, strokeWidth: 2, arrowSize: 12, stroke: COLORS.soft });
+    rgt(385, 430, 'instruct_', 19, { fill: COLORS.soft, font: MONO });
+    rgt(385, 458, 'ut_align', 19, { fill: COLORS.soft, font: MONO });
+  });
+
+  V('6B', 'two tasks that cannot be solved',
+    'both are real training instances; no correct patch passes either of them', () => {
+    box(140, 200, 630, 450, COLORS.card);
+    ctr(455, 255, 'the whole instruction', 20, { fill: COLORS.soft });
+    mctr(455, 330, 'do-while loop', 34, { weight: 700 });
+    addLine(190, 375, 720, 375, { stroke: COLORS.faint });
+    ctr(455, 425, 'the tests also demand', 21, { fill: COLORS.soft });
+    ctr(455, 460, 'bitwise AND and the &= operator', 21);
+    ctr(455, 495, 'neither is mentioned', 21, { fill: COLORS.soft });
+    addCross(455, 555, 22, COLORS.rose);
+    mctr(455, 625, 'CrossGL/crosstl#206', 17, { fill: COLORS.faint });
+    box(830, 200, 630, 450, COLORS.card);
+    ctr(1145, 255, 'the test asserts', 20, { fill: COLORS.soft });
+    mctr(1145, 330, '"Coundn t find dataset"', 26, { weight: 700, fill: COLORS.rose });
+    addLine(880, 375, 1410, 375, { stroke: COLORS.faint });
+    ctr(1145, 425, 'the instruction says only', 21, { fill: COLORS.soft });
+    ctr(1145, 460, 'code to delete a dataset', 21);
+    ctr(1145, 495, 'the correct spelling fails', 21, { fill: COLORS.soft });
+    addCross(1145, 555, 22, COLORS.rose);
+    mctr(1145, 625, 'Clinical-Genomics/cgbeacon2#17', 17, { fill: COLORS.faint });
+  });
+
+  V('6C', 'what the build pipeline actually proves',
+    'the environment is validated end to end; the match between the ask and the oracle is not', () => {
+    const st = [['pull request', COLORS.blue], ['fix + test patch', COLORS.violet], ['docker env', COLORS.teal], ['evaluation.sh', COLORS.amber], ['pass / fail', COLORS.softEmerald]];
+    st.forEach((s,i) => {
+      const x = rowX(i,5,240,45);
+      box(x, 290, 240, 150, s[1]);
+      mctr(x+120, 372, s[0], 19, { weight: 700 });
+      if (i < 4) aR(x+240, x+285, 365, { strokeWidth: 1.8, arrowSize: 11 });
+    });
+    lft(170, 568, 'validated', 22, { fill: COLORS.emerald });
+    addCheck(430, 560, 16, COLORS.emerald);
+    lft(475, 568, 'fails before the patch, passes after', 21);
+    lft(170, 648, 'not validated', 22, { fill: COLORS.rose });
+    addCross(430, 640, 16, COLORS.rose);
+    lft(475, 648, 'that the instruction describes the same thing', 21);
+  });
+
+  V('6D', 'a zero solve rate is not always difficulty',
+    'the tasks nobody solves are disproportionately the broken ones, and they still cost rollouts', () => {
+    box(520, 196, 28, 20, COLORS.lightRed); lft(560, 214, 'low quality task', 19, { fill: COLORS.soft });
+    box(900, 196, 28, 20, COLORS.softEmerald); lft(940, 214, 'good task', 19, { fill: COLORS.soft });
+    const frac = [0.58, 0.34, 0.24, 0.17, 0.11];
+    const names = ['0%', '1-25', '26-50', '51-75', '76-100'];
+    frac.forEach((f,i) => {
+      const x = rowX(i,5,160,70), H = 380, rh = Math.round(H*f);
+      box(x, 280, 160, rh, COLORS.lightRed);
+      box(x, 280+rh, 160, H-rh, COLORS.softEmerald);
+      mctr(x+80, 700, names[i], 20);
+    });
+    ctr(800, 745, 'solve rate bucket', 18, { fill: COLORS.soft });
+  });
+
+  V('6E', 'a judge that opens the environment',
+    'it runs commands in the repo, reads the tests, and returns two judgments instead of one score', () => {
+    const ins = ['repo files', 'test scripts', 'shell commands', 'reference patch'];
+    ins.forEach((t,i) => {
+      const y = 190 + i*130;
+      box(130, y, 300, 110, COLORS.blue);
+      mctr(280, y+66, t, 20, { weight: 700 });
+      addArrow(430, y+55, 560, 370 + i*50, { curve: 15, strokeWidth: 1.6, arrowSize: 10 });
+    });
+    box(560, 330, 340, 240, COLORS.amber, { strokeWidth: 2.6 });
+    ctr(730, 430, 'quality judge', 28, { weight: 700 });
+    ctr(730, 472, 'explores, then rules', 19, { fill: COLORS.soft });
+    box(1040, 250, 340, 110, COLORS.card);  mctr(1210, 315, 'instruct_clear', 20);
+    box(1040, 400, 340, 110, COLORS.card);  mctr(1210, 465, 'instruct_ut_align', 20);
+    box(1040, 570, 340, 110, COLORS.softEmerald); mctr(1210, 635, 'overall_good', 20, { weight: 700 });
+    addArrow(900, 420, 1040, 310, { curve: -20, strokeWidth: 1.8, arrowSize: 11 });
+    addArrow(900, 460, 1040, 455, { curve: 0, strokeWidth: 1.8, arrowSize: 11 });
+    aD(1210, 362, 398, { strokeWidth: 1.8, arrowSize: 10 });
+    aD(1210, 512, 568, { strokeWidth: 1.8, arrowSize: 10 });
+  });
+
+  // ============================================================
+  // 7. WHICH SHORTCUTS ACTUALLY PAY
+  // ============================================================
+  V('7A', 'only one door still pays',
+    'after the environment was hardened, most shortcut behaviours resolve below baseline; one does not', () => {
+    lft(150, 145, 'behaviour', 19, { fill: COLORS.soft });
+    rgt(900, 145, 'freq %', 19, { fill: COLORS.soft });
+    ctr(1180, 145, 'resolved rate vs baseline', 19, { fill: COLORS.soft });
+    addLine(1180, 200, 1180, 672, { stroke: COLORS.faint });
+    const draw = (y, name, freq, d) => {
+      lft(150, y+8, name, 21);
+      rgt(900, y+8, freq.toFixed(2), 20, { font: MONO, fill: COLORS.soft });
+      const w = Math.abs(d)*6, x = d < 0 ? 1180-w : 1180;
+      box(x, y-14, w, 28, d < 0 ? COLORS.blue : COLORS.lightRed, { strokeWidth: 1.6 });
+      if (d < 0) rgt(x-12, y+8, d.toFixed(2), 20, { font: MONO, fill: COLORS.soft });
+      else lft(x+w+12, y+8, '+' + d.toFixed(2), 20, { font: MONO, fill: COLORS.rose, weight: 700 });
+    };
+    lft(150, 190, 'static environment leakage', 18, { fill: COLORS.faint });
+    [['repository history mining',21.11,-3.44],['test oracle tampering',3.69,-12.70],
+     ['evaluation harness tampering',8.25,-18.52],['visible test overfitting',30.00,-8.37],
+     ['evaluator aware patching',8.78,-3.60]].forEach((r,i) => draw(232+i*64, r[0], r[1], r[2]));
+    lft(150, 548, 'policy dependent shortcut access', 18, { fill: COLORS.faint });
+    [['solution artifact retrieval',4.32,12.35],['external fix lookup',7.03,1.70]]
+      .forEach((r,i) => draw(590+i*62, r[0], r[1], r[2]));
+    mctr(800, 730, 'baseline resolved rate 59.99', 19, { fill: COLORS.faint });
+  });
+
+  V('7B', 'hardening moved the problem, it did not end it',
+    'sealing the environment removed the reward advantage of the known leaks; the agent still goes looking', () => {
+    box(110, 200, 680, 470, COLORS.paper, { strokeWidth: 1.8 });
+    ctr(450, 258, 'static environment leakage', 23, { weight: 700 });
+    addLine(690, 300, 690, 620, { stroke: COLORS.faint });
+    [['repository history mining',-3.44],['test oracle tampering',-12.70],['evaluation harness tampering',-18.52],
+     ['visible test overfitting',-8.37],['evaluator aware patching',-3.60]].forEach((r,i) => {
+      const y = 340 + i*62;
+      lft(145, y+7, r[0], 18);
+      const w = Math.abs(r[1])*4;
+      box(690-w, y-13, w, 26, COLORS.blue, { strokeWidth: 1.6 });
+      lft(700, y+7, r[1].toFixed(2), 18, { font: MONO, fill: COLORS.soft });
+    });
+    box(830, 200, 660, 470, COLORS.paper, { strokeWidth: 1.8 });
+    ctr(1160, 258, 'policy dependent shortcuts', 23, { weight: 700 });
+    addLine(1330, 300, 1330, 620, { stroke: COLORS.faint });
+    [['solution artifact retrieval',12.35],['external fix lookup',1.70]].forEach((r,i) => {
+      const y = 390 + i*100;
+      lft(865, y+7, r[0], 18);
+      box(1330, y-13, r[1]*4, 26, COLORS.lightRed, { strokeWidth: 1.6 });
+      lft(1330 + r[1]*4 + 10, y+7, '+' + r[1].toFixed(2), 18, { font: MONO, fill: COLORS.rose, weight: 700 });
+    });
+    mctr(800, 725, 'baseline resolved rate 59.99', 19, { fill: COLORS.faint });
+  });
+
+  V('7C', 'four percent of runs, twelve points of reward',
+    'the rarest shortcut is the one that pays; that is enough for reinforcement learning to find it', () => {
+    mctr(800, 225, 'solution artifact retrieval', 30, { weight: 700 });
+    const blocks = [['4.32%','of trajectories',COLORS.card],['72.34%','resolved',COLORS.card],['+12.35','over baseline',COLORS.lightRed]];
+    blocks.forEach((b,i) => {
+      const x = rowX(i,3,380,60);
+      box(x, 280, 380, 230, b[2], { strokeWidth: 2.4 });
+      ctr(x+190, 400, b[0], 56, { weight: 700, fill: i===2 ? COLORS.rose : COLORS.ink });
+      ctr(x+190, 460, b[1], 21, { fill: COLORS.soft });
+    });
+    box(400, 580, 240, 36, COLORS.card, { strokeWidth: 1.6 });
+    lft(660, 606, '59.99  baseline', 20, { font: MONO, fill: COLORS.soft });
+    box(400, 636, 289, 36, COLORS.lightRed, { strokeWidth: 1.6 });
+    lft(710, 662, '72.34  with the shortcut', 20, { font: MONO, fill: COLORS.rose });
+  });
+
+  V('7D', 'the trajectory that branched',
+    'both routes end on the same green badge; only one of them is software engineering', () => {
+    const nodes = ['read the issue', 'grep the repo', 'edit and test'];
+    nodes.forEach((t,i) => {
+      const x = 150 + i*270;
+      box(x, 530, 220, 100, COLORS.blue);
+      mctr(x+110, 588, t, 18, { weight: 700 });
+      if (i < 2) aR(x+220, x+270, 580, { strokeWidth: 1.8, arrowSize: 11 });
+    });
+    lft(150, 690, 'local debugging', 20, { fill: COLORS.soft });
+    box(520, 220, 420, 120, COLORS.lightRed, { strokeWidth: 2.4 });
+    mctr(730, 275, 'fetch pull/2388.diff', 22, { weight: 700 });
+    ctr(730, 312, 'the fix, verbatim', 19, { fill: COLORS.soft });
+    ctr(730, 190, 'the shortcut', 20, { fill: COLORS.rose });
+    addArrow(300, 528, 540, 342, { curve: -45, strokeWidth: 2, arrowSize: 12, stroke: COLORS.rose });
+    addArrow(940, 300, 1225, 470, { curve: 45, strokeWidth: 2, arrowSize: 12, stroke: COLORS.rose });
+    addArrow(910, 580, 1225, 545, { curve: 0, strokeWidth: 2, arrowSize: 12 });
+    box(1230, 460, 230, 160, COLORS.softEmerald, { strokeWidth: 2.6 });
+    mctr(1345, 525, 'resolved', 24, { weight: 700 });
+    addCheck(1345, 575, 22, COLORS.emerald);
+  });
+
+  V('7E', 'you can seal the room, not the search',
+    'git history and network access are static doors you can close; information seeking is a behaviour', () => {
+    const doors = [['git history','sealed',true],['network access','disabled',true],['shortcut seeking','still open',false]];
+    doors.forEach((d,i) => {
+      const x = 200 + i*360;
+      box(x, 240, 260, 340, d[2] ? COLORS.card : COLORS.lightRed, { strokeWidth: 2.4 });
+      mctr(x+130, 295, d[0], 20, { weight: 700 });
+      if (d[2]) {
+        [350, 410, 470, 530].forEach(y => addLine(x+16, y, x+244, y, { stroke: COLORS.faint }));
+        addCheck(x+130, 630, 18, COLORS.emerald);
+      } else {
+        addCross(x+130, 630, 18, COLORS.rose);
+      }
+      ctr(x+130, 700, d[1], 20, { fill: d[2] ? COLORS.soft : COLORS.rose });
+    });
+    aR(1180, 1255, 420, { strokeWidth: 2.4, arrowSize: 14, stroke: COLORS.rose });
+    box(1260, 360, 220, 130, COLORS.softEmerald, { strokeWidth: 2.4 });
+    mctr(1370, 420, 'pass', 24, { weight: 700 });
+    addCheck(1370, 460, 16, COLORS.emerald);
+  });
+
+  // ============================================================
+  // 8. MONITOR THE TRAJECTORY, NOT JUST THE PATCH
+  // ============================================================
+  V('8A', 'the final state does not show the route',
+    'an outcome verifier reads the repository after the fact, so both of these look identical to it', () => {
+    lft(150, 180, 'legitimate debugging', 20, { fill: COLORS.soft });
+    ['reproduce', 'localize', 'fix'].forEach((t,i) => {
+      const x = 150 + i*270;
+      box(x, 210, 230, 110, COLORS.blue);
+      mctr(x+115, 272, t, 20, { weight: 700 });
+      if (i < 2) aR(x+230, x+270, 265, { strokeWidth: 1.8, arrowSize: 11 });
+    });
+    lft(150, 530, 'the shortcut', 20, { fill: COLORS.rose });
+    ['search the pr', 'open the diff', 'apply it'].forEach((t,i) => {
+      const x = 150 + i*270;
+      box(x, 560, 230, 110, COLORS.lightRed);
+      mctr(x+115, 622, t, 20, { weight: 700 });
+      if (i < 2) aR(x+230, x+270, 615, { strokeWidth: 1.8, arrowSize: 11 });
+    });
+    addArrow(920, 265, 1080, 400, { curve: 30, strokeWidth: 2, arrowSize: 12 });
+    addArrow(920, 615, 1080, 480, { curve: -30, strokeWidth: 2, arrowSize: 12 });
+    box(1080, 340, 320, 200, COLORS.card, { strokeWidth: 2.6 });
+    ctr(1240, 425, 'final repo', 26, { weight: 700 });
+    ctr(1240, 462, 'state', 26, { weight: 700 });
+    mctr(1240, 600, 'evaluation.sh', 21, { fill: COLORS.soft });
+    addCheck(1240, 645, 18, COLORS.emerald);
+  });
+
+  V('8B', 'the pattern set is never finished',
+    'each interval samples fresh rollouts, a reviewer names the new shortcut, and the monitor is redeployed', () => {
+    const st = [['sample','rollouts'],['agentic','reviewer'],['add pattern','to P'],['redeploy','monitor']];
+    st.forEach((s,i) => {
+      const x = rowX(i,4,300,60);
+      box(x, 300, 300, 170, i===2 ? COLORS.amber : COLORS.blue);
+      ctr(x+150, 375, s[0], 24, { weight: 700 });
+      ctr(x+150, 412, s[1], 24, { weight: 700 });
+      if (i < 3) aR(x+300, x+360, 385, { strokeWidth: 1.8, arrowSize: 11 });
+    });
+    const xa = rowX(0,4,300,60), xb = rowX(3,4,300,60);
+    addLine(xb+150, 470, xb+150, 610, { stroke: COLORS.soft, strokeWidth: 2 });
+    addLine(xb+150, 610, xa+150, 610, { stroke: COLORS.soft, strokeWidth: 2 });
+    addArrow(xa+150, 610, xa+150, 476, { curve: 0, strokeWidth: 2, arrowSize: 12, stroke: COLORS.soft });
+    mctr(800, 650, 'every training interval', 21, { fill: COLORS.soft });
+    ctr(800, 250, 'because the shortcuts the policy finds change as it improves', 20, { fill: COLORS.faint });
+  });
+
+  V('8C', 'hacked down, clean up',
+    'the gain is not more passing, it is a shift from shortcut success to monitor clean success', () => {
+    addLine(200, 690, 1400, 690, { stroke: COLORS.faint });
+    const groups = [[520,'hacked resolved',[28.57, 0.56],[COLORS.lightRed, COLORS.softEmerald]],
+                    [1080,'clean resolved',[40.22, 60.53],[COLORS.card, COLORS.softEmerald]]];
+    groups.forEach(g => {
+      g[2].forEach((v,i) => {
+        const h = v*6.6, x = g[0] - 165 + i*200;
+        box(x, 690-h, 130, h, g[3][i]);
+        mctr(x+65, 690-h-18, v.toFixed(2), 22, { weight: 700 });
+        ctr(x+65, 718, i===0 ? 'base' : 'monitored', 17, { fill: COLORS.soft });
+      });
+      ctr(g[0], 758, g[1], 24, { weight: 700 });
+    });
+  });
+
+  V('8D', 'the same shape on all three benchmarks',
+    'clean resolution rises by fifteen to twenty eight points while the hack rate falls to near zero', () => {
+    lft(520, 185, 'clean resolved', 19, { fill: COLORS.soft });
+    lft(1150, 185, 'hack rate', 19, { fill: COLORS.soft });
+    const rows = [['SWE-bench Verified', 36.49, 64.98, '51.49 to 2.13'],
+                  ['SWE-bench Multilingual', 50.73, 66.33, '31.19 to 1.59'],
+                  ['SWE-bench Pro', 33.43, 50.27, '30.60 to 0.20']];
+    rows.forEach((r,i) => {
+      const y = 260 + i*170;
+      lft(140, y+6, r[0], 22);
+      box(520, y-42, r[1]*6.5, 32, COLORS.card, { strokeWidth: 1.6 });
+      box(520, y+4, r[2]*6.5, 32, COLORS.softEmerald, { strokeWidth: 1.6 });
+      lft(530 + r[2]*6.5, y+28, '+' + (r[2]-r[1]).toFixed(2), 20, { font: MONO, fill: COLORS.emerald, weight: 700 });
+      lft(1150, y+6, r[3], 20, { font: MONO, fill: COLORS.rose });
+    });
+  });
+
+  V('8E', 'the penalty lands on the span',
+    'the monitor reads the whole trajectory and docks the reward where the shortcut appears', () => {
+    lft(150, 300, 'one trajectory', 19, { fill: COLORS.soft });
+    box(150, 330, 1180, 130, COLORS.card, { strokeWidth: 2 });
+    for (let i = 1; i < 8; i++) addLine(150 + i*147.5, 330, 150 + i*147.5, 460, { stroke: COLORS.faint });
+    box(740, 330, 147.5, 130, COLORS.lightRed, { strokeWidth: 2 });
+    mctr(813, 302, 'curl .../2388.diff', 19, { fill: COLORS.rose });
+    aD(813, 462, 552, { strokeWidth: 2, arrowSize: 12, stroke: COLORS.rose });
+    box(200, 560, 340, 120, COLORS.softEmerald);
+    mctr(370, 630, 'verifier: pass', 22, { weight: 700 });
+    box(630, 560, 340, 120, COLORS.amber);
+    mctr(800, 630, 'monitor: match', 22, { weight: 700 });
+    box(1060, 560, 340, 120, COLORS.lightRed);
+    mctr(1230, 630, 'reward: docked', 22, { weight: 700 });
+    aR(540, 625, 620, { strokeWidth: 1.8, arrowSize: 11 });
+    aR(970, 1055, 620, { strokeWidth: 1.8, arrowSize: 11 });
+  });
+
+  // ============================================================
+  // 9. THE METRIC THAT LIED
+  // ============================================================
+  V('9A', 'the number went up while the work got worse',
+    'the uncorrected pass rate keeps climbing as a growing share of those passes come from shortcuts', () => {
+    addLine(200, 700, 1400, 700, { stroke: COLORS.faint });
+    addLine(200, 700, 200, 190, { stroke: COLORS.faint });
+    lft(210, 745, 'rl steps', 18, { fill: COLORS.soft });
+    addPath('M 230 600 Q 700 400 1300 320', { stroke: COLORS.ink, strokeWidth: 3 });
+    addPath('M 230 610 Q 640 420 820 420 Q 1080 430 1300 640', { stroke: COLORS.rose, strokeWidth: 3 });
+    lft(1320, 320, 'verifier', 19, { fill: COLORS.ink, font: MONO });
+    lft(1320, 348, 'pass rate', 19, { fill: COLORS.ink, font: MONO });
+    lft(1320, 640, 'clean', 19, { fill: COLORS.rose, font: MONO });
+    lft(1320, 668, 'resolved', 19, { fill: COLORS.rose, font: MONO });
+    addLine(880, 400, 880, 460, { stroke: COLORS.faint, strokeLineDash: [7,6] });
+    ctr(880, 380, 'they part ways here', 19, { fill: COLORS.soft });
+  });
+
+  V('9B', 'half of that bar is not real',
+    'counting monitor triggered successes as failures turns a rising curve into a collapsing one', () => {
+    addLine(230, 660, 1380, 660, { stroke: COLORS.faint });
+    const bars = [[400, 0.62, 0.10], [800, 0.70, 0.30], [1200, 0.78, 0.53]];
+    bars.forEach((b,i) => {
+      const total = b[1]*560, hacked = b[2]*560;
+      box(b[0]-110, 660-total, 220, total-hacked, COLORS.softEmerald);
+      box(b[0]-110, 660-hacked, 220, hacked, COLORS.lightRed);
+      ctr(b[0], 705, ['early','mid','late'][i], 22, { fill: COLORS.soft });
+    });
+    mctr(1200, 660-0.53*560+40, '41.35', 22, { weight: 700, fill: COLORS.rose });
+    mctr(1200, 660-0.78*560-20, '36.49 clean', 22, { weight: 700, fill: COLORS.emerald });
+    box(300, 196, 28, 20, COLORS.softEmerald); lft(340, 214, 'clean resolved', 19, { fill: COLORS.soft });
+    box(660, 196, 28, 20, COLORS.lightRed);    lft(700, 214, 'passed via a monitored shortcut', 19, { fill: COLORS.soft });
+    mctr(1200, 745, 'SWE-bench Verified, unmonitored', 18, { fill: COLORS.faint });
+  });
+
+  V('9C', 'the same run, monitored and not',
+    'behaviour monitored training avoids the late collapse instead of correcting it afterwards', () => {
+    const panel = (x, title, path, color) => {
+      box(x, 220, 620, 440, COLORS.paper, { strokeWidth: 1.8 });
+      ctr(x+310, 275, title, 25, { weight: 700 });
+      addLine(x+60, 600, x+560, 600, { stroke: COLORS.faint });
+      addLine(x+60, 600, x+60, 320, { stroke: COLORS.faint });
+      addPath(path, { stroke: color, strokeWidth: 3 });
+    };
+    panel(150, 'no monitor', 'M 220 560 Q 400 380 500 400 Q 620 430 690 570', COLORS.rose);
+    panel(830, 'with monitor', 'M 900 560 Q 1100 400 1370 350', COLORS.emerald);
+    ctr(460, 700, 'clean resolved over rl steps', 19, { fill: COLORS.soft });
+    ctr(1140, 700, 'clean resolved over rl steps', 19, { fill: COLORS.soft });
+  });
+
+  V('9D', 'what the reported number contains',
+    'more than half of the successes on this benchmark came through a monitored shortcut channel', () => {
+    box(230, 270, 460, 240, COLORS.card, { strokeWidth: 2.4 });
+    ctr(460, 390, '77.84%', 58, { weight: 700 });
+    ctr(460, 450, 'reported as resolved', 21, { fill: COLORS.soft });
+    aR(690, 900, 390, { strokeWidth: 2.4, arrowSize: 15 });
+    box(900, 210, 470, 160, COLORS.softEmerald, { strokeWidth: 2.4 });
+    ctr(1135, 285, '36.49%', 42, { weight: 700 });
+    ctr(1135, 330, 'clean', 21, { fill: COLORS.soft });
+    box(900, 410, 470, 160, COLORS.lightRed, { strokeWidth: 2.4 });
+    ctr(1135, 485, '41.35%', 42, { weight: 700, fill: COLORS.rose });
+    ctr(1135, 530, 'passed via a shortcut', 21, { fill: COLORS.soft });
+    addCross(1420, 490, 22, COLORS.rose);
+    mctr(800, 690, 'SWE-bench Verified, no behaviour monitor', 19, { fill: COLORS.faint });
+  });
+
+  V('9E', 'the same run, scored two ways',
+    'the only difference is whether trajectories that triggered the monitor are counted as solved', () => {
+    lft(350, 285, 'scored by the verifier alone', 21, { fill: COLORS.soft });
+    box(350, 300, 474, 90, COLORS.softEmerald, { strokeWidth: 2.2 });
+    box(824, 300, 538, 90, COLORS.lightRed, { strokeWidth: 2.2 });
+    mctr(587, 358, '36.49', 26, { weight: 700 });
+    mctr(1093, 358, '41.35', 26, { weight: 700, fill: COLORS.rose });
+    lft(350, 465, 'scored with monitored passes removed', 21, { fill: COLORS.soft });
+    box(350, 480, 474, 90, COLORS.softEmerald, { strokeWidth: 2.2 });
+    mctr(587, 538, '36.49', 26, { weight: 700 });
+    lft(850, 538, 'the rest was never a fix', 21, { fill: COLORS.soft });
+    addLine(824, 290, 824, 600, { stroke: COLORS.rose, strokeWidth: 2, strokeLineDash: [9,7] });
+  });
+
+  // ============================================================
+  // 10. SCREENSHOTS CANNOT SEE BEHAVIOUR
+  // ============================================================
+  V('10A', 'a still frame misses the application',
+    'a screenshot is one page state, so everything that only exists after an interaction is invisible', () => {
+    box(170, 220, 620, 430, COLORS.paper, { strokeWidth: 2.2 });
+    box(170, 220, 620, 50, COLORS.card, { strokeWidth: 2 });
+    [200, 226, 252].forEach(x => addCircle(x, 245, 14, { stroke: COLORS.faint }));
+    box(210, 300, 540, 60, COLORS.card, { strokeWidth: 1.6 });
+    box(210, 380, 250, 230, COLORS.card, { strokeWidth: 1.6 });
+    box(490, 380, 260, 230, COLORS.card, { strokeWidth: 1.6 });
+    ctr(480, 690, 'one page state', 20, { fill: COLORS.soft });
+    ['a modal that opens on click', 'a dropdown menu', 'content revealed on scroll', 'form validation'].forEach((t,i) => {
+      const y = 290 + i*100;
+      addCross(880, y, 16, COLORS.rose);
+      lft(925, y+8, t, 23);
+    });
+  });
+
+  V('10B', 'plan once, then drive the browser',
+    'the planner writes the whole action list in a single pass, so there is no agent loop to drift', () => {
+    const st = [['page info','a11y tree, state',COLORS.blue], ['action planner','one pass, full list',COLORS.violet],
+                ['render server','click, scroll, fill',COLORS.teal], ['judge','frames, code, rubric',COLORS.amber]];
+    st.forEach((s,i) => {
+      const x = rowX(i,4,290,50);
+      box(x, 320, 290, 190, s[2]);
+      ctr(x+145, 395, s[0], 24, { weight: 700 });
+      ctr(x+145, 440, s[1], 19, { fill: COLORS.soft });
+      if (i < 3) aR(x+290, x+340, 415, { strokeWidth: 1.8, arrowSize: 11 });
+    });
+    const x2 = rowX(1,4,290,50), x4 = rowX(3,4,290,50);
+    ctr(x2+145, 560, 'not an agent loop', 20, { fill: COLORS.rose });
+    ctr(x4+145, 560, 'reward from what it did', 20, { fill: COLORS.emerald });
+    addCheck(x4+145, 600, 18, COLORS.emerald);
+  });
+
+  V('10C', 'a static judge pays for verbose css',
+    'when the score comes from reading source, the model learns to write more of it', () => {
+    box(250, 170, 1100, 240, COLORS.paper, { strokeWidth: 1.8 });
+    lft(285, 210, 'generation length', 21, { fill: COLORS.soft });
+    addLine(300, 380, 1310, 380, { stroke: COLORS.faint });
+    addPath('M 310 355 Q 700 255 1290 215', { stroke: COLORS.rose, strokeWidth: 3 });
+    addPath('M 310 350 Q 700 340 1290 348', { stroke: COLORS.emerald, strokeWidth: 3 });
+    rgt(1330, 200, 'static judge', 18, { fill: COLORS.rose });
+    rgt(1330, 375, 'interactive', 18, { fill: COLORS.emerald });
+    box(250, 450, 1100, 240, COLORS.paper, { strokeWidth: 1.8 });
+    lft(285, 490, 'test score', 21, { fill: COLORS.soft });
+    addLine(300, 660, 1310, 660, { stroke: COLORS.faint });
+    addPath('M 310 600 Q 700 572 1290 585', { stroke: COLORS.rose, strokeWidth: 3 });
+    addPath('M 310 618 Q 700 540 1290 496', { stroke: COLORS.emerald, strokeWidth: 3 });
+    rgt(1330, 610, 'static judge', 18, { fill: COLORS.rose });
+    rgt(1330, 482, 'interactive', 18, { fill: COLORS.emerald });
+  });
+
+  V('10D', 'the checklist behind the score',
+    'each task is decomposed into roughly twenty six checks, and most of them are about behaviour', () => {
+    box(150, 280, 420, 240, COLORS.card, { strokeWidth: 2.4 });
+    ctr(360, 400, '25.9', 58, { weight: 700 });
+    ctr(360, 450, 'checklist items', 21, { fill: COLORS.soft });
+    ctr(360, 482, 'per task', 21, { fill: COLORS.soft });
+    const dims = [['functional',37.7,COLORS.softEmerald],['content',19.0,COLORS.blue],['visual',13.3,COLORS.violet],
+                  ['layout',12.9,COLORS.violet],['ux',9.3,COLORS.teal],['technical',7.2,COLORS.card]];
+    dims.forEach((d,i) => {
+      const y = 210 + i*80;
+      rgt(660, y+8, d[0], 21, { font: MONO, fill: COLORS.soft });
+      box(700, y-18, d[1]*14, 36, d[2], { strokeWidth: 1.6 });
+      lft(700 + d[1]*14 + 14, y+8, d[1].toFixed(1), 20, { font: MONO, fill: COLORS.soft });
+    });
+  });
+
+  V('10E', 'three judges, one that is not gameable by length',
+    'grounding the reward in the recorded interaction removes the incentive that inflated the static scores', () => {
+    const cols = [['visual', 0.45, 0.85, COLORS.card], ['hybrid', 0.60, 0.90, COLORS.card], ['interactive', 0.90, 0.45, COLORS.softEmerald]];
+    cols.forEach((c,i) => {
+      const x = rowX(i,3,380,60);
+      box(x, 240, 380, 400, c[3], { strokeWidth: i===2 ? 2.8 : 2 });
+      ctr(x+190, 300, c[0], 27, { weight: 700 });
+      lft(x+40, 370, 'test score', 18, { fill: COLORS.soft });
+      box(x+40, 382, 300*c[1], 36, COLORS.emerald, { strokeWidth: 1.6 });
+      lft(x+40, 490, 'output length', 18, { fill: COLORS.soft });
+      box(x+40, 502, 300*c[2], 36, c[2] > 0.6 ? COLORS.rose : COLORS.card, { strokeWidth: 1.6 });
+    });
+  });
+
+  // ============================================================
+  // 11. THE USER IS THE VERIFIER YOU ALREADY HAVE
+  // ============================================================
+  V('11A', 'the signal is mostly silence',
+    'people move straight on when it works and say so clearly when it does not', () => {
+    box(150, 330, 996, 140, COLORS.card, { strokeWidth: 2.2 });
+    box(1146, 330, 260, 140, COLORS.lightRed, { strokeWidth: 2.2 });
+    box(1406, 330, 45, 140, COLORS.softEmerald, { strokeWidth: 2.2 });
+    mctr(648, 410, 'neutral  76.6', 26, { weight: 700 });
+    mctr(1276, 410, 'negative  20.0', 22, { weight: 700 });
+    rgt(1420, 300, 'positive 3.5', 20, { fill: COLORS.emerald, font: MONO });
+    addLine(1428, 308, 1428, 328, { stroke: COLORS.emerald });
+    rgt(380, 604, 'negative, high confidence', 20, { fill: COLORS.soft });
+    box(420, 580, 409, 34, COLORS.lightRed, { strokeWidth: 1.6 });
+    lft(842, 604, '81.8', 20, { font: MONO, fill: COLORS.rose });
+    rgt(380, 674, 'neutral, high confidence', 20, { fill: COLORS.soft });
+    box(420, 650, 93, 34, COLORS.card, { strokeWidth: 1.6 });
+    lft(526, 674, '18.7', 20, { font: MONO, fill: COLORS.soft });
+  });
+
+  V('11B', 'every reply grades the last turn',
+    'the judgment is already in the conversation, sometimes stated and sometimes only acted out', () => {
+    const rows = [['okay, proceed with the changes', 'explicit', 1],
+                  ['still does not work, stop using that approach', 'explicit', -1],
+                  ['add a remember me feature', 'implicit', 0],
+                  ['revert to the previous colors', 'explicit', -1]];
+    rows.forEach((r,i) => {
+      const y = 200 + i*130;
+      lft(150, y+62, r[1], 17, { fill: COLORS.faint, font: MONO });
+      box(300, y, 900, 100, COLORS.card);
+      lft(330, y+62, r[0], 23);
+      if (r[2] === 1) { addCheck(1245, y+48, 16, COLORS.emerald); lft(1285, y+58, 'positive', 19, { fill: COLORS.emerald }); }
+      else if (r[2] === -1) { addCross(1245, y+48, 16, COLORS.rose); lft(1285, y+58, 'negative', 19, { fill: COLORS.rose }); }
+      else { addCircle(1245, y+48, 22, { stroke: COLORS.soft }); lft(1285, y+58, 'neutral', 19, { fill: COLORS.soft }); }
+    });
+  });
+
+  V('11C', 'where the complaints actually land',
+    'implementation errors and misread requirements are more than three quarters of the negative signal', () => {
+    const rs = [['execution_error',56.6,COLORS.lightRed],['misunderstand',21.1,COLORS.lightRed],['omission',8.9,COLORS.card],
+                ['overaction',6.3,COLORS.card],['inefficiency',4.9,COLORS.card],['communication',2.1,COLORS.card]];
+    rs.forEach((r,i) => {
+      const y = 200 + i*88;
+      rgt(590, y+9, r[0], 22, { font: MONO, fill: COLORS.soft });
+      box(620, y-20, r[1]*13, 40, r[2], { strokeWidth: 1.8 });
+      lft(620 + r[1]*13 + 14, y+9, r[1].toFixed(1), 21, { font: MONO, fill: i < 2 ? COLORS.rose : COLORS.soft });
+    });
+  });
+
+  V('11D', 'the flywheel',
+    'real interactions keep supplying on policy signal about the behaviour the agent actually produced', () => {
+    const nodes = [[650,135,'real usage',COLORS.blue],[1080,365,'feedback extracted',COLORS.violet],
+                   [650,595,'training signal',COLORS.amber],[220,365,'better agent',COLORS.softEmerald]];
+    nodes.forEach(n => {
+      box(n[0], n[1], 300, 110, n[3]);
+      ctr(n[0]+150, n[1]+66, n[2], 23, { weight: 700 });
+    });
+    addArrow(950, 200, 1170, 362, { curve: 40, strokeWidth: 2.2, arrowSize: 13 });
+    addArrow(1180, 478, 960, 640, { curve: 40, strokeWidth: 2.2, arrowSize: 13 });
+    addArrow(650, 640, 430, 478, { curve: 40, strokeWidth: 2.2, arrowSize: 13 });
+    addArrow(420, 362, 640, 200, { curve: 40, strokeWidth: 2.2, arrowSize: 13 });
+    mctr(800, 410, 'on policy', 21, { fill: COLORS.soft });
+  });
+
+  V('11E', 'do not compress the verifier you have',
+    'a learned reward model turns a huge live signal back into a static proxy the policy can exploit', () => {
+    box(150, 380, 340, 170, COLORS.card, { strokeWidth: 2.4 });
+    mctr(320, 440, '125,528', 30, { weight: 700 });
+    ctr(320, 478, 'trajectories', 20, { fill: COLORS.soft });
+    mctr(320, 520, '535,737 labels', 19, { fill: COLORS.soft });
+    box(620, 190, 400, 150, COLORS.lightRed);
+    ctr(820, 250, 'a learned reward model', 22, { weight: 700 });
+    ctr(820, 290, 'a static, lossy proxy', 19, { fill: COLORS.soft });
+    box(1120, 190, 340, 150, COLORS.lightRed);
+    ctr(1290, 258, 'the policy', 22, { weight: 700 });
+    ctr(1290, 292, 'exploits it', 22, { weight: 700 });
+    box(620, 540, 400, 150, COLORS.softEmerald);
+    ctr(820, 600, 'train on the spans', 22, { weight: 700 });
+    ctr(820, 640, 'the users already left', 19, { fill: COLORS.soft });
+    box(1120, 540, 340, 150, COLORS.softEmerald);
+    ctr(1290, 608, 'grounded in', 22, { weight: 700 });
+    ctr(1290, 642, 'actual utility', 22, { weight: 700 });
+    addArrow(490, 430, 615, 290, { curve: -25, strokeWidth: 2, arrowSize: 12 });
+    addArrow(490, 500, 615, 610, { curve: 25, strokeWidth: 2, arrowSize: 12 });
+    aR(1020, 1115, 265, { strokeWidth: 2, arrowSize: 12, stroke: COLORS.rose });
+    aR(1020, 1115, 615, { strokeWidth: 2, arrowSize: 12, stroke: COLORS.emerald });
+  });
+
+  // ============================================================
+  // 12. YOU CANNOT FIX IT BY DOWNWEIGHTING
+  // ============================================================
+  V('12A', 'reweighting is not a dial you can turn',
+    'discarding the negative tokens is worse than keeping them; only a slight downweight beats the baseline', () => {
+    addLine(250, 700, 1400, 700, { stroke: COLORS.faint });
+    addLine(250, 700, 250, 220, { stroke: COLORS.faint });
+    const pts = [[0.0,37.2],[0.5,35.1],[0.8,44.4],[1.0,41.8]];
+    const X = w => 300 + w*1000, Y = v => 680 - (v-34)*36.67;
+    addLine(280, Y(41.8), 1380, Y(41.8), { stroke: COLORS.soft, strokeWidth: 1.6, strokeLineDash: [9,7] });
+    lft(300, Y(41.8)-16, 'sft baseline', 19, { fill: COLORS.soft });
+    addPath(`M ${X(0)} ${Y(37.2)} L ${X(0.5)} ${Y(35.1)} L ${X(0.8)} ${Y(44.4)} L ${X(1.0)} ${Y(41.8)}`, { stroke: COLORS.ink, strokeWidth: 2.6 });
+    pts.forEach(p => {
+      const good = p[1] > 41.8;
+      addCircle(X(p[0]), Y(p[1]), 24, { fill: good ? COLORS.softEmerald : COLORS.lightRed, fillStyle: 'solid', strokeWidth: 2.2 });
+      mctr(X(p[0]), Y(p[1])-28, p[1].toFixed(1), 21, { weight: 700, fill: good ? COLORS.emerald : COLORS.rose });
+      mctr(X(p[0]), 740, p[0].toFixed(1), 20, { fill: COLORS.soft });
+    });
+    lft(1400, 740, 'w_neg', 20, { font: MONO, fill: COLORS.soft });
+  });
+
+  V('12B', 'attenuate versus push away',
+    'a weight can only change how hard the model learns something, not which direction it moves', () => {
+    const panel = (px, title, sub) => {
+      box(px, 220, 620, 440, COLORS.paper, { strokeWidth: 1.8 });
+      ctr(px+310, 285, title, 26, { weight: 700 });
+      ctr(px+310, 322, sub, 20, { fill: COLORS.soft });
+      addEllipse(px+430, 430, 250, 150, { fill: COLORS.lightRed, fillStyle: 'solid', stroke: COLORS.rose, strokeWidth: 2 });
+      ctr(px+430, 424, 'negative', 19); ctr(px+430, 450, 'behaviour', 19);
+      addCircle(px+140, 560, 28, { fill: COLORS.violet, fillStyle: 'solid', strokeWidth: 2.2 });
+      ctr(px+140, 615, 'policy', 18, { fill: COLORS.soft });
+    };
+    panel(150, 'reweighting', 'how much it learns');
+    addArrow(310, 545, 400, 495, { curve: 0, strokeWidth: 2.4, arrowSize: 13, stroke: COLORS.rose });
+    panel(830, 'preference learning', 'which way it moves');
+    addArrow(940, 578, 862, 640, { curve: 0, strokeWidth: 2.4, arrowSize: 13, stroke: COLORS.emerald });
+  });
+
+  V('12C', 'spans, cut at the user turns',
+    'each span is one complete agent response, so the polarity attaches to a unit the user actually judged', () => {
+    const segs = [[150,260,'neutral',COLORS.card],[410,230,'negative',COLORS.lightRed],[640,310,'neutral',COLORS.card],
+                  [950,250,'positive',COLORS.softEmerald],[1200,250,'negative',COLORS.lightRed]];
+    ctr(800, 275, 'each boundary is a user turn', 20, { fill: COLORS.soft });
+    segs.forEach(s => {
+      box(s[0], 320, s[1], 150, s[3], { strokeWidth: 2 });
+      mctr(s[0]+s[1]/2, 520, s[2], 19, { fill: COLORS.soft });
+      if (s[0] > 150) aD(s[0], 292, 316, { strokeWidth: 1.6, arrowSize: 9, stroke: COLORS.faint });
+    });
+    addCheck(400, 600, 15, COLORS.emerald); lft(440, 610, 'positive spans are pushed up', 22);
+    addCross(400, 660, 15, COLORS.rose);    lft(440, 670, 'negative spans are pushed away', 22);
+    addCircle(400, 718, 22, { stroke: COLORS.soft }); lft(440, 728, 'neutral spans keep the plain loss', 22);
+  });
+
+  V('12D', 'the gain is largest where the tests are real',
+    'span level preference learning beats both baselines everywhere, and by most on the internal benchmark', () => {
+    [['sft',COLORS.card],['rw-sft',COLORS.blue],['span-kto',COLORS.softEmerald]].forEach((d,i) => {
+      const x = 430 + i*230;
+      box(x, 178, 28, 20, d[1]); lft(x+38, 197, d[0], 19, { fill: COLORS.soft, font: MONO });
+    });
+    addLine(200, 660, 1050, 660, { stroke: COLORS.faint });
+    [['SWE-bench Verified',[54.2,55.2,59.8],420],['OctoBench',[62.3,67.0,67.4],800]].forEach(g => {
+      g[1].forEach((v,i) => {
+        const h = v*6.5, x = g[2]-155+i*110;
+        box(x, 660-h, 90, h, [COLORS.card,COLORS.blue,COLORS.softEmerald][i]);
+        mctr(x+45, 660-h-16, v.toFixed(1), 19, { fill: COLORS.soft });
+      });
+      ctr(g[2], 700, g[0], 22, { weight: 700 });
+    });
+    box(1120, 280, 340, 260, COLORS.lightRed, { strokeWidth: 2.4 });
+    ctr(1290, 340, 'Aone-bench', 24, { weight: 700 });
+    mctr(1290, 410, '14.8  to  28.1', 26, { weight: 700 });
+    ctr(1290, 470, '+13.3 points', 24, { fill: COLORS.emerald, weight: 700 });
+    ctr(1290, 590, 'a private benchmark', 19, { fill: COLORS.soft });
+  });
+
+  V('12E', 'behaving better when it fails',
+    'on the tasks it cannot solve, the model stops thrashing and starts saying what is wrong', () => {
+    ctr(800, 215, 'unresolved tasks', 26, { weight: 700 });
+    [['inefficiency',34.5],['communication',26.5],['execution_error',13.9]].forEach((r,i) => {
+      const y = 320 + i*110;
+      rgt(600, y+9, r[0], 23, { font: MONO, fill: COLORS.soft });
+      box(630, y-22, r[1]*20, 44, COLORS.softEmerald, { strokeWidth: 1.8 });
+      lft(630 + r[1]*20 + 14, y+9, '+' + r[1].toFixed(1) + '%', 22, { font: MONO, fill: COLORS.emerald, weight: 700 });
+    });
+    addLine(250, 620, 1380, 620, { stroke: COLORS.faint });
+    rgt(600, 685, 'resolved tasks', 23, { fill: COLORS.faint });
+    box(630, 662, 6.8*20, 32, COLORS.card, { strokeWidth: 1.6 });
+    lft(630 + 6.8*20 + 14, 685, '+0.5 to +6.8%', 21, { font: MONO, fill: COLORS.faint });
+  });
+
+  // ============================================================
+  // 13. JUDGING A REPO WITH AN AGENT
+  // ============================================================
+  V('13A', 'more rules stopped helping at v5',
+    'each round of detail fixed a real failure mode until the instructions outgrew what the judge could follow', () => {
+    addLine(250, 700, 1380, 700, { stroke: COLORS.faint });
+    addLine(250, 700, 250, 240, { stroke: COLORS.faint });
+    lft(250, 220, 'best of n accuracy', 19, { fill: COLORS.soft });
+    const Y = v => 680 - (v-55)*28;
+    const pts = [[300,57.9,'v1','run the tests'],[550,63.9,'v2','end to end'],[800,62.4,'v3','role limits'],
+                 [1050,67.4,'v4','less context'],[1300,59.6,'v5','more rules']];
+    addPath(pts.map((p,i) => (i?'L':'M') + ` ${p[0]} ${Y(p[1])}`).join(' '), { stroke: COLORS.ink, strokeWidth: 2.6 });
+    pts.forEach((p,i) => {
+      const c = i===3 ? COLORS.softEmerald : (i===4 ? COLORS.lightRed : COLORS.card);
+      addCircle(p[0], Y(p[1]), 26, { fill: c, fillStyle: 'solid', strokeWidth: 2.2 });
+      mctr(p[0], Y(p[1])-30, p[1].toFixed(1), 21, { weight: 700 });
+      mctr(p[0], 738, p[2], 21, { fill: i===4 ? COLORS.rose : COLORS.soft });
+      ctr(p[0], 764, p[3], 16, { fill: COLORS.faint });
+    });
+  });
+
+  V('13B', 'the evaluator has its own failure modes',
+    'four rounds of tightening helped; the fifth gave it more procedure than it could hold', () => {
+    const cards = [['baseline to v1','reads the code','never runs it',true],
+                   ['v1 to v2','unit tests only','no end to end',true],
+                   ['v2 to v3','fixes the code','it is judging',true],
+                   ['v3 to v4','reads the whole','repository',true],
+                   ['v4 to v5','more rules than','it can follow',false]];
+    cards.forEach((c,i) => {
+      const x = rowX(i,5,250,35);
+      box(x, 250, 250, 380, c[3] ? COLORS.amber : COLORS.lightRed, { strokeWidth: 2.2 });
+      mctr(x+125, 305, c[0], 17, { fill: COLORS.soft });
+      ctr(x+125, 400, c[1], 21, { weight: 700 });
+      ctr(x+125, 435, c[2], 21, { weight: 700 });
+      if (c[3]) addCheck(x+125, 540, 18, COLORS.emerald); else addCross(x+125, 540, 18, COLORS.rose);
+    });
+    ctr(800, 690, 'each card is the behaviour the next prompt version removed', 20, { fill: COLORS.faint });
+  });
+
+  V('13C', 'ranking well is not filtering well',
+    'the model that orders candidates best is not the model that keeps the best set', () => {
+    box(150, 230, 620, 420, COLORS.paper, { strokeWidth: 1.8 });
+    ctr(460, 295, 'ranks better', 26, { weight: 700 });
+    [['Qwen 3.7 Plus',0.553,true],['DeepSeek V4 Pro',0.420,false]].forEach((r,i) => {
+      const y = 400 + i*110;
+      rgt(400, y+9, r[0], 20, { fill: COLORS.soft });
+      box(420, y-20, r[1]*600, 40, r[2] ? COLORS.softEmerald : COLORS.card, { strokeWidth: 1.8 });
+      lft(420 + r[1]*600 + 12, y+9, r[1].toFixed(3), 20, { font: MONO, fill: COLORS.soft });
+    });
+    mctr(460, 625, 'kendall tau', 19, { fill: COLORS.faint });
+    box(830, 230, 620, 420, COLORS.paper, { strokeWidth: 1.8 });
+    ctr(1140, 295, 'filters better', 26, { weight: 700 });
+    [['DeepSeek V4 Pro',0.611,true],['Qwen 3.7 Plus',0.595,false]].forEach((r,i) => {
+      const y = 400 + i*110;
+      rgt(1080, y+9, r[0], 20, { fill: COLORS.soft });
+      box(1100, y-20, (r[1]-0.5)*2000, 40, r[2] ? COLORS.softEmerald : COLORS.card, { strokeWidth: 1.8 });
+      lft(1100 + (r[1]-0.5)*2000 + 12, y+9, r[1].toFixed(3), 20, { font: MONO, fill: COLORS.soft });
+    });
+    mctr(1140, 625, 'unit test score of what it kept', 19, { fill: COLORS.faint });
+  });
+
+  V('13D', 'raise the bar and the pile disappears',
+    'a stricter threshold buys quality with quantity, which only matters when candidates are scarce', () => {
+    addLine(230, 680, 1420, 680, { stroke: COLORS.faint });
+    lft(240, 265, 'average unit test score', 19, { fill: COLORS.emerald });
+    lft(240, 520, 'samples retained', 19, { fill: COLORS.soft });
+    const data = [[320,0.572,198],[660,0.615,139],[1000,0.652,81],[1340,0.721,30]];
+    const Ys = s => 460 - (s-0.55)*900;
+    data.forEach(d => {
+      const h = d[2]*0.7;
+      box(d[0]-55, 680-h, 110, h, COLORS.card, { strokeWidth: 1.8 });
+      mctr(d[0], 680-h-14, String(d[2]), 20, { fill: COLORS.soft });
+    });
+    addPath(data.map((d,i) => (i?'L':'M') + ` ${d[0]} ${Ys(d[1])}`).join(' '), { stroke: COLORS.emerald, strokeWidth: 3 });
+    data.forEach(d => {
+      addCircle(d[0], Ys(d[1]), 22, { fill: COLORS.softEmerald, fillStyle: 'solid', stroke: COLORS.emerald, strokeWidth: 2.2 });
+      mctr(d[0], Ys(d[1])-26, d[1].toFixed(3), 20, { fill: COLORS.emerald, weight: 700 });
+    });
+    ['score >= 7','score >= 8','score >= 9','score >= 10'].forEach((t,i) => mctr(data[i][0], 725, t, 19, { fill: COLORS.soft }));
+  });
+
+  V('13E', 'filtered data beats random data of the same size',
+    'and doubling the raw data catches up, at twice the training cost', () => {
+    addLine(200, 680, 1400, 680, { stroke: COLORS.faint });
+    addLine(230, 486, 1380, 486, { stroke: COLORS.soft, strokeWidth: 1.6, strokeLineDash: [9,7] });
+    lft(240, 466, 'base model 11.41', 19, { fill: COLORS.soft });
+    const bars = [[400,21.61,'random sample','9,139',COLORS.card],
+                  [800,23.52,'evaluator filtered','9,139',COLORS.softEmerald],
+                  [1200,24.75,'no filter, all data','19,050',COLORS.amber]];
+    bars.forEach(b => {
+      const h = b[1]*17;
+      box(b[0]-100, 680-h, 200, h, b[4], { strokeWidth: 2.2 });
+      mctr(b[0], 680-h-18, b[1].toFixed(2), 26, { weight: 700 });
+      ctr(b[0], 718, b[2], 22, { weight: 700 });
+      mctr(b[0], 750, b[3], 20, { fill: COLORS.soft });
+    });
+    ctr(600, 240, '+1.91 at equal data size', 23, { fill: COLORS.emerald });
+    addLine(400, 260, 800, 260, { stroke: COLORS.emerald, strokeWidth: 2 });
+    addLine(400, 260, 400, 285, { stroke: COLORS.emerald, strokeWidth: 2 });
+    addLine(800, 260, 800, 285, { stroke: COLORS.emerald, strokeWidth: 2 });
+  });
+
+  // ============================================================
+  // 14. CO-EVOLVE OR SATURATE
+  // ============================================================
+  V('14A', 'verification is the infrastructure',
+    'not one reward but a stack of them, rebuilt as the policy and the task landscape move', () => {
+    box(600, 140, 400, 120, COLORS.violet, { strokeWidth: 2.6 });
+    ctr(800, 212, 'the policy', 28, { weight: 700 });
+    ['unit tests', 'rubric and interactive judges', 'user feedback', 'agent evaluators'].forEach((t,i) => {
+      box(350, 320 + i*95, 900, 85, [COLORS.blue, COLORS.violet, COLORS.teal, COLORS.amber][i]);
+      ctr(800, 375 + i*95, t, 24, { weight: 700 });
+    });
+    addArrow(700, 316, 700, 266, { curve: 0, strokeWidth: 2.2, arrowSize: 13 });
+    lft(720, 295, 'reward', 20, { fill: COLORS.soft, font: MONO });
+    addArrow(1005, 200, 1262, 452, { curve: 70, strokeWidth: 2.2, arrowSize: 13, stroke: COLORS.rose });
+    lft(1330, 330, 'rebuilt', 20, { fill: COLORS.rose });
+    addArrow(300, 330, 300, 660, { curve: 0, strokeWidth: 1.8, arrowSize: 11, stroke: COLORS.soft });
+    rgt(285, 500, 'more faithful', 19, { fill: COLORS.soft });
+  });
+
+  V('14B', 'no fixed reward survives the policy',
+    'each reward function works for a stretch and then stops discriminating; the capability curve does not stop', () => {
+    addPath('M 200 320 Q 800 250 1400 200', { stroke: COLORS.ink, strokeWidth: 3 });
+    lft(210, 290, 'policy capability', 21, { fill: COLORS.soft });
+    box(200, 400, 380, 80, COLORS.blue);   mctr(390, 450, 'reward v1', 22, { weight: 700 });
+    addCross(620, 440, 20, COLORS.rose);   ctr(620, 495, 'saturated', 17, { fill: COLORS.rose });
+    box(560, 520, 420, 80, COLORS.violet); mctr(770, 570, 'reward v2', 22, { weight: 700 });
+    addCross(1020, 560, 20, COLORS.rose);  ctr(1020, 615, 'saturated', 17, { fill: COLORS.rose });
+    box(960, 630, 440, 80, COLORS.amber);  mctr(1180, 680, 'reward v3', 22, { weight: 700 });
+    ctr(1440, 678, 'and so on', 19, { fill: COLORS.soft });
+  });
+
+  V('14C', 'four constructions, one direction',
+    'every step is closer to what the user meant and further from anything a machine can check outright', () => {
+    addArrow(150, 250, 1450, 250, { curve: 0, strokeWidth: 2.2, arrowSize: 13, stroke: COLORS.emerald });
+    ctr(800, 225, 'more faithful to intent', 21, { fill: COLORS.emerald });
+    const st = [['unit tests','pass or fail',COLORS.blue], ['rubric judges','what it looks like',COLORS.violet],
+                ['user feedback','what they meant',COLORS.teal], ['agent evaluators','open ended judgment',COLORS.lightRed]];
+    st.forEach((s,i) => {
+      const x = rowX(i,4,300,45);
+      box(x, 340, 300, 200, s[2]);
+      ctr(x+150, 420, s[0], 25, { weight: 700 });
+      ctr(x+150, 462, s[1], 19, { fill: COLORS.soft });
+    });
+    addArrow(150, 630, 1450, 630, { curve: 0, strokeWidth: 2.2, arrowSize: 13, stroke: COLORS.rose });
+    ctr(800, 672, 'harder to check mechanically', 21, { fill: COLORS.rose });
+  });
+
+  V('14D', 'the centre is still empty',
+    'cheap, deep, and resistant to gaming at the same time is the thing that is still missing', () => {
+    addPath('M 800 190 L 330 660 L 1270 660 Z', { strokeWidth: 2.6 });
+    ctr(800, 160, 'faithful', 27, { weight: 700 });
+    ctr(800, 130, 'users, agent judges', 18, { fill: COLORS.soft });
+    ctr(320, 705, 'scalable', 27, { weight: 700 });
+    ctr(320, 735, 'automated pipelines', 18, { fill: COLORS.soft });
+    ctr(1280, 705, 'robust', 27, { weight: 700 });
+    ctr(1280, 735, 'behaviour monitoring', 18, { fill: COLORS.soft });
+    addCircle(800, 480, 220, { stroke: COLORS.rose, strokeWidth: 2.4, strokeLineDash: [12,9] });
+    ctr(800, 470, 'still open', 30, { fill: COLORS.rose, weight: 700 });
+    ctr(800, 510, 'cheap, deep, ungameable', 19, { fill: COLORS.soft });
+  });
+
+  V('14E', 'no silver bullet',
+    'no single mechanism settles verification once; the verifier only stays useful by moving with the generator', () => {
+    addPath('M 320 580 L 320 400 Q 385 290 450 400 L 450 580 Z', { fill: COLORS.card, fillStyle: 'solid', strokeWidth: 2.4 });
+    addCross(385, 470, 46, COLORS.rose);
+    mctr(385, 645, 'Brooks, 1986', 18, { fill: COLORS.faint });
+    box(780, 290, 340, 130, COLORS.violet, { strokeWidth: 2.4 });
+    ctr(950, 368, 'the generator', 26, { weight: 700 });
+    box(780, 510, 340, 130, COLORS.amber, { strokeWidth: 2.4 });
+    ctr(950, 588, 'the verifier', 26, { weight: 700 });
+    addArrow(775, 360, 775, 570, { curve: -70, strokeWidth: 2.2, arrowSize: 13 });
+    addArrow(1125, 570, 1125, 360, { curve: 70, strokeWidth: 2.2, arrowSize: 13 });
+    rgt(660, 470, 'is scored by', 20, { fill: COLORS.soft });
+    lft(1245, 470, 'is rebuilt against', 20, { fill: COLORS.soft });
+  });
+
+
+  // ============== CONTACT SHEET ==============
+  const TITLES = [
+    'the turn',
+    'every verifier is a proxy',
+    'optimization widens the gap',
+    'pick two of three',
+    'the horizon recedes',
+    'tests can be unfaithful before they are hacked',
+    'which shortcuts actually pay',
+    'monitor the trajectory, not just the patch',
+    'the metric that lied',
+    'screenshots cannot see behaviour',
+    'the user is the verifier you already have',
+    'you cannot fix it by downweighting',
+    'judging a repo with an agent',
+    'co-evolve or saturate',
+  ];
+  const NGROUPS = TITLES.length;
+  const picks = {};
+  let group = 1, zoomIdx = -1;
+
+  const renderInto = (el, slide) => {
+    svg = el; rc = rough.svg(el); clearSvg(el);
+    TEXT_SCALE = slide.scale != null ? slide.scale : 1;
+    MONO_SCALE = slide.monoScale != null ? slide.monoScale : 1;
+    slide.draw();
+  };
+  const inGroup = (g) => slides.filter(s => s.group === g);
+
+  const drawPicks = () => {
+    const list = [];
+    for (let g = 1; g <= NGROUPS; g++) if (picks[g]) list.push(picks[g]);
+    document.getElementById('picklist').textContent = list.length ? list.join('  ') : 'nothing yet';
+  };
+  const togglePick = (s) => {
+    picks[s.group] = picks[s.group] === s.tag ? null : s.tag;
+    buildGrid(); drawPicks();
+    if (zoomIdx >= 0) document.getElementById('opick').classList.toggle('on', picks[s.group] === s.tag);
+  };
+
+  const openZoom = (i) => {
+    const list = inGroup(group);
+    if (i < 0 || i >= list.length) return;
+    zoomIdx = i;
+    const s = list[i];
+    renderInto(document.getElementById('osvg'), s);
+    document.getElementById('otag').textContent = s.tag;
+    document.getElementById('ocount').textContent = 'variation ' + (i+1) + ' of ' + list.length;
+    document.getElementById('oheadline').textContent = s.headline;
+    document.getElementById('ocaption').textContent = s.caption;
+    document.getElementById('opick').classList.toggle('on', picks[s.group] === s.tag);
+    document.getElementById('overlay').classList.add('on');
+  };
+  const closeZoom = () => { zoomIdx = -1; document.getElementById('overlay').classList.remove('on'); };
+
+  function buildGrid() {
+    document.getElementById('gnum').textContent = 'slide ' + group + ' / ' + NGROUPS;
+    document.getElementById('gtitle').textContent = TITLES[group-1];
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    inGroup(group).forEach((s, i) => {
+      const fig = document.createElement('figure');
+      fig.className = 'tile' + (picks[s.group] === s.tag ? ' picked' : '');
+      const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      el.setAttribute('viewBox', '0 0 1600 900');
+      el.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      fig.appendChild(el);
+      const cap = document.createElement('figcaption');
+      const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = s.tag;
+      const hl = document.createElement('span'); hl.className = 'hl'; hl.textContent = s.headline;
+      const btn = document.createElement('button'); btn.className = 'pick';
+      btn.textContent = picks[s.group] === s.tag ? 'picked' : 'pick';
+      btn.addEventListener('click', (e) => { e.stopPropagation(); togglePick(s); });
+      cap.appendChild(tag); cap.appendChild(hl); cap.appendChild(btn);
+      fig.appendChild(cap);
+      grid.appendChild(fig);
+      renderInto(el, s);
+      fig.addEventListener('click', () => openZoom(i));
+    });
+  }
+
+  const goGroup = (g) => {
+    if (g < 1 || g > NGROUPS) return;
+    group = g; closeZoom(); buildGrid();
+  };
+
+  buildGrid(); drawPicks();
+  document.getElementById('overlay').addEventListener('click', (e) => {
+    if (e.target.id !== 'opick') closeZoom();
+  });
+  document.getElementById('opick').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const list = inGroup(group);
+    if (zoomIdx >= 0) togglePick(list[zoomIdx]);
+  });
+  document.addEventListener('keydown', (e) => {
+    const list = inGroup(group);
+    if (e.key === 'Escape') { closeZoom(); return; }
+    if (zoomIdx >= 0) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); openZoom(zoomIdx + 1 < list.length ? zoomIdx + 1 : 0); return; }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); openZoom(zoomIdx - 1 >= 0 ? zoomIdx - 1 : list.length - 1); return; }
+      if (e.key === 'p' || e.key === 'P') { togglePick(list[zoomIdx]); return; }
+    } else {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goGroup(group + 1); return; }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); goGroup(group - 1); return; }
+    }
+    if (e.key >= '1' && e.key <= '5') { e.preventDefault(); openZoom(parseInt(e.key, 10) - 1); }
+  });
+})();
+</script>
+</body>
+</html>
