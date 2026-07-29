@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "ff01475aa2dc0b39",
+        "id": "1c69be52b4312a85",
         "type": "tabs",
         "children": [
           {
-            "id": "6a2e6052cb151cec",
+            "id": "0105b19b1bb0b2d7",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "socials/youtube/videos/verification/verification-horizon-video-script.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "verification-horizon-video-script"
             }
           }
         ]
@@ -178,8 +182,21 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "6a2e6052cb151cec",
+  "active": "0105b19b1bb0b2d7",
   "lastOpenFiles": [
+    "images/verification-horizon-five-layers-5.png",
+    "images/verification-horizon-five-layers-4.png",
+    "images/verification-horizon-decay-5.png",
+    "images/verification-horizon-decay-4.png",
+    "images/verification-horizon-hacked-wins-5.png",
+    "images/verification-horizon-hacked-wins-4.png",
+    "images/verification-horizon-trajectory-5.png",
+    "images/verification-horizon-trajectory-4.png",
+    "images/verification-horizon-prompt-vs-requirement-5.png",
+    "images/verification-horizon-prompt-vs-requirement-4.png",
+    "images/verification-horizon-answer-key-5.png",
+    "socials/youtube/videos/verification/verification-horizon-video-script.md",
+    "socials/youtube/videos/second-codebase-playbook.md",
     "clippings/tw_future _of_software_development_retreat_ key_takeaways.pdf",
     "decks/b2b-sales-techniques.md",
     "decks/deck-note-type.md",
@@ -187,16 +204,6 @@
     "socials/CLAUDE.md",
     "CLAUDE.md",
     "socials/youtube/videos/decision-surfaces.md",
-    "images/decision-surfaces-victor-cheap-representations-10.png",
-    "images/decision-surfaces-victor-cheap-representations-9.png",
-    "images/decision-surfaces-victor-cheap-representations-8.png",
-    "images/decision-surfaces-victor-cheap-representations-7.png",
-    "images/decision-surfaces-victor-cheap-representations-6.png",
-    "images/decision-surfaces-hook-fable-leaving-10.png",
-    "images/decision-surfaces-hook-fable-leaving-9.png",
-    "images/decision-surfaces-hook-fable-leaving-8.png",
-    "images/decision-surfaces-hook-fable-leaving-7.png",
-    "images/decision-surfaces-hook-fable-leaving-6.png",
     "socials/youtube/videos/decision-surfaces-script-decisions.md",
     "socials/youtube/videos/observer-agents.md",
     "projects/claude-code-future-features/observer-demo-rig/__pycache__/test_tax.cpython-314.pyc",
@@ -209,7 +216,6 @@
     "artefacts/observer-agents-L2-four-eyes.html",
     "artefacts/observer-agents-L4-myth-vs-real.html",
     "artefacts/observer-agents-L2-four-eyes.html.tmp.5741.1f13035e6854",
-    "artefacts/observer-agents-L4-myth-vs-real.html.tmp.5741.7bf793a5b26b",
     "artefacts/decision-surfaces-lab/brief.md",
     "artefacts/youtube-format-analysis-2026-07.md",
     "projects/agentic-coding-school/to-film/techniques/plan-with-contrasts.md",
@@ -224,8 +230,6 @@
     "projects/agentic-coding-school/classes/advanced-techniques/06-multi-agent-orchestration/07-from-point-fix-to-architectural-fix.md",
     "projects/agentic-coding-school/classes/fundamental-techniques/_drafts/something-deeper-at-play.md",
     "artefacts/boundaryml-ai-that-works/_index.md",
-    "socials/youtube/videos/uploaded/fable-exit-interview.md",
-    "socials/youtube/videos/to-upload/five-jobs-for-your-best-model.md",
     "Untitled.canvas"
   ]
 }
