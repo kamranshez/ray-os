@@ -184,11 +184,12 @@ if prev:
     archive_dir=os.path.expanduser("~/.claude/cache/cc-feature-tracker/snapshots")
     os.makedirs(archive_dir,exist_ok=True)
     prev_bytes=json.dumps(prev,indent=2,sort_keys=True).encode()
-    prev_hash=hashlib.sha256(prev_bytes).hexdigest()[:16]
+    archive_bytes=prev_bytes+b"\n"
+    prev_hash=hashlib.sha256(archive_bytes).hexdigest()[:16]
     prev_ver=re.sub(r'[^0-9A-Za-z._-]+','-',str(prev.get("version","unknown"))).strip('-')
     archive_path=os.path.join(archive_dir,f"snapshot-{prev_ver}-{prev_hash}.json")
     if not os.path.exists(archive_path):
-        open(archive_path,"wb").write(prev_bytes+b"\n")
+        open(archive_path,"wb").write(archive_bytes)
 
 # always write the new snapshot
 open(prev_path,"w").write(json.dumps(snap,indent=2,sort_keys=True))
