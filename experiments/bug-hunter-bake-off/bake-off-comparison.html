@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bug-Hunter Bake-Off: 10-Way Comparison</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --line:#2d3542;
+    --fg:#e6edf3; --dim:#8b949e; --dimmer:#6e7781;
+    --gold:#e3b341; --silver:#9aa7b4; --rust:#d4694a;
+    --green:#3fb950; --blue:#58a6ff; --purple:#bc8cff; --red:#f85149;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    padding:48px 24px 96px;
+  }
+  .wrap{max-width:1140px;margin:0 auto}
+  code,.mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;font-size:.88em}
+
+  header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:40px}
+  h1{font-size:30px;line-height:1.2;margin:0 0 14px;letter-spacing:-.02em}
+  .sub{color:var(--dim);max-width:78ch;margin:0}
+  .meta{margin-top:18px;color:var(--dimmer);font-size:13px}
+  .meta span{margin-right:20px}
+
+  h2{font-size:13px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
+     margin:56px 0 18px;font-weight:600}
+  h2:first-of-type{margin-top:0}
+
+  /* podium */
+  .podium{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px}
+  .card.win{border-color:var(--gold);box-shadow:0 0 0 1px rgba(227,179,65,.16)}
+  .card.two{border-color:var(--silver)}
+  .card.lose{border-color:var(--rust)}
+  .rank{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+  .win .rank{color:var(--gold)} .two .rank{color:var(--silver)} .lose .rank{color:var(--rust)}
+  .card h3{margin:0 0 10px;font-size:17px;font-family:ui-monospace,Menlo,monospace}
+  .card p{margin:0;color:var(--dim);font-size:13.5px;line-height:1.6}
+  .card .why{color:var(--fg);font-size:13.5px;margin:0 0 10px}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;color:var(--dim);font-weight:600;font-size:11px;letter-spacing:.07em;
+     text-transform:uppercase;padding:0 10px 10px;border-bottom:1px solid var(--line)}
+  th.n,td.n{text-align:right}
+  th{vertical-align:bottom}
+  .thn{display:block;font-size:9.5px;letter-spacing:.02em;text-transform:none;
+       color:var(--dimmer);font-weight:400;margin-top:3px}
+
+  .legend{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+          padding:20px 22px;margin-bottom:22px}
+  .lg-intro{margin:0 0 16px;font-size:13.5px;color:var(--dim)}
+  .lg-intro b{color:var(--fg)}
+  .rungs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+  .rung{background:#0f141b;border:1px solid #232a35;border-radius:8px;padding:13px 15px}
+  .rk{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+      margin-bottom:7px}
+  .rung p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.55}
+  .lg-note{margin:0;padding-top:15px;border-top:1px solid #232a35;
+           font-size:13px;color:var(--dim);line-height:1.6}
+  .lg-note b{color:var(--fg)}
+  .lg-note code{color:var(--blue)}
+  td{padding:11px 10px;border-bottom:1px solid #1e242e;vertical-align:middle}
+  tr:hover td{background:#12171f}
+  .skill{font-family:ui-monospace,Menlo,monospace;font-size:13px}
+  .est{color:var(--purple);font-size:11px;margin-left:5px;cursor:help}
+  .bar{height:5px;border-radius:3px;background:#22293480;min-width:2px;display:inline-block;vertical-align:middle}
+  .barwrap{display:flex;align-items:center;gap:9px}
+  .pct{color:var(--dimmer);font-size:11px;min-width:36px;text-align:right;font-family:ui-monospace,Menlo,monospace}
+  .medal{width:16px;display:inline-block}
+
+  /* convergence */
+  .conv{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .conv-row{display:grid;grid-template-columns:1fr auto;gap:16px;padding:14px 18px;
+            border-bottom:1px solid #1e242e;align-items:center}
+  .conv-row:last-child{border-bottom:0}
+  .conv-row:hover{background:#12171f}
+  .conv-t{font-size:13.5px}
+  .conv-t code{color:var(--blue)}
+  .dots{display:flex;gap:3px;align-items:center;white-space:nowrap}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+  .cnt{color:var(--green);font-size:12px;font-weight:700;margin-left:7px;font-family:ui-monospace,Menlo,monospace}
+  .who{color:var(--dimmer);font-size:11.5px;margin-top:4px}
+
+  /* detail cards */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:0}
+  details[open]{background:var(--panel2)}
+  summary{padding:15px 18px;cursor:pointer;list-style:none;display:flex;align-items:baseline;gap:10px}
+  summary::-webkit-details-marker{display:none}
+  summary:hover{background:#12171f}
+  .pos{color:var(--dimmer);font-family:ui-monospace,Menlo,monospace;font-size:12px;min-width:20px}
+  .nm{font-family:ui-monospace,Menlo,monospace;font-size:14px;flex:1}
+  .thesis{color:var(--dim);font-size:12px}
+  .body{padding:2px 18px 18px 48px}
+  .body .lead{font-size:13.5px;color:var(--fg);margin:0 0 14px}
+  .pc{margin:0 0 10px;font-size:13px;color:var(--dim);line-height:1.6}
+  .pc b{font-weight:600;letter-spacing:.03em;font-size:11px;text-transform:uppercase;
+        display:block;margin-bottom:3px}
+  .pc.p b{color:var(--green)} .pc.c b{color:var(--red)}
+
+  .note{background:#1a1f18;border:1px solid #2c3a24;border-left:3px solid var(--green);
+        border-radius:8px;padding:16px 20px;color:var(--dim);font-size:13.5px}
+  .note.warn{background:#1f1c16;border-color:#3d3524;border-left-color:var(--gold)}
+  .note b{color:var(--fg)}
+  .note p{margin:0 0 10px} .note p:last-child{margin:0}
+
+  footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);
+         color:var(--dimmer);font-size:12px}
+  @media(max-width:860px){.podium,.grid,.rungs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Bug-Hunter Bake-Off</h1>
+  <p class="sub">Ten independently designed bug-hunting skills, run in parallel against the same
+  codebase, under identical rules, each spawning its own nested subagents. The question is not
+  "what bugs does HyperWhisper have." It is <b>which hunting strategy actually finds real defects
+  when there is no diff to anchor on</b>. The bugs are the measuring instrument, not the product.</p>
+  <p class="meta">
+    <span>Arena: 210 files / ~31k lines TypeScript</span>
+    <span>Model: Opus 5</span>
+    <span>~85 nested subagents</span>
+    <span>2026-07-29</span>
+  </p>
+</header>
+
+<h2>Verdict</h2>
+<div class="podium">
+  <div class="card win">
+    <div class="rank">★ Best</div>
+    <h3>entry-point-tracer</h3>
+    <p class="why">Enumerate all 88 entry points, trace each hop by hop, inspect the
+    <em>joints between layers</em> rather than the layers.</p>
+    <p>Found both of the run's most severe defects, and neither was reachable by any other
+    strategy. Highest unique-finding count by a wide margin.</p>
+  </div>
+  <div class="card two">
+    <div class="rank">Runner-up</div>
+    <h3>hostile-input-hunter</h3>
+    <p class="why">Construct a hostile input, run it, keep only what reproduces.</p>
+    <p>The only 100% repro rate in the field: 20 of 20. Wins on proof quality, loses on
+    ceiling. You cannot fuzz your way to an architectural mismatch.</p>
+  </div>
+  <div class="card lose">
+    <div class="rank">▼ Worst</div>
+    <h3>mutation-survivor-hunter</h3>
+    <p class="why">Mutate the code, run the tests, treat surviving mutants as unpinned behaviour.</p>
+    <p>Zero confirmed. The thesis presupposes a test suite this codebase lacks where it matters,
+    so every mutant survives and the signal is uniformly zero.</p>
+  </div>
+</div>
+
+<h2>Scorecard</h2>
+
+<div class="legend">
+  <p class="lg-intro">Every hunter graded its own findings on the same three-rung ladder. The
+  default verdict was <b>refuted</b>, so a finding had to earn its way up:</p>
+  <div class="rungs">
+    <div class="rung">
+      <div class="rk" style="color:var(--red)">Refuted &nbsp;· thrown away</div>
+      <p>"This looks fragile" with no trigger path. Not counted anywhere. Most candidates
+      ended here, which is the point.</p>
+    </div>
+    <div class="rung">
+      <div class="rk" style="color:var(--gold)">Plausible &nbsp;· a maybe</div>
+      <p>Survived scrutiny, but one link in the chain could not be proven. The hunter had to
+      say <em>which</em> link. Counted, but discounted.</p>
+    </div>
+    <div class="rung">
+      <div class="rk" style="color:var(--green)">Confirmed &nbsp;· a real bug</div>
+      <p>A concrete trigger path from a real entry point: named file, named line, named caller,
+      and an input that reaches it.</p>
+    </div>
+  </div>
+  <p class="lg-note"><b>Separately from the ladder:</b> did the hunter back the finding with something
+  <em>executable</em> (a failing test, a <code>curl</code>, a node one-liner, an observed typecheck
+  error) rather than with an argument? That is the <b>proof rate</b> column, and it is the most
+  informative number in the table. Two hunters can both report 20 confirmed findings while one
+  proved them and the other reasoned about them.</p>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:26px"></th><th>Skill</th>
+      <th class="n">Real bugs<br><span class="thn">confirmed</span></th>
+      <th class="n">Maybes<br><span class="thn">plausible</span></th>
+      <th class="n">Proved it<br><span class="thn">ran something</span></th>
+      <th style="width:180px">Proof rate<br><span class="thn">proved ÷ all findings</span></th>
+      <th style="width:190px">Files read<br><span class="thn">of 210 in scope</span></th>
+      <th class="n">Sub-<br>agents</th>
+    </tr>
+  </thead>
+  <tbody id="tb"></tbody>
+</table>
+<p style="color:var(--dimmer);font-size:12px;margin-top:12px">
+  <span class="est">※</span> reconstructed from returned subagent output, not self-reported.
+  These three were stopped before their synthesis pass. See the caveat below.
+</p>
+
+<h2>Convergence index &mdash; the most load-bearing section</h2>
+<div class="conv" id="conv"></div>
+<div class="note" style="margin-top:16px">
+  <p><b>Independent rediscovery is the strongest evidence available that a finding is real.</b>
+  When strategies with nothing in common land on the same file and line, the defect is almost
+  certainly there.</p>
+  <p>The top item was found <b>four times by four unrelated strategies</b>, and every one of them
+  verified it by <em>running</em> the WHATWG URL parser rather than reasoning about it. Fix these
+  first, regardless of which skill you keep.</p>
+</div>
+
+<h2>All ten, ranked</h2>
+<div class="grid" id="cards"></div>
+
+<h2>What I would actually take from this</h2>
+<div class="note">
+  <p><b>Keep two, as a pair.</b> entry-point-tracer for reach and severity,
+  hostile-input-hunter for proof. They fail in opposite directions: one produces arguments about
+  architecture, the other produces executable demonstrations about inputs. Their overlap was low,
+  so running both gets you the severe findings <em>and</em> the incontestable ones.</p>
+  <p><b>The inverted ladder worked.</b> Verifiers refuted a large share of what finders proposed,
+  including several that read as compelling: a "dead" validator that was live, a Stripe version
+  mismatch that was a typing artifact, a credit bug whose exposure proved bounded and
+  self-correcting. Under diff-review defaults, every one of those ships as a PLAUSIBLE comment.</p>
+  <p><b>Coverage honesty was the sleeper axis.</b> The strategies worth trusting are not the ones
+  with the biggest numbers. They are the ones whose refuted lists are longer than their candidate
+  lists.</p>
+</div>
+
+<div class="note warn" style="margin-top:16px">
+  <p><b>Caveat on the ranking.</b> Three hunters (marked ※) never got their synthesis pass: the run
+  was paused, and oracle-hunter then died on a session limit. They are scored on what their
+  subagents demonstrably returned, which denies them the step where a hunter deduplicates,
+  re-verifies, and drops its own weak items. That is exactly where spec-gap-hunter initially failed,
+  so it is not a trivial omission.</p>
+  <p>entry-point-tracer wins comfortably enough that finishing would likely not change the top spot.
+  But the middle of the table (invariant-hunter, oracle-hunter, subsystem-auditor) is close enough
+  that a clean rerun could reorder it.</p>
+</div>
+
+<footer>
+  Full write-up: <code>bug-hunt/BAKE-OFF.md</code> &nbsp;·&nbsp;
+  Individual reports: <code>bug-hunt/reports/*.md</code> &nbsp;·&nbsp;
+  Rules of engagement: <code>bug-hunt/00-shared-brief.md</code>
+</footer>
+
+</div>
+<script>
+const D=[
+ {n:"entry-point-tracer",c:40,p:15,r:12,f:150,a:15,est:1,rank:1,
+  th:"Enumerate entry points, trace every hop",
+  lead:"Its own closing line names the thesis: every individual layer is defensively written, and all the failures are at the joints. The reservation and the charge use different units of duration; the balance check and the deduction share no state; the deduction's failure signal has nowhere to go; the fail-closed backstop was applied to four adapters and not the other four.",
+  pros:"Highest yield and highest severity. Found the login CSRF (a plain link signs the victim into the attacker's account) and the unrecoverable redirect-loop lockout that one secret rotation would trigger for every logged-in user at once. Systematically complete: it enumerated entry points first, so its coverage claim is checkable. Finds cross-system seams (code vs Stripe, code vs Vercel deploy ordering) that file-reading cannot see by construction.",
+  cons:"By far the most expensive: 15 subagents, longest wall-clock, largest token spend. Coverage is entry-point-shaped, so unusual paths get thinner treatment. Real duplication across its own traces, which a synthesis pass would have collapsed. Lower repro rate, because tracing yields arguments more readily than executable proofs."},
+
+ {n:"hostile-input-hunter",c:20,p:4,r:20,f:108,a:7,est:0,rank:2,
+  th:"Construct the input, run it, keep what reproduces",
+  lead:"On raw numbers this looks like the winner, and its 100% repro rate is not a scoring artifact: its method is to build an input and execute it, so a finding either reproduces or does not survive.",
+  pros:"Unmatched proof quality, every finding executable. Broad file coverage at 108 files. Findings are unambiguous and fast to triage, with no judgment call about whether they are real.",
+  cons:"Hard ceiling on severity. It finds malformed-input bugs, not design-seam bugs, and the defects that cost most here are architectural mismatches between layers. Blind to anything needing multi-step state or cross-service reasoning. Volume can crowd out the few items that matter."},
+
+ {n:"git-signal-hunter",c:11,p:3,r:6,f:68,a:11,est:0,rank:3,
+  th:"Mine history: churn, reverts, fix commits, comment drift",
+  lead:"Finds where the codebase has repeatedly hurt. Its distinctive move was reading commit messages as intent evidence, which let it separate deliberate tradeoffs from oversights better than any other entrant.",
+  pros:"Strong yield with 11 subagents. Uniquely able to distinguish 'this is a known accepted tradeoff' from 'nobody noticed', which is exactly the judgment that stops a report from being noise.",
+  cons:"This repo is a squashed vendoring commit across large stretches, which blinded it precisely where it most wanted to look. It reports that honestly rather than papering over it."},
+
+ {n:"invariant-hunter",c:25,p:15,r:8,f:140,a:14,est:1,rank:4,
+  th:"Name a codebase-wide property, sweep all 210 files for violations",
+  lead:"Picks a property that should hold everywhere (every outbound fetch has a timeout; every secret comparison is constant-time) and checks all of it. Found that seven of eight LLM adapters call fetch with no timeout signal at all.",
+  pros:"Best completeness per invariant, and the best refuted-to-confirmed ratio in the run. Its I9 secret-comparison sweep came back nearly clean and said so, which is a genuinely useful result rather than a failure.",
+  cons:"Only ever finds what its invariant list anticipates. Choosing the invariants is the strategy, so a defect nobody thought to phrase as a property stays invisible."},
+
+ {n:"subsystem-auditor",c:7,p:8,r:1,f:58,a:6,est:0,rank:5,
+  th:"Divide into subsystems, audit each in depth",
+  lead:"Reasonable yield across 58 files, but the only entrant whose PLAUSIBLE count exceeds its CONFIRMED count, which is the signature of a strategy that reasons rather than proves.",
+  pros:"Good breadth-to-depth balance. Produces coherent per-subsystem narratives that are easy to hand to whoever owns that area.",
+  cons:"Just 1 of 15 findings carried a repro, so its output needs the most downstream verification of any entrant. Without that follow-up its report is a list of leads, not findings."},
+
+ {n:"oracle-hunter",c:8,p:7,r:5,f:95,a:10,est:0,rank:6,
+  th:"Run the tools, chase every signal to a verdict",
+  lead:"Notable for the highest refutation rate in the run: it killed most of its own leads, correctly. It established that the Stripe `as any` suppressions were narrowing noise rather than a version mismatch, that a supposedly dead validator was actually called, and that a NaN hazard was unreachable.",
+  pros:"Nearly everything it confirms is backed by observed tool output. Its refutations are argued from primary sources: it read the installed SDK's type declarations and the plugin's own resolution order rather than trusting assumptions.",
+  cons:"Strictly bounded by what the tools can see, and this codebase typechecks clean, so its ceiling was low from the start. Its best findings came from chasing a signal sideways into adjacent code, not from the signal itself."},
+
+ {n:"concurrency-hunter",c:3,p:2,r:3,f:17,a:6,est:0,rank:7,
+  th:"Hunt races, TOCTOU, ordering bugs",
+  lead:"Low volume, but the best verification discipline in the field. Its verifiers confirmed, downgraded, and refuted with equal willingness, and corrected their own parent's framing more than once.",
+  pros:"Highest signal-to-noise per finding. One verifier proved a candidate's exploit was not serially repeatable (the deduction writes the balance back to cache) and identified concurrency as the real amplifier instead.",
+  cons:"Only 17 files examined directly. A narrow thesis that this codebase rewarded only in the billing path."},
+
+ {n:"divergence-hunter",c:2,p:1,r:1,f:34,a:5,est:0,rank:8,
+  th:"Find two implementations of one operation that disagree",
+  lead:"A good thesis that found the /usage versus auth.ts cache-poisoning split, which six hunters ultimately converged on from different directions.",
+  pros:"When it fires, the finding is inherently high-confidence: two code paths visibly disagreeing is hard to argue with, and the fix is obvious.",
+  cons:"Depends entirely on the codebase containing duplicated logic. Low yield here because most operations have a single implementation."},
+
+ {n:"spec-gap-hunter",c:2,p:1,r:2,f:30,a:7,est:0,rank:9,
+  th:"Compare documented behaviour to actual behaviour",
+  lead:"Correctly bucketed 5 stale-doc items separately rather than folding them into its count to look better. Required intervention: its first report badly under-reported what its own subagents had returned.",
+  pros:"Held its verification bar even under pressure to inflate, keeping 2 CONFIRMED after re-synthesis rather than promoting weak items. Comment-versus-code drift is a real and cheap-to-fix defect class.",
+  cons:"The only entrant with a synthesis failure, as distinct from a hunting failure: the findings were there and did not make it into the report unaided. Low ceiling when docs are sparse."},
+
+ {n:"mutation-survivor-hunter",c:0,p:1,r:6,f:15,a:3,est:0,rank:10,
+  th:"Mutate, run tests, treat survivors as unpinned behaviour",
+  lead:"The thesis is respectable and the execution was clean: it built its own git worktree, symlinked node_modules, and reverted every mutation. It fails because the thesis presupposes a test suite, and this codebase does not have one where it matters.",
+  pros:"When it does fire, the evidence is the strongest possible: an executable demonstration that a behaviour is unpinned. Rigorous and self-aware. Its scorecard reads 'came up dry: yes (on test gaps) / no (on live bugs)', correctly refusing to claim its 6 repros as wins for the strategy.",
+  cons:"Needs mature test coverage to produce any signal; on thinly-tested code every mutant survives and the signal is uniformly zero. Slowest per file. Narrowest coverage at 15 of 210. Only entrant needing write access and isolation."}
+];
+
+const C=[
+ {t:'<code>sanitizeReturnTo</code> tab/CR/LF bypass gives an open redirect',
+  loc:'middleware.ts:135', k:4,
+  who:'oracle-hunter · entry-point-tracer (T10, T11) · invariant-hunter (I13)'},
+ {t:'<code>/usage</code> caches a transient 5xx/429 as "license invalid" for a full hour',
+  loc:'routes/usage.ts:48', k:6,
+  who:'divergence · subsystem-auditor · git-signal · entry-point-tracer (T4, T5) · oracle-hunter (D2) · concurrency'},
+ {t:'Fire-and-forget <code>deductCredits</code> swallows every failure, so the charge is lost',
+  loc:'middleware/credits.ts:74', k:5,
+  who:'concurrency · git-signal · subsystem-auditor · entry-point-tracer (T3, T6) · oracle-hunter (A1)'},
+ {t:'Credit check has no reservation or hold, so concurrent requests all pass one balance',
+  loc:'middleware/credits.ts:46', k:4,
+  who:'concurrency · entry-point-tracer (T3, T6) · hostile-input · oracle-hunter (A1)'},
+ {t:'SIGTERM drain misses streaming sessions, so a whole session is billed to nobody',
+  loc:'index.ts:95', k:3,
+  who:'entry-point-tracer (T3, T4) · invariant-hunter (I11) · concurrency'},
+ {t:'<code>/api/internal/models</code> is ungated, unlike its three siblings',
+  loc:'app/api/internal/models/route.ts:8', k:3,
+  who:'entry-point-tracer (T9) · invariant-hunter (I9) · oracle-hunter'},
+ {t:'Admin grant is the only writer that does not normalise email, but every reader does',
+  loc:'admin/customers.ts:219', k:2,
+  who:'entry-point-tracer (T9, T12)'}
+];
+
+const mx={c:40,f:210,a:15};
+const col=d=>d.rank===1?'var(--gold)':d.rank===2?'var(--silver)':d.rank===10?'var(--rust)':'var(--blue)';
+const med=d=>d.rank===1?'★':d.rank===10?'▼':'';
+
+document.getElementById('tb').innerHTML=D.map(d=>{
+  const rr=d.c+d.p?Math.round(d.r/(d.c+d.p)*100):0;
+  return `<tr>
+    <td class="n"><span class="medal" style="color:${col(d)}">${med(d)}</span></td>
+    <td class="skill">${d.n}${d.est?'<span class="est" title="Reconstructed from subagent output; no synthesis pass">※</span>':''}</td>
+    <td class="n" style="color:${col(d)};font-weight:600">${d.est?'~':''}${d.c}</td>
+    <td class="n" style="color:var(--dim)">${d.est?'~':''}${d.p}</td>
+    <td class="n" style="color:var(--dim)">${d.est?'~':''}${d.r}</td>
+    <td title="${d.r} of ${d.c+d.p} findings were backed by something executable"><div class="barwrap"><span class="bar" style="width:${rr*1.3}px;background:${rr>=90?'var(--green)':rr>=40?'var(--blue)':'var(--dimmer)'}"></span><span class="pct">${rr}%</span></div></td>
+    <td><div class="barwrap"><span class="bar" style="width:${d.f/mx.f*130}px;background:var(--purple)"></span><span class="pct">${d.est?'~':''}${d.f}</span></div></td>
+    <td class="n" style="color:var(--dim)">${d.a}</td>
+  </tr>`}).join('');
+
+document.getElementById('conv').innerHTML=C.map(c=>`
+  <div class="conv-row">
+    <div><div class="conv-t">${c.t}</div><div class="who">${c.loc} &nbsp;·&nbsp; ${c.who}</div></div>
+    <div class="dots">${'<span class="dot"></span>'.repeat(c.k)}<span class="cnt">${c.k}×</span></div>
+  </div>`).join('');
+
+document.getElementById('cards').innerHTML=D.map(d=>`
+  <details${d.rank<=2||d.rank===10?' open':''}>
+    <summary>
+      <span class="pos" style="color:${col(d)}">${d.rank}</span>
+      <span class="nm">${d.n}${d.est?'<span class="est">※</span>':''}</span>
+      <span class="thesis">${d.th}</span>
+    </summary>
+    <div class="body">
+      <p class="lead">${d.lead}</p>
+      <p class="pc p"><b>Pros</b>${d.pros}</p>
+      <p class="pc c"><b>Cons</b>${d.cons}</p>
+    </div>
+  </details>`).join('');
+</script>
+</body>
+</html>
