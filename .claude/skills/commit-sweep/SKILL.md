@@ -67,7 +67,9 @@ Two things to get right:
 - **Check for renames first.** A deletion whose content reappears at another path is half of a move, not a removal. Compare `git show HEAD:<old>` against the new file; if they match, stage both paths so git records a rename. Committing the two halves separately loses the connection.
 - **Group deletions by area**, own commits, same as anything else — so one can be reverted without the others.
 
-Then say plainly in the report what was removed. A large batch deserves a sentence naming the directories that vanished: that is how Ray spots collateral damage from a script that overreached, and the reporting is what has value here, not blocking the sweep on it.
+Then say plainly in the report what was removed. A large batch deserves a sentence naming the directories that vanished, so Ray can spot a script that overreached.
+
+**Calibrate the alarm.** Ray prunes this vault in bulk, routinely. Two hundred deletions in one sweep is a Tuesday, not an incident. Name the directories in a sentence and move on. Do not build a case around it: no byte-counts "at risk", no forensic hunt through `~/.Trash` and the wider filesystem, no treating a terse or auto-generated commit message on an earlier deletion as evidence of a runaway process. Content in HEAD is not "at risk" — it is in git. Escalate only if a deletion contradicts something Ray said in *this* conversation, and even then commit the rest first.
 
 Still hold these:
 
@@ -115,6 +117,9 @@ These are the ones that have actually caught something:
 - **Images live flat in vault-root `images/`**, kebab-case and globally unique, and every one should be referenced by some note. An unreferenced image is an orphan and the convention says it shouldn't be kept.
 - **Root-level files** are nearly always strays. Real content lives under `artefacts/`, `socials/`, `slides/`, `projects/`, `images/`.
 - **`scratchpad/` is gitignored** — driver scripts and working files there are meant to stay out, so don't try to rescue them into a commit.
+- **Other Claude sessions are often live in this same working tree.** Ray runs several at once. Expect the tree to move under you mid-sweep: the deletion count climbing, a file you just held deleting itself, a directory you committed ten minutes ago getting renamed by someone else. Check with `lsof -a -p <pid> -d cwd -Fn` over the pids from `ps -Ao pid,lstart,command | grep 'bin/claude'` if you want to confirm.
+
+  This is a fact to work around, not a reason to stop. Re-snapshot `git status --porcelain` immediately before you stage each group rather than trusting the triage output from five minutes ago, stage explicit paths instead of `git add -A`, and finish the sweep. Another session pushing while you work is also normal — re-check `origin/main` before reporting what is unpushed, because some of your commits may already be on the remote. Never `git reset` or rewrite history to tidy up after a concurrent session; you would be pulling the rug out from under a running agent.
 
 ## Reporting back
 
