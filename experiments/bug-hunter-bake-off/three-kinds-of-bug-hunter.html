@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Three kinds of bug hunter — bake-off taxonomy</title>
+<style>
+:root{
+  --bg:#0c0e12; --panel:#12151b; --panel2:#171b23; --line:#232936;
+  --tx:#e6e9ef; --dim:#98a2b4; --dimmer:#5f6a7d;
+  --blue:#5b9cf8; --green:#3fcf8e; --gold:#f2c14e; --red:#f4685f;
+  --purple:#b28bf5; --teal:#4fd1c5; --rust:#c96442; --silver:#c3ccd9;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:46px 30px 100px}
+h1{font-size:34px;line-height:1.2;margin:0 0 10px;letter-spacing:-.5px}
+h2{font-size:23px;margin:56px 0 6px;letter-spacing:-.3px}
+h2 .num{color:var(--dimmer);font-variant-numeric:tabular-nums;margin-right:10px;font-weight:400}
+h3{font-size:16px;margin:30px 0 8px}
+p{margin:10px 0}
+.sub{color:var(--dim);font-size:16px;max-width:80ch}
+.lede{color:var(--dim);font-size:14px;border-left:2px solid var(--line);padding-left:14px;margin:14px 0 0;max-width:82ch}
+code{font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:#1c212b;
+  padding:1.5px 5px;border-radius:4px;color:var(--teal)}
+header{border-bottom:1px solid var(--line);padding-bottom:26px}
+.meta{color:var(--dimmer);font-size:12.5px;display:flex;gap:20px;flex-wrap:wrap;margin-top:14px}
+.claim{background:linear-gradient(180deg,#141922,#12151b);border:1px solid var(--line);
+  border-left:3px solid var(--gold);border-radius:10px;padding:20px 24px;margin:22px 0}
+.claim .lbl{font-size:11px;letter-spacing:1.3px;text-transform:uppercase;color:var(--gold);
+  font-weight:700;margin-bottom:8px}
+.claim p{margin:8px 0;font-size:15.5px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px 24px;margin:18px 0}
+.fig{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px 22px 16px;margin:22px 0}
+.fig .cap{color:var(--dimmer);font-size:12.5px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.fig .cap b{color:var(--dim)}
+.figt{font-size:12px;letter-spacing:1.1px;text-transform:uppercase;color:var(--dimmer);
+  font-weight:700;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dimmer);font-size:11px;letter-spacing:.7px;text-transform:uppercase;font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr:hover td{background:#151a22}
+.tag{display:inline-block;font-size:10.5px;padding:1.5px 7px;border-radius:20px;font-weight:600;
+  letter-spacing:.3px;white-space:nowrap}
+.t-yes{background:rgba(63,207,142,.14);color:var(--green)}
+.t-no{background:rgba(244,104,95,.14);color:var(--red)}
+.t-part{background:rgba(242,193,78,.14);color:var(--gold)}
+.t-new{background:rgba(91,156,248,.16);color:var(--blue)}
+button{font:inherit;color:inherit;cursor:pointer}
+ul{margin:8px 0;padding-left:20px}li{margin:5px 0;color:var(--dim);font-size:14px}
+li b,li strong{color:var(--tx)}
+.warn{border-left:3px solid var(--red)}
+.ok{border-left:3px solid var(--green)}
+.q{border-left:2px solid var(--dimmer);padding-left:14px;color:var(--dim);font-style:italic;margin:12px 0;font-size:14px}
+footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line);color:var(--dimmer);font-size:12.5px}
+a{color:var(--blue)}
+.legend-row{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--dimmer);margin-top:10px}
+.legend-row span{display:flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:2px;display:inline-block}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:860px){.two{grid-template-columns:1fr}}
+.mini{font-size:13px;color:var(--dim)}
+.mini b{color:var(--tx)}
+
+/* ---- taxonomy board ---- */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.board{grid-template-columns:1fr}}
+.grp{border:1px solid var(--line);border-radius:10px;background:var(--panel2);padding:14px 14px 16px}
+.grp.g1{border-top:3px solid var(--green)}
+.grp.g2{border-top:3px solid var(--gold)}
+.grp.g3{border-top:3px solid var(--red)}
+.grp .gh{font-size:14px;font-weight:700;margin-bottom:3px}
+.grp .gt{font-size:12px;color:var(--dimmer);min-height:34px;margin-bottom:10px}
+.grp .glen{font-size:11px;letter-spacing:.4px;text-transform:uppercase;font-weight:700;margin-bottom:12px}
+.g1 .glen{color:var(--green)}.g2 .glen{color:var(--gold)}.g3 .glen{color:var(--red)}
+.chip{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:#11151c;
+  border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin-bottom:6px;
+  font-size:13px;transition:.13s;position:relative}
+.chip:hover{border-color:#38445c;background:#161c25}
+.chip.on{border-color:var(--blue);background:#1a2433}
+.chip .rk{font:11px/1 ui-monospace,monospace;color:var(--dimmer);flex:0 0 20px;
+  font-variant-numeric:tabular-nums}
+.chip .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip .cf{font:11px/1 ui-monospace,monospace;color:var(--dim);flex:0 0 auto}
+.chip.dead{opacity:.34}
+.chip.dead .nm{text-decoration:line-through;text-decoration-color:var(--red)}
+.detail{margin-top:16px;border:1px solid var(--line);border-radius:10px;background:#11151c;
+  padding:18px 20px;min-height:150px}
+.detail .dh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:2px}
+.detail .dn{font-size:16px;font-weight:700}
+.detail .dg{font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;font-weight:700}
+.detail .drow{display:grid;grid-template-columns:118px 1fr;gap:2px 14px;margin-top:12px;font-size:13.5px}
+.detail .dk{color:var(--dimmer);font-size:11.5px;letter-spacing:.5px;text-transform:uppercase;padding-top:3px}
+.detail .dv{color:var(--dim)}
+.detail .dv b{color:var(--tx)}
+.nums{display:flex;gap:20px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.nums div{font-size:12px;color:var(--dimmer)}
+.nums div b{display:block;font-size:19px;color:var(--tx);font-variant-numeric:tabular-nums;
+  font-weight:600;line-height:1.3}
+
+/* ---- toggles ---- */
+.tog{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.tog button{background:#11151c;border:1px solid var(--line);border-radius:20px;
+  padding:7px 14px;font-size:12.5px;color:var(--dimmer);transition:.13s;display:flex;
+  align-items:center;gap:8px}
+.tog button:hover{border-color:#38445c;color:var(--dim)}
+.tog button.on{background:rgba(63,207,142,.1);border-color:rgba(63,207,142,.5);color:var(--green)}
+.tog .dot{width:7px;height:7px;border-radius:50%;background:#2c3444}
+.tog button.on .dot{background:var(--green)}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 18px;align-items:center}
+.presets .pl{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--dimmer);font-weight:600}
+.presets button{background:var(--panel2);border:1px solid var(--line);border-radius:7px;
+  padding:6px 12px;font-size:12.5px;color:var(--dim)}
+.presets button:hover{border-color:var(--blue);color:var(--tx)}
+.counter{font-size:13.5px;color:var(--dim);margin:16px 0 4px;padding:12px 16px;
+  border-radius:8px;background:var(--panel2);border:1px solid var(--line)}
+.counter b{color:var(--tx);font-size:16px;font-variant-numeric:tabular-nums}
+.counter .starved{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Three kinds of bug hunter</h1>
+  <p class="sub">The ten strategies in the bake-off look like ten different ideas. They are really three,
+  and they separate on a single question that has nothing to do with what kind of bug each one claims to
+  hunt: <b>where does its list of things to check come from?</b></p>
+  <div class="meta">
+    <span>10 strategies + 1 written afterwards</span>
+    <span>1 codebase, ~85 agents</span>
+    <span>2026-07-30</span>
+    <span><a href="bake-off-comparison.html">the scoreboard →</a></span>
+    <span><a href="why-the-winners-won.html">why the winners won →</a></span>
+  </div>
+</header>
+
+<div class="claim">
+  <div class="lbl">The short answer</div>
+  <p>A bug hunt is only as good as its list. <b>The best lists are already sitting in the code</b> —
+  every route, every adapter, every writer to one table — because you can read them off with grep, they
+  are never empty, and finishing one is a claim someone else can check.</p>
+  <p>The two losing families both fail on the list, in opposite directions. One <b>invents</b> its list,
+  so the list has no end and no defensible denominator. The other's list is <b>contingent</b> on the repo
+  having some artifact — a test suite, a git history, a spec — and when the artifact is missing the list
+  is empty and the hunt scores zero without ever starting.</p>
+</div>
+
+<h2><span class="num">01</span>The question that sorts them</h2>
+<p class="sub">Not "what kind of bug do you look for". That is what each skill's own instructions talk
+about, and it turned out to be nearly uninformative. This one question predicts both the ranking and,
+more usefully, whether a strategy will transfer to a different codebase.</p>
+
+<div class="fig">
+  <div class="figt">Figure 1 — one question, three families</div>
+  <div id="f1"></div>
+  <div class="cap"><b>Read the bottom row first.</b> The length of a strategy's list is the property that
+  matters, because a hunt cannot outperform its list. A list that can be empty is a strategy that can
+  score zero for reasons that have nothing to do with how good it is — which is exactly what happened to
+  four of the ten.</div>
+</div>
+
+<h2><span class="num">02</span>The board</h2>
+<p class="sub">All ten from the run, plus <code>odd-one-out-hunter</code>, which was written afterwards
+because the run kept surfacing its mechanism by accident. Click any strategy for what its list actually
+was and how it did.</p>
+
+<div class="fig">
+  <div class="figt">Figure 2 — click a strategy · <span style="text-transform:none;letter-spacing:0">numbers are confirmed findings</span></div>
+  <div class="board" id="board"></div>
+  <div class="detail" id="detail"></div>
+  <div class="cap"><b>The three keepers are all in the left column, and so is the new skill.</b> That is
+  not a coincidence I arranged: the left column is the only one whose members work on any repository you
+  point them at. Ranks are by confirmed-finding count, which is the metric the
+  <a href="why-the-winners-won.html">companion page</a> argues is partly a measure of compute rather than
+  of strategy — so read them as rough, not as a verdict.</div>
+</div>
+
+<h2><span class="num">03</span>Your codebase switched four of them off</h2>
+<p class="sub">This is the part that makes the scoreboard misleading if you read it as a ranking of
+strategies. Four entrants were graded on a codebase that could not feed them. Toggle what a repo has and
+watch the board go dark.</p>
+
+<div class="fig">
+  <div class="figt">Figure 3 — what does the repository have?</div>
+  <div class="tog" id="tog"></div>
+  <div class="presets">
+    <span class="pl">Presets</span>
+    <button data-preset="hw">hyperwhisper-public (the arena)</button>
+    <button data-preset="legacy">10-year-old monolith</button>
+    <button data-preset="all">everything present</button>
+    <button data-preset="none">greenfield, week one</button>
+  </div>
+  <div class="counter" id="counter"></div>
+  <div class="board" id="board2"></div>
+  <div class="cap"><b>The left column never changes.</b> Whatever you toggle, the four "list is in the
+  code" strategies stay live, because every repository with more than one of anything has routes, inputs
+  and sibling families. The right column is where the toggles bite. <b>concurrency-hunter is the honest
+  exception on the left</b> — its method reads its list off the code, but it needs the code to have shared
+  mutable state at all, so it dims too. On the arena preset it stayed live, and placed 3rd.</div>
+</div>
+
+<div class="panel warn">
+  <p class="mini"><b>So four of the bottom five are not bad skills.</b> They are skills that were handed a
+  blank page. <code>hyperwhisper-public</code> has a 7.7% test-to-source ratio, so mutation-survivor had
+  almost nothing to mutate. Its 67 commits all landed on a single day, so git-signal had no history to
+  mine. There is no written spec. And the repo is genuinely well factored, so divergence-hunter could not
+  find two implementations of one calculation to disagree with each other. Deleting them on the strength
+  of this run would be reading a precondition failure as a quality failure.</p>
+</div>
+
+<h2><span class="num">04</span>Volume against proof</h2>
+<p class="sub">One more view, because "which is best" needs a second axis. Finding a lot is worthless if
+none of it is demonstrable, and demonstrating three things is not a sweep.</p>
+
+<div class="fig">
+  <div class="figt">Figure 4 — findings reported against the share that carried an executable repro</div>
+  <div id="f4"></div>
+  <div class="legend-row">
+    <span><i class="sw" style="background:#3fcf8e"></i> list is in the code</span>
+    <span><i class="sw" style="background:#f2c14e"></i> list is invented</span>
+    <span><i class="sw" style="background:#f4685f"></i> list is contingent</span>
+    <span style="color:#5f6a7d">circle size = agents spent</span>
+  </div>
+  <div class="cap"><b>Only one strategy is in the good corner.</b> hostile-input-hunter reported 24
+  findings and shipped a runnable repro for 20 of them, on 7 agents. Note the honest caveats: the red
+  group's proof rates look respectable only because they are fractions of two or three findings, where a
+  single repro swings the percentage by 33 points, and <b>mutation-survivor-hunter is not plotted at all</b>
+  because it confirmed nothing, which leaves its proof rate undefined rather than zero. Also note that
+  proof rate does <em>not</em> sort by family: entry-point-tracer sits in the green group at 22%. Proof
+  discipline is a property of the individual skill, not of where its list came from.</div>
+</div>
+
+<h2><span class="num">05</span>Why "the list is in the code" is the whole trick</h2>
+<p class="sub">The strongest version of this idea is the one nobody submitted. It is worth walking through
+because it shows what the property buys you.</p>
+
+<div class="panel">
+  <p class="mini">Take the eleven speech-to-text provider adapters. They are not copies of each other —
+  each talks to a different API — so nothing that hunts duplicated logic will look at them twice. But
+  they all do the same <em>kind</em> of job, so they should all agree about the rules they follow.</p>
+  <p class="mini">Line them up against one decision point and you get this, which needs no spec, no test
+  suite, no git history and no opinion from you:</p>
+  <div style="margin:16px 0" id="f5"></div>
+  <p class="mini">The code already decided that outbound calls carry a timeout. It just failed to apply
+  the decision to one of them. You are not arguing about what the code <em>should</em> do, which is the
+  move that generates confident false positives on unfamiliar code. You are pointing out that the project
+  answered the question in writing, next to the version that got it right — and the comment beside the
+  correct sibling is usually sitting there naming the exact harm.</p>
+  <p class="mini"><b>Every convergent finding in the whole run came from this shape</b>, and four separate
+  hunters walked into it accidentally under four different names. None of them had it as a thesis. That is
+  what <code>odd-one-out-hunter</code> now does on purpose.</p>
+</div>
+
+<h2><span class="num">06</span>What to actually run</h2>
+<p class="sub">In this order, and stop whenever the budget runs out — the ordering is by cost-to-value, so
+a truncated run is still a coherent one.</p>
+
+<div class="panel">
+  <table>
+    <thead><tr><th style="width:26px"></th><th>Run</th><th>Because</th><th style="width:150px">Needs</th></tr></thead>
+    <tbody>
+      <tr><td class="n">1</td><td><b>odd-one-out-hunter</b></td>
+        <td>Cheapest list to build, highest-precision oracle, and the mechanism that produced every
+        convergent finding in the run.</td><td><span class="tag t-yes">nothing</span></td></tr>
+      <tr><td class="n">2</td><td><b>hostile-input-hunter</b></td>
+        <td>The only entrant in the good corner of Figure 4. 20 confirmed, all 20 with a runnable repro,
+        on 7 agents.</td><td><span class="tag t-yes">nothing</span></td></tr>
+      <tr><td class="n">3</td><td><b>entry-point-tracer</b></td>
+        <td>Best coverage surface there is, and the biggest raw volume. Discount it for a 22% proof rate
+        and for being the one hunter whose report was never independently checked.</td>
+        <td><span class="tag t-yes">nothing</span></td></tr>
+      <tr><td class="n">4</td><td><b>concurrency-hunter</b>, conditionally</td>
+        <td>Best coverage per agent in the field: 150 files on 6. Only worth running where there is shared
+        mutable state to race.</td><td><span class="tag t-part">shared state</span></td></tr>
+      <tr><td class="n">5</td><td><b>whichever contingent one your repo feeds</b></td>
+        <td>git-signal on a long history, mutation-survivor on a real test suite, spec-gap where a spec
+        exists, divergence on copy-paste code. Check the precondition before spending the agents.</td>
+        <td><span class="tag t-no">varies</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2><span class="num">07</span>Where this could be wrong</h2>
+<div class="panel">
+  <ul>
+    <li><b>One codebase, one run.</b> Every number here comes from a single sweep of a single repo. The
+    taxonomy is an argument about mechanism; the ranking attached to it is one data point.</li>
+    <li><b>The families are my carving, not a measured clustering.</b> Nobody labelled these strategies by
+    list-origin in advance. I sorted them after seeing the results, which is exactly the procedure that
+    produces categories that fit the data too well. The test that would matter is whether the ordering
+    holds on a repo nobody has looked at yet.</li>
+    <li><b>"Invented list" is a spectrum, not a bin.</b> invariant-hunter authored its list of eight
+    invariants and then swept each one rigorously, which is why it placed 4th rather than at the bottom.
+    subsystem-auditor authored regions and read them, and finished with a 7% proof rate. Same family, very
+    different discipline.</li>
+    <li><b>Ranks lean on confirmed-finding count</b>, which correlates with compute at r=+0.82 while
+    executable repros do not correlate with it at all. Two entrants also had scoring problems of my own
+    making, documented on the <a href="bake-off-comparison.html">scoreboard</a>.</li>
+    <li><b>Nothing here measures the bugs that were missed.</b> Every family shares one blind spot the run
+    cannot see: a rule that is uniformly absent across an entire family looks perfectly consistent, and no
+    amount of list-sweeping will flag it.</li>
+  </ul>
+</div>
+
+<footer>
+  Bug-hunter bake-off · <code>experiments/bug-hunter-bake-off/</code> · taxonomy page.
+  Companion pages: <a href="bake-off-comparison.html">the scoreboard</a> ·
+  <a href="why-the-winners-won.html">why the winners won</a>.
+  Underlying reports in <code>results/</code> and <code>raw-subagent-output/</code>.
+</footer>
+</div>
+
+<script>
+/* ------------------------------------------------------------------ data --- */
+/* c/p/r/f/a and ranks are the corrected values from bake-off-comparison.html.
+   `pre` names the repo property a strategy needs before its list can be
+   non-empty; null means it needs nothing at all, which is the whole point of
+   group 1. */
+const S=[
+ {k:'entry-point-tracer',g:1,rank:1,c:40,p:15,r:12,f:150,a:15,pre:null,
+  list:'Every route, page, webhook, cron and CLI command — 88 of them',
+  how:'Read straight off the framework\'s routing conventions with grep.',
+  note:'Biggest volume in the run by a distance. Two discounts: only 22% of its findings carried a repro, and it is the one entrant whose output was never independently verified, because the extraction agent died and was never re-run. Most valuable, but the winner label was withdrawn.'},
+ {k:'hostile-input-hunter',g:1,rank:2,c:20,p:4,r:20,f:108,a:7,pre:null,
+  list:'Every value that crosses a trust boundary into the system',
+  how:'Follow each parameter, header, body field and env var inward from the boundary.',
+  note:'The best skill in the field on the measure that survives scrutiny. Every one of its 20 confirmed findings shipped an executable repro, the only clean sweep in the run, and it did it on 7 agents for the highest yield per agent (2.86).'},
+ {k:'concurrency-hunter',g:1,rank:3,c:12,p:3,r:4,f:150,a:6,pre:'state',
+  list:'Every owner of a piece of shared mutable state — 4 stores of money state',
+  how:'Enumerate the stores, then ask who writes each one and in what order.',
+  note:'The efficiency result: 150 files covered on 6 agents, matching the 15-agent leader\'s coverage, via one broad cheap mapper plus five narrow lenses. Shape of the fan-out beat size of it. Also the run\'s biggest scoring casualty — I originally scored its partial report at 3 instead of 12.'},
+ {k:'odd-one-out-hunter',g:1,rank:null,c:null,p:null,r:null,f:null,a:null,pre:null,
+  list:'Every family of siblings that should share a rule',
+  how:'Census the families (routes/*, providers/*, all writers to one column), then diff each family for a guard k of n members have.',
+  note:'Not an entrant — written after the run, because this mechanism produced every convergent finding while being nobody\'s stated thesis. Four hunters reached it by accident under four different names. Its oracle is the comment or test beside the sibling that got it right, which is why its precision is high for the cost.'},
+ {k:'invariant-hunter',g:2,rank:4,c:25,p:15,r:8,f:140,a:19,pre:null,
+  list:'Eight invariants the system ought to hold, one sweep each',
+  how:'Author the invariants from reasoning about the domain, then check every file against each.',
+  note:'A genuine sweeper, and swept properly, which is why it placed 4th. But an authored list has no ceiling and no denominator you can defend, and that shows in the output: 15 plausibles against 25 confirmed, and the lowest proof rate of the top group at 20%, for 19+ agents.'},
+ {k:'git-signal-hunter',g:3,rank:5,c:11,p:3,r:5,f:68,a:11,pre:'history',
+  list:'Whatever the history flags: churn, reverts, fix-on-fix, hot files',
+  how:'Mine git log and blame for places the project has already struggled.',
+  note:'Best proof rate outside the top three (36%), on a repo that gave it nothing: 67 commits, all landed on one day, one author. Graded on a codebase it was not looking at. On a decade-old monolith this plausibly ranks 1st.'},
+ {k:'oracle-hunter',g:2,rank:6,c:8,p:7,r:5,f:95,a:10,pre:null,
+  list:'Properties the author decides ought to hold, then hunts violations of',
+  how:'Author each property, then look for code that breaks it.',
+  note:'Middle of the field on every axis. Its list is authored like invariant-hunter\'s, but with less rigour per item: 8 confirmed against 7 plausible means nearly half its output stayed unproven.'},
+ {k:'subsystem-auditor',g:2,rank:7,c:7,p:8,r:1,f:58,a:6,pre:null,
+  list:'A region the auditor picks, read closely',
+  how:'Choose a subsystem and read it hard.',
+  note:'The clearest demonstration of what sampling without a denominator costs: 1 repro across 15 findings, a 7% proof rate, the worst in the field. "I looked at payments and it seemed fine" is not a claim anyone can check, including you.'},
+ {k:'divergence-hunter',g:3,rank:8,c:2,p:1,r:1,f:34,a:5,pre:'dupes',
+  list:'Pairs of implementations of one calculation that return different answers',
+  how:'Find duplicated logic, then diff the duplicates for disagreement.',
+  note:'Starved. The repo is well factored, so there was little duplicated logic to diff. This is the skill odd-one-out-hunter is most often confused with, and the distinction is load-bearing: this one needs two copies of one calculation, that one needs siblings that legitimately differ but should share guards.'},
+ {k:'spec-gap-hunter',g:3,rank:9,c:2,p:1,r:2,f:30,a:7,pre:'spec',
+  list:'Every promise a spec or doc makes, checked against the code',
+  how:'Read the spec, then verify each stated behaviour.',
+  note:'Starved. There is no written spec. Its 67% proof rate is 2 repros out of 3 findings, a fraction too small to mean much.'},
+ {k:'mutation-survivor-hunter',g:3,rank:10,c:0,p:3,r:7,f:20,a:4,pre:'tests',
+  list:'Every mutation of the source the test suite fails to catch',
+  how:'Mutate the code, run the tests, collect the survivors.',
+  note:'Starved, and measuring the wrong thing here: with a 7.7% test-to-source ratio it was really scoring the test suite, not the code. Its 7 surviving mutants are artifacts of that, not repros of findings, which is why its proof rate renders as undefined rather than 233%.'}
+];
+
+const G={
+ 1:{n:'The list is in the code',
+    t:'Enumerate something you can read off the source, then account for every member.',
+    len:'List is never empty',col:'#3fcf8e'},
+ 2:{n:'The list is invented',
+    t:'The hunter authors the list of things to check from its own reasoning.',
+    len:'List has no ceiling',col:'#f2c14e'},
+ 3:{n:'The list is contingent',
+    t:'The list exists only if the repo happens to carry some artifact.',
+    len:'List can be empty',col:'#f4685f'}
+};
+
+const PRE={
+ state:{n:'shared mutable state',def:1},
+ history:{n:'meaningful git history',def:0},
+ tests:{n:'a real test suite',def:0},
+ spec:{n:'a written spec',def:0},
+ dupes:{n:'duplicated logic',def:0}
+};
+
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const proof=d=>{ if(d.c===null) return null; const t=d.c+d.p; if(!t||d.r>t) return null; return d.r/t*100; };
+
+/* ------------------------------------------------- Figure 1: the question --- */
+(function(){
+  const W=920,H=318;
+  const boxes=[
+    {x:8,  g:1},
+    {x:318,g:2},
+    {x:628,g:3}
+  ];
+  const BW=284;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">
+  <defs><style>
+    .ft{font:600 13px -apple-system,sans-serif;fill:#e6e9ef}
+    .fs{font:11.5px -apple-system,sans-serif;fill:#98a2b4}
+    .fq{font:600 14px -apple-system,sans-serif;fill:#e6e9ef}
+    .fl{font:700 10.5px -apple-system,sans-serif;letter-spacing:.9px}
+    .fm{font:11px ui-monospace,monospace;fill:#5f6a7d}
+  </style></defs>`;
+
+  /* root question */
+  s+=`<rect x="240" y="6" width="440" height="50" rx="9" fill="#171b23" stroke="#f2c14e" stroke-opacity=".55"/>
+      <text x="460" y="30" class="fq" text-anchor="middle">Where does the list of things</text>
+      <text x="460" y="47" class="fq" text-anchor="middle">to check come from?</text>`;
+
+  /* connectors: down from root, along a rail, down into each box */
+  s+=`<path d="M460 56 V78" stroke="#2c3444" stroke-width="1.5" fill="none"/>
+      <path d="M150 78 H770" stroke="#2c3444" stroke-width="1.5" fill="none"/>`;
+  boxes.forEach(b=>{
+    const cx=b.x+BW/2;
+    s+=`<path d="M${cx} 78 V104" stroke="${G[b.g].col}" stroke-opacity=".5" stroke-width="1.5" fill="none"/>`;
+  });
+
+  /* the three family boxes */
+  boxes.forEach(b=>{
+    const g=G[b.g], cx=b.x+BW/2;
+    s+=`<rect x="${b.x}" y="104" width="${BW}" height="118" rx="9" fill="#12151b"
+          stroke="${g.col}" stroke-opacity=".45"/>
+        <rect x="${b.x}" y="104" width="${BW}" height="3" rx="1.5" fill="${g.col}"/>
+        <text x="${cx}" y="130" class="fl" fill="${g.col}" text-anchor="middle">FAMILY ${b.g}</text>
+        <text x="${cx}" y="152" class="ft" text-anchor="middle">${esc(g.n)}</text>`;
+    /* wrapped description */
+    const words=g.t.split(' '); let lines=[],cur='';
+    words.forEach(w=>{ if((cur+' '+w).trim().length>36){lines.push(cur.trim());cur=w;} else cur+=' '+w; });
+    if(cur.trim())lines.push(cur.trim());
+    lines.slice(0,4).forEach((ln,i)=>{
+      s+=`<text x="${cx}" y="${174+i*16}" class="fs" text-anchor="middle">${esc(ln)}</text>`;
+    });
+  });
+
+  /* outcome strip — the row that matters */
+  boxes.forEach(b=>{
+    const g=G[b.g], cx=b.x+BW/2;
+    s+=`<path d="M${cx} 222 V244" stroke="${g.col}" stroke-opacity=".35" stroke-width="1.5"
+          stroke-dasharray="3 3" fill="none"/>
+        <rect x="${b.x+26}" y="244" width="${BW-52}" height="34" rx="17"
+          fill="${g.col}" fill-opacity=".11" stroke="${g.col}" stroke-opacity=".4"/>
+        <text x="${cx}" y="266" class="fl" fill="${g.col}" text-anchor="middle">${esc(g.len.toUpperCase())}</text>`;
+  });
+
+  /* member counts */
+  const counts={1:0,2:0,3:0}; S.forEach(d=>counts[d.g]++);
+  boxes.forEach(b=>{
+    const cx=b.x+BW/2;
+    s+=`<text x="${cx}" y="300" class="fm" text-anchor="middle">${counts[b.g]} of the 11 strategies</text>`;
+  });
+
+  s+='</svg>';
+  document.getElementById('f1').innerHTML=s;
+})();
+
+/* ------------------------------------------------- Figure 2: the board ------ */
+function chipHTML(d,dead){
+  const rk=d.rank===null?'—':d.rank;
+  const cf=d.c===null?'<span class="tag t-new">new</span>':d.c;
+  return `<button class="chip${dead?' dead':''}" data-k="${d.k}">
+    <span class="rk">${rk}</span><span class="nm">${esc(d.k)}</span><span class="cf">${cf}</span></button>`;
+}
+function boardHTML(id,deadFn){
+  let h='';
+  [1,2,3].forEach(g=>{
+    const g_=G[g];
+    h+=`<div class="grp g${g}"><div class="glen">Family ${g}</div>
+      <div class="gh">${esc(g_.n)}</div><div class="gt">${esc(g_.t)}</div>`;
+    S.filter(d=>d.g===g).sort((a,b)=>(a.rank===null?0:a.rank)-(b.rank===null?0:b.rank))
+      .forEach(d=>{h+=chipHTML(d,deadFn?deadFn(d):false)});
+    h+='</div>';
+  });
+  return h;
+}
+
+function detailHTML(k){
+  const d=S.find(x=>x.k===k); if(!d) return '';
+  const g=G[d.g], pr=proof(d);
+  let h=`<div class="dh"><span class="dn">${esc(d.k)}</span>
+    <span class="dg" style="color:${g.col}">${esc(g.n)}</span>
+    ${d.pre?`<span class="tag t-part">needs ${esc(PRE[d.pre].n)}</span>`:'<span class="tag t-yes">no preconditions</span>'}
+    ${d.rank===null?'<span class="tag t-new">not an entrant</span>':''}</div>
+    <div class="drow"><div class="dk">Its list</div><div class="dv"><b>${esc(d.list)}</b></div></div>
+    <div class="drow"><div class="dk">Built by</div><div class="dv">${esc(d.how)}</div></div>
+    <div class="drow"><div class="dk">How it went</div><div class="dv">${esc(d.note)}</div></div>`;
+  if(d.c!==null){
+    h+=`<div class="nums">
+      <div><b>${d.rank}</b>rank</div>
+      <div><b>${d.c}</b>confirmed</div>
+      <div><b>${d.p}</b>plausible</div>
+      <div><b>${pr===null?'n/a':Math.round(pr)+'%'}</b>proof rate</div>
+      <div><b>${d.f}</b>files read</div>
+      <div><b>${d.a}</b>agents</div>
+      <div><b>${(d.c/d.a).toFixed(2)}</b>confirmed / agent</div>
+    </div>`;
+  } else {
+    h+=`<div class="nums"><div style="color:#5f6a7d;font-size:12.5px">No scores: written after the run,
+      so it has never been graded against the other ten. Three test cases are drafted against this same
+      codebase, where the answers are already known.</div></div>`;
+  }
+  return h;
+}
+
+const boardEl=document.getElementById('board'), detailEl=document.getElementById('detail');
+boardEl.innerHTML=boardHTML('board',null);
+detailEl.innerHTML=detailHTML('odd-one-out-hunter');
+/* Delegated listener rather than inline handlers, and rather than one listener per
+   chip, so re-rendering the board can never leave a dead button behind. */
+boardEl.addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b) return;
+  boardEl.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  b.classList.add('on');
+  detailEl.innerHTML=detailHTML(b.dataset.k);
+});
+boardEl.querySelector('[data-k="odd-one-out-hunter"]').classList.add('on');
+
+/* ------------------------------------- Figure 3: preconditions, interactive - */
+const state={}; Object.keys(PRE).forEach(k=>state[k]=!!PRE[k].def);
+const togEl=document.getElementById('tog'),
+      b2El=document.getElementById('board2'),
+      cntEl=document.getElementById('counter');
+
+function renderTog(){
+  togEl.innerHTML=Object.keys(PRE).map(k=>
+    `<button data-pre="${k}" class="${state[k]?'on':''}"><i class="dot"></i>${esc(PRE[k].n)}</button>`
+  ).join('');
+}
+const isDead=d=>!!(d.pre && !state[d.pre]);
+function renderBoard2(){
+  b2El.innerHTML=boardHTML('board2',isDead);
+  const dead=S.filter(isDead), live=S.length-dead.length;
+  cntEl.innerHTML=`<b>${live}</b> of ${S.length} strategies can start on this repository.`+
+    (dead.length?` <span class="starved">${dead.length} starved:</span> ${
+      dead.map(d=>esc(d.k)).join(', ')}. Each would score near zero here for reasons that say nothing
+      about the strategy.`:' Nothing is starved — every list is non-empty.');
+}
+togEl.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pre]'); if(!b) return;
+  state[b.dataset.pre]=!state[b.dataset.pre]; renderTog(); renderBoard2();
+});
+document.querySelector('.presets').addEventListener('click',e=>{
+  const b=e.target.closest('[data-preset]'); if(!b) return;
+  const P={
+    hw:     {state:1,history:0,tests:0,spec:0,dupes:0},
+    /* an old monolith reliably has history, copy-paste and shared state, and
+       usually some tests; a written spec is the thing it almost never has */
+    legacy: {state:1,history:1,tests:1,spec:0,dupes:1},
+    all:    {state:1,history:1,tests:1,spec:1,dupes:1},
+    none:   {state:0,history:0,tests:0,spec:0,dupes:0}
+  }[b.dataset.preset];
+  Object.keys(PRE).forEach(k=>state[k]=!!P[k]);
+  renderTog(); renderBoard2();
+});
+renderTog(); renderBoard2();
+/* The board2 chips are informational here; clicking one still opens the detail
+   pane above, which is the useful behaviour when a chip has just gone dark. */
+b2El.addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b) return;
+  detailEl.innerHTML=detailHTML(b.dataset.k);
+  boardEl.querySelectorAll('.chip').forEach(c=>
+    c.classList.toggle('on',c.dataset.k===b.dataset.k));
+  detailEl.scrollIntoView({behavior:'smooth',block:'center'});
+});
+
+/* --------------------------------------- Figure 4: volume vs proof rate ----- */
+(function(){
+  const W=920,H=430,L=62,R=26,T=16,B=52;
+  const pw=W-L-R, ph=H-T-B;
+  const XM=58, YM=90;
+  const x=v=>L+v/XM*pw, y=v=>T+ph-v/YM*ph;
+  /* label offsets are hand-set: three strategies land on x=15 and would collide */
+  const off={
+    'entry-point-tracer':[-8,-14,'end'],
+    'hostile-input-hunter':[12,4,'start'],
+    'concurrency-hunter':[-13,4,'end'],
+    'invariant-hunter':[-13,4,'end'],
+    'oracle-hunter':[13,4,'start'],
+    'subsystem-auditor':[13,4,'start'],
+    'git-signal-hunter':[12,-9,'start'],
+    'divergence-hunter':[12,4,'start'],
+    'spec-gap-hunter':[12,4,'start']
+  };
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">
+  <defs><style>
+    .ax{stroke:#232936;stroke-width:1}
+    .gr{stroke:#1a1f29;stroke-width:1}
+    .tl{font:11px ui-monospace,monospace;fill:#5f6a7d}
+    .al{font:600 11px -apple-system,sans-serif;fill:#98a2b4;letter-spacing:.5px}
+    .pl{font:11.5px -apple-system,sans-serif;fill:#c3ccd9}
+  </style></defs>`;
+
+  /* gridlines + ticks */
+  for(let v=0;v<=YM;v+=15){
+    s+=`<line class="gr" x1="${L}" y1="${y(v)}" x2="${L+pw}" y2="${y(v)}"/>
+        <text class="tl" x="${L-9}" y="${y(v)+4}" text-anchor="end">${v}%</text>`;
+  }
+  for(let v=0;v<=XM-3;v+=10){
+    s+=`<text class="tl" x="${x(v)}" y="${T+ph+18}" text-anchor="middle">${v}</text>`;
+  }
+  s+=`<line class="ax" x1="${L}" y1="${T+ph}" x2="${L+pw}" y2="${T+ph}"/>
+      <line class="ax" x1="${L}" y1="${T}" x2="${L}" y2="${T+ph}"/>
+      <text class="al" x="${L+pw/2}" y="${H-14}" text-anchor="middle">FINDINGS REPORTED (confirmed + plausible)</text>
+      <text class="al" x="16" y="${T+ph/2}" text-anchor="middle"
+        transform="rotate(-90 16 ${T+ph/2})">SHARE WITH AN EXECUTABLE REPRO</text>`;
+
+  /* the good corner, called out */
+  s+=`<rect x="${x(18)}" y="${y(YM)}" width="${x(XM)-x(18)}" height="${y(55)-y(YM)}"
+        fill="#3fcf8e" fill-opacity=".05" stroke="#3fcf8e" stroke-opacity=".22"
+        stroke-dasharray="4 4" rx="6"/>
+      <text class="tl" x="${x(19.5)}" y="${y(YM)+17}" fill="#3fcf8e">high volume AND provable</text>`;
+
+  /* points */
+  S.filter(d=>proof(d)!==null).forEach(d=>{
+    const col=G[d.g].col, tot=d.c+d.p, pr=proof(d);
+    const rad=5+Math.sqrt(d.a)*1.55;
+    s+=`<circle cx="${x(tot)}" cy="${y(pr)}" r="${rad}" fill="${col}" fill-opacity=".2"
+          stroke="${col}" stroke-width="1.6"/>`;
+    const o=off[d.k]||[12,4,'start'];
+    s+=`<text class="pl" x="${x(tot)+o[0]}" y="${y(pr)+o[1]}" text-anchor="${o[2]}">${esc(d.k)}</text>
+        <text class="tl" x="${x(tot)+o[0]}" y="${y(pr)+o[1]+13}" text-anchor="${o[2]}">${
+          d.r}/${tot} repro · ${d.a} agents</text>`;
+  });
+
+  /* the excluded one, noted on the chart rather than left silent */
+  s+=`<text class="tl" x="${L+pw}" y="${T+ph-8}" text-anchor="end" fill="#5f6a7d">
+        mutation-survivor-hunter not plotted: 0 confirmed, proof rate undefined</text>`;
+  s+='</svg>';
+  document.getElementById('f4').innerHTML=s;
+})();
+
+/* ------------------------- Figure 5: the worked example, a one-column matrix - */
+(function(){
+  const rows=[
+    ['deepgram',1],['assemblyai',1],['whisper-api',1],['rev-ai',1],
+    ['speechmatics',1],['gladia',1],['elevenlabs',1],['google-chirp',0]
+  ];
+  const W=920, rowH=30, H=rows.length*rowH+58;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">
+  <defs><style>
+    .mn{font:12.5px ui-monospace,monospace;fill:#c3ccd9}
+    .mh{font:700 10.5px -apple-system,sans-serif;fill:#5f6a7d;letter-spacing:.9px}
+    .mv{font:600 12px -apple-system,sans-serif}
+    .mo{font:12px -apple-system,sans-serif;fill:#98a2b4}
+  </style></defs>
+  <text class="mh" x="0" y="14">MEMBER</text>
+  <text class="mh" x="250" y="14" text-anchor="middle">CARRIES A TIMEOUT</text>
+  <text class="mh" x="420" y="14">WHAT THAT MEANS</text>`;
+  rows.forEach((r,i)=>{
+    const yy=32+i*rowH, ok=r[1];
+    s+=`<rect x="0" y="${yy}" width="${W}" height="${rowH-4}" rx="5"
+          fill="${ok?'#12151b':'rgba(244,104,95,.09)'}"
+          stroke="${ok?'#1e232e':'rgba(244,104,95,.45)'}"/>
+        <text class="mn" x="12" y="${yy+18}">${esc(r[0])}.ts</text>
+        <text class="mv" x="250" y="${yy+18}" text-anchor="middle"
+          fill="${ok?'#3fcf8e':'#f4685f'}">${ok?'yes':'NO'}</text>`;
+    if(!ok){
+      s+=`<text class="mo" x="420" y="${yy+18}" fill="#f4685f">the odd one out — and the other seven are the arbiter</text>`;
+    }
+  });
+  s+=`<text class="mo" x="0" y="${H-12}">7 of 8 apply the rule. No spec was consulted. No test was run. The list came from <tspan
+      style="font:12px ui-monospace,monospace;fill:#4fd1c5">ls providers/</tspan>.</text>`;
+  s+='</svg>';
+  document.getElementById('f5').innerHTML=s;
+})();
+</script>
+</body>
+</html>

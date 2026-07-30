@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why the winners won — bug-hunter bake-off</title>
+<style>
+:root{
+  --bg:#0c0e12; --panel:#12151b; --panel2:#171b23; --line:#232936;
+  --tx:#e6e9ef; --dim:#98a2b4; --dimmer:#5f6a7d;
+  --blue:#5b9cf8; --green:#3fcf8e; --gold:#f2c14e; --red:#f4685f;
+  --purple:#b28bf5; --teal:#4fd1c5; --rust:#c96442; --silver:#c3ccd9;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:46px 30px 100px}
+h1{font-size:34px;line-height:1.2;margin:0 0 10px;letter-spacing:-.5px}
+h2{font-size:23px;margin:56px 0 6px;letter-spacing:-.3px}
+h2 .num{color:var(--dimmer);font-variant-numeric:tabular-nums;margin-right:10px;font-weight:400}
+h3{font-size:16px;margin:30px 0 8px}
+p{margin:10px 0}
+.sub{color:var(--dim);font-size:16px;max-width:78ch}
+.lede{color:var(--dim);font-size:14px;border-left:2px solid var(--line);padding-left:14px;margin:14px 0 0;max-width:82ch}
+code{font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:#1c212b;
+  padding:1.5px 5px;border-radius:4px;color:var(--teal)}
+header{border-bottom:1px solid var(--line);padding-bottom:26px}
+.meta{color:var(--dimmer);font-size:12.5px;display:flex;gap:20px;flex-wrap:wrap;margin-top:14px}
+.claim{background:linear-gradient(180deg,#141922,#12151b);border:1px solid var(--line);
+  border-left:3px solid var(--gold);border-radius:10px;padding:20px 24px;margin:22px 0}
+.claim .lbl{font-size:11px;letter-spacing:1.3px;text-transform:uppercase;color:var(--gold);
+  font-weight:700;margin-bottom:8px}
+.claim p{margin:8px 0;font-size:15.5px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px 24px;margin:18px 0}
+.fig{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px 22px 16px;margin:22px 0}
+.fig .cap{color:var(--dimmer);font-size:12.5px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.fig .cap b{color:var(--dim)}
+.figt{font-size:12px;letter-spacing:1.1px;text-transform:uppercase;color:var(--dimmer);
+  font-weight:700;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dimmer);font-size:11px;letter-spacing:.7px;text-transform:uppercase;font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr:hover td{background:#151a22}
+.tag{display:inline-block;font-size:10.5px;padding:1.5px 7px;border-radius:20px;font-weight:600;
+  letter-spacing:.3px;white-space:nowrap}
+.t-yes{background:rgba(63,207,142,.14);color:var(--green)}
+.t-no{background:rgba(244,104,95,.14);color:var(--red)}
+.t-part{background:rgba(242,193,78,.14);color:var(--gold)}
+button{font:inherit;color:inherit;cursor:pointer}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tabs button{background:var(--panel2);border:1px solid var(--line);border-radius:7px;
+  padding:8px 14px;font-size:13px;color:var(--dim);transition:.12s}
+.tabs button:hover{color:var(--tx);border-color:#2f374a}
+.tabs button.on{background:#1e2836;border-color:var(--blue);color:var(--tx)}
+.scat{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:860px){.scat{grid-template-columns:1fr}}
+.mech{border:1px solid var(--line);border-radius:9px;margin:9px 0;background:var(--panel2);overflow:hidden}
+.mech summary{padding:13px 16px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:13px}
+.mech summary::-webkit-details-marker{display:none}
+.mech summary:hover{background:#1b212b}
+.mech .mid{font:11.5px/1 ui-monospace,monospace;color:var(--dimmer);width:26px;flex:0 0 26px}
+.mech .mname{font-weight:600;font-size:14px;flex:1;min-width:200px}
+.mech .mbar{width:120px;height:7px;background:#1e232e;border-radius:4px;overflow:hidden;flex:0 0 120px}
+.mech .mbar i{display:block;height:100%;border-radius:4px}
+.mech .myield{font-size:11px;color:var(--dimmer);width:82px;text-align:right;flex:0 0 82px}
+.mech .body{padding:2px 16px 16px 55px;font-size:13.5px;color:var(--dim);border-top:1px solid var(--line)}
+.mech .body b{color:var(--tx);font-weight:600}
+.mech[open] summary{background:#1b212b}
+.rule{display:grid;grid-template-columns:auto 1fr;gap:0 16px;margin:14px 0}
+.rule .k{color:var(--gold);font-weight:700;font-size:13px;font-variant-numeric:tabular-nums;
+  padding-top:2px;white-space:nowrap}
+.rule .v{font-size:14px;color:var(--dim);padding-bottom:12px}
+.rule .v b{color:var(--tx)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:860px){.two{grid-template-columns:1fr}}
+.mini{font-size:13px;color:var(--dim)}
+.mini b{color:var(--tx)}
+ul{margin:8px 0;padding-left:20px}li{margin:5px 0;color:var(--dim);font-size:14px}
+li b,li strong{color:var(--tx)}
+.warn{border-left:3px solid var(--red)}
+.ok{border-left:3px solid var(--green)}
+.q{border-left:2px solid var(--dimmer);padding-left:14px;color:var(--dim);font-style:italic;margin:12px 0;font-size:14px}
+footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line);color:var(--dimmer);font-size:12.5px}
+a{color:var(--blue)}
+.legend-row{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--dimmer);margin-top:10px}
+.legend-row span{display:flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:2px;display:inline-block}
+.rank-list{display:flex;flex-direction:column;gap:4px}
+.rk{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:center;
+  padding:7px 12px;border-radius:7px;background:var(--panel2);border:1px solid var(--line);
+  font-size:13.5px;transition:.15s}
+.rk .p{font-variant-numeric:tabular-nums;color:var(--dimmer);font-weight:700}
+.rk .mv{font-size:11px;font-variant-numeric:tabular-nums}
+.up{color:var(--green)}.down{color:var(--red)}.same{color:var(--dimmer)}
+.rk.big{border-color:#2f3b4f;background:#182030}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Why the winners won</h1>
+  <p class="sub">Ten bug-hunting strategies, one codebase, ~85 agents. This page works backwards from
+  the defects that were actually confirmed to the property that surfaced them — and finds that most of
+  the winners did not win for the reason their own instructions claim.</p>
+  <div class="meta">
+    <span>Analysis: 3 independent Fable agents</span>
+    <span>Lenses: mechanism · confounds · generality</span>
+    <span>2026-07-30</span>
+    <span><a href="bake-off-comparison.html">← the scoreboard</a></span>
+  </div>
+</header>
+
+<div class="claim">
+  <div class="lbl">The short answer</div>
+  <p>The ranking is explained almost entirely by two variables, and <b>neither of them is a thesis</b>:
+  whether the strategy <b>enumerated a finite surface and swept all of it</b> rather than sampling a
+  region, and whether it could <b>execute something</b> rather than argue.</p>
+  <p>Thesis content mattered mostly for what it <em>forbade</em> the hunter from looking at. The single
+  most productive mechanism in the entire run is one that no skill claims and no skill was built for.</p>
+</div>
+
+<h2><span class="num">01</span>Enumerate and sweep, or sample and hope</h2>
+<p class="sub">Sort the ten by how much of the 210-file arena they touched, and the table sorts itself
+into two groups with almost nothing in between.</p>
+
+<div class="fig">
+  <div class="figt">Figure 1 — coverage splits the field before any thesis does</div>
+  <div id="f1"></div>
+  <div class="cap"><b>The gap is the story.</b> Every strategy above the line defines a finite set up
+  front — 88 entry points, every input surface, one invariant × every file — and then accounts for each
+  member. Every strategy below it picks a region and reads hard. There is no middle. The four sweepers
+  took the top four places on confirmed count and the four samplers took the bottom four, and this
+  happened across four completely unrelated theses on each side.</div>
+</div>
+
+<h2><span class="num">02</span>But coverage is bought with compute, and compute buys claims, not proofs</h2>
+<p class="sub">Which raises the obvious objection: maybe the winners just spent more. Mostly yes — on
+one axis, and revealingly not on the other.</p>
+
+<div class="fig">
+  <div class="figt">Figure 2 — the same self-reports, two very different relationships</div>
+  <div class="scat">
+    <div><div id="f2a"></div></div>
+    <div><div id="f2b"></div></div>
+  </div>
+  <div class="cap"><b>Confirmed findings track compute at r=+0.82. Executable repros do not track it at
+  all</b> (+0.31, below the p&lt;.05 threshold of 0.632 for n=10). Both numbers come out of the same
+  self-reported scorecards, so the gap cannot be a reporting artifact. Fanning out more agents buys more
+  <em>claims</em>; it does not buy more <em>proofs</em>. That makes proof rate the only volume metric in
+  the scoreboard that resists inflation — and it is why <code>hostile-input-hunter</code>'s clean sweep
+  of 20 repros on 20 findings is the most robust single result in the run.</div>
+</div>
+
+<div class="panel ok">
+  <h3 style="margin-top:0">The exception that teaches more than the rule</h3>
+  <p class="mini"><code>concurrency-hunter</code> reached <b>~150 files on 6 subagents</b>, matching the
+  15-agent entrant's coverage at 40% of the spend. Its ledger shows how: <b>one broad mapping agent
+  opened 120 files</b>, then five narrow lenses swept what the mapper found. Correcting its row is what
+  dropped the files~subagents correlation from +0.87 to +0.65.</p>
+  <p class="mini">So coverage is not simply purchased. <b>Fan-out shape beats fan-out count</b>: one wide
+  cheap mapper plus narrow deep lenses dominates many independent deep divers, because the divers each
+  re-pay the discovery cost. This is the most directly actionable finding on this page.</p>
+</div>
+
+<h2><span class="num">03</span>What actually generated the findings</h2>
+<p class="sub">Ten distinct acts of attention appear across the run. Ranked by yield, the leader is not
+anybody's thesis — it is a move four different hunters stumbled into while nominally doing something
+else, each giving it a different name.</p>
+
+<div id="mechs"></div>
+
+<div class="claim" style="border-left-color:var(--purple)">
+  <div class="lbl" style="color:var(--purple)">The buried winner</div>
+  <p><b>M2 — read two siblings that do one job, find the guard present in one and absent in the other,
+  then find the comment that says the missing guard matters.</b></p>
+  <p>This produced <em>every single</em> convergent finding in the run. Four hunters rediscovered it
+  independently and none of them was built for it: <code>git-signal</code> called it adjacency,
+  <code>oracle</code> called it a guard-asymmetry scan, <code>concurrency</code> called it
+  constraint-backing, <code>subsystem-auditor</code> called it contract auditing. It is cheap, it needs
+  no infrastructure, and its verdicts are near-unarguable because the codebase convicts itself: the
+  sibling's comment usually states the exact harm.</p>
+  <p class="mini" style="color:var(--dim)">The canonical instance: <code>/usage</code> caches any non-2xx
+  as "license invalid" for an hour, while its sibling <code>auth.ts:62-73</code> has the exact guard
+  <em>and a comment naming the exact harm</em>. Six hunters found it. One transient 502 during a redeploy
+  locks a paying customer out for an hour across all 17 machines, and it cannot self-heal because the
+  next read is a cache hit.</p>
+</div>
+
+<h2><span class="num">04</span>Did the winners win for the reasons they claim?</h2>
+<p class="sub">Mostly no. Each row compares what the SKILL.md sells against what the evidence shows
+actually did the work.</p>
+
+<table>
+  <thead><tr><th style="width:170px">Strategy</th><th>Stated thesis</th><th>What actually produced its findings</th><th style="width:92px">Match</th></tr></thead>
+  <tbody id="thesis"></tbody>
+</table>
+
+<div class="panel warn">
+  <h3 style="margin-top:0">The winner's number does not survive counting</h3>
+  <p class="mini"><code>entry-point-tracer</code>'s <b>~40 confirmed</b> is a post-hoc promotion of a
+  subset of <b>~122 candidate blocks</b> across its 13 traces (T03=9, T04=12, T05=13, T06=8, T07=8,
+  T08=11, T09=8, T10=10, T11=10, T12=6, T13=7, T14=13, T15=7). Each carries only a self-rated
+  <code>confidence</code> field. None passed through its own verify or prove phase — and none of its 13
+  subagent prompts contains the words REFUTED, PLAUSIBLE, or "default verdict". <b>The shared ladder was
+  never propagated to the winner's evidence base</b>, so its count is not commensurable with the nine
+  rows beneath it.</p>
+  <p class="mini">At least two of its candidates were independently <em>refuted</em> elsewhere in the same
+  run, and one of its two headline findings — the redirect-loop lockout — was <b>independently
+  rediscovered</b> by <code>invariant-hunter</code>'s I8 sweep at the same file and line, naming the same
+  trigger. The claim "neither was reached by any other hunter" is false.</p>
+  <p class="mini">What survives is narrower and still worth keeping: <b>entry-point tracing reached a
+  class of cross-<em>system</em> seam defect that nothing else here reached at all.</b> That claim needs
+  no count to stand.</p>
+</div>
+
+<h2><span class="num">05</span>Where the bugs actually were</h2>
+<p class="sub">A strategy can only win by pointing at where the defects are. So: where were they? Not
+where the codebase's shape suggests.</p>
+
+<div class="fig">
+  <div class="figt">Figure 3 — one balance, four owners, no ownership rule</div>
+  <div id="f3"></div>
+  <div class="cap"><b>The defect-generating mechanism.</b> Money state lives in four places. Postgres was
+  hardened — <code>FOR UPDATE</code>, unique indexes on four columns, several carrying comments naming the
+  race they close. The other three were never given an ownership rule. <b>Every expensive defect in this
+  run is a disagreement between two of these four stores</b>, and every survivor sits either
+  <em>upstream</em> of Postgres (a gate reading a cache) or on a <em>dedupe key chosen so an existing
+  constraint can never fire</em> (<code>sourceId: crypto.randomUUID()</code>). Two structural amplifiers:
+  17 always-on Fly machines, so no in-process guarantee is ever global; and serverless on the other side,
+  whose redeploys generate exactly the transient 502 that poisons the cache.</div>
+</div>
+
+<div class="two">
+  <div class="panel">
+    <h3 style="margin-top:0">The hypothesis that lost</h3>
+    <p class="mini"><b>"Many near-duplicate provider adapters, so sibling-diffing wins."</b> Close to
+    refuted. <code>divergence-hunter</code> exists to diff duplicates and scored <b>2</b>. The obvious
+    duplicate family (<code>account/*</code> against <code>license/*</code>) turns out to be 9-12 line
+    wrappers over real implementations — deliberately factored, nothing to diverge. And only 1 of
+    <code>invariant-hunter</code>'s 6 sweeps was a clean whole-class omission harvest.</p>
+  </div>
+  <div class="panel ok">
+    <h3 style="margin-top:0">The hypothesis that won</h3>
+    <p class="mini"><b>"Money-state transitions under concurrency and partial failure."</b> 11 of
+    <code>concurrency-hunter</code>'s 12 confirmed findings are money-state. 4 of 7 convergence-index
+    items are. And <code>mutation-survivor-hunter</code>'s 7 surviving mutants land on <b>the same ~300
+    lines</b> — three unrelated methods pointing at one place. That is a mechanism, not a theme, which is
+    what makes it a real cluster.</p>
+  </div>
+</div>
+
+<p class="lede">Why the distinction pays: "integration seams" predicts the winner correctly for the
+wrong reason and tells you to diff all boundaries. "Money-state under concurrency and partial failure"
+tells you to trace <b>state ownership across cache, retry and lifecycle boundaries</b> — a far smaller
+target, and the one to aim a rerun at.</p>
+
+<div class="panel">
+  <h3 style="margin-top:0">A second cluster, smaller and more severe — and nothing was aimed at it</h3>
+  <p class="mini">Auth and session state-transition guards: the login CSRF, the cookie-presence versus
+  session-validity lockout, the sign-out route missing a <code>return</code> after revoking the session.
+  About 10 findings, but they hold <b>the two most severe in the run</b>. Money-state is the
+  <em>volume</em> cluster; auth-state is the <em>severity</em> cluster. <b>No single strategy was pointed
+  at both</b> — which is the real argument for running a small portfolio rather than picking a winner.</p>
+</div>
+
+<h2><span class="num">06</span>How much of this is about HyperWhisper?</h2>
+<p class="sub">Most of it. Four of the ten were scored on a codebase they were not looking at, each
+precondition verified by direct measurement. Pick a different codebase and the table reorders violently.</p>
+
+<div class="panel">
+  <h3 style="margin-top:0">Preconditions that were simply absent</h3>
+  <table>
+    <thead><tr><th style="width:200px">Strategy</th><th>What it needs</th><th>What was there</th></tr></thead>
+    <tbody>
+      <tr><td><code>mutation-survivor</code></td><td>A test suite worth mutating against</td><td>10 of ~43 cloud files have a colocated test; <b>0 of ~150 <code>nextjs</code> files do</b>. Test-to-source ratio ~7.7%. The 1,774 lines holding the severe findings have no direct tests.</td></tr>
+      <tr><td><code>git-signal</code></td><td>Real history: churn, reverts, fix density</td><td><b>67 commits, all dated one day</b>, off an initial-release squash. Zero reverts, median zero post-import touches. It still landed 11 — the best per-precondition performance in the run.</td></tr>
+      <tr><td><code>divergence</code></td><td>Genuine duplicated logic</td><td>The repo is factored. Its duplicate families are thin wrappers.</td></tr>
+      <tr><td><code>oracle</code></td><td>Tools that emit signal</td><td>Clean <code>tsc</code> on both projects, 0 failing tests, 0 skipped, 0 TODO markers. Its three clean findings are about the <em>toolchain</em>, not the product.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="fig">
+  <div class="figt">Figure 4 — the same ten strategies on four different codebases</div>
+  <div class="tabs" id="cfTabs"></div>
+  <div id="cfWhy" class="mini" style="margin-bottom:16px;color:var(--dim)"></div>
+  <div class="rank-list" id="cfList"></div>
+  <div class="cap"><b>Click through the four.</b> <code>entry-point-tracer</code> goes from 1st to ~8th on
+  a mature library, because "88 entry points" collapses into "the exported API" and there are no hops,
+  no services and no deploy ordering to inspect. <code>mutation-survivor-hunter</code> goes from last to
+  2nd on the same codebase, because its precondition is finally met. <code>git-signal-hunter</code> tops
+  a legacy monolith, where repeat-fix files are the best prior available and nothing substitutes for it.
+  Numbers to the right are the move from this run's corrected ranking.</div>
+</div>
+
+<h2><span class="num">07</span>So what actually leads to winning</h2>
+
+<div class="panel">
+  <div class="rule">
+    <div class="k">1</div><div class="v"><b>Enumerate a finite surface and account for every member.</b>
+    Not because enumeration finds bugs, but because it makes coverage <em>checkable</em> — and the
+    characteristic failure of whole-codebase hunting is a report that reads exhaustive when it was a
+    sample. This is the one property worth carrying to every codebase, even where the strategy that owns
+    it would finish 8th.</div>
+
+    <div class="k">2</div><div class="v"><b>Be able to run something.</b> Execution is the only axis in
+    this run that compute could not inflate, and it collapses verdict ambiguity: the demonstration
+    <em>is</em> the verdict, so the method produces almost no maybes. It is also the best refuter — the
+    same harness that proved 20 findings killed a 25-row catalog of candidate number bugs.</div>
+
+    <div class="k">3</div><div class="v"><b>Cross the process boundary.</b> Read <code>node_modules</code>,
+    the platform's deploy ordering, the third party's real delivery semantics. Highest severity per
+    finding of any mechanism, and only two of ten hunters were permitted to do it. Both headline
+    severities came from here.</div>
+
+    <div class="k">4</div><div class="v"><b>Diff siblings and let the codebase convict itself.</b> The
+    highest-yield mechanism in the run and nobody's thesis. Promote it to a first-class hunter and you
+    capture most of the yield at a fraction of the cost.</div>
+
+    <div class="k">5</div><div class="v"><b>One wide cheap mapper, then narrow deep lenses.</b> Shape,
+    not count. Six well-shaped agents matched fifteen poorly-shaped ones on coverage.</div>
+
+    <div class="k">6</div><div class="v"><b>Check your preconditions before you start.</b> Four of ten
+    entrants were scored on codebases they were not looking at. The transferable result here is not "use
+    entry-point-tracer" — it is the <em>selection rule</em>: identify the codebase's defect-generating
+    mechanism, then check each strategy's precondition against it.</div>
+  </div>
+</div>
+
+<div class="claim" style="border-left-color:var(--teal)">
+  <div class="lbl" style="color:var(--teal)">The cheap way to test all of this</div>
+  <p>Run the same ten against <b>a mature library with a dense test suite</b>. If
+  <code>mutation-survivor</code> and <code>hostile-input</code> top the table and
+  <code>entry-point-tracer</code> falls out of the top five, the selection rule is real and this run's
+  ranking is a fact about HyperWhisper. <b>If <code>entry-point-tracer</code> wins again, this whole
+  analysis is wrong</b> and the ranking is closer to a general result than any of it claims.</p>
+</div>
+
+<h2><span class="num">08</span>What this page is not sure about</h2>
+<div class="panel warn">
+  <ul>
+    <li><b>Convergence measures noticing, not verdict.</b> One row of the convergence index was noticed
+    by three hunters and then independently <em>refuted</em> by two. Counting noticings had it exactly
+    backwards, and that row is now withdrawn.</li>
+    <li><b>Convergence also has a selection bias.</b> The findings that converge are by construction the
+    ones many strategies can reach, so the index partly measures how <em>cheap</em> a finding was. The
+    six-way item sits in two functions about twenty lines apart in one file. Unique findings are the axis
+    that discriminates between strategies, and it is the axis this run measured worst.</li>
+    <li><b>Ranks 5-10 are partly a resource race.</b> All ten hunters drew on one shared 20-slot subagent
+    pool while the four biggest fan-outs alone wanted ~55. <code>oracle</code> lost its entire
+    verification wave, <code>spec-gap</code> received zero subagent output, <code>divergence</code> lost
+    three of five subagents and never ran the sweep that owns its best finding,
+    <code>mutation-survivor</code> had three spawns rejected. Read the bottom half as understated in one
+    direction.</li>
+    <li><b>The defect taxonomy counts are ±30%.</b> The classification agents were lost to a network drop
+    and only proportions were recoverable. Category shares are reliable; individual counts are estimates.</li>
+    <li><b>n=1 codebase, n=1 run, self-graded.</b> Every number here is a hunter's own assessment of its
+    own work, and three scorecard rows were transcribed wrong on first publication. A five-line parser
+    generating the scoreboard from the reports would have caught all three.</li>
+  </ul>
+</div>
+
+<footer>
+  Scoreboard: <a href="bake-off-comparison.html">bake-off-comparison.html</a> &nbsp;·&nbsp;
+  Full write-up: <code>results/meta-analysis.md</code> &nbsp;·&nbsp;
+  Reports: <code>results/reports/*.md</code> &nbsp;·&nbsp;
+  Recovered sweeps: <code>raw-subagent-output/invariant-hunter/own-sweeps-I1-I8/</code>
+</footer>
+
+</div>
+<script>
+/* ---------- data ---------- */
+const S=[
+ {n:"entry-point-tracer",   c:40,r:12,f:150,a:15,sweep:1,soft:1},
+ {n:"invariant-hunter",     c:25,r:8, f:140,a:19,sweep:1,soft:1},
+ {n:"hostile-input-hunter", c:20,r:20,f:108,a:7, sweep:1},
+ {n:"concurrency-hunter",   c:12,r:4, f:150,a:6, sweep:1},
+ {n:"git-signal-hunter",    c:11,r:5, f:68, a:11,sweep:0},
+ {n:"oracle-hunter",        c:8, r:5, f:95, a:10,sweep:0},
+ {n:"subsystem-auditor",    c:7, r:1, f:58, a:6, sweep:0},
+ {n:"divergence-hunter",    c:2, r:1, f:34, a:5, sweep:0},
+ {n:"spec-gap-hunter",      c:2, r:2, f:30, a:7, sweep:0},
+ {n:"mutation-survivor-hunter",c:0,r:7,f:20,a:4, sweep:0}
+];
+
+/* ---------- Figure 1: coverage split ---------- */
+(function(){
+  const W=1050,rowH=30,padL=210,padR=70;
+  const max=210;
+  let y=6,rows='';
+  const sorted=[...S].sort((a,b)=>b.f-a.f);
+  sorted.forEach((d,i)=>{
+    const w=(d.f/max)*(W-padL-padR);
+    const col=d.sweep?'var(--blue)':'var(--rust)';
+    rows+=`<g transform="translate(0,${y})">
+      <text x="${padL-12}" y="14" text-anchor="end" fill="${d.sweep?'var(--tx)':'var(--dim)'}" font-size="12.5">${d.n}</text>
+      <rect x="${padL}" y="3" width="${w}" height="15" rx="3" fill="${col}" opacity="${d.sweep?.85:.55}"/>
+      <text x="${padL+w+9}" y="15" fill="var(--dimmer)" font-size="11.5">${d.soft?'~':''}${d.f}</text>
+      <text x="${padL+w+52}" y="15" fill="${d.c>=11?'var(--green)':'var(--dimmer)'}" font-size="11.5">${d.soft?'~':''}${d.c} conf</text>
+    </g>`;
+    y+=rowH;
+    if(i===3){
+      y+=12;
+      rows+=`<g transform="translate(0,${y})">
+        <line x1="20" x2="${W-20}" y1="0" y2="0" stroke="var(--gold)" stroke-width="1" stroke-dasharray="5 4" opacity=".7"/>
+        <text x="20" y="16" fill="var(--gold)" font-size="10.5" letter-spacing=".8">ENUMERATE &amp; SWEEP A FINITE SET &nbsp;↑ &nbsp;&nbsp;·&nbsp;&nbsp; SAMPLE A REGION &nbsp;↓</text>
+      </g>`;
+      y+=30;
+    }
+  });
+  document.getElementById('f1').innerHTML=
+    `<svg viewBox="0 0 ${W} ${y+10}" width="100%" style="overflow:visible">
+      <text x="${padL}" y="0" fill="var(--dimmer)" font-size="10.5">FILES READ, OF 210 IN SCOPE</text>
+      ${rows}</svg>
+     <div class="legend-row">
+       <span><i class="sw" style="background:var(--blue)"></i> enumerated a finite surface</span>
+       <span><i class="sw" style="background:var(--rust)"></i> sampled a region</span>
+     </div>`;
+})();
+
+/* ---------- Figure 2: two scatters ---------- */
+function scatter(el,xk,yk,xl,yl,r,rho,sig){
+  const W=470,H=300,p={l:52,r:18,t:26,b:46};
+  const xs=S.map(d=>d[xk]),ys=S.map(d=>d[yk]);
+  const xmax=Math.max(...xs)*1.12,ymax=Math.max(...ys)*1.15;
+  const X=v=>p.l+(v/xmax)*(W-p.l-p.r), Y=v=>H-p.b-(v/ymax)*(H-p.t-p.b);
+  // least squares
+  const n=S.length,mx=xs.reduce((a,b)=>a+b)/n,my=ys.reduce((a,b)=>a+b)/n;
+  let num=0,den=0; for(let i=0;i<n;i++){num+=(xs[i]-mx)*(ys[i]-my);den+=(xs[i]-mx)**2}
+  const m=num/den,b0=my-m*mx;
+  const col=sig?'var(--green)':'var(--dimmer)';
+  let pts='';
+  S.forEach(d=>{
+    pts+=`<circle cx="${X(d[xk])}" cy="${Y(d[yk])}" r="5" fill="${col}" opacity=".8"/>`;
+  });
+  // ticks
+  let ticks='';
+  for(let i=0;i<=4;i++){
+    const vx=xmax*i/4, vy=ymax*i/4;
+    ticks+=`<text x="${X(vx)}" y="${H-p.b+17}" text-anchor="middle" fill="var(--dimmer)" font-size="10">${Math.round(vx)}</text>`;
+    ticks+=`<text x="${p.l-9}" y="${Y(vy)+4}" text-anchor="end" fill="var(--dimmer)" font-size="10">${Math.round(vy)}</text>`;
+    ticks+=`<line x1="${p.l}" x2="${W-p.r}" y1="${Y(vy)}" y2="${Y(vy)}" stroke="var(--line)" stroke-width="1" opacity=".55"/>`;
+  }
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%">
+    ${ticks}
+    <line x1="${X(0)}" y1="${Y(b0)}" x2="${X(xmax)}" y2="${Y(m*xmax+b0)}" stroke="${col}" stroke-width="2" stroke-dasharray="${sig?'0':'6 5'}" opacity=".75"/>
+    ${pts}
+    <text x="${(W+p.l)/2}" y="${H-8}" text-anchor="middle" fill="var(--dim)" font-size="11.5">${xl}</text>
+    <text x="14" y="${(H-p.b+p.t)/2}" text-anchor="middle" fill="var(--dim)" font-size="11.5" transform="rotate(-90 14 ${(H-p.b+p.t)/2})">${yl}</text>
+    <text x="${W-p.r}" y="${p.t-8}" text-anchor="end" fill="${col}" font-size="12.5" font-weight="700">r = ${r}${sig?'':'   (n.s.)'}</text>
+  </svg>`;
+}
+scatter(document.getElementById('f2a'),'a','c','subagents spawned','confirmed findings','+0.82',null,true);
+scatter(document.getElementById('f2b'),'a','r','subagents spawned','findings with a repro','+0.31',null,false);
+
+/* ---------- Figure 3: four stores ---------- */
+(function(){
+  const boxes=[
+    {x:40,y:26,w:210,h:74,t:'Postgres credit_grants',s:'authoritative · HARDENED',
+     d:'FOR UPDATE · 4 unique indexes',c:'var(--green)'},
+    {x:530,y:26,w:210,h:74,t:'Upstash Redis license:&lt;key&gt;',s:'mutable balance · 4 writers',
+     d:'SET .. EX 3600, last-writer-wins',c:'var(--red)'},
+    {x:40,y:196,w:210,h:74,t:'Stripe',s:'external ledger',
+     d:'at-least-once, unordered delivery',c:'var(--red)'},
+    {x:530,y:196,w:210,h:74,t:'Desktop client balance',s:'local copy',
+     d:'decremented from a response header',c:'var(--red)'}
+  ];
+  let g='';
+  boxes.forEach(b=>{
+    g+=`<g>
+      <rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="8" fill="var(--panel2)" stroke="${b.c}" stroke-width="1.4" opacity=".95"/>
+      <text x="${b.x+14}" y="${b.y+24}" fill="var(--tx)" font-size="13" font-weight="600">${b.t}</text>
+      <text x="${b.x+14}" y="${b.y+42}" fill="${b.c}" font-size="10.5" letter-spacing=".5">${b.s}</text>
+      <text x="${b.x+14}" y="${b.y+60}" fill="var(--dimmer)" font-size="10.5">${b.d}</text>
+    </g>`;
+  });
+  const links=[
+    [250,63,530,63,'cache poisoned by a transient 502'],
+    [250,233,530,233,'refund arrives before its grant'],
+    [145,100,145,196,'webhook mutations lost'],
+    [635,100,635,196,'header vs real balance']
+  ];
+  links.forEach(([x1,y1,x2,y2,lbl])=>{
+    const mx=(x1+x2)/2,my=(y1+y2)/2;
+    const horiz=y1===y2;
+    g+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--red)" stroke-width="1.3" stroke-dasharray="5 4" opacity=".65"/>
+      <text x="${mx}" y="${horiz?my-9:my}" text-anchor="middle" fill="var(--red)" font-size="10.5" opacity=".95">${lbl}</text>`;
+  });
+  g+=`<g>
+    <rect x="300" y="122" width="180" height="52" rx="8" fill="#1d1418" stroke="var(--gold)" stroke-width="1.4"/>
+    <text x="390" y="143" text-anchor="middle" fill="var(--gold)" font-size="12" font-weight="700">NO OWNERSHIP RULE</text>
+    <text x="390" y="161" text-anchor="middle" fill="var(--dim)" font-size="10.5">every expensive defect lives here</text>
+  </g>
+  <text x="40" y="302" fill="var(--dimmer)" font-size="10.5">AMPLIFIERS &nbsp;·&nbsp; 17 always-on Fly machines, so no in-process guarantee is ever global</text>
+  <text x="40" y="318" fill="var(--dimmer)" font-size="10.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;·&nbsp; serverless redeploys generate the exact transient 502 that poisons the cache</text>`;
+  document.getElementById('f3').innerHTML=`<svg viewBox="0 0 790 332" width="100%">${g}</svg>`;
+})();
+
+/* ---------- mechanisms ---------- */
+const M=[
+ {id:'M2',n:'Sibling asymmetry, plus a comment naming the harm',y:5,yl:'highest yield',
+  c:'var(--purple)',claimed:0,
+  b:'Two code paths doing one job; the guard is in one and missing from the other. Produced <b>every convergent finding in the run</b>. Four hunters reached it independently under four different names — adjacency, guard-asymmetry scan, constraint-backing, contract auditing — and <b>none was built for it</b>. The codebase usually convicts itself: <code>auth.ts:62-73</code> carries a comment naming the exact harm that its sibling <code>/usage</code> permits.'},
+ {id:'M6',n:'Cross the process boundary: repo code vs third-party reality',y:4.6,yl:'highest severity',
+  c:'var(--red)',claimed:0,
+  b:'Read <code>node_modules</code>, the platform, the third party\'s real semantics. Produced <b>both headline severities and most uniques</b>: the login CSRF (proved from better-auth\'s dist), the <code>23505</code> detection made dead by a drizzle upgrade, migrations committing before failable build steps, credits minted from <code>metadata.credit_amount</code> while promo codes are enabled and <code>amount_total</code> is never read. <b>Only two of ten hunters did this</b>, and only because their instructions permitted leaving the repo.'},
+ {id:'M4',n:'In-process harness driving the real handler with fakes',y:4.2,yl:'highest precision',
+  c:'var(--green)',claimed:1,
+  b:'All 20 of hostile-input\'s findings, plus 4 of concurrency\'s and 4 of git-signal\'s. 545 MB pushed down one socket in ~3s; five sockets billing 2.9x the balance; a refund-before-checkout replayed against a faithful in-memory db-layer. 100% verdict rate on what it reaches, and structurally unable to reach topology or third-party semantics.'},
+ {id:'M1',n:'Run the real primitive on a hostile literal',y:4,yl:'best refuter',
+  c:'var(--green)',claimed:1,
+  b:'The <code>sanitizeReturnTo</code> open redirect was found this way <b>four independent times</b>, each hunter invoking the real WHATWG parser rather than reasoning about it. Also the run\'s most productive <em>refuter</em>: a 25-row hostile number catalog, a full timing-safe-compare matrix, and a prototype-pollution probe all came back clean. <b>The demonstration is the verdict, so it produces no maybes.</b>'},
+ {id:'M5',n:'Enumerate a finite surface, account for every member',y:3.4,yl:'best coverage',
+  c:'var(--blue)',claimed:1,
+  b:'88 entry points into 13 trace units; 6 invariants swept across 210 files. Uniquely produces the <b>inert / unwired / never-visited</b> class that no lens aimed at live code can see: a zero-caller public function still making an un-timed outbound fetch, endpoints with no consumers holding the widest plaintext-key surface, and the completeness claim that <em>8 of 8</em> LLM adapters lack a timeout. Its weakness is that its output is unverified candidates.'},
+ {id:'M3',n:'Read a comment, test or legal page as intent, then check code',y:3,yl:'decides verdicts',
+  c:'var(--gold)',claimed:1,
+  b:'Finds nothing on its own; it is the load-bearing half of nearly every CONFIRMED. A mirror comment enumerating three of four conditions. A test asserting exactly the two blocked prefixes. A shutdown drain whose comment claims it prevents the loss it permits. A published refund-policy worked example the threshold cannot express. It refutes just as often as it confirms.'},
+ {id:'M7',n:'Git log as targeting',y:1.6,yl:'1 unique',
+  c:'var(--teal)',claimed:1,
+  b:'On a 67-commit single-day history this had no dynamic range at all, and the hunter says so: <em>"history was good at choosing files and bad at predicting bugs."</em> It still produced one finding nothing else reached, and refuted three of its own most attractive primed hypotheses.'},
+ {id:'M8',n:'Run the toolchain',y:1.4,yl:'meta-bugs only',
+  c:'var(--teal)',claimed:1,
+  b:'Silent on product logic here — clean typecheck, no failing tests, no TODO markers. But uniquely produced the <b>broken-tooling</b> class: ESLint has never been able to run because its config imports an undeclared package, and 26 security-relevant tests exist that no CI invokes. Only reachable by <em>trying to run the tool</em>.'},
+ {id:'M10',n:'Promises from docs, names and legal copy',y:1.2,yl:'low severity',
+  c:'var(--dimmer)',claimed:1,
+  b:'<code>og:locale</code> invalid on 14 of 40 shipped locales, reachable only from "a function named <code>toOpenGraphLocale</code> promises a valid OG locale". Near-zero severity but the cleanest proof that name-as-promise sees something no other lens does. Note the highest-value member of this family was found by <em>hostile-input</em>, not the doc-reading skill — because it ran the arithmetic in the published refund policy.'},
+ {id:'M9',n:'Mutate a line, see if the suite notices',y:1,yl:'0 confirmed',
+  c:'var(--rust)',claimed:1,
+  b:'Zero live bugs, <b>7 proven test gaps</b> — every one a money-charging or authorization line that the suite <em>executes</em> but never <em>asserts on</em>. Line coverage calls those lines covered. No other strategy in the field can produce that, and it is the difference between "tested" and "defended". Its 0-confirmed is partly a rubric mismatch: the scoreboard counts live bugs, and this skill\'s deliverable is test gaps.'}
+];
+document.getElementById('mechs').innerHTML=M.map(m=>`
+ <details class="mech"${m.id==='M2'?' open':''}>
+   <summary>
+     <span class="mid">${m.id}</span>
+     <span class="mname">${m.n}</span>
+     <span class="tag ${m.claimed?'t-part':'t-no'}">${m.claimed?'is a thesis':'nobody&rsquo;s thesis'}</span>
+     <span class="mbar"><i style="width:${m.y/5*100}%;background:${m.c}"></i></span>
+     <span class="myield">${m.yl}</span>
+   </summary>
+   <div class="body">${m.b}</div>
+ </details>`).join('');
+
+/* ---------- thesis vs mechanism ---------- */
+const T=[
+ {n:'entry-point-tracer',th:'Walk every entry point hop by hop and interrogate the <em>joint between layers</em>.',
+  ac:'<b>Exhaustive enumeration plus permission to read outside the repo.</b> One headliner is a pure seam finding. The other, the login CSRF, is a read of better-auth\'s dist proving the CSRF middleware is opted into per endpoint — a library fact with seam vocabulary narrated over it. The seam lens contributed one headline and a lot of persuasive framing around findings other mechanisms generated.',m:'part'},
+ {n:'hostile-input-hunter',th:'Attack every input surface with a fixed catalog of hostile values.',
+  ac:'<b>The harness, not the catalog</b> — and it says so itself: <em>"this codebase validates scalars superbly and validates relationships between values poorly. Every survivor was relational."</em> The findings earning its place (refund ordering, the partial-refund threshold, reservation-versus-billing units) are <em>seam</em> findings reached with an executable harness. The catalog\'s real function was falsification.',m:'no'},
+ {n:'concurrency-hunter',th:'Enumerate shared mutable state and hunt named interleavings.',
+  ac:'Matched on about a third of its output. Four findings are genuinely interleaving-shaped; four more are <b>single-actor sibling/constraint asymmetry</b> — going to the schema to ask what actually backs a check, and finding a plain non-unique index or a dedupe key that can never fire. Its genuinely distinctive move is undeclared: <b>establishing deployment facts first</b> (17 machines, <code>auto_stop_machines=off</code>) so "theoretically racy" becomes "races on ordinary traffic".',m:'part'},
+ {n:'git-signal-hunter',th:'Mine history — churn, reverts, fix density — to choose where to read.',
+  ac:'<b>Thesis dead on this repo, hunter still productive.</b> 28 in-scope commits, zero reverts, every file born on one of two days. One substituted signal (bot authorship) did the work, and its two most severe findings came from files with essentially no git signal at all. It refuted three history-derived hypotheses including the most attractive lead in the run.',m:'no'},
+ {n:'oracle-hunter',th:'Run the tools; spend attention only where a tool already flagged something.',
+  ac:'<b>Refuted as a finder, validated as a refuter.</b> All oracles silent. Its three clean findings are about the toolchain. Its product findings arrived <em>sideways</em> from a swallowed-error grep and a guard-asymmetry scan — i.e. M2 wearing an oracle badge. Against that it holds the highest refutation rate in the field, killing 20 of 25 dead-code leads and an entire NaN cluster by quoting the guards.',m:'no'},
+ {n:'mutation-survivor-hunter',th:'Mutate code; surviving mutants mark behaviour nothing pins.',
+  ac:'Method executed exactly as designed, on a codebase that could not reward it — 7.7% test-to-source ratio, and zero of ~150 <code>nextjs</code> files with a colocated test. Produced <b>0 live bugs and the run\'s most alarming result</b>, which no scoring axis could score.',m:'yes'}
+];
+document.getElementById('thesis').innerHTML=T.map(t=>`<tr>
+  <td><code>${t.n}</code></td><td class="mini">${t.th}</td><td class="mini">${t.ac}</td>
+  <td><span class="tag t-${t.m}">${t.m==='yes'?'matches':t.m==='part'?'partial':'diverges'}</span></td>
+</tr>`).join('');
+
+/* ---------- counterfactuals ---------- */
+const BASE=['entry-point-tracer','hostile-input-hunter','concurrency-hunter','invariant-hunter',
+ 'git-signal-hunter','oracle-hunter','subsystem-auditor','divergence-hunter','spec-gap-hunter',
+ 'mutation-survivor-hunter'];
+const CF=[
+ {k:'This run (corrected)',why:'HyperWhisper: young, solo-developer, integration-heavy. Postgres hardened; three other stores holding money state with no ownership rule. 17 always-on Fly machines plus serverless.',
+  order:BASE},
+ {k:'Mature library, dense suite',why:'A parser, or a date/decimal/crypto library. Semver contract, real docs, few I/O boundaries, 85%+ coverage. <b>The cheap falsification test for this whole analysis.</b>',
+  order:['hostile-input-hunter','mutation-survivor-hunter','spec-gap-hunter','invariant-hunter','oracle-hunter','subsystem-auditor','divergence-hunter','entry-point-tracer','concurrency-hunter','git-signal-hunter']},
+ {k:'Legacy monolith, 10y history',why:'Heavy internal state, thin tests, a decade of repeat-fix files and revert clusters. The largest reordering of the three.',
+  order:['git-signal-hunter','divergence-hunter','invariant-hunter','subsystem-auditor','entry-point-tracer','concurrency-hunter','hostile-input-hunter','oracle-hunter','spec-gap-hunter','mutation-survivor-hunter']},
+ {k:'Data pipeline / ETL',why:'Batch plus streaming, schema evolution, backfills, at-least-once delivery. The domain names its own invariants, which removes invariant-hunter\'s usual weakness.',
+  order:['invariant-hunter','divergence-hunter','concurrency-hunter','oracle-hunter','entry-point-tracer','spec-gap-hunter','mutation-survivor-hunter','hostile-input-hunter','subsystem-auditor','git-signal-hunter']}
+];
+let cur=0;
+function drawCF(){
+  const tabs=document.getElementById('cfTabs');
+  tabs.innerHTML=CF.map((c,i)=>
+    `<button class="${i===cur?'on':''}" data-i="${i}">${c.k}</button>`).join('');
+  // Listeners rather than inline onclick: the buttons are re-rendered on every
+  // switch, and an inline handler depends on the function being reachable from
+  // global scope, which is a needless thing to rely on.
+  tabs.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click',()=>{cur=+b.dataset.i;drawCF()});
+  });
+  document.getElementById('cfWhy').innerHTML=CF[cur].why;
+  const base=CF[0].order;
+  document.getElementById('cfList').innerHTML=CF[cur].order.map((n,i)=>{
+    const was=base.indexOf(n), mv=was-i;
+    const cls=mv>0?'up':mv<0?'down':'same';
+    const txt=cur===0?'':(mv>0?`▲ ${mv}`:mv<0?`▼ ${-mv}`:'—');
+    return `<div class="rk${Math.abs(mv)>=4?' big':''}">
+      <span class="p">${i+1}</span>
+      <span>${n}</span>
+      <span class="mv ${cls}">${txt}</span></div>`;
+  }).join('');
+}
+drawCF();
+</script>
+</body>
+</html>
