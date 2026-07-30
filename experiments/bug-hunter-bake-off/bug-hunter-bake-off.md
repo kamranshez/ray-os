@@ -31,24 +31,40 @@ this run is the head-to-head.
 
 ## The answer
 
-**Best: `entry-point-tracer`.** Enumerate every entry point (it found 88), trace each hop by
-hop, and inspect the *joints between layers* rather than the layers. It produced the two most
-severe findings in the run and the highest unique-finding count, and several of its findings
-are cross-*system* seams (code versus Stripe, code versus Vercel's deploy ordering) that a
-file-reading strategy cannot see by construction.
+**Most valuable, but unranked: `entry-point-tracer`.** Enumerate every entry point (it found 88),
+trace each hop by hop, and inspect the *joints between layers* rather than the layers. It reached
+a class of cross-*system* seam defect (code versus Stripe, code versus Vercel's deploy ordering)
+that a file-reading strategy cannot see by construction, and that is a real and distinctive
+result. Its *rank* is not supported: see Caveats. It originally held first place on a count that
+nobody audited and that was never graded on the shared ladder.
 
-**Runner-up: `hostile-input-hunter`.** The only 100% proof rate in the field, 20 of 20. Wins
-on evidence quality, loses on ceiling: you cannot fuzz your way to "the reservation and the
-charge disagree about what a minute is."
+**Best on evidence, and the one result compute cannot inflate: `hostile-input-hunter`.** See
+below. Given that confirmed-count turns out to correlate with compute spent at r=+0.82 while
+proof-count does not correlate with it at significance, this is the entrant whose placement rests
+on the soundest axis in the table.
 
-**Worst: `mutation-survivor-hunter`.** Zero confirmed. Its thesis presupposes a test suite
-this codebase lacks where it matters, so every mutant survives and the signal is uniformly
-zero. Ranked last on *fit*, not conduct: it executed cleanly and reported its own dry run
-honestly rather than padding the scorecard.
+**`hostile-input-hunter`.** Every one of its 20 confirmed findings carried an executable repro,
+the only clean sweep in the field. Wins on evidence quality, loses on ceiling: you cannot fuzz
+your way to "the reservation and the charge disagree about what a minute is."
 
-The practical recommendation is to keep the top two **as a pair**. They fail in opposite
-directions, one producing architectural arguments and the other executable demonstrations,
-and their overlap was low.
+**Third, and the run's biggest scoring casualty: `concurrency-hunter`.** 12 confirmed findings
+on only 6 subagents, originally published as 3 because a transport failure ate its subagents'
+results. It reached ~150 files with one broad mapper plus five narrow lenses, matching the
+15-agent entrant's coverage, which is the clearest evidence in the run that fan-out *shape*
+beats fan-out *count*.
+
+**Worst: `mutation-survivor-hunter`.** Zero confirmed. Its thesis presupposes a test suite this
+codebase lacks where it matters, so a surviving mutant carries no information and the signal
+collapses. Ranked last on *fit*, not conduct: it executed cleanly and reported its own dry run
+honestly rather than padding the scorecard. It also produced the run's most alarming single
+result, which no scoring axis here could score — all 7 of its surviving mutants are money or
+authorization enforcement points that the suite executes but never asserts on.
+
+The practical recommendation is to keep **three**, not two, and to pick them for the axes they
+cover rather than for their ranks: `entry-point-tracer` for cross-system seams, which nothing
+else reached; `hostile-input-hunter` for executable proof, the one axis compute cannot inflate;
+and `concurrency-hunter` for defects that need two things to happen at once, a class no amount
+of careful reading finds. They fail in genuinely different directions and their overlap was low.
 
 ## What transferred beyond the ranking
 
@@ -82,16 +98,52 @@ and their overlap was low.
 | `raw-subagent-output/` | 34 nested-subagent returns, renamed from task hashes. |
 
 `raw-subagent-output/entry-point-tracer/` and `.../invariant-hunter/` are the only record of
-those two hunters' work, since both were stopped before writing their reports. The
-`verifiers/` folder is worth reading on its own: it is where the inverted ladder actually
-did its job, and where several findings were downgraded or overturned.
+those two hunters' work, since both were stopped before writing their reports.
+`invariant-hunter/own-sweeps-I1-I8/` holds its first eight sweeps, recovered on 2026-07-30 from
+an ephemeral tmp scratchpad that would have been garbage-collected; they are the richest single
+seam of unsynthesised findings in the archive and they were very nearly lost. The `verifiers/`
+folder is where the inverted ladder did its job and several findings were downgraded or
+overturned, though note it adjudicates one hunter's candidates only, so "the ladder worked"
+generalises from that plus self-reports rather than from a clean sweep of all ten.
 
 ## Caveats
 
 Two hunters (`entry-point-tracer`, `invariant-hunter`) never got their synthesis pass, so
-their scorecard rows are reconstructed from subagent returns rather than self-reported. The
-top spot is safe by a wide enough margin, but the middle of the table could reorder on a
-clean rerun.
+their scorecard rows are reconstructed from subagent returns rather than self-reported.
+
+**Corrected 2026-07-30.** Re-checking every row against the scorecard each hunter wrote at the
+top of its own report turned up three errors, one of them material. `concurrency-hunter` was
+published at 3 confirmed and is actually **12**, moving it from 7th to 3rd; a transport failure
+had swallowed its six lens agents' results, and the scorecard was taken from the partial report
+it wrote before recovering them. `mutation-survivor-hunter` is 0/3/7/20/4, not 0/1/6/15/3, and
+`git-signal-hunter` proved 5 findings rather than 6. Details in `results/meta-analysis.md`.
+
+That correction changes the reading of the experiment, not just the table. The run had
+penalised a hunter for harness flakiness and presented it as a fact about its strategy, and
+"concurrency bugs were rare in this codebase" was an artifact of the error rather than an
+observation. They are not rare; they are the densest cluster in the run.
+
+**The declared winner is not defensible and should be read as unranked.** `entry-point-tracer`'s
+`~40` is the largest number in the table, no independent read of it exists, and it was assigned
+by me to prose that was never graded on the shared ladder — none of its 13 subagent prompts
+mention REFUTED or PLAUSIBLE, and its traces self-grade `confidence: high` instead. Two further
+claims failed on checking: its redirect-loop lockout was independently found by
+`invariant-hunter`'s I8 sweep at the same file and line, and the "highest unique-finding count"
+was never tabulated by anyone. What survives is narrower and still worth keeping the strategy
+for: entry-point tracing reached a class of cross-*system* seam defect that nothing else here
+reached.
+
+A correction published earlier in this note was itself wrong and is withdrawn: `invariant-hunter`
+was *not* over-credited with other hunters' candidates. I1-I8 are its own sweeps, each candidate
+carrying an explicit ownership tag, and what looked like misattribution was convergence. Its real
+error is the agent count, which is at least 19 rather than 14.
+
+**Ranks 5 to 10 are partly a resource-race outcome.** All ten hunters drew on one shared 20-slot
+subagent pool while the four largest fan-outs alone wanted about 55. `oracle-hunter` lost its
+entire verification wave, `subsystem-auditor` lost an angle and all but one verifier,
+`spec-gap-hunter` received zero subagent output (which is the real cause of the synthesis failure
+I attributed to it), and `mutation-survivor-hunter` had three spawns rejected outright. Read the
+bottom half as one-directionally understated.
 
 The findings themselves are about a live product. They were produced read-only, with no
 network side effects and no production calls, and none of them have been fixed or filed yet.

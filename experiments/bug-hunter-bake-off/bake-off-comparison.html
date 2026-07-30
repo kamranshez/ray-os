@@ -138,30 +138,34 @@
     <h3>entry-point-tracer</h3>
     <p class="why">Enumerate all 88 entry points, trace each hop by hop, inspect the
     <em>joints between layers</em> rather than the layers.</p>
-    <p>Found both of the run's most severe defects, and neither was reachable by any other
-    strategy. Highest unique-finding count by a wide margin.</p>
+    <p>Reached a class of cross-<em>system</em> seam defect &mdash; code versus Stripe, code versus
+    Vercel's deploy ordering &mdash; that no other strategy here reached at all. But its counts are
+    unaudited and were never graded on the shared ladder, so the <em>rank</em> is not defensible:
+    see corrections.</p>
   </div>
   <div class="card two">
     <div class="rank">Runner-up</div>
     <h3>hostile-input-hunter</h3>
     <p class="why">Construct a hostile input, run it, keep only what reproduces.</p>
-    <p>The only 100% repro rate in the field: 20 of 20. Wins on proof quality, loses on
-    ceiling. You cannot fuzz your way to an architectural mismatch.</p>
+    <p>Every one of its 20 confirmed findings carried an executable repro, the only clean sweep
+    in the field. Wins on proof quality, loses on ceiling: you cannot fuzz your way to an
+    architectural mismatch.</p>
   </div>
   <div class="card lose">
     <div class="rank">▼ Worst</div>
     <h3>mutation-survivor-hunter</h3>
     <p class="why">Mutate the code, run the tests, treat surviving mutants as unpinned behaviour.</p>
     <p>Zero confirmed. The thesis presupposes a test suite this codebase lacks where it matters,
-    so every mutant survives and the signal is uniformly zero.</p>
+    so a surviving mutant carries no information and the signal collapses. Last on fit, not conduct
+    &mdash; and it produced the run's most alarming result, which no scoring axis here can score.</p>
   </div>
 </div>
 
 <h2>Scorecard</h2>
 
 <div class="legend">
-  <p class="lg-intro">Every hunter graded its own findings on the same three-rung ladder. The
-  default verdict was <b>refuted</b>, so a finding had to earn its way up:</p>
+  <p class="lg-intro">Every hunter was <em>given</em> the same three-rung ladder. The default verdict
+  was <b>refuted</b>, so a finding had to earn its way up:</p>
   <div class="rungs">
     <div class="rung">
       <div class="rk" style="color:var(--red)">Refuted &nbsp;· thrown away</div>
@@ -184,6 +188,12 @@
   error) rather than with an argument? That is the <b>proof rate</b> column, and it is the most
   informative number in the table. Two hunters can both report 20 confirmed findings while one
   proved them and the other reasoned about them.</p>
+  <p class="lg-note"><b>Why proof rate and not confirmed count:</b> across these ten rows, confirmed
+  count correlates with files read at r=+0.82 and with subagent count at r=+0.82, while repro count
+  correlates with neither at significance (+0.47 and +0.31). Both figures come from the same
+  self-reports, so that gap is not a reporting artifact. Fanning out more agents buys more
+  <em>claims</em>, not more <em>proofs</em> &mdash; which makes the confirmed column substantially a
+  compute proxy and the proof column the one that resists inflation.</p>
 </div>
 
 <table>
@@ -202,7 +212,7 @@
 </table>
 <p style="color:var(--dimmer);font-size:12px;margin-top:12px">
   <span class="est">※</span> reconstructed from returned subagent output, not self-reported.
-  These three were stopped before their synthesis pass. See the caveat below.
+  These two were stopped before their synthesis pass. See the caveat below.
 </p>
 
 <h2>Convergence index &mdash; the most load-bearing section</h2>
@@ -221,10 +231,18 @@
 
 <h2>What I would actually take from this</h2>
 <div class="note">
-  <p><b>Keep two, as a pair.</b> entry-point-tracer for reach and severity,
-  hostile-input-hunter for proof. They fail in opposite directions: one produces arguments about
-  architecture, the other produces executable demonstrations about inputs. Their overlap was low,
-  so running both gets you the severe findings <em>and</em> the incontestable ones.</p>
+  <p><b>Keep three, chosen for coverage rather than rank.</b> entry-point-tracer for cross-system
+  seams, which nothing else here reached; hostile-input-hunter for executable proof, the one axis
+  compute cannot inflate; concurrency-hunter for defects needing two things to happen at once, a
+  class no amount of careful reading finds. They fail in genuinely different directions and their
+  overlap was low, so running all three gets the severe findings, the incontestable ones,
+  <em>and</em> the ones that only appear under load.</p>
+  <p><b>Correction to the original pairing argument.</b> This page used to justify the pair by saying
+  their coverage barely overlapped. That is false: 7 of hostile-input-hunter's 20 findings have
+  entry-point-tracer counterparts (#1, #2, #3, #5, #7, #8, #14 against T10-F2, T07-BUG-5, T07-BUG-2/6,
+  T03-BUG-4, T03-BUG-5, T04-#4). The pair is still right, but for a different reason: they differ in
+  <em>evidence class</em>, one producing arguments and the other executable demonstrations, not in
+  which code they visit. <a href="why-the-winners-won.html">Why the winners won</a> takes this apart.</p>
   <p><b>The inverted ladder worked.</b> Verifiers refuted a large share of what finders proposed,
   including several that read as compelling: a "dead" validator that was live, a Stripe version
   mismatch that was a typing artifact, a credit bug whose exposure proved bounded and
@@ -235,20 +253,55 @@
 </div>
 
 <div class="note warn" style="margin-top:16px">
-  <p><b>Caveat on the ranking.</b> Three hunters (marked ※) never got their synthesis pass: the run
-  was paused, and oracle-hunter then died on a session limit. They are scored on what their
-  subagents demonstrably returned, which denies them the step where a hunter deduplicates,
-  re-verifies, and drops its own weak items. That is exactly where spec-gap-hunter initially failed,
-  so it is not a trivial omission.</p>
-  <p>entry-point-tracer wins comfortably enough that finishing would likely not change the top spot.
-  But the middle of the table (invariant-hunter, oracle-hunter, subsystem-auditor) is close enough
-  that a clean rerun could reorder it.</p>
+  <p><b>Caveat on the ranking.</b> Two hunters (marked ※) never got their synthesis pass, because the
+  run was paused. They are scored on what their subagents demonstrably returned, which denies them
+  the step where a hunter deduplicates, re-verifies, and drops its own weak items. That is exactly
+  where spec-gap-hunter initially failed, so it is not a trivial omission.</p>
+  <p>The middle of the table is close enough that a clean rerun could reorder it. The top is now
+  softer than it first looked: see the corrections below.</p>
+</div>
+
+<div class="note warn" style="margin-top:16px">
+  <p><b>Corrections, 2026-07-30.</b> Every row was re-checked against the scorecard block each hunter
+  wrote at the top of its own report. Three rows were wrong when this page was first published.</p>
+  <p><b>concurrency-hunter was published as 3 confirmed and is actually 12</b>, moving it from 7th to
+  3rd. Its own coverage ledger explains why: a transport failure swallowed all six of its lens
+  agents' completion notifications, so it wrote a partial report from its own direct reading, then
+  recovered the agents and published a merged version. The scorecard was taken from the partial one.
+  The <code>17</code> in the old files-read column was the count it had read <em>by itself</em>, never
+  its coverage. The direction of that error is the uncomfortable part: the run penalised a hunter for
+  harness flakiness and called it a property of its strategy.</p>
+  <p>mutation-survivor-hunter was 0/1/6/15/3 and is actually 0/3/7/20/4, which does not move it off
+  last place. git-signal-hunter's proof count was 5, not 6.</p>
+  <p><b>The top spot is not defensible and should be read as unranked.</b> entry-point-tracer's
+  <code>~40</code> is the largest figure on this page, no independent read of it exists (an attempt to
+  re-extract it from the raw traces failed), and it was assigned by a third party to prose that was
+  never graded on the ladder at all: none of its 13 subagent prompts contain the words REFUTED or
+  PLAUSIBLE, and <code>PLAUSIBLE</code> appears nowhere in its transcripts, which instead self-grade
+  <code>confidence: high</code>. Its number is therefore not commensurable with the nine rows beneath
+  it. Two further claims failed on checking: its redirect-loop lockout was <em>independently found</em>
+  by invariant-hunter's I8 sweep at the same file and line, and the "highest unique-finding count"
+  was never tabulated by anyone. What survives is narrower and still worth keeping the strategy for:
+  entry-point tracing reached a class of cross-<em>system</em> seam defect (Stripe binding by
+  unverified email, Refund-Only revoking via its own webhook, migrations committing before failable
+  build steps) that no other strategy here reached at all.</p>
+  <p><b>An earlier correction on this page was itself wrong and is withdrawn.</b> It claimed
+  invariant-hunter had been over-credited with other hunters' candidates. It had not: I1-I8 are its
+  own first eight sweeps, each candidate carrying an explicit ownership tag, and what looked like
+  misattribution was six hunters converging on the same defects. Its real error is the agent count,
+  which is at least 19 (8 sweeps + 6 sweeps + 5 verifiers), not 14.</p>
+  <p><b>Ranks 5 to 10 are a race outcome, not a strategy property.</b> All ten hunters drew on one
+  shared 20-slot subagent pool and the four largest fan-outs alone demanded about 55. oracle-hunter
+  lost its entire verification wave ("That phase did not run"), subsystem-auditor lost Angle D and all
+  but one verifier, spec-gap-hunter received zero subagent output, and mutation-survivor-hunter had 3
+  spawns rejected outright. The bottom half of this table is partly a record of who lost a resource
+  race, and should be read as one-directionally understated.</p>
 </div>
 
 <footer>
-  Full write-up: <code>bug-hunt/BAKE-OFF.md</code> &nbsp;·&nbsp;
-  Individual reports: <code>bug-hunt/reports/*.md</code> &nbsp;·&nbsp;
-  Rules of engagement: <code>bug-hunt/00-shared-brief.md</code>
+  Full write-up: <code>results/meta-analysis.md</code> &nbsp;·&nbsp;
+  Individual reports: <code>results/reports/*.md</code> &nbsp;·&nbsp;
+  Rules of engagement: <code>method/shared-brief.md</code>
 </footer>
 
 </div>
@@ -262,23 +315,23 @@ const D=[
 
  {n:"hostile-input-hunter",c:20,p:4,r:20,f:108,a:7,est:0,rank:2,
   th:"Construct the input, run it, keep what reproduces",
-  lead:"On raw numbers this looks like the winner, and its 100% repro rate is not a scoring artifact: its method is to build an input and execute it, so a finding either reproduces or does not survive.",
+  lead:"On raw numbers this looks like the winner, and its clean sweep of repros across all 20 confirmed findings is not a scoring artifact: its method is to build an input and execute it, so a finding either reproduces or does not survive.",
   pros:"Unmatched proof quality, every finding executable. Broad file coverage at 108 files. Findings are unambiguous and fast to triage, with no judgment call about whether they are real.",
   cons:"Hard ceiling on severity. It finds malformed-input bugs, not design-seam bugs, and the defects that cost most here are architectural mismatches between layers. Blind to anything needing multi-step state or cross-service reasoning. Volume can crowd out the few items that matter."},
 
- {n:"git-signal-hunter",c:11,p:3,r:6,f:68,a:11,est:0,rank:3,
+ {n:"git-signal-hunter",c:11,p:3,r:5,f:68,a:11,est:0,rank:5,
   th:"Mine history: churn, reverts, fix commits, comment drift",
   lead:"Finds where the codebase has repeatedly hurt. Its distinctive move was reading commit messages as intent evidence, which let it separate deliberate tradeoffs from oversights better than any other entrant.",
   pros:"Strong yield with 11 subagents. Uniquely able to distinguish 'this is a known accepted tradeoff' from 'nobody noticed', which is exactly the judgment that stops a report from being noise.",
   cons:"This repo is a squashed vendoring commit across large stretches, which blinded it precisely where it most wanted to look. It reports that honestly rather than papering over it."},
 
- {n:"invariant-hunter",c:25,p:15,r:8,f:140,a:14,est:1,rank:4,
+ {n:"invariant-hunter",c:25,p:15,r:8,f:140,a:19,est:1,rank:4,
   th:"Name a codebase-wide property, sweep all 210 files for violations",
   lead:"Picks a property that should hold everywhere (every outbound fetch has a timeout; every secret comparison is constant-time) and checks all of it. Found that seven of eight LLM adapters call fetch with no timeout signal at all.",
   pros:"Best completeness per invariant, and the best refuted-to-confirmed ratio in the run. Its I9 secret-comparison sweep came back nearly clean and said so, which is a genuinely useful result rather than a failure.",
   cons:"Only ever finds what its invariant list anticipates. Choosing the invariants is the strategy, so a defect nobody thought to phrase as a property stays invisible."},
 
- {n:"subsystem-auditor",c:7,p:8,r:1,f:58,a:6,est:0,rank:5,
+ {n:"subsystem-auditor",c:7,p:8,r:1,f:58,a:6,est:0,rank:7,
   th:"Divide into subsystems, audit each in depth",
   lead:"Reasonable yield across 58 files, but the only entrant whose PLAUSIBLE count exceeds its CONFIRMED count, which is the signature of a strategy that reasons rather than proves.",
   pros:"Good breadth-to-depth balance. Produces coherent per-subsystem narratives that are easy to hand to whoever owns that area.",
@@ -290,11 +343,11 @@ const D=[
   pros:"Nearly everything it confirms is backed by observed tool output. Its refutations are argued from primary sources: it read the installed SDK's type declarations and the plugin's own resolution order rather than trusting assumptions.",
   cons:"Strictly bounded by what the tools can see, and this codebase typechecks clean, so its ceiling was low from the start. Its best findings came from chasing a signal sideways into adjacent code, not from the signal itself."},
 
- {n:"concurrency-hunter",c:3,p:2,r:3,f:17,a:6,est:0,rank:7,
+ {n:"concurrency-hunter",c:12,p:3,r:4,f:150,a:6,est:0,rank:3,
   th:"Hunt races, TOCTOU, ordering bugs",
-  lead:"Low volume, but the best verification discipline in the field. Its verifiers confirmed, downgraded, and refuted with equal willingness, and corrected their own parent's framing more than once.",
-  pros:"Highest signal-to-noise per finding. One verifier proved a candidate's exploit was not serially repeatable (the deduction writes the balance back to cache) and identified concurrency as the real amplifier instead.",
-  cons:"Only 17 files examined directly. A narrow thesis that this codebase rewarded only in the billing path."},
+  lead:"Originally misscored at 3 confirmed because a transport failure ate its subagents' results and the scorecard was taken from the partial report it wrote before recovering them. Actually 12 confirmed, and the tightest thematic cluster in the run: every finding sits on a money-state transition rather than on data corruption.",
+  pros:"The best verification discipline in the field, confirming, downgrading and refuting with equal willingness and correcting its own parent's framing more than once. It is also the only strategy that reached defects requiring two things to happen at once, which is a class that careful file-reading cannot find at any depth.",
+  cons:"Only 4 of 12 findings carry an executable repro, and that is inherent rather than lazy: a true race across 17 Fly machines and many Vercel lambdas cannot be driven in-process, so its strongest findings are argued rather than demonstrated."},
 
  {n:"divergence-hunter",c:2,p:1,r:1,f:34,a:5,est:0,rank:8,
   th:"Find two implementations of one operation that disagree",
@@ -308,11 +361,11 @@ const D=[
   pros:"Held its verification bar even under pressure to inflate, keeping 2 CONFIRMED after re-synthesis rather than promoting weak items. Comment-versus-code drift is a real and cheap-to-fix defect class.",
   cons:"The only entrant with a synthesis failure, as distinct from a hunting failure: the findings were there and did not make it into the report unaided. Low ceiling when docs are sparse."},
 
- {n:"mutation-survivor-hunter",c:0,p:1,r:6,f:15,a:3,est:0,rank:10,
+ {n:"mutation-survivor-hunter",c:0,p:3,r:7,f:20,a:4,est:0,rank:10,
   th:"Mutate, run tests, treat survivors as unpinned behaviour",
-  lead:"The thesis is respectable and the execution was clean: it built its own git worktree, symlinked node_modules, and reverted every mutation. It fails because the thesis presupposes a test suite, and this codebase does not have one where it matters.",
-  pros:"When it does fire, the evidence is the strongest possible: an executable demonstration that a behaviour is unpinned. Rigorous and self-aware. Its scorecard reads 'came up dry: yes (on test gaps) / no (on live bugs)', correctly refusing to claim its 6 repros as wins for the strategy.",
-  cons:"Needs mature test coverage to produce any signal; on thinly-tested code every mutant survives and the signal is uniformly zero. Slowest per file. Narrowest coverage at 15 of 210. Only entrant needing write access and isolation."}
+  lead:"The thesis is respectable and the execution was clean: it built its own git worktree, symlinked node_modules, and reverted every mutation. It fails because the thesis presupposes a test suite, and this codebase does not have one where it matters. Last on fit, not on conduct.",
+  pros:"It produced the single most alarming result in the run, just not in the category being scored. All 7 of its surviving mutants are money-charging or authorization enforcement points in middleware/ that the suite executes but never asserts on: it deleted the only line that charges anyone, turned the paywall into 'balance < 0', removed the revoked-license rejection, and moved Deepgram's rate 80%, and the suite stayed green every time. The arithmetic is defended; the gates that call it are not.",
+  cons:"Needs mature test coverage to produce any signal; where there are no tests a surviving mutant carries no information. Of its 10 executed mutations 7 survived and 3 were killed, and all 3 kills came from hyperwhisper-cloud, which does have a suite &mdash; so the collapse is specific to nextjs/, not universal. Slowest per file. Narrowest coverage at 20 of 210. Only entrant needing write access and isolation, and the most compute-starved: 4 agents where its deep tier wants 10-12, with 3 spawns rejected outright."}
 ];
 
 const C=[
@@ -340,18 +393,29 @@ const C=[
 ];
 
 const mx={c:40,f:210,a:15};
+// Render in rank order regardless of how the array happens to be written, so a rank
+// correction can never silently disagree with the row order on the page.
+D.sort((a,b)=>a.rank-b.rank);
 const col=d=>d.rank===1?'var(--gold)':d.rank===2?'var(--silver)':d.rank===10?'var(--rust)':'var(--blue)';
 const med=d=>d.rank===1?'★':d.rank===10?'▼':'';
 
 document.getElementById('tb').innerHTML=D.map(d=>{
-  const rr=d.c+d.p?Math.round(d.r/(d.c+d.p)*100):0;
+  const tot=d.c+d.p;
+  // A proof rate only means something when the executable artifacts back findings this hunter
+  // actually reported. mutation-survivor-hunter's 7 are surviving mutants, not repros of its
+  // own findings, so r exceeds its finding count and the ratio is undefined rather than 233%.
+  const undef=!tot||d.r>tot;
+  const rr=undef?0:Math.round(d.r/tot*100);
+  const cell=undef
+    ? `<span class="pct" style="color:var(--dimmer)" title="Not a ratio: its ${d.r} executable artifacts are surviving mutants, not repros of the ${tot} findings it reported">n/a</span>`
+    : `<div class="barwrap"><span class="bar" style="width:${rr*1.3}px;background:${rr>=90?'var(--green)':rr>=40?'var(--blue)':'var(--dimmer)'}"></span><span class="pct">${rr}%</span></div>`;
   return `<tr>
     <td class="n"><span class="medal" style="color:${col(d)}">${med(d)}</span></td>
     <td class="skill">${d.n}${d.est?'<span class="est" title="Reconstructed from subagent output; no synthesis pass">※</span>':''}</td>
     <td class="n" style="color:${col(d)};font-weight:600">${d.est?'~':''}${d.c}</td>
     <td class="n" style="color:var(--dim)">${d.est?'~':''}${d.p}</td>
     <td class="n" style="color:var(--dim)">${d.est?'~':''}${d.r}</td>
-    <td title="${d.r} of ${d.c+d.p} findings were backed by something executable"><div class="barwrap"><span class="bar" style="width:${rr*1.3}px;background:${rr>=90?'var(--green)':rr>=40?'var(--blue)':'var(--dimmer)'}"></span><span class="pct">${rr}%</span></div></td>
+    <td title="${undef?'':d.r+' of '+tot+' findings (confirmed + plausible) were backed by something executable'}">${cell}</td>
     <td><div class="barwrap"><span class="bar" style="width:${d.f/mx.f*130}px;background:var(--purple)"></span><span class="pct">${d.est?'~':''}${d.f}</span></div></td>
     <td class="n" style="color:var(--dim)">${d.a}</td>
   </tr>`}).join('');
