@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """Classify a ray-os working tree ahead of a commit sweep.
 
-Sorts everything git reports into junk / hold / ready, and runs the repo-specific
-checks that are easy to forget by hand: orphan images, images outside the flat
-vault-root images/ folder, root-level strays, deletions of tracked files, and the
-LFS payload a push would carry.
+Sorts everything git reports into junk / renames / hold / ready, and runs the
+repo-specific checks that are easy to forget by hand: orphan images, images
+outside the flat vault-root images/ folder, root-level strays, deletions of
+tracked files, and the LFS payload a push would carry.
+
+Renames are found by content, not by name: every deleted path is hashed from the
+index and every untracked file from disk, so a file that moved is reported as one
+rename instead of a deletion plus an unrelated addition. Files whose basename
+survived but whose content changed are reported separately as move-plus-edit
+candidates, since only a human can confirm those.
 
 Read-only. Never stages, commits, or deletes anything.
 """
@@ -59,6 +65,79 @@ def entries(root):
     return items
 
 
+def blob_shas_index(root, paths):
+    """path -> blob sha recorded in the index; works for files gone from disk."""
+    want = set(paths)
+    if not want:
+        return {}
+    found = {}
+    for rec in sh("git", "-C", root, "ls-files", "-s", "-z").split("\0"):
+        if "\t" not in rec:
+            continue
+        meta, path = rec.split("\t", 1)
+        bits = meta.split()
+        if len(bits) >= 2 and path in want:
+            found[path] = bits[1]
+    return found
+
+
+def blob_shas_disk(root, paths):
+    """path -> blob sha computed from the file as it sits on disk."""
+    if not paths:
+        return {}
+    r = subprocess.run(
+        ["git", "-C", root, "hash-object", "--stdin-paths"],
+        input="\n".join(paths) + "\n",
+        capture_output=True,
+        text=True,
+    )
+    shas = [s for s in r.stdout.splitlines() if s]
+    if len(shas) != len(paths):
+        return {}  # a path vanished mid-run; fall back to reporting no renames
+    return dict(zip(paths, shas))
+
+
+def detect_renames(root, deleted, untracked):
+    """Pair deletions with untracked files that hold the same content.
+
+    Returns (renames, moved_edited): exact content matches, and same-basename
+    pairs whose content differs. Both are pairs of (old_path, new_path).
+    """
+    old = blob_shas_index(root, deleted)
+    new = blob_shas_disk(root, untracked)
+
+    by_sha = defaultdict(list)
+    for path, sha in new.items():
+        by_sha[sha].append(path)
+
+    renames, claimed = [], set()
+    for o in deleted:
+        sha = old.get(o)
+        if not sha:
+            continue
+        free = [p for p in sorted(by_sha.get(sha, [])) if p not in claimed]
+        if free:
+            claimed.add(free[0])
+            renames.append((o, free[0]))
+
+    matched_old = {o for o, _ in renames}
+    by_base = defaultdict(list)
+    for path in new:
+        if path not in claimed:
+            by_base[os.path.basename(path)].append(path)
+
+    moved_edited = []
+    for o in deleted:
+        if o in matched_old:
+            continue
+        free = [p for p in sorted(by_base.get(os.path.basename(o), [])) if p not in claimed]
+        if free:
+            claimed.add(free[0])
+            moved_edited.append((o, free[0]))
+
+    return renames, moved_edited
+
+
 def linked_names(root):
     """Every wikilink target referenced by any note in the vault."""
     names = set()
@@ -106,7 +185,18 @@ def main():
     deleted_paths = []
     linked = None
 
+    # Pair moves before classifying, so a relocated file is one rename rather
+    # than a deletion plus an unrelated addition.
+    renames, moved_edited = detect_renames(
+        root,
+        [p for x, y, p in items if "D" in (x, y) and not JUNK.search(p)],
+        [p for x, y, p in items if (x, y) == ("?", "?") and not JUNK.search(p)],
+    )
+    paired = {p for pair in renames + moved_edited for p in pair}
+
     for x, y, path in items:
+        if path in paired:
+            continue
         status = f"{x}{y}".strip() or "??"
         untracked = (x, y) == ("?", "?")
         deleted = "D" in (x, y)
@@ -155,6 +245,17 @@ def main():
     print(f"commit-sweep triage — {len(items)} entries in {root}")
 
     section("NEVER COMMIT — junk", junk)
+
+    if renames or moved_edited:
+        print("\nRENAMES — stage both paths so git records a move")
+        print("-" * 22)
+        for o, n in renames:
+            print(f"  {o}\n    -> {n}")
+        for o, n in moved_edited:
+            print(f"  {o}\n    -> {n}   (same name, content CHANGED — confirm it is the same file)")
+        print("  Stage the old and new path together in one commit. Staged apart,")
+        print("  git records a delete plus an add and the connection is lost.")
+
     section("HOLD — needs a human decision", hold)
 
     print("\nREADY — grouped by area")
@@ -175,9 +276,9 @@ def main():
         print("-" * 22)
         print("  Included in READY above: commit these, grouped by area, like any")
         print("  other change. The content stays recoverable from history.")
-        print("  Before committing, check each one is a real removal and not half of")
-        print("  a rename — if the content reappeared elsewhere, stage both paths so")
-        print("  git records a rename instead of a delete plus an add.")
+        print("  Moves are already filtered out into RENAMES above, so these are")
+        print("  real removals. Bulk pruning is routine in this vault: name the")
+        print("  directories that went in a sentence, and skip the incident report.")
         if n >= 25:
             print(f"  {n} at once is a lot. Say so plainly in the report, and name the")
             print("  directories that vanished, so Ray can spot collateral damage.")

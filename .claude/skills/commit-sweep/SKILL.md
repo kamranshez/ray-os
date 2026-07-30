@@ -1,6 +1,6 @@
 ---
 name: commit-sweep
-description: Turn an accumulated, messy ray-os working tree into a set of clean separately-revertable commits and push them, while holding back the files a human should decide on. Use this whenever the user wants to commit or push work that has piled up — "commit all this", "push everything that's waiting", "split up the commits", "clean up my git status", "let's get this committed", "sync the vault" — and any time you finish a chunk of work in ray-os and the user asks you to save or ship it. Also use it when git status has grown long and mixed and you need to figure out what is safe to commit. Prefer this over a bare `git add -A && git commit` in this repo, because ray-os has LFS media, vault-convention checks, and usually a mix of your work and Ray's sitting side by side.
+description: Turn an accumulated, messy ray-os working tree into a set of clean separately-revertable commits and push them — additions, renames and removals alike — while holding back the files a human should decide on. Use this whenever the user wants to commit or push work that has piled up — "commit all this", "push everything that's waiting", "split up the commits", "clean up my git status", "let's get this committed", "sync the vault" — and any time you finish a chunk of work in ray-os and the user asks you to save or ship it. Also use it when git status has grown long and mixed and you need to figure out what is safe to commit. Prefer this over a bare `git add -A && git commit` in this repo, because ray-os has LFS media, vault-convention checks, and usually a mix of your work and Ray's sitting side by side.
 ---
 
 ## Why this exists
@@ -19,7 +19,9 @@ Run the bundled script from the repo root. It classifies everything in the worki
 .claude/skills/commit-sweep/scripts/triage.py
 ```
 
-It reports four groups: **junk** (never commit), **hold** (needs a human decision), **ready** (grouped by area), and the **LFS payload** you would be pushing. Read its output before deciding anything — it exists so you don't re-derive the same checks by hand every time.
+It reports **junk** (never commit), **renames** (moves it paired up by content), **hold** (needs a human decision), **ready** (grouped by area), a **deletions** count, and the **LFS payload** you would be pushing. Read its output before deciding anything — it exists so you don't re-derive the same checks by hand every time.
+
+Trust its rename pairing over your own reading of `git status`. It hashes every deleted path from the index and every untracked file from disk, so it catches a file that moved *and* was renamed, which eyeballing basenames does not.
 
 ### 2. Separate your work from what was already there
 
@@ -56,16 +58,17 @@ Don't over-split. Three files that only make sense together are one commit, not 
 
 Message style follows the existing log — `area: what changed`, or `area(scope): what changed`. Run `git log --oneline -15` to match the prevailing shape. Append the trailers the Bash tool documents (`Co-Authored-By`, `Claude-Session`). Ray does not use em or en dashes in his writing; commit messages are his repo, so avoid them there too.
 
-### 5. Commit deletions like any other change
+### 5. Sweep all three kinds of change
 
-A deletion is part of the sweep, not an exception to it. If a tracked file is gone from disk, Ray removed it, and leaving the removal uncommitted just parks it in limbo: absent from the vault, still recorded in HEAD, and guaranteed to show up again in the next sweep. Commit it.
+A working tree holds additions, renames and removals, and the sweep commits all three. None of them is an exception.
 
-This does not conflict with CLAUDE.md's "never delete files without explicit user permission." That rule governs *you* deleting things. Recording a removal Ray already made is the opposite: the deletion happened before you arrived, and committing it is bookkeeping. The content also stays in history — `git show <sha>:<path>` recovers any of it — so this is reversible in a way an actual deletion is not.
+**Additions and modifications** are the easy case: group them by area per step 4 and commit.
 
-Two things to get right:
+**Renames** must be staged as renames. Take the pairs from the triage RENAMES section and stage the old and the new path *in the same commit* — `git add -- <old> <new>` — then confirm with `git diff --cached --find-renames --stat`, which should show `{old => new}` and zero content change. Staged apart, git records a delete plus an unrelated add, and the file's history stops at the old path. A pair flagged `content CHANGED` needs your eyes: same basename is suggestive, not proof, so compare them before deciding it is one file rather than two.
 
-- **Check for renames first.** A deletion whose content reappears at another path is half of a move, not a removal. Compare `git show HEAD:<old>` against the new file; if they match, stage both paths so git records a rename. Committing the two halves separately loses the connection.
-- **Group deletions by area**, own commits, same as anything else — so one can be reverted without the others.
+**Removals** get committed too. If a tracked file is gone from disk, Ray removed it, and leaving the removal uncommitted parks it in limbo: absent from the vault, still recorded in HEAD, and guaranteed to resurface in the next sweep. Group them by area, own commits, so one area can be reverted without the others.
+
+That does not conflict with CLAUDE.md's "never delete files without explicit user permission." That rule governs *you* deleting things. Recording a removal Ray already made is the opposite: it happened before you arrived, and committing it is bookkeeping. The content also stays in history — `git show <sha>:<path>` recovers any of it — so this is reversible in a way an actual deletion is not.
 
 Then say plainly in the report what was removed. A large batch deserves a sentence naming the directories that vanished, so Ray can spot a script that overreached.
 
@@ -124,5 +127,7 @@ These are the ones that have actually caught something:
 ## Reporting back
 
 Close with a table of the commits you made (one row each: message and what's in it), then the held items, then the push verification. Lead with the seam you chose and why if it wasn't obvious — the grouping is the actual judgment in this task, and it's the part worth a sentence of explanation.
+
+Say how many additions, renames and removals went in. Renames especially: "4 of those 220 deletions were a move" is the kind of thing Ray wants to know, because it means the count he saw in `git status` was overstating what actually went away.
 
 If you told Ray something earlier in the session that the triage proved wrong (a file you thought was modified and wasn't), correct it in one line. Don't dwell on it.
