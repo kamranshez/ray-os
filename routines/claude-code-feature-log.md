@@ -494,3 +494,9 @@ Official Anthropic changelog/release checking was blocked because neither requir
 ### ⚙️ Environment changes
 
 - No added or removed functional `CLAUDE_CODE_*` / `CLAUDE_*` controls. Direct runtime reads and the typed schema are unchanged; raw-only `CLAUDE_CODE_DISPATCH_V2S` remains an internal injected-object property rather than a `process.env` control, and `CLAUDE_WORKFLOW_NAME_ONLY0` is a one-character Bun/minifier concatenation artifact while canonical `CLAUDE_WORKFLOW_NAME_ONLY` remains present.
+
+## 2026-07-30 09:19 — v2.1.220
+
+Classifier health passed before diffing: 359 gate/config call sites, 1,349 telemetry names, 1,759 total `tengu_*` strings, and zero binary-class transitions across all 437 flags shared with the prior rolling snapshot. A fresh live `cachedGrowthBookFeatures` read contains the same 437 flags, and the prior input was preserved immutably as `snapshot-2.1.220-Claude-Code-7a4d8bf3e93a2147.json` (SHA-256 `7a4d8bf3e93a2147d7796342e04b9d6d8402246e93bdb6f19faafe688686ee66`) before the rolling snapshot was replaced.
+
+No verified local changes: zero GrowthBook switches, new flags, DCE switches, functional environment additions, or functional environment removals. The required Exa MCP search/fetch tools are not registered, so the official Anthropic changelog/release check is blocked; no fallback source was used and `announcements-latest.json` remains absent and was not advanced. Slack was intentionally not sent.
