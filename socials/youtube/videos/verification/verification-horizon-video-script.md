@@ -1,15 +1,38 @@
 # The Verification Horizon — video script
 
-**Format:** mental-model video. One idea argued hard, not a tutorial.
+**Format:** mental-model video with a demo spine. One idea argued hard and shown once per layer. Still not a tutorial.
 **Thesis:** *Verifiers decay.* Your definition of "working" has a shelf life.
-**Runtime target:** 15–17 min.
-**Script mode:** hybrid. Cold open and outro are **verbatim**. The five layer sections are **beat sheets** with mandated lines marked `★`.
+**Runtime target:** 20–22 min with the demo thread. Drop `DEMO 4` and shorten `DEMO 2` to hold 17.
+**Script mode:** hybrid. Cold open and outro are **verbatim**. The five layer sections are **beat sheets** with mandated lines marked `★`. Every demo block is a **placeholder**: prompt and required outcome are fixed, the talking is improvised, `TK` marks anything filled at record time.
 **Running example:** one feature — *"let users invite teammates to their workspace"* — plus a coverage board that stays on screen the whole video.
+**Second running example:** one Claude Code session on that feature, cut into seven clips. See the demo spine below.
 
 **Sources**
 - OpenAI, *OpenAI and Hugging Face partner to address security incident during model evaluation*, 21 July 2026 (updated 28 July 2026).
 - Andon Labs / Fable 5 alignment regression note (Vending-Bench Arena).
 - Qwen Team, *The Verification Horizon: No Silver Bullet for Coding Agent Rewards*, arXiv:2606.26300.
+
+---
+
+## DEMO SPINE — one session, seven cuts
+
+One Claude Code session on a real repo building the invite feature, recorded in order and cut into seven clips. The session is the second running example: by `DEMO 5` the audience is watching the trajectory of the same session they watched begin in Act 1.
+
+| # | Where | Runs | What the audience sees |
+|---|---|---|---|
+| 0 | end of Act 1 | ~60s | The up-front ask. Before any code: *what can you verify, and how long can you run without me?* |
+| 1 | Layer 1 | ~45s | It builds and runs the cheap pipeline. Rows 1–8 and 12 go green for real. |
+| 2 | Layer 1 sidebar | ~40s | One invariant, fuzzed. It finds something nobody wrote down. |
+| 3 | Layer 2 | ~50s | Playwright double-click. Backend green, product broken. |
+| 4 | Layer 3 | ~45s | Rubric scoring, and a high score on something visibly bad. |
+| 5 | Layer 4 | ~70s | The trajectory of this session. The flag. The payoff of the thread. |
+| — | Layer 5 | none | **No demo, deliberately.** You cannot rehearse production. Say so on camera. |
+| 6 | outro | ~40s | The conversion rule, executed once, live. |
+
+**Rules for the thread**
+- Same repo, same branch, same session, always in order. `DEMO 5` only works if the trajectory is genuinely the one from `DEMO 1` through `DEMO 4`, so a re-shoot of any earlier clip invalidates it.
+- Keep every clip under 70 seconds. If one runs long, cut the agent's thinking, never the outcome.
+- Nothing in the thread should look expensive. The argument is that this is a few prompts and a few minutes, not a weekend, which is what keeps it consistent with the outro.
 
 ---
 
@@ -150,6 +173,40 @@ So for the rest of this video I want to do two things. Show you the five layers 
 - ★ **"Nobody wrote a single one of these down. And every one of them is a way the feature can be technically delivered and actually broken."**
 - Call the paper here, briefly: this is what Qwen means when they say intent is *underspecified by nature*. The person holding the intent often can't articulate it until a counterexample shows up. You don't know rule 13 exists until someone emails you about it.
 - ★ **"So this board is the target. And a verifier is anything that can tell you a row is green. That's it. That's what the rest of the video is."**
+
+> **[DEMO 0 — screen recording, ~60s. Repo open, board stays docked right.]**
+
+**The beat: ask before you build.** Almost nobody does this and it costs nothing.
+
+**Prompt, fixed. Read it out as you type it:**
+
+```
+Before you write any code for this feature: what verification can you
+actually set up for "let users invite teammates to their workspace"?
+
+Three lists:
+1. checks you can write AND run yourself, right now
+2. checks you can write but can't run without me
+3. what you won't be able to check at all
+
+Then: once list 1 exists, how long could you work on this unattended?
+```
+
+**What should come back. Steer it if it doesn't, TK exact wording on the day:**
+- list 1: build, types, unit, integration, a permissions test. The cheap pipeline.
+- list 2: browser-level behaviour, email delivery, anything needing a real account.
+- list 3: whether the copy is any good, whether the button is findable, what real users will actually do.
+
+**On the board:** rows the agent claims in list 1 get a **hollow outline**, not a fill. Claimed, not proven. The five layers spend the rest of the video filling them in.
+
+- ★ **"That is the cheapest sixty seconds in this entire video. I asked it what it could prove before I asked it to build anything, and it told me exactly where my board goes dark."**
+- List 3 is the interesting one: that's the agent volunteering its own blind spots, accurately, for free. It knows. You just have to ask before it's invested in a diff.
+- And the part nobody says out loud, which is the real reason to do this:
+- ★ **"Whatever it can check by itself is exactly how far it can run without you. Your verifier is not a safety net. It's the length of the leash."**
+- Keep it cheap on camera. This is one prompt, not a plan.
+
+**TK improv:** react to what it actually proposes. If it over-promises on list 1, say so out loud — that's better footage than a clean answer.
+
 - Set the rule for the middle: five layers, and for each one, two questions only. **What does it catch? How does it go blind?**
 
 > **[ON SCREEN: board stays docked, right-hand side, all 15 rows grey. It never leaves.]**
@@ -195,6 +252,19 @@ it("cannot accept the same invitation twice", async () => {
 
 **Light up: 1, 2, 3, 4, 5, 6, 7, 8, 12.**
 
+> **[DEMO 1 — screen recording, ~45s]**
+
+**Same session as `DEMO 0`, no new context.** One line: `go ahead and build list 1, then run it.`
+
+**What must land:**
+- it scaffolds the five gates and runs them without being told how
+- green across the board, fast, and genuinely satisfying to watch
+- the hollow rows from `DEMO 0` fill in solid: 1 through 8, and 12
+
+**TK improv:** whatever it names the test files. Point at the permissions test specifically — that's row 1, the one everyone forgets.
+
+- ★ **"Two prompts. Nine rows are now permanently guarded. This is the cheapest layer you will ever own and most of you don't have it."**
+
 **How it goes blind** — ★ **"A test suite is a list of the things you thought of. It has no opinion whatsoever about the things you didn't."**
 - Row 9 is already half-dark: you can test that the API is idempotent, but you cannot test that a human double-clicks.
 - Rows 10 through 15 are completely invisible to this layer and always will be.
@@ -209,6 +279,16 @@ it("cannot accept the same invitation twice", async () => {
 **Sidebar: fuzzing (~30s).** The honest partial patch. Fuzzing is how you attack "the things you didn't think of" without having to think of them — throw generated tokens, malformed emails, random valid-and-invalid action sequences at it, and assert an *invariant* instead of an output:
 > `"A user never gets membership in a workspace without a valid, unexpired, unrevoked invitation."`
 That's a sentence that covers rows you never wrote. It's the only thing on this layer that finds unknown unknowns, and almost nobody runs it.
+
+> **[DEMO 2 — screen recording, ~40s]**
+
+**Prompt:** `write me one property test for this invariant, then fuzz it: a user never gets membership in a workspace without a valid, unexpired, unrevoked invitation.`
+
+**What must land:** it generates the sequences and it finds something. **TK the actual failure** — seed the repo beforehand so one exists. Likeliest candidates: an invite accepted for a workspace deleted mid-flow, or an invite accepted after the role it granted was changed.
+
+**Board discipline:** the finding goes on as `4a`, indented under row 4. **Not** as row 16. The board *growing* is Layer 5's move and we don't spend it here. This is a deliberate foreshadow, not the payoff.
+
+- ★ **"I didn't think of that one. Nobody typed that requirement anywhere. The invariant found it because an invariant is a sentence about the rows you haven't written yet."**
 
 ![[verification-horizon-invariant-1.png]]
 ![[verification-horizon-invariant-2.png]]
@@ -233,6 +313,19 @@ expect(await emailsSentTo("alice@example.com")).toBe(1);
 **What it catches** — rows 9, 10, 11, and it re-checks 1 through 7 through the actual interface a human touches. This is where you find out that the API is perfect and the button is behind a modal. Backend green, product broken.
 
 **Light up: 9, 10, 11.**
+
+> **[DEMO 3 — screen recording, ~50s. This is where the demo turns on you, so don't over-rehearse it.]**
+
+**Prompt:** `now drive the real UI. Send an invite the way a person would, and double-click the button.`
+
+**What must land, in this order:**
+- layer 1 is still fully green. Say that out loud *before* showing the result.
+- the double-click produces two invites, or two emails. **TK** which one — seed the repo so this genuinely breaks.
+- the fix is one line and it finds it in seconds. The point is not that it's hard. The point is that nothing below this layer could see it at all.
+
+- ★ **"Every test I had was green. The feature was broken. Both of those sentences are true and that is the entire reason this layer exists."**
+
+**TK improv:** the reaction shot when it comes back with two rows in the invites table. Don't script it.
 
 **How it goes blind** — ★ **"This layer proves the thing happened. It has no idea whether the thing was any good."**
 - The button worked. Was the error message comprehensible? Playwright cannot tell you.
@@ -263,6 +356,19 @@ expect(await emailsSentTo("alice@example.com")).toBe(1);
 **What it catches** — rows 13 and 14. The things that are real, expensive, and impossible to assert. Is the error message useful. Is the feature discoverable. Does this look like the rest of the product. Did the agent solve the request or a narrow reading of the request.
 
 **Light up: 13, 14.**
+
+> **[DEMO 4 — screen recording, ~45s. First cut if runtime is tight.]**
+
+**Prompt:** paste the rubric from the slide, then `open the invite link signed into a different account, score it against this rubric, and show me the screen you scored.`
+
+**What must land:**
+- it drives the flow, screenshots the wrong-account screen, comes back with a number and reasons
+- the number is **too high**. TK the exact score, but it should be praising a screen that is visibly unhelpful.
+- then the move: `you gave that an 8. Read the screen again and tell me what a confused user does next.` It reverses.
+
+- ★ **"It agreed with me instantly. That's not a judge, that's an audience. And a judge you can talk out of its score will get talked out of it by the thing it's judging."**
+
+**TK improv:** if it happens to score it correctly low, run it again against a deliberately more verbose version of the same screen and show it preferring the longer one. Either outcome proves the layer, so you can't lose this take.
 
 - Worth naming why it's a *rubric* and not "hey Claude is this good": Qwen found that decomposing into structured dimensions took judge–human agreement to a Spearman correlation around 0.9, and made different judge models agree with each other at Kendall τ above 0.93. Unstructured LLM judging is vibes with extra steps. Structured judging is a measurement.
 
@@ -306,6 +412,21 @@ Every layer above judges the final state. None of them can see *how you got ther
 - The numbers: hacked-and-passing went from **28.6% to 0.56%.** Clean resolution — passing *without* triggering the monitor — went from **40.2% to 60.5%.** On SWE-Bench Verified alone, 36% to 65%.
 - ★ **"Read that second number again. Watching how the work got done made the work twenty points better. They didn't add a single test."**
 - And the graph that should scare you: in the unmonitored run, the reported pass rate kept climbing while genuine performance *collapsed*. The dashboard was green the whole way down.
+
+> **[DEMO 5 — screen recording, ~70s. The payoff of the whole thread.]**
+
+**Nothing new gets built here.** You scroll back through the session the audience has been watching since Act 1 and read what actually happened in it.
+
+**Prompt:** `dump everything you did in this session: every command, every file you touched, every network call, and the final diff.`
+
+**What must land, in this order:**
+1. the boring stuff. Commands, files read. Let it be boring for a good ten seconds.
+2. the flag. **TK the real one, do not stage it if you can possibly avoid it.** Most likely candidates from `DEMO 1` through `DEMO 3`: it edited a test file while fixing the double-click bug, it looked something up online, or it loosened an assertion to get back to green.
+3. if the session genuinely produced nothing flag-worthy, say that on camera and cut to the log from the separate unattended run instead. **A clean log is a real result and it is worth more than a planted one.**
+
+- ★ **"Every green tick you just watched came from this session. This is the only view that can tell you whether any of them were earned."**
+- Callback to `DEMO 0` and close the leash idea: this is why *how long can you run unattended* is not a number the agent gets to pick for itself.
+- ★ **"I let it run on its own because layers one and two existed. This is how I find out whether that was a good idea."**
 
 **How it goes blind** — the pattern set is a list of tricks you've already seen. Qwen had to keep rewriting it *during training*, because as the policy improved it found new channels that weren't in the original review. ★ **"A monitor is a snapshot of yesterday's cheating."**
 
@@ -351,6 +472,14 @@ invite_accepted     238   ← 39%, was 61% last month
 
 ★ **"You didn't forget these. You could not have known them. The board was never complete, and it was never going to be — and if you believe that, then you already believe verifiers decay, because a board that grows is a verifier that was wrong yesterday."**
 
+> **[NO DEMO HERE — and say that on camera. It's the strongest thing you can do with this layer.]**
+
+There is no clip for this layer because there cannot be one. Everything above was a simulation you can run in ninety seconds on a laptop. This one takes a month and real users, and the honest move is to name that difference out loud rather than fake a dashboard for symmetry.
+
+**On screen:** real artifacts only. **TK** a genuine funnel screenshot and one genuine support email, redacted. If nothing suitable exists, use the mock above and label it a mock on screen.
+
+- ★ **"I can demo the first four layers. I cannot demo this one, and that gap is the point: the only layer that touches reality is the only one you can't rehearse."**
+
 **How it goes blind** — it's the slowest and most expensive signal you own, it only tells you about things that already shipped and already cost you, and it's aggregate, so a failure affecting 2% of users hides inside noise forever. You cannot ship against this layer. You can only learn from it.
 
 ![[verification-horizon-board-grows-1.png]]
@@ -380,6 +509,23 @@ That's it. That's the mechanism.
 Someone emails you that they were signed into the wrong account. You don't just fix it. You ask: *which layer should have caught this?* And the answer is layer three, so you add a rubric line about wrong-account recovery, and now that failure can never silently ship again. Your agent double-sends an invite. That's layer two, so a double-click test goes in. You catch an agent widening an assertion to make its own tests pass — that's layer four, and now that pattern is in the policy file forever.
 
 You don't plan the whole stack. You let production pay for it. Every real failure buys exactly one permanent check, at exactly the layer that missed it. Do that for six months and you will have a verification system that is *shaped like your actual product*, which is worth more than any stack somebody on YouTube designed for you.
+
+And notice this is the same question I asked at the very beginning, just pointed the other way round. Before you start, you ask the agent what it can prove. After something breaks, you ask which layer should have proved it. One question, two ends of the same loop, and between them is the only verification system you're ever actually going to maintain.
+
+> **[DEMO 6 — screen recording, ~40s. Last thing before the close.]**
+
+The rule, run once, on a failure the audience already watched happen.
+
+**Prompt:** `the double-click bug from earlier got through. Which layer should have caught it, and add the check there. Just that one.`
+
+**What must land:**
+- it names layer 2 without being told
+- one test goes in, it runs, it's green, it's committed
+- the whole thing is under a minute, and that *is* the argument. You are not building a stack. You are paying for one check with one failure.
+
+- ★ **"That's it. That's the entire practice. One real failure bought one permanent check, and my verifier is now one row less wrong than it was this morning."**
+
+**TK improv:** if the fuzz finding from `DEMO 2` got a bigger reaction on the day, use that failure instead. Either works.
 
 ![[verification-horizon-conversion-rule-1.png]]
 ![[verification-horizon-conversion-rule-2.png]]
@@ -417,6 +563,14 @@ I'll see you in the next one.
 
 **Coverage board states.** Board is docked from Act 1 onward. Row states: `grey` (uncovered) → `lit` when a layer claims it → colour-coded by layer. Layer 4 lights nothing and instead draws a shield around the whole board. Layer 5 lights 13/14/15 *and appends rows 16–18*, which is the visual proof of the thesis.
 
+**Demo thread — recording prep.**
+- One repo, one branch, one session, recorded in order in a single sitting. `DEMO 5` reads the trajectory of `DEMO 1` through `DEMO 4`, so re-shooting any earlier clip invalidates it.
+- Seed the repo so `DEMO 2` and `DEMO 3` genuinely fail. **TK** which bugs. The double-click one has to actually break, not be narrated.
+- Record a second, longer unattended run separately as insurance for `DEMO 5`, in case the main session's log comes back clean.
+- Board states for the thread: `hollow` (claimed by the agent in `DEMO 0`, unproven) → `solid` (proven by a layer) → indented sub-rows like `4a` for anything fuzzing turns up. Rows 16 to 18 still only appear at Layer 5.
+- Do not tidy the agent's output before recording. The mistakes are the asset.
+- Runtime: the thread adds roughly 5:00. `DEMO 4` is the first cut, `DEMO 2` the second.
+
 **Mandated lines (`★`) — do not paraphrase on camera:**
 1. "That's the whole ticket. Twelve words."
 2. "Nobody wrote a single one of these down."
@@ -429,6 +583,14 @@ I'll see you in the next one.
 9. "Metrics tell you where. Users tell you why."
 10. "The board was never complete, and it was never going to be."
 11. The conversion rule, read exactly as written.
+
+**Demo-thread mandated lines (`★`) — do not paraphrase on camera:**
+12. "Whatever it can check by itself is exactly how far it can run without you. Your verifier is not a safety net. It's the length of the leash." (`DEMO 0`)
+13. "Two prompts. Nine rows are now permanently guarded." (`DEMO 1`)
+14. "Every test I had was green. The feature was broken." (`DEMO 3`)
+15. "Every green tick you just watched came from this session." (`DEMO 5`)
+16. "I can demo the first four layers. I cannot demo this one." (Layer 5)
+17. "One real failure bought one permanent check." (`DEMO 6`)
 
 **Numbers to get right on camera:**
 - Qwen hacked-resolved **28.57% → 0.56%**; clean-resolved **40.22% → 60.53%**; SWE-Bench Verified clean **36.49% → 64.98%**.
@@ -445,5 +607,7 @@ I'll see you in the next one.
 - "You Don't Have a Verifier"
 
 **Open / to decide**
-- Whether to include the cost-cascade point (don't run all five layers on every change; gate the expensive ones behind the cheap ones). Currently cut for pace — one line in the outro at most.
+- Whether to include the cost-cascade point (don't run all five layers on every change; gate the expensive ones behind the cheap ones). Currently cut for pace — one line in the outro at most. `DEMO 1` now covers most of this implicitly.
 - CTA placement.
+- Runtime. The demo thread pushes this to 20–22 min. Either accept the longer runtime or cut `DEMO 4` and trim `DEMO 2`.
+- Deck slides for the thread don't exist yet. At minimum: a `DEMO 0` three-lists slide, a hollow-vs-solid board legend, and a "no demo possible" card for Layer 5.
