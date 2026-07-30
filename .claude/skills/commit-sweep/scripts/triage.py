@@ -103,6 +103,7 @@ def main():
 
     junk, hold, ready = [], [], []
     media_paths = []
+    deleted_paths = []
     linked = None
 
     for x, y, path in items:
@@ -118,7 +119,8 @@ def main():
             continue
 
         if deleted:
-            hold.append(f"[{status}] {path}  — deletion of a tracked file; confirm intent")
+            deleted_paths.append(path)
+            ready.append((status, path))
             continue
 
         reasons = []
@@ -166,6 +168,19 @@ def main():
             print(f"      [{status}] {path}")
         if len(rows) > 6:
             print(f"      … and {len(rows) - 6} more")
+
+    if deleted_paths:
+        n = len(deleted_paths)
+        print(f"\nDELETIONS — {n} tracked file{'s' if n != 1 else ''} removed from disk")
+        print("-" * 22)
+        print("  Included in READY above: commit these, grouped by area, like any")
+        print("  other change. The content stays recoverable from history.")
+        print("  Before committing, check each one is a real removal and not half of")
+        print("  a rename — if the content reappeared elsewhere, stage both paths so")
+        print("  git records a rename instead of a delete plus an add.")
+        if n >= 25:
+            print(f"  {n} at once is a lot. Say so plainly in the report, and name the")
+            print("  directories that vanished, so Ray can spot collateral damage.")
 
     payload = 0
     for p in media_paths:

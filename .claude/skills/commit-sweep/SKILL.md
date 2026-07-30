@@ -39,7 +39,7 @@ git log --oneline -2 -- <path>   # when it landed, and why
 ls -d <path>                     # does it still exist on disk?
 ```
 
-A skill directory that's gone from disk with three tracked files showing as deleted is probably an intentional removal — but "probably" is the reason to ask rather than assume.
+A skill directory that's gone from disk with three tracked files showing as deleted is an intentional removal, and step 5 says to commit it. The reason to look anyway is that the same status output covers a very different case: a file that moved. `ls -d` on the old path plus a search for the basename elsewhere tells you which one you have in about ten seconds, and that distinction changes what you stage.
 
 ### 4. Group into commits
 
@@ -56,11 +56,21 @@ Don't over-split. Three files that only make sense together are one commit, not 
 
 Message style follows the existing log — `area: what changed`, or `area(scope): what changed`. Run `git log --oneline -15` to match the prevailing shape. Append the trailers the Bash tool documents (`Co-Authored-By`, `Claude-Session`). Ray does not use em or en dashes in his writing; commit messages are his repo, so avoid them there too.
 
-### 5. Hold back the judgment calls
+### 5. Commit deletions like any other change
 
-Some things should not be committed on your own initiative:
+A deletion is part of the sweep, not an exception to it. If a tracked file is gone from disk, Ray removed it, and leaving the removal uncommitted just parks it in limbo: absent from the vault, still recorded in HEAD, and guaranteed to show up again in the next sweep. Commit it.
 
-- **Deletions of tracked files.** Committing a deletion propagates it. That's a decision, and CLAUDE.md is explicit that files don't get deleted without Ray saying so.
+This does not conflict with CLAUDE.md's "never delete files without explicit user permission." That rule governs *you* deleting things. Recording a removal Ray already made is the opposite: the deletion happened before you arrived, and committing it is bookkeeping. The content also stays in history — `git show <sha>:<path>` recovers any of it — so this is reversible in a way an actual deletion is not.
+
+Two things to get right:
+
+- **Check for renames first.** A deletion whose content reappears at another path is half of a move, not a removal. Compare `git show HEAD:<old>` against the new file; if they match, stage both paths so git records a rename. Committing the two halves separately loses the connection.
+- **Group deletions by area**, own commits, same as anything else — so one can be reverted without the others.
+
+Then say plainly in the report what was removed. A large batch deserves a sentence naming the directories that vanished: that is how Ray spots collateral damage from a script that overreached, and the reporting is what has value here, not blocking the sweep on it.
+
+Still hold these:
+
 - **Files that violate a vault convention** — an image outside `images/`, a generic name like `sheet1.png`, an image no note references. These are usually accidents, and committing an accident makes it permanent.
 - **Anything you genuinely can't classify.**
 
